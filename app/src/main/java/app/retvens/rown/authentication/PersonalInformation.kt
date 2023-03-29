@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 
@@ -57,10 +58,7 @@ class PersonalInformation : AppCompatActivity() {
         eMail.text = email
 
         dialog.findViewById<CardView>(R.id.card_go).setOnClickListener {
-            Toast.makeText(applicationContext,"Sent",Toast.LENGTH_SHORT).show()
-            val intent = Intent(this,OtpVerification::class.java)
-            intent.putExtra("phone",email)
-            intent.putExtra("PI","PI")
+            val intent = Intent(this,DashBoardActivity::class.java)
             startActivity(intent)
             dialog.dismiss()
         }
