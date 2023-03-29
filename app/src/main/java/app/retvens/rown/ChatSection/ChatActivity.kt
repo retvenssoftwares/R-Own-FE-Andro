@@ -1,14 +1,12 @@
-package app.retvens.rown
+package app.retvens.rown.ChatSection
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import app.retvens.rown.R
 
-class MainActivity : AppCompatActivity() {
+class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-
-
+        setContentView(R.layout.activity_chat)
     }
 }
