@@ -1,17 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.gms.google-services'
 }
 
 android {
     namespace 'app.retvens.rown'
-    compileSdk 33
+    compileSdk 32
 
     defaultConfig {
         applicationId "app.retvens.rown"
         minSdk 24
-        targetSdk 33
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -31,11 +30,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    buildFeatures{
-        viewBinding true
-    }
-
 }
 
 dependencies {
@@ -44,21 +38,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-
-    //ImagePicker
-//    implementation 'com.github.Drjacky:ImagePicker:2.3.22'
-    //Country Code Picker
-    implementation'com.hbb20:ccp:2.5.3'
-
-    //Progress Bar
-
-    implementation 'com.google.android.material:material:1.8.0'
-
-    implementation 'com.google.firebase:firebase-auth:21.1.0'
-
 }
