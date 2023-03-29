@@ -29,7 +29,9 @@ class OtpVerification : AppCompatActivity() {
     lateinit var otpET4: EditText
     lateinit var otpET5: EditText
     lateinit var otpET6: EditText
+
     var selectedETPosition: Int = 0
+
     lateinit var otp: String
 
     lateinit var auth: FirebaseAuth
@@ -109,11 +111,9 @@ class OtpVerification : AppCompatActivity() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
         }
-
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
         }
-
         override fun afterTextChanged(s: Editable?) {
             if (s!!.length > 0) {
                 if (selectedETPosition == 0) {
@@ -136,7 +136,6 @@ class OtpVerification : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     fun showKeyBoard(otpET: EditText) {
@@ -148,7 +147,6 @@ class OtpVerification : AppCompatActivity() {
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
 
         if (keyCode == KeyEvent.KEYCODE_DEL) {
-
             if (selectedETPosition == 5) {
                 selectedETPosition = 4
                 showKeyBoard(otpET5)
