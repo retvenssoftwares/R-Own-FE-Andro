@@ -22,6 +22,8 @@ class OtpVerification : AppCompatActivity() {
     lateinit var otpET2 : EditText
     lateinit var otpET3 : EditText
     lateinit var otpET4 : EditText
+    lateinit var otpET5 : EditText
+    lateinit var otpET6 : EditText
     lateinit var otp : String
 
     lateinit var auth: FirebaseAuth
@@ -34,8 +36,10 @@ class OtpVerification : AppCompatActivity() {
         otpET2 = findViewById(R.id.otpET2)
         otpET3 = findViewById(R.id.otpET3)
         otpET4 = findViewById(R.id.otpET4)
+        otpET5 = findViewById(R.id.otpET5)
+        otpET6 = findViewById(R.id.otpET6)
 
-        otp = "$otpET1$otpET2$otpET3$otpET4"
+        otp = "$otpET1$otpET2$otpET3$otpET4$otpET5$otpET6"
 
         auth=FirebaseAuth.getInstance()
 

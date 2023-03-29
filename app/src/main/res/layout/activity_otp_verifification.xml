@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:weightSum="4"
+        android:weightSum="6"
         android:layout_marginTop="40dp"
         android:paddingHorizontal="40dp"
         app:layout_constraintTop_toBottomOf="@id/text_phone_otp"
@@ -80,7 +80,7 @@
         <EditText
             android:id="@+id/otpET1"
             android:layout_width="40dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_marginEnd="15dp"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -95,7 +95,7 @@
         <EditText
             android:id="@+id/otpET2"
             android:layout_width="40dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_marginEnd="15dp"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -110,7 +110,37 @@
         <EditText
             android:id="@+id/otpET3"
             android:layout_width="40dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="15dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:inputType="number"
+            android:maxLines="1"
+            android:maxLength="1"
+            android:background="@drawable/round_corner_background"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/otpET4"
+            android:layout_width="40dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="15dp"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:inputType="number"
+            android:maxLines="1"
+            android:maxLength="1"
+            android:background="@drawable/round_corner_background"
+            android:textSize="35dp"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/otpET5"
+            android:layout_width="40dp"
+            android:layout_height="70dp"
             android:layout_marginEnd="15dp"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -123,9 +153,9 @@
             android:layout_weight="1"/>
 
         <EditText
-            android:id="@+id/otpET4"
+            android:id="@+id/otpET6"
             android:layout_width="40dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:inputType="number"
