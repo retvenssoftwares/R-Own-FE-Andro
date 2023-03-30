@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +18,12 @@
         android:theme="@style/Theme.Rown"
         tools:targetApi="31">
         <activity
+            android:name=".authentication.PersonalInformation"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".authentication.OtpVerification"
             android:exported="false"
@@ -30,10 +33,9 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".authentication.PersonalInformation"
+            android:name=".authentication.PersonalInformationPhone"
             android:exported="true"
             android:theme="@style/Theme.Rown_Splash">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,8 +56,6 @@
         <activity
             android:name=".Dashboard.DashBoardActivity"
             android:exported="true">
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -70,10 +70,10 @@
             android:authorities="app.retvens.rown.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>
