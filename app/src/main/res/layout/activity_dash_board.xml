@@ -7,6 +7,8 @@
     tools:context=".Dashboard.DashBoardActivity"
     android:id="@+id/drawerLayout"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
+
     >
 
 
@@ -33,7 +35,6 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             android:titleTextColor="@android:color/white"
             android:subtitleTextColor="@android:color/white"
-            android:title="My App Title"
             android:gravity="start"
             tools:ignore="MissingConstraints" />
 
