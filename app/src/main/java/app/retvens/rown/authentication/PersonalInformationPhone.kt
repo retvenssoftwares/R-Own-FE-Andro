@@ -10,15 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Html
-import android.util.Log
-import android.util.Patterns
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -26,61 +23,53 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
-import app.retvens.rown.databinding.ActivityPersonalInformationBinding
+import app.retvens.rown.databinding.ActivityPersonalInformationPhoneBinding
 import java.io.File
-import com.google.firebase.auth.ActionCodeSettings
-import com.google.firebase.auth.FirebaseAuth
 
-class PersonalInformation : AppCompatActivity() {
+class PersonalInformationPhone : AppCompatActivity() {
 
-    lateinit var binding :ActivityPersonalInformationBinding
+    lateinit var binding : ActivityPersonalInformationPhoneBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
-    lateinit var galleryImageUri: Uri
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var imageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        binding.profile.setImageURI(null)
-        binding.profile.setImageURI(imageUri)
+        binding.profilePhone.setImageURI(null)
+        binding.profilePhone.setImageURI(imageUri)
     }
     lateinit var dialog: Dialog
 
-    private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPersonalInformationBinding.inflate(layoutInflater)
+        binding = ActivityPersonalInformationPhoneBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.textWelcome.text= Html.fromHtml("<font color=${Color.BLACK}>Welcome On </font>" +
+        binding.textWelcomePhone.text= Html.fromHtml("<font color=${Color.BLACK}>Welcome On </font>" +
                 "<font color=${Color.GREEN}> Board</font>")
 
         imageUri = createImageUri()!!
 
-        binding.camera.setOnClickListener {
+        binding.cameraPhone.setOnClickListener {
             //Requesting Permission For CAMERA
             if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this,
-                arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
                 )
             }
             openBottomSheet()
         }
 
-        binding.cardSavePerson.setOnClickListener {
-
-            if(binding.etName.length() < 3){
+        binding.cardSavePersonPhone.setOnClickListener {
+            if(binding.etNamePhone.length() < 3){
                 binding.nameLayout.error = "Please enter your name"
-            } else if(binding.etEmail.length() < 10){
-                binding.emailLayout.error = "Enter a valid Email"
+            } else if(binding.etPhonePerson.length() < 10){
+                binding.phoneLayout.error = "Enter a valid Email"
             } else{
-                binding.emailLayout.isErrorEnabled = false
-                val mail = binding.etEmail.text.toString()
+                binding.phoneLayout.isErrorEnabled = false
+                val mail = binding.etPhonePerson.text.toString()
                 mail.trim()
                 openBottomSheetEmail(mail)
             }
         }
-
-        auth = FirebaseAuth.getInstance()
-
     }
 
     private fun openBottomSheetEmail(email:String) {
@@ -92,85 +81,20 @@ class PersonalInformation : AppCompatActivity() {
         eMail.text = email
 
         dialog.findViewById<CardView>(R.id.card_go).setOnClickListener {
-
+            val intent = Intent(this, DashBoardActivity::class.java)
+            startActivity(intent)
             dialog.dismiss()
-
-            mailVerification()
-
         }
 
         dialog.show()
-        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
         dialog.window?.setGravity(Gravity.BOTTOM)
     }
 
-    private fun mailVerification() {
-
-        val mail = binding.etEmail.text.toString()
-
-//        val actionCodeSettings = ActionCodeSettings.newBuilder()
-//            .setUrl("https://www.retvens.com/finishSignUp?cartId=1234")
-//            .setHandleCodeInApp(true)
-//            .setAndroidPackageName("app.retvens.rown", true, "12")
-//            .build()
-//
-//        auth.sendSignInLinkToEmail(mail, actionCodeSettings)
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    Toast.makeText(applicationContext,"mail is sent to $mail",Toast.LENGTH_SHORT).show()
-//                }else{
-//                    Toast.makeText(applicationContext,task.exception?.message.toString(),Toast.LENGTH_SHORT).show()
-//                    Log.e("error",task.exception?.message.toString())
-//                }
-//            }
-//
-//        val emailLink = intent.data.toString()
-//
-//        if (auth.isSignInWithEmailLink(emailLink)) {
-//            auth.signInWithEmailLink(mail, emailLink)
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        Toast.makeText(applicationContext,"mail is verified",Toast.LENGTH_SHORT).show()
-//                        val user = task.result?.user
-//                        // do something with the user object
-//                    } else {
-//                        Toast.makeText(applicationContext,"fail to verify",Toast.LENGTH_SHORT).show()
-//                        // handle sign-in failure
-//                    }
-//                }
-//        }
-
-        auth.createUserWithEmailAndPassword(mail, "000000")
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Send verification email to the user
-                    val user = auth.currentUser
-                    user?.sendEmailVerification()
-                        ?.addOnCompleteListener { verificationTask ->
-                            if (verificationTask.isSuccessful) {
-                                Toast.makeText(applicationContext, "Verification email sent", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(applicationContext, "Failed to send verification email", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                } else {
-                    Toast.makeText(applicationContext, "Failed to create account", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-// Check if email is verified
-        val user = auth.currentUser
-
-
-
-
-
-    }
-
     private fun openBottomSheet() {
-        val dialog: Dialog = Dialog(this)
+        dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.bottom_sheet_camera)
 
@@ -193,7 +117,7 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun deleteImage() {
-        binding.profile.setImageURI(null)
+        binding.profilePhone.setImageURI(null)
         dialog.dismiss()
     }
 
@@ -207,16 +131,16 @@ class PersonalInformation : AppCompatActivity() {
         startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
         dialog.dismiss()
     }
-    
-   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
             val imageUri = data.data
-            binding.profile.setImageURI(imageUri)
+            binding.profilePhone.setImageURI(imageUri)
         }
     }
-    
+
     private fun createImageUri(): Uri? {
         val image = File(applicationContext.filesDir,"camera_photo.png")
         return FileProvider.getUriForFile(applicationContext,
