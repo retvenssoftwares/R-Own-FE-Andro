@@ -8,4 +8,7 @@
 
     </style>
 
+    <style name="RoundedCornerImage">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Html
 import android.view.Gravity
 import android.view.ViewGroup
@@ -22,6 +23,8 @@ import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 class PersonalInformation : AppCompatActivity() {
 
     lateinit var binding :ActivityPersonalInformationBinding
+    var PICK_IMAGE_REQUEST_CODE : Int = 0
+    lateinit var dialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +74,7 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun openBottomSheet() {
-        val dialog: Dialog = Dialog(this)
+        dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.bottom_sheet_camera)
 
@@ -102,6 +105,17 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
+        dialog.dismiss()
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
+            val imageUri = data.data
+            binding.profile.setImageURI(imageUri)
+        }
     }
 }
