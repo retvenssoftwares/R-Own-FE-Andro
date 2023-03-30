@@ -12,13 +12,19 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.MesiboDataClass
+import app.retvens.rown.DataCollections.MesiboResponseClass
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class OtpVerification : AppCompatActivity() {
     lateinit var binding: ActivityOtpVerifificationBinding
@@ -29,7 +35,9 @@ class OtpVerification : AppCompatActivity() {
     lateinit var otpET4: EditText
     lateinit var otpET5: EditText
     lateinit var otpET6: EditText
+
     var selectedETPosition: Int = 0
+
     lateinit var otp: String
 
     lateinit var auth: FirebaseAuth
@@ -44,15 +52,6 @@ class OtpVerification : AppCompatActivity() {
         otpET4 = findViewById(R.id.otpET4)
         otpET5 = findViewById(R.id.otpET5)
         otpET6 = findViewById(R.id.otpET6)
-
-        val otp1 = otpET1.text.toString()
-        val otp2 = otpET2.text.toString()
-        val otp3 = otpET3.text.toString()
-        val otp4 = otpET4.text.toString()
-        val otp5 = otpET5.text.toString()
-        val otp6 = otpET6.text.toString()
-
-        otp = "$otp1$otp2$otp3$otp4$otp5$otp6"
 
         otpET1.addTextChangedListener(textWatcher)
         otpET2.addTextChangedListener(textWatcher)
@@ -70,6 +69,17 @@ class OtpVerification : AppCompatActivity() {
         binding.textPhoneOtp.text = intent.getStringExtra("phone").toString()
 
         binding.cardVerifyOtp.setOnClickListener {
+
+            val otp1 = otpET1.text.toString()
+            val otp2 = otpET2.text.toString()
+            val otp3 = otpET3.text.toString()
+            val otp4 = otpET4.text.toString()
+            val otp5 = otpET5.text.toString()
+            val otp6 = otpET6.text.toString()
+
+            otp = "$otp1$otp2$otp3$otp4$otp5$otp6"
+
+
             if (!otp.isEmpty()) {
                 val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                     storedVerificationId.toString(), otp
@@ -79,7 +89,6 @@ class OtpVerification : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
             }
-            startActivity(Intent(this, PersonalInformation::class.java))
         }
     }
 
@@ -93,6 +102,7 @@ class OtpVerification : AppCompatActivity() {
                         "Otp Verified Successfully",
                         Toast.LENGTH_SHORT
                     ).show()
+                    createUserMesibo()
                     finish()
 // ...
                 } else {
@@ -105,15 +115,47 @@ class OtpVerification : AppCompatActivity() {
             }
     }
 
+    //MesiboUserCreation
+
+    private fun createUserMesibo() {
+
+        val number =  intent.getStringExtra("phone").toString()
+        val send = MesiboDataClass(number)
+        val data = RetrofitBuilder.retrofitBuilder.createMesiboUser(send)
+
+        data.enqueue(object : Callback<MesiboResponseClass?> {
+            override fun onResponse(
+                call: Call<MesiboResponseClass?>,
+                response: Response<MesiboResponseClass?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+
+
+
+                    Toast.makeText(applicationContext,response.token,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,response.uid,Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+                }
+
+            }
+
+            override fun onFailure(call: Call<MesiboResponseClass?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
+    }
+
     val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
         }
-
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
         }
-
         override fun afterTextChanged(s: Editable?) {
             if (s!!.length > 0) {
                 if (selectedETPosition == 0) {
@@ -136,7 +178,6 @@ class OtpVerification : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     fun showKeyBoard(otpET: EditText) {
@@ -148,7 +189,6 @@ class OtpVerification : AppCompatActivity() {
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
 
         if (keyCode == KeyEvent.KEYCODE_DEL) {
-
             if (selectedETPosition == 5) {
                 selectedETPosition = 4
                 showKeyBoard(otpET5)

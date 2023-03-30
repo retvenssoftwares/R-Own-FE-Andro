@@ -8,7 +8,10 @@
 
     </style>
 
-    <style name="RoundedCornerImage">
-        <item name="cornerSize">50%</item>
+    <style name="AppTheme.ActionBar.Transparent" parent="Theme.Rown">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="colorPrimary">@android:color/transparent</item>
     </style>
+
 </resources>

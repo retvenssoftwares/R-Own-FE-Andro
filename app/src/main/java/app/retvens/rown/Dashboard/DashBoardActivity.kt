@@ -3,6 +3,8 @@ package app.retvens.rown.Dashboard
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
@@ -23,99 +25,40 @@ import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ChatSection.ChatActivity
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
+import app.retvens.rown.authentication.LoginActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import java.lang.Math.abs
 
-class DashBoardActivity : AppCompatActivity() {
 
-    private lateinit var gestureDetector: GestureDetectorCompat
+class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
+
+    private lateinit var gestureDetector: GestureDetector
     private lateinit var toggle: ActionBarDrawerToggle
+    var x1:Float = 0.0f
+    var x2:Float = 0.0f
+    var y1:Float = 0.0f
+    var y2:Float = 0.0f
+    private lateinit var auth:FirebaseAuth
 
-
-    internal open class OnSwipeTouchListener(c: Context?) :
-        View.OnTouchListener {
-        private val gestureDetector: GestureDetector
-        override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-            return gestureDetector.onTouchEvent(motionEvent)
-        }
-        private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
-            private val SWIPE_THRESHOLD: Int = 100
-            private val SWIPE_VELOCITY_THRESHOLD: Int = 100
-            override fun onDown(e: MotionEvent): Boolean {
-                return true
-            }
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                onClick()
-                return super.onSingleTapUp(e)
-            }
-            override fun onDoubleTap(e: MotionEvent): Boolean {
-                onDoubleClick()
-                return super.onDoubleTap(e)
-            }
-            override fun onLongPress(e: MotionEvent) {
-                onLongClick()
-                super.onLongPress(e)
-            }
-            override fun onFling(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
-                try {
-                    val diffY = e2.y - e1.y
-                    val diffX = e2.x - e1.x
-                    if (abs(diffX) > abs(diffY)) {
-                        if (abs(diffX) > SWIPE_THRESHOLD && abs(
-                                velocityX
-                            ) > SWIPE_VELOCITY_THRESHOLD
-                        ) {
-                            if (diffX > 0) {
-                                onSwipeRight()
-                            }
-                            else {
-                                onSwipeLeft()
-                            }
-                        }
-                    }
-                    else {
-                        if (abs(diffY) > SWIPE_THRESHOLD && abs(
-                                velocityY
-                            ) > SWIPE_VELOCITY_THRESHOLD
-                        ) {
-                            if (diffY < 0) {
-                                onSwipeUp()
-                            }
-                            else {
-                                onSwipeDown()
-                            }
-                        }
-                    }
-                } catch (exception: Exception) {
-                    exception.printStackTrace()
-                }
-                return false
-            }
-        }
-        open fun onSwipeRight() {}
-        open fun onSwipeLeft() {}
-        open fun onSwipeUp() {}
-        open fun onSwipeDown() {}
-        private fun onClick() {}
-        private fun onDoubleClick() {}
-        private fun onLongClick() {}
-        init {
-            gestureDetector = GestureDetector(c, GestureListener())
-        }
+    companion object{
+        const val MIN_DISTANCE = 150
     }
 
-    @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
+
+    @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
 
-        replaceFragment(HomeFragment())
+        window.statusBarColor = Color.TRANSPARENT
+
+        auth = FirebaseAuth.getInstance()
+
+//        replaceFragment(HomeFragment())
+            replaceFragment(HomeFragment())
+
         //setUp Buttons
         val setting = findViewById<Button>(R.id.Setting)
         val logoutbtn = findViewById<Button>(R.id.logoutbtn)
@@ -125,7 +68,10 @@ class DashBoardActivity : AppCompatActivity() {
         }
 
         logoutbtn.setOnClickListener {
-            Toast.makeText(applicationContext,"logout",Toast.LENGTH_SHORT).show()
+
+            auth.signOut()
+            startActivity(Intent(this,LoginActivity::class.java))
+
         }
 
 
@@ -194,26 +140,52 @@ class DashBoardActivity : AppCompatActivity() {
 
         val frame = findViewById<FrameLayout>(R.id.fragment_container)
 
-        frame.setOnClickListener(object : OnSwipeTouchListener(this@DashBoardActivity),
-            View.OnClickListener {
-            override fun onClick(p0: View?) {
-                Toast.makeText(applicationContext,"left swipe",Toast.LENGTH_SHORT).show()
-            }
 
-            override fun onSwipeLeft() {
-                super.onSwipeLeft()
-                Toast.makeText(applicationContext,"left swipe",Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onSwipeRight() {
-                super.onSwipeRight()
-                Toast.makeText(applicationContext,"right swipe",Toast.LENGTH_SHORT).show()
-            }
-
-        })
+        gestureDetector = GestureDetector(this,this@DashBoardActivity)
 
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+
+        Toast.makeText(applicationContext,"op",Toast.LENGTH_SHORT)
+
+        gestureDetector.onTouchEvent(event!!)
+
+        when(event.action){
+            0 ->{
+                x1 = event.x
+                y1 = event.y
+            }
+            1->{
+                x2 = event.x
+                y2 = event.y
+
+                val valueX:Float = x2-x1
+                val valueF:Float = y2-y1
+
+                if (abs(valueX) > MIN_DISTANCE){
+
+                    if (x2 > x1){
+                        Toast.makeText(applicationContext,"Right swipe",Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(applicationContext,"Left swipe",Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+                else if (abs(valueF) > MIN_DISTANCE){
+                    if (y2 > y1){
+                        Toast.makeText(applicationContext,"Bottom swipe",Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(applicationContext,"Up swipe",Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            }
+        }
+
+
+        return super.onTouchEvent(event)
+    }
 
     private fun replaceFragment(fragment: Fragment) {
         if (fragment !=null){
@@ -247,4 +219,31 @@ class DashBoardActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDown(p0: MotionEvent): Boolean {
+        return false
+    }
+
+    override fun onShowPress(p0: MotionEvent) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSingleTapUp(p0: MotionEvent): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
+        return false
+    }
+
+    override fun onLongPress(p0: MotionEvent) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
+        return false
+    }
+
+
+
 }
+
