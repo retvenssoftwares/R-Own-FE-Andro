@@ -14,4 +14,8 @@
         <item name="colorPrimary">@android:color/transparent</item>
     </style>
 
+    <style name="RoundedCornerImage">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

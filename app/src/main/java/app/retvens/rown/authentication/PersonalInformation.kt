@@ -10,8 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Html
-import android.util.Log
-import android.util.Patterns
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
@@ -28,9 +26,7 @@ import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 import java.io.File
-import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
-import java.io.File
 
 class PersonalInformation : AppCompatActivity() {
 
@@ -205,7 +201,7 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
         dialog.dismiss()
     }
