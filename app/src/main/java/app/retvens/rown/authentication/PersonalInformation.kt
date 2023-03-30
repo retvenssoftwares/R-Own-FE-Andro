@@ -2,8 +2,10 @@ package app.retvens.rown.authentication
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -14,16 +16,28 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
+import java.io.File
 
 class PersonalInformation : AppCompatActivity() {
 
     lateinit var binding :ActivityPersonalInformationBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
+    lateinit var galleryImageUri: Uri
+
+    var REQUEST_CAMERA_PERMISSION : Int = 0
+    lateinit var imageUri: Uri
+    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
+        binding.profile.setImageURI(null)
+        binding.profile.setImageURI(imageUri)
+    }
     lateinit var dialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +47,15 @@ class PersonalInformation : AppCompatActivity() {
         binding.textWelcome.text= Html.fromHtml("<font color=${Color.BLACK}>Welcome On </font>" +
                 "<font color=${Color.GREEN}> Board</font>")
 
+        imageUri = createImageUri()!!
+
         binding.camera.setOnClickListener {
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                )
+            }
             openBottomSheet()
         }
 
@@ -97,11 +119,11 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun deleteImage() {
-
+        binding.profile.setImageURI(null)
     }
 
     private fun openCamera() {
-
+        contract.launch(imageUri)
     }
 
     private fun openGallery() {
@@ -117,5 +139,13 @@ class PersonalInformation : AppCompatActivity() {
             val imageUri = data.data
             binding.profile.setImageURI(imageUri)
         }
+    }
+
+    private fun createImageUri(): Uri? {
+        val image = File(applicationContext.filesDir,"camera_photo.png")
+        return FileProvider.getUriForFile(applicationContext,
+            "app.retvens.rown.fileProvider",
+            image
+        )
     }
 }
