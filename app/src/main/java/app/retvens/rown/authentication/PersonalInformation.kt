@@ -120,10 +120,12 @@ class PersonalInformation : AppCompatActivity() {
 
     private fun deleteImage() {
         binding.profile.setImageURI(null)
+        dialog.dismiss()
     }
 
     private fun openCamera() {
         contract.launch(imageUri)
+        dialog.dismiss()
     }
 
     private fun openGallery() {
