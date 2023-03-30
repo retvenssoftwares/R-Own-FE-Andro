@@ -8,7 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PatternMatcher
+import android.provider.MediaStore
 import android.text.Html
 import android.util.Log
 import android.util.Patterns
@@ -18,6 +18,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -26,6 +27,7 @@ import androidx.core.content.FileProvider
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
+import java.io.File
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import java.io.File
@@ -65,6 +67,7 @@ class PersonalInformation : AppCompatActivity() {
         }
 
         binding.cardSavePerson.setOnClickListener {
+
             if(binding.etName.length() < 3){
                 binding.nameLayout.error = "Please enter your name"
             } else if(binding.etEmail.length() < 10){
