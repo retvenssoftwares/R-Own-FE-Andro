@@ -37,5 +37,13 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
+    <style name="Theme.Rown.ActionBarTransparent">
+        <item name="android:background"> @null </item>
+        <!-- Support library compatibility -->
+        <item name="displayOptions">showHome|useLogo</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
 
 </resources>

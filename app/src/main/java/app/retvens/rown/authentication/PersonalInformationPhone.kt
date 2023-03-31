@@ -6,16 +6,17 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Html
-import android.view.Gravity
-import android.view.ViewGroup
-import android.view.Window
+import android.util.Log
+import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -24,6 +25,8 @@ import androidx.core.content.FileProvider
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationPhoneBinding
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.File
 
 class PersonalInformationPhone : AppCompatActivity() {
@@ -32,21 +35,39 @@ class PersonalInformationPhone : AppCompatActivity() {
     var PICK_IMAGE_REQUEST_CODE : Int = 0
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
-    lateinit var imageUri: Uri
+    lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        binding.profilePhone.setImageURI(null)
-        binding.profilePhone.setImageURI(imageUri)
+        cropImage(cameraImageUri)
+//        binding.profilePhone.setImageURI(null)
+//        binding.profilePhone.setImageURI(imageUri)
     }
     lateinit var dialog: Dialog
-
+    private fun setWindowFlag(bits: Int, on: Boolean) {
+        val win = window
+        val winParams = win.attributes
+        if (on) {
+            winParams.flags = winParams.flags or bits
+        } else {
+            winParams.flags = winParams.flags and bits.inv()
+        }
+        win.attributes = winParams
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalInformationPhoneBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.textWelcomePhone.text= Html.fromHtml("<font color=${Color.BLACK}>Welcome On </font>" +
-                "<font color=${Color.GREEN}> Board</font>")
+        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
+            setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true)
+        }
+        if (Build.VERSION.SDK_INT >= 19) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+            window.statusBarColor = Color.TRANSPARENT
+        }
 
-        imageUri = createImageUri()!!
+        cameraImageUri = createImageUri()!!
 
         binding.cameraPhone.setOnClickListener {
             //Requesting Permission For CAMERA
@@ -62,7 +83,7 @@ class PersonalInformationPhone : AppCompatActivity() {
             if(binding.etNamePhone.length() < 3){
                 binding.nameLayout.error = "Please enter your name"
             } else if(binding.etPhonePerson.length() < 10){
-                binding.phoneLayout.error = "Enter a valid Email"
+                binding.phoneLayout.error = "Enter a valid Phone number"
             } else{
                 binding.phoneLayout.isErrorEnabled = false
                 val mail = binding.etPhonePerson.text.toString()
@@ -83,6 +104,7 @@ class PersonalInformationPhone : AppCompatActivity() {
         dialog.findViewById<CardView>(R.id.card_go).setOnClickListener {
             val intent = Intent(this, DashBoardActivity::class.java)
             startActivity(intent)
+            finish()
             dialog.dismiss()
         }
 
@@ -122,7 +144,7 @@ class PersonalInformationPhone : AppCompatActivity() {
     }
 
     private fun openCamera() {
-        contract.launch(imageUri)
+        contract.launch(cameraImageUri)
         dialog.dismiss()
     }
 
@@ -135,10 +157,35 @@ class PersonalInformationPhone : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             val imageUri = data.data
-            binding.profilePhone.setImageURI(imageUri)
+            if (imageUri != null) {
+
+                cropImage(imageUri)
+
+            }
+        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val resultingImage = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                val newImage = resultingImage.uri
+
+                binding.profilePhone.setImageURI(newImage)
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(this,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    private fun cropImage(imageUri: Uri) {
+        val options = CropImage.activity(imageUri)
+            .setGuidelines(CropImageView.Guidelines.ON)
+
+        options.setAspectRatio(1, 1)
+            .setCropShape(CropImageView.CropShape.OVAL)
+            .start(this)
+
+        binding.profilePhone.setImageURI(imageUri)
     }
 
     private fun createImageUri(): Uri? {
