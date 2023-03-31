@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Verification code has been sent to"
+        android:fontFamily="@font/montserrat_regular"
         android:textSize="15dp"
         android:textColor="#8A000000"
         android:layout_marginTop="20dp"
@@ -20,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="arjungupta0817@gmail.com"
+        android:fontFamily="@font/montserrat_semibold"
         android:textSize="18dp"
-        android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"/>
 
@@ -44,6 +45,7 @@
             android:paddingVertical="8dp"
             android:textAlignment="center"
             android:text="Let's Go"
+            android:fontFamily="@font/montserrat_semibold"
             android:textSize="29dp"
             android:background="@color/green_own"
             android:textColor="@color/black"/>
