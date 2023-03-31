@@ -16,7 +16,10 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
+import android.view.Gravity
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -27,10 +30,21 @@ import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationPhoneBinding
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class PersonalInformationPhone : AppCompatActivity() {
 
+    lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
+    private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    private lateinit var auth:FirebaseAuth
+    lateinit var storedVerificationId:String
+    private lateinit var number: String
     lateinit var binding : ActivityPersonalInformationPhoneBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
 
@@ -42,12 +56,17 @@ class PersonalInformationPhone : AppCompatActivity() {
 //        binding.profilePhone.setImageURI(imageUri)
     }
     lateinit var dialog: Dialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalInformationPhoneBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         cameraImageUri = createImageUri()!!
+
+        auth = FirebaseAuth.getInstance()
+
+        var currentUser = auth.currentUser
 
         binding.cameraPhone.setOnClickListener {
             //Requesting Permission For CAMERA
@@ -71,6 +90,38 @@ class PersonalInformationPhone : AppCompatActivity() {
                 openBottomSheetEmail(mail)
             }
         }
+
+        // Callback function for Phone Auth
+        callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                finish()
+            }
+
+            override fun onVerificationFailed(e: FirebaseException) {
+                Toast.makeText(applicationContext, "Failed", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onCodeSent(
+                verificationId: String,
+                token: PhoneAuthProvider.ForceResendingToken
+            ) {
+
+                Log.d("TAG","onCodeSent:$verificationId")
+                storedVerificationId = verificationId
+                resendToken = token
+
+                number = binding.etPhonePerson.text.toString()
+                val key = "1"
+                var intent = Intent(applicationContext,OtpVerification::class.java)
+                intent.putExtra("storedVerificationId",storedVerificationId)
+                intent.putExtra("phone",number)
+                intent.putExtra("key",key)
+                startActivity(intent)
+            }
+        }
+
     }
 
     private fun openBottomSheetEmail(email:String) {
@@ -82,6 +133,10 @@ class PersonalInformationPhone : AppCompatActivity() {
         eMail.text = email
 
         dialog.findViewById<CardView>(R.id.card_go).setOnClickListener {
+
+
+
+            phoneNumberVerification()
             val intent = Intent(this, DashBoardActivity::class.java)
             startActivity(intent)
             finish()
@@ -94,6 +149,29 @@ class PersonalInformationPhone : AppCompatActivity() {
         dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
         dialog.window?.setGravity(Gravity.BOTTOM)
     }
+
+    private fun phoneNumberVerification() {
+
+        var number=binding.etPhonePerson.text.toString().trim()
+
+        if(!number.isEmpty()){
+            number="+91"+number
+            sendVerificationcode (number)
+        }else{
+            Toast.makeText(this,"Enter mobile number",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun sendVerificationcode(number: String) {
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(number) // Phone number to verify
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setActivity(this) // Activity (for callback binding)
+            .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
 
     private fun openBottomSheet() {
         dialog = Dialog(this)
