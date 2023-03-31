@@ -49,10 +49,13 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'androidx.activity:activity-ktx:1.7.0'
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
+    //ImageCropper
+//    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
-    //ImagePicker
-//    implementation 'com.github.Drjacky:ImagePicker:2.3.22'
     //Country Code Picker
     implementation'com.hbb20:ccp:2.5.3'
 
