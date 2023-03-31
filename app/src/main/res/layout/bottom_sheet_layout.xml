@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/otp_will_be_sent_to"
+        android:fontFamily="@font/montserrat_regular"
         android:textSize="15dp"
         android:textColor="#8A000000"
         android:layout_marginTop="20dp"
@@ -20,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+91 7905845935"
+        android:fontFamily="@font/montserrat_bold"
         android:textSize="24dp"
-        android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"/>
 
@@ -45,6 +46,7 @@
             android:paddingVertical="8dp"
             android:textAlignment="center"
             android:text="@string/send_otp"
+            android:fontFamily="@font/montserrat_regular"
             android:textSize="29dp"
             android:background="@color/green_own"
             android:textColor="@color/black"/>
@@ -70,6 +72,7 @@
             android:layout_height="match_parent"
             android:paddingVertical="8dp"
             android:text="@string/change_phone_number"
+            android:fontFamily="@font/montserrat_semibold"
             android:textSize="19dp"
             android:textAlignment="center"
             android:background="@color/white"
