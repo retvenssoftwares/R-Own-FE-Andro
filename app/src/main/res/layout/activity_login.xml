@@ -39,7 +39,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/png_language"
+        android:src="@drawable/svg_language"
         android:layout_marginTop="20dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="World's 1st"
+            android:fontFamily="@font/montserrat_bold"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="16dp"
@@ -63,7 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hospitality Community App"
-            android:textSize="25dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="23dp"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/text_world"
@@ -75,6 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Log in or sign up"
+            android:fontFamily="@font/montserrat_regular"
             android:textSize="16dp"
             android:layout_marginTop="30dp"
             android:textColor="@color/black"
@@ -154,6 +157,7 @@
                 android:paddingHorizontal="80dp"
                 android:paddingVertical="8dp"
                 android:text="Continue"
+                android:fontFamily="@font/montserrat_regular"
                 android:textSize="29dp"
                 android:background="@color/green_own"
                 android:textColor="@color/black"/>
@@ -165,6 +169,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Or continue with"
+            android:fontFamily="@font/montserrat_semibold"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="14dp"
@@ -189,6 +194,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="By continuing, you agree to our"
+            android:fontFamily="@font/montserrat_regular"
             android:textSize="12dp"
             android:layout_marginTop="32dp"
             android:textColor="@color/black"
@@ -212,6 +218,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Terms and conditions"
+                android:fontFamily="@font/montserrat_regular"
                 android:textSize="12dp"
                 android:textColor="@color/black"
                 app:layout_constraintHorizontal_bias="0.35"/>
@@ -220,6 +227,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Privacy policies"
+                android:fontFamily="@font/montserrat_regular"
                 android:textSize="12dp"
                 android:textColor="@color/black"
                 android:layout_marginHorizontal="8dp" />
@@ -228,6 +236,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Content policies"
+                android:fontFamily="@font/montserrat_regular"
                 android:textSize="12dp"
                 android:textColor="@color/black"/>
 
