@@ -29,6 +29,8 @@ import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 import com.google.firebase.auth.ActionCodeSettings
 import java.io.File
 import com.google.firebase.auth.FirebaseAuth
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 
 class PersonalInformation : AppCompatActivity() {
 
@@ -37,10 +39,9 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var galleryImageUri: Uri
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
-    lateinit var imageUri: Uri
+    lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        binding.profile.setImageURI(null)
-        binding.profile.setImageURI(imageUri)
+        cropImage(cameraImageUri)
     }
     lateinit var dialog: Dialog
 
@@ -49,10 +50,8 @@ class PersonalInformation : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.textWelcome.text= Html.fromHtml("<font color=${Color.BLACK}>Welcome On </font>" +
-                "<font color=${Color.GREEN}> Board</font>")
 
-        imageUri = createImageUri()!!
+        cameraImageUri = createImageUri()!!
 
         binding.camera.setOnClickListener {
             //Requesting Permission For CAMERA
@@ -93,6 +92,7 @@ class PersonalInformation : AppCompatActivity() {
         dialog.findViewById<CardView>(R.id.card_go).setOnClickListener {
             val intent = Intent(this,DashBoardActivity::class.java)
             startActivity(intent)
+            finish()
             dialog.dismiss()
 
             mailVerification()
@@ -193,7 +193,7 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun openCamera() {
-        contract.launch(imageUri)
+        contract.launch(cameraImageUri)
         dialog.dismiss()
     }
 
@@ -208,7 +208,23 @@ class PersonalInformation : AppCompatActivity() {
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
             val imageUri = data.data
-            binding.profile.setImageURI(imageUri)
+            if (imageUri != null) {
+
+                cropImage(imageUri)
+
+            }
+        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val resultingImage = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                val newImage = resultingImage.uri
+
+                binding.profile.setImageURI(newImage)
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(this, "Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
         }
     }
 
@@ -219,4 +235,16 @@ class PersonalInformation : AppCompatActivity() {
             image
         )
     }
+
+    private fun cropImage(imageUri: Uri) {
+        val options = CropImage.activity(imageUri)
+            .setGuidelines(CropImageView.Guidelines.ON)
+
+        options.setAspectRatio(1, 1)
+            .setCropShape(CropImageView.CropShape.OVAL)
+            .start(this)
+
+        binding.profile.setImageURI(imageUri)
+    }
+
 }

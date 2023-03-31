@@ -103,6 +103,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:background="@color/white"
+            app:ccpDialog_backgroundColor="@color/white"
             app:ccp_textSize="16dp"
             app:ccp_autoDetectCountry="true"
             app:ccp_showNameCode="false"

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -19,37 +20,30 @@
         tools:targetApi="31">
         <activity
             android:name=".authentication.PersonalInformationPhone"
-            android:exported="true">
-
-        </activity>
+            android:theme="@style/Theme.Rown_Splash"
+            android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:name=".authentication.PersonalInformation"
+            android:theme="@style/Theme.Rown_Splash"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".authentication.OtpVerification"
+            android:theme="@style/Theme.Rown_Splash"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".authentication.LoginActivity"
+            android:theme="@style/Theme.Rown_Splash"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".authentication.PersonalInformation"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Rown_Splash">
-
-
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ChatSection.ChatActivity"
-            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,8 +56,16 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ChatSection.ChatActivity"
+            android:theme="@style/Theme.Rown_Splash"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Dashboard.DashBoardActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"
+            android:theme="@style/Theme.Rown_Splash"
             android:screenOrientation="portrait"
             android:exported="true">
 
