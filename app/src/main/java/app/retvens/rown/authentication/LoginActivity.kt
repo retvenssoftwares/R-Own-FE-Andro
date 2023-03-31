@@ -177,7 +177,7 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("SignIn", "signInWithCredential:success")
                     Toast.makeText(applicationContext,"YOU ARE SUCCESSFULLY LOGIN",Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, DashBoardActivity::class.java)
+                    val intent = Intent(this, PersonalInformationPhone::class.java)
                     startActivity(intent)
                     finish()
 

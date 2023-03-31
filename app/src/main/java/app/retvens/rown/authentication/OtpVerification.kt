@@ -84,7 +84,7 @@ class OtpVerification : AppCompatActivity() {
                 val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                     storedVerificationId.toString(), otp
                 )
-                Toast.makeText(this, otp, Toast.LENGTH_SHORT).show()
+
                 signInWithPhoneAuthCredential(credential)
             } else {
                 Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
@@ -96,7 +96,16 @@ class OtpVerification : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    startActivity(Intent(applicationContext, PersonalInformation::class.java))
+
+                    val key = intent.getStringExtra("key")
+
+                    if (key == "1"){
+                        startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                    }else{
+                        startActivity(Intent(applicationContext, PersonalInformation::class.java))
+                    }
+
+
                     Toast.makeText(
                         applicationContext,
                         "Otp Verified Successfully",

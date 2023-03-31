@@ -4,6 +4,9 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+apply from: "https://api.mesibo.com/mesibo.gradle"
+
+
 android {
     namespace 'app.retvens.rown'
     compileSdk 33
@@ -80,5 +83,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
+    //Mesibo dependencies
+    implementation 'com.mesibo.api:mesibo:2.0.50'
+    implementation 'com.mesibo.api:calls:2.0.50'
+    implementation 'com.mesibo.api:ui:2.0.50'
+
+    implementation "com.mesibo.api:mesibo:${project.MesiboVersion_Api}"
+    implementation "com.mesibo.api:ui:${project.MesiboVersion_Ui}"
+    implementation "com.mesibo.api:calls:${project.MesiboVersion_Calls}"
 
 }
