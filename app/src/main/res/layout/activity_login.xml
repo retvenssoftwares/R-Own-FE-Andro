@@ -39,7 +39,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/png_language"
+        android:src="@drawable/svg_language"
         android:layout_marginTop="20dp"
         android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
