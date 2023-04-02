@@ -135,6 +135,8 @@
             android:hint="Enter your number"
             android:paddingVertical="17dp"
             android:paddingHorizontal="15dp"
+            android:maxLines="1"
+            android:maxLength="10"
             android:textSize="16dp"
             android:inputType="number"
             android:textColor="@color/black"
