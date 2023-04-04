@@ -2,7 +2,9 @@ package app.retvens.rown.authentication
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -31,6 +33,7 @@ import java.io.File
 import com.google.firebase.auth.FirebaseAuth
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import java.util.*
 
 class PersonalInformation : AppCompatActivity() {
 
@@ -48,6 +51,7 @@ class PersonalInformation : AppCompatActivity() {
     private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadLocale()
         binding = ActivityPersonalInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -246,5 +250,40 @@ class PersonalInformation : AppCompatActivity() {
 
         binding.profile.setImageURI(imageUri)
     }
+    private fun loadLocale(){
+        val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
+        val language = sharedPreferences.getString("MY_LANG", "")
+        setLocale(language!!)
+    }
 
+    private fun setLocale(language: String) {
+        val locale  = Locale(language)
+        Locale.setDefault(locale)
+        val configuration = Configuration()
+        configuration.locale = locale
+        baseContext.resources.updateConfiguration(configuration, baseContext.resources.displayMetrics)
+
+        val editor : SharedPreferences.Editor = getSharedPreferences("Settings", MODE_PRIVATE).edit()
+        editor.putString("MY_LANG", language)
+        editor.apply()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        loadLocale()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        loadLocale()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadLocale()
+    }
+    override fun onPause() {
+        super.onPause()
+        loadLocale()
+    }
 }
