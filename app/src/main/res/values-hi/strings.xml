@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">R-own</string>
+    <string name="world_s_1st">दुनिया का पहला</string>
+    <string name="hospitality_community_app">आतिथ्य समुदाय ऐप</string>
+    <string name="log_in_or_sign_up">लॉग इन या साइन अप</string>
+    <string name="or_continue_with">या साथ जारी रखें</string>
+    <string name="enter_your_number">फोन नंबर दर्ज</string>
+    <string name="continu">जारी रखना</string>
+    <string name="by_continuing_you_agree_to_our">जारी रखकर, आप हमारी सहमति देते हैं</string>
+    <string name="terms_and_conditions">नियम और शर्तें</string>
+    <string name="privacy_policies">गोपनीयता पालिसी</string>
+    <string name="content_policies">सामग्री नीतियां</string>
+    <string name="verification_code">सत्यापन कोड</string>
+    <string name="please_enter_otp_sent_to">कृपया ओटीपी दर्ज करें जिसे भेजा गया है</string>
+    <string name="didn_t_received_otp">ओटीपी नहीं मिला?</string>
+    <string name="resend_otp">ओटीपी पुनः भेजें</string>
+    <string name="verify">सत्यापित करना</string>
+    <string name="please_provide_some_details">कृपया अपने बारे में कुछ विवरण प्रदान करें कि आप हमें कैसे याद रखना चाहते हैं।</string>
+    <string name="enter_name">नाम दर्ज करें</string>
+    <string name="this_is_not_your">यह आपका उपयोगकर्ता नाम या पिन नहीं है यह नाम आपके समुदाय को दिखाई देगा</string>
+    <string name="enter_email">ईमेल दर्ज करें</string>
+    <string name="save">" जमा"</string>
+    <string name="change_phone_number">फ़ोन नंबर बदलें</string>
+    <string name="send_otp">OTP भेजें</string>
+    <string name="otp_will_be_sent_to">पर ओटीपी भेजा जाएगा</string>
+</resources>

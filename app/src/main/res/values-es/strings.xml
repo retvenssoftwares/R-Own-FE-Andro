@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">R-own</string>
+    <string name="world_s_1st">el primero del mundo</string>
+    <string name="hospitality_community_app">Aplicación de la comunidad de hospitalidad</string>
+    <string name="log_in_or_sign_up">Iniciar sesión o registrarse</string>
+    <string name="or_continue_with">o continuar con</string>
+    <string name="enter_your_number">ingresa número telefónico</string>
+    <string name="continu">Continuar</string>
+    <string name="by_continuing_you_agree_to_our">Al continuar, aceptas nuestros</string>
+    <string name="terms_and_conditions">Términos y condiciones</string>
+    <string name="privacy_policies">Políticas de privacidad</string>
+    <string name="content_policies">Políticas de contenido</string>
+    <string name="verification_code">Código de verificación</string>
+    <string name="please_enter_otp_sent_to">Ingrese OTP enviado a</string>
+    <string name="didn_t_received_otp">¿No recibiste OTP?</string>
+    <string name="resend_otp">Reenviar OTP</string>
+    <string name="verify">Verificar</string>
+    <string name="please_provide_some_details">Proporcione algunos detalles sobre usted, cómo desea que lo recordemos.</string>
+    <string name="enter_name">Ingrese su nombre</string>
+    <string name="this_is_not_your">Este no es su nombre de usuario o PIN. Este nombre será visible para su comunidad.</string>
+    <string name="enter_email">Ingrese correo electrónico</string>
+    <string name="save">Ahorrar</string>
+    <string name="change_phone_number">Cambiar número de teléfono</string>
+    <string name="send_otp">Enviar OTP</string>
+    <string name="otp_will_be_sent_to">OTP será enviado a</string>
+</resources>

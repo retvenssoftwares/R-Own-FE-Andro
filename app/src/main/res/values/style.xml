@@ -9,9 +9,9 @@
     </style>
 
     <style name="AppTheme.ActionBar.Transparent" parent="Theme.Rown">
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="RoundedCornerImage">

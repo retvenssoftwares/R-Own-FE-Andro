@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">R-own</string>
+    <string name="world_s_1st">世界初</string>
+    <string name="hospitality_community_app">ホスピタリティ コミュニティ アプリ</string>
+    <string name="log_in_or_sign_up">ログインまたはサインアップ</string>
+    <string name="or_continue_with">または続行します</string>
+    <string name="enter_your_number">電話番号を入力してください</string>
+    <string name="continu">続く</string>
+    <string name="by_continuing_you_agree_to_our">続行することにより、あなたは私たちの</string>
+    <string name="terms_and_conditions">規約と条件</string>
+    <string name="privacy_policies">プライバシー ポリシー</string>
+    <string name="content_policies">コンテンツ ポリシー</string>
+    <string name="verification_code">検証コード</string>
+    <string name="please_enter_otp_sent_to">送信先の OTP を入力してください</string>
+    <string name="didn_t_received_otp">OTP を受信して​​いませんか?</string>
+    <string name="resend_otp">OTPを再送信</string>
+    <string name="verify">確認</string>
+    <string name="please_provide_some_details">私たちにどのように記憶してほしいか、あなた自身についての詳細を入力してください。</string>
+    <string name="enter_name">名前を入力</string>
+    <string name="this_is_not_your">これはあなたのユーザー名やピンではありません この名前はあなたのコミュニティに表示されます</string>
+    <string name="enter_email">メールアドレスを入力して</string>
+    <string name="save">保存</string>
+    <string name="change_phone_number">電話番号の変更</string>
+    <string name="send_otp">OTP を送信</string>
+    <string name="otp_will_be_sent_to">OTP が送信されます</string>
+</resources>
