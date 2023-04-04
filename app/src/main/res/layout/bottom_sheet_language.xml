@@ -81,6 +81,7 @@
                         android:paddingHorizontal="20dp">
 
                         <ImageView
+                            android:id="@+id/img_arab"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/lang_grp_english"
@@ -89,6 +90,17 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
+                       <!-- <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Arabic"
+                            android:textSize="18dp"
+                            android:paddingHorizontal="10dp"
+                            android:background="@color/white"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="@id/img_arab"
+                            app:layout_constraintStart_toStartOf="@id/img_arab"/>-->
                         <RadioButton
                             android:id="@+id/radio_1"
                             android:layout_width="match_parent"
