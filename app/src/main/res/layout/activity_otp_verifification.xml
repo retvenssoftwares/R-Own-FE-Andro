@@ -32,19 +32,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/language_from_otp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/svg_language"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/text_veri"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Verification Code"
+        android:text="@string/verification_code"
         android:fontFamily="@font/montserrat_bold"
         android:textSize="28dp"
         android:textColor="@color/black"
@@ -58,7 +59,7 @@
         android:id="@+id/text_please"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please enter OTP sent to"
+        android:text="@string/please_enter_otp_sent_to"
         android:fontFamily="@font/montserrat_regular"
         android:textSize="18dp"
         android:layout_marginTop="6dp"
@@ -193,7 +194,7 @@
         android:id="@+id/text_didnt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Didn't received OTP?"
+        android:text="@string/didn_t_received_otp"
         android:fontFamily="@font/montserrat_semibold"
         android:textSize="18dp"
         android:layout_marginTop="6dp"
@@ -208,7 +209,7 @@
         android:id="@+id/text_resend_otp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Resend OTP"
+        android:text="@string/resend_otp"
         android:fontFamily="@font/montserrat_bold"
         android:textSize="18dp"
         android:layout_marginStart="10dp"
@@ -236,7 +237,7 @@
             android:layout_height="match_parent"
             android:paddingHorizontal="80dp"
             android:paddingVertical="8dp"
-            android:text="Verify"
+            android:text="@string/verify"
             android:fontFamily="@font/montserrat_regular"
             android:textSize="24dp"
             android:background="@color/light_grey"
