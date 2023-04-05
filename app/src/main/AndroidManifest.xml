@@ -52,14 +52,14 @@
             android:name=".authentication.OtpVerification"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Rown_Splash" />
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".authentication.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Rown_Splash" />
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Dashboard.DashBoardActivity"
             android:exported="true"
             android:theme="@style/Theme.Rown_Splash">
             <meta-data
@@ -67,7 +67,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Dashboard.DashBoardActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash">
