@@ -19,6 +19,16 @@
         android:theme="@style/Theme.Rown"
         tools:targetApi="31">
         <activity
+            android:name=".ChatSection.ChatScreen"
+            android:exported="true">
+
+
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ChatSection.MesiboUsers"
             android:exported="true">
 
@@ -56,7 +66,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".Dashboard.DashBoardActivity"
             android:exported="true"
@@ -69,7 +78,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
 
 
             <meta-data

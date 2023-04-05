@@ -1,7 +1,10 @@
 package app.retvens.rown.Dashboard
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
@@ -13,14 +16,24 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.ChatSection.UserChatList
+import app.retvens.rown.DataCollections.MesiboUsersData
+import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.Math.abs
 
 
@@ -31,6 +44,9 @@ class DashBoardActivity : AppCompatActivity(){
     private lateinit var auth:FirebaseAuth
     private lateinit var viewPager:ViewPager
     private lateinit var drawerLayout:DrawerLayout
+    lateinit var dialog: Dialog
+    private lateinit var popularUsersAdapter: PopularUsersAdapter
+    private  var userList: List<MesiboUsersData> = emptyList()
 
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,26 +141,81 @@ class DashBoardActivity : AppCompatActivity(){
         val frame = findViewById<FrameLayout>(R.id.fragment_container)
 
 
-        viewPager = findViewById<ViewPager>(R.id.viewPager)
-        val adapter = FragmentAdapter(supportFragmentManager)
-        viewPager.adapter = adapter
+//        viewPager = findViewById<ViewPager>(R.id.viewPager)
+//        val adapter = FragmentAdapter(supportFragmentManager)
+//        viewPager.adapter = adapter
+//
+//        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+//            override fun onPageSelected(position: Int) {
+//                if (position == 1) {
+//                    replaceFragment(UserChatList())
+//                }
+//            }
+//
+//            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+//                // Do nothing
+//            }
+//
+//            override fun onPageScrollStateChanged(state: Int) {
+//                // Do nothing
+//            }
+//        })
 
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageSelected(position: Int) {
-                if (position == 1) {
-                    replaceFragment(UserChatList())
+        showBottomDialog()
+
+    }
+
+    private fun showBottomDialog() {
+        dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.popular_connections_layout)
+
+        try {
+            val recycler = dialog.findViewById<RecyclerView>(R.id.popularUsers_recycler)
+            recycler.layoutManager = GridLayoutManager(this,3)
+
+            popularUsersAdapter = PopularUsersAdapter(this, emptyList())
+            recycler.adapter = popularUsersAdapter
+            popularUsersAdapter.notifyDataSetChanged()
+
+            getMesiboUsers()
+
+            dialog.show()
+            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
+            dialog.window?.setGravity(Gravity.BOTTOM)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getMesiboUsers() {
+        val send = RetrofitBuilder.retrofitBuilder.getMesiboUsers()
+
+        send.enqueue(object : Callback<UsersList?> {
+            override fun onResponse(call: Call<UsersList?>, response: Response<UsersList?>) {
+                if (response.isSuccessful) {
+                    val response = response.body()!!
+                    if (response.result) {
+                        userList = response.users
+                        // Update the adapter with the new data
+                        popularUsersAdapter.userList = userList ?: emptyList()
+                        popularUsersAdapter.notifyDataSetChanged()
+
+                        Toast.makeText(applicationContext,userList.size.toString(),Toast.LENGTH_SHORT).show()
+
+                    }
+                }else{
+                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                // Do nothing
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-                // Do nothing
+            override fun onFailure(call: Call<UsersList?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message,Toast.LENGTH_SHORT).show()
             }
         })
-
     }
 
 

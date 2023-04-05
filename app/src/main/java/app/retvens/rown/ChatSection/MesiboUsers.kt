@@ -18,7 +18,7 @@ class MesiboUsers : AppCompatActivity() {
 
     private lateinit var receiverProfileAdapter: ReceiverProfileAdapter
     private lateinit var recycler:RecyclerView
-    private lateinit var userList: List<MesiboUsersData>
+    private  var userList: List<MesiboUsersData> = emptyList()
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +43,15 @@ class MesiboUsers : AppCompatActivity() {
        send.enqueue(object : Callback<UsersList?> {
            override fun onResponse(call: Call<UsersList?>, response: Response<UsersList?>) {
                if (response.isSuccessful) {
-                   val usersList = response.body()
-                   if (usersList != null && usersList.result) {
-                       userList = usersList.users
+                   val response = response.body()!!
+                   if (response.result) {
+                       userList = response.users
                        // Update the adapter with the new data
-                       receiverProfileAdapter.
-                       userList = userList
+                       receiverProfileAdapter.userList = userList ?: emptyList()
                        receiverProfileAdapter.notifyDataSetChanged()
+
+                       Toast.makeText(applicationContext,userList.size.toString(),Toast.LENGTH_SHORT).show()
+
                    }
                }else{
                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()

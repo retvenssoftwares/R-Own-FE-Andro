@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/topdiologe"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginHorizontal="30dp"
+        android:text="Connect with them and build your own community "
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:fontFamily="@font/montserrat_semibold"
+        />
+
+
+
+    <EditText
+        android:layout_marginTop="10dp"
+        android:id="@+id/connections_search"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="Who do you want to connect with"
+        android:paddingLeft="10dp"
+        android:textSize="15dp"
+        android:textColor="@color/grey_40"
+        android:textColorHint="@color/grey_40"
+        android:background="@drawable/searchboxusers"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="20dp"
+        />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="40dp"
+        android:src="@drawable/searchbar"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/popularUsers_recycler"
+        app:layout_constraintTop_toBottomOf="@id/connections_search"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="15dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

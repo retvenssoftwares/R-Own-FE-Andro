@@ -15,14 +15,7 @@ data class MesiboUsersData(
 ){
 
 }
-//val api: Mesibo = Mesibo.getInstance()
-//        api.init(applicationContext)
-//
-//        Mesibo.addListener(this)
-//        Mesibo.setAccessToken("a9afa113e47f7f13ca8a5f61ad30c15218971cb9609f51385787e554786c2sa0585e450b2")
-//        Mesibo.setDatabase("retvensDB", 0)
-//
-//        Mesibo.start()
+
 
 
 

@@ -1,6 +1,7 @@
 package app.retvens.rown.ChatSection
 
 import android.content.Context
+import android.content.Intent
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +41,14 @@ class ReceiverProfileAdapter(val context: Context, var userList:List<MesiboUsers
         val relativeTime = DateUtils.getRelativeTimeSpanString(timestamp * 1000L, now, DateUtils.SECOND_IN_MILLIS) // get the relative time
 
         holder.lastSeen.setText("Active $relativeTime")
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context,ChatScreen::class.java)
+            intent.putExtra("name",data.address)
+            intent.putExtra("userId",data.uid)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent)
+        }
 
     }
 
