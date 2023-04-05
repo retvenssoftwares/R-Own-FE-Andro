@@ -14,11 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.LayoutDirection
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.Animation
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -138,6 +140,18 @@ class LoginActivity : AppCompatActivity() {
         dialogLanguage.window?.setGravity(Gravity.BOTTOM)
         dialogLanguage.show()
 
+        val language_arabic = dialogLanguage.findViewById<ImageView>(R.id.language_arabic)
+        val language_english = dialogLanguage.findViewById<ImageView>(R.id.language_english)
+        val language_hindi = dialogLanguage.findViewById<ImageView>(R.id.language_hindi)
+        val language_spanish = dialogLanguage.findViewById<ImageView>(R.id.language_spanish)
+        val language_german = dialogLanguage.findViewById<ImageView>(R.id.language_german)
+        val language_japanese = dialogLanguage.findViewById<ImageView>(R.id.language_japanese)
+        val language_portuguese = dialogLanguage.findViewById<ImageView>(R.id.language_portuguese)
+        val language_italian = dialogLanguage.findViewById<ImageView>(R.id.language_italian)
+        val language_french = dialogLanguage.findViewById<ImageView>(R.id.language_french)
+        val language_russian = dialogLanguage.findViewById<ImageView>(R.id.language_russian)
+        val language_chinese = dialogLanguage.findViewById<ImageView>(R.id.language_chinese)
+
         val r1 = dialogLanguage.findViewById<RadioButton>(R.id.radio_1)
         val r2 =dialogLanguage.findViewById<RadioButton>(R.id.radio_2)
         val r3 = dialogLanguage.findViewById<RadioButton>(R.id.radio_3)
@@ -150,10 +164,14 @@ class LoginActivity : AppCompatActivity() {
         val r10 = dialogLanguage.findViewById<RadioButton>(R.id.radio_10)
         val r11 = dialogLanguage.findViewById<RadioButton>(R.id.radio_11)
 
+        dialogLanguage.findViewById<ImageView>(R.id.bt_close).setOnClickListener {
+            dialogLanguage.dismiss()
+        }
+
         val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
         val language = sharedPreferences.getString("MY_LANG", "")
 
-        when{
+       /* when{
             language == "ar" -> r1.isChecked = true
             language == "" -> r2.isChecked = true
             language == "hi" -> r3.isChecked = true
@@ -165,31 +183,42 @@ class LoginActivity : AppCompatActivity() {
             language == "fr" -> r9.isChecked = true
             language == "ru" -> r10.isChecked = true
             language == "zh" -> r11.isChecked = true
-        }
+        }*/
 
-        /* if (language == "ar"){
+         if (language == "ar"){
              r1.isChecked = true
+             language_arabic.setImageResource(R.drawable.arabic_language_selected)
          } else if (language == ""){
              r2.isChecked = true
+             language_english.setImageResource(R.drawable.english_language_selected)
          } else if (language == "hi"){
              r3.isChecked = true
+             language_hindi.setImageResource(R.drawable.hindi_language_selected)
          } else if (language == "es"){
              r4.isChecked = true
+             language_spanish.setImageResource(R.drawable.spanish_language_selected)
          } else if (language == "de"){
              r5.isChecked = true
+             language_german.setImageResource(R.drawable.german_language_selected)
          } else if (language == "ja"){
              r6.isChecked = true
+             language_japanese.setImageResource(R.drawable.japanese_language_selected)
          } else if (language == "pt"){
              r7.isChecked = true
+             language_portuguese.setImageResource(R.drawable.portuguese_language_selected)
          } else if (language == "it"){
              r8.isChecked = true
+             language_italian.setImageResource(R.drawable.italian_language_selected)
          } else if (language == "fr"){
              r9.isChecked = true
+             language_french.setImageResource(R.drawable.french_language_selected)
          } else if (language == "ru"){
              r10.isChecked = true
+             language_russian.setImageResource(R.drawable.russian_language_selected)
          } else if (language == "zh"){
              r11.isChecked = true
-         }*/
+             language_chinese.setImageResource(R.drawable.chinese_language_selected)
+         }
 
         r1.setOnClickListener {
             setLocale("ar")
