@@ -1,28 +1,20 @@
 package app.retvens.rown.Dashboard
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Constraints
-import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import app.retvens.rown.ChatSection.ChatActivity
+import app.retvens.rown.ChatSection.UserChatList
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
@@ -32,28 +24,19 @@ import com.google.firebase.auth.FirebaseAuth
 import java.lang.Math.abs
 
 
-class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener{
+class DashBoardActivity : AppCompatActivity(){
 
-    private lateinit var gestureDetector: GestureDetector
+
     private lateinit var toggle: ActionBarDrawerToggle
-    var x1:Float = 0.0f
-    var x2:Float = 0.0f
-    var y1:Float = 0.0f
-    var y2:Float = 0.0f
     private lateinit var auth:FirebaseAuth
-
-    companion object{
-        const val MIN_DISTANCE = 150
-    }
-
+    private lateinit var viewPager:ViewPager
+    private lateinit var drawerLayout:DrawerLayout
 
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dash_board)
-
-        window.statusBarColor = Color.TRANSPARENT
-
+        
         auth = FirebaseAuth.getInstance()
 
 //        replaceFragment(HomeFragment())
@@ -76,7 +59,7 @@ class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener
 
 
         //setUp drawerLayout
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
+        drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
 
 
@@ -126,7 +109,6 @@ class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                 R.id.tutorial ->  Toast.makeText(applicationContext,"click", Toast.LENGTH_SHORT).show()
 
             }
-
             true
         }
 
@@ -138,54 +120,33 @@ class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener
             }
         }
 
+
+
         val frame = findViewById<FrameLayout>(R.id.fragment_container)
 
 
-        gestureDetector = GestureDetector(this,this@DashBoardActivity)
+        viewPager = findViewById<ViewPager>(R.id.viewPager)
+        val adapter = FragmentAdapter(supportFragmentManager)
+        viewPager.adapter = adapter
+
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageSelected(position: Int) {
+                if (position == 1) {
+                    replaceFragment(UserChatList())
+                }
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                // Do nothing
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                // Do nothing
+            }
+        })
 
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-        Toast.makeText(applicationContext,"op",Toast.LENGTH_SHORT)
-
-        gestureDetector.onTouchEvent(event!!)
-
-        when(event.action){
-            0 ->{
-                x1 = event.x
-                y1 = event.y
-            }
-            1->{
-                x2 = event.x
-                y2 = event.y
-
-                val valueX:Float = x2-x1
-                val valueF:Float = y2-y1
-
-                if (abs(valueX) > MIN_DISTANCE){
-
-                    if (x2 > x1){
-                        Toast.makeText(applicationContext,"Right swipe",Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(applicationContext,"Left swipe",Toast.LENGTH_SHORT).show()
-                    }
-
-                }
-                else if (abs(valueF) > MIN_DISTANCE){
-                    if (y2 > y1){
-                        Toast.makeText(applicationContext,"Bottom swipe",Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(applicationContext,"Up swipe",Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            }
-        }
-
-
-        return super.onTouchEvent(event)
-    }
 
     private fun replaceFragment(fragment: Fragment) {
         if (fragment !=null){
@@ -219,29 +180,7 @@ class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         }
     }
 
-    override fun onDown(p0: MotionEvent): Boolean {
-        return false
-    }
 
-    override fun onShowPress(p0: MotionEvent) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onSingleTapUp(p0: MotionEvent): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
-        return false
-    }
-
-    override fun onLongPress(p0: MotionEvent) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onFling(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
-        return false
-    }
 
 
 

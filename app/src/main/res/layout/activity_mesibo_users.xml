@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".ChatSection.ChatActivity">
-
-
+    android:fitsSystemWindows="true"
+    tools:context=".ChatSection.MesiboUsers">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecycler"
@@ -16,8 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="80dp"
         />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

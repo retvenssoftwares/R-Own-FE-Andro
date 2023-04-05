@@ -4,8 +4,7 @@
     
         <!-- Primary brand color. -->
         <item name="colorPrimary">#ADD134</item>
-        <item name="android:navigationBarColor">@android:color/white</item>
-        <item name="colorPrimaryVariant">@color/green_own</item>
+
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -18,8 +17,10 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Rown_Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorOnPrimary">@color/white</item>
+    <style name="Theme.Rown_Splash" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorOnPrimary">#ADD134</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="colorPrimaryVariant">@color/green_own</item>
         <!-- Status bar color. -->
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor">@color/white</item>

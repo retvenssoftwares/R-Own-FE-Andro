@@ -1,41 +1,24 @@
 package app.retvens.rown.ChatSection
 
+import android.content.Context
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.DataCollections.MesiboUsersData
+import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.R
-import com.mesibo.api.Mesibo
 import com.mesibo.api.MesiboProfile
-import java.util.concurrent.ConcurrentHashMap
 
-class ReceiverProfileAdapter(private var profiles: ConcurrentHashMap<String, MesiboProfile>?) :
+class ReceiverProfileAdapter(val context: Context, var userList:List<MesiboUsersData>) :
     RecyclerView.Adapter<ReceiverProfileAdapter.ProfileViewHolder>() {
 
     class ProfileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val nameTextView: TextView = itemView.findViewById(R.id.receiver_name)
-        private val addressTextView: TextView = itemView.findViewById(R.id.receiver_lastMessage)
+        var nameTextView = itemView.findViewById<TextView>(R.id.receiver_name)
+        var lastSeen = itemView.findViewById<TextView>(R.id.active_timeMessage)
 
-        fun bind(profile: MesiboProfile) {
-            nameTextView.text = profile.address
-            addressTextView.text = profile.uid.toString()
-
-            getLastSeenText(profile.lastSeen.toLong())
-
-        }
-
-        private fun getLastSeenText(lastSeen: Long): String {
-            val currentTimeMillis = System.currentTimeMillis()
-            val lastSeenMillis = lastSeen * 1000
-            val diffMillis = currentTimeMillis - lastSeenMillis
-
-            return when {
-                diffMillis < 60_000 -> "Online"
-                diffMillis < 3_600_000 -> "${diffMillis / 60_000}m ago"
-                else -> "${diffMillis / 3_600_000}h ago"
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
@@ -45,11 +28,22 @@ class ReceiverProfileAdapter(private var profiles: ConcurrentHashMap<String, Mes
     }
 
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
-        val profile = profiles?.get(position.toString())
-        profile?.let { holder.bind(it) }
+
+        val data = userList[position]
+
+        holder.nameTextView.text = data.address
+
+        val lastSeen = data.lastonline
+
+        val timestamp = lastSeen
+        val now = System.currentTimeMillis() // get the current time in milliseconds
+        val relativeTime = DateUtils.getRelativeTimeSpanString(timestamp * 1000L, now, DateUtils.SECOND_IN_MILLIS) // get the relative time
+
+        holder.lastSeen.setText("Active $relativeTime")
+
     }
 
     override fun getItemCount(): Int {
-        return profiles?.size ?: 0
+        return userList.size
     }
 }
