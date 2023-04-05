@@ -334,8 +334,11 @@ class LoginActivity : AppCompatActivity() {
         dialog.findViewById<CardView>(R.id.card_change_phone).setOnClickListener {
             dialog.dismiss()
         }
-
-
+        dialog.show()
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialog.window?.setGravity(Gravity.BOTTOM)
     }
     private fun sendVerificationcode(number: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
