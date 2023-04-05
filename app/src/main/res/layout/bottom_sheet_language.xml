@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:text="In what language do you want \nto have your hospitality adventures ?"
             android:textSize="16dp"
-            android:paddingStart="24dp"
-            android:paddingTop="24dp"
+            android:paddingTop="34dp"
+            android:paddingHorizontal="28dp"
             android:paddingBottom="25dp"
             android:fontFamily="@font/montserrat_semibold"
             android:textColor="@color/black"
@@ -38,8 +38,8 @@
 
         <ImageView
             android:id="@+id/bt_close"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_margin="10dp"
             app:srcCompat="@drawable/ic_close"
             android:layout_alignParentEnd="true"
@@ -78,31 +78,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:id="@+id/img_arab"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_english"
-                            android:layout_marginStart="15dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-                        <!--<TextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Arabic"
                             android:textSize="20dp"
-                            android:paddingHorizontal="10dp"
-                            android:paddingBottom="9dp"
-                            android:layout_marginLeft="13dp"
-                            android:background="@color/white"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
-                            app:layout_constraintBottom_toBottomOf="@id/img_arab"
-                            app:layout_constraintStart_toStartOf="@id/img_arab"/>-->
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_arabic"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/language_arabic"
+                            android:scaleType="centerCrop"
+                            android:layout_marginVertical="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
                         <RadioButton
                             android:id="@+id/radio_1"
                             android:layout_width="match_parent"
@@ -133,17 +133,33 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_english"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="English"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_english"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_english"
+                            android:layout_marginVertical="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
                         <RadioButton
                             android:id="@+id/radio_2"
                             android:layout_width="match_parent"
@@ -173,14 +189,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_hindi"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Hindi"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_hindi"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_hindi"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -214,14 +244,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_spanish"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Spanish"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_spanish"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_spanish"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -255,14 +299,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_german"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="German"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_german"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_german"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -295,14 +353,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_japanese"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Japanese"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_japanese"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_english"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -335,14 +407,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_japanese"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Portuguese"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_portuguese"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_english"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -375,14 +461,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_italian"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Italian"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_italian"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_english"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -415,14 +515,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_french"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="French"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_french"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_english"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -455,14 +569,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_russian"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Russian"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_russian"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_english"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -495,14 +623,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="20dp">
+                        android:paddingHorizontal="14dp">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/lang_grp_russian"
-                            android:layout_marginStart="15dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chinese"
+                            android:textSize="20dp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:textColor="@color/black"
+                            app:layout_constraintHorizontal_bias="0.15"
+                            app:layout_constraintVertical_bias=".65"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                        <ImageView
+                            android:id="@+id/language_chinese"
+                            android:layout_width="160dp"
+                            android:layout_height="50dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/language_english"
+                            android:layout_marginVertical="10dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
