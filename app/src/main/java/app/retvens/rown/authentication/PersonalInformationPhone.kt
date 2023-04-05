@@ -30,13 +30,13 @@ import androidx.core.content.FileProvider
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationPhoneBinding
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -138,12 +138,7 @@ class PersonalInformationPhone : AppCompatActivity() {
 
         dialog.findViewById<CardView>(R.id.card_go).setOnClickListener {
 
-
-
             phoneNumberVerification()
-            val intent = Intent(this, DashBoardActivity::class.java)
-            startActivity(intent)
-            finish()
             dialog.dismiss()
         }
 
