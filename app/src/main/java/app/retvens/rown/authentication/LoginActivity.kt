@@ -2,15 +2,24 @@ package app.retvens.rown.authentication
 
 import android.app.Activity
 import android.app.Dialog
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
+import android.view.animation.Animation
+import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +34,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
@@ -41,9 +51,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadLocale()
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.languageFromLogin.setOnClickListener {
+             openBottomLanguageSheet()
+        }
 
         FirebaseApp.initializeApp(this)
 
@@ -110,6 +124,145 @@ class LoginActivity : AppCompatActivity() {
                 showBottomDialog(phone)
             }
         }
+    }
+
+    private fun openBottomLanguageSheet() {
+        val dialogLanguage = Dialog(this)
+        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogLanguage.setContentView(R.layout.bottom_sheet_language)
+        dialogLanguage.setCancelable(true)
+
+        dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialogLanguage.window?.setGravity(Gravity.BOTTOM)
+        dialogLanguage.show()
+
+        val r1 = dialogLanguage.findViewById<RadioButton>(R.id.radio_1)
+        val r2 =dialogLanguage.findViewById<RadioButton>(R.id.radio_2)
+        val r3 = dialogLanguage.findViewById<RadioButton>(R.id.radio_3)
+        val r4 = dialogLanguage.findViewById<RadioButton>(R.id.radio_4)
+        val r5 = dialogLanguage.findViewById<RadioButton>(R.id.radio_5)
+        val r6 = dialogLanguage.findViewById<RadioButton>(R.id.radio_6)
+        val r7 = dialogLanguage.findViewById<RadioButton>(R.id.radio_7)
+        val r8  = dialogLanguage.findViewById<RadioButton>(R.id.radio_8)
+        val r9 = dialogLanguage.findViewById<RadioButton>(R.id.radio_9)
+        val r10 = dialogLanguage.findViewById<RadioButton>(R.id.radio_10)
+        val r11 = dialogLanguage.findViewById<RadioButton>(R.id.radio_11)
+
+        val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
+        val language = sharedPreferences.getString("MY_LANG", "")
+
+        when{
+            language == "ar" -> r1.isChecked = true
+            language == "" -> r2.isChecked = true
+            language == "hi" -> r3.isChecked = true
+            language == "es" -> r4.isChecked = true
+            language == "de" -> r5.isChecked = true
+            language == "ja" -> r6.isChecked = true
+            language == "pt" -> r7.isChecked = true
+            language == "it" -> r8.isChecked = true
+            language == "fr" -> r9.isChecked = true
+            language == "ru" -> r10.isChecked = true
+            language == "zh" -> r11.isChecked = true
+        }
+
+        /* if (language == "ar"){
+             r1.isChecked = true
+         } else if (language == ""){
+             r2.isChecked = true
+         } else if (language == "hi"){
+             r3.isChecked = true
+         } else if (language == "es"){
+             r4.isChecked = true
+         } else if (language == "de"){
+             r5.isChecked = true
+         } else if (language == "ja"){
+             r6.isChecked = true
+         } else if (language == "pt"){
+             r7.isChecked = true
+         } else if (language == "it"){
+             r8.isChecked = true
+         } else if (language == "fr"){
+             r9.isChecked = true
+         } else if (language == "ru"){
+             r10.isChecked = true
+         } else if (language == "zh"){
+             r11.isChecked = true
+         }*/
+
+        r1.setOnClickListener {
+            setLocale("ar")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r2.setOnClickListener {
+            setLocale("")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r3.setOnClickListener {
+            setLocale("hi")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r4.setOnClickListener {
+            setLocale("es")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r5.setOnClickListener {
+            setLocale("de")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r6.setOnClickListener {
+            setLocale("ja")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r7.setOnClickListener {
+            setLocale("pt")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r8.setOnClickListener {
+            setLocale("it")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r9.setOnClickListener {
+            setLocale("fr")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r10.setOnClickListener {
+            setLocale("ru")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+        r11.setOnClickListener {
+            setLocale("zh")
+            dialogLanguage.dismiss()
+            recreate()
+        }
+    }
+
+    private fun setLocale(language: String) {
+        val locale  = Locale(language)
+        Locale.setDefault(locale)
+        val configuration = Configuration()
+        configuration.locale = locale
+        baseContext.resources.updateConfiguration(configuration, baseContext.resources.displayMetrics)
+
+        val editor : SharedPreferences.Editor = getSharedPreferences("Settings", MODE_PRIVATE).edit()
+        editor.putString("MY_LANG", language)
+        editor.apply()
+    }
+    private fun loadLocale(){
+        val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
+        val language = sharedPreferences.getString("MY_LANG", "")
+        setLocale(language!!)
     }
 
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -189,5 +342,25 @@ class LoginActivity : AppCompatActivity() {
 
                 }
             }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        loadLocale()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        loadLocale()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadLocale()
+    }
+    override fun onPause() {
+        super.onPause()
+        loadLocale()
     }
 }

@@ -82,7 +82,7 @@
 
                         <ImageView
                             android:id="@+id/img_arab"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:src="@drawable/lang_grp_english"
                             android:layout_marginStart="15dp"
@@ -90,14 +90,16 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
-                       <!-- <TextView
+                        <!--<TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Arabic"
-                            android:textSize="18dp"
+                            android:textSize="20dp"
                             android:paddingHorizontal="10dp"
+                            android:paddingBottom="9dp"
+                            android:layout_marginLeft="13dp"
                             android:background="@color/white"
-                            android:fontFamily="@font/montserrat_bold"
+                            android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="@id/img_arab"
                             app:layout_constraintStart_toStartOf="@id/img_arab"/>-->
@@ -107,7 +109,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -148,7 +150,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -188,7 +190,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -229,7 +231,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -270,7 +272,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -310,7 +312,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -350,7 +352,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -390,7 +392,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -430,7 +432,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -470,7 +472,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -510,7 +512,7 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center_vertical"
                             android:gravity="center_vertical"
-                            android:selectAllOnFocus="true"
+                            android:buttonTint="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
