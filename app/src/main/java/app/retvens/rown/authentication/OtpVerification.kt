@@ -123,6 +123,12 @@ class OtpVerification : AppCompatActivity() {
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
 // The verification code entered was invalid
                         Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show()
+                        otpET1.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
+                        otpET2.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
+                        otpET3.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
+                        otpET4.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
+                        otpET5.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
+                        otpET6.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
                     }
                 }
             }
@@ -187,7 +193,7 @@ class OtpVerification : AppCompatActivity() {
                     selectedETPosition = 5
                     showKeyBoard(otpET6)
                 }else if (selectedETPosition == 5){
-                    binding.textVerifyBtn.setBackgroundColor(resources.getColor(R.color.green_own))
+                    binding.cardVerifyOtp.visibility = View.VISIBLE
                 }
             }
         }
