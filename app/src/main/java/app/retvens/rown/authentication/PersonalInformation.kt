@@ -47,6 +47,7 @@ class PersonalInformation : AppCompatActivity() {
         cropImage(cameraImageUri)
     }
     lateinit var dialog: Dialog
+    lateinit var progressDialog: Dialog
 
     private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +78,14 @@ class PersonalInformation : AppCompatActivity() {
                 binding.emailLayout.isErrorEnabled = false
                 val mail = binding.etEmail.text.toString()
                 mail.trim()
-                openBottomSheetEmail(mail)
+                progressDialog = Dialog(this)
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.setCancelable(false)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                progressDialog.show()
+//                openBottomSheetEmail(mail)
+                mailVerification(mail)
             }
         }
 
@@ -85,22 +93,35 @@ class PersonalInformation : AppCompatActivity() {
 
     }
 
-    private fun openBottomSheetEmail(email:String) {
+    private fun openBottomSheetEmail(mail:String) {
         val dialog: Dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.bottom_sheet_layout_mail)
 
         val eMail = dialog.findViewById<TextView>(R.id.text_eMail)
-        eMail.text = email
+        eMail.text = mail
 
         dialog.findViewById<CardView>(R.id.card_go).setOnClickListener {
-            val intent = Intent(this,DashBoardActivity::class.java)
-            startActivity(intent)
-            finish()
             dialog.dismiss()
-
-            mailVerification()
-
+            val emailLink = intent.data.toString()
+            if (auth.isSignInWithEmailLink(emailLink)) {
+                auth.signInWithEmailLink(mail, emailLink)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            progressDialog.dismiss()
+                            Toast.makeText(applicationContext,"mail is verified",Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this,DashBoardActivity::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                            val user = task.result?.user
+                            // do something with the user object
+                        } else {
+                            Toast.makeText(applicationContext,"fail to verify",Toast.LENGTH_SHORT).show()
+                            progressDialog.dismiss()
+                            // handle sign-in failure
+                        }
+                    }
+            }
         }
 
         dialog.show()
@@ -110,9 +131,9 @@ class PersonalInformation : AppCompatActivity() {
         dialog.window?.setGravity(Gravity.BOTTOM)
     }
 
-    private fun mailVerification() {
+    private fun mailVerification(mail:String) {
 
-        val mail = binding.etEmail.text.toString()
+//        val mail = binding.etEmail.text.toString()
 
         val actionCodeSettings = ActionCodeSettings.newBuilder()
             .setUrl("https://app.retvens.com/emailSignInLink")
@@ -123,28 +144,17 @@ class PersonalInformation : AppCompatActivity() {
         auth.sendSignInLinkToEmail(mail, actionCodeSettings)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    openBottomSheetEmail(mail)
                     Toast.makeText(applicationContext,"mail is sent to $mail",Toast.LENGTH_SHORT).show()
                 }else{
+                    progressDialog.dismiss()
                     Toast.makeText(applicationContext,task.exception?.message.toString(),Toast.LENGTH_SHORT).show()
                     Log.e("error",task.exception?.message.toString())
                 }
             }
 //
-        val emailLink = intent.data.toString()
 
-        if (auth.isSignInWithEmailLink(emailLink)) {
-            auth.signInWithEmailLink(mail, emailLink)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(applicationContext,"mail is verified",Toast.LENGTH_SHORT).show()
-                        val user = task.result?.user
-                        // do something with the user object
-                    } else {
-                        Toast.makeText(applicationContext,"fail to verify",Toast.LENGTH_SHORT).show()
-                        // handle sign-in failure
-                    }
-                }
-        }
+
 //
 //        auth.createUserWithEmailAndPassword(mail, "000000")
 //            .addOnCompleteListener { task ->
@@ -168,6 +178,7 @@ class PersonalInformation : AppCompatActivity() {
 
     }
 
+ /*------------------------------CAMERA FUNCTIONALITIES AND SET LOCALE LANGUAGE--------------*/
     private fun openBottomSheet() {
         dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
