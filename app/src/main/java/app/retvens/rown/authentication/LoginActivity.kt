@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.LayoutDirection
 import android.util.Log
 import android.view.Gravity
@@ -44,6 +45,7 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
+    var mLastClickTime: Long = 0
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
@@ -59,6 +61,11 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.languageFromLogin.setOnClickListener {
+            // mis-clicking prevention, using threshold of 1000 ms
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
              openBottomLanguageSheet()
         }
 
@@ -76,6 +83,13 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         binding.imgGoogle.setOnClickListener {
+
+            progressDialog = Dialog(this)
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setCancelable(false)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            progressDialog.show()
             resultLauncher.launch(Intent(googleSignInClient.signInIntent))
         }
 
@@ -312,8 +326,10 @@ class LoginActivity : AppCompatActivity() {
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
                     Log.w("SignIn", "Google sign in failed", e)
+                    progressDialog.dismiss()
                 }
             }else{
+                progressDialog.dismiss()
                 Log.w("SignIn", exception.toString())
                 Toast.makeText(this,"Failed",Toast.LENGTH_LONG).show()
             }
@@ -366,8 +382,8 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("SignIn", "signInWithCredential:success")
-                    progressDialog.dismiss()
                     Toast.makeText(applicationContext,"YOU ARE SUCCESSFULLY LOGIN",Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
                     val intent = Intent(this, PersonalInformationPhone::class.java)
                     startActivity(intent)
                     finish()
