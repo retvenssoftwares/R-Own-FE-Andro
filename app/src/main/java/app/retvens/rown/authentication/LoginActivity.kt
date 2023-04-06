@@ -43,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
 
     lateinit var dialog: Dialog
+    lateinit var progressDialog: Dialog
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
@@ -91,11 +92,12 @@ class LoginActivity : AppCompatActivity() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                 finish()
-
+                progressDialog.dismiss()
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
                 Toast.makeText(applicationContext, "Failed", Toast.LENGTH_LONG).show()
+                progressDialog.dismiss()
             }
 
             override fun onCodeSent(
@@ -328,6 +330,13 @@ class LoginActivity : AppCompatActivity() {
         phoneN.text = phone.toString()
 
         dialog.findViewById<CardView>(R.id.card_send_otp).setOnClickListener {
+            progressDialog = Dialog(this)
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setCancelable(false)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            progressDialog.show()
             Toast.makeText(this,"Sending..", Toast.LENGTH_SHORT).show()
             sendVerificationcode(phoneNumber)
         }
@@ -357,15 +366,13 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("SignIn", "signInWithCredential:success")
+                    progressDialog.dismiss()
                     Toast.makeText(applicationContext,"YOU ARE SUCCESSFULLY LOGIN",Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, PersonalInformationPhone::class.java)
                     startActivity(intent)
                     finish()
-
-
-
                 } else {
-
+                    progressDialog.dismiss()
                     Log.d("SignIn", "signInWithCredential:failure", task.exception)
 
                 }
