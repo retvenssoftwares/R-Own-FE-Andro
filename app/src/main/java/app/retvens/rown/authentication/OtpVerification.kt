@@ -1,15 +1,19 @@
 package app.retvens.rown.authentication
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
+import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -31,6 +35,7 @@ import java.util.*
 
 class OtpVerification : AppCompatActivity() {
     lateinit var binding: ActivityOtpVerifificationBinding
+    lateinit var progressDialog : Dialog
 
     lateinit var otpET1: EditText
     lateinit var otpET2: EditText
@@ -85,6 +90,12 @@ class OtpVerification : AppCompatActivity() {
 
 
             if (!otp.isEmpty()) {
+                progressDialog = Dialog(this)
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                progressDialog.show()
                 val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                     storedVerificationId.toString(), otp
                 )
@@ -100,6 +111,7 @@ class OtpVerification : AppCompatActivity() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    progressDialog.dismiss()
 
                     val key = intent.getStringExtra("key")
 
@@ -121,6 +133,7 @@ class OtpVerification : AppCompatActivity() {
                 } else {
 // Sign in failed, display a message and update the UI
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        progressDialog.dismiss()
 // The verification code entered was invalid
                         Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show()
                         otpET1.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
