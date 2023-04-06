@@ -24,4 +24,15 @@
     <string name="change_phone_number">फ़ोन नंबर बदलें</string>
     <string name="send_otp">OTP भेजें</string>
     <string name="otp_will_be_sent_to">पर ओटीपी भेजा जाएगा</string>
+    <string name="english">अंग्रेज़ी</string>
+    <string name="hindi">हिंदी</string>
+    <string name="spanish">स्पैनिश</string>
+    <string name="german">जर्मन</string>
+    <string name="japanese">जापानी</string>
+    <string name="portuguese">पुर्तगाली</string>
+    <string name="italian">इतालवी</string>
+    <string name="french">फ्रेंच</string>
+    <string name="russian">रूसी</string>
+    <string name="chinese">चीनी</string>
+    <string name="arabic">अरबी</string>
 </resources>

@@ -24,4 +24,15 @@
     <string name="change_phone_number">Changer de numéro de téléphone</string>
     <string name="send_otp">Envoyer OTP</string>
     <string name="otp_will_be_sent_to">OTP sera envoyé à</string>
+    <string name="english">Anglais</string>
+    <string name="hindi">hindi</string>
+    <string name="spanish">Espagnol</string>
+    <string name="german">Allemand</string>
+    <string name="japanese">Japonais</string>
+    <string name="portuguese">Portugais</string>
+    <string name="italian">Italien</string>
+    <string name="french">Français</string>
+    <string name="russian">russe</string>
+    <string name="chinese">Chinois</string>
+    <string name="arabic">arabe</string>
 </resources>

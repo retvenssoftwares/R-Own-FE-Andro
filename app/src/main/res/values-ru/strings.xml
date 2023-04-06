@@ -24,4 +24,15 @@
     <string name="change_phone_number">Изменить номер телефона</string>
     <string name="send_otp">Отправить одноразовый пароль</string>
     <string name="otp_will_be_sent_to">OTP будет отправлен на</string>
+    <string name="english">Английский</string>
+    <string name="hindi">хинди</string>
+    <string name="spanish">испанский</string>
+    <string name="german">Немецкий</string>
+    <string name="japanese">Японский</string>
+    <string name="portuguese">португальский</string>
+    <string name="italian">итальянский</string>
+    <string name="french">Французский</string>
+    <string name="russian">Русский</string>
+    <string name="chinese">Китайский</string>
+    <string name="arabic">арабский</string>
 </resources>
