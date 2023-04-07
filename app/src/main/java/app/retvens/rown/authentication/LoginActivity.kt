@@ -1,11 +1,13 @@
 package app.retvens.rown.authentication
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
@@ -15,6 +17,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.telephony.TelephonyManager
 import android.util.LayoutDirection
 import android.util.Log
 import android.view.Gravity
@@ -27,6 +30,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityLoginBinding
@@ -43,6 +48,8 @@ import java.util.concurrent.TimeUnit
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
 
+    val REQUEST_CODE = 102
+    lateinit var phoneNum: String
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
     var mLastClickTime: Long = 0
@@ -54,6 +61,38 @@ class LoginActivity : AppCompatActivity() {
     lateinit var phoneNumber:String
     lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted, set the phone number to the EditText
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {
+                    // Get the TelephonyManager instance
+                    val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+                    // Retrieve the phone number
+                    val phoneNumber = telephonyManager.line1Number
+
+                    // Set the phone number to the EditText
+                    phoneNum = phoneNumber.drop(2)
+                    binding.editPhone.setText(phoneNum)
+                }else {
+                    // Permission has been denied, handle it accordingly
+                    // For example, show a message or disable functionality that requires the permission
+                    Toast.makeText(this,"permission denied", Toast.LENGTH_SHORT).toString()
+                }
+            }
+        } else {
+            // Permission has been denied, handle it accordingly
+            // For example, show a message or disable functionality that requires the permission
+            Toast.makeText(this,"Something bad", Toast.LENGTH_SHORT).toString()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadLocale()
@@ -67,6 +106,21 @@ class LoginActivity : AppCompatActivity() {
             }
             mLastClickTime = SystemClock.elapsedRealtime();
              openBottomLanguageSheet()
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {
+            // Get the TelephonyManager instance
+            val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+            // Retrieve the phone number
+            val phoneNumber = telephonyManager.line1Number
+
+            // Set the phone number to the EditText
+            phoneNum = phoneNumber.drop(2)
+            binding.editPhone.setText(phoneNum)
+        } else {
+            // Permission has not been granted, request it
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_NUMBERS), REQUEST_CODE)
         }
 
         FirebaseApp.initializeApp(this)
@@ -119,6 +173,7 @@ class LoginActivity : AppCompatActivity() {
                 token: PhoneAuthProvider.ForceResendingToken
             ) {
                 dialog.dismiss()
+
 
                 Log.d("TAG","onCodeSent:$verificationId")
                 storedVerificationId = verificationId
