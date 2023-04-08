@@ -3,6 +3,7 @@ package app.retvens.rown.ChatSection
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,11 +56,13 @@ class MesiboUsers : AppCompatActivity() {
                    }
                }else{
                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+                   Log.e("",response.message().toString())
                }
            }
 
            override fun onFailure(call: Call<UsersList?>, t: Throwable) {
                Toast.makeText(applicationContext,t.message,Toast.LENGTH_SHORT).show()
+               Log.e("",t.message.toString())
            }
        })
 

@@ -11,7 +11,7 @@ import retrofit2.http.POST
 
 interface RownUrl {
 
-    @POST("createUser")
+    @POST("usercreate")
     fun createMesiboUser(@Body create:MesiboDataClass):Call<MesiboResponseClass>
 
     @GET("users")

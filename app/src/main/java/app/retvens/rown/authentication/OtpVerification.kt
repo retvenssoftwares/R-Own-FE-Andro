@@ -32,6 +32,11 @@ import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -239,10 +244,8 @@ open class OtpVerification : AppCompatActivity() {
                 if (response.isSuccessful){
                     val response = response.body()!!
 
+                    SharedPreferenceManagerAdmin.getInstance(applicationContext).saveUser(response)
 
-
-                    Toast.makeText(applicationContext,response.token,Toast.LENGTH_SHORT).show()
-                    Toast.makeText(applicationContext,response.uid,Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
                 }
