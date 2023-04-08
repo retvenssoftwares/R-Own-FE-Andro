@@ -44,7 +44,7 @@ class ReceiverProfileAdapter(val context: Context, var userList:List<MesiboUsers
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context,ChatScreen::class.java)
-            intent.putExtra("name",data.address)
+            intent.putExtra("address",data.address)
             intent.putExtra("userId",data.uid)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent)

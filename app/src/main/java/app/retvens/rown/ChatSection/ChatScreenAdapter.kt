@@ -5,8 +5,10 @@ import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.R
 import com.mesibo.api.Mesibo
@@ -14,6 +16,7 @@ import com.mesibo.api.MesiboMessage
 import com.mesibo.api.MesiboProfile
 import java.lang.String.format
 import java.text.MessageFormat.format
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -53,9 +56,6 @@ class ChatScreenAdapter(
             }
 
         }
-
-        Toast.makeText(context,message.profile.uid.toString(),Toast.LENGTH_SHORT).show()
-
     }
 
     override fun getItemCount(): Int {
@@ -64,20 +64,27 @@ class ChatScreenAdapter(
 
     override fun getItemViewType(position: Int): Int {
         var message = messages[position]
+
         return if (message.profile.uid == myUserId) {
             VIEW_TYPE_MESSAGE_SENT
         } else {
-            VIEW_TYPE_MESSAGE_RECEIVED
+                VIEW_TYPE_MESSAGE_RECEIVED
         }
     }
 
     inner class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val messageTextView: TextView = itemView.findViewById(R.id.sender_message)
         private val timeTextView: TextView = itemView.findViewById(R.id.sender_time)
+        private val seenIcon:ImageView = itemView.findViewById(R.id.read_msg)
 
         fun bind(message: MesiboMessage) {
             messageTextView.text = message.message
-            timeTextView.text = DateFormat.format("HH:mm:ss", Date(message.ts))
+            val currentTimeMillis = System.currentTimeMillis()
+            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val formattedTime = timeFormat.format(Date(currentTimeMillis))
+            timeTextView.text = formattedTime
+
+
         }
     }
 
@@ -87,7 +94,7 @@ class ChatScreenAdapter(
 
         fun bind(message: MesiboMessage) {
             messageTextView.text = message.message
-            timeTextView.text = DateFormat.format("HH:mm:ss", Date(message.ts))
+            timeTextView.text = DateFormat.format("HH:mm", Date(message.ts))
         }
     }
 }

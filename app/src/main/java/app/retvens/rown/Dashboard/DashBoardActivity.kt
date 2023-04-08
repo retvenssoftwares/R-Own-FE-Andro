@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.ChatSection.MesiboUsers
 import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.ChatSection.UserChatList
 import app.retvens.rown.DataCollections.MesiboUsersData
@@ -161,35 +162,35 @@ class DashBoardActivity : AppCompatActivity(){
 //            }
 //        })
 
-        showBottomDialog()
+//        showBottomDialog()
 
     }
 
-    private fun showBottomDialog() {
-        dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.popular_connections_layout)
-
-        try {
-            val recycler = dialog.findViewById<RecyclerView>(R.id.popularUsers_recycler)
-            recycler.layoutManager = GridLayoutManager(this,3)
-
-            popularUsersAdapter = PopularUsersAdapter(this, emptyList())
-            recycler.adapter = popularUsersAdapter
-            popularUsersAdapter.notifyDataSetChanged()
-
-            getMesiboUsers()
-
-            dialog.show()
-            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
-            dialog.window?.setGravity(Gravity.BOTTOM)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error: " + e.message, Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun showBottomDialog() {
+//        dialog = Dialog(this)
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog.setContentView(R.layout.popular_connections_layout)
+//
+//        try {
+//            val recycler = dialog.findViewById<RecyclerView>(R.id.popularUsers_recycler)
+//            recycler.layoutManager = GridLayoutManager(this,3)
+//
+//            popularUsersAdapter = PopularUsersAdapter(this, emptyList())
+//            recycler.adapter = popularUsersAdapter
+//            popularUsersAdapter.notifyDataSetChanged()
+//
+//            getMesiboUsers()
+//
+//            dialog.show()
+//            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+//            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
+//            dialog.window?.setGravity(Gravity.BOTTOM)
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Toast.makeText(this, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     private fun getMesiboUsers() {
         val send = RetrofitBuilder.retrofitBuilder.getMesiboUsers()
@@ -240,7 +241,7 @@ class DashBoardActivity : AppCompatActivity(){
                 return true
             }
             R.id.action_chats -> {
-                Toast.makeText(applicationContext,"chats",Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this,MesiboUsers::class.java))
                 return true
             }
             R.id.action_notify -> {

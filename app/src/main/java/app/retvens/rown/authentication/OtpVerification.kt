@@ -20,6 +20,7 @@ import app.retvens.rown.DataCollections.MesiboDataClass
 import app.retvens.rown.DataCollections.MesiboResponseClass
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
+import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -150,10 +151,8 @@ class OtpVerification : AppCompatActivity() {
                 if (response.isSuccessful){
                     val response = response.body()!!
 
+                    SharedPreferenceManagerAdmin.getInstance(applicationContext).saveUser(response)
 
-
-                    Toast.makeText(applicationContext,response.token,Toast.LENGTH_SHORT).show()
-                    Toast.makeText(applicationContext,response.uid,Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
                 }
