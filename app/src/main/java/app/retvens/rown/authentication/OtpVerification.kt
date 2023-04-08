@@ -1,5 +1,6 @@
 package app.retvens.rown.authentication
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -10,16 +11,18 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
+import androidx.activity.result.contract.ActivityResultContracts
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.MesiboDataClass
@@ -27,14 +30,14 @@ import app.retvens.rown.DataCollections.MesiboResponseClass
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
 import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import java.util.concurrent.TimeUnit
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 open class OtpVerification : AppCompatActivity() {
@@ -57,6 +60,11 @@ open class OtpVerification : AppCompatActivity() {
 
     lateinit var otp: String
 
+    lateinit var storedVerificationId:String
+    lateinit var phone:String
+    lateinit var phoneNumber:String
+    lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
+    private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,8 +85,57 @@ open class OtpVerification : AppCompatActivity() {
         otpET4.addTextChangedListener(textWatcher)
         otpET5.addTextChangedListener(textWatcher)
         otpET6.addTextChangedListener(textWatcher)
-        startSmartUserConsent()
+//        startSmartUserConsent()
+
         showKeyBoard(otpET1)
+
+        phone =  intent.getStringExtra("phone").toString()
+        binding.textPhoneOtp.text = intent.getStringExtra("phone").toString()
+        callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                finish()
+            }
+
+            override fun onVerificationFailed(e: FirebaseException) {
+                Toast.makeText(applicationContext, "Failed", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onCodeSent(
+                verificationId: String,
+                token: PhoneAuthProvider.ForceResendingToken
+            ) {
+
+
+                Log.d("TAG","onCodeSent:$verificationId")
+                storedVerificationId = verificationId
+                resendToken = token
+                Toast.makeText(applicationContext,"Otp will be send to Enter Mobile Number",Toast.LENGTH_SHORT).show()
+                var intent = Intent(applicationContext,OtpVerification::class.java)
+                intent.putExtra("storedVerificationId",storedVerificationId)
+                intent.putExtra("phone",phone)
+                startActivity(intent)
+            }
+        }
+
+
+        binding.textResendOtp.setOnClickListener {
+            binding.textResendOtp.visibility = View.GONE
+            binding.countDownTimer.visibility = View.VISIBLE
+            val timer = object: CountDownTimer(60000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    binding.countDownTimer.text = "00:${millisUntilFinished/1000}"
+                    sendVerificationcode(phone)
+                }
+
+                override fun onFinish() {
+                    binding.textResendOtp.visibility = View.VISIBLE
+                    binding.countDownTimer.visibility = View.GONE
+                }
+            }
+            timer.start()
+        }
 
         binding.languageFromOtp.setOnClickListener {
             // mis-clicking prevention, using threshold of 1000 ms
@@ -92,7 +149,6 @@ open class OtpVerification : AppCompatActivity() {
 
         val storedVerificationId = intent.getStringExtra("storedVerificationId")
 
-        binding.textPhoneOtp.text = intent.getStringExtra("phone").toString()
 
         binding.cardVerifyOtp.setOnClickListener {
 
@@ -124,53 +180,6 @@ open class OtpVerification : AppCompatActivity() {
         }
     }
 
-    private fun startSmartUserConsent() {
-        val client = SmsRetriever.getClient(this)
-        client.startSmsUserConsent(null)
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_USER_CONSENT){
-            if (resultCode == RESULT_OK && data != null){
-                val message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE)
-                getOtpFromMessage(message)
-            }
-        }
-    }
-//    var activityResult = registerForActivityResult()
-    private fun getOtpFromMessage(message: String?) {
-        val otpPattern = Pattern.compile("(|^)\\d{6}")
-        val matcher = otpPattern.matcher(message)
-        if (matcher.find()){
-            val grpOTP = matcher.group(0)
-            Toast.makeText(this,grpOTP!!.toString(),Toast.LENGTH_SHORT).show()
-            val editText = listOf(otpET1,otpET2,otpET3,otpET4,otpET5,otpET6)
-//            set(grpOTP.toInt(),editText)
-        }
-    }
-    private fun set(number:Int,editText : List<EditText>){
-        var num = number
-        var digit : Int
-        for (i in 0 until editText.size){
-            digit = num % 10
-            num /= 10
-            editText[editText.size - 1 - i].setText(digit.toString())
-        }
-    }
-    private fun registerBroadCastReceiver(){
-        otpBroadcastReciever = OtpBroadcastReciever()
-        otpBroadcastReciever!!.smsBroadCastReceiverListener = object : OtpBroadcastReciever.OtpBroadcastReceiverListener{
-            override fun onSuccess(intent: Intent?) {
-                startActivityForResult(intent!!,REQ_USER_CONSENT)
-            }
-
-            override fun onFailure() {
-
-            }
-        }
-        val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
-        registerReceiver(otpBroadcastReciever,intentFilter)
-    }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
@@ -479,12 +488,12 @@ open class OtpVerification : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+//        registerBroadCastReceiver()
         loadLocale()
-        registerBroadCastReceiver()
     }
     override fun onStop() {
         super.onStop()
-        unregisterReceiver(otpBroadcastReciever)
+//        unregisterReceiver(otpBroadcastReciever)
     }
 
     override fun onRestart() {
@@ -499,5 +508,14 @@ open class OtpVerification : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         loadLocale()
+    }
+    private fun sendVerificationcode(number: String) {
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(number) // Phone number to verify
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setActivity(this) // Activity (for callback binding)
+            .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
     }
 }

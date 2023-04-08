@@ -218,6 +218,20 @@
         app:layout_constraintBottom_toBottomOf="@id/text_didnt"
         app:layout_constraintStart_toEndOf="@id/text_didnt"/>
 
+    <TextView
+        android:id="@+id/countDownTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:60"
+        android:fontFamily="@font/montserrat_bold"
+        android:textSize="18dp"
+        android:layout_marginStart="10dp"
+        android:textColor="#EA0000"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/text_didnt"
+        app:layout_constraintBottom_toBottomOf="@id/text_didnt"
+        app:layout_constraintStart_toEndOf="@id/text_didnt"/>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/card_verify_otp"
         android:layout_width="wrap_content"
