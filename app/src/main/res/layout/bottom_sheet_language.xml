@@ -15,7 +15,7 @@
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="In what language do you want \nto have your hospitality adventures ?"
+            android:text="@string/in_what_language_do"
             android:textSize="16dp"
             android:paddingTop="34dp"
             android:paddingHorizontal="28dp"
@@ -83,7 +83,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Arabic"
+                            android:text="@string/arabic"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -138,7 +138,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="English"
+                            android:text="@string/english"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -194,7 +194,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Hindi"
+                            android:text="@string/hindi"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -249,7 +249,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Spanish"
+                            android:text="@string/spanish"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -304,7 +304,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="German"
+                            android:text="@string/german"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -358,7 +358,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Japanese"
+                            android:text="@string/japanese"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -412,7 +412,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Portuguese"
+                            android:text="@string/portuguese"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -466,7 +466,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Italian"
+                            android:text="@string/italian"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -520,7 +520,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="French"
+                            android:text="@string/french"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -574,7 +574,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Russian"
+                            android:text="@string/russian"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"
@@ -628,7 +628,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Chinese"
+                            android:text="@string/chinese"
                             android:textSize="20dp"
                             android:fontFamily="@font/montserrat_semibold"
                             android:textColor="@color/black"

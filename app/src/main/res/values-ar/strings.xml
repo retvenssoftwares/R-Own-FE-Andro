@@ -24,4 +24,16 @@
     <string name="change_phone_number">غير رقم الهاتف</string>
     <string name="send_otp">أرسل OTP</string>
     <string name="otp_will_be_sent_to">سيتم إرسال OTP إلى</string>
+    <string name="english">إنجليزي</string>
+    <string name="hindi">هندي</string>
+    <string name="spanish">الأسبانية</string>
+    <string name="german">ألمانية</string>
+    <string name="japanese">اليابانية</string>
+    <string name="portuguese">البرتغالية</string>
+    <string name="italian">إيطالي</string>
+    <string name="french">فرنسي</string>
+    <string name="russian">الروسية</string>
+    <string name="chinese">صينى</string>
+    <string name="arabic">عربي</string>
+    <string name="in_what_language_do">بأي لغة تريد أن تكون لديك مغامرات الضيافة الخاصة بك؟</string>
 </resources>

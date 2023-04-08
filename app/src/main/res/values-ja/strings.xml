@@ -24,4 +24,16 @@
     <string name="change_phone_number">電話番号の変更</string>
     <string name="send_otp">OTP を送信</string>
     <string name="otp_will_be_sent_to">OTP が送信されます</string>
+    <string name="english">英語</string>
+    <string name="hindi">ヒンディー語</string>
+    <string name="spanish">スペイン語</string>
+    <string name="german">ドイツ人</string>
+    <string name="japanese">日本</string>
+    <string name="portuguese">ポルトガル語</string>
+    <string name="italian">イタリアの</string>
+    <string name="french">フランス語</string>
+    <string name="russian">ロシア</string>
+    <string name="chinese">中国語</string>
+    <string name="arabic">アラビア語</string>
+    <string name="in_what_language_do">おもてなしの冒険をどの言語で行いたいですか?</string>
 </resources>

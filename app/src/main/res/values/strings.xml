@@ -42,6 +42,18 @@
     <string name="change_phone_number">Change Phone Number</string>
     <string name="send_otp">Send OTP</string>
     <string name="otp_will_be_sent_to">OTP will be sent to</string>
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
+    <string name="spanish">Spanish</string>
+    <string name="german">German</string>
+    <string name="japanese">Japanese</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="italian">Italian</string>
+    <string name="french">French</string>
+    <string name="russian">Russian</string>
+    <string name="chinese">Chinese</string>
+    <string name="arabic">Arabic</string>
+    <string name="in_what_language_do">In what language do you want  to have your hospitality adventures ?</string>
 
     <style name="SmallText">
         <item name="android:textSize">14sp</item>

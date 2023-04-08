@@ -94,5 +94,9 @@ dependencies {
     implementation "com.mesibo.api:calls:${project.MesiboVersion_Calls}"
 
     implementation "com.theartofdev.edmodo:android-image-cropper:2.8.0"
+    //Custom ProgressBar
+    implementation 'com.github.emreesen27:Android-Nested-Progress:v1.0.2'
 
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
 }

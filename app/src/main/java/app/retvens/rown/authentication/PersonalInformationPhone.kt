@@ -171,7 +171,7 @@ class PersonalInformationPhone : AppCompatActivity() {
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
-
+/*------------------------------CAMERA FUNCTIONALITIES AND SET LOCALE LANGUAGE--------------*/
     private fun openBottomSheet() {
         dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

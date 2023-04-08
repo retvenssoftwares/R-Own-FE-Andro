@@ -24,4 +24,16 @@
     <string name="change_phone_number">Alterar número de telefone</string>
     <string name="send_otp">Enviar OTP</string>
     <string name="otp_will_be_sent_to">OTP será enviado para</string>
+    <string name="english">Inglês</string>
+    <string name="hindi">hindi</string>
+    <string name="spanish">Espanhol</string>
+    <string name="german">Alemão</string>
+    <string name="japanese">japonês</string>
+    <string name="portuguese">Português</string>
+    <string name="italian">Italiano</string>
+    <string name="french">Francês</string>
+    <string name="russian">Russo</string>
+    <string name="chinese">chinês</string>
+    <string name="arabic">árabe</string>
+    <string name="in_what_language_do">Em que idioma você quer ter suas aventuras de hospitalidade?</string>
 </resources>

@@ -1,11 +1,13 @@
 package app.retvens.rown.authentication
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
@@ -14,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
+import android.telephony.TelephonyManager
 import android.util.LayoutDirection
 import android.util.Log
 import android.view.Gravity
@@ -26,6 +30,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityLoginBinding
@@ -42,8 +48,11 @@ import java.util.concurrent.TimeUnit
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
 
+    val REQUEST_CODE = 102
+    lateinit var phoneNum: String
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
+    var mLastClickTime: Long = 0
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
@@ -52,6 +61,38 @@ class LoginActivity : AppCompatActivity() {
     lateinit var phoneNumber:String
     lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted, set the phone number to the EditText
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {
+                    // Get the TelephonyManager instance
+                    val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+                    // Retrieve the phone number
+                    val phoneNumber = telephonyManager.line1Number
+
+                    // Set the phone number to the EditText
+                    phoneNum = phoneNumber.drop(2)
+                    binding.editPhone.setText(phoneNum)
+                }else {
+                    // Permission has been denied, handle it accordingly
+                    // For example, show a message or disable functionality that requires the permission
+                    Toast.makeText(this,"permission denied", Toast.LENGTH_SHORT).toString()
+                }
+            }
+        } else {
+            // Permission has been denied, handle it accordingly
+            // For example, show a message or disable functionality that requires the permission
+            Toast.makeText(this,"Something bad", Toast.LENGTH_SHORT).toString()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadLocale()
@@ -59,7 +100,27 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.languageFromLogin.setOnClickListener {
+            // mis-clicking prevention, using threshold of 1000 ms
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
              openBottomLanguageSheet()
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {
+            // Get the TelephonyManager instance
+            val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+            // Retrieve the phone number
+            val phoneNumber = telephonyManager.line1Number
+
+            // Set the phone number to the EditText
+            phoneNum = phoneNumber.drop(2)
+            binding.editPhone.setText(phoneNum)
+        } else {
+            // Permission has not been granted, request it
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_NUMBERS), REQUEST_CODE)
         }
 
         FirebaseApp.initializeApp(this)
@@ -76,6 +137,13 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         binding.imgGoogle.setOnClickListener {
+
+            progressDialog = Dialog(this)
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setCancelable(false)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            progressDialog.show()
             resultLauncher.launch(Intent(googleSignInClient.signInIntent))
         }
 
@@ -105,6 +173,7 @@ class LoginActivity : AppCompatActivity() {
                 token: PhoneAuthProvider.ForceResendingToken
             ) {
                 dialog.dismiss()
+
 
                 Log.d("TAG","onCodeSent:$verificationId")
                 storedVerificationId = verificationId
@@ -312,8 +381,10 @@ class LoginActivity : AppCompatActivity() {
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
                     Log.w("SignIn", "Google sign in failed", e)
+                    progressDialog.dismiss()
                 }
             }else{
+                progressDialog.dismiss()
                 Log.w("SignIn", exception.toString())
                 Toast.makeText(this,"Failed",Toast.LENGTH_LONG).show()
             }
@@ -366,8 +437,8 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("SignIn", "signInWithCredential:success")
-                    progressDialog.dismiss()
                     Toast.makeText(applicationContext,"YOU ARE SUCCESSFULLY LOGIN",Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
                     val intent = Intent(this, PersonalInformationPhone::class.java)
                     startActivity(intent)
                     finish()
