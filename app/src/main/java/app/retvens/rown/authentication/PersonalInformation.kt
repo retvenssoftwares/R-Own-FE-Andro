@@ -48,6 +48,7 @@ class PersonalInformation : AppCompatActivity() {
     }
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
+    lateinit var username : String
 
     private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +77,7 @@ class PersonalInformation : AppCompatActivity() {
                 binding.emailLayout.error = "Enter a valid Email"
             } else{
                 binding.emailLayout.isErrorEnabled = false
+                username = binding.etName.text.toString()
                 val mail = binding.etEmail.text.toString()
                 mail.trim()
                 progressDialog = Dialog(this)
@@ -118,6 +120,10 @@ class PersonalInformation : AppCompatActivity() {
                         } else {
                             Toast.makeText(applicationContext,"fail to verify",Toast.LENGTH_SHORT).show()
                             progressDialog.dismiss()
+                            val intent = Intent(this,UserInterest::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.putExtra("user",username)
+                            startActivity(intent)
                             // handle sign-in failure
                         }
                     }
@@ -149,6 +155,11 @@ class PersonalInformation : AppCompatActivity() {
                 }else{
                     progressDialog.dismiss()
                     Toast.makeText(applicationContext,task.exception?.message.toString(),Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this,UserInterest::class.java)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.putExtra("user",username)
+                    startActivity(intent)
                     Log.e("error",task.exception?.message.toString())
                 }
             }
