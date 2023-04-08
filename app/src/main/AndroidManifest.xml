@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -21,11 +24,23 @@
         android:theme="@style/Theme.Rown"
         tools:targetApi="31">
         <activity
+            android:name=".authentication.UserContacts"
+            android:exported="true"
+            android:theme="@style/AppTheme.ActionBar.Transparent"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".authentication.UserInterest"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent"
+            android:screenOrientation="portrait"
+            />
+        <activity
             android:name=".ChatSection.ChatScreen"
             android:exported="true">
-
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -33,7 +48,6 @@
         <activity
             android:name=".ChatSection.MesiboUsers"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -44,17 +58,26 @@
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".authentication.PersonalInformation"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Rown_Splash" />
+            android:theme="@style/Theme.Rown_Splash">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".authentication.OtpVerification"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
+            android:theme="@style/AppTheme.ActionBar.Transparent" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".authentication.LoginActivity"
             android:exported="false"
@@ -73,19 +96,19 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <meta-data
             android:name="preloaded_fonts"

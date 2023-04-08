@@ -35,4 +35,5 @@
     <string name="russian">俄语</string>
     <string name="chinese">中国人</string>
     <string name="arabic">阿拉伯</string>
+    <string name="in_what_language_do">你想用什么语言来体验你的待客之道？</string>
 </resources>

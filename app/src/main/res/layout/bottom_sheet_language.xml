@@ -15,7 +15,7 @@
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="In what language do you want \nto have your hospitality adventures ?"
+            android:text="@string/in_what_language_do"
             android:textSize="16dp"
             android:paddingTop="34dp"
             android:paddingHorizontal="28dp"

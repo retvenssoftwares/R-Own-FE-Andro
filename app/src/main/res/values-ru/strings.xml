@@ -35,4 +35,5 @@
     <string name="russian">Русский</string>
     <string name="chinese">Китайский</string>
     <string name="arabic">арабский</string>
+    <string name="in_what_language_do">На каком языке вы хотите, чтобы ваши приключения в сфере гостеприимства?</string>
 </resources>

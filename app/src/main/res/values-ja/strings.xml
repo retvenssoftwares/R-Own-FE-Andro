@@ -35,4 +35,5 @@
     <string name="russian">ロシア</string>
     <string name="chinese">中国語</string>
     <string name="arabic">アラビア語</string>
+    <string name="in_what_language_do">おもてなしの冒険をどの言語で行いたいですか?</string>
 </resources>

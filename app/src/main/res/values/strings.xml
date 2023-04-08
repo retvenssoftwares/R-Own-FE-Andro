@@ -53,6 +53,7 @@
     <string name="russian">Russian</string>
     <string name="chinese">Chinese</string>
     <string name="arabic">Arabic</string>
+    <string name="in_what_language_do">In what language do you want  to have your hospitality adventures ?</string>
 
     <style name="SmallText">
         <item name="android:textSize">14sp</item>
