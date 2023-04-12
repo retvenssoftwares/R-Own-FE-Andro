@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="200dp"
+    android:layout_height="300dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="25dp"
+    app:cardElevation="6dp"
+    android:layout_margin="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/vendor_cover"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            app:shapeAppearanceOverlay="@style/SquareCornerImageForCards"
+            android:src="@drawable/background_interest"
+            app:tint="@color/grey_20"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/vendor_profile"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:shapeAppearanceOverlay="@style/RoundedCornerImage"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/svg_add_bg"
+        app:layout_constraintTop_toBottomOf="@id/vendor_cover"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/vendor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="Karsten Dobrev"
+        android:textSize="10dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/black"
+        app:layout_constraintVertical_bias="0.08"
+        app:layout_constraintTop_toTopOf="@id/vendor_profile"
+        app:layout_constraintBottom_toBottomOf="@id/vendor_profile"
+        app:layout_constraintStart_toEndOf="@id/vendor_profile"/>
+
+    <TextView
+        android:id="@+id/vendors_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@grafixpixel"
+        android:textSize="8dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/green_own"
+        app:layout_constraintStart_toStartOf="@id/vendor_name"
+        app:layout_constraintTop_toBottomOf="@id/vendor_name"/>
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/svg_users"
+        android:layout_marginEnd="3dp"
+        app:layout_constraintTop_toTopOf="@id/vendor_name"
+        app:layout_constraintBottom_toBottomOf="@id/vendor_name"
+        app:layout_constraintEnd_toStartOf="@id/users"/>
+
+    <TextView
+        android:id="@+id/users"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20"
+        android:textSize="14dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/green_own"
+        app:layout_constraintTop_toTopOf="@id/vendor_name"
+        app:layout_constraintBottom_toBottomOf="@id/vendor_name"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+            <LinearLayout
+                android:id="@+id/layoutS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="15dp"
+                app:layout_constraintTop_toBottomOf="@id/vendor_name"
+                app:layout_constraintStart_toStartOf="@id/vendor_name">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/svg_setting"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="Photographer"
+                    android:textSize="7dp"
+                    android:paddingHorizontal="3dp"
+                    android:paddingVertical="1dp"
+                    android:background="@drawable/border"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:text="Graphic Designer"
+                    android:textSize="7dp"
+                    android:paddingHorizontal="3dp"
+                    android:paddingVertical="1dp"
+                    android:background="@drawable/border"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_l"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/layoutS"
+                app:layout_constraintStart_toStartOf="@id/vendor_name">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/post_liked_profile"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/svg_location"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="Kanpur"
+                    android:textSize="6dp"
+                    android:paddingHorizontal="3dp"
+                    android:paddingVertical="1dp"
+                    android:background="@drawable/border"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="Lucknuw"
+                    android:textSize="6dp"
+                    android:paddingHorizontal="3dp"
+                    android:paddingVertical="1dp"
+                    android:background="@drawable/border"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="Delhi-NCR"
+                    android:textSize="6dp"
+                    android:paddingHorizontal="3dp"
+                    android:paddingVertical="1dp"
+                    android:background="@drawable/border"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_20"
+                android:layout_marginTop="4dp"
+                android:layout_marginHorizontal="30dp"
+                app:layout_constraintTop_toBottomOf="@id/ll_l"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="Avg. Price"
+            android:textSize="8dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/grey_60"
+            app:layout_constraintStart_toStartOf="@id/avg_price"
+            app:layout_constraintBottom_toTopOf="@id/avg_price"
+            app:layout_constraintEnd_toEndOf="@id/avg_price"/>
+
+        <TextView
+            android:id="@+id/avg_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="999"
+            android:textSize="10dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_get_quote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="8dp"
+            android:layout_gravity="center_horizontal"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/avg_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="3dp"
+                android:paddingHorizontal="5dp"
+                android:textAlignment="center"
+                android:text="Get Quotation"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="10dp"
+                android:background="@color/green_own"
+                android:textColor="@color/black"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/rating_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="3.0"
+            android:textSize="10dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/avg_price"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/avg_rating_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(23)"
+            android:textSize="10dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@id/avg_price"
+            app:layout_constraintStart_toEndOf="@id/rating_text"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
