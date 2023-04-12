@@ -20,7 +20,10 @@ class UserInterest : AppCompatActivity() {
         binding.userName.text = "Hello, $username!"
 
         binding.cardContinueInterest.setOnClickListener {
-            startActivity(Intent(this,UserContacts::class.java))
+            val intent = Intent(applicationContext, UserContacts::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.putExtra("name",username)
+            startActivity(intent)
         }
     }
 }
