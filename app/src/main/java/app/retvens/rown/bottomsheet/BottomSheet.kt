@@ -70,8 +70,10 @@ class BottomSheet : BottomSheetDialogFragment() {
             }
 
             override fun onFailure(call: Call<UsersList?>, t: Throwable) {
-                Toast.makeText(context,t.message, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context,t.message.toString(), Toast.LENGTH_SHORT).show()
             }
         })
     }
+
+
 }
