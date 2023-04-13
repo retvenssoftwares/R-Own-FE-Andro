@@ -1,6 +1,7 @@
 package app.retvens.rown.authentication
 
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -11,7 +12,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Html
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
@@ -25,7 +26,9 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 import com.google.firebase.auth.ActionCodeSettings
@@ -33,13 +36,22 @@ import java.io.File
 import com.google.firebase.auth.FirebaseAuth
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.util.*
 
 class PersonalInformation : AppCompatActivity() {
 
     lateinit var binding :ActivityPersonalInformationBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
-    lateinit var galleryImageUri: Uri
+    //Cropped image uri
+    lateinit var croppedImageUri: Uri
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraImageUri: Uri
@@ -49,6 +61,7 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
     lateinit var username : String
+    lateinit var eMail : String
 
     private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,8 +91,8 @@ class PersonalInformation : AppCompatActivity() {
             } else{
                 binding.emailLayout.isErrorEnabled = false
                 username = binding.etName.text.toString()
-                val mail = binding.etEmail.text.toString()
-                mail.trim()
+                eMail = binding.etEmail.text.toString()
+                eMail.trim()
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 progressDialog.setContentView(R.layout.progress_dialoge)
@@ -87,7 +100,8 @@ class PersonalInformation : AppCompatActivity() {
                 progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 progressDialog.show()
 //                openBottomSheetEmail(mail)
-                mailVerification(mail)
+//                mailVerification(eMail)
+                uploadData()
             }
         }
 
@@ -159,7 +173,7 @@ class PersonalInformation : AppCompatActivity() {
                     val intent = Intent(this,UserInterest::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.putExtra("user",username)
-                    startActivity(intent)
+//                    startActivity(intent)
                     Log.e("error",task.exception?.message.toString())
                 }
             }
@@ -189,7 +203,64 @@ class PersonalInformation : AppCompatActivity() {
 
     }
 
- /*------------------------------CAMERA FUNCTIONALITIES AND SET LOCALE LANGUAGE--------------*/
+    private fun uploadData() {
+        val parcelFileDescriptor = contentResolver.openFileDescriptor(
+            croppedImageUri!!,"r",null
+        )?:return
+
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        val file = File(cacheDir,contentResolver.getFileName(croppedImageUri!!))
+        val outputStream = FileOutputStream(file)
+        inputStream.copyTo(outputStream)
+        val body = UploadRequestBody(file,"image")
+
+        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
+
+        val respo = RetrofitBuilder.retrofitBuilder.uploadUserProfile(
+            MultipartBody.Part.createFormData("Profile_pic", file.name, body),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),phone
+        )
+        respo.enqueue(object : Callback<UserProfileResponse?> {
+            override fun onResponse(
+                call: Call<UserProfileResponse?>,
+                response: Response<UserProfileResponse?>
+            ) {
+                Log.d("res",response.toString())
+                Log.d("res",file.name.toString())
+                Log.d("res",file.toString())
+                progressDialog.dismiss()
+                Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+
+                if (response.message().toString() != "Request Entity Too Large"){
+                    val intent = Intent(applicationContext,UserInterest::class.java)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.putExtra("user",username)
+                    startActivity(intent)
+                }
+//                Toast.makeText(applicationContext,file.name.toString(),Toast.LENGTH_SHORT).show()
+            }
+            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("res",t.localizedMessage,t)
+            }
+        })
+
+       
+    }
+    private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
+
+        var name = ""
+        val returnCursor = this.query(coverPhotoPart,null,null,null,null)
+        if (returnCursor!=null){
+            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            returnCursor.moveToFirst()
+            name = returnCursor.getString(nameIndex)
+            returnCursor.close()
+        }
+        return name
+    }
+    /*------------------------------CAMERA FUNCTIONALITIES AND SET LOCALE LANGUAGE--------------*/
     private fun openBottomSheet() {
         dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -269,8 +340,8 @@ class PersonalInformation : AppCompatActivity() {
         options.setAspectRatio(1, 1)
             .setCropShape(CropImageView.CropShape.OVAL)
             .start(this)
-
-        binding.profile.setImageURI(imageUri)
+        croppedImageUri = imageUri
+        binding.profile.setImageURI(croppedImageUri)
     }
     private fun loadLocale(){
         val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)

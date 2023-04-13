@@ -2,13 +2,11 @@ package app.retvens.rown.Dashboard
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.FrameLayout
@@ -18,6 +16,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,12 +30,10 @@ import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
-import com.google.android.gms.tasks.OnCompleteListener
+import app.retvens.rown.bottomsheet.BottomSheet
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.messaging.FirebaseMessaging
-import com.mesibo.api.Mesibo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,7 +48,6 @@ class DashBoardActivity : AppCompatActivity(){
     private lateinit var viewPager:ViewPager
     private lateinit var drawerLayout:DrawerLayout
     lateinit var dialog: Dialog
-    private lateinit var token:String
     private lateinit var popularUsersAdapter: PopularUsersAdapter
     private  var userList: List<MesiboUsersData> = emptyList()
 
@@ -143,20 +139,6 @@ class DashBoardActivity : AppCompatActivity(){
             }
         }
 
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(ContentValues.TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            // Get new FCM registration token
-            token = task.result
-
-            // Log and toast
-            Log.e("token", token)
-
-            Mesibo.setPushToken(token)
-        })
 
 
         val frame = findViewById<FrameLayout>(R.id.fragment_container)

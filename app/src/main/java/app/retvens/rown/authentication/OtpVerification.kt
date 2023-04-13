@@ -198,7 +198,9 @@ open class OtpVerification : AppCompatActivity() {
                         startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                         finish()
                     }else{
-                        startActivity(Intent(applicationContext, PersonalInformation::class.java))
+                        val intent = Intent(applicationContext, PersonalInformation::class.java)
+                        intent.putExtra("phone",phone)
+                        startActivity(intent)
                         finish()
                     }
 

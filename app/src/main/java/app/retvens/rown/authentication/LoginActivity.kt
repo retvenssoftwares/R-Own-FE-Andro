@@ -440,6 +440,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext,"YOU ARE SUCCESSFULLY LOGIN",Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
                     val intent = Intent(this, PersonalInformationPhone::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     finish()
                 } else {
