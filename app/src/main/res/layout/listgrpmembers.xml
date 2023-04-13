@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F0F0F0"
+    android:layout_marginTop="10dp"
+    app:cardCornerRadius="15dp"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="#F0F0F0"
+        android:padding="10dp"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/memberspic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/rounded_image"
+            android:src="@drawable/dummy"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            />
+
+        <TextView
+            android:id="@+id/membersName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/memberspic"
+            android:layout_marginStart="20dp"
+            android:text="Rahul"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textFontWeight="700"
+            android:paddingTop="10dp"
+            />
+
+
+        <TextView
+            android:id="@+id/membersBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/memberspic"
+            android:layout_marginStart="20dp"
+            android:text="Your Bio"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            app:layout_constraintTop_toBottomOf="@id/membersName"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textFontWeight="700"
+            />
+
+
+        <ImageView
+            android:id="@+id/check"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/checkmark_circle"
+            android:visibility="gone"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

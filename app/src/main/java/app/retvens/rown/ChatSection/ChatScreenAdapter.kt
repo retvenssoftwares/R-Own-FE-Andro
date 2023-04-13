@@ -2,6 +2,7 @@ package app.retvens.rown.ChatSection
 
 import android.content.Context
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.DataCollections.MessageEntity
 import app.retvens.rown.R
 import com.mesibo.api.Mesibo
 import com.mesibo.api.MesiboMessage
@@ -22,8 +24,8 @@ import kotlin.collections.ArrayList
 
 class ChatScreenAdapter(
     private val context: Context,
-    private var messages: ArrayList<MesiboMessage>,
-    private val myUserId: Long
+    private var messages: List<MessageEntity>,
+    private val myAddress: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -55,6 +57,8 @@ class ChatScreenAdapter(
                 receivedMessageViewHolder.bind(message)
             }
 
+
+
         }
     }
 
@@ -63,12 +67,12 @@ class ChatScreenAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        var message = messages[position]
+        val message = messages[position]
 
-        return if (message.profile.uid == myUserId) {
+        return if (message.sender == myAddress) {
             VIEW_TYPE_MESSAGE_SENT
         } else {
-                VIEW_TYPE_MESSAGE_RECEIVED
+            VIEW_TYPE_MESSAGE_RECEIVED
         }
     }
 
@@ -77,14 +81,12 @@ class ChatScreenAdapter(
         private val timeTextView: TextView = itemView.findViewById(R.id.sender_time)
         private val seenIcon:ImageView = itemView.findViewById(R.id.read_msg)
 
-        fun bind(message: MesiboMessage) {
+        fun bind(message: MessageEntity) {
             messageTextView.text = message.message
             val currentTimeMillis = System.currentTimeMillis()
             val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
             val formattedTime = timeFormat.format(Date(currentTimeMillis))
             timeTextView.text = formattedTime
-
-
         }
     }
 
@@ -92,9 +94,9 @@ class ChatScreenAdapter(
         private val messageTextView: TextView = itemView.findViewById(R.id.receiver_message)
         private val timeTextView: TextView = itemView.findViewById(R.id.receiver_time)
 
-        fun bind(message: MesiboMessage) {
+        fun bind(message: MessageEntity) {
             messageTextView.text = message.message
-            timeTextView.text = DateFormat.format("HH:mm", Date(message.ts))
+            timeTextView.text = DateFormat.format("HH:mm", Date(message.timestamp))
         }
     }
 }
