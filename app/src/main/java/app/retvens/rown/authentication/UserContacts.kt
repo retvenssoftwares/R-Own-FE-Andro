@@ -208,8 +208,10 @@ class UserContacts : AppCompatActivity() {
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 }
+                progressDialog.dismiss()
             }
             override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
+                progressDialog.dismiss()
                 Log.d("cont",t.localizedMessage.toString(),t)
             }
         })
