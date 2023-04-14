@@ -94,6 +94,7 @@ open class OtpVerification : AppCompatActivity() {
 
         showKeyBoard(otpET1)
 
+        phoneNumber =  intent.getStringExtra("phoneNum").toString()
         phone =  intent.getStringExtra("phone").toString()
         binding.textPhoneOtp.text = intent.getStringExtra("phone").toString()
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -116,11 +117,7 @@ open class OtpVerification : AppCompatActivity() {
                 Log.d("TAG","onCodeSent:$verificationId")
                 storedVerificationId = verificationId
                 resendToken = token
-                Toast.makeText(applicationContext,"Otp will be send to Enter Mobile Number",Toast.LENGTH_SHORT).show()
-                var intent = Intent(applicationContext,OtpVerification::class.java)
-                intent.putExtra("storedVerificationId",storedVerificationId)
-                intent.putExtra("phone",phone)
-                startActivity(intent)
+                Toast.makeText(applicationContext,"Otp will be resend",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -194,24 +191,25 @@ open class OtpVerification : AppCompatActivity() {
 
                     val key = intent.getStringExtra("key")
 
-                    if (key == "1"){
-                        startActivity(Intent(applicationContext, DashBoardActivity::class.java))
-                        finish()
-                    }else{
-                        val intent = Intent(applicationContext, PersonalInformation::class.java)
-                        intent.putExtra("phone",phone)
-                        startActivity(intent)
-                        finish()
-                    }
-
-
                     Toast.makeText(
                         applicationContext,
                         "Otp Verified Successfully",
                         Toast.LENGTH_SHORT
                     ).show()
                     createUserMesibo()
-                    finish()
+
+                    if (key == "1"){
+                        startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                        finish()
+                    }else{
+                        val intent = Intent(applicationContext, PersonalInformation::class.java)
+                        intent.putExtra("phone",phoneNumber)
+                        startActivity(intent)
+                        finish()
+                    }
+
+
+
 // ...
                 } else {
 // Sign in failed, display a message and update the UI
@@ -245,7 +243,8 @@ open class OtpVerification : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-
+                    Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
+                    Log.d("SaveM",response.toString())
                     SharedPreferenceManagerAdmin.getInstance(applicationContext).saveUser(response)
 
                 }else{
