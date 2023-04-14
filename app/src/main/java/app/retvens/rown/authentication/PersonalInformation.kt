@@ -238,17 +238,17 @@ class PersonalInformation : AppCompatActivity() {
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file!!,"image")
 
-//        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
-        val phone : Long = 212178812
+        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
+//        val phone : Long = 212178812
 
         val _id = SharedPreferenceManagerAdmin.getInstance(this).user.__v.toString()
-//        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
-//        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
-//        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
+        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
+        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
 
-        val addresse = "address"
-        val token = "StoredInSharedPreferenceManagerAdmin"
-        val uid = 12345
+//        val addresse = "address"
+//        val token = "StoredInSharedPreferenceManagerAdmin"
+//        val uid = 12345
 
         Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
 
