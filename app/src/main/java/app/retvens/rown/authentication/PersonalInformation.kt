@@ -28,12 +28,16 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.Interest
+import app.retvens.rown.DataCollections.MesiboAccount
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
+import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.google.firebase.auth.ActionCodeSettings
 import java.io.File
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -81,6 +85,14 @@ class PersonalInformation : AppCompatActivity() {
             }
             openBottomSheet()
         }
+
+        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
+        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
+        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+        Log.d("shared",addresse)
+        Log.d("shared",token)
+        Log.d("shared",uid.toString())
+        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.address.toString(),Toast.LENGTH_SHORT).show()
 
         binding.cardSavePerson.setOnClickListener {
 
@@ -215,11 +227,32 @@ class PersonalInformation : AppCompatActivity() {
         val body = UploadRequestBody(file,"image")
 
         val phone : Long = intent.getStringExtra("phone")?.toLong()!!
+//        val phone : Long = 212178815
+
+        val _id = SharedPreferenceManagerAdmin.getInstance(this).user.__v.toString()
+        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
+        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
+        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+
+//        val addresse = "address"
+//        val token = "StoredInSharedPreferenceManagerAdmin"
+//        val uid = 12345
+
+        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
+
+        val Interest = Interest(_id,uid.toString())
+        val Mesibo_account = MesiboAccount(_id,addresse,token,uid)
 
         val respo = RetrofitBuilder.retrofitBuilder.uploadUserProfile(
-            MultipartBody.Part.createFormData("Profile_pic", file.name, body),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),phone
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),
+            phone,
+            MultipartBody.Part.createFormData("Profile_pic", file.name, body),
+            Mesibo_account.uid,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.address),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.token),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Interest.id),
+           20,12
         )
         respo.enqueue(object : Callback<UserProfileResponse?> {
             override fun onResponse(
@@ -241,6 +274,7 @@ class PersonalInformation : AppCompatActivity() {
 //                Toast.makeText(applicationContext,file.name.toString(),Toast.LENGTH_SHORT).show()
             }
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
                 Log.d("res",t.localizedMessage,t)
             }

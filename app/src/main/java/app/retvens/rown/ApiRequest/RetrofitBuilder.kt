@@ -4,7 +4,7 @@ import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val Base_url = "http://64.227.129.111/"
+const val Base_url = "http://64.227.150.47/"
 
 object RetrofitBuilder {
 
