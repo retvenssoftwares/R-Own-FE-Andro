@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:fitsSystemWindows="true"
-    tools:context=".CreateCommunity.SelectMembers">
+    tools:context=".CreateCommunity.UploadIcon">
 
     <RelativeLayout
         android:id="@+id/relative"
@@ -29,7 +29,7 @@
             android:textSize="20dp" />
 
         <ImageButton
-            android:id="@+id/createCommunity_backBtn_members"
+            android:id="@+id/createCommunity_backBtn"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_alignParentStart="true"
@@ -38,7 +38,15 @@
             android:background="@color/white"
             android:src="@drawable/community_btn" />
 
-
+        <ImageButton
+            android:id="@+id/createCommunity_cut"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@color/white"
+            android:src="@drawable/close_circle" />
 
     </RelativeLayout>
 
@@ -58,7 +66,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:fontFamily="@font/montserrat_semibold"
-            android:text="Select members"
+            android:text="Upload an icon"
             android:textColor="#ADD314"
             android:textFontWeight="700"
             android:textSize="18dp" />
@@ -73,69 +81,89 @@
         app:layout_constraintTop_toBottomOf="@id/relative2"
         android:background="#A4D71D" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/selectedItemrecycler"
+
+    <ImageView
+        android:id="@+id/img_round"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/round_img"
+        app:tint="@color/black"
+        app:layout_constraintVertical_bias="0.44"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="130dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="center"
+        android:src="@drawable/profile_img"
+        app:tint="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/img_round"
+        app:layout_constraintEnd_toEndOf="@id/img_round"
+        app:layout_constraintStart_toStartOf="@id/img_round"/>
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile"
+        android:layout_width="235dp"
+        android:layout_height="235dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/RoundedCornerImage"
+        tools:src="@drawable/top_round"
+        android:padding="1dp"
+        app:layout_constraintTop_toTopOf="@id/img_round"
+        app:layout_constraintBottom_toBottomOf="@id/img_round"
+        app:layout_constraintEnd_toEndOf="@id/img_round"
+        app:layout_constraintStart_toStartOf="@id/img_round"/>
+
+
+    <ImageView
+        android:id="@+id/camera"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/camera_img_black"
+        app:layout_constraintBottom_toBottomOf="@id/img_round"
+        app:layout_constraintEnd_toEndOf="@id/img_round"/>
+
+    <TextView
+        android:id="@+id/Community_Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/relative2"
+        app:layout_constraintTop_toBottomOf="@+id/profile"
+        android:layout_marginTop="25dp"
+        android:textAlignment="center"
+        android:text="Retvens Community"
+        android:textColor="@color/black"
+        android:textSize="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textFontWeight="700"
         />
 
-    <RelativeLayout
-        android:id="@+id/relativesearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/selectedItemrecycler"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp"
-        >
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginHorizontal="30dp"
-            android:background="@drawable/searchmembers"
-            android:layout_centerHorizontal="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.266"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_centerVertical="true"
-            />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/searchbar"
-            android:layout_marginEnd="40dp"
-            />
-
-    </RelativeLayout>
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listOfaddmembers"
+        android:id="@+id/recyclerUpload"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="15dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/Community_Name"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/relativesearch"
-        android:layout_marginTop="15dp"
         />
 
     <ImageView
-        android:id="@+id/select_next"
+        android:id="@+id/nextUpload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="30dp"
         android:layout_marginEnd="30dp"
         android:src="@drawable/nextbtn"
-        android:visibility="gone"
         />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

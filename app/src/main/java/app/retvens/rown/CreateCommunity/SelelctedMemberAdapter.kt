@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.R
@@ -27,6 +28,9 @@ class SelectedMembersAdapter(private val context: Context) :
     override fun onBindViewHolder(holder: SelectedMemberViewHolder, position: Int) {
         val member = selectedMembersList[position]
 
+        holder.profileImageView.setImageResource(R.drawable.dummy)
+
+
 
         // Load profile image here
     }
@@ -36,7 +40,11 @@ class SelectedMembersAdapter(private val context: Context) :
     }
 
     fun addSelectedMember(member: MesiboUsersData) {
-        selectedMembersList.add(member)
-        notifyDataSetChanged()
+        val index = selectedMembersList.indexOf(member)
+        if (index == -1) {
+            selectedMembersList.add(member)
+        } else {
+            selectedMembersList.removeAt(index)
+        }
     }
 }

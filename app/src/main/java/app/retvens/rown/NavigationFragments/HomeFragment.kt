@@ -1,13 +1,18 @@
 package app.retvens.rown.NavigationFragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import app.retvens.rown.CreateCommunity.CreateCommunity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
 
@@ -35,6 +40,16 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheet = BottomSheet()
         val fragManager = (activity as FragmentActivity).supportFragmentManager
+        fragManager?.let{bottomSheet.show(it, BottomSheet.TAG)}
+
+
+        val btn = view.findViewById<CardView>(R.id.community_btn)
+
+        btn.setOnClickListener {
+            startActivity(Intent(context,CreateCommunity::class.java))
+
+        }
+
         fragManager?.let { bottomSheet.show(it, BottomSheet.TAG) }
 
         val gesture = GestureDetector(

@@ -152,5 +152,7 @@ dependencies {
         implementation 'id.zelory:compressor:3.0.1'
     }
 
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
 
 }

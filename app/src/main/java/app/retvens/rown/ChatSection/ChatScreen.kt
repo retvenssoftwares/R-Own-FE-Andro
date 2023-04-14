@@ -112,22 +112,21 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
             }
         }.start()
 
-        val x = Mesibo.setOnlineStatusMode(Mesibo.ONLINEMODE_FOREGROUND)
-
-        val status = findViewById<TextView>(R.id.activeStatus)
-
-        val receiversInfo = Mesibo.getProfile(name)
-
-        Log.e("",x.toString())
-
-
-
 
         val send = findViewById<ImageView>(R.id.btn_send)
+
+        if (textMessage.text.isNotEmpty()){
+            send.setImageResource(R.drawable.sendtext)
+        }else{
+            send.setImageResource(R.drawable.mikeicon)
+        }
+
+
         send.setOnClickListener {
             val messagetext = textMessage.text.toString()
 
             if (messagetext.isNotEmpty()) {
+
                 name = intent.getStringExtra("address")
 
                 val message: MesiboMessage = profile.newMessage()
@@ -165,8 +164,6 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                 sendmessage.message = messagetext
                 sendmessage.send()
                 val title = message.profile.address
-
-//                notify(title,sendmessage.message
 
 
 
@@ -233,6 +230,8 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
         if (message.isIncoming){
             val sender: MesiboProfile = message.profile
 
+            val icon = findViewById<ImageView>(R.id.read_msg)
+            icon.setImageResource(R.drawable.doublecheck2)
 
             val messageEntity = MessageEntity(
                 message.mid,
@@ -256,7 +255,9 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                     .toString() + ": " + message.message,Toast.LENGTH_SHORT).show()
             }
         } else if (message.isOutgoing()) {
-            Toast.makeText(applicationContext,"Message is sent",Toast.LENGTH_SHORT).show()
+
+            val icon = findViewById<ImageView>(R.id.read_msg)
+
 
 
         }

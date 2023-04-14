@@ -3,6 +3,7 @@ package app.retvens.rown.CreateCommunity
 import android.content.Context
 import android.content.Intent
 import android.text.format.DateUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,19 +49,19 @@ class SelectMembersAdapter(val context: Context, var userList:List<MesiboUsersDa
 
         holder.nameTextView.text = data.address
 
-        var isProfileVisible = false
+
 
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(data)
-        }
 
-        holder.itemView.setOnClickListener {
-            if (isProfileVisible) {
-                holder.check.visibility = View.GONE
-            } else {
+            data.isSelected = !data.isSelected
+
+            // Update checkmark icon visibility
+            if (data.isSelected) {
                 holder.check.visibility = View.VISIBLE
+            } else {
+                holder.check.visibility = View.GONE
             }
-            isProfileVisible = !isProfileVisible
         }
 
     }
