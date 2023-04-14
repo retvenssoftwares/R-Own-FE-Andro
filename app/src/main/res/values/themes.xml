@@ -31,7 +31,6 @@
 
     <style name="DailogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
     <style name="Theme.AppBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">

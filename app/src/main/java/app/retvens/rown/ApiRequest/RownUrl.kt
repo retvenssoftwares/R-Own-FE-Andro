@@ -15,24 +15,26 @@ interface RownUrl {
     @Multipart
     @POST("profile")
     fun uploadUserProfile(
-        @Part Profile_pic: MultipartBody.Part,
-        @Part("User_name") Name: RequestBody,
+        @Part("Full_name") Name: RequestBody,
         @Part("Email") Email: RequestBody,
         @Part("Phone") Phone: Long,
-
+        @Part Profile_pic: MultipartBody.Part,
+        @Part("Mesibo_account[uid]") uid:Int,
+        @Part("Mesibo_account[address]") address:RequestBody,
+        @Part("Mesibo_account[token]") token:RequestBody,
+        @Part("Interest[id]") id:RequestBody,
+        @Part("Post_count") Post_count: Int,
+        @Part("connection_count") connection_count: Int,
     ) : Call<UserProfileResponse>
+
+    @GET("profile")
+    fun getProfile() : Call<List<UserProfileRequestItem>>
 
     @POST("usercreate")
     fun createMesiboUser(@Body create:MesiboDataClass):Call<MesiboResponseClass>
 
-    @POST("creategroup")
-    fun createGroup(@Body create:GroupCreate):Call<ResponseGroup>
-
     @GET("users")
     fun getMesiboUsers(): Call<UsersList>
-
-    @POST("addmember")
-    fun addMember(@Body addMember:AddMemberData):Call<ResponseGroup>
 
     @POST("contacts")
     fun uploadContacts(

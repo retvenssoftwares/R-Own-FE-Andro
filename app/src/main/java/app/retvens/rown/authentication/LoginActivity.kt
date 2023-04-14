@@ -12,6 +12,7 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -32,7 +33,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.UserProfileRequest
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -42,6 +46,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -116,8 +123,12 @@ class LoginActivity : AppCompatActivity() {
             val phoneNumber = telephonyManager.line1Number
 
             // Set the phone number to the EditText
-            phoneNum = phoneNumber.drop(2)
-            binding.editPhone.setText(phoneNum)
+            if (phoneNumber.length > 10){
+                phoneNum = phoneNumber.drop(2)
+                binding.editPhone.setText(phoneNum)
+            }else{
+                binding.editPhone.setText(phoneNum)
+            }
         } else {
             // Permission has not been granted, request it
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_NUMBERS), REQUEST_CODE)
@@ -127,7 +138,11 @@ class LoginActivity : AppCompatActivity() {
 
         auth=FirebaseAuth.getInstance()
 
-
+        binding.privacyPolicy.setOnClickListener{
+            val uri : Uri = Uri.parse("https://www.retvensservices.com/privacy-policy")
+            val intent = Intent(Intent.ACTION_VIEW,uri)
+            startActivity(intent)
+        }
 
         //googleLogin
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -182,7 +197,9 @@ class LoginActivity : AppCompatActivity() {
                 var intent = Intent(applicationContext,OtpVerification::class.java)
                 intent.putExtra("storedVerificationId",storedVerificationId)
                 intent.putExtra("phone",phone)
+                intent.putExtra("phoneNum",phoneNum)
                 startActivity(intent)
+                progressDialog.dismiss()
             }
         }
 
@@ -190,6 +207,7 @@ class LoginActivity : AppCompatActivity() {
             if (binding.editPhone.length() < 10){
                 Toast.makeText(this,"Please enter a valid phone number", Toast.LENGTH_SHORT).show()
             }else{
+//                getProfil()
                 val countryCode = binding.countryCode.selectedCountryCode
                 val phoneNo = binding.editPhone.text.toString()
                 phone = "+$countryCode $phoneNo"
@@ -451,6 +469,24 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+    fun getProfil(){
+        val pro = RetrofitBuilder.retrofitBuilder.getProfile()
+        pro.enqueue(object : Callback<List<UserProfileRequestItem>?> {
+            override fun onResponse(
+                call: Call<List<UserProfileRequestItem>?>,
+                response: Response<List<UserProfileRequestItem>?>
+            ) {
+                Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("Profile",response.toString())
+                Log.d("Profile",response.body().toString())
+//                Log.d("Profile",response.body()?.)
+            }
+            override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("Profile",t.localizedMessage.toString(),t)
+            }
+        })
+    }
 
     override fun onStart() {
         super.onStart()

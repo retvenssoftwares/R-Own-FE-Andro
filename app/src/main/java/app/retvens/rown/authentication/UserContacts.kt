@@ -23,6 +23,10 @@ import app.retvens.rown.DataCollections.ContactResponse
 import app.retvens.rown.DataCollections.ContactsData
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserContactsBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,6 +55,11 @@ class UserContacts : AppCompatActivity() {
             progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             progressDialog.show()
+//            GlobalScope.launch {
+//                withContext(Dispatchers.IO){
+//
+//                }
+//            }
             loadContacts()
         }
     }
@@ -64,11 +73,7 @@ class UserContacts : AppCompatActivity() {
             requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),
                 PERMISSIONS_REQUEST_READ_CONTACTS)
         } else {
-            try {
                 getContacts()
-            }catch (e:Exception){
-                Toast.makeText(applicationContext,"Get Conts: ${ e.toString() }",Toast.LENGTH_SHORT).show()
-            }
 //            builder = getContacts()
 //            binding.text2.text = builder.toString()
 //            Log.d("Name ===>", builder.toString())
@@ -144,7 +149,12 @@ class UserContacts : AppCompatActivity() {
         listOfContacts.forEach {
             Log.d("cont", "${it.Name} ${it.Number} ${it.Company_Name}\n")
         }
-        uploadContacts(listOfContacts)
+        GlobalScope.launch {
+            withContext(Dispatchers.IO){
+                this@UserContacts.uploadContacts(listOfContacts)
+            }
+        }
+
         cursor.close()
     }
     @SuppressLint("Range")
@@ -194,25 +204,27 @@ class UserContacts : AppCompatActivity() {
     }
     private fun uploadContacts(listOfContacts: MutableList<ContactDetail>) {
         val user = intent.getStringExtra("name").toString()
-        val upload = RetrofitBuilder.retrofitBuilder.uploadContacts(ContactsData(listOfContacts,user))
+        val upload = RetrofitBuilder.retrofitBuilder.uploadContacts(ContactsData(listOfContacts,"Arjun Ji"))
         upload.enqueue(object : Callback<ContactResponse?> {
             override fun onResponse(
                 call: Call<ContactResponse?>,
                 response: Response<ContactResponse?>
             ) {
+//                Toast.makeText(applicationContext,"response.message().toString()",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+                Log.d("cont",response.toString())
+                progressDialog.dismiss()
                 if (response.isSuccessful){
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
-                    Log.d("cont",response.toString())
+//                    progressDialog.dismiss()
                     val intent = Intent(applicationContext, DashBoardActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 }
-                progressDialog.dismiss()
             }
             override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
                 progressDialog.dismiss()
-                Log.d("cont",t.localizedMessage.toString(),t)
+                Log.d("cont", "CoApi : ${ t.localizedMessage.toString() }",t)
+                Toast.makeText(applicationContext,"response.Error()",Toast.LENGTH_SHORT).show()
             }
         })
     }
