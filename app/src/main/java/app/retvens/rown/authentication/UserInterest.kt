@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserInterestBinding
+import app.retvens.rown.utils.moveTo
 
 class UserInterest : AppCompatActivity() {
     lateinit var binding: ActivityUserInterestBinding
@@ -20,6 +21,7 @@ class UserInterest : AppCompatActivity() {
         binding.userName.text = "Hello, $username!"
 
         binding.cardContinueInterest.setOnClickListener {
+            moveTo(this,"MoveToUC")
             val intent = Intent(applicationContext, UserContacts::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             intent.putExtra("name",username)

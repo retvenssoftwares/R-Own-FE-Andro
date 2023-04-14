@@ -6,11 +6,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
@@ -22,6 +24,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,22 +36,24 @@ import app.retvens.rown.DataCollections.MesiboAccount
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
+import app.retvens.rown.utils.moveTo
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.google.firebase.auth.ActionCodeSettings
-import java.io.File
 import com.google.firebase.auth.FirebaseAuth
-import com.google.gson.Gson
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.FileInputStream
-import java.io.FileOutputStream
+import java.io.*
 import java.util.*
+
 
 class PersonalInformation : AppCompatActivity() {
 
@@ -56,6 +61,9 @@ class PersonalInformation : AppCompatActivity() {
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
     lateinit var croppedImageUri: Uri
+    lateinit var finalUri: Uri
+    var bmp: Bitmap ?= null
+    lateinit var baos: ByteArrayOutputStream
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraImageUri: Uri
@@ -88,10 +96,10 @@ class PersonalInformation : AppCompatActivity() {
 
         val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
         val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
-        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+//        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
         Log.d("shared",addresse)
         Log.d("shared",token)
-        Log.d("shared",uid.toString())
+//        Log.d("shared",uid.toString())
         Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.address.toString(),Toast.LENGTH_SHORT).show()
 
         binding.cardSavePerson.setOnClickListener {
@@ -217,26 +225,30 @@ class PersonalInformation : AppCompatActivity() {
 
     private fun uploadData() {
         val parcelFileDescriptor = contentResolver.openFileDescriptor(
-            croppedImageUri!!,"r",null
+            finalUri!!,"r",null
         )?:return
 
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file = File(cacheDir,contentResolver.getFileName(croppedImageUri!!))
+        val file = File(cacheDir,contentResolver.getFileName(finalUri!!))
+        var compressedImageFile : File ?= null
+        GlobalScope.launch {
+            compressedImageFile = Compressor.compress(this@PersonalInformation, file)
+        }
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
-        val body = UploadRequestBody(file,"image")
+        val body = UploadRequestBody(file!!,"image")
 
-        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
-//        val phone : Long = 212178815
+//        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
+        val phone : Long = 212178812
 
         val _id = SharedPreferenceManagerAdmin.getInstance(this).user.__v.toString()
-        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
-        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
-        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+//        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
+//        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
+//        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
 
-//        val addresse = "address"
-//        val token = "StoredInSharedPreferenceManagerAdmin"
-//        val uid = 12345
+        val addresse = "address"
+        val token = "StoredInSharedPreferenceManagerAdmin"
+        val uid = 12345
 
         Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
 
@@ -266,6 +278,7 @@ class PersonalInformation : AppCompatActivity() {
                 Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
 
                 if (response.message().toString() != "Request Entity Too Large"){
+                    moveTo(this@PersonalInformation,"MoveToI")
                     val intent = Intent(applicationContext,UserInterest::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.putExtra("user",username)
@@ -375,8 +388,40 @@ class PersonalInformation : AppCompatActivity() {
             .setCropShape(CropImageView.CropShape.OVAL)
             .start(this)
         croppedImageUri = imageUri
-        binding.profile.setImageURI(croppedImageUri)
+
+        val timestamp = "" + System.currentTimeMillis()
+
+        bmp = null
+        try {
+            bmp = MediaStore.Images.Media.getBitmap(contentResolver, croppedImageUri)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        baos = ByteArrayOutputStream()
+
+        // here we can choose quality factor
+        // in third parameter(ex. here it is 25)
+
+        // here we can choose quality factor
+        // in third parameter(ex. here it is 25)
+        bmp?.compress(Bitmap.CompressFormat.JPEG, 0, baos)
+
+        finalUri = getImageUri(bmp!!)!!
+
+        binding.profile.setImageURI(finalUri)
     }
+    fun getImageUri(inImage: Bitmap): Uri? {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 0, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            getContentResolver(),
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
+    }
+
     private fun loadLocale(){
         val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
         val language = sharedPreferences.getString("MY_LANG", "")

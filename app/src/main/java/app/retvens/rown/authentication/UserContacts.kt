@@ -23,6 +23,7 @@ import app.retvens.rown.DataCollections.ContactResponse
 import app.retvens.rown.DataCollections.ContactsData
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserContactsBinding
+import app.retvens.rown.utils.moveTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,6 +44,7 @@ class UserContacts : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.skip.setOnClickListener {
+            moveTo(this,"MoveToD")
             val intent = Intent(applicationContext, DashBoardActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
@@ -55,12 +57,12 @@ class UserContacts : AppCompatActivity() {
             progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             progressDialog.show()
-//            GlobalScope.launch {
-//                withContext(Dispatchers.IO){
-//
-//                }
-//            }
-            loadContacts()
+            GlobalScope.launch {
+                withContext(Dispatchers.IO){
+                    loadContacts()
+                }
+            }
+
         }
     }
 
@@ -73,7 +75,10 @@ class UserContacts : AppCompatActivity() {
             requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS),
                 PERMISSIONS_REQUEST_READ_CONTACTS)
         } else {
+            val myT = Thread {
                 getContacts()
+            }
+            myT.start()
 //            builder = getContacts()
 //            binding.text2.text = builder.toString()
 //            Log.d("Name ===>", builder.toString())
@@ -149,13 +154,9 @@ class UserContacts : AppCompatActivity() {
         listOfContacts.forEach {
             Log.d("cont", "${it.Name} ${it.Number} ${it.Company_Name}\n")
         }
-        GlobalScope.launch {
-            withContext(Dispatchers.IO){
-                this@UserContacts.uploadContacts(listOfContacts)
-            }
-        }
+                cursor?.close()
 
-        cursor.close()
+          uploadContacts(listOfContacts)
     }
     @SuppressLint("Range")
     private fun getRawContactId(id: String?): String? {
@@ -204,18 +205,17 @@ class UserContacts : AppCompatActivity() {
     }
     private fun uploadContacts(listOfContacts: MutableList<ContactDetail>) {
         val user = intent.getStringExtra("name").toString()
-        val upload = RetrofitBuilder.retrofitBuilder.uploadContacts(ContactsData(listOfContacts,"Arjun Ji"))
+        val upload = RetrofitBuilder.retrofitBuilder.uploadContacts(ContactsData(listOfContacts,user))
         upload.enqueue(object : Callback<ContactResponse?> {
             override fun onResponse(
                 call: Call<ContactResponse?>,
                 response: Response<ContactResponse?>
             ) {
-//                Toast.makeText(applicationContext,"response.message().toString()",Toast.LENGTH_SHORT).show()
                 Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
                 Log.d("cont",response.toString())
                 progressDialog.dismiss()
                 if (response.isSuccessful){
-//                    progressDialog.dismiss()
+                    moveTo(this@UserContacts,"MoveToD")
                     val intent = Intent(applicationContext, DashBoardActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)

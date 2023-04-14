@@ -29,6 +29,7 @@ import app.retvens.rown.DataCollections.MesiboDataClass
 import app.retvens.rown.DataCollections.MesiboResponseClass
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
+import app.retvens.rown.utils.moveTo
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
@@ -202,6 +203,7 @@ open class OtpVerification : AppCompatActivity() {
                         startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                         finish()
                     }else{
+                        moveTo(this,"MoveToPI")
                         val intent = Intent(applicationContext, PersonalInformation::class.java)
                         intent.putExtra("phone",phoneNumber)
                         startActivity(intent)
