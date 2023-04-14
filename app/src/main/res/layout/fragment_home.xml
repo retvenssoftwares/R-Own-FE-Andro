@@ -26,7 +26,6 @@
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/community_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardElevation="12dp"
@@ -50,6 +49,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
                     <ImageView
+                        android:id="@+id/community_btn"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:src="@drawable/svg_add"

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import android.widget.Toolbar
@@ -43,14 +44,12 @@ class HomeFragment : Fragment() {
         fragManager?.let{bottomSheet.show(it, BottomSheet.TAG)}
 
 
-        val btn = view.findViewById<CardView>(R.id.community_btn)
+        val btn = view.findViewById<ImageView>(R.id.community_btn)
 
         btn.setOnClickListener {
             startActivity(Intent(context,CreateCommunity::class.java))
 
         }
-
-        fragManager?.let { bottomSheet.show(it, BottomSheet.TAG) }
 
         val gesture = GestureDetector(
             activity,
