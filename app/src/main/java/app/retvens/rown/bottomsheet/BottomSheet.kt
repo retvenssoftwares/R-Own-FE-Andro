@@ -40,7 +40,7 @@ class BottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recycler = view.findViewById<RecyclerView>(R.id.popularUsers_recycler)
-            recycler.layoutManager = GridLayoutManager(context,3)
+            recycler.layoutManager = GridLayoutManager(context,2)
 
             popularUsersAdapter = PopularUsersAdapter(requireContext(), emptyList())
             recycler.adapter = popularUsersAdapter

@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+91 7905845935"
-        android:fontFamily="@font/montserrat_bold"
+        android:fontFamily="@font/montserrat_semibold"
         android:textSize="28dp"
         android:textColor="@color/black"
         android:layout_gravity="center_horizontal"/>
@@ -47,8 +47,9 @@
             android:paddingVertical="8dp"
             android:textAlignment="center"
             android:text="@string/send_otp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textSize="29dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="600"
+            android:textSize="28dp"
             android:background="@color/green_own"
             android:textColor="@color/black"/>
 

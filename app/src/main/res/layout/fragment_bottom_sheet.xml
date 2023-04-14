@@ -54,12 +54,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/popularUsers_recycler"
-        app:layout_constraintTop_toBottomOf="@id/connections_search"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="550dp"
         android:layout_marginTop="15dp"
+        tools:listitem="@layout/cardofusers"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/connections_search"
         android:layout_marginHorizontal="15dp"
         />
 
