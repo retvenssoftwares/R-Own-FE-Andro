@@ -21,7 +21,7 @@ class PopularUsersAdapter(val context: Context, var userList:List<MesiboUsersDat
         var lastSeen = itemView.findViewById<TextView>(R.id.active_timeMessage)
         var profile = itemView.findViewById<ImageView>(R.id.connection_profile)
 
-        var button = itemView.findViewById<Button>(R.id.connectUser)
+        var button = itemView.findViewById<TextView>(R.id.connectUser)
 
     }
 
