@@ -4,42 +4,41 @@ import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
+import app.retvens.rown.ApiRequest.AppDatabase
+import app.retvens.rown.DataCollections.MessageEntity
 import app.retvens.rown.MyFirebaseMessagingService
 import app.retvens.rown.R
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import com.mesibo.api.Mesibo
-import com.mesibo.api.MesiboGroupProfile
-import com.mesibo.api.MesiboMessage
-import com.mesibo.api.MesiboProfile
-import com.mesibo.api.MesiboReadSession
-import com.mesibo.calls.api.CallStateReceiver.init
+import com.mesibo.api.*
 import com.mesibo.calls.api.MesiboCall
 import com.mesibo.calls.api.MesiboCall.CallProperties
 import com.mesibo.calls.api.MesiboCallActivity
-import com.mesibo.messaging.MesiboImages.init
-import org.webrtc.NetworkMonitor.init
 
-class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProgressListener,MesiboCall.IncomingListener{
+
+class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProgressListener,MesiboCall.IncomingListener,
+    Mesibo.SyncListener,Mesibo.FileTransferListener,Mesibo.FileTransferHandler{
 
     private lateinit var adapter: ChatScreenAdapter
-    private val messages: ArrayList<MesiboMessage> = ArrayList()
+    private val messages: ArrayList<MessageEntity> = ArrayList()
     private var myUserId: Long = 0   // replace with your Mesibo user ID
     private lateinit var profile: MesiboProfile
     private lateinit var textMessage:EditText
     private lateinit var recyclerView:RecyclerView
     private lateinit var token:String
     private var mNotifyUser: MyFirebaseMessagingService? = null
+    private lateinit var appDatabase: AppDatabase
+    private  var getMessages:List<MessageEntity> = emptyList()
+    private  var name:String = ""
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,16 +51,23 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         val authtoken = SharedPreferenceManagerAdmin.getInstance(applicationContext).user.uid
 
-        Toast.makeText(applicationContext,authtoken,Toast.LENGTH_SHORT).show()
+        appDatabase = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "my-database").build()
+
+
+        Log.e("",authtoken.toString())
 
         Mesibo.addListener(this)
         Mesibo.setAccessToken(authtoken)
-        Mesibo.setDatabase("retvensDB", 0)
+        Mesibo.setDatabase("Retvens.db",0)
+
+
 
         Mesibo.start()
 
+
+
         val receiversName = findViewById<TextView>(R.id.chatName)
-        val name = intent.getStringExtra("address")
+        var name = intent.getStringExtra("address")
         receiversName.text = name
         val uid = intent.getLongExtra("userId",0)
 
@@ -76,21 +82,44 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         profile = Mesibo.getSelfProfile()
 
+
         Mesibo.setAppInForeground(this, 0, true)
         val mReadSession:MesiboReadSession = profile.createReadSession(this)
         mReadSession?.enableReadReceipt(true)
         mReadSession?.read(100)
 
 
+
+
         mReadSession?.enableMissedCalls(true)
 
         // Create the adapter with empty message list and current user ID
-        adapter = ChatScreenAdapter(this, messages,myUserId)
+        adapter = ChatScreenAdapter(this, messages,profile.address)
 
         // Set the adapter to the RecyclerView
         recyclerView.adapter = adapter
 
         textMessage = findViewById(R.id.text_content)
+
+
+        Thread {
+            val getMessages = AppDatabase.getInstance(applicationContext).chatMessageDao().getMessages(profile.address,name!!)
+
+            runOnUiThread {
+                messages.addAll(getMessages)
+                adapter.notifyDataSetChanged()
+                recyclerView.scrollToPosition(messages.size - 1)
+            }
+        }.start()
+
+        val x = Mesibo.setOnlineStatusMode(Mesibo.ONLINEMODE_FOREGROUND)
+
+        val status = findViewById<TextView>(R.id.activeStatus)
+
+        val receiversInfo = Mesibo.getProfile(name)
+
+        Log.e("",x.toString())
+
 
 
 
@@ -99,15 +128,25 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
             val messagetext = textMessage.text.toString()
 
             if (messagetext.isNotEmpty()) {
-                val name = intent.getStringExtra("address")
+                name = intent.getStringExtra("address")
 
                 val message: MesiboMessage = profile.newMessage()
                 message.profile = profile
                 message.message = messagetext
-                messages.add(message)
 
+                val messageEntity = MessageEntity(
+                    message.mid,
+                    message.profile.address,
+                    name!!,
+                    message.message,
+                    timestamp = System.currentTimeMillis()
+                )
+                Thread {
+                    AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
+                }.start()
 
-                // Notify the adapter about the new data
+                messages.add(messageEntity)
+
                 adapter.notifyItemInserted(messages.size - 1)
                 recyclerView.scrollToPosition(messages.size - 1)
 
@@ -125,10 +164,9 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                 val sendmessage:MesiboMessage = recipientProfile.newMessage()
                 sendmessage.message = messagetext
                 sendmessage.send()
-
                 val title = message.profile.address
 
-//                notify(title,sendmessage.message)
+//                notify(title,sendmessage.message
 
 
 
@@ -140,11 +178,12 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
         }
 
 
+
         val video = findViewById<ImageView>(R.id.video_Call)
 
         video.setOnClickListener {
 
-            val name = intent.getStringExtra("address")
+            name = intent.getStringExtra("address")
 
             val recipientProfile:MesiboProfile
             recipientProfile = Mesibo.getProfile(name)
@@ -162,7 +201,7 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         val voice = findViewById<ImageView>(R.id.voice_Call)
         voice.setOnClickListener {
-            val name = intent.getStringExtra("address")
+            name = intent.getStringExtra("address")
             val recipientProfile:MesiboProfile
             recipientProfile = Mesibo.getProfile(name)
 
@@ -174,37 +213,40 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
         val call:MesiboCall  = MesiboCall.getInstance()
         call.init(applicationContext)
 
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-            // Get new FCM registration token
-            token = task.result
-
-            // Log and toast
-            Log.e("token", token)
-
-            Mesibo.setPushToken(token)
-        })
-
         mNotifyUser = MyFirebaseMessagingService()
 
- }
+        var readCount = 10
+        var result = mReadSession.read(readCount)
+        if (result < readCount) {
+            mReadSession.sync(readCount - result, this)
+        }
+
+
+    }
 
 //    fun notify(title: String, message: String) {
 //        mNotifyUser!!.generateNotification(title,message)
 //    }
 
     override fun Mesibo_onMessage(message: MesiboMessage) {
-
+        name = intent.getStringExtra("address")!!
         if (message.isIncoming){
             val sender: MesiboProfile = message.profile
 
-            message.save()
-            messages.add(message)
 
+            val messageEntity = MessageEntity(
+                message.mid,
+                name,
+                profile.address,
+                message.message,
+                timestamp = System.currentTimeMillis()
+            )
+
+            Thread {
+                AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
+            }.start()
+
+            messages.add(messageEntity)
             // Notify the adapter about the new data
             adapter.notifyItemInserted(messages.size - 1)
             recyclerView.scrollToPosition(messages.size - 1)
@@ -214,7 +256,7 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                     .toString() + ": " + message.message,Toast.LENGTH_SHORT).show()
             }
         } else if (message.isOutgoing()) {
-
+            Toast.makeText(applicationContext,"Message is sent",Toast.LENGTH_SHORT).show()
 
 
         }
@@ -227,6 +269,7 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 //
 //        val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.doublecheck)
 //        seenIcon.setImageDrawable(drawable)
+
 
 
 
@@ -334,6 +377,22 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
     override fun MesiboCall_onNotify(p0: Int, p1: MesiboProfile?, p2: Boolean): Boolean {
        return true
+    }
+
+    override fun Mesibo_onSync(p0: Int) {
+
+    }
+
+    override fun Mesibo_onFileTransferProgress(p0: MesiboFileTransfer?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun Mesibo_onStartFileTransfer(p0: MesiboFileTransfer?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun Mesibo_onStopFileTransfer(p0: MesiboFileTransfer?): Boolean {
+        TODO("Not yet implemented")
     }
 
 

@@ -51,7 +51,6 @@ class MesiboUsers : AppCompatActivity() {
                        receiverProfileAdapter.userList = userList ?: emptyList()
                        receiverProfileAdapter.notifyDataSetChanged()
 
-                       Toast.makeText(applicationContext,userList.size.toString(),Toast.LENGTH_SHORT).show()
 
                    }
                }else{

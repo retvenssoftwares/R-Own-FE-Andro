@@ -5,6 +5,9 @@ plugins {
 }
 
 apply from: "https://api.mesibo.com/mesibo.gradle"
+apply plugin: 'kotlin-kapt'
+
+
 
 
 android {
@@ -39,6 +42,10 @@ android {
         viewBinding true
     }
 
+    kapt {
+        generateStubs = true
+    }
+
 }
 
 dependencies {
@@ -50,6 +57,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
+    implementation 'androidx.room:room-common:2.5.1'
+    implementation 'androidx.room:room-ktx:2.5.1'
+    implementation 'androidx.datastore:datastore-core-android:1.1.0-alpha03'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -89,9 +99,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //Mesibo dependencies
-    implementation 'com.mesibo.api:mesibo:2.0.50'
-    implementation 'com.mesibo.api:calls:2.0.50'
-    implementation 'com.mesibo.api:ui:2.0.50'
+    implementation 'com.mesibo.api:mesibo:2.1.0'
+    implementation 'com.mesibo.api:calls:2.1.0'
+    implementation 'com.mesibo.api:ui:2.1.0'
 
     implementation "com.mesibo.api:mesibo:${project.MesiboVersion_Api}"
     implementation "com.mesibo.api:ui:${project.MesiboVersion_Ui}"
@@ -103,4 +113,42 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
+
+    implementation 'com.google.firebase:firebase-messaging:23.1.2'
+
+    implementation 'com.github.emreesen27:Android-Nested-Progress:v1.0.2'
+
+    implementation "androidx.room:room-runtime:2.5.1"
+
+    dependencies {
+
+
+        implementation("androidx.room:room-runtime:2.5.1")
+        annotationProcessor("androidx.room:room-compiler:2.5.1")
+
+        // To use Kotlin annotation processing tool (kapt)
+        kapt("androidx.room:room-compiler:2.5.1")
+        // To use Kotlin Symbol Processing (KSP)
+//        ksp("androidx.room:room-compiler:2.5.1")
+
+        // optional - Kotlin Extensions and Coroutines support for Room
+        implementation("androidx.room:room-ktx:2.5.1")
+
+        // optional - RxJava2 support for Room
+        implementation("androidx.room:room-rxjava2:2.5.1")
+
+        // optional - RxJava3 support for Room
+        implementation("androidx.room:room-rxjava3:2.5.1")
+
+        // optional - Guava support for Room, including Optional and ListenableFuture
+        implementation("androidx.room:room-guava:2.5.1")
+
+        // optional - Test helpers
+        testImplementation("androidx.room:room-testing:2.5.1")
+
+        // optional - Paging 3 Integration
+        implementation("androidx.room:room-paging:2.5.1")
+    }
+
+
 }

@@ -56,7 +56,7 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
 
         myUserId = Mesibo.getUid()
 
-        adapter = ChatScreenAdapter(this, messages,myUserId)
+//        adapter = ChatScreenAdapter(this, messages,myUserId)
 
         recyclerView.adapter = adapter
 
