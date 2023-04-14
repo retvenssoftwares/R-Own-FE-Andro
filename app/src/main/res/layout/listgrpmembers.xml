@@ -5,6 +5,7 @@
     android:background="#F0F0F0"
     android:layout_marginTop="10dp"
     app:cardCornerRadius="15dp"
+    android:clickable="true"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout

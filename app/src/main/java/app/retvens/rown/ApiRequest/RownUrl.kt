@@ -18,14 +18,21 @@ interface RownUrl {
         @Part Profile_pic: MultipartBody.Part,
         @Part("User_name") Name: RequestBody,
         @Part("Email") Email: RequestBody,
-        @Part("Phone") Phone: Long
+        @Part("Phone") Phone: Long,
+
     ) : Call<UserProfileResponse>
 
     @POST("usercreate")
     fun createMesiboUser(@Body create:MesiboDataClass):Call<MesiboResponseClass>
 
+    @POST("creategroup")
+    fun createGroup(@Body create:GroupCreate):Call<ResponseGroup>
+
     @GET("users")
     fun getMesiboUsers(): Call<UsersList>
+
+    @POST("addmember")
+    fun addMember(@Body addMember:AddMemberData):Call<ResponseGroup>
 
     @POST("contacts")
     fun uploadContacts(

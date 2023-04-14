@@ -1,11 +1,14 @@
 package app.retvens.rown.CreateCommunity
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +27,9 @@ class SelectMembers : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var selectedMembersAdapter: SelectedMembersAdapter
     private lateinit var selectedMembersRecyclerView: RecyclerView
+    private  var selectedMember:ArrayList<String> = ArrayList()
     private  var userList: List<MesiboUsersData> = emptyList()
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_members)
@@ -37,18 +42,53 @@ class SelectMembers : AppCompatActivity() {
 
         selectedMembersAdapter = SelectedMembersAdapter(this)
 
+        selectedMembersRecyclerView.adapter = selectedMembersAdapter
+
         receiverProfileAdapter = SelectMembersAdapter(baseContext, emptyList())
         recycler.adapter = receiverProfileAdapter
         receiverProfileAdapter.notifyDataSetChanged()
 
+        val next = findViewById<ImageView>(R.id.select_next)
+
+        val name = intent.getStringExtra("name")
+        val description = intent.getStringExtra("desc")
+
+
+
+        next.setOnClickListener {
+                val intent = Intent(this,UploadIcon::class.java)
+            intent.putStringArrayListExtra("selectedMembers", selectedMember)
+            intent.putExtra("name",name)
+            intent.putExtra("desc",description)
+            startActivity(intent)
+        }
+
         receiverProfileAdapter.setOnItemClickListener(object : SelectMembersAdapter.OnItemClickListener {
             override fun onItemClick(member: MesiboUsersData) {
+
+                next.visibility = View.VISIBLE
+
+                val index = selectedMember.indexOf(member.address)
+                if (index == -1) {
+                    selectedMember.add(member.address)
+                } else {
+                    selectedMember.removeAt(index)
+                }
+
                 selectedMembersAdapter.addSelectedMember(member)
-                recycler.visibility = View.VISIBLE
+                selectedMembersAdapter.notifyDataSetChanged()
+
+
             }
         })
 
         getMesiboUsers()
+
+        val backbtn = findViewById<ImageView>(R.id.createCommunity_backBtn_members)
+
+        backbtn.setOnClickListener {
+            startActivity(Intent(this,CreateCommunity::class.java))
+        }
 
     }
 

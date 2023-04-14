@@ -226,9 +226,7 @@ class PersonalInformation : AppCompatActivity() {
                 call: Call<UserProfileResponse?>,
                 response: Response<UserProfileResponse?>
             ) {
-                Log.d("res",response.toString())
-                Log.d("res",file.name.toString())
-                Log.d("res",file.toString())
+
                 progressDialog.dismiss()
                 Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
 
@@ -242,7 +240,8 @@ class PersonalInformation : AppCompatActivity() {
             }
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
                 Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("res",t.localizedMessage,t)
+
+
             }
         })
 

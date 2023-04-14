@@ -150,5 +150,7 @@ dependencies {
         implementation("androidx.room:room-paging:2.5.1")
     }
 
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
 
 }

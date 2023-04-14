@@ -11,7 +11,8 @@ data class MesiboUsersData(
     val flag:Number,
     val flags:Number,
     val token:String,
-    val appid:String
+    val appid:String,
+    var isSelected: Boolean = false
 ){
 
 }
