@@ -2,6 +2,7 @@ package app.retvens.rown.authentication
 
 import android.app.Dialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -42,12 +43,10 @@ import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import id.zelory.compressor.Compressor
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,14 +59,15 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var binding :ActivityPersonalInformationBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
-    lateinit var croppedImageUri: Uri
-    lateinit var finalUri: Uri
+    private lateinit var croppedImageUri: Uri
+    var finalUri: Uri ?= null
     var bmp: Bitmap ?= null
     lateinit var baos: ByteArrayOutputStream
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
+//        compressImage(cameraImageUri)
         cropImage(cameraImageUri)
     }
     lateinit var dialog: Dialog
@@ -224,57 +224,68 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun uploadData() {
-        val parcelFileDescriptor = contentResolver.openFileDescriptor(
-            finalUri!!,"r",null
-        )?:return
-
-        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file = File(cacheDir,contentResolver.getFileName(finalUri!!))
-        var compressedImageFile : File ?= null
-        GlobalScope.launch {
-            compressedImageFile = Compressor.compress(this@PersonalInformation, file)
-        }
-        val outputStream = FileOutputStream(file)
-        inputStream.copyTo(outputStream)
-        val body = UploadRequestBody(file!!,"image")
-
-        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
-//        val phone : Long = 212178812
+//        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
+        val phone : Long = 2121785612
 
         val _id = SharedPreferenceManagerAdmin.getInstance(this).user.__v.toString()
-        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
-        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
-        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+//        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
+//        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
+//        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
 
-//        val addresse = "address"
-//        val token = "StoredInSharedPreferenceManagerAdmin"
-//        val uid = 12345
-
-        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
+        val addresse = "address"
+        val token = "StoredInSharedPreferenceManagerAdmin"
+        val uid = 18355
+//        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
 
         val Interest = Interest(_id,uid.toString())
         val Mesibo_account = MesiboAccount(_id,addresse,token,uid)
 
-        val respo = RetrofitBuilder.retrofitBuilder.uploadUserProfile(
+/*        if (croppedImageUri != null){
+
+            var file : File ?= null
+            var body : UploadRequestBody ?= null
+
+            val parcelFileDescriptor = contentResolver.openFileDescriptor(
+            croppedImageUri!!,"r",null
+        )?:return
+
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        file = File(cacheDir,contentResolver.getFileName(croppedImageUri!!))
+        val outputStream = FileOutputStream(file)
+        inputStream.copyTo(outputStream)
+        body = UploadRequestBody(file,"image")
+
+    }*/
+
+        val filesDir = applicationContext.filesDir
+        val file = File(filesDir,"image.png")
+
+        val inputStream = contentResolver.openInputStream(croppedImageUri)
+        val outputStream = FileOutputStream(file)
+        inputStream!!.copyTo(outputStream)
+
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+        val respo  = RetrofitBuilder.retrofitBuilder.uploadUserProfile(
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),
             phone,
-            MultipartBody.Part.createFormData("Profile_pic", file.name, body),
+            MultipartBody.Part.createFormData("Profile_pic", file.name, requestBody),
             Mesibo_account.uid,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.address),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.token),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Interest.id),
-           20,12
+            20,12
         )
         respo.enqueue(object : Callback<UserProfileResponse?> {
             override fun onResponse(
                 call: Call<UserProfileResponse?>,
                 response: Response<UserProfileResponse?>
             ) {
-
                 progressDialog.dismiss()
                 Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
-
+                Log.d("image file", file.toString())
+                Log.d("image", response.toString())
                 if (response.message().toString() != "Request Entity Too Large"){
                     moveTo(this@PersonalInformation,"MoveToI")
                     val intent = Intent(applicationContext,UserInterest::class.java)
@@ -331,7 +342,8 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun deleteImage() {
-        binding.profile.setImageURI(null)
+        croppedImageUri = null!!
+        binding.profile.setImageURI(croppedImageUri)
         dialog.dismiss()
     }
 
@@ -385,41 +397,64 @@ class PersonalInformation : AppCompatActivity() {
 
         options.setAspectRatio(1, 1)
             .setCropShape(CropImageView.CropShape.OVAL)
+            .setOutputCompressQuality(20)
+            .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
             .start(this)
         croppedImageUri = imageUri
 
-        val timestamp = "" + System.currentTimeMillis()
+//        finalUri = compressImage(croppedImageUri,applicationContext)!!
 
-        bmp = null
-        try {
-            bmp = MediaStore.Images.Media.getBitmap(contentResolver, croppedImageUri)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        baos = ByteArrayOutputStream()
-
-        // here we can choose quality factor
-        // in third parameter(ex. here it is 25)
-
-        // here we can choose quality factor
-        // in third parameter(ex. here it is 25)
-        bmp?.compress(Bitmap.CompressFormat.JPEG, 0, baos)
-
-        finalUri = getImageUri(bmp!!)!!
-
-        binding.profile.setImageURI(finalUri)
+        binding.profile.setImageURI(croppedImageUri)
     }
     fun getImageUri(inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 0, bytes)
         val path = MediaStore.Images.Media.insertImage(
-            getContentResolver(),
+            contentResolver,
             inImage,
             "Title",
             null
         )
         return Uri.parse(path)
     }
+    fun compressImage(imageUri: Uri): Uri {
+        lateinit var compressed : Uri
+      try {
+          val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
+          val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+          val fileName = String.format("%d.jpg",System.currentTimeMillis())
+          val finalFile = File(path,fileName)
+          val fileOutputStream = FileOutputStream(finalFile)
+          imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+          fileOutputStream.flush()
+          fileOutputStream.close()
+
+          compressed = Uri.fromFile(finalFile)
+
+          croppedImageUri = compressed
+          binding.profile.setImageURI(croppedImageUri)
+          val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+          intent.setData(compressed)
+          sendBroadcast(intent)
+      }catch (e:IOException){
+          e.printStackTrace()
+      }
+        return compressed
+    }
+
+    private fun getRealPathFromURI(uri: Uri, context: Context): String? {
+        var path: String? = null
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, projection, null, null, null)
+        if (cursor != null) {
+            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor.moveToFirst()
+            path = cursor.getString(column_index)
+            cursor.close()
+        }
+        return path
+    }
+
 
     private fun loadLocale(){
         val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)

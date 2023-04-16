@@ -18,9 +18,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
-import app.retvens.rown.DataCollections.ContactDetail
-import app.retvens.rown.DataCollections.ContactResponse
-import app.retvens.rown.DataCollections.ContactsData
+import app.retvens.rown.DataCollections.onboarding.ContactDetail
+import app.retvens.rown.DataCollections.onboarding.ContactResponse
+import app.retvens.rown.DataCollections.onboarding.ContactsData
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserContactsBinding
 import app.retvens.rown.utils.moveTo

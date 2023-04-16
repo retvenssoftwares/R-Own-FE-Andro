@@ -1,4 +1,4 @@
-package app.retvens.rown.DataCollections
+package app.retvens.rown.DataCollections.onboarding
 
 data class ContactDetail(
     val Company_Name: String,
