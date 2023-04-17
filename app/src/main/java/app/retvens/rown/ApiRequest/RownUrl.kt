@@ -1,6 +1,9 @@
 package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.*
+import app.retvens.rown.DataCollections.onboarding.ContactResponse
+import app.retvens.rown.DataCollections.onboarding.ContactsData
+import app.retvens.rown.DataCollections.onboarding.GetInterests
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -50,7 +53,7 @@ interface RownUrl {
         @Body contacts : ContactsData
     ) : Call<ContactResponse>
 
-//    @GET("profile")
-//    fun getUsers() : Call<>
+    @GET("interests")
+    fun getInterests() : Call<GetInterests>
 }
 
