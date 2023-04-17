@@ -39,9 +39,9 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val bottomSheet = BottomSheet()
-        val fragManager = (activity as FragmentActivity).supportFragmentManager
-        fragManager?.let{bottomSheet.show(it, BottomSheet.TAG)}
+//        val bottomSheet = BottomSheet()
+//        val fragManager = (activity as FragmentActivity).supportFragmentManager
+//        fragManager?.let{bottomSheet.show(it, BottomSheet.TAG)}
 
 
         val btn = view.findViewById<ImageView>(R.id.community_btn)

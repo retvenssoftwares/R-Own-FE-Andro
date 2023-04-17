@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.FrameLayout
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import app.retvens.rown.ApiRequest.AppDatabase
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.ChatSection.MesiboUsers
 import app.retvens.rown.ChatSection.ReceiverProfileAdapter
@@ -30,7 +32,6 @@ import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
-import app.retvens.rown.bottomsheet.BottomSheet
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -65,6 +66,8 @@ class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener
 //        replaceFragment(HomeFragment())
             replaceFragment(HomeFragment())
 
+
+
         //setUp Buttons
         val setting = findViewById<Button>(R.id.Setting)
         val logoutbtn = findViewById<Button>(R.id.logoutbtn)
@@ -77,10 +80,7 @@ class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener
 
             auth.signOut()
             startActivity(Intent(this,LoginActivity::class.java))
-
         }
-
-
         //setUp drawerLayout
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -96,8 +96,6 @@ class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener
         // Set the toolbar as the support action bar
         setSupportActionBar(toolbar)
 
-        // Set the title of the action bar
-        supportActionBar?.title = "My Action Bar Title"
 
         // Enable the up button in the action bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -211,7 +209,6 @@ class DashBoardActivity : AppCompatActivity(), GestureDetector.OnGestureListener
                         popularUsersAdapter.userList = userList ?: emptyList()
                         popularUsersAdapter.notifyDataSetChanged()
 
-                        Toast.makeText(applicationContext,userList.size.toString(),Toast.LENGTH_SHORT).show()
 
                     }
                 }else{

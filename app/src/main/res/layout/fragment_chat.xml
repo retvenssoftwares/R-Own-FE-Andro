@@ -7,15 +7,65 @@
     android:background="@color/white"
     tools:context=".NavigationFragments.ChatFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+   <TextView
+       android:id="@+id/title"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       android:text="My Chats"
+       android:textColor="#272A3D"
+       android:textSize="30dp"
+       android:fontFamily="@font/montserrat_semibold"
+       android:textFontWeight="800"
+       android:layout_marginTop="10dp"
+       android:layout_marginStart="20dp"
+       />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendsList"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
-        android:textColor="@color/black"
-        android:textSize="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/openList"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@color/green_own"
+        android:backgroundTint="@color/green_own"
+        >
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/meesageicon"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Chat"
+            android:textColor="#272A3D"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="40dp"
+            android:textSize="15dp"
+            android:fontFamily="@font/inter_medium"
+            android:textFontWeight="700"
+            />
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

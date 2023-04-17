@@ -5,7 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.ChatSection.GroupChat
@@ -21,6 +23,7 @@ class UploadIcon : AppCompatActivity() {
 
     private var groupId:String = ""
     private lateinit var myRecyclerView: RecyclerView
+    private lateinit var adapter:UploadIconAdapter
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,18 +33,23 @@ class UploadIcon : AppCompatActivity() {
         val name = intent.getStringExtra("name")
         val description = intent.getStringExtra("desc")
 
+        val setName = findViewById<TextView>(R.id.Community_Name)
+
+        setName.text = name
 
         myRecyclerView = findViewById(R.id.recyclerUpload)
+        myRecyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
 
-        val adapter = UploadIconAdapter(members)
+
+        adapter = UploadIconAdapter(this,members)
         myRecyclerView.adapter = adapter
 
         val next = findViewById<ImageView>(R.id.nextUpload)
 
         next.setOnClickListener {
+            val name = intent.getStringExtra("name")
             CreateGroup(name.toString())
 
-            startActivity(Intent(this,GroupChat::class.java))
         }
 
 
@@ -63,6 +71,10 @@ class UploadIcon : AppCompatActivity() {
                     val response = response.body()!!
                     groupId = response.group.gid.toString()
                     addMembers()
+                    val intent = Intent(applicationContext,GroupChat::class.java)
+                    intent.putExtra("groupId",groupId)
+                    startActivity(intent)
+
                 }else{
                     Toast.makeText(applicationContext,response.message(),Toast.LENGTH_SHORT).show()
                 }

@@ -9,7 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.AppDatabase
+import app.retvens.rown.DataCollections.MessageEntity
 import app.retvens.rown.R
+import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.mesibo.api.Mesibo
 import com.mesibo.api.MesiboGroupProfile
 import com.mesibo.api.MesiboMessage
@@ -23,9 +26,10 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
     private lateinit var adapter: ChatScreenAdapter
     private lateinit var profile: MesiboProfile
     private lateinit var textMessage: EditText
-    private val messages: ArrayList<MesiboMessage> = ArrayList()
+    private val messages: ArrayList<MessageEntity> = ArrayList()
     private lateinit var recyclerView: RecyclerView
     private var myUserId: Long = 0
+    private var group:String = ""
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,16 +38,21 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
         val api: Mesibo = Mesibo.getInstance()
         api.init(applicationContext)
 
+        val authtoken = SharedPreferenceManagerAdmin.getInstance(applicationContext).user.uid
+
         Mesibo.addListener(this)
-        Mesibo.setAccessToken("177db9368845508649f9ad6e10fff0f31591b439a439c69e55479c7dma7b7433b08e")
-        Mesibo.setDatabase("retvensDB", 0)
+        Mesibo.setAccessToken(authtoken)
+        Mesibo.setDatabase("Retvens.db", 0)
         Mesibo.start()
 
         val receiversName = findViewById<TextView>(R.id.groupName)
 
-        val groupProfile: MesiboProfile? = Mesibo.getProfile(2740197)
+        group = intent.getStringExtra("groupId").toString()
+
+
+        val groupProfile: MesiboProfile? = Mesibo.getProfile(group)
         val name = groupProfile?.groupProfile?.firstName
-        receiversName.text = name
+//        receiversName.text = name
 
         textMessage = findViewById(R.id.group_text_content)
 
@@ -56,7 +65,7 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
 
         myUserId = Mesibo.getUid()
 
-//        adapter = ChatScreenAdapter(this, messages,myUserId)
+        adapter = ChatScreenAdapter(this, messages,myUserId.toString())
 
         recyclerView.adapter = adapter
 
@@ -72,19 +81,30 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
                 val message: MesiboMessage = sender.newMessage()
                 message.profile = sender
                 message.message = messagetext
-                messages.add(message)
+                val messageEntity = MessageEntity(
+                    message.mid,
+                    message.profile.address,
+                    group,
+                    message.message,
+                    timestamp = System.currentTimeMillis(),
+                    MessageEntity.MessageState.SENT
+                )
+                Thread {
+                    AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
+                }.start()
 
+                messages.add(messageEntity)
 
-                // Notify the adapter about the new data
                 adapter.notifyItemInserted(messages.size - 1)
                 recyclerView.scrollToPosition(messages.size - 1)
 
                 textMessage.text.clear()
 
 
+                val group = intent.getStringExtra("groupId")
 
-
-                val groupProfile: MesiboGroupProfile? = Mesibo.getProfile(2740197) as MesiboGroupProfile?
+                val groupProfile: MesiboGroupProfile? =
+                    Mesibo.getProfile(group) as MesiboGroupProfile?
 
                 if (groupProfile != null) {
                     // Create a MesiboMessage object and set its profile and message text
@@ -97,26 +117,12 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
                 }
 
 
-            }else{
+            } else {
 
                 Toast.makeText(this, "Message cannot be empty", Toast.LENGTH_SHORT).show()
 
             }
-
-    }
-
-
-        val groupvoicecall = findViewById<ImageView>(R.id.group_voice_Call)
-        groupvoicecall.setOnClickListener {
-
-            val groupProfile: MesiboGroupProfile? = Mesibo.getProfile(2740197) as MesiboGroupProfile?
-
-            MesiboCall.getInstance().init(applicationContext)
-            MesiboCall.getInstance().callUi(this, groupProfile, false)
         }
-
-        val call: MesiboCall = MesiboCall.getInstance()
-        call.init(applicationContext)
 
     }
 
@@ -124,9 +130,21 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
         if (message.isIncoming){
             val sender: MesiboProfile = message.profile
 
-            message.save()
-            messages.add(message)
 
+            val messageEntity = MessageEntity(
+                message.mid,
+                group,
+                profile.address,
+                message.message,
+                timestamp = System.currentTimeMillis(),
+                MessageEntity.MessageState.DELIVERED
+            )
+
+            Thread {
+                AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
+            }.start()
+
+            messages.add(messageEntity)
             // Notify the adapter about the new data
             adapter.notifyItemInserted(messages.size - 1)
             recyclerView.scrollToPosition(messages.size - 1)
