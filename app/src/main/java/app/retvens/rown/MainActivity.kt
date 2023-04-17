@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import app.retvens.rown.Dashboard.DashBoardActivity
-import app.retvens.rown.authentication.LoginActivity
-import app.retvens.rown.authentication.PersonalInformationPhone
-import app.retvens.rown.authentication.UserContacts
-import app.retvens.rown.authentication.UserInterest
+import app.retvens.rown.authentication.*
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +25,10 @@ class MainActivity : AppCompatActivity() {
             val move = sharedPreferences.getString("MoveTo", "")
 
             if (move == "MoveToPI"){
+                val intent = Intent(this, PersonalInformation::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            } else if (move == "MoveToPIP"){
                 val intent = Intent(this, PersonalInformationPhone::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)

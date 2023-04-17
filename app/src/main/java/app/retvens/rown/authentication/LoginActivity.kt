@@ -39,6 +39,7 @@ import app.retvens.rown.DataCollections.UserProfileRequest
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityLoginBinding
+import app.retvens.rown.utils.moveTo
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -456,6 +457,7 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("SignIn", "signInWithCredential:success")
                     Toast.makeText(applicationContext,"YOU ARE SUCCESSFULLY LOGIN",Toast.LENGTH_SHORT).show()
+                    moveTo(this,"MoveToPIP")
                     progressDialog.dismiss()
                     val intent = Intent(this, PersonalInformationPhone::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -464,7 +466,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     progressDialog.dismiss()
                     Log.d("SignIn", "signInWithCredential:failure", task.exception)
-
+                    Toast.makeText(applicationContext,"signInWithGoogle : Failure",Toast.LENGTH_SHORT).show()
                 }
             }
     }

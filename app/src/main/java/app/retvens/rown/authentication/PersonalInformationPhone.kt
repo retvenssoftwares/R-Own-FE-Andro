@@ -5,12 +5,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.text.Html
 import android.util.Log
@@ -38,6 +40,8 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -47,18 +51,20 @@ class PersonalInformationPhone : AppCompatActivity() {
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     private lateinit var auth:FirebaseAuth
     lateinit var storedVerificationId:String
-    private lateinit var number: String
     lateinit var binding : ActivityPersonalInformationPhoneBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
+    //Cropped image uri
+    private var croppedImageUri: Uri ?= null
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
         cropImage(cameraImageUri)
-//        binding.profilePhone.setImageURI(null)
-//        binding.profilePhone.setImageURI(imageUri)
     }
     lateinit var dialog: Dialog
+    lateinit var progressDialog: Dialog
+    lateinit var username : String
+    lateinit var phone : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,9 +95,9 @@ class PersonalInformationPhone : AppCompatActivity() {
                 binding.phoneLayout.error = "Enter a valid Phone number"
             } else{
                 binding.phoneLayout.isErrorEnabled = false
-                val mail = binding.etPhonePerson.text.toString()
-                mail.trim()
-                openBottomSheetEmail(mail)
+                username = binding.etNamePhone.text.toString()
+                phone = binding.etPhonePerson.text.toString()
+                openBottomSheetEmail(phone)
             }
         }
 
@@ -104,7 +110,8 @@ class PersonalInformationPhone : AppCompatActivity() {
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
-                Toast.makeText(applicationContext, "Failed", Toast.LENGTH_LONG).show()
+                progressDialog.dismiss()
+                Toast.makeText(applicationContext, "Failed $e", Toast.LENGTH_LONG).show()
             }
 
             override fun onCodeSent(
@@ -116,11 +123,10 @@ class PersonalInformationPhone : AppCompatActivity() {
                 storedVerificationId = verificationId
                 resendToken = token
 
-                number = binding.etPhonePerson.text.toString()
                 val key = "1"
                 var intent = Intent(applicationContext,OtpVerification::class.java)
                 intent.putExtra("storedVerificationId",storedVerificationId)
-                intent.putExtra("phone",number)
+                intent.putExtra("phone",phone)
                 intent.putExtra("key",key)
                 startActivity(intent)
             }
@@ -138,6 +144,12 @@ class PersonalInformationPhone : AppCompatActivity() {
 
         dialog.findViewById<CardView>(R.id.card_go).setOnClickListener {
 
+            progressDialog = Dialog(this)
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.setCancelable(false)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            progressDialog.show()
             phoneNumberVerification()
             dialog.dismiss()
         }
@@ -196,7 +208,8 @@ class PersonalInformationPhone : AppCompatActivity() {
     }
 
     private fun deleteImage() {
-        binding.profilePhone.setImageURI(null)
+        croppedImageUri = null
+        binding.profilePhone.setImageURI(croppedImageUri)
         dialog.dismiss()
     }
 
@@ -224,9 +237,9 @@ class PersonalInformationPhone : AppCompatActivity() {
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val resultingImage = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
-                val newImage = resultingImage.uri
+                val croppedImage = resultingImage.uri
 
-                binding.profilePhone.setImageURI(newImage)
+                compressImage(croppedImage)
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(this,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
@@ -240,9 +253,9 @@ class PersonalInformationPhone : AppCompatActivity() {
 
         options.setAspectRatio(1, 1)
             .setCropShape(CropImageView.CropShape.OVAL)
+            .setOutputCompressQuality(20)
+            .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
             .start(this)
-
-        binding.profilePhone.setImageURI(imageUri)
     }
 
     private fun createImageUri(): Uri? {
@@ -252,6 +265,32 @@ class PersonalInformationPhone : AppCompatActivity() {
             image
         )
     }
+
+    fun compressImage(imageUri: Uri): Uri {
+        lateinit var compressed : Uri
+        try {
+            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
+            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val fileName = String.format("%d.jpg",System.currentTimeMillis())
+            val finalFile = File(path,fileName)
+            val fileOutputStream = FileOutputStream(finalFile)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+
+            compressed = Uri.fromFile(finalFile)
+
+            croppedImageUri = compressed
+            binding.profilePhone.setImageURI(croppedImageUri)
+            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            intent.setData(compressed)
+            sendBroadcast(intent)
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+        return compressed
+    }
+
     private fun loadLocale(){
         val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
         val language = sharedPreferences.getString("MY_LANG", "")
