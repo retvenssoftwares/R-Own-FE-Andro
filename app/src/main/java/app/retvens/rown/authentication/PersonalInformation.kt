@@ -59,10 +59,7 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var binding :ActivityPersonalInformationBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
-    private lateinit var croppedImageUri: Uri
-    var finalUri: Uri ?= null
-    var bmp: Bitmap ?= null
-    lateinit var baos: ByteArrayOutputStream
+    private var croppedImageUri: Uri ?= null
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraImageUri: Uri
@@ -224,84 +221,100 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun uploadData() {
-//        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
-        val phone : Long = 2121785612
+        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
+//        val phone : Long = 21412481214
 
         val _id = SharedPreferenceManagerAdmin.getInstance(this).user.__v.toString()
-//        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
-//        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
-//        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+        val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
+        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
+        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
 
-        val addresse = "address"
-        val token = "StoredInSharedPreferenceManagerAdmin"
-        val uid = 18355
+//        val addresse = "address"
+//        val token = "StoredInSharedPreferenceManagerAdmin"
+//        val uid = 18355
 //        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
 
         val Interest = Interest(_id,uid.toString())
         val Mesibo_account = MesiboAccount(_id,addresse,token,uid)
 
-/*        if (croppedImageUri != null){
 
-            var file : File ?= null
-            var body : UploadRequestBody ?= null
+        if (croppedImageUri != null){
 
-            val parcelFileDescriptor = contentResolver.openFileDescriptor(
-            croppedImageUri!!,"r",null
-        )?:return
+            val filesDir = applicationContext.filesDir
+            val file = File(filesDir,"image.png")
 
-        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        file = File(cacheDir,contentResolver.getFileName(croppedImageUri!!))
-        val outputStream = FileOutputStream(file)
-        inputStream.copyTo(outputStream)
-        body = UploadRequestBody(file,"image")
+            val inputStream = contentResolver.openInputStream(croppedImageUri!!)
+            val outputStream = FileOutputStream(file)
+            inputStream!!.copyTo(outputStream)
 
-    }*/
+            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
 
-        val filesDir = applicationContext.filesDir
-        val file = File(filesDir,"image.png")
-
-        val inputStream = contentResolver.openInputStream(croppedImageUri)
-        val outputStream = FileOutputStream(file)
-        inputStream!!.copyTo(outputStream)
-
-        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-
-        val respo  = RetrofitBuilder.retrofitBuilder.uploadUserProfile(
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),
-            phone,
-            MultipartBody.Part.createFormData("Profile_pic", file.name, requestBody),
-            Mesibo_account.uid,
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.address),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.token),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Interest.id),
-            20,12
-        )
-        respo.enqueue(object : Callback<UserProfileResponse?> {
-            override fun onResponse(
-                call: Call<UserProfileResponse?>,
-                response: Response<UserProfileResponse?>
-            ) {
-                progressDialog.dismiss()
-                Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
-                Log.d("image file", file.toString())
-                Log.d("image", response.toString())
-                if (response.message().toString() != "Request Entity Too Large"){
-                    moveTo(this@PersonalInformation,"MoveToI")
-                    val intent = Intent(applicationContext,UserInterest::class.java)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.putExtra("user",username)
-                    startActivity(intent)
-                }
+            val respo  = RetrofitBuilder.retrofitBuilder.uploadUserProfile(
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),
+                phone,
+                MultipartBody.Part.createFormData("Profile_pic", file.name, requestBody),
+                Mesibo_account.uid,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.address),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.token),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Interest.id),
+                0,0
+            )
+            respo.enqueue(object : Callback<UserProfileResponse?> {
+                override fun onResponse(
+                    call: Call<UserProfileResponse?>,
+                    response: Response<UserProfileResponse?>
+                ) {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+                    Log.d("image file", file.toString())
+                    Log.d("image", response.toString())
+                    if (response.message().toString() != "Request Entity Too Large"){
+                        moveTo(this@PersonalInformation,"MoveToI")
+                        val intent = Intent(applicationContext,UserInterest::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.putExtra("user",username)
+                        startActivity(intent)
+                    }
 //                Toast.makeText(applicationContext,file.name.toString(),Toast.LENGTH_SHORT).show()
-            }
-            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
-                progressDialog.dismiss()
-                Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                }
+                override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                }
+            })
 
-
-            }
-        })
+        } else {
+            val pWithoutImg = RetrofitBuilder.retrofitBuilder.uploadUserProfileWithoutImg(
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),
+                phone,
+                Mesibo_account.uid,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.address),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.token),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Interest.id)
+                )
+            pWithoutImg.enqueue(object : Callback<UserProfileResponse?> {
+                override fun onResponse(
+                    call: Call<UserProfileResponse?>,
+                    response: Response<UserProfileResponse?>
+                ) {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+                    if (response.message().toString() != "Request Entity Too Large"){
+                        moveTo(this@PersonalInformation,"MoveToI")
+                        val intent = Intent(applicationContext,UserInterest::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        intent.putExtra("user",username)
+                        startActivity(intent)
+                    }
+                }
+                override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
 
        
     }
@@ -342,7 +355,7 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun deleteImage() {
-        croppedImageUri = null!!
+        croppedImageUri = null
         binding.profile.setImageURI(croppedImageUri)
         dialog.dismiss()
     }
@@ -364,16 +377,16 @@ class PersonalInformation : AppCompatActivity() {
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
             val imageUri = data.data
             if (imageUri != null) {
-
+//                compressImage(imageUri)
                 cropImage(imageUri)
 
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val resultingImage = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
-                val newImage = resultingImage.uri
+                val croppedImage = resultingImage.uri
 
-                binding.profile.setImageURI(newImage)
+               compressImage(croppedImage)
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(this, "Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT)
@@ -400,22 +413,6 @@ class PersonalInformation : AppCompatActivity() {
             .setOutputCompressQuality(20)
             .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
             .start(this)
-        croppedImageUri = imageUri
-
-//        finalUri = compressImage(croppedImageUri,applicationContext)!!
-
-        binding.profile.setImageURI(croppedImageUri)
-    }
-    fun getImageUri(inImage: Bitmap): Uri? {
-        val bytes = ByteArrayOutputStream()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 0, bytes)
-        val path = MediaStore.Images.Media.insertImage(
-            contentResolver,
-            inImage,
-            "Title",
-            null
-        )
-        return Uri.parse(path)
     }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri
@@ -441,20 +438,6 @@ class PersonalInformation : AppCompatActivity() {
       }
         return compressed
     }
-
-    private fun getRealPathFromURI(uri: Uri, context: Context): String? {
-        var path: String? = null
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = context.contentResolver.query(uri, projection, null, null, null)
-        if (cursor != null) {
-            val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            cursor.moveToFirst()
-            path = cursor.getString(column_index)
-            cursor.close()
-        }
-        return path
-    }
-
 
     private fun loadLocale(){
         val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)

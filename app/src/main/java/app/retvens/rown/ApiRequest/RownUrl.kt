@@ -30,6 +30,18 @@ interface RownUrl {
         @Part("connection_count") connection_count: Int,
     ) : Call<UserProfileResponse>
 
+    @Multipart
+    @POST("profile")
+    fun uploadUserProfileWithoutImg(
+        @Part("Full_name") Name: RequestBody,
+        @Part("Email") Email: RequestBody,
+        @Part("Phone") Phone: Long,
+        @Part("Mesibo_account[uid]") uid:Int,
+        @Part("Mesibo_account[address]") address:RequestBody,
+        @Part("Mesibo_account[token]") token:RequestBody,
+        @Part("Interest[id]") id:RequestBody
+    ) : Call<UserProfileResponse>
+
     @GET("profile")
     fun getProfile() : Call<List<UserProfileRequestItem>>
 
