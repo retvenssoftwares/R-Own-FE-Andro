@@ -97,12 +97,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="500dp"
         android:background="@drawable/chatbgdesign"
         app:layout_constraintBottom_toTopOf="@+id/set"
         app:layout_constraintEnd_toEndOf="@+id/set"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:layout_constraintVertical_bias="0.0">
 
@@ -114,6 +115,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="0dp"
+            android:layout_marginBottom="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,58 +123,6 @@
 
     </RelativeLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/set"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        android:orientation="vertical"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        >-->
-
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:background="@drawable/typeboxsetup"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        android:orientation="horizontal">-->
-
-<!--        <ImageView-->
-<!--            android:layout_gravity="center"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:background="?attr/selectableItemBackground"-->
-<!--            android:clickable="true"-->
-<!--            android:padding="13dp"-->
-<!--            android:src="@drawable/emojisymbol"-->
-<!--            />-->
-
-<!--        <EditText-->
-<!--            android:id="@+id/text_content"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            android:textColor="#000000"-->
-<!--            android:textColorHint="#000000"-->
-<!--            android:hint="Type your message..."-->
-<!--            android:imeOptions="actionSearch" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/btn_send"-->
-<!--            android:layout_width="50dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:background="?attr/selectableItemBackground"-->
-<!--            android:clickable="true"-->
-<!--            android:padding="12dp"-->
-<!--            app:srcCompat="@drawable/sendtext" />-->
-
-
-<!--    </LinearLayout>-->
-
-<!--    </LinearLayout>-->
 
 
     <LinearLayout

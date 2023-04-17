@@ -1,34 +1,90 @@
 {
   "project_info": {
-    "project_number": "1097487844125",
-    "project_id": "r-own-backend",
-    "storage_bucket": "r-own-backend.appspot.com"
+    "project_number": "83133683322",
+    "firebase_url": "https://r-own-d0a2c-default-rtdb.firebaseio.com",
+    "project_id": "r-own-d0a2c",
+    "storage_bucket": "r-own-d0a2c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1097487844125:android:f9f8289a230bbfefaa17f4",
+        "mobilesdk_app_id": "1:83133683322:android:564b1639e6fc69020b0dc3",
         "android_client_info": {
           "package_name": "app.retvens.rown"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1097487844125-et9tnikr24iikqturl69gq6r209l7074.apps.googleusercontent.com",
+          "client_id": "83133683322-7jjqp69oe0r0fc76ebhtq3m1t2juhg23.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.retvens.rown",
+            "certificate_hash": "458fe0f2c5d38866746b8bbb9c8ca618e819e8b0"
+          }
+        },
+        {
+          "client_id": "83133683322-8isr0s2v3er68mt6blb4741v6k0s5n4k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.retvens.rown",
+            "certificate_hash": "38bb73ac3ff21fc3e5f746d90f2557e7f4cfb161"
+          }
+        },
+        {
+          "client_id": "83133683322-ghi2vohjtmj982in3s4gi21t31rq5pbc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.retvens.rown",
+            "certificate_hash": "21755fb99f9c8c913cf33b4d5908d7371c20a221"
+          }
+        },
+        {
+          "client_id": "83133683322-omr0qsarr40953lkej2f9c1ju081auqv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.retvens.rown",
+            "certificate_hash": "c0d487f999b7fe695f84d4ca2e52bcbbf2b35437"
+          }
+        },
+        {
+          "client_id": "83133683322-u7s83ds0c39c2tsvcolr6mu20anvsul2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.retvens.rown",
+            "certificate_hash": "cb840df31964dce8b697e95c6a0b9359d18096c8"
+          }
+        },
+        {
+          "client_id": "83133683322-vt5g8l6o67nd62ii78gg106884hobm24.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.retvens.rown",
+            "certificate_hash": "6d17e80250170135836cbeadd5be1ffabe6c03ae"
+          }
+        },
+        {
+          "client_id": "83133683322-3tcbsc0oun26173vnchcgill5iuts99f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA5oWiWcKYkXbq17oaqW4P6ohKk7wKMXgI"
+          "current_key": "AIzaSyCydWVqZYhDpi0O0Muo9n7qjsIAuziOApI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1097487844125-5s8t2k144h9gb76q320pq15grkk8310k.apps.googleusercontent.com",
+              "client_id": "83133683322-3tcbsc0oun26173vnchcgill5iuts99f.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "83133683322-33vcfgbdtlee9p94kfna2cdinm0enui1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tempproject"
+              }
             }
           ]
         }

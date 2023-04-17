@@ -36,6 +36,15 @@ interface RownUrl {
     @GET("users")
     fun getMesiboUsers(): Call<UsersList>
 
+    @POST("creategroup")
+    fun createGroup(@Body create:GroupCreate):Call<ResponseGroup>
+
+
+
+    @POST("addmember")
+    fun addMember(@Body addMember:AddMemberData):Call<ResponseGroup>
+
+
     @POST("contacts")
     fun uploadContacts(
         @Body contacts : ContactsData

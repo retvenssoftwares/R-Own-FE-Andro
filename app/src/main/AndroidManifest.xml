@@ -49,11 +49,6 @@
         <activity
             android:name=".CreateCommunity.CreateCommunity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             <meta-data
                 android:name="android.app.lib_name"
@@ -76,6 +71,17 @@
         <activity
             android:name=".ChatSection.ChatScreen"
             android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".ChatSection.GroupChat"
+            android:exported="true">
+
+
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -129,6 +135,13 @@
             android:name=".Dashboard.DashBoardActivity"
             android:exported="true"
             android:theme="@style/Theme.Rown_Splash">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -138,6 +151,10 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash">
+
+
+
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

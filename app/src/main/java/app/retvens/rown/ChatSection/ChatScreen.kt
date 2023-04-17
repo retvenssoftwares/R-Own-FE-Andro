@@ -1,10 +1,10 @@
 package app.retvens.rown.ChatSection
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,8 +17,6 @@ import app.retvens.rown.DataCollections.MessageEntity
 import app.retvens.rown.MyFirebaseMessagingService
 import app.retvens.rown.R
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.mesibo.api.*
 import com.mesibo.calls.api.MesiboCall
 import com.mesibo.calls.api.MesiboCall.CallProperties
@@ -45,6 +43,8 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_screen)
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
 
         val api: Mesibo = Mesibo.getInstance()
         api.init(applicationContext)
@@ -57,7 +57,7 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
         Log.e("",authtoken.toString())
 
         Mesibo.addListener(this)
-        Mesibo.setAccessToken(authtoken)
+        Mesibo.setAccessToken("c37944213c2e16ddff06b19c79a2b8b8e6c7eb09c636699ee83feff479ea3laee516ae2db")
         Mesibo.setDatabase("Retvens.db",0)
 
 
@@ -74,7 +74,7 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
 
         recyclerView = findViewById(R.id.chatMessagesRecycler)
-        val layoutManager: LinearLayoutManager = LinearLayoutManager(applicationContext)
+        val layoutManager = LinearLayoutManager(applicationContext)
         layoutManager.stackFromEnd = true
         recyclerView.layoutManager = layoutManager
 
@@ -84,11 +84,10 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
 
         Mesibo.setAppInForeground(this, 0, true)
+
         val mReadSession:MesiboReadSession = profile.createReadSession(this)
         mReadSession?.enableReadReceipt(true)
         mReadSession?.read(100)
-
-
 
 
         mReadSession?.enableMissedCalls(true)
@@ -103,7 +102,10 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
 
         Thread {
-            val getMessages = AppDatabase.getInstance(applicationContext).chatMessageDao().getMessages(profile.address,name!!)
+            val getMessages = AppDatabase.getInstance(applicationContext).chatMessageDao().getMessages(profile.address,name!!,profile.address)
+                .filter { message ->
+            message.sender == profile.address || message.sender == name
+        }
 
             runOnUiThread {
                 messages.addAll(getMessages)
@@ -115,11 +117,6 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         val send = findViewById<ImageView>(R.id.btn_send)
 
-        if (textMessage.text.isNotEmpty()){
-            send.setImageResource(R.drawable.sendtext)
-        }else{
-            send.setImageResource(R.drawable.mikeicon)
-        }
 
 
         send.setOnClickListener {
@@ -133,16 +130,20 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                 message.profile = profile
                 message.message = messagetext
 
+
+
                 val messageEntity = MessageEntity(
                     message.mid,
                     message.profile.address,
                     name!!,
                     message.message,
-                    timestamp = System.currentTimeMillis()
+                    timestamp = System.currentTimeMillis(),
+                    MessageEntity.MessageState.SENT
                 )
                 Thread {
                     AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
                 }.start()
+
 
                 messages.add(messageEntity)
 
@@ -230,15 +231,16 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
         if (message.isIncoming){
             val sender: MesiboProfile = message.profile
 
-            val icon = findViewById<ImageView>(R.id.read_msg)
-            icon.setImageResource(R.drawable.doublecheck2)
+//            val icon = findViewById<ImageView>(R.id.read_msg)
+//            icon.setImageResource(R.drawable.doublecheck2)
 
             val messageEntity = MessageEntity(
                 message.mid,
                 name,
                 profile.address,
                 message.message,
-                timestamp = System.currentTimeMillis()
+                timestamp = System.currentTimeMillis(),
+                MessageEntity.MessageState.DELIVERED
             )
 
             Thread {

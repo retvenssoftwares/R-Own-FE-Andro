@@ -50,7 +50,7 @@ class ChatScreenAdapter(
         when (holder.itemViewType) {
             VIEW_TYPE_MESSAGE_SENT -> {
                 val sentMessageViewHolder = holder as SentMessageViewHolder
-                sentMessageViewHolder.bind(message)
+                sentMessageViewHolder.bind(message,message.state)
             }
             VIEW_TYPE_MESSAGE_RECEIVED -> {
                 val receivedMessageViewHolder = holder as ReceivedMessageViewHolder
@@ -76,23 +76,29 @@ class ChatScreenAdapter(
         }
     }
 
+
     inner class SentMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val messageTextView: TextView = itemView.findViewById(R.id.sender_message)
         private val timeTextView: TextView = itemView.findViewById(R.id.sender_time)
         private val seenIcon:ImageView = itemView.findViewById(R.id.read_msg)
 
-        fun bind(message: MessageEntity) {
+        fun bind(message: MessageEntity, state: MessageEntity.MessageState) {
             messageTextView.text = message.message
-            val currentTimeMillis = System.currentTimeMillis()
-            val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val formattedTime = timeFormat.format(Date(currentTimeMillis))
-            timeTextView.text = formattedTime
+            timeTextView.text = DateFormat.format("HH:mm", Date(message.timestamp))
+
+            when (message.state) {
+                MessageEntity.MessageState.SENT -> seenIcon.setImageResource(R.drawable.singlecheck)
+                MessageEntity.MessageState.DELIVERED -> seenIcon.setImageResource(R.drawable.doublecheck2)
+                MessageEntity.MessageState.SEEN -> seenIcon.setImageResource(R.drawable.doublecheck)
+            }
         }
+
     }
 
     inner class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val messageTextView: TextView = itemView.findViewById(R.id.receiver_message)
         private val timeTextView: TextView = itemView.findViewById(R.id.receiver_time)
+
 
         fun bind(message: MessageEntity) {
             messageTextView.text = message.message

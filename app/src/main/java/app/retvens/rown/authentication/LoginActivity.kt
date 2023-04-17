@@ -56,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
 
     val REQUEST_CODE = 102
-    lateinit var phoneNum: String
+    private var phoneNum: String = ""
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
     var mLastClickTime: Long = 0
@@ -179,7 +179,8 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
-                Toast.makeText(applicationContext, "Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, e.message.toString(), Toast.LENGTH_LONG).show()
+                Log.e("error",e.message.toString())
                 progressDialog.dismiss()
             }
 
