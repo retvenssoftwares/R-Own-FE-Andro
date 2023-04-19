@@ -1,15 +1,24 @@
 package app.retvens.rown.authentication
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.Window
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.onboarding.GetInterests
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserInterestBinding
 import app.retvens.rown.utils.moveTo
+import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,7 +26,10 @@ import retrofit2.Response
 class UserInterest : AppCompatActivity() {
     lateinit var binding: ActivityUserInterestBinding
 
+    lateinit var progressDialog : Dialog
+
     lateinit var username: String
+    lateinit var userInterestAdapter: UserInterestAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +43,17 @@ class UserInterest : AppCompatActivity() {
         binding.interestGrid.setHasFixedSize(true)
 
         binding.cardContinueInterest.setOnClickListener {
+//            progressDialog = Dialog(this)
+//            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//            progressDialog.setCancelable(true)
+//            progressDialog.setContentView(R.layout.progress_dialoge)
+//            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//
+//            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+//
+//            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+//            progressDialog.show()
+
             moveTo(this,"MoveToUC")
             val intent = Intent(applicationContext, UserContacts::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -42,14 +65,51 @@ class UserInterest : AppCompatActivity() {
 
     private fun getInterests() {
         val retroInterest = RetrofitBuilder.retrofitBuilder.getInterests()
-        retroInterest.enqueue(object : Callback<GetInterests?> {
-            override fun onResponse(call: Call<GetInterests?>, response: Response<GetInterests?>) {
-                Log.d("Interest",response.body().toString())
-                Log.d("Interest",response.message().toString())
+        retroInterest.enqueue(object : Callback<List<GetInterests>?> {
+            override fun onResponse(call: Call<List<GetInterests>?>, response: Response<List<GetInterests>?>) {
+                Log.d("Interest","body : ${response.body().toString()}")
+                Log.d("Interest","message ${response.message().toString()}")
                 Log.d("Interest",response.code().toString())
                 Log.d("Interest",response.isSuccessful.toString())
+
+                if (response.isSuccessful){
+                    val data = response.body()!!
+                    userInterestAdapter = UserInterestAdapter(applicationContext, data)
+                    userInterestAdapter.notifyDataSetChanged()
+                    binding.interestGrid.adapter = userInterestAdapter
+
+                    binding.etSearchInterest.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            count: Int,
+                            after: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            before: Int,
+                            count: Int
+                        ) {
+                            val originalData = data.toList()
+                            val filterData = originalData.filter {searchInData->
+                                searchInData.Name.contains(s.toString(),ignoreCase = false)
+                            }
+                            userInterestAdapter.searchInterest(filterData)
+                        }
+
+                        override fun afterTextChanged(s: Editable?) {
+
+                        }
+                    })
+
+                }
             }
-            override fun onFailure(call: Call<GetInterests?>, t: Throwable) {
+            override fun onFailure(call: Call<List<GetInterests>?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
                 Log.d("Interest",t.localizedMessage,t)
             }
         })

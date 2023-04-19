@@ -40,6 +40,7 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityLoginBinding
 import app.retvens.rown.utils.moveTo
+import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -159,6 +160,8 @@ class LoginActivity : AppCompatActivity() {
             progressDialog.setCancelable(false)
             progressDialog.setContentView(R.layout.progress_dialoge)
             progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
             resultLauncher.launch(Intent(googleSignInClient.signInIntent))
         }
@@ -195,6 +198,7 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("TAG","onCodeSent:$verificationId")
                 storedVerificationId = verificationId
                 resendToken = token
+                phoneNum = binding.editPhone.text.toString()
                 Toast.makeText(applicationContext,"Otp will be send to Enter Mobile Number",Toast.LENGTH_SHORT).show()
                 var intent = Intent(applicationContext,OtpVerification::class.java)
                 intent.putExtra("storedVerificationId",storedVerificationId)
@@ -426,7 +430,8 @@ class LoginActivity : AppCompatActivity() {
             progressDialog.setCancelable(false)
             progressDialog.setContentView(R.layout.progress_dialoge)
             progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
             Toast.makeText(this,"Sending..", Toast.LENGTH_SHORT).show()
             sendVerificationcode(phoneNumber)

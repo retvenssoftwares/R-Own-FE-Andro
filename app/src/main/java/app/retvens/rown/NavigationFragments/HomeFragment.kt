@@ -13,20 +13,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.CreateCommunity.CreateCommunity
+import app.retvens.rown.NavigationFragments.home.Community
+import app.retvens.rown.NavigationFragments.home.CommunityListAdapter
+import app.retvens.rown.NavigationFragments.home.Post
+import app.retvens.rown.NavigationFragments.home.PostAdapter
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
 
 
 class HomeFragment : Fragment() {
-    lateinit var gestureDetector: GestureDetector
-    private val swipeThreshold = 100
-    private val swipeVelocityThreshold = 100
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
+
+    lateinit var recyclerPost : RecyclerView
+    lateinit var recyclerCommunity : RecyclerView
+    lateinit var postAdapter: PostAdapter
+    lateinit var communityListAdapter: CommunityListAdapter
+    lateinit var postsArrayList : ArrayList<Post>
+    lateinit var communityArrayList : ArrayList<Community>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,19 +47,54 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val bottomSheet = BottomSheet()
-//        val fragManager = (activity as FragmentActivity).supportFragmentManager
-//        fragManager?.let{bottomSheet.show(it, BottomSheet.TAG)}
+        val bottomSheet = BottomSheet()
+        val fragManager = (activity as FragmentActivity).supportFragmentManager
+//        fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
 
+        recyclerPost = view.findViewById(R.id.recyclerPost)
+        recyclerPost.layoutManager = LinearLayoutManager(context)
+        recyclerPost.setHasFixedSize(true)
+
+        recyclerCommunity = view.findViewById(R.id.recyclerCommunity)
+        recyclerCommunity.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+        recyclerCommunity.setHasFixedSize(true)
+
+        communityArrayList = arrayListOf<Community>()
+        postsArrayList = arrayListOf<Post>()
+
+        val post1 = Post(R.drawable.png_profile,
+            "Walker",
+            R.drawable.png_profile_post,
+            R.drawable.png_post,
+            "Paul","Traveller","","2d","arjungupta08","Every gives you a reason!")
+
+        val post2 = Post(R.drawable.png_profile,
+            "D'souza",
+            R.drawable.png_profile_post,
+            R.drawable.png_posts,
+            "John","Blogger","Blogger community","3Hr","d_s","Every Stay Gives you a reason to smile!")
+        postsArrayList.add(post1)
+        postsArrayList.add(post2)
+        postsArrayList.add(post1)
+
+        recyclerPost.adapter = PostAdapter(requireContext(),postsArrayList)
+
+        val cummunity = Community(R.drawable.png_profile_post,"Food community","70 members")
+        val cummunity1 = Community(R.drawable.png_profile_post,"Travellers community","40 members")
+        communityArrayList.add(cummunity)
+        communityArrayList.add(cummunity1)
+        communityArrayList.add(cummunity)
+        communityArrayList.add(cummunity1)
+
+        recyclerCommunity.adapter = CommunityListAdapter(requireContext(),communityArrayList)
 
         val btn = view.findViewById<ImageView>(R.id.community_btn)
 
         btn.setOnClickListener {
             startActivity(Intent(context,CreateCommunity::class.java))
-
         }
 
-        val gesture = GestureDetector(
+/*        val gesture = GestureDetector(
             activity,
             object : SimpleOnGestureListener() {
                 override fun onDown(e: MotionEvent): Boolean {
@@ -83,16 +126,17 @@ class HomeFragment : Fragment() {
                             Toast.makeText(context,"LtR",Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: Exception) {
-                        // nothing
+                        Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show()
+                        Log.d("tag",e.toString())
                     }
                     return super.onFling(e1, e2, velocityX, velocityY)
                 }
             })
 
         view.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                return gesture.onTouchEvent(event!!)
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                return gesture.onTouchEvent(event)
             }
-        })
+        })*/
     }
 }

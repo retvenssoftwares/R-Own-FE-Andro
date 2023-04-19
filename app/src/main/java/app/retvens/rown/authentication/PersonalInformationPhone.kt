@@ -32,6 +32,7 @@ import androidx.core.content.FileProvider
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationPhoneBinding
+import com.bumptech.glide.Glide
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -149,7 +150,10 @@ class PersonalInformationPhone : AppCompatActivity() {
             progressDialog.setContentView(R.layout.progress_dialoge)
             progressDialog.setCancelable(false)
             progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
+
             phoneNumberVerification()
             dialog.dismiss()
         }

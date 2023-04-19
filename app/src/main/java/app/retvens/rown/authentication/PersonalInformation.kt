@@ -38,7 +38,9 @@ import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 import app.retvens.rown.utils.moveTo
+import app.retvens.rown.utils.saveUserId
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.theartofdev.edmodo.cropper.CropImage
@@ -94,6 +96,7 @@ class PersonalInformation : AppCompatActivity() {
         val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
         val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
 //        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+
         Log.d("shared",addresse)
         Log.d("shared",token)
 //        Log.d("shared",uid.toString())
@@ -115,6 +118,8 @@ class PersonalInformation : AppCompatActivity() {
                 progressDialog.setContentView(R.layout.progress_dialoge)
                 progressDialog.setCancelable(false)
                 progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
                 progressDialog.show()
 //                openBottomSheetEmail(mail)
 //                mailVerification(eMail)
@@ -226,13 +231,16 @@ class PersonalInformation : AppCompatActivity() {
 
         val _id = SharedPreferenceManagerAdmin.getInstance(this).user.__v.toString()
         val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
-        val token = SharedPreferenceManagerAdmin.getInstance(this).user.token.toString()
-        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toInt()
+        val uid = SharedPreferenceManagerAdmin.getInstance(this).user.token!!.toInt()
+        Log.d("sharedU",addresse)
+        Log.d("sharedU",uid.toString())
+        val token = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toString()
+        Log.d("sharedU",token)
 
 //        val addresse = "address"
 //        val token = "StoredInSharedPreferenceManagerAdmin"
 //        val uid = 18355
-//        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
 
         val Interest = Interest(_id,uid.toString())
         val Mesibo_account = MesiboAccount(_id,addresse,token,uid)
@@ -266,9 +274,13 @@ class PersonalInformation : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+                    val user_id = response.body()?.user_id.toString()
+                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
+                    saveUserId(applicationContext,user_id)
                     Log.d("image file", file.toString())
                     Log.d("image", response.toString())
+                    Log.d("image", response.body().toString())
                     if (response.message().toString() != "Request Entity Too Large"){
                         moveTo(this@PersonalInformation,"MoveToI")
                         val intent = Intent(applicationContext,UserInterest::class.java)
@@ -300,7 +312,10 @@ class PersonalInformation : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+                    val user_id = response.body()?.user_id.toString()
+                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
+                    saveUserId(applicationContext,user_id)
                     if (response.message().toString() != "Request Entity Too Large"){
                         moveTo(this@PersonalInformation,"MoveToI")
                         val intent = Intent(applicationContext,UserInterest::class.java)

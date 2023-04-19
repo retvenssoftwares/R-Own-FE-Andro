@@ -30,6 +30,7 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
     private lateinit var recyclerView: RecyclerView
     private var myUserId: Long = 0
     private var group:String = ""
+    lateinit var name:String
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,8 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
         val receiversName = findViewById<TextView>(R.id.groupName)
 
         group = intent.getStringExtra("groupId").toString()
+        name = intent.getStringExtra("name").toString()
+        receiversName.text = name
 
 
         val groupProfile: MesiboProfile? = Mesibo.getProfile(group)

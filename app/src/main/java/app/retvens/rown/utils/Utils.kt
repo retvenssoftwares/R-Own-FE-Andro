@@ -11,3 +11,11 @@ fun moveTo(context:Context,state : String){
     editor.putString("MoveTo", state)
     editor.apply()
 }
+
+fun saveUserId(context:Context,user_id : String){
+    val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveUserId",
+        AppCompatActivity.MODE_PRIVATE
+    ).edit()
+    editor.putString("user_id", user_id)
+    editor.apply()
+}

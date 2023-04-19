@@ -34,6 +34,7 @@ import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -171,7 +172,10 @@ open class OtpVerification : AppCompatActivity() {
                 progressDialog.setCancelable(false)
                 progressDialog.setContentView(R.layout.progress_dialoge)
                 progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
                 progressDialog.show()
+
                 val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                     storedVerificationId.toString(), otp
                 )
@@ -190,7 +194,6 @@ open class OtpVerification : AppCompatActivity() {
                 if (task.isSuccessful) {
                     progressDialog.dismiss()
 
-                    val key = intent.getStringExtra("key")
 
                     Toast.makeText(
                         applicationContext,
@@ -198,18 +201,6 @@ open class OtpVerification : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     createUserMesibo()
-
-                    if (key == "1"){
-                        startActivity(Intent(applicationContext, DashBoardActivity::class.java))
-                        finish()
-                    }else{
-                        moveTo(this,"MoveToPI")
-                        val intent = Intent(applicationContext, PersonalInformation::class.java)
-                        intent.putExtra("phone",phoneNumber)
-                        startActivity(intent)
-                        finish()
-                    }
-
 
 
 // ...
@@ -248,6 +239,18 @@ open class OtpVerification : AppCompatActivity() {
                     Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
                     Log.d("SaveM",response.toString())
                     SharedPreferenceManagerAdmin.getInstance(applicationContext).saveUser(response)
+
+                    val key = intent.getStringExtra("key")
+                    if (key == "1"){
+                        startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                        finish()
+                    }else{
+                        moveTo(applicationContext,"MoveToPI")
+                        val intent = Intent(applicationContext, PersonalInformation::class.java)
+                        intent.putExtra("phone",phoneNumber)
+                        startActivity(intent)
+                        finish()
+                    }
 
                 }else{
                     Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()

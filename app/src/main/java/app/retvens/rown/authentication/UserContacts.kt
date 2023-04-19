@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.Window
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -24,6 +25,7 @@ import app.retvens.rown.DataCollections.onboarding.ContactsData
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserContactsBinding
 import app.retvens.rown.utils.moveTo
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,8 +57,10 @@ class UserContacts : AppCompatActivity() {
             progressDialog.setCancelable(false)
             progressDialog.setContentView(R.layout.progress_dialoge)
             progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
+
             GlobalScope.launch {
                 withContext(Dispatchers.IO){
                     loadContacts()

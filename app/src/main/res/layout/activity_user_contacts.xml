@@ -63,7 +63,7 @@
         android:paddingHorizontal="10dp"
         android:textColor="@color/green_own"
         android:fontFamily="@font/montserrat_bold"
-        android:background="@drawable/intrest_item"
+        android:background="@drawable/interest_item"
         app:layout_constraintVertical_bias="0.2"
         app:layout_constraintTop_toBottomOf="@id/text2"
         app:layout_constraintStart_toStartOf="@id/text2"
@@ -80,7 +80,7 @@
         android:layout_marginHorizontal="20dp"
         android:textColor="@color/white"
         android:fontFamily="@font/montserrat_bold"
-        android:background="@drawable/intrest_item"
+        android:background="@drawable/interest_item"
         android:backgroundTint="@color/green_own"
         app:layout_constraintStart_toEndOf="@id/skip"
         app:layout_constraintBottom_toBottomOf="@id/skip"/>

@@ -24,13 +24,15 @@ class UploadIcon : AppCompatActivity() {
     private var groupId:String = ""
     private lateinit var myRecyclerView: RecyclerView
     private lateinit var adapter:UploadIconAdapter
+
+    lateinit var name: String
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_icon)
 
         val members = intent.getStringArrayListExtra("selectedMembers")
-        val name = intent.getStringExtra("name")
+        name = intent.getStringExtra("name").toString()
         val description = intent.getStringExtra("desc")
 
         val setName = findViewById<TextView>(R.id.Community_Name)
@@ -73,6 +75,7 @@ class UploadIcon : AppCompatActivity() {
                     addMembers()
                     val intent = Intent(applicationContext,GroupChat::class.java)
                     intent.putExtra("groupId",groupId)
+                    intent.putExtra("name",name)
                     startActivity(intent)
 
                 }else{

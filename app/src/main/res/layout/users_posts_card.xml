@@ -4,8 +4,9 @@
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="15dp"
-    app:cardElevation="6dp"
-    android:layout_margin="4dp">
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="6dp"
+    app:cardElevation="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -21,6 +22,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
+                android:id="@+id/liked_by_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -28,20 +30,20 @@
                 android:layout_gravity="center_vertical">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/post_liked_profile"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:id="@+id/liked_by_profile"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     app:shapeAppearanceOverlay="@style/RoundedCornerImage"
                     android:layout_marginStart="30dp"
-                    android:src="@drawable/svg_add_bg"/>
+                    android:src="@drawable/png_profile"/>
 
                 <TextView
-                    android:id="@+id/post_liked_person_name"
+                    android:id="@+id/liked_by_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="13dp"
                     android:text="Karsten Dobrev"
-                    android:textSize="14dp"
+                    android:textSize="12dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@id/post_liked_profile"
@@ -53,13 +55,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="liked this post"
-                    android:textSize="13dp"
+                    android:textSize="12dp"
                     android:layout_marginStart="4dp"
                     android:fontFamily="@font/montserrat_regular"
-                    android:textColor="@color/grey_60"
-                    app:layout_constraintStart_toEndOf="@id/post_liked_person_name"
-                    app:layout_constraintBottom_toBottomOf="@id/post_liked_person_name"
-                    app:layout_constraintTop_toTopOf="@id/post_liked_person_name"/>
+                    android:textColor="@color/grey_60"/>
 
             </LinearLayout>
 
@@ -74,12 +73,12 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/post_profile"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="7dp"
         android:layout_marginStart="15dp"
-        android:src="@drawable/svg_add_bg"
+        android:src="@drawable/png_profile_post"
         app:layout_constraintTop_toBottomOf="@id/post_liked_profile_layout"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -89,26 +88,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
         android:text="Karsten Dobrev"
-        android:textSize="16dp"
+        android:textSize="15dp"
         android:fontFamily="@font/montserrat_semibold"
         android:textColor="@color/black"
-        app:layout_constraintVertical_bias="0.15"
+        app:layout_constraintVertical_bias="0.02"
         app:layout_constraintTop_toTopOf="@id/post_profile"
         app:layout_constraintBottom_toBottomOf="@id/post_profile"
         app:layout_constraintStart_toEndOf="@id/post_profile"/>
 
     <TextView
-        android:id="@+id/user_type"
+        android:id="@+id/post_user_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Travel Influencer"
-        android:textSize="13dp"
+        android:textSize="11dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/grey_60"
         app:layout_constraintStart_toStartOf="@id/user_name_post"
         app:layout_constraintTop_toBottomOf="@id/user_name_post"/>
 
     <TextView
+        android:id="@+id/post_user_dominican"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dominican Republic"
@@ -116,7 +116,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/grey_60"
         app:layout_constraintStart_toStartOf="@id/user_name_post"
-        app:layout_constraintTop_toBottomOf="@id/user_type"/>
+        app:layout_constraintTop_toBottomOf="@id/post_user_type"/>
 
     <TextView
         android:id="@+id/post_time"
@@ -124,22 +124,21 @@
         android:layout_height="wrap_content"
         android:text="2W"
         android:textSize="11dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="12dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/grey_60"
-        app:layout_constraintTop_toBottomOf="@id/user_type"
+        app:layout_constraintTop_toBottomOf="@id/post_user_type"
         app:layout_constraintEnd_toEndOf="@id/post_pic"/>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/post_pic"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="300dp"
         android:scaleType="centerCrop"
         android:layout_marginTop="13dp"
         android:layout_marginHorizontal="15dp"
-        android:src="@drawable/background_interest"
+        android:src="@drawable/png_post"
         app:shapeAppearanceOverlay="@style/SquareCornerImage"
-        app:tint="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/post_profile"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -149,37 +148,40 @@
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:gravity="center"
-            android:weightSum="6"
+            android:weightSum="7"
             android:background="@drawable/transparent_bg"
             app:layout_constraintBottom_toBottomOf="@id/post_pic"
             app:layout_constraintEnd_toEndOf="@id/post_pic"
             app:layout_constraintStart_toStartOf="@id/post_pic">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/like_post"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
                 android:src="@drawable/svg_like_post"/>
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/comment"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
                 android:src="@drawable/svg_post_comment"/>
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:id="@+id/share_post"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
                 android:src="@drawable/svg_share_post"/>
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
                 android:src="@drawable/svg_save_post"/>
 
         </LinearLayout>
 
             <TextView
-                android:id="@+id/user_id_post"
+                android:id="@+id/user_id_on_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="dobrev_karsten"
@@ -192,6 +194,7 @@
                 app:layout_constraintTop_toBottomOf="@id/post_pic"/>
 
             <TextView
+                android:id="@+id/recentCommentByUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Every stay gives you a reason to smile :)"
@@ -201,7 +204,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@id/user_id_post"
+                app:layout_constraintStart_toEndOf="@id/user_id_on_comment"
                 app:layout_constraintTop_toBottomOf="@id/post_pic"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 

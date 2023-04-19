@@ -4,14 +4,17 @@ import app.retvens.rown.DataCollections.*
 import app.retvens.rown.DataCollections.onboarding.ContactResponse
 import app.retvens.rown.DataCollections.onboarding.ContactsData
 import app.retvens.rown.DataCollections.onboarding.GetInterests
+import app.retvens.rown.authentication.UpdateInterestClass
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface RownUrl {
 
@@ -65,7 +68,13 @@ interface RownUrl {
         @Body contacts : ContactsData
     ) : Call<ContactResponse>
 
-    @GET("interests")
-    fun getInterests() : Call<GetInterests>
+    @GET("get_interest")
+    fun getInterests() : Call<List<GetInterests>>
+
+    @PATCH("update_int/{id}")
+    fun updateInterest(
+        @Path("id") id : String,
+        @Body updateInterestClass: UpdateInterestClass
+    ) : Call<ContactResponse>
 }
 
