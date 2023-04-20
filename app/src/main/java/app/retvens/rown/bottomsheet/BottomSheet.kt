@@ -1,7 +1,7 @@
 package app.retvens.rown.bottomsheet
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.PopularUsersAdapter
 import app.retvens.rown.DataCollections.MesiboUsersData
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -27,6 +28,10 @@ class BottomSheet : BottomSheetDialogFragment() {
     private lateinit var popularUsersAdapter: PopularUsersAdapter
     private  var userList: List<MesiboUsersData> = emptyList()
 
+    private lateinit var usersProfileAdapter: UsersProfileAdapter
+
+    lateinit var recycler : RecyclerView
+
     override fun getTheme(): Int = R.style.Theme_AppBottomSheetDialogTheme
 
     override fun onCreateView(
@@ -39,14 +44,15 @@ class BottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recycler = view.findViewById<RecyclerView>(R.id.popularUsers_recycler)
+        recycler = view.findViewById<RecyclerView>(R.id.popularUsers_recycler)
             recycler.layoutManager = GridLayoutManager(context,2)
 
-            popularUsersAdapter = PopularUsersAdapter(requireContext(), emptyList())
-            recycler.adapter = popularUsersAdapter
-            popularUsersAdapter.notifyDataSetChanged()
+//            popularUsersAdapter = PopularUsersAdapter(requireContext(), emptyList())
+//            recycler.adapter = popularUsersAdapter
+//            popularUsersAdapter.notifyDataSetChanged()
 
-            getMesiboUsers()
+//            getMesiboUsers()
+        getProfil()
     }
     private fun getMesiboUsers() {
         val send = RetrofitBuilder.retrofitBuilder.getMesiboUsers()
@@ -75,5 +81,29 @@ class BottomSheet : BottomSheetDialogFragment() {
         })
     }
 
+    fun getProfil(){
+        val pro = RetrofitBuilder.retrofitBuilder.getProfile()
+        pro.enqueue(object : Callback<List<UserProfileRequestItem>?> {
+            override fun onResponse(
+                call: Call<List<UserProfileRequestItem>?>,
+                response: Response<List<UserProfileRequestItem>?>
+            ) {
+                Toast.makeText(context,response.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("Profile",response.toString())
+                Log.d("Profile",response.body().toString())
+
+                val data = response.body()!!
+                usersProfileAdapter = UsersProfileAdapter(requireContext(), data)
+                usersProfileAdapter.notifyDataSetChanged()
+                recycler.adapter = usersProfileAdapter
+
+//                Log.d("Profile",response.body()?.)
+            }
+            override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
+                Toast.makeText(context,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("Profile",t.localizedMessage.toString(),t)
+            }
+        })
+    }
 
 }

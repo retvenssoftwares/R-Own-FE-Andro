@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheet = BottomSheet()
         val fragManager = (activity as FragmentActivity).supportFragmentManager
-//        fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
+        fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
 
         recyclerPost = view.findViewById(R.id.recyclerPost)
         recyclerPost.layoutManager = LinearLayoutManager(context)

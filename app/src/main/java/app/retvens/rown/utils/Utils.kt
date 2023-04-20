@@ -12,10 +12,24 @@ fun moveTo(context:Context,state : String){
     editor.apply()
 }
 
+fun moveToClear(context: Context){
+    val sharedPreferences = context.getSharedPreferences("Move", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.clear()
+    editor.apply()
+}
+
 fun saveUserId(context:Context,user_id : String){
     val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveUserId",
         AppCompatActivity.MODE_PRIVATE
     ).edit()
     editor.putString("user_id", user_id)
+    editor.apply()
+}
+
+fun clearUserId(context: Context){
+    val settings = context.getSharedPreferences("SaveUserId", Context.MODE_PRIVATE)
+    val editor = settings.edit()
+    editor.clear()
     editor.apply()
 }

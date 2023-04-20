@@ -29,9 +29,14 @@ import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.ChatSection.UserChatList
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UsersList
+import app.retvens.rown.MainActivity
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
+import app.retvens.rown.databinding.ActivityDashBoardBinding
+import app.retvens.rown.utils.clearUserId
+import app.retvens.rown.utils.moveToClear
+import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -43,11 +48,16 @@ import java.lang.Math.abs
 
 class DashBoardActivity : AppCompatActivity() {
 
+    lateinit var binding: ActivityDashBoardBinding
 
+    private lateinit var drawerLayout:DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
+    lateinit var mActivityTitle : String
+    var isPLVisible : Boolean? = false
+    var isHLVisible : Boolean? = false
+
     private lateinit var auth:FirebaseAuth
     private lateinit var viewPager:ViewPager
-    private lateinit var drawerLayout:DrawerLayout
     lateinit var dialog: Dialog
     private lateinit var popularUsersAdapter: PopularUsersAdapter
     private  var userList: List<MesiboUsersData> = emptyList()
@@ -55,7 +65,8 @@ class DashBoardActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dash_board)
+        binding = ActivityDashBoardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
 
@@ -64,22 +75,10 @@ class DashBoardActivity : AppCompatActivity() {
 
 
 
-        //setUp Buttons
-        val setting = findViewById<Button>(R.id.Setting)
-        val logoutbtn = findViewById<Button>(R.id.logoutbtn)
-
-        setting.setOnClickListener {
-            Toast.makeText(applicationContext,"Setting",Toast.LENGTH_SHORT).show()
-        }
-
-        logoutbtn.setOnClickListener {
-
-            auth.signOut()
-            startActivity(Intent(this,LoginActivity::class.java))
-        }
         //setUp drawerLayout
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
+        mActivityTitle = title.toString()
 
 
 
@@ -137,7 +136,39 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
 
+        binding.navSecurity.setOnClickListener {
+            if (!isPLVisible!!){
+                binding.privacyList.visibility = View.VISIBLE
+                isPLVisible = true
+            }else{
+                binding.privacyList.visibility = View.GONE
+                isPLVisible = false
+            }
+        }
 
+        binding.navHelp.setOnClickListener {
+            if (!isHLVisible!!){
+                binding.navHelpList.visibility = View.VISIBLE
+                isHLVisible = true
+            }else{
+                binding.navHelpList.visibility = View.GONE
+                isHLVisible = false
+            }
+        }
+
+        binding.Setting.setOnClickListener {
+            Toast.makeText(applicationContext,"Setting",Toast.LENGTH_SHORT).show()
+        }
+
+        binding.logout.setOnClickListener {
+
+            auth.signOut()
+            SharedPreferenceManagerAdmin.getInstance(applicationContext).clear()
+            moveToClear(applicationContext)
+            clearUserId(applicationContext)
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
 
         val frame = findViewById<FrameLayout>(R.id.fragment_container)
 
@@ -165,32 +196,6 @@ class DashBoardActivity : AppCompatActivity() {
 //        showBottomDialog()
 
     }
-
-//    private fun showBottomDialog() {
-//        dialog = Dialog(this)
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        dialog.setContentView(R.layout.popular_connections_layout)
-//
-//        try {
-//            val recycler = dialog.findViewById<RecyclerView>(R.id.popularUsers_recycler)
-//            recycler.layoutManager = GridLayoutManager(this,3)
-//
-//            popularUsersAdapter = PopularUsersAdapter(this, emptyList())
-//            recycler.adapter = popularUsersAdapter
-//            popularUsersAdapter.notifyDataSetChanged()
-//
-//            getMesiboUsers()
-//
-//            dialog.show()
-//            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-//            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//            dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
-//            dialog.window?.setGravity(Gravity.BOTTOM)
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Toast.makeText(this, "Error: " + e.message, Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     private fun getMesiboUsers() {
         val send = RetrofitBuilder.retrofitBuilder.getMesiboUsers()

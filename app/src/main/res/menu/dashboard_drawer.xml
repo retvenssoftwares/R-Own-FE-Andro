@@ -9,11 +9,12 @@
     <item
         android:id="@+id/partner"
         android:title="Become Our Partner"
-        
+        android:visible="false"
         />
     <item
         android:id="@+id/tutorial"
         android:title="Learn with Retvens"
+        android:visible="false"
         />
 
 
