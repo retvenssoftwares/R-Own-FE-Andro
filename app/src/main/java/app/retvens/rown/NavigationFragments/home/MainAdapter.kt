@@ -1,20 +1,20 @@
-package app.retvens.rown.Dashboard
+package app.retvens.rown.NavigationFragments.home
 
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import app.retvens.rown.NavigationFragments.home.*
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
 import app.retvens.rown.databinding.UsersPostsCardBinding
 //import com.karan.multipleviewrecyclerview.Banner
-import com.karan.multipleviewrecyclerview.DataItem
-import com.karan.multipleviewrecyclerview.DataItemType
+
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
-class MainAdapter(private val dataItemList: List<DataItem>) :
+class MainAdapter(val context: Context, private val dataItemList: List<DataItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
@@ -30,25 +30,50 @@ class MainAdapter(private val dataItemList: List<DataItem>) :
             binding.childRecyclerView.setHasFixedSize(true)
             binding.childRecyclerView.layoutManager = LinearLayoutManager(binding.root.context,RecyclerView.HORIZONTAL,false)
         }
-        fun bindCommunityRecyclerView(recyclerItemList : List<DataItem.CreateCommunityRecyclerData>){
+        fun bindCreateCommunityRecyclerView(recyclerItemList : List<DataItem.CreateCommunityRecyclerData>){
+            val adapter = CreateCommunityChildAdapter(DataItemType.CREATE_COMMUNITY, recyclerItemList)
+            binding.childRecyclerView.adapter = adapter
+            binding.relativeRecycler.visibility = View.GONE
+        }
+        fun bindCommunityRecyclerView(recyclerItemList : List<DataItem.CommunityRecyclerData>){
             val adapter = CommunityChildAdapter(DataItemType.COMMUNITY, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
+            binding.recyclerHeading.text = "Check into the most comfortable stays."
+            binding.viewAllItem.setOnClickListener {
+                Toast.makeText(context, "Community", Toast.LENGTH_SHORT).show()
+            }
         }
         fun bindHotelSectionRecyclerView(recyclerItemList : List<DataItem.HotelSectionRecyclerData>){
             val adapter = HotelSectionChildAdapter(DataItemType.HOTEL_SECTION, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
+            binding.recyclerHeading.text = "Connect with the like-minded individuals"
+            binding.viewAllItem.setOnClickListener {
+                Toast.makeText(context, "Hotel Section", Toast.LENGTH_SHORT).show()
+            }
         }
         fun bindBlogsRecyclerView(recyclerItemList : List<DataItem.BlogsRecyclerData>){
             val adapter = BlogsChildAdapter(DataItemType.BLOGS, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
+            binding.recyclerHeading.text = "Popular blogs you must read."
+            binding.viewAllItem.setOnClickListener {
+                Toast.makeText(context, "Blogs", Toast.LENGTH_SHORT).show()
+            }
         }
         fun bindHotelAwardsRecyclerView(recyclerItemList : List<DataItem.AwardsRecyclerData>){
             val adapter = AwardsChildAdapter(DataItemType.HOTEL_AWARDS, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
+            binding.recyclerHeading.text = "Check what's in store"
+            binding.viewAllItem.setOnClickListener {
+                Toast.makeText(context, "Hotel Awards", Toast.LENGTH_SHORT).show()
+            }
         }
         fun bindVendorsRecyclerView(recyclerItemList : List<DataItem.VendorsRecyclerData>){
             val adapter = VendorsChildAdapter(DataItemType.VENDORS, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
+            binding.recyclerHeading.text = "Avail the Best-in-class service for yourself."
+            binding.viewAllItem.setOnClickListener {
+                Toast.makeText(context, "Vendors", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -109,8 +134,13 @@ class MainAdapter(private val dataItemList: List<DataItem>) :
                             (holder as RecyclerItemViewHolder).bindVendorsRecyclerView(it)
                         }
                     }
+                    DataItemType.CREATE_COMMUNITY -> {
+                        dataItemList[position].createCommunityRecyclerDataList?.let {
+                            (holder as RecyclerItemViewHolder).bindCreateCommunityRecyclerView(it)
+                        }
+                    }
                     else -> {
-                        dataItemList[position].createCommunityRecyclerDataList?.let{
+                        dataItemList[position].communityRecyclerDataList?.let{
                             (holder as RecyclerItemViewHolder).bindCommunityRecyclerView(it)
                         }
                     }

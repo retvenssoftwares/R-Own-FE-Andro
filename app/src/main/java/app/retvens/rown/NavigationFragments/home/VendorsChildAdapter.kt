@@ -3,9 +3,7 @@ package app.retvens.rown.NavigationFragments.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import app.retvens.rown.databinding.HotellAwardsBinding
 import app.retvens.rown.databinding.VendorsCardHomeBinding
-import com.karan.multipleviewrecyclerview.DataItem
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 

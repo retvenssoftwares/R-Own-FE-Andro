@@ -1,4 +1,4 @@
-package com.karan.multipleviewrecyclerview
+package app.retvens.rown.NavigationFragments.home
 
 data class DataItem(
     val viewType : Int,
@@ -8,6 +8,7 @@ data class DataItem(
     var hotelAwardsList : List<AwardsRecyclerData>? = null,
     var blogsRecyclerDataList : List<BlogsRecyclerData>? = null,
     var vendorsRecyclerDataList : List<VendorsRecyclerData>? = null,
+    var communityRecyclerDataList : List<CommunityRecyclerData>? = null,
     var createCommunityRecyclerDataList : List<CreateCommunityRecyclerData>? = null,
     var banner : Banner? = null
 ){
@@ -19,6 +20,7 @@ data class DataItem(
     data class BlogsRecyclerData(val BlogsCover : Int, val BlogTitle : String, val Profile : Int)
     data class AwardsRecyclerData(val Cover : Int)
     data class HotelSectionRecyclerData(val Cover : Int, val Title : String)
+    data class CommunityRecyclerData(var image : Int, var title : String, var members : String)
     data class CreateCommunityRecyclerData(var image : Int, var title : String, var members : String)
 
 //    constructor(viewType: Int, recyclerItemList: List<RecyclerItem>) : this(viewType){

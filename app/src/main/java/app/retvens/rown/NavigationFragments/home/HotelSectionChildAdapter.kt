@@ -2,18 +2,13 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.databinding.HotelSectionItemBinding
-import app.retvens.rown.databinding.HotellAwardsBinding
-import app.retvens.rown.databinding.PopularBlogsCardHomeBinding
-import app.retvens.rown.databinding.VendorsCardHomeBinding
-import com.karan.multipleviewrecyclerview.DataItem
-import com.karan.multipleviewrecyclerview.DataItemType
+
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 class HotelSectionChildAdapter(private val viewType: Int,
-    private val hotelSectionRecyclerData : List<DataItem.HotelSectionRecyclerData>,
+                               private val hotelSectionRecyclerData : List<DataItem.HotelSectionRecyclerData>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

@@ -37,7 +37,7 @@ class UsersProfileAdapter(val context: Context, var profileList : List<UserProfi
             Glide.with(context).load(currentItem.Profile_pic).into(holder.profile)
 
         holder.profile.setOnClickListener {
-            showBottomDialog()
+            showBottomDialog(currentItem.Profile_pic, currentItem.Full_name)
         }
 
 
@@ -54,13 +54,18 @@ class UsersProfileAdapter(val context: Context, var profileList : List<UserProfi
         notifyDataSetChanged()
     }
 
-    private fun showBottomDialog() {
+    private fun showBottomDialog(profilePic: String, fullName: String) {
     val dialog = Dialog(context)
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.setContentView(R.layout.connections_profile_dialog)
 
+    val image = dialog.findViewById<ImageView>(R.id.connection_profile)
+        Glide.with(context).load(profilePic).into(image)
+
+        dialog.findViewById<TextView>(R.id.c_name).text = fullName
+
     dialog.findViewById<CardView>(R.id.card_message_person).setOnClickListener {
-        showMessageDialog()
+        showMessageDialog(profilePic, fullName)
     }
 //            val back =  dialog.findViewById<>()
 
@@ -71,11 +76,16 @@ class UsersProfileAdapter(val context: Context, var profileList : List<UserProfi
     dialog.window?.setGravity(Gravity.BOTTOM)
 }
 
-    private fun showMessageDialog() {
+    private fun showMessageDialog(profilePic: String, fullName: String) {
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.connection_message_layout)
 
+        val messageImg = dialog.findViewById<ImageView>(R.id.message_profile)
+        val messageName = dialog.findViewById<TextView>(R.id.message_name)
+
+        Glide.with(context).load(profilePic).into(messageImg)
+        messageName.text = fullName
 //            val back =  dialog.findViewById<>()
 
         dialog.show()
