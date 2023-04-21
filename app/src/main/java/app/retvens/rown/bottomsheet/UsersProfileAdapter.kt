@@ -1,5 +1,6 @@
 package app.retvens.rown.bottomsheet
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -14,7 +15,7 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class UsersProfileAdapter(val context: Context, var interestList : List<UserProfileRequestItem>) : RecyclerView.Adapter<UsersProfileAdapter.InterestViewHolder>() {
+class UsersProfileAdapter(val context: Context, var profileList : List<UserProfileRequestItem>) : RecyclerView.Adapter<UsersProfileAdapter.InterestViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InterestViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -23,11 +24,12 @@ class UsersProfileAdapter(val context: Context, var interestList : List<UserProf
     }
 
     override fun getItemCount(): Int {
-        return interestList.size
+        return profileList.size
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: InterestViewHolder, position: Int) {
-        val currentItem = interestList[position]
+        val currentItem = profileList[position]
 //        holder.name.text = currentItem.Mesibo_account.get(0).address.toString()
         holder.name.text = currentItem.Full_name
         holder.position.text = currentItem.User_id
@@ -47,10 +49,10 @@ class UsersProfileAdapter(val context: Context, var interestList : List<UserProf
         var profile = itemView.findViewById<ImageView>(R.id.connection_profile)
     }
 
-//    fun searchInterest(searchText : List<GetInterests>){
-//        interestList = searchText
-//        notifyDataSetChanged()
-//    }
+    fun searchConnection(searchText : List<UserProfileRequestItem>){
+        profileList = searchText
+        notifyDataSetChanged()
+    }
 
     private fun showBottomDialog() {
     val dialog = Dialog(context)
