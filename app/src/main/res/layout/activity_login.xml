@@ -186,6 +186,7 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="14dp"
+            android:visibility="gone"
             android:paddingHorizontal="12dp"
             android:textAlignment="center"
             android:layout_marginTop="25dp"
@@ -200,6 +201,7 @@
             android:contentDescription="changeLanguage"
             android:layout_marginTop="8dp"
             android:src="@drawable/google"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_or" />

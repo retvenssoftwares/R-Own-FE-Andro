@@ -6,7 +6,7 @@
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="25dp"
     app:cardElevation="6dp"
-    android:layout_margin="4dp">
+    android:layout_margin="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -19,8 +19,7 @@
             android:scaleType="centerCrop"
             android:elevation="10dp"
             app:shapeAppearanceOverlay="@style/SquareCornerImageForCards"
-            android:src="@drawable/background_interest"
-            app:tint="@color/grey_20"
+            android:src="@drawable/png_vendor"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
