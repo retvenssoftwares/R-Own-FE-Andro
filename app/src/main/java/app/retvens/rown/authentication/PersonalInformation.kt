@@ -2,13 +2,11 @@ package app.retvens.rown.authentication
 
 import android.app.Dialog
 import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -34,6 +32,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.Interest
 import app.retvens.rown.DataCollections.MesiboAccount
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
@@ -83,6 +82,8 @@ class PersonalInformation : AppCompatActivity() {
 
         cameraImageUri = createImageUri()!!
 
+        val user_id = intent.getStringExtra("user_id").toString()
+        fetchUser(user_id)
         binding.camera.setOnClickListener {
             //Requesting Permission For CAMERA
             if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
@@ -123,12 +124,39 @@ class PersonalInformation : AppCompatActivity() {
                 progressDialog.show()
 //                openBottomSheetEmail(mail)
 //                mailVerification(eMail)
-                uploadData()
+                uploadData(user_id)
             }
         }
 
         auth = FirebaseAuth.getInstance()
 
+    }
+
+    private fun fetchUser(userId: String) {
+        val fetch = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
+        fetch.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
+                Log.d("fetch",response.body().toString())
+
+                if (response.isSuccessful){
+                    val image = response.body()?.Profile_pic
+                    val name = response.body()?.Full_name
+                    val mail = response.body()?.Email
+                    Glide.with(applicationContext).load(image).into(binding.profile)
+                    binding.etName.setText(name)
+                    binding.etEmail.setText(mail)
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun openBottomSheetEmail(mail:String) {
@@ -225,9 +253,11 @@ class PersonalInformation : AppCompatActivity() {
 
     }
 
-    private fun uploadData() {
+    private fun uploadData(user_id: String) {
         val phone : Long = intent.getStringExtra("phone")?.toLong()!!
-//        val phone : Long = 21412481214
+//        val phone : Long = 7905845936
+
+        val message = intent.getStringExtra("message")
 
         val _id = SharedPreferenceManagerAdmin.getInstance(this).user.__v.toString()
         val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
@@ -237,10 +267,10 @@ class PersonalInformation : AppCompatActivity() {
         val token = SharedPreferenceManagerAdmin.getInstance(this).user.uid!!.toString()
         Log.d("sharedU",token)
 
-//        val addresse = "address"
-//        val token = "StoredInSharedPreferenceManagerAdmin"
-//        val uid = 18355
-        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
+//        val addresse = "address Noted"
+//        val token = "Testing Token With Image"
+//        val uid = 18235
+//        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
 
         val Interest = Interest(_id,uid.toString())
         val Mesibo_account = MesiboAccount(_id,addresse,token,uid)
@@ -249,7 +279,7 @@ class PersonalInformation : AppCompatActivity() {
         if (croppedImageUri != null){
 
             val filesDir = applicationContext.filesDir
-            val file = File(filesDir,"image.png")
+            val file = File(filesDir,addresse)
 
             val inputStream = contentResolver.openInputStream(croppedImageUri!!)
             val outputStream = FileOutputStream(file)
@@ -258,6 +288,7 @@ class PersonalInformation : AppCompatActivity() {
             val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
 
             val respo  = RetrofitBuilder.retrofitBuilder.uploadUserProfile(
+                user_id,
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),
                 phone,
@@ -274,19 +305,28 @@ class PersonalInformation : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    val user_id = response.body()?.user_id.toString()
                     Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
-                    saveUserId(applicationContext,user_id)
                     Log.d("image file", file.toString())
                     Log.d("image", response.toString())
                     Log.d("image", response.body().toString())
                     if (response.message().toString() != "Request Entity Too Large"){
-                        moveTo(this@PersonalInformation,"MoveToI")
-                        val intent = Intent(applicationContext,UserInterest::class.java)
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        intent.putExtra("user",username)
-                        startActivity(intent)
+                        if (message != "user already exist"){
+                            moveTo(this@PersonalInformation,"MoveToI")
+                            val intent = Intent(applicationContext,UserInterest::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.putExtra("user",username)
+                            startActivity(intent)
+                            finish()
+                        }else{
+                            moveTo(this@PersonalInformation,"MoveToD")
+                            Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(applicationContext,DashBoardActivity::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.putExtra("user",username)
+                            startActivity(intent)
+                            finish()
+                        }
                     }
 //                Toast.makeText(applicationContext,file.name.toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -296,8 +336,10 @@ class PersonalInformation : AppCompatActivity() {
                 }
             })
 
-        } else {
+        }
+        else {
             val pWithoutImg = RetrofitBuilder.retrofitBuilder.uploadUserProfileWithoutImg(
+                user_id,
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),eMail),
                 phone,
@@ -312,16 +354,25 @@ class PersonalInformation : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    val user_id = response.body()?.user_id.toString()
                     Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
-                    saveUserId(applicationContext,user_id)
                     if (response.message().toString() != "Request Entity Too Large"){
-                        moveTo(this@PersonalInformation,"MoveToI")
-                        val intent = Intent(applicationContext,UserInterest::class.java)
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        intent.putExtra("user",username)
-                        startActivity(intent)
+                        if (message != "user already exist"){
+                            moveTo(this@PersonalInformation,"MoveToI")
+                            val intent = Intent(applicationContext,UserInterest::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.putExtra("user",username)
+                            startActivity(intent)
+                            finish()
+                        }else{
+                            moveTo(this@PersonalInformation,"MoveToD")
+                            Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(applicationContext,DashBoardActivity::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.putExtra("user",username)
+                            startActivity(intent)
+                            finish()
+                        }
                     }
                 }
                 override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {

@@ -4,6 +4,7 @@ import app.retvens.rown.DataCollections.*
 import app.retvens.rown.DataCollections.onboarding.ContactResponse
 import app.retvens.rown.DataCollections.onboarding.ContactsData
 import app.retvens.rown.DataCollections.onboarding.GetInterests
+import app.retvens.rown.DataCollections.onboarding.SearchUser
 import app.retvens.rown.authentication.UpdateInterestClass
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -19,8 +20,9 @@ import retrofit2.http.Path
 interface RownUrl {
 
     @Multipart
-    @POST("profile")
+    @PATCH("update/{user_id}")
     fun uploadUserProfile(
+        @Path("user_id") user_id : String,
         @Part("Full_name") Name: RequestBody,
         @Part("Email") Email: RequestBody,
         @Part("Phone") Phone: Long,
@@ -34,8 +36,9 @@ interface RownUrl {
     ) : Call<UserProfileResponse>
 
     @Multipart
-    @POST("profile")
+    @PATCH("update/{user_id}")
     fun uploadUserProfileWithoutImg(
+        @Path("user_id") user_id : String,
         @Part("Full_name") Name: RequestBody,
         @Part("Email") Email: RequestBody,
         @Part("Phone") Phone: Long,
@@ -44,6 +47,16 @@ interface RownUrl {
         @Part("Mesibo_account[token]") token:RequestBody,
         @Part("Interest[id]") id:RequestBody
     ) : Call<UserProfileResponse>
+
+    @POST("profile")
+    fun searchUser(
+        @Body searchUser: SearchUser
+    ) : Call<UserProfileResponse>
+
+    @GET("profile/{user_id}")
+    fun fetchUser(
+        @Path("user_id") user_id: String
+    ) : Call<UserProfileRequestItem>
 
     @GET("profile")
     fun getProfile() : Call<List<UserProfileRequestItem>>

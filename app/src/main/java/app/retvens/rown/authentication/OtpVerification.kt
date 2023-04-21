@@ -1,10 +1,8 @@
 package app.retvens.rown.authentication
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
@@ -22,15 +20,16 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.MesiboDataClass
 import app.retvens.rown.DataCollections.MesiboResponseClass
+import app.retvens.rown.DataCollections.UserProfileResponse
+import app.retvens.rown.DataCollections.onboarding.SearchUser
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
 import app.retvens.rown.utils.moveTo
-import com.google.android.gms.auth.api.phone.SmsRetriever
+import app.retvens.rown.utils.saveUserId
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
@@ -44,8 +43,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import java.util.concurrent.TimeUnit
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 open class OtpVerification : AppCompatActivity() {
     lateinit var binding: ActivityOtpVerifificationBinding
@@ -96,8 +93,8 @@ open class OtpVerification : AppCompatActivity() {
 
         showKeyBoard(otpET1)
 
-        phoneNumber =  intent.getStringExtra("phoneNum").toString()
-        phone =  intent.getStringExtra("phone").toString()
+        phoneNumber =  intent.getStringExtra("phoneNum").toString() //without CountryCode
+        phone =  intent.getStringExtra("phone").toString() // with CountryCode and +
         binding.textPhoneOtp.text = intent.getStringExtra("phone").toString()
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
@@ -245,11 +242,7 @@ open class OtpVerification : AppCompatActivity() {
                         startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                         finish()
                     }else{
-                        moveTo(applicationContext,"MoveToPI")
-                        val intent = Intent(applicationContext, PersonalInformation::class.java)
-                        intent.putExtra("phone",phoneNumber)
-                        startActivity(intent)
-                        finish()
+                        searchUser()
                     }
 
                 }else{
@@ -264,6 +257,33 @@ open class OtpVerification : AppCompatActivity() {
         })
 
 
+    }
+    private fun searchUser() {
+        val search = RetrofitBuilder.retrofitBuilder.searchUser(SearchUser(phoneNumber.toLong()))
+        search.enqueue(object : Callback<UserProfileResponse?> {
+            override fun onResponse(
+                call: Call<UserProfileResponse?>,
+                response: Response<UserProfileResponse?>
+            ) {
+                val user_id = response.body()?.user_id.toString()
+                val message = response.body()?.message.toString()
+                saveUserId(applicationContext,user_id)
+                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
+                Log.d("search",response.body().toString())
+                moveTo(applicationContext,"MoveToPI")
+                val intent = Intent(applicationContext, PersonalInformation::class.java)
+                intent.putExtra("phone",phoneNumber)
+                intent.putExtra("user_id",user_id)
+                intent.putExtra("message",message)
+                startActivity(intent)
+                finish()
+            }
+
+            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("search",t.localizedMessage,t)
+            }
+        })
     }
 
     private fun openBottomLanguageSheet() {

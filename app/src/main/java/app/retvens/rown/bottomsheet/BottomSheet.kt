@@ -1,10 +1,13 @@
 package app.retvens.rown.bottomsheet
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +34,7 @@ class BottomSheet : BottomSheetDialogFragment() {
     private lateinit var usersProfileAdapter: UsersProfileAdapter
 
     lateinit var recycler : RecyclerView
+    lateinit var connectionsSerch: EditText
 
     override fun getTheme(): Int = R.style.Theme_AppBottomSheetDialogTheme
 
@@ -44,6 +48,9 @@ class BottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        connectionsSerch = view.findViewById(R.id.connections_search)
+
         recycler = view.findViewById<RecyclerView>(R.id.popularUsers_recycler)
             recycler.layoutManager = GridLayoutManager(context,2)
 
@@ -92,15 +99,46 @@ class BottomSheet : BottomSheetDialogFragment() {
                 Log.d("Profile",response.toString())
                 Log.d("Profile",response.body().toString())
 
-                val data = response.body()!!
-                usersProfileAdapter = UsersProfileAdapter(requireContext(), data)
-                usersProfileAdapter.notifyDataSetChanged()
-                recycler.adapter = usersProfileAdapter
+                if(response.isSuccessful){
+                    val data = response.body()!!
+                    usersProfileAdapter = UsersProfileAdapter(requireContext(), data)
+                    usersProfileAdapter.notifyDataSetChanged()
+                    recycler.adapter = usersProfileAdapter
+
+                     connectionsSerch.addTextChangedListener(object : TextWatcher {
+                         override fun beforeTextChanged(
+                             s: CharSequence?,
+                             start: Int,
+                             count: Int,
+                             after: Int
+                         ) {
+
+                         }
+
+                         override fun onTextChanged(
+                             s: CharSequence?,
+                             start: Int,
+                             before: Int,
+                             count: Int
+                         ) {
+                             val original = data.toList()
+                             val filter = original.filter { searchUser ->
+                                 searchUser.Full_name.contains(s.toString(),ignoreCase = false)
+                             }
+                             usersProfileAdapter.searchConnection(filter)
+                         }
+
+                         override fun afterTextChanged(s: Editable?) {
+
+                         }
+                     })
+
+                }
 
 //                Log.d("Profile",response.body()?.)
             }
             override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
-                Toast.makeText(context,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,t.localizedMessage,Toast.LENGTH_SHORT).show()
                 Log.d("Profile",t.localizedMessage.toString(),t)
             }
         })

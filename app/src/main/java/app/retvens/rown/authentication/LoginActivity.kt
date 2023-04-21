@@ -3,28 +3,22 @@ package app.retvens.rown.authentication
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.SystemClock
 import android.telephony.TelephonyManager
-import android.util.LayoutDirection
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
-import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
@@ -35,8 +29,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
-import app.retvens.rown.DataCollections.UserProfileRequest
-import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.DataCollections.UserProfileResponse
+import app.retvens.rown.DataCollections.onboarding.SearchUser
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityLoginBinding
 import app.retvens.rown.utils.moveTo
@@ -477,24 +471,6 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    fun getProfil(){
-        val pro = RetrofitBuilder.retrofitBuilder.getProfile()
-        pro.enqueue(object : Callback<List<UserProfileRequestItem>?> {
-            override fun onResponse(
-                call: Call<List<UserProfileRequestItem>?>,
-                response: Response<List<UserProfileRequestItem>?>
-            ) {
-                Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("Profile",response.toString())
-                Log.d("Profile",response.body().toString())
-//                Log.d("Profile",response.body()?.)
-            }
-            override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("Profile",t.localizedMessage.toString(),t)
-            }
-        })
-    }
 
     override fun onStart() {
         super.onStart()

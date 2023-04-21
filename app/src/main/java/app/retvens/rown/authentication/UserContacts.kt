@@ -215,8 +215,8 @@ class UserContacts : AppCompatActivity() {
                 call: Call<ContactResponse?>,
                 response: Response<ContactResponse?>
             ) {
-                Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
-                Log.d("cont",response.toString())
+                Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("cont",response.body().toString())
                 progressDialog.dismiss()
                 if (response.isSuccessful){
                     moveTo(this@UserContacts,"MoveToD")
