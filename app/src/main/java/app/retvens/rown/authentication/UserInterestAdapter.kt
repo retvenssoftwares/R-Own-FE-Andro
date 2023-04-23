@@ -21,7 +21,15 @@ import retrofit2.Response
 
 class UserInterestAdapter(val context: Context, var interestList : List<GetInterests>) : RecyclerView.Adapter<UserInterestAdapter.InterestViewHolder>() {
 
-    lateinit var user_id : String
+    var addedItems : MutableList<GetInterests> ? = mutableListOf()
+
+    interface onItemClickListener{
+        fun onItemClickInterest(addedItems : MutableList<GetInterests>)
+    }
+    private var mListener: onItemClickListener? = null
+    fun setOnItemClickListener(listener: onItemClickListener){
+        mListener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InterestViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,12 +45,18 @@ class UserInterestAdapter(val context: Context, var interestList : List<GetInter
         val currentItem = interestList[position]
         holder.name.text = currentItem.Name
 
-        val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        user_id = sharedPreferences.getString("user_id", "").toString()
-
-        holder.name.setOnClickListener {
-            uploadInterest(currentItem.id)
-            holder.linearLayout.background = holder.itemView.context.getDrawable(R.drawable.interest_item_selected)
+        holder.itemView.setOnClickListener {
+            if (addedItems!!.contains(currentItem)) {
+                addedItems!!.remove(currentItem)
+//            uploadInterest(currentItem.id)
+                holder.linearLayout.background =
+                    holder.itemView.context.getDrawable(R.drawable.interest_item)
+            }else{
+                holder.linearLayout.background =
+                    holder.itemView.context.getDrawable(R.drawable.interest_item_selected)
+                addedItems!!.add(currentItem)
+            }
+            mListener?.onItemClickInterest(addedItems!!)
         }
 
     }
@@ -57,25 +71,4 @@ class UserInterestAdapter(val context: Context, var interestList : List<GetInter
         notifyDataSetChanged()
     }
 
-    private fun uploadInterest(id: String) {
-        val update = RetrofitBuilder.retrofitBuilder.updateInterest(id,
-            UpdateInterestClass(user_id))
-        Toast.makeText(context,"User_id : $user_id",Toast.LENGTH_SHORT).show()
-        update.enqueue(object : Callback<ContactResponse?> {
-            override fun onResponse(
-                call: Call<ContactResponse?>,
-                response: Response<ContactResponse?>
-            ) {
-                Toast.makeText(context,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("update_interest",response.body()?.message.toString())
-                Log.d("update_interest",response.toString())
-            }
-
-            override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
-                Toast.makeText(context,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("update_interest",t.localizedMessage,t)
-            }
-        })
-
-    }
 }

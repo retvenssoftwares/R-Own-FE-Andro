@@ -11,8 +11,7 @@
         android:layout_height="235dp"
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-        android:src="@drawable/background_interest"
-        app:tint="@color/grey_40"
+        android:src="@drawable/png_blog"
         android:padding="1dp"
         android:elevation="8dp"
         android:layout_marginTop="80dp"
@@ -31,6 +30,7 @@
             android:layout_width="235dp"
             android:layout_height="235dp"
             android:scaleType="centerCrop"
+            android:src="@drawable/png_blog"
             app:shapeAppearanceOverlay="@style/RoundedCornerImage"
             android:padding="1dp"
             android:layout_marginBottom="-100dp"
@@ -39,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/c_name"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -65,7 +65,7 @@
         android:textColor="#000000"
         android:textSize="18dp"
         android:fontFamily="@font/montserrat_semibold"
-        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintTop_toBottomOf="@id/c_name"
         app:layout_constraintStart_toStartOf="@id/profile"
         app:layout_constraintEnd_toEndOf="@id/profile"
         />

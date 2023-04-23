@@ -2,22 +2,14 @@ package app.retvens.rown.NavigationFragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.CreateCommunity.CreateCommunity
-import app.retvens.rown.Dashboard.MainAdapter
+import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.home.Community
 import app.retvens.rown.NavigationFragments.home.CommunityListAdapter
 import app.retvens.rown.NavigationFragments.home.Post
@@ -25,8 +17,8 @@ import app.retvens.rown.NavigationFragments.home.PostAdapter
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
 //import com.karan.multipleviewrecyclerview.Banner
-import com.karan.multipleviewrecyclerview.DataItem
-import com.karan.multipleviewrecyclerview.DataItemType
+import app.retvens.rown.NavigationFragments.home.DataItem
+import app.retvens.rown.NavigationFragments.home.DataItemType
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 
@@ -67,7 +59,7 @@ class HomeFragment : Fragment() {
         mList = ArrayList()
         prepareData()
 
-        val adapter = MainAdapter(mList)
+        val adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
 
 
@@ -161,6 +153,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareData() {
+        val communityList = ArrayList<DataItem.CommunityRecyclerData>()
+        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12"))
+        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34"))
+        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3"))
+        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_post,"Vendor 4","78"))
+
         val createCommunityList = ArrayList<DataItem.CreateCommunityRecyclerData>()
         createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12"))
         createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34"))
@@ -190,11 +188,12 @@ class HomeFragment : Fragment() {
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_events))
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_awards))
 
-        mList.add(DataItem(DataItemType.COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
+        mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
         mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(R.drawable.png_post, R.drawable.png_profile, "Jason Stathon")))
         mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
         mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_r_logo, "John")))
         mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
+        mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
         mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
         mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Tom")))
         mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))

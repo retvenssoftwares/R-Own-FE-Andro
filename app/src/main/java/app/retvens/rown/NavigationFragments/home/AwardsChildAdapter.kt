@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.databinding.HotellAwardsBinding
-import com.karan.multipleviewrecyclerview.DataItem
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 

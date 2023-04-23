@@ -1,4 +1,4 @@
-package com.karan.multipleviewrecyclerview
+package app.retvens.rown.NavigationFragments.home
 
 class DataItemType {
 
@@ -9,6 +9,7 @@ class DataItemType {
         const val HOTEL_SECTION = 3
         const val HOTEL_AWARDS = 4
         const val VENDORS = 5
+        const val CREATE_COMMUNITY = 6
     }
 
 }

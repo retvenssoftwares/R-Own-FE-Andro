@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.onboarding.ContactResponse
 import app.retvens.rown.DataCollections.onboarding.GetInterests
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserInterestBinding
@@ -23,18 +24,24 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserInterest : AppCompatActivity() {
+class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListener {
     lateinit var binding: ActivityUserInterestBinding
 
     lateinit var progressDialog : Dialog
+    lateinit var addedIntersts : MutableList<GetInterests>
 
     lateinit var username: String
     lateinit var userInterestAdapter: UserInterestAdapter
+
+    lateinit var user_id : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserInterestBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        user_id = sharedPreferences.getString("user_id", "").toString()
 
         username = intent.getStringExtra("user").toString()
         binding.userName.text = "Hello, $username!"
@@ -54,11 +61,18 @@ class UserInterest : AppCompatActivity() {
 //            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
 //            progressDialog.show()
 
+
+            addedIntersts.forEach {
+                Log.d("Interest", it.id.toString())
+                uploadInterest(it.id)
+//                Toast.makeText(this, it.Name.toString(), Toast.LENGTH_SHORT).show()
+            }
+
             moveTo(this,"MoveToUC")
             val intent = Intent(applicationContext, UserContacts::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             intent.putExtra("name",username)
-            startActivity(intent)
+//            startActivity(intent)
         }
         getInterests()
     }
@@ -77,6 +91,7 @@ class UserInterest : AppCompatActivity() {
                     userInterestAdapter = UserInterestAdapter(applicationContext, data)
                     userInterestAdapter.notifyDataSetChanged()
                     binding.interestGrid.adapter = userInterestAdapter
+                    userInterestAdapter.setOnItemClickListener(this@UserInterest)
 
                     binding.etSearchInterest.addTextChangedListener(object : TextWatcher {
                         override fun beforeTextChanged(
@@ -113,5 +128,30 @@ class UserInterest : AppCompatActivity() {
                 Log.d("Interest",t.localizedMessage,t)
             }
         })
+    }
+
+    override fun onItemClickInterest(addedItems: MutableList<GetInterests>) {
+        addedIntersts = addedItems
+    }
+
+    private fun uploadInterest(id: String) {
+        val update = RetrofitBuilder.retrofitBuilder.updateInterest(id, UpdateInterestClass(user_id))
+        Toast.makeText(applicationContext,"User_id : $user_id",Toast.LENGTH_SHORT).show()
+        update.enqueue(object : Callback<ContactResponse?> {
+            override fun onResponse(
+                call: Call<ContactResponse?>,
+                response: Response<ContactResponse?>
+            ) {
+                Toast.makeText(applicationContext,"$id - ${response.body()?.message.toString()}",Toast.LENGTH_SHORT).show()
+                Log.d("update_interest",response.body()?.message.toString())
+                Log.d("update_interest",response.toString())
+            }
+
+            override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext, t.localizedMessage!!.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("update_interest",t.localizedMessage,t)
+            }
+        })
+
     }
 }
