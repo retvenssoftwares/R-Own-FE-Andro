@@ -86,6 +86,9 @@ class ChatScreenAdapter(
             messageTextView.text = message.message
             timeTextView.text = DateFormat.format("HH:mm", Date(message.timestamp))
 
+            Log.d("Delivery State", "State: $state")
+
+
             when (message.state) {
                 MessageEntity.MessageState.SENT -> seenIcon.setImageResource(R.drawable.singlecheck)
                 MessageEntity.MessageState.DELIVERED -> seenIcon.setImageResource(R.drawable.doublecheck2)

@@ -4,7 +4,7 @@
 
     <style name="SpecificCornerRounded">
 
-        <item name="cornerSize">100%</item>
+        <item name="cornerSize">50%</item>
 
     </style>
 

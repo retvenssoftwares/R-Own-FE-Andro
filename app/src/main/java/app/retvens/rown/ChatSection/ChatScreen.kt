@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -17,6 +18,7 @@ import app.retvens.rown.DataCollections.MessageEntity
 import app.retvens.rown.MyFirebaseMessagingService
 import app.retvens.rown.R
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
+import com.bumptech.glide.Glide
 import com.mesibo.api.*
 import com.mesibo.calls.api.MesiboCall
 import com.mesibo.calls.api.MesiboCall.CallProperties
@@ -36,7 +38,8 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
     private var mNotifyUser: MyFirebaseMessagingService? = null
     private lateinit var appDatabase: AppDatabase
     private  var getMessages:List<MessageEntity> = emptyList()
-    private  var name:String = ""
+    private  var address:String = ""
+    private var mReadSession:MesiboReadSession? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,24 +56,24 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         appDatabase = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "my-database").build()
 
-
         Log.e("",authtoken.toString())
 
         Mesibo.addListener(this)
-        Mesibo.setAccessToken("c37944213c2e16ddff06b19c79a2b8b8e6c7eb09c636699ee83feff479ea3laee516ae2db")
-        Mesibo.setDatabase("Retvens.db",0)
-
-
+        Mesibo.setAccessToken(authtoken)
+        Mesibo.setDatabase(appDatabase.toString(),0)
 
         Mesibo.start()
 
 
 
         val receiversName = findViewById<TextView>(R.id.chatName)
-        var name = intent.getStringExtra("address")
+        var address = intent.getStringExtra("address")
+        var name = intent.getStringExtra("name")
         receiversName.text = name
-        val uid = intent.getLongExtra("userId",0)
 
+        val pic = findViewById<ImageView>(R.id.profileOfUser)
+        val profile_pic = intent.getStringExtra("profile")
+        Glide.with(applicationContext).load(profile_pic).into(pic)
 
 
         recyclerView = findViewById(R.id.chatMessagesRecycler)
@@ -82,15 +85,12 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         profile = Mesibo.getSelfProfile()
 
-
         Mesibo.setAppInForeground(this, 0, true)
-
-        val mReadSession:MesiboReadSession = profile.createReadSession(this)
+        mReadSession= MesiboReadSession(this)
         mReadSession?.enableReadReceipt(true)
-        mReadSession?.read(100)
-
-
         mReadSession?.enableMissedCalls(true)
+
+
 
         // Create the adapter with empty message list and current user ID
         adapter = ChatScreenAdapter(this, messages,profile.address)
@@ -102,10 +102,8 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
 
         Thread {
-            val getMessages = AppDatabase.getInstance(applicationContext).chatMessageDao().getMessages(profile.address,name!!,profile.address)
-                .filter { message ->
-            message.sender == profile.address || message.sender == name
-        }
+            val getMessages = AppDatabase.getInstance(applicationContext).chatMessageDao().getMessages(profile.address,address!!)
+
 
             runOnUiThread {
                 messages.addAll(getMessages)
@@ -124,7 +122,8 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
             if (messagetext.isNotEmpty()) {
 
-                name = intent.getStringExtra("address")
+                address = intent.getStringExtra("address")
+                var name = intent.getStringExtra("name")
 
                 val message: MesiboMessage = profile.newMessage()
                 message.profile = profile
@@ -135,15 +134,15 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                 val messageEntity = MessageEntity(
                     message.mid,
                     message.profile.address,
-                    name!!,
+                    address!!,
                     message.message,
+                    name!!,
                     timestamp = System.currentTimeMillis(),
                     MessageEntity.MessageState.SENT
                 )
                 Thread {
                     AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
                 }.start()
-
 
                 messages.add(messageEntity)
 
@@ -156,7 +155,7 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
 
                 val recipientProfile:MesiboProfile
-                recipientProfile = Mesibo.getProfile(name)
+                recipientProfile = Mesibo.getProfile(address)
 //                recipientProfile.name = "Recipient Name"
 
 
@@ -181,10 +180,10 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         video.setOnClickListener {
 
-            name = intent.getStringExtra("address")
-
+            address = intent.getStringExtra("address")
+            Toast.makeText(applicationContext,address,Toast.LENGTH_SHORT).show()
             val recipientProfile:MesiboProfile
-            recipientProfile = Mesibo.getProfile(name)
+            recipientProfile = Mesibo.getProfile(address)
 
 
             MesiboCall.getInstance().init(applicationContext)
@@ -192,16 +191,12 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         }
 
-//        val groupProfile: MesiboProfile? = Mesibo.getProfile(2740197)
-//
-//
-//        Toast.makeText(applicationContext,groupProfile?.name,Toast.LENGTH_SHORT).show()
-
         val voice = findViewById<ImageView>(R.id.voice_Call)
         voice.setOnClickListener {
-            name = intent.getStringExtra("address")
+            address = intent.getStringExtra("address")
+            Toast.makeText(applicationContext,address,Toast.LENGTH_SHORT).show()
             val recipientProfile:MesiboProfile
-            recipientProfile = Mesibo.getProfile(name)
+            recipientProfile = Mesibo.getProfile(address)
 
 
             MesiboCall.getInstance().init(applicationContext)
@@ -213,13 +208,6 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         mNotifyUser = MyFirebaseMessagingService()
 
-        var readCount = 10
-        var result = mReadSession.read(readCount)
-        if (result < readCount) {
-            mReadSession.sync(readCount - result, this)
-        }
-
-
     }
 
 //    fun notify(title: String, message: String) {
@@ -227,54 +215,59 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 //    }
 
     override fun Mesibo_onMessage(message: MesiboMessage) {
-        name = intent.getStringExtra("address")!!
+        address = intent.getStringExtra("address")!!
+
+        val incomingAddress = message.profile.address
         if (message.isIncoming){
             val sender: MesiboProfile = message.profile
+
 
 //            val icon = findViewById<ImageView>(R.id.read_msg)
 //            icon.setImageResource(R.drawable.doublecheck2)
 
-            val messageEntity = MessageEntity(
-                message.mid,
-                name,
-                profile.address,
-                message.message,
-                timestamp = System.currentTimeMillis(),
-                MessageEntity.MessageState.DELIVERED
-            )
+            if (incomingAddress == address){
+                val messageEntity = MessageEntity(
+                    message.mid,
+                    address,
+                    profile.address,
+                    message.message,
+                    profile.address,
+                    timestamp = System.currentTimeMillis(),
+                    MessageEntity.MessageState.DELIVERED
+                )
 
-            Thread {
-                AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
-            }.start()
+                Thread {
+                    AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
+                }.start()
 
-            messages.add(messageEntity)
-            // Notify the adapter about the new data
-            adapter.notifyItemInserted(messages.size - 1)
-            recyclerView.scrollToPosition(messages.size - 1)
+                messages.add(messageEntity)
+                // Notify the adapter about the new data
+                adapter.notifyItemInserted(messages.size - 1)
+                recyclerView.scrollToPosition(messages.size - 1)
 
-            if(message.isRealtimeMessage()) {
-                Toast.makeText(applicationContext, "You have got a message from " + sender.getNameOrAddress("")
-                    .toString() + ": " + message.message,Toast.LENGTH_SHORT).show()
+                if(message.isRealtimeMessage()) {
+
+                    mReadSession?.enableUnreadMessages(false)
+                    mReadSession?.read(message.mid.toInt())
+
+                    Log.e("",mReadSession?.unreadMessageCount.toString())
+
+
+                    Toast.makeText(applicationContext, "You have got a message from " + sender.getNameOrAddress("")
+                        .toString() + ": " + message.message,Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                Toast.makeText(applicationContext,"you have a message",Toast.LENGTH_SHORT).show()
             }
+
         } else if (message.isOutgoing()) {
 
-            val icon = findViewById<ImageView>(R.id.read_msg)
-
-
-
         }
+
 
     }
 
     override fun Mesibo_onMessageStatus(p0: MesiboMessage) {
-
-//        val seenIcon:ImageView = findViewById(R.id.read_msg)
-//
-//        val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.doublecheck)
-//        seenIcon.setImageDrawable(drawable)
-
-
-
 
     }
 

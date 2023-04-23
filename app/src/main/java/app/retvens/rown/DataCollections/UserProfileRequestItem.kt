@@ -6,7 +6,7 @@ data class UserProfileRequestItem(
     val Full_name: String,
     val Interest: List<Interest>,
     val Mesibo_account: List<MesiboAccount>,
-    val Phone: Long,
+    val Phone: String,
     val Post_count: Int,
     val Profile_pic: String,
     val User_id: String,

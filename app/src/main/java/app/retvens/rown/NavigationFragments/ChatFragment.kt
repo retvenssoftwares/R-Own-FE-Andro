@@ -51,7 +51,7 @@ class ChatFragment : Fragment() {
         val address = SharedPreferenceManagerAdmin.getInstance(requireContext()).user.address
 
         Thread {
-            val receiver = AppDatabase.getInstance(requireContext()).chatMessageDao().getDistinctReceiversWithLatestMessage()
+            val receiver = AppDatabase.getInstance(requireContext()).chatMessageDao().getRecentChats(address!!)
 
             run {
 

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.MesiboUsersData
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.R
 import retrofit2.Call
@@ -29,9 +30,7 @@ class MesiboUsers : AppCompatActivity() {
         recycler = findViewById<RecyclerView>(R.id.chatRecycler)
         recycler.layoutManager = LinearLayoutManager(this)
 
-        receiverProfileAdapter = ReceiverProfileAdapter(baseContext, emptyList())
-        recycler.adapter = receiverProfileAdapter
-        receiverProfileAdapter.notifyDataSetChanged()
+
 
         getMesiboUsers()
 
@@ -39,31 +38,27 @@ class MesiboUsers : AppCompatActivity() {
 
     private fun getMesiboUsers() {
 
-        val send = RetrofitBuilder.retrofitBuilder.getMesiboUsers()
+        val send = RetrofitBuilder.retrofitBuilder.getProfile()
 
-       send.enqueue(object : Callback<UsersList?> {
-           override fun onResponse(call: Call<UsersList?>, response: Response<UsersList?>) {
-               if (response.isSuccessful) {
-                   val response = response.body()!!
-                   if (response.result) {
-                       userList = response.users
-                       // Update the adapter with the new data
-                       receiverProfileAdapter.userList = userList ?: emptyList()
-                       receiverProfileAdapter.notifyDataSetChanged()
+        send.enqueue(object : Callback<List<UserProfileRequestItem>?> {
+            override fun onResponse(
+                call: Call<List<UserProfileRequestItem>?>,
+                response: Response<List<UserProfileRequestItem>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    receiverProfileAdapter = ReceiverProfileAdapter(baseContext,response)
+                    recycler.adapter = receiverProfileAdapter
+                    receiverProfileAdapter.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
 
-
-                   }
-               }else{
-                   Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
-                   Log.e("",response.message().toString())
-               }
-           }
-
-           override fun onFailure(call: Call<UsersList?>, t: Throwable) {
-               Toast.makeText(applicationContext,t.message,Toast.LENGTH_SHORT).show()
-               Log.e("",t.message.toString())
-           }
-       })
+            override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
 
     }
 }

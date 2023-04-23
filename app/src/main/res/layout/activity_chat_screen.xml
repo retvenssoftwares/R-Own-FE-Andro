@@ -22,12 +22,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UnknownId" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profileOfUser"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         android:layout_marginTop="10dp"
-        android:src="@drawable/dummy"
+        app:shapeAppearanceOverlay="@style/SpecificCornerRounded"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintStart_toEndOf="@+id/back_btn"
         app:layout_constraintTop_toTopOf="parent" />

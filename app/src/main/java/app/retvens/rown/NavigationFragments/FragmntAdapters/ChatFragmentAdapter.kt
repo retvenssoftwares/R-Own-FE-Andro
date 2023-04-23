@@ -35,12 +35,13 @@ class ChatFragmentAdapter(val context: Context, private var receiver: List<Messa
 
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
         val data = receiver[position]
-        holder.userName.text = data.receiver
+        holder.userName.text = data.receiverName
         holder.lastMessage.text = data.message
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context,ChatScreen::class.java)
             intent.putExtra("address","${data.receiver}")
+            intent.putExtra("name",data.receiverName)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }

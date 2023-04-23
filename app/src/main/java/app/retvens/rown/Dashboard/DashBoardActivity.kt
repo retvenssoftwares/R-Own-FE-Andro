@@ -173,28 +173,6 @@ class DashBoardActivity : AppCompatActivity() {
         val frame = findViewById<FrameLayout>(R.id.fragment_container)
 
 
-//        viewPager = findViewById<ViewPager>(R.id.viewPager)
-//        val adapter = FragmentAdapter(supportFragmentManager)
-//        viewPager.adapter = adapter
-//
-//        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-//            override fun onPageSelected(position: Int) {
-//                if (position == 1) {
-//                    replaceFragment(UserChatList())
-//                }
-//            }
-//
-//            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-//                // Do nothing
-//            }
-//
-//            override fun onPageScrollStateChanged(state: Int) {
-//                // Do nothing
-//            }
-//        })
-
-//        showBottomDialog()
-
     }
 
     private fun getMesiboUsers() {
@@ -244,7 +222,12 @@ class DashBoardActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_chats -> {
-                startActivity(Intent(this,MesiboUsers::class.java))
+                val myFragment = ChatFragment()
+                supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.fragment_container, myFragment)
+                    addToBackStack(null)
+                    commit()
+                }
                 return true
             }
             R.id.action_notify -> {
