@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="20dp"
+    android:background="@drawable/top_round">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/syjt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select your location?"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="18dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/syjh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search your location below"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="11dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/syjt"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="6dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardBackgroundColor="@color/white">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="MU"
+            android:textColorHint="@color/grey_40"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:background="@null"
+            android:padding="12dp"
+            android:drawableEnd="@drawable/svg_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/syjh"/>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mu"
+        android:textColor="@color/grey_40"
+        android:textSize="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="24dp"/>
+
+    <LinearLayout
+        android:id="@+id/location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kharghar, Mumbai, Maharastra, India"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <LinearLayout
+        android:id="@+id/location1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kharghar, Mumbai, Maharastra, India"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <LinearLayout
+        android:id="@+id/vendor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kharghar, Mumbai, Maharastra, India"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="50dp"/>
+
+</LinearLayout>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/white"
+    tools:context=".Dashboard.profileCompletion.frags.VendorsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/use_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="22dp"
+        android:paddingHorizontal="22dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Your information helps you discover new community, peoples and jobs"
+        android:textColor="@color/black"
+        android:textFontWeight="600"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/img_round"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/round_img"
+        app:tint="@color/black"
+        android:layout_marginStart="22dp"
+        android:padding="3dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/use_text"
+        app:layout_constraintTop_toBottomOf="@id/use_text"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/hotel_vendor_profile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/svg_vendor"
+        app:shapeAppearance="@style/RoundedCornerImage"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="22dp"
+        android:padding="3dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/use_text"
+        app:layout_constraintTop_toBottomOf="@id/use_text"/>
+    <ImageView
+        android:id="@+id/camera_vendor"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/camera_img_black"
+        app:layout_constraintBottom_toBottomOf="@id/hotel_vendor_profile"
+        app:layout_constraintEnd_toEndOf="@id/hotel_vendor_profile"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Tell People How Your Brands Look’s LikeTell People How Your Brands Look’s Like"
+        android:textColor="@color/grey_60"
+        android:paddingStart="8dp"
+        android:paddingEnd="15dp"
+        android:textFontWeight="600"
+        android:textSize="11dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/hotel_vendor_profile"
+        app:layout_constraintBottom_toBottomOf="@id/hotel_vendor_profile"
+        app:layout_constraintTop_toTopOf="@id/hotel_vendor_profile" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_stud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/hotel_vendor_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/university"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Brand Name"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/black"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginHorizontal="20dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/ll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dob_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:text="Egniter"
+                android:textColorHint="@drawable/hint_selector"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Description"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/black"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="20dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/ll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:text="Hi,  We are photography based digital brand
+providing you vast variety of photo shoots
+for your properties and other services too."
+                android:textColorHint="@drawable/hint_selector"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Services in your brand woks"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/black"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="20dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconDrawable="@drawable/ic_arrow_down_24"
+            app:endIconMode="custom"
+            app:endIconTint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/ll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:text="Photography , Digital Marketing, Video Creation"
+                android:textColorHint="@drawable/hint_selector"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Portfolio Link"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/black"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="20dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/ll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:text="https://example.com/portfolio"
+                android:textColorHint="@drawable/hint_selector"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Website Link"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/black"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="20dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/ll"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:text="https://example.com"
+                android:textColorHint="@drawable/hint_selector"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_job_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginHorizontal="45dp"
+        app:cardElevation="6dp"
+        android:layout_gravity="center_horizontal"
+        app:cardCornerRadius="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="10dp"
+            android:textAlignment="center"
+            android:text="Next"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="600"
+            android:textSize="22dp"
+            android:background="@color/green_own"
+            android:textColor="@color/black"/>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
@@ -27,6 +28,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.ChatSection.MesiboUsers
 import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.ChatSection.UserChatList
+import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
@@ -102,6 +104,9 @@ class DashBoardActivity : AppCompatActivity() {
         //setUp Header
         val header = LayoutInflater.from(this).inflate(R.layout.nav_header_dashboard,navView,false)
         navView.addHeaderView(header)
+        header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
+            startActivity(Intent(this, UserName::class.java))
+        }
 
         //setUp BottomNav
         val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
