@@ -275,11 +275,12 @@
                     app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/noOfHotels"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/montserrat_regular"
                         android:textColor="@color/black"
-                        android:text="2"
+                        android:hint="2"
                         android:textColorHint="@drawable/hint_selector"
                         android:inputType="text"/>
 

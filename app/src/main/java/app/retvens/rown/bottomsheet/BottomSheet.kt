@@ -138,8 +138,8 @@ class BottomSheet : BottomSheetDialogFragment() {
 //                Log.d("Profile",response.body()?.)
             }
             override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
-                Toast.makeText(context,t.localizedMessage,Toast.LENGTH_SHORT).show()
-                Log.d("Profile",t.localizedMessage.toString(),t)
+                Toast.makeText(context,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("Profile",t.localizedMessage?.toString(),t)
             }
         })
     }

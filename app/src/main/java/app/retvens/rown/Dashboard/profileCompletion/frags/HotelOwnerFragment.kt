@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
@@ -22,9 +23,9 @@ import com.google.android.material.textfield.TextInputLayout
 class HotelOwnerFragment : Fragment(), BackHandler {
 
     lateinit var hotelType : TextInputEditText
+    lateinit var noOfHotels : TextInputEditText
     lateinit var singleHotelLayout : ConstraintLayout
     lateinit var chainHotelLayout : ConstraintLayout
-
     private var nextScreen : Int = 0
 
     override fun onCreateView(
@@ -41,6 +42,7 @@ class HotelOwnerFragment : Fragment(), BackHandler {
         singleHotelLayout = view.findViewById(R.id.cons_single_hotel)
         chainHotelLayout = view.findViewById(R.id.cons_chain_hotel)
 
+        noOfHotels = view.findViewById<TextInputEditText>(R.id.noOfHotels)
         hotelType = view.findViewById<TextInputEditText>(R.id.hotel_type_et)
 
             hotelType.setOnClickListener {
@@ -51,10 +53,21 @@ class HotelOwnerFragment : Fragment(), BackHandler {
             if (nextScreen == 1){
 
                 val fragment = HotelOwnerChainFragment()
-                val transaction = activity?.supportFragmentManager?.beginTransaction()
-                transaction?.replace(R.id.fragment_username,fragment)
-                transaction?.commit()
+                val hotels = noOfHotels.text.toString()
+                if (hotels.isEmpty()){
+                    Toast.makeText(requireContext(), "input hotels", Toast.LENGTH_SHORT).show()
+                } else{
 
+                    val bundle = Bundle()
+                    bundle.putString("hotels", hotels)
+
+                    fragment.arguments = bundle
+
+                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+                    transaction?.replace(R.id.fragment_username,fragment)
+                    transaction?.commit()
+
+                }
             }
         }
 
