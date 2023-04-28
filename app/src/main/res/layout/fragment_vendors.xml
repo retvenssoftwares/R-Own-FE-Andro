@@ -89,7 +89,6 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/university"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -106,7 +105,6 @@
             app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dob_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
@@ -166,13 +164,13 @@ for your properties and other services too."
             app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/vendor_services_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
                 android:text="Photography , Digital Marketing, Video Creation"
-                android:textColorHint="@drawable/hint_selector"
-                android:inputType="text"/>
+                android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
