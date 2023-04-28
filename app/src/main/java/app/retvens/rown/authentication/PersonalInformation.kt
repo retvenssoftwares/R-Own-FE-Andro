@@ -279,7 +279,7 @@ class PersonalInformation : AppCompatActivity() {
         if (croppedImageUri != null){
 
             val filesDir = applicationContext.filesDir
-            val file = File(filesDir,addresse)
+            val file = File(filesDir,"$token.png")
 
             val inputStream = contentResolver.openInputStream(croppedImageUri!!)
             val outputStream = FileOutputStream(file)
@@ -314,7 +314,7 @@ class PersonalInformation : AppCompatActivity() {
                         if (message != "user already exist"){
                             moveTo(this@PersonalInformation,"MoveToI")
                             val intent = Intent(applicationContext,UserInterest::class.java)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
                             startActivity(intent)
                             finish()
@@ -322,7 +322,7 @@ class PersonalInformation : AppCompatActivity() {
                             moveTo(this@PersonalInformation,"MoveToD")
                             Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
                             startActivity(intent)
                             finish()
@@ -332,10 +332,10 @@ class PersonalInformation : AppCompatActivity() {
                 }
                 override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
                 }
             })
-
+9
         }
         else {
             val pWithoutImg = RetrofitBuilder.retrofitBuilder.uploadUserProfileWithoutImg(
@@ -360,7 +360,7 @@ class PersonalInformation : AppCompatActivity() {
                         if (message != "user already exist"){
                             moveTo(this@PersonalInformation,"MoveToI")
                             val intent = Intent(applicationContext,UserInterest::class.java)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
                             startActivity(intent)
                             finish()
@@ -368,7 +368,7 @@ class PersonalInformation : AppCompatActivity() {
                             moveTo(this@PersonalInformation,"MoveToD")
                             Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
                             startActivity(intent)
                             finish()
@@ -377,7 +377,7 @@ class PersonalInformation : AppCompatActivity() {
                 }
                 override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
                 }
             })
         }

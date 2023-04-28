@@ -84,9 +84,9 @@ interface RownUrl {
     @GET("get_interest")
     fun getInterests() : Call<List<GetInterests>>
 
-    @PATCH("update_int/{id}")
+    @PATCH("interest_push/{User_id}")
     fun updateInterest(
-        @Path("id") id : String,
+        @Path("User_id") User_id : String,
         @Body updateInterestClass: UpdateInterestClass
     ) : Call<ContactResponse>
 }

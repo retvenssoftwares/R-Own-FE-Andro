@@ -128,26 +128,27 @@ class UserContacts : AppCompatActivity() {
                 val rawContactId = getRawContactId(id)
                 val companyName = getCompanyName(rawContactId!!)
                 val phoneNumber = (cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))).toInt()
-
+//                var phoneNumValue
                 if (phoneNumber > 0) {
                     val cursorPhone = contentResolver.query(
                         ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                         null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null)
 
                     if(cursorPhone!!.count > 0) {
+                        var phoneNumber : String = ""
                         while (cursorPhone.moveToNext()) {
-                            val phoneNumValue = cursorPhone?.let {
+                            val phoneNumValue = cursorPhone.let {
                                 cursorPhone.getString(
                                     it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                             }
 //                            builder.append("Contact: ").append(name)
 //                                .append(",\nCompany: ").append(companyName)
 //                                .append(",\nPhone Number: ").append(phoneNumValue).append("\n\n")
-
-                            listOfContacts.add(ContactDetail(companyName.toString(),name.toString(),phoneNumValue.toString()))
+                            phoneNumber = phoneNumValue
 //                            Log.d("Name ===>", companyName.toString())
 //                            companyName?.let { Log.d("Name ===>", it) }
                         }
+                        listOfContacts.add(ContactDetail(companyName.toString(),name.toString(),phoneNumber.toString()))
                     }
                     cursorPhone.close()
                 }
@@ -155,10 +156,10 @@ class UserContacts : AppCompatActivity() {
         } else {
            Toast.makeText(applicationContext,"No more contacts",Toast.LENGTH_SHORT).show()
         }
-        listOfContacts.forEach {
-            Log.d("cont", "${it.Name} ${it.Number} ${it.Company_Name}\n")
-        }
-                cursor?.close()
+//        listOfContacts.forEach {
+//            Log.d("cont", "${it.Name} ${it.Number} ${it.Company_Name}\n")
+//        }
+        cursor.close()
 
           uploadContacts(listOfContacts)
     }
@@ -208,8 +209,13 @@ class UserContacts : AppCompatActivity() {
         }
     }
     private fun uploadContacts(listOfContacts: MutableList<ContactDetail>) {
-        val user = intent.getStringExtra("name").toString()
-        val upload = RetrofitBuilder.retrofitBuilder.uploadContacts(ContactsData(listOfContacts,user))
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+        val upload = RetrofitBuilder.retrofitBuilder.uploadContacts(ContactsData(listOfContacts,user_id))
+
+        listOfContacts.forEach {
+            Log.d("con","${it.Name}, ${it.Number}, ${it.Company_Name} ")
+        }
         upload.enqueue(object : Callback<ContactResponse?> {
             override fun onResponse(
                 call: Call<ContactResponse?>,
@@ -217,18 +223,21 @@ class UserContacts : AppCompatActivity() {
             ) {
                 Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                 Log.d("cont",response.body().toString())
-                progressDialog.dismiss()
                 if (response.isSuccessful){
+                    progressDialog.dismiss()
                     moveTo(this@UserContacts,"MoveToD")
                     val intent = Intent(applicationContext, DashBoardActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
+                } else {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext,"${response.code().toString()} - Retry (Connection Lost)",Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
                 progressDialog.dismiss()
-                Log.d("cont", "CoApi : ${ t.localizedMessage.toString() }",t)
-                Toast.makeText(applicationContext,"response.Error()",Toast.LENGTH_SHORT).show()
+                Log.d("cont", "ContactsApi : ${ t.localizedMessage?.toString() }",t)
+                Toast.makeText(applicationContext,"Error - ${t.localizedMessage}",Toast.LENGTH_SHORT).show()
             }
         })
     }

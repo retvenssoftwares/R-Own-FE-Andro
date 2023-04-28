@@ -280,7 +280,7 @@ open class OtpVerification : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
                 Log.d("search",t.localizedMessage,t)
             }
         })
