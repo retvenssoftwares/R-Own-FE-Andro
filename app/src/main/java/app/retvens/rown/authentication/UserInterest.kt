@@ -42,6 +42,8 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         user_id = sharedPreferences.getString("user_id", "").toString()
+        Toast.makeText(applicationContext,"User_id : $user_id",Toast.LENGTH_SHORT).show()
+        Log.d("update_interest","User_id : $user_id")
 
         username = intent.getStringExtra("user").toString()
         binding.userName.text = "Hello, $username!"
@@ -50,16 +52,16 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
         binding.interestGrid.setHasFixedSize(true)
 
         binding.cardContinueInterest.setOnClickListener {
-//            progressDialog = Dialog(this)
-//            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//            progressDialog.setCancelable(true)
-//            progressDialog.setContentView(R.layout.progress_dialoge)
-//            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//
-//            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-//
-//            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
-//            progressDialog.show()
+            progressDialog = Dialog(this)
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setCancelable(true)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+
+            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
 
 
             addedIntersts.forEach {
@@ -67,6 +69,8 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
                 uploadInterest(it.id)
 //                Toast.makeText(this, it.Name.toString(), Toast.LENGTH_SHORT).show()
             }
+
+            progressDialog.dismiss()
 
             moveTo(this,"MoveToUC")
             val intent = Intent(applicationContext, UserContacts::class.java)
@@ -135,8 +139,7 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
     }
 
     private fun uploadInterest(id: String) {
-        val update = RetrofitBuilder.retrofitBuilder.updateInterest(id, UpdateInterestClass(user_id))
-        Toast.makeText(applicationContext,"User_id : $user_id",Toast.LENGTH_SHORT).show()
+        val update = RetrofitBuilder.retrofitBuilder.updateInterest(user_id, UpdateInterestClass(id))
         update.enqueue(object : Callback<ContactResponse?> {
             override fun onResponse(
                 call: Call<ContactResponse?>,
@@ -144,12 +147,13 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
             ) {
                 Toast.makeText(applicationContext,"$id - ${response.body()?.message.toString()}",Toast.LENGTH_SHORT).show()
                 Log.d("update_interest",response.body()?.message.toString())
+                Log.d("update_interest",response.body().toString())
                 Log.d("update_interest",response.toString())
             }
 
             override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
                 Toast.makeText(applicationContext, t.localizedMessage!!.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("update_interest",t.localizedMessage,t)
+                Log.d("update_interest",t.localizedMessage!!.toString(),t)
             }
         })
 
