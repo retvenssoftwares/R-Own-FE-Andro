@@ -1,45 +1,36 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags.adapter
 
-import android.app.Activity
-import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.provider.MediaStore
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
-import java.io.File
 
-class HotelChainAdapter(private var chainList : List<HotelChainData>, val context: Context) : RecyclerView.Adapter<HotelChainAdapter.HotelChainViewHolder>() {
+class HotelChainAdapter(private var chainList: List<HotelChainData>, val context: Context, val coverUri: Uri?) : RecyclerView.Adapter<HotelChainAdapter.HotelChainViewHolder>() {
 
-    lateinit var dialog: Dialog
+//    lateinit var dialog: Dialog
+//
+//    var PICK_IMAGE_REQUEST_CODE : Int = 0
+//    //Cropped image uri
+//    private var croppedHotelChainImageUri: Uri?= null  // Final Uri for Hotel chain
+//
+//    var REQUEST_CAMERA_PERMISSION : Int = 0
+//    lateinit var cameraHotelChainImageUri : Uri
 
-    var PICK_IMAGE_REQUEST_CODE : Int = 0
-    //Cropped image uri
-    private var croppedHotelChainImageUri: Uri?= null  // Final Uri for Hotel chain
+    var mListener: onCoverImageClickListener ? = null
+    fun setOnCoverClickListener(listener: onCoverImageClickListener?){
+        mListener = listener
+    }
 
-    var REQUEST_CAMERA_PERMISSION : Int = 0
-    lateinit var cameraHotelChainImageUri: Uri
+    interface onCoverImageClickListener{
+        fun onCoverImageClick(userType : String)
+    }
     class HotelChainViewHolder(itemView: View) : ViewHolder(itemView){
         val nameET = itemView.findViewById<TextInputEditText>(R.id.chainHotelNameET)
         val location = itemView.findViewById<TextInputEditText>(R.id.chainHotelLocationET)
@@ -48,6 +39,8 @@ class HotelChainAdapter(private var chainList : List<HotelChainData>, val contex
         val nameTIL = itemView.findViewById<TextInputLayout>(R.id.chainHotelNameLayout)
         val locationTIL = itemView.findViewById<TextInputLayout>(R.id.chainHotelLocationLayout)
         val ratingTIL = itemView.findViewById<TextInputLayout>(R.id.chainHotelRatingLayout)
+
+        val chainCover = itemView.findViewById<ImageView>(R.id.hotel_chain_cover_1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HotelChainViewHolder {
@@ -65,6 +58,14 @@ class HotelChainAdapter(private var chainList : List<HotelChainData>, val contex
         holder.nameTIL.setHint(currentItem.hotelNameHint)
         holder.locationTIL.setHint(currentItem.locationHint)
         holder.ratingTIL.setHint(currentItem.hotelStarHint)
+        holder.chainCover.setImageURI(coverUri)
 
+        holder.chainCover.setOnClickListener {
+            mListener?.onCoverImageClick("ChainAdapter")
+        }
+
+        holder.rating.setOnClickListener {
+
+        }
     }
 }

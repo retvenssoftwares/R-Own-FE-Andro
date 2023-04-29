@@ -26,6 +26,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
 import app.retvens.rown.R
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -64,6 +65,7 @@ class HotelOwnerFragment : Fragment(), BackHandler {
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
     private var croppedHotelChainImageUri: Uri?= null  // Final Uri for Hotel chain
+    private var croppedHotelChainCoverImageUri: Uri?= null  // Final Uri for Hotel chain
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraHotelChainImageUri: Uri
@@ -79,10 +81,12 @@ class HotelOwnerFragment : Fragment(), BackHandler {
             Log.d("owner", cameraUser)
             croppedOwnerProfileImageUri = cameraHotelChainImageUri
             hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
-        }else{
+        }else if (cameraUser == "OwnerCover"){
             Log.d("owner", cameraUser)
             croppedOwnerCoverImageUri = cameraHotelChainImageUri
             hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
+        }else{
+        croppedHotelChainCoverImageUri = cameraHotelChainImageUri
         }
     }
 
@@ -214,10 +218,12 @@ class HotelOwnerFragment : Fragment(), BackHandler {
                     Log.d("owner", cameraUser)
                     croppedOwnerProfileImageUri = imageUri
                     hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
-                }else{
+                }else if (cameraUser == "OwnerCover"){
                     Log.d("owner", cameraUser)
                     croppedOwnerCoverImageUri = imageUri
                     hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
+                }else{
+                    croppedHotelChainCoverImageUri = imageUri
                 }
 
             }
