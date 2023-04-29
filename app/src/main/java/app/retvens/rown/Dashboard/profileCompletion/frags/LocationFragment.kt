@@ -16,10 +16,16 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentTransaction
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
+import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class LocationFragment : Fragment(), BackHandler {
@@ -49,10 +55,8 @@ class LocationFragment : Fragment(), BackHandler {
         }
 
         view.findViewById<CardView>(R.id.card_location_next).setOnClickListener {
-            val fragment = BasicInformationFragment()
-            val transaction = activity?.supportFragmentManager?.beginTransaction()
-            transaction?.replace(R.id.fragment_username,fragment)
-            transaction?.commit()
+
+            setLocation()
         }
 
 //        requireActivity().onBackPressedDispatcher.addCallback(
@@ -70,6 +74,38 @@ class LocationFragment : Fragment(), BackHandler {
 //                }
 //            }
 //        )
+    }
+
+    private fun setLocation() {
+
+        val location = etLocation.text.toString()
+
+        val update = RetrofitBuilder.profileCompletion.setLocation("Oo7PCzo0-", LocationClass(location))
+
+        update.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    val fragment = BasicInformationFragment()
+                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+                    transaction?.replace(R.id.fragment_username,fragment)
+                    transaction?.commit()
+
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
     }
 
     private fun openLocationSheet() {

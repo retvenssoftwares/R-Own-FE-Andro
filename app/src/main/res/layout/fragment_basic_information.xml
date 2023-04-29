@@ -166,7 +166,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_location"
+                    android:id="@+id/et_end"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
@@ -267,7 +267,7 @@ I am a hotelier, hotel owner or vendor in hospitality"
             android:textColor="@color/black"
             android:clickable="true"
             android:focusable="false"
-            android:text="Hotel Owner"
+            android:hint="Hotel Owner"
             android:editable="false"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -294,7 +294,7 @@ I am a hotelier, hotel owner or vendor in hospitality"
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="Android Devloper"
+                android:hint="Android Devloper"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
