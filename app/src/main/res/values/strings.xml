@@ -56,6 +56,8 @@
     <string name="in_what_language_do">In what language do you want  to have your hospitality adventures ?</string>
     <string name="privacy_security" formatted="false">Privacy &amp; Security</string>
     <string name="help_support" formatted="false">Help &amp; Support</string>
+    <string name="_1_month"><![CDATA[< 1 Month]]></string>
+    <string name="_3_month"><![CDATA[>3 Month]]></string>
 
     <style name="SmallText">
         <item name="android:textSize">14sp</item>

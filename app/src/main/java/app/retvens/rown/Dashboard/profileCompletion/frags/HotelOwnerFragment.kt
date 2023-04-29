@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.R
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.theartofdev.edmodo.cropper.CropImage
@@ -37,26 +39,52 @@ import java.io.IOException
 class HotelOwnerFragment : Fragment(), BackHandler {
 
     lateinit var hotelType : TextInputEditText
-    lateinit var noOfHotels : TextInputEditText
-    lateinit var hotelOwnerStarET : TextInputEditText
     lateinit var singleHotelLayout : ConstraintLayout
     lateinit var chainHotelLayout : ConstraintLayout
-
-    lateinit var cameraHotelChain : ImageView
-    lateinit var hotelChainProfile : ImageView
-
-    var PICK_IMAGE_REQUEST_CODE : Int = 0
-    //Cropped image uri
-    private var croppedImageUri: Uri?= null
-
-    var REQUEST_CAMERA_PERMISSION : Int = 0
-    lateinit var cameraImageUri: Uri
-    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraImageUri)
-    }
+    private var nextScreen : Int = 0
+    private var cameraUser : String = ""
     lateinit var dialog: Dialog
 
-    private var nextScreen : Int = 0
+
+
+    /*-----------------------SINGLE HOTEL--------------------------------*/
+    /*-----------------------SINGLE HOTEL--------------------------------*/
+    lateinit var noOfHotels : TextInputEditText
+    lateinit var hotelOwnerStarET : TextInputEditText
+    lateinit var hotelOwnerProfile  : ShapeableImageView
+    lateinit var hotelOwnerCover  : ShapeableImageView
+
+    lateinit var croppedOwnerProfileImageUri: Uri // Final Uri for Owner Profile
+    lateinit var croppedOwnerCoverImageUri: Uri  // Final Uri for Owner Cover
+    /*-----------------------HOTEL CHAIN--------------------------------*/
+    /*-----------------------HOTEL CHAIN--------------------------------*/
+
+    lateinit var cameraHotelChain : ImageView
+    lateinit var hotelChainProfile : ShapeableImageView
+    var PICK_IMAGE_REQUEST_CODE : Int = 0
+    //Cropped image uri
+    private var croppedHotelChainImageUri: Uri?= null  // Final Uri for Hotel chain
+
+    var REQUEST_CAMERA_PERMISSION : Int = 0
+    lateinit var cameraHotelChainImageUri: Uri
+    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
+//        cropImage(cameraHotelChainImageUri)
+
+        Log.d("owner", "cameraUser")
+        if (cameraUser == "ChainProfile") {
+            Log.d("owner", cameraUser)
+            croppedHotelChainImageUri = cameraHotelChainImageUri
+            hotelChainProfile.setImageURI(croppedHotelChainImageUri)
+        }else if (cameraUser == "OwnerProfile"){
+            Log.d("owner", cameraUser)
+            croppedOwnerProfileImageUri = cameraHotelChainImageUri
+            hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
+        }else{
+            Log.d("owner", cameraUser)
+            croppedOwnerCoverImageUri = cameraHotelChainImageUri
+            hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,31 +97,46 @@ class HotelOwnerFragment : Fragment(), BackHandler {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cameraImageUri = createImageUri()!!
-
+        hotelType = view.findViewById<TextInputEditText>(R.id.hotel_type_et)
         singleHotelLayout = view.findViewById(R.id.cons_single_hotel)
         chainHotelLayout = view.findViewById(R.id.cons_chain_hotel)
-
-        noOfHotels = view.findViewById<TextInputEditText>(R.id.noOfHotels)
-        hotelType = view.findViewById<TextInputEditText>(R.id.hotel_type_et)
-        hotelOwnerStarET = view.findViewById<TextInputEditText>(R.id.hotel_owner_star_et)
-
-        hotelChainProfile = view.findViewById(R.id.hotel_chain_profile)
-        cameraHotelChain = view.findViewById(R.id.camera_hotelChain)
-        cameraHotelChain.setOnClickListener {
-            openBottomCameraSheet()
+        hotelType.setOnClickListener {
+            openHotelTypeBottom()
         }
+
+        /*-----------------------SINGLE HOTEL--------------------------------*/
+        /*-----------------------SINGLE HOTEL--------------------------------*/
+        noOfHotels = view.findViewById<TextInputEditText>(R.id.noOfHotels)
+        hotelOwnerStarET = view.findViewById<TextInputEditText>(R.id.hotel_owner_star_et)
 
         hotelOwnerStarET.setOnClickListener {
             openBottomStarSelection()
         }
-            hotelType.setOnClickListener {
-            openHotelTypeBottom()
-            }
+
+        hotelOwnerProfile = view.findViewById(R.id.hotel_owner_profile)
+        hotelOwnerProfile.setOnClickListener {
+            cameraUser = "OwnerProfile"
+            openBottomCameraSheet("OwnerProfile")
+        }
+        hotelOwnerCover = view.findViewById(R.id.hotel_owner_cover)
+        hotelOwnerCover.setOnClickListener {
+            cameraUser = "OwnerCover"
+            openBottomCameraSheet("OwnerCover")
+        }
+
+        /*-----------------------HOTEL CHAIN--------------------------------*/
+        /*-----------------------HOTEL CHAIN--------------------------------*/
+        cameraHotelChainImageUri = createImageUri()!!
+
+        hotelChainProfile = view.findViewById(R.id.hotel_chain_profile)
+        cameraHotelChain = view.findViewById(R.id.camera_hotelChain)
+        cameraHotelChain.setOnClickListener {
+            cameraUser = "ChainProfile"
+            openBottomCameraSheet("ChainProfile")
+        }
 
         view.findViewById<CardView>(R.id.card_owner_next).setOnClickListener {
             if (nextScreen == 1){
-
                 val fragment = HotelOwnerChainFragment()
                 val hotels = noOfHotels.text.toString()
                 if (hotels.isEmpty()){
@@ -115,7 +158,7 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
     }
 
-    private fun openBottomCameraSheet() {
+    private fun openBottomCameraSheet(user : String) {
 
         dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -138,18 +181,15 @@ class HotelOwnerFragment : Fragment(), BackHandler {
         dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
         dialog.window?.setGravity(Gravity.BOTTOM)
     }
-
     private fun deleteImage() {
-        croppedImageUri = null
-        hotelChainProfile.setImageURI(croppedImageUri)
+        croppedHotelChainImageUri = null
+        hotelChainProfile.setImageURI(croppedHotelChainImageUri)
         dialog.dismiss()
     }
-
     private fun openCamera() {
-        contract.launch(cameraImageUri)
+        contract.launch(cameraHotelChainImageUri)
         dialog.dismiss()
     }
-
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
@@ -163,7 +203,22 @@ class HotelOwnerFragment : Fragment(), BackHandler {
             val imageUri = data.data
             if (imageUri != null) {
 
-                cropImage(imageUri)
+//                cropImage(imageUri)
+
+                Log.d("owner", "cameraUser")
+                if (cameraUser == "ChainProfile") {
+                    Log.d("owner", cameraUser)
+                    croppedHotelChainImageUri = imageUri
+                    hotelChainProfile.setImageURI(croppedHotelChainImageUri)
+                }else if (cameraUser == "OwnerProfile"){
+                    Log.d("owner", cameraUser)
+                    croppedOwnerProfileImageUri = imageUri
+                    hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
+                }else{
+                    Log.d("owner", cameraUser)
+                    croppedOwnerCoverImageUri = imageUri
+                    hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
+                }
 
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -171,8 +226,17 @@ class HotelOwnerFragment : Fragment(), BackHandler {
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = resultingImage.uri
 
-                compressImage(croppedImage)
-
+                Log.d("owner", "cameraUser")
+                if (cameraUser == "ChainProfile") {
+                    Log.d("owner", cameraUser)
+                    croppedHotelChainImageUri = croppedImage
+                }else if (cameraUser == "OwnerProfile"){
+                    Log.d("owner", cameraUser)
+                    croppedOwnerProfileImageUri = croppedImage
+                }else{
+                    Log.d("owner", cameraUser)
+                    croppedOwnerCoverImageUri = croppedImage
+                }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(context,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
             }
@@ -188,38 +252,12 @@ class HotelOwnerFragment : Fragment(), BackHandler {
             .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
             .start(requireActivity())
     }
-
     private fun createImageUri(): Uri? {
         val image = File(requireContext().filesDir,"camera_photo.png")
         return FileProvider.getUriForFile(requireContext(),
             "app.retvens.rown.fileProvider",
             image
         )
-    }
-
-    fun compressImage(imageUri: Uri): Uri {
-        lateinit var compressed : Uri
-        try {
-            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver,imageUri)
-            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            val fileName = String.format("%d.jpg",System.currentTimeMillis())
-            val finalFile = File(path,fileName)
-            val fileOutputStream = FileOutputStream(finalFile)
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
-            fileOutputStream.flush()
-            fileOutputStream.close()
-
-            compressed = Uri.fromFile(finalFile)
-
-            croppedImageUri = compressed
-            hotelChainProfile.setImageURI(croppedImageUri)
-            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            intent.setData(compressed)
-            activity?.sendBroadcast(intent)
-        }catch (e: IOException){
-            e.printStackTrace()
-        }
-        return compressed
     }
 
 
@@ -277,7 +315,6 @@ class HotelOwnerFragment : Fragment(), BackHandler {
         }
 
     }
-
     private fun openHotelTypeBottom() {
 
         val dialogRole = Dialog(requireContext())

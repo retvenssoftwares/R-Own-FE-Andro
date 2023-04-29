@@ -53,6 +53,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.*
 import java.util.*
+import kotlin.streams.asSequence
 
 
 class PersonalInformation : AppCompatActivity() {
@@ -278,8 +279,13 @@ class PersonalInformation : AppCompatActivity() {
 
         if (croppedImageUri != null){
 
+            val randomString = Random().ints(username.length.toLong(), 0, username.length)
+                .asSequence()
+                .map(username::get)
+                .joinToString("")
+
             val filesDir = applicationContext.filesDir
-            val file = File(filesDir,"$token.png")
+            val file = File(filesDir,"$randomString.png")
 
             val inputStream = contentResolver.openInputStream(croppedImageUri!!)
             val outputStream = FileOutputStream(file)
@@ -335,7 +341,6 @@ class PersonalInformation : AppCompatActivity() {
                     Toast.makeText(applicationContext,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
                 }
             })
-9
         }
         else {
             val pWithoutImg = RetrofitBuilder.retrofitBuilder.uploadUserProfileWithoutImg(

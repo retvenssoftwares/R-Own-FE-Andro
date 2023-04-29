@@ -105,6 +105,8 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/montserrat_regular"
             android:textColor="@color/black"
+            android:clickable="true"
+            android:focusable="false"
             android:text="Indore, Madhya Pradesh"
             android:editable="false"/>
 

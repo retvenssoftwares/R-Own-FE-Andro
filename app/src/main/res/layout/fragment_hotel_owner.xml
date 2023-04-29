@@ -54,6 +54,8 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/montserrat_regular"
             android:textColor="@color/black"
+            android:clickable="true"
+            android:focusable="false"
             android:text="Single Hotel"
             android:editable="false"/>
 
@@ -121,7 +123,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:text="Sahpura Group"
+                android:hint="Sahpura Group"
                 android:textColorHint="@drawable/hint_selector"
                 android:inputType="text"/>
 
@@ -152,7 +154,8 @@
                 android:textColor="@color/black"
                 android:text="Indore, Madhya Pradesh"
                 android:editable="false"
-                android:inputType="text"/>
+                android:clickable="true"
+                android:focusable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -181,7 +184,8 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:focusedByDefault="true"
+                android:clickable="true"
+                android:focusable="false"
                 android:text="5 Star"
                 android:editable="false"/>
 
@@ -284,7 +288,7 @@
                         android:textColor="@color/black"
                         android:hint="2"
                         android:textColorHint="@drawable/hint_selector"
-                        android:inputType="text"/>
+                        android:inputType="number"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -338,7 +342,7 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/montserrat_regular"
                         android:textColor="@color/black"
-                        android:text="https://example.com"
+                        android:hint="https://example.com"
                         android:textColorHint="@drawable/hint_selector"
                         android:inputType="text"/>
 
@@ -366,7 +370,7 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/montserrat_regular"
                         android:textColor="@color/black"
-                        android:text="https://example.com/booking"
+                        android:hint="https://example.com/booking"
                         android:textColorHint="@drawable/hint_selector"
                         android:inputType="text"/>
 
