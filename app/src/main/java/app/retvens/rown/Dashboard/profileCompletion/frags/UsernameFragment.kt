@@ -108,7 +108,7 @@ class UsernameFragment : Fragment() {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
 

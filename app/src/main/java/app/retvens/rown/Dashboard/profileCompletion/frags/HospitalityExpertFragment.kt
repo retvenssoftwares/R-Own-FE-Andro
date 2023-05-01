@@ -15,12 +15,14 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
-import app.retvens.rown.DataCollections.ProfileCompletion.HospitalityexpertData
-import app.retvens.rown.DataCollections.ProfileCompletion.JobData
-import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.R
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
@@ -35,6 +37,9 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
     private lateinit var jobTitle:TextInputEditText
     private lateinit var start:TextInputEditText
     private lateinit var end:TextInputEditText
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var hospitalityExpertAdapter: HospitalityExpertAdapter
+    private lateinit var dialogRole:Dialog
 
 
     override fun onCreateView(
@@ -106,7 +111,7 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
 
     private fun openRecentCompanyBottom() {
 
-        val dialogRole = Dialog(requireContext())
+        dialogRole = Dialog(requireContext())
         dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogRole.setContentView(R.layout.bottom_sheet_select_company)
         dialogRole.setCancelable(true)
@@ -117,18 +122,45 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
         dialogRole.window?.setGravity(Gravity.BOTTOM)
         dialogRole.show()
 
-        dialogRole.findViewById<LinearLayout>(R.id.tatapl).setOnClickListener {
-            recentCoET.setText("Tata Consultancy ltd.")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.tatasteel).setOnClickListener {
-            recentCoET.setText("Tata Consultancy ltd.")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.useTata).setOnClickListener {
-            recentCoET.setText("Tata")
-            dialogRole.dismiss()
-        }
+        recyclerView = dialogRole.findViewById(R.id.company_recycler)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        getCompany()
+
+    }
+
+    private fun getCompany() {
+        val get = RetrofitBuilder.profileCompletion.getCompany()
+
+        get.enqueue(object : Callback<List<CompanyDatacClass>?>,
+            HospitalityExpertAdapter.OnJobClickListener {
+            override fun onResponse(
+                call: Call<List<CompanyDatacClass>?>,
+                response: Response<List<CompanyDatacClass>?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    hospitalityExpertAdapter = HospitalityExpertAdapter(requireContext(),response)
+                    hospitalityExpertAdapter.notifyDataSetChanged()
+                    recyclerView.adapter = hospitalityExpertAdapter
+
+                    hospitalityExpertAdapter.setOnJobClickListener(this)
+                }
+                else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<CompanyDatacClass>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onJobClick(job: CompanyDatacClass) {
+                recentCoET.setText(job.company_name)
+                dialogRole.dismiss()
+            }
+        })
     }
 
     private fun showBottomJobType() {

@@ -11,11 +11,6 @@ data class MessageEntity(
     val message: String,
     val receiverName: String,
     val timestamp: Long ,
-    var state: MessageState
 ){
-    enum class MessageState {
-        SENT,
-        DELIVERED,
-        SEEN
-    }
+
 }

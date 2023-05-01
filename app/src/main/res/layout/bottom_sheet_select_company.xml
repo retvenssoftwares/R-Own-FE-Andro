@@ -48,97 +48,13 @@
             app:layout_constraintTop_toBottomOf="@id/syjh"/>
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mu"
-        android:textColor="@color/grey_40"
-        android:textSize="10dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="24dp"/>
 
-    <LinearLayout
-        android:id="@+id/tatapl"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/company_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tata Consultancy ltd."
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_60"
-        android:layout_marginHorizontal="30dp"/>
-
-    <LinearLayout
-        android:id="@+id/tatasteel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tata Services Pvt. Ltd."
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_60"
-        android:layout_marginHorizontal="30dp"/>
-
-    <LinearLayout
-        android:id="@+id/useTata"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Use “Tata” as company"
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_60"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginTop="25dp"
+        />
 
 </LinearLayout>

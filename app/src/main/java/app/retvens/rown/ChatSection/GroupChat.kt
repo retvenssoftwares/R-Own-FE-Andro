@@ -90,8 +90,7 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
                     group,
                     message.message,
                     message.profile.address,
-                    timestamp = System.currentTimeMillis(),
-                    MessageEntity.MessageState.SENT
+                    timestamp = System.currentTimeMillis()
                 )
                 Thread {
                     AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
@@ -141,8 +140,7 @@ class GroupChat : AppCompatActivity(),Mesibo.MessageListener,MesiboCall.InProgre
                 profile.address,
                 message.message,
                 message.profile.address,
-                timestamp = System.currentTimeMillis(),
-                MessageEntity.MessageState.DELIVERED
+                timestamp = System.currentTimeMillis()
             )
 
             Thread {

@@ -30,8 +30,10 @@ import androidx.core.content.FileProvider
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
+import app.retvens.rown.DataCollections.ProfileCompletion.HotelOwnerInfoData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.authentication.UploadRequestBody
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -60,13 +62,16 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
 
 
-    /*-----------------------SINGLE HOTEL--------------------------------*/
+    /*-----------------------SINGLE HOTEL----------------------------------*/
     /*-----------------------SINGLE HOTEL--------------------------------*/
     lateinit var noOfHotels : TextInputEditText
     lateinit var hotelOwnerStarET : TextInputEditText
     lateinit var hotelOwnerProfile  : ShapeableImageView
     lateinit var hotelOwnerCover  : ShapeableImageView
     lateinit var ownerHotel : TextInputEditText
+    lateinit var chainName:TextInputEditText
+    lateinit var website:TextInputEditText
+    lateinit var bookingLink:TextInputEditText
 
     private var croppedOwnerProfileImageUri: Uri? = null // Final Uri for Owner Profile
     private var croppedOwnerCoverImageUri: Uri? = null  // Final Uri for Owner Cover
@@ -113,6 +118,10 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
         ownerHotel = view.findViewById(R.id.owner_Hotel)
 
+        chainName = view.findViewById(R.id.hotelchain_Name)
+        website = view.findViewById(R.id.hotel_Website)
+        bookingLink = view.findViewById(R.id.hotel_bokkinglink)
+
         hotelType = view.findViewById<TextInputEditText>(R.id.hotel_type_et)
         singleHotelLayout = view.findViewById(R.id.cons_single_hotel)
         chainHotelLayout = view.findViewById(R.id.cons_chain_hotel)
@@ -153,30 +162,64 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
         view.findViewById<CardView>(R.id.card_owner_next).setOnClickListener {
             if (nextScreen == 1){
-                val fragment = HotelOwnerChainFragment()
+
                 val hotels = noOfHotels.text.toString()
                 if (hotels.isEmpty()){
                     Toast.makeText(requireContext(), "input hotels", Toast.LENGTH_SHORT).show()
                 } else{
 
+
+                    UploadChainData()
+                }
+            }else{
+                UploadData()
+            }
+        }
+
+        val submit = view.findViewById<CardView>(R.id.card_owner_next)
+
+
+    }
+
+    private fun UploadChainData() {
+
+        val type = hotelType.text.toString()
+        val number = noOfHotels.text.toString()
+        val name = chainName.text.toString()
+        val website = website.text.toString()
+        val book = bookingLink.text.toString()
+
+        val data = HotelOwnerInfoData(name,type,number,website,book)
+
+        val update = RetrofitBuilder.profileCompletion.setHotelInfo("Oo7PCzo0-",data)
+
+        update.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    val fragment = HotelOwnerChainFragment()
+
                     val bundle = Bundle()
-                    bundle.putString("hotels", hotels)
+                    bundle.putString("hotels", number)
 
                     fragment.arguments = bundle
 
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
-
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
-        }
 
-        val submit = view.findViewById<CardView>(R.id.card_owner_next)
-
-        submit.setOnClickListener {
-            UploadData()
-        }
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
 
     }
 
@@ -197,23 +240,25 @@ class HotelOwnerFragment : Fragment(), BackHandler {
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
 
-//        val parcelFileDescriptor1 = requireContext().contentResolver.openFileDescriptor(
-//            croppedOwnerProfileImageUri!!,"r",null
-//        )?:return
-//
-//
-//
-//        val inputStream1 = FileInputStream(parcelFileDescriptor1.fileDescriptor)
-//        val file1 = File(requireContext().cacheDir, requireContext().contentResolver.getFileName(croppedOwnerProfileImageUri!!) + ".jpg")
-//        val outputStream1 = FileOutputStream(file1)
-//        inputStream1.copyTo(outputStream1)
-//        val body1 = UploadRequestBody(file1,"image")
+        val parcelFileDescriptor1 = requireContext().contentResolver.openFileDescriptor(
+            croppedOwnerProfileImageUri!!,"r",null
+        )?:return
+
+
+
+        val inputStream1 = FileInputStream(parcelFileDescriptor1.fileDescriptor)
+        val file1 = File(requireContext().cacheDir, requireContext().contentResolver.getFileName(croppedOwnerProfileImageUri!!) + ".jpg")
+        val outputStream1 = FileOutputStream(file1)
+        inputStream1.copyTo(outputStream1)
+        val body1 = UploadRequestBody(file1,"image")
 
         val send = RetrofitBuilder.profileCompletion.uploadHotelData(
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"indore"),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),star),
-            MultipartBody.Part.createFormData("hotelData", file.name, body),
+            MultipartBody.Part.createFormData("hotelCoverpic", file.name, body),
+            MultipartBody.Part.createFormData("hotelProfilepic", file1.name, body1),
+            MultipartBody.Part.createFormData("hotelLogo", file.name, body),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"rahul")
         )
 

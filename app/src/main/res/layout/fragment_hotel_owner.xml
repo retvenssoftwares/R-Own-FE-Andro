@@ -311,6 +311,7 @@
                     app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/hotelchain_Name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/montserrat_regular"
@@ -339,6 +340,7 @@
                     app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/hotel_Website"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/montserrat_regular"
@@ -367,6 +369,7 @@
                     app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/hotel_bokkinglink"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/montserrat_regular"

@@ -50,7 +50,7 @@ class ChatScreenAdapter(
         when (holder.itemViewType) {
             VIEW_TYPE_MESSAGE_SENT -> {
                 val sentMessageViewHolder = holder as SentMessageViewHolder
-                sentMessageViewHolder.bind(message,message.state)
+                sentMessageViewHolder.bind(message)
             }
             VIEW_TYPE_MESSAGE_RECEIVED -> {
                 val receivedMessageViewHolder = holder as ReceivedMessageViewHolder
@@ -82,18 +82,10 @@ class ChatScreenAdapter(
         private val timeTextView: TextView = itemView.findViewById(R.id.sender_time)
         private val seenIcon:ImageView = itemView.findViewById(R.id.read_msg)
 
-        fun bind(message: MessageEntity, state: MessageEntity.MessageState) {
+        fun bind(message: MessageEntity) {
             messageTextView.text = message.message
             timeTextView.text = DateFormat.format("HH:mm", Date(message.timestamp))
 
-            Log.d("Delivery State", "State: $state")
-
-
-            when (message.state) {
-                MessageEntity.MessageState.SENT -> seenIcon.setImageResource(R.drawable.singlecheck)
-                MessageEntity.MessageState.DELIVERED -> seenIcon.setImageResource(R.drawable.doublecheck2)
-                MessageEntity.MessageState.SEEN -> seenIcon.setImageResource(R.drawable.doublecheck)
-            }
         }
 
     }

@@ -20,9 +20,15 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.BasicInfoClass
+import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import com.google.android.material.textfield.TextInputEditText
@@ -32,7 +38,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BasicInformationFragment : Fragment(), BackHandler {
+class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter.OnJobClickListener {
 
     private var isStudent : Boolean = true
     private var isHotelier : Boolean = true
@@ -42,10 +48,13 @@ class BasicInformationFragment : Fragment(), BackHandler {
     lateinit var myRoleInHos : TextInputLayout
     lateinit var myRoleInHosET : TextInputEditText
     lateinit var myRecentJobET : TextInputEditText
+    private lateinit var dialogRole:Dialog
 
     private lateinit var university:TextInputEditText
     private lateinit var start:TextInputEditText
     private lateinit var end:TextInputEditText
+    private lateinit var recyclerView:RecyclerView
+    private lateinit var basicInformationAdapter: BasicInformationAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -234,7 +243,7 @@ class BasicInformationFragment : Fragment(), BackHandler {
 
     @SuppressLint("SetTextI18n")
     private fun openBottomRecentJob() {
-        val dialogRole = Dialog(requireContext())
+        dialogRole = Dialog(requireContext())
         dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogRole.setContentView(R.layout.bottom_sheet_job_title)
         dialogRole.setCancelable(true)
@@ -245,19 +254,53 @@ class BasicInformationFragment : Fragment(), BackHandler {
         dialogRole.window?.setGravity(Gravity.BOTTOM)
         dialogRole.show()
 
-        dialogRole.findViewById<LinearLayout>(R.id.hotel_owner).setOnClickListener {
-            myRecentJobET.setText("Assistant")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.hos_expert).setOnClickListener {
-            myRecentJobET.setText("Associate")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.vendor).setOnClickListener {
-            myRecentJobET.setText("Administrative Assistant")
-            dialogRole.dismiss()
-        }
+        recyclerView = dialogRole.findViewById(R.id.jobs_recycler)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        getJobsList()
+
+
     }
+
+    private fun getJobsList() {
+
+        val getJob = RetrofitBuilder.profileCompletion.getJobTitle()
+
+        getJob.enqueue(object : Callback<List<GetJobDataClass>?>,
+            BasicInformationAdapter.OnJobClickListener {
+            override fun onResponse(
+                call: Call<List<GetJobDataClass>?>,
+                response: Response<List<GetJobDataClass>?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    basicInformationAdapter = BasicInformationAdapter(requireContext(),response)
+                    basicInformationAdapter.notifyDataSetChanged()
+                    recyclerView.adapter = basicInformationAdapter
+
+                    basicInformationAdapter.setOnJobClickListener(this)
+                }
+                else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<GetJobDataClass>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onJobClick(job: GetJobDataClass) {
+                    myRecentJobET.setText(job.job_title)
+                    dialogRole.dismiss()
+            }
+        })
+
+
+
+
+    }
+
 
     @SuppressLint("SetTextI18n")
     private fun openBottomRoleinHos() {
@@ -298,4 +341,9 @@ class BasicInformationFragment : Fragment(), BackHandler {
 
         return true
     }
+
+    override fun onJobClick(job: GetJobDataClass) {
+        TODO("Not yet implemented")
+    }
+
 }
