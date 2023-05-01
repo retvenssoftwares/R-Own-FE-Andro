@@ -1,5 +1,6 @@
 package app.retvens.rown.Dashboard.profileCompletion
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ class UserName : AppCompatActivity() {
 
     lateinit var binding : ActivityUserNameBinding
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserNameBinding.inflate(layoutInflater)

@@ -44,6 +44,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
     }
 
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {

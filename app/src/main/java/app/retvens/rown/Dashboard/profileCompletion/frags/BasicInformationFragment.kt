@@ -16,15 +16,29 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.BasicInfoClass
+import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
-class BasicInformationFragment : Fragment(), BackHandler {
+class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter.OnJobClickListener {
 
     private var isStudent : Boolean = true
     private var isHotelier : Boolean = true
@@ -34,6 +48,13 @@ class BasicInformationFragment : Fragment(), BackHandler {
     lateinit var myRoleInHos : TextInputLayout
     lateinit var myRoleInHosET : TextInputEditText
     lateinit var myRecentJobET : TextInputEditText
+    private lateinit var dialogRole:Dialog
+
+    private lateinit var university:TextInputEditText
+    private lateinit var start:TextInputEditText
+    private lateinit var end:TextInputEditText
+    private lateinit var recyclerView:RecyclerView
+    private lateinit var basicInformationAdapter: BasicInformationAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +76,12 @@ class BasicInformationFragment : Fragment(), BackHandler {
         myRoleInHos = view.findViewById(R.id.my_role_hospitality)
         myRoleInHosET = view.findViewById(R.id.myRoleInHosET)
         myRecentJobET = view.findViewById(R.id.my_recent_job)
+
+        //Define Student Details
+        university = view.findViewById(R.id.dob_et)
+        start = view.findViewById(R.id.et_session_Start)
+        end = view.findViewById(R.id.et_end)
+
 
         val recentJob = view.findViewById<TextInputLayout>(R.id.recentJobLayout)
 
@@ -110,38 +137,7 @@ class BasicInformationFragment : Fragment(), BackHandler {
         }
 
         view.findViewById<CardView>(R.id.card_basic_next).setOnClickListener {
-            when (nextFrag) {
-                0 -> {
-                    val fragment = JobTitleFragment()
-                    val transaction = activity?.supportFragmentManager?.beginTransaction()
-                    transaction?.replace(R.id.fragment_username,fragment)
-                    transaction?.commit()
-                }
-                1 -> {
-
-                    val fragment = HotelOwnerFragment()
-                    val transaction = activity?.supportFragmentManager?.beginTransaction()
-                    transaction?.replace(R.id.fragment_username,fragment)
-                    transaction?.commit()
-
-                }
-                2 -> {
-
-                    val fragment = HospitalityExpertFragment()
-                    val transaction = activity?.supportFragmentManager?.beginTransaction()
-                    transaction?.replace(R.id.fragment_username,fragment)
-                    transaction?.commit()
-
-                }
-                3 -> {
-
-                    val fragment = VendorsFragment()
-                    val transaction = activity?.supportFragmentManager?.beginTransaction()
-                    transaction?.replace(R.id.fragment_username,fragment)
-                    transaction?.commit()
-
-                }
-            }
+            setJobTitle()
         }
 
 //        requireActivity().onBackPressedDispatcher.addCallback(
@@ -161,9 +157,93 @@ class BasicInformationFragment : Fragment(), BackHandler {
 //        )
     }
 
+    private fun setJobTitle() {
+        val sharedPreferences =  requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val university = university.text.toString()
+        val start = start.text.toString()
+        val end = end.text.toString()
+        val role:String
+
+        val roleInHotel = myRoleInHosET.text.toString()
+        val roleInJob = myRecentJobET.text.toString()
+
+
+
+        Toast.makeText(requireContext(),"${myRecentJobET.text.toString()}",Toast.LENGTH_SHORT).show()
+
+        if (roleInJob.isNotEmpty()){
+            role = roleInJob
+        }else if (roleInHotel.isNotEmpty()){
+            role = roleInHotel
+        }
+        else{
+            role = ""
+        }
+
+        val info = BasicInfoClass(role, BasicInfoClass.EducationData(university,start,end))
+
+        val update = RetrofitBuilder.profileCompletion.setJobRole("Oo7PCzo0-",info)
+
+        update.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+
+                    when (nextFrag) {
+                        0 -> {
+                            val fragment = JobTitleFragment()
+                            val transaction = activity?.supportFragmentManager?.beginTransaction()
+                            transaction?.replace(R.id.fragment_username,fragment)
+                            transaction?.commit()
+                        }
+                        1 -> {
+
+                            val fragment = HotelOwnerFragment()
+                            val transaction = activity?.supportFragmentManager?.beginTransaction()
+                            transaction?.replace(R.id.fragment_username,fragment)
+                            transaction?.commit()
+
+                        }
+                        2 -> {
+
+                            val fragment = HospitalityExpertFragment()
+                            val transaction = activity?.supportFragmentManager?.beginTransaction()
+                            transaction?.replace(R.id.fragment_username,fragment)
+                            transaction?.commit()
+
+                        }
+                        3 -> {
+
+                            val fragment = VendorsFragment()
+                            val transaction = activity?.supportFragmentManager?.beginTransaction()
+                            transaction?.replace(R.id.fragment_username,fragment)
+                            transaction?.commit()
+
+                        }
+                    }
+
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
+    }
+
     @SuppressLint("SetTextI18n")
     private fun openBottomRecentJob() {
-        val dialogRole = Dialog(requireContext())
+        dialogRole = Dialog(requireContext())
         dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogRole.setContentView(R.layout.bottom_sheet_job_title)
         dialogRole.setCancelable(true)
@@ -174,20 +254,55 @@ class BasicInformationFragment : Fragment(), BackHandler {
         dialogRole.window?.setGravity(Gravity.BOTTOM)
         dialogRole.show()
 
-        dialogRole.findViewById<LinearLayout>(R.id.hotel_owner).setOnClickListener {
-            myRecentJobET.setText("Assistant")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.hos_expert).setOnClickListener {
-            myRecentJobET.setText("Associate")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.vendor).setOnClickListener {
-            myRecentJobET.setText("Administrative Assistant")
-            dialogRole.dismiss()
-        }
+        recyclerView = dialogRole.findViewById(R.id.jobs_recycler)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        getJobsList()
+
+
     }
 
+    private fun getJobsList() {
+
+        val getJob = RetrofitBuilder.profileCompletion.getJobTitle()
+
+        getJob.enqueue(object : Callback<List<GetJobDataClass>?>,
+            BasicInformationAdapter.OnJobClickListener {
+            override fun onResponse(
+                call: Call<List<GetJobDataClass>?>,
+                response: Response<List<GetJobDataClass>?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    basicInformationAdapter = BasicInformationAdapter(requireContext(),response)
+                    basicInformationAdapter.notifyDataSetChanged()
+                    recyclerView.adapter = basicInformationAdapter
+
+                    basicInformationAdapter.setOnJobClickListener(this)
+                }
+                else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<GetJobDataClass>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onJobClick(job: GetJobDataClass) {
+                    myRecentJobET.setText(job.job_title)
+                    dialogRole.dismiss()
+            }
+        })
+
+
+
+
+    }
+
+
+    @SuppressLint("SetTextI18n")
     private fun openBottomRoleinHos() {
         val dialogRole = Dialog(requireContext())
         dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -226,4 +341,9 @@ class BasicInformationFragment : Fragment(), BackHandler {
 
         return true
     }
+
+    override fun onJobClick(job: GetJobDataClass) {
+        TODO("Not yet implemented")
+    }
+
 }

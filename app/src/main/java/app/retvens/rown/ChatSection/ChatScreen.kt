@@ -56,11 +56,11 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         appDatabase = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "my-database").build()
 
-        Log.e("",authtoken.toString())
+
 
         Mesibo.addListener(this)
         Mesibo.setAccessToken(authtoken)
-        Mesibo.setDatabase(appDatabase.toString(),0)
+        Mesibo.setDatabase("Mesibo.db",0)
 
         Mesibo.start()
 
@@ -85,11 +85,10 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         profile = Mesibo.getSelfProfile()
 
-        Mesibo.setAppInForeground(this, 0, true)
-        mReadSession= MesiboReadSession(this)
-        mReadSession?.enableReadReceipt(true)
-        mReadSession?.enableMissedCalls(true)
-
+//        Mesibo.setAppInForeground(this, 0, true)
+//        mReadSession= MesiboReadSession(this)
+//        mReadSession?.enableReadReceipt(true)
+//        mReadSession?.enableMissedCalls(true)
 
 
         // Create the adapter with empty message list and current user ID
@@ -103,7 +102,6 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
 
         Thread {
             val getMessages = AppDatabase.getInstance(applicationContext).chatMessageDao().getMessages(profile.address,address!!)
-
 
             runOnUiThread {
                 messages.addAll(getMessages)
@@ -137,8 +135,7 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                     address!!,
                     message.message,
                     name!!,
-                    timestamp = System.currentTimeMillis(),
-                    MessageEntity.MessageState.SENT
+                    timestamp = System.currentTimeMillis()
                 )
                 Thread {
                     AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
@@ -163,8 +160,6 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                 val sendmessage:MesiboMessage = recipientProfile.newMessage()
                 sendmessage.message = messagetext
                 sendmessage.send()
-                val title = message.profile.address
-
 
 
             }else{
@@ -221,10 +216,6 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
         if (message.isIncoming){
             val sender: MesiboProfile = message.profile
 
-
-//            val icon = findViewById<ImageView>(R.id.read_msg)
-//            icon.setImageResource(R.drawable.doublecheck2)
-
             if (incomingAddress == address){
                 val messageEntity = MessageEntity(
                     message.mid,
@@ -232,25 +223,22 @@ class ChatScreen : AppCompatActivity(), Mesibo.MessageListener,MesiboCall.InProg
                     profile.address,
                     message.message,
                     profile.address,
-                    timestamp = System.currentTimeMillis(),
-                    MessageEntity.MessageState.DELIVERED
+                    timestamp = System.currentTimeMillis()
                 )
+
+                messages.add(messageEntity)
 
                 Thread {
                     AppDatabase.getInstance(applicationContext).chatMessageDao().insertMessage(messageEntity)
                 }.start()
 
-                messages.add(messageEntity)
+
                 // Notify the adapter about the new data
                 adapter.notifyItemInserted(messages.size - 1)
                 recyclerView.scrollToPosition(messages.size - 1)
 
                 if(message.isRealtimeMessage()) {
 
-                    mReadSession?.enableUnreadMessages(false)
-                    mReadSession?.read(message.mid.toInt())
-
-                    Log.e("",mReadSession?.unreadMessageCount.toString())
 
 
                     Toast.makeText(applicationContext, "You have got a message from " + sender.getNameOrAddress("")

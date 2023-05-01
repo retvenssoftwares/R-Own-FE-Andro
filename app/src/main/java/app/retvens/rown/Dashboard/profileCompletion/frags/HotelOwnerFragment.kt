@@ -1,6 +1,7 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -9,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -25,19 +27,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.HotelOwnerInfoData
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.authentication.UploadRequestBody
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
 class HotelOwnerFragment : Fragment(), BackHandler {
+
 
     lateinit var hotelType : TextInputEditText
     lateinit var singleHotelLayout : ConstraintLayout
@@ -48,15 +62,19 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
 
 
-    /*-----------------------SINGLE HOTEL--------------------------------*/
+    /*-----------------------SINGLE HOTEL----------------------------------*/
     /*-----------------------SINGLE HOTEL--------------------------------*/
     lateinit var noOfHotels : TextInputEditText
     lateinit var hotelOwnerStarET : TextInputEditText
     lateinit var hotelOwnerProfile  : ShapeableImageView
     lateinit var hotelOwnerCover  : ShapeableImageView
+    lateinit var ownerHotel : TextInputEditText
+    lateinit var chainName:TextInputEditText
+    lateinit var website:TextInputEditText
+    lateinit var bookingLink:TextInputEditText
 
-    lateinit var croppedOwnerProfileImageUri: Uri // Final Uri for Owner Profile
-    lateinit var croppedOwnerCoverImageUri: Uri  // Final Uri for Owner Cover
+    private var croppedOwnerProfileImageUri: Uri? = null // Final Uri for Owner Profile
+    private var croppedOwnerCoverImageUri: Uri? = null  // Final Uri for Owner Cover
     /*-----------------------HOTEL CHAIN--------------------------------*/
     /*-----------------------HOTEL CHAIN--------------------------------*/
 
@@ -65,7 +83,6 @@ class HotelOwnerFragment : Fragment(), BackHandler {
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
     private var croppedHotelChainImageUri: Uri?= null  // Final Uri for Hotel chain
-    private var croppedHotelChainCoverImageUri: Uri?= null  // Final Uri for Hotel chain
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraHotelChainImageUri: Uri
@@ -81,12 +98,10 @@ class HotelOwnerFragment : Fragment(), BackHandler {
             Log.d("owner", cameraUser)
             croppedOwnerProfileImageUri = cameraHotelChainImageUri
             hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
-        }else if (cameraUser == "OwnerCover"){
+        }else{
             Log.d("owner", cameraUser)
             croppedOwnerCoverImageUri = cameraHotelChainImageUri
             hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
-        }else{
-        croppedHotelChainCoverImageUri = cameraHotelChainImageUri
         }
     }
 
@@ -100,6 +115,12 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        ownerHotel = view.findViewById(R.id.owner_Hotel)
+
+        chainName = view.findViewById(R.id.hotelchain_Name)
+        website = view.findViewById(R.id.hotel_Website)
+        bookingLink = view.findViewById(R.id.hotel_bokkinglink)
 
         hotelType = view.findViewById<TextInputEditText>(R.id.hotel_type_et)
         singleHotelLayout = view.findViewById(R.id.cons_single_hotel)
@@ -141,24 +162,124 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
         view.findViewById<CardView>(R.id.card_owner_next).setOnClickListener {
             if (nextScreen == 1){
-                val fragment = HotelOwnerChainFragment()
+
                 val hotels = noOfHotels.text.toString()
                 if (hotels.isEmpty()){
                     Toast.makeText(requireContext(), "input hotels", Toast.LENGTH_SHORT).show()
                 } else{
 
+
+                    UploadChainData()
+                }
+            }else{
+                UploadData()
+            }
+        }
+
+        val submit = view.findViewById<CardView>(R.id.card_owner_next)
+
+
+    }
+
+    private fun UploadChainData() {
+
+        val type = hotelType.text.toString()
+        val number = noOfHotels.text.toString()
+        val name = chainName.text.toString()
+        val website = website.text.toString()
+        val book = bookingLink.text.toString()
+
+        val data = HotelOwnerInfoData(name,type,number,website,book)
+
+        val update = RetrofitBuilder.profileCompletion.setHotelInfo("Oo7PCzo0-",data)
+
+        update.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    val fragment = HotelOwnerChainFragment()
+
                     val bundle = Bundle()
-                    bundle.putString("hotels", hotels)
+                    bundle.putString("hotels", number)
 
                     fragment.arguments = bundle
 
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
-
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
-        }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun UploadData() {
+
+        val type = hotelType.text.toString()
+        val hotelName = ownerHotel.text.toString()
+        val star = hotelOwnerStarET.text.toString()
+
+        val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(
+            croppedOwnerCoverImageUri!!,"r",null
+        )?:return
+
+
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        val file =  File(requireContext().cacheDir, "cropped_${requireContext().contentResolver.getFileName(croppedOwnerCoverImageUri!!)}.jpg")
+        val outputStream = FileOutputStream(file)
+        inputStream.copyTo(outputStream)
+        val body = UploadRequestBody(file,"image")
+
+        val parcelFileDescriptor1 = requireContext().contentResolver.openFileDescriptor(
+            croppedOwnerProfileImageUri!!,"r",null
+        )?:return
+
+
+
+        val inputStream1 = FileInputStream(parcelFileDescriptor1.fileDescriptor)
+        val file1 = File(requireContext().cacheDir, requireContext().contentResolver.getFileName(croppedOwnerProfileImageUri!!) + ".jpg")
+        val outputStream1 = FileOutputStream(file1)
+        inputStream1.copyTo(outputStream1)
+        val body1 = UploadRequestBody(file1,"image")
+
+        val send = RetrofitBuilder.profileCompletion.uploadHotelData(
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"indore"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),star),
+            MultipartBody.Part.createFormData("hotelCoverpic", file.name, body),
+            MultipartBody.Part.createFormData("hotelProfilepic", file1.name, body1),
+            MultipartBody.Part.createFormData("hotelLogo", file.name, body),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"rahul")
+        )
+
+        send.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(requireContext(),DashBoardActivity::class.java))
+                }else{
+                    Toast.makeText(requireContext(),response.message().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
 
     }
 
@@ -218,12 +339,10 @@ class HotelOwnerFragment : Fragment(), BackHandler {
                     Log.d("owner", cameraUser)
                     croppedOwnerProfileImageUri = imageUri
                     hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
-                }else if (cameraUser == "OwnerCover"){
+                }else{
                     Log.d("owner", cameraUser)
                     croppedOwnerCoverImageUri = imageUri
                     hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
-                }else{
-                    croppedHotelChainCoverImageUri = imageUri
                 }
 
             }
@@ -358,6 +477,19 @@ class HotelOwnerFragment : Fragment(), BackHandler {
         transaction?.commit()
 
         return true
+    }
+
+    private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
+
+        var name = ""
+        val returnCursor = this.query(coverPhotoPart,null,null,null,null)
+        if (returnCursor!=null){
+            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            returnCursor.moveToFirst()
+            name = returnCursor.getString(nameIndex)
+            returnCursor.close()
+        }
+        return name
     }
 
 }

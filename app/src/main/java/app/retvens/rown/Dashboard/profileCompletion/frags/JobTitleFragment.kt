@@ -1,6 +1,8 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,14 +14,35 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
+import app.retvens.rown.DataCollections.ProfileCompletion.JobData
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import com.google.android.material.textfield.TextInputEditText
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class JobTitleFragment : Fragment(), BackHandler {
 
     lateinit var eTypeET : TextInputEditText
     lateinit var recentCoET : TextInputEditText
+    private lateinit var jobTitle:TextInputEditText
+    private lateinit var jobType:TextInputEditText
+    private lateinit var companyName:TextInputEditText
+    private lateinit var start:TextInputEditText
+    private lateinit var end:TextInputEditText
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var hospitalityExpertAdapter: HospitalityExpertAdapter
+    private lateinit var dialogRole:Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +52,7 @@ class JobTitleFragment : Fragment(), BackHandler {
         return inflater.inflate(R.layout.fragment_job_title, container, false)
     }
 
+    @SuppressLint("CutPasteId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,11 +66,54 @@ class JobTitleFragment : Fragment(), BackHandler {
             showBottomJobType()
         }
 
+        val submit = view.findViewById<CardView>(R.id.card_job_next)
+
+        submit.setOnClickListener {
+            setJobDetails()
+        }
+
+        jobTitle = view.findViewById(R.id.rJob_et)
+        jobType = view.findViewById(R.id.eType_et)
+        companyName = view.findViewById(R.id.recentComET)
+        start = view.findViewById(R.id.et_session_Start)
+        end = view.findViewById(R.id.et_session_end)
+
+    }
+
+    private fun setJobDetails() {
+        val title = jobTitle.text.toString()
+        val type = jobType.text.toString()
+        val company = companyName.text.toString()
+        val start = start.text.toString()
+        val end = end.text.toString()
+
+        val data = JobData(JobData.JobDetails(type,title,company,start,end))
+
+        val update = RetrofitBuilder.profileCompletion.setJobDetail("Oo7PCzo0-",data)
+
+        update.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(context,DashBoardActivity::class.java))
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun openRecentCompanyBottom() {
 
-        val dialogRole = Dialog(requireContext())
+        dialogRole = Dialog(requireContext())
         dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogRole.setContentView(R.layout.bottom_sheet_select_company)
         dialogRole.setCancelable(true)
@@ -57,18 +124,45 @@ class JobTitleFragment : Fragment(), BackHandler {
         dialogRole.window?.setGravity(Gravity.BOTTOM)
         dialogRole.show()
 
-        dialogRole.findViewById<LinearLayout>(R.id.tatapl).setOnClickListener {
-            recentCoET.setText("Tata Consultancy ltd.")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.tatasteel).setOnClickListener {
-            recentCoET.setText("Tata Consultancy ltd.")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.useTata).setOnClickListener {
-            recentCoET.setText("Tata")
-            dialogRole.dismiss()
-        }
+        recyclerView = dialogRole.findViewById(R.id.company_recycler)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        getCompany()
+
+    }
+
+    private fun getCompany() {
+        val get = RetrofitBuilder.profileCompletion.getCompany()
+
+        get.enqueue(object : Callback<List<CompanyDatacClass>?>,
+            HospitalityExpertAdapter.OnJobClickListener {
+            override fun onResponse(
+                call: Call<List<CompanyDatacClass>?>,
+                response: Response<List<CompanyDatacClass>?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    hospitalityExpertAdapter = HospitalityExpertAdapter(requireContext(),response)
+                    hospitalityExpertAdapter.notifyDataSetChanged()
+                    recyclerView.adapter = hospitalityExpertAdapter
+
+                    hospitalityExpertAdapter.setOnJobClickListener(this)
+                }
+                else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<CompanyDatacClass>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onJobClick(job: CompanyDatacClass) {
+                recentCoET.setText(job.company_name)
+                dialogRole.dismiss()
+            }
+        })
     }
 
     private fun showBottomJobType() {

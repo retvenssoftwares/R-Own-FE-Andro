@@ -50,7 +50,6 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="BD"
             android:textColorHint="@color/grey_40"
             style="@style/TextAppearance.AppCompat.Body1"
             android:background="@null"
@@ -70,87 +69,12 @@
         android:layout_marginTop="2dp"
         android:layout_marginStart="24dp"/>
 
-    <LinearLayout
-        android:id="@+id/hotel_owner"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/jobs_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Assistance"
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_60"
-        android:layout_marginHorizontal="30dp"/>
-
-    <LinearLayout
-        android:id="@+id/hos_expert"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Associate"
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_60"
-        android:layout_marginHorizontal="30dp"/>
-
-    <LinearLayout
-        android:id="@+id/vendor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Administrative Assistant"
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/black"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_60"
-        android:layout_marginHorizontal="30dp"/>
+        android:layout_marginTop="25dp"
+        />
 
 </LinearLayout>

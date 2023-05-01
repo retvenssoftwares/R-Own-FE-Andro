@@ -105,6 +105,7 @@
             app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/brand_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
@@ -133,6 +134,7 @@
             app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/brand_desc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
@@ -194,6 +196,7 @@ for your properties and other services too."
             app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/portfolio_link"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
@@ -222,6 +225,7 @@ for your properties and other services too."
             app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/website_link"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"

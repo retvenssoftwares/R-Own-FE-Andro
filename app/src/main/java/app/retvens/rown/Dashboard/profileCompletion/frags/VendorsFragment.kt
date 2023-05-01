@@ -1,23 +1,59 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.Dialog
+import android.content.ContentResolver
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.OpenableColumns
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.authentication.UploadRequestBody
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
+import com.theartofdev.edmodo.cropper.CropImage
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 class VendorsFragment : Fragment(), BackHandler {
 
     lateinit var servicesET : TextInputEditText
+    private lateinit var selectLogo:ImageView
+    private lateinit var setLogo:ShapeableImageView
+    lateinit var dialog: Dialog
+    var PICK_IMAGE_REQUEST_CODE : Int = 0
+    private var logoOfImageUri: Uri? = null
+    private lateinit var brandName:TextInputEditText
+    private lateinit var brandDesc:TextInputEditText
+    private lateinit var portfolio:TextInputEditText
+    private lateinit var website:TextInputEditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +69,94 @@ class VendorsFragment : Fragment(), BackHandler {
         servicesET = view.findViewById(R.id.vendor_services_et)
         servicesET.setOnClickListener {
             openVendorService()
+        }
+
+        selectLogo = view.findViewById(R.id.camera_vendor)
+        setLogo = view.findViewById(R.id.hotel_vendor_profile)
+        selectLogo.setOnClickListener {
+            openBottomCameraSheet()
+        }
+
+        brandName = view.findViewById(R.id.brand_name)
+        brandDesc = view.findViewById(R.id.brand_desc)
+        portfolio = view.findViewById(R.id.portfolio_link)
+        website = view.findViewById(R.id.website_link)
+
+        val submit = view.findViewById<CardView>(R.id.card_job_next)
+        submit.setOnClickListener {
+            uploadData()
+        }
+    }
+
+    private fun uploadData() {
+        val name = brandName.text.toString()
+        val description = brandDesc.text.toString()
+        val portfolio = portfolio.text.toString()
+        val website = website.text.toString()
+
+        val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(
+            logoOfImageUri!!,"r",null
+        )?:return
+
+
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        val file =  File(requireContext().cacheDir, "cropped_${requireContext().contentResolver.getFileName(logoOfImageUri!!)}.jpg")
+        val outputStream = FileOutputStream(file)
+        inputStream.copyTo(outputStream)
+        val body = UploadRequestBody(file,"image")
+
+        val send = RetrofitBuilder.profileCompletion.uploadVendorData("Oo7PCzo0-",
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),portfolio),
+            MultipartBody.Part.createFormData("vendorImage", file.name, body),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"Oo7PCzo0-"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),website)
+        )
+
+        send.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(requireContext(),DashBoardActivity::class.java))
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            val imageUri = data.data
+            if (imageUri != null) {
+
+                logoOfImageUri = imageUri
+                setLogo.setImageURI(logoOfImageUri)
+
+
+            }
+        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val resultingImage = CropImage.getActivityResult(data)
+            if (resultCode == AppCompatActivity.RESULT_OK) {
+                val croppedImage = resultingImage.uri
+
+                    logoOfImageUri = croppedImage
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(context,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -64,6 +188,63 @@ class VendorsFragment : Fragment(), BackHandler {
         transaction?.commit()
 
         return true
+    }
+
+    private fun openBottomCameraSheet() {
+
+        dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.bottom_sheet_camera)
+
+        dialog.findViewById<ImageView>(R.id.delete_img).setOnClickListener {
+            deleteImage()
+        }
+
+        dialog.findViewById<LinearLayout>(R.id.pick_from_gallery).setOnClickListener {
+            openGallery()
+        }
+        dialog.findViewById<LinearLayout>(R.id.pick_from_camera).setOnClickListener {
+            openCamera()
+        }
+
+        dialog.show()
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialog.window?.setGravity(Gravity.BOTTOM)
+    }
+    private fun deleteImage() {
+        logoOfImageUri = null
+        setLogo.setImageURI(logoOfImageUri)
+        dialog.dismiss()
+    }
+    private fun openCamera() {
+        contract.launch(logoOfImageUri)
+        dialog.dismiss()
+    }
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
+        dialog.dismiss()
+    }
+
+    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
+//        cropImage(cameraHotelChainImageUri)
+
+            setLogo.setImageURI(logoOfImageUri)
+    }
+
+    private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
+
+        var name = ""
+        val returnCursor = this.query(coverPhotoPart,null,null,null,null)
+        if (returnCursor!=null){
+            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            returnCursor.moveToFirst()
+            name = returnCursor.getString(nameIndex)
+            returnCursor.close()
+        }
+        return name
     }
 
 }
