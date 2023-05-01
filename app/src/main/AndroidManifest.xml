@@ -44,11 +44,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.job.JobDetailsAppliedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NavigationFragments.job.JobDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Dashboard.profileCompletion.UserName"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Rown_Splash">
-        </activity>
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".CreateCommunity.UploadIcon"
             android:exported="false"
@@ -175,6 +180,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

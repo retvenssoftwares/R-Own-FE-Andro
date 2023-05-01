@@ -115,6 +115,7 @@ class DashBoardActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.home -> replaceFragment(HomeFragment())
                 R.id.jobs -> replaceFragment(JobFragment())
+//                R.id.jobs -> replaceFragment(JobsForHoteliers())
                 R.id.explore -> replaceFragment(ExploreFragment())
                 R.id.events -> replaceFragment(EventFragment())
                 R.id.profile -> replaceFragment(ProfileFragment())
