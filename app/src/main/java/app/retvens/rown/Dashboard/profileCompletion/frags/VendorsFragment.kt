@@ -9,6 +9,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -16,6 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -23,10 +26,18 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.VendorServicesAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.CreateVendorDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.PostVendorSerivces
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.ProfileCompletion.VendorServicesData
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import com.bumptech.glide.Glide
@@ -60,6 +71,11 @@ class VendorsFragment : Fragment(), BackHandler {
     private lateinit var brandDesc:TextInputEditText
     private lateinit var portfolio:TextInputEditText
     private lateinit var website:TextInputEditText
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var vendorServicesAdapter: VendorServicesAdapter
+    private  var selectedServices:ArrayList<String> = ArrayList()
+    private var vendorId:String = ""
+    private lateinit var searchBar:EditText
 
     lateinit var progressDialog : Dialog
 
@@ -125,6 +141,91 @@ class VendorsFragment : Fragment(), BackHandler {
                 uploadData()
             }
         }
+
+        getVendor()
+    }
+
+    private fun createService() {
+
+        val data = CreateVendorDataClass(vendorId,"1")
+
+        val send = RetrofitBuilder.profileCompletion.createVendor(data)
+
+        send.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    sendServices()
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun getVendor() {
+
+       val data = RetrofitBuilder.retrofitBuilder.fetchUser("Oo7PCzo0-")
+
+        data.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    vendorId = response.vendorInfo.vendor_id
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun sendServices() {
+
+        for (x in selectedServices){
+//
+//            Toast.makeText(requireContext(),x.toString(),Toast.LENGTH_SHORT).show()
+
+            val data = PostVendorSerivces(x)
+
+            val send = RetrofitBuilder.profileCompletion.setServices(vendorId,data)
+
+            send.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    if (response.isSuccessful){
+                        val response = response.body()!!
+                        Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                }
+            })
+
+        }
+
     }
 
     private fun uploadData() {
@@ -163,6 +264,7 @@ class VendorsFragment : Fragment(), BackHandler {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     progressDialog.dismiss()
+                    createService()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                 }else{
@@ -221,10 +323,84 @@ class VendorsFragment : Fragment(), BackHandler {
         dialogRole.window?.setGravity(Gravity.BOTTOM)
         dialogRole.show()
 
-        dialogRole.findViewById<RelativeLayout>(R.id.fullTime).setOnClickListener {
-            dialogRole.dismiss()
-        }
+        recyclerView = dialogRole.findViewById(R.id.brand_services)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        searchBar = dialogRole.findViewById(R.id.searchServices)
+
+        getServices()
+
+
+
     }
+
+    private fun getServices() {
+        val data = RetrofitBuilder.profileCompletion.getServices()
+
+        data.enqueue(object : Callback<List<VendorServicesData>?>,
+            VendorServicesAdapter.OnJobClickListener {
+            override fun onResponse(
+                call: Call<List<VendorServicesData>?>,
+                response: Response<List<VendorServicesData>?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    val originalData = response.toList()
+                    vendorServicesAdapter = VendorServicesAdapter(requireContext(),response)
+                    vendorServicesAdapter.notifyDataSetChanged()
+                    recyclerView.adapter = vendorServicesAdapter
+
+                    vendorServicesAdapter.setOnJobClickListener(this)
+
+                    searchBar.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val filterData = originalData.filter { item ->
+                                item.service_name.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            vendorServicesAdapter.updateData(filterData)
+                        }
+
+                        override fun afterTextChanged(p0: Editable?) {
+
+                        }
+
+                    })
+                }
+                else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<VendorServicesData>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onJobClick(job: VendorServicesData) {
+                val index = selectedServices.indexOf(job.service_name)
+                if (index == -1) {
+                    selectedServices.add(job.service_name)
+                } else {
+                    selectedServices.removeAt(index)
+                }
+
+                Log.e("serives",selectedServices.toString())
+
+                servicesET.setText(selectedServices.toString())
+            }
+        })
+    }
+
     override fun handleBackPressed(): Boolean {
         val fragment = BasicInformationFragment()
         val transaction = activity?.supportFragmentManager?.beginTransaction()

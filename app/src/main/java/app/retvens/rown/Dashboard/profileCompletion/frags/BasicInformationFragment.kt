@@ -5,6 +5,8 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -12,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -56,6 +59,7 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
     private lateinit var end:TextInputEditText
     private lateinit var recyclerView:RecyclerView
     private lateinit var basicInformationAdapter: BasicInformationAdapter
+    private lateinit var serarchBar:EditText
 
     lateinit var progressDialog : Dialog
     override fun onCreateView(
@@ -273,6 +277,8 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        serarchBar = dialogRole.findViewById(R.id.searchJob)
+
         getJobsList()
 
 
@@ -290,11 +296,37 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
+                    val originalData = response.toList()
                     basicInformationAdapter = BasicInformationAdapter(requireContext(),response)
                     basicInformationAdapter.notifyDataSetChanged()
                     recyclerView.adapter = basicInformationAdapter
 
                     basicInformationAdapter.setOnJobClickListener(this)
+
+                    serarchBar.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val filterData = originalData.filter { item ->
+                                item.job_title.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            basicInformationAdapter.updateData(filterData)
+                        }
+
+                        override fun afterTextChanged(p0: Editable?) {
+
+                        }
+
+                    })
+
                 }
                 else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()

@@ -2,6 +2,7 @@ package app.retvens.rown.Dashboard.profileCompletion.frags.adapter
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -24,8 +26,14 @@ class HotelChainAdapter(private var chainList: List<HotelChainData>, val context
 //    lateinit var cameraHotelChainImageUri : Uri
 
     var mListener: onCoverImageClickListener ? = null
+    private var croppedHotelChainCoverImageUri: Uri? = null
     fun setOnCoverClickListener(listener: onCoverImageClickListener?){
         mListener = listener
+    }
+
+    fun setCroppedHotelChainCoverImageUri(uri: Uri?) {
+        croppedHotelChainCoverImageUri = uri
+        notifyDataSetChanged()
     }
 
     interface onCoverImageClickListener{
@@ -40,7 +48,7 @@ class HotelChainAdapter(private var chainList: List<HotelChainData>, val context
         val locationTIL = itemView.findViewById<TextInputLayout>(R.id.chainHotelLocationLayout)
         val ratingTIL = itemView.findViewById<TextInputLayout>(R.id.chainHotelRatingLayout)
 
-        val chainCover = itemView.findViewById<ImageView>(R.id.hotel_chain_cover_1)
+        val chainCover = itemView.findViewById<ShapeableImageView>(R.id.hotel_chain_cover_1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HotelChainViewHolder {
@@ -58,7 +66,9 @@ class HotelChainAdapter(private var chainList: List<HotelChainData>, val context
         holder.nameTIL.setHint(currentItem.hotelNameHint)
         holder.locationTIL.setHint(currentItem.locationHint)
         holder.ratingTIL.setHint(currentItem.hotelStarHint)
-        holder.chainCover.setImageURI(coverUri)
+        holder.chainCover.setImageURI(currentItem.coverUri)
+
+        Log.e("uri",currentItem.coverUri.toString())
 
         holder.chainCover.setOnClickListener {
             mListener?.onCoverImageClick("ChainAdapter")

@@ -1,5 +1,6 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,12 @@ class HospitalityExpertAdapter(val context: Context, var companyList:List<Compan
 
     fun setOnJobClickListener(listener: OnJobClickListener) {
         jobClickListener = listener
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<CompanyDatacClass>) {
+        companyList = newItems
+        notifyDataSetChanged()
     }
 
 }

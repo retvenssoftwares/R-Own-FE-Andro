@@ -1,5 +1,7 @@
 package app.retvens.rown.DataCollections
 
+import android.telecom.Call.Details
+
 data class UserProfileRequestItem(
 
     val Email: String,
@@ -12,6 +14,10 @@ data class UserProfileRequestItem(
     val User_id: String,
     val __v: Int,
     val _id: String,
-    val connection_count: Int
-
-)
+    val connection_count: Int,
+    val vendorInfo:Details
+){
+    data class Details(
+        val vendor_id:String
+    )
+}

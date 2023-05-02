@@ -5,6 +5,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -44,6 +47,8 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
     private lateinit var recyclerView: RecyclerView
     private lateinit var hospitalityExpertAdapter: HospitalityExpertAdapter
     private lateinit var dialogRole:Dialog
+    private lateinit var searchBar:EditText
+    private var originalData: List<CompanyDatacClass> = emptyList()
 
     lateinit var jobTitleLayout : TextInputLayout
     lateinit var startLayout : TextInputLayout
@@ -163,6 +168,8 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
 
         getCompany()
 
+        searchBar = dialogRole.findViewById(R.id.searchCompany)
+
     }
 
     private fun getCompany() {
@@ -175,12 +182,39 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
                 response: Response<List<CompanyDatacClass>?>
             ) {
                 if (response.isSuccessful && isAdded){
+
                     val response = response.body()!!
+                    originalData = response.toList()
                     hospitalityExpertAdapter = HospitalityExpertAdapter(requireContext(),response)
                     hospitalityExpertAdapter.notifyDataSetChanged()
                     recyclerView.adapter = hospitalityExpertAdapter
 
                     hospitalityExpertAdapter.setOnJobClickListener(this)
+
+                    searchBar.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val filterData = originalData.filter { item ->
+                                item.company_name.contains(p0.toString(), ignoreCase = true)
+                            }
+
+                            hospitalityExpertAdapter.updateData(filterData)
+                        }
+
+                        override fun afterTextChanged(p0: Editable?) {
+
+                        }
+
+                    })
+
                 }
                 else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()

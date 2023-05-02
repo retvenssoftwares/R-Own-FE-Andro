@@ -1,5 +1,6 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,12 @@ class BasicInformationAdapter(val context: Context, var jobList:List<GetJobDataC
 
     fun setOnJobClickListener(listener: OnJobClickListener) {
         jobClickListener = listener
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<GetJobDataClass>) {
+        jobList = newItems
+        notifyDataSetChanged()
     }
 
 }

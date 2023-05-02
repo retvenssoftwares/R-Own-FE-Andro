@@ -48,11 +48,13 @@
         android:layout_marginHorizontal="20dp"
         app:cardBackgroundColor="@color/white">
         <EditText
+            android:id="@+id/searchJob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/grey_40"
             style="@style/TextAppearance.AppCompat.Body1"
             android:background="@null"
+            android:textColor="@color/black"
             android:padding="12dp"
             android:drawableEnd="@drawable/svg_search"
             app:layout_constraintStart_toStartOf="parent"

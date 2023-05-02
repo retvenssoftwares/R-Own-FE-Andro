@@ -280,6 +280,7 @@ class JobFragment : Fragment() {
         dialogRole.window?.setGravity(Gravity.BOTTOM)
         dialogRole.show()
 
+
     }
     private fun showBottomNotice() {
 

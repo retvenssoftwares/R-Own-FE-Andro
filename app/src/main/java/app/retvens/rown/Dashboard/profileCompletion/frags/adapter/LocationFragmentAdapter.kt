@@ -34,14 +34,15 @@ class LocationFragmentAdapter(val context: Context, var cityList:List<LocationDa
             val data = cityList[position]
 
         holder.country.text = data.name
-
         for (x in data.states){
             holder.state.text = x.name
 
             for (y in x.cities){
                 holder.city.text = y.name
             }
+
         }
+
 
     }
 

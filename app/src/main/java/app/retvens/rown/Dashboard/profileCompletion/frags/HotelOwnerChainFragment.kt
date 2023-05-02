@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -35,6 +36,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
     private var croppedHotelChainCoverImageUri: Uri?= null  // Final Uri for Hotel chain Cover
+    private var chainHotelList:MutableList<HotelChainData>? = null
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraHotelChainImageUri: Uri
@@ -56,7 +58,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
         super.onViewCreated(view, savedInstanceState)
 
 
-        cameraHotelChainImageUri = createImageUri()!!
+//        cameraHotelChainImageUri = createImageUri()!!
 
         chainRecyclerView = view.findViewById(R.id.chainHotelRecyclerView)
         chainRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -67,7 +69,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
     }
 
     private fun setUpChainAdapter() {
-        val chainHotelList : MutableList<HotelChainData> = mutableListOf()
+        chainHotelList = mutableListOf()
 
         var n : Int = 2
 
@@ -81,12 +83,13 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
                 R.drawable.png_post,
                 "Hotel $i Name",
                 "Hotel $i Star rating",
-                "Hotel $i Location"
+                "Hotel $i Location",
+                croppedHotelChainCoverImageUri
             )
-            chainHotelList.add(hotelChainData)
+            chainHotelList!!.add(hotelChainData)
         }
 
-        val hotelChainAdapter = HotelChainAdapter(chainHotelList, requireContext(), croppedHotelChainCoverImageUri)
+        val hotelChainAdapter = HotelChainAdapter(chainHotelList!!, requireContext(), croppedHotelChainCoverImageUri)
         chainRecyclerView.adapter = hotelChainAdapter
         hotelChainAdapter.notifyDataSetChanged()
         hotelChainAdapter.setOnCoverClickListener(this@HotelOwnerChainFragment)
@@ -105,6 +108,12 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
 
     override fun onCoverImageClick(userType: String) {
         openBottomCameraSheet()
+        val hotelChainAdapter = HotelChainAdapter(chainHotelList!!, requireContext(), croppedHotelChainCoverImageUri)
+        chainRecyclerView.adapter = hotelChainAdapter
+        hotelChainAdapter.notifyDataSetChanged()
+        hotelChainAdapter.setOnCoverClickListener(this@HotelOwnerChainFragment)
+
+        setUpChainAdapter()
     }
 
     private fun openBottomCameraSheet() {
@@ -150,16 +159,13 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val imageUri = data.data
             if (imageUri != null) {
-
-//                cropImage(imageUri)
-
-                    croppedHotelChainCoverImageUri = imageUri
+                croppedHotelChainCoverImageUri = imageUri
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val resultingImage = CropImage.getActivityResult(data)
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = resultingImage.uri
-
+                croppedHotelChainCoverImageUri = croppedImage
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(context,"Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT).show()
             }
