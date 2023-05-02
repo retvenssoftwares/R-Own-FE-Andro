@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -30,6 +31,7 @@ import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.ChatSection.UserChatList
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
 import app.retvens.rown.NavigationFragments.*
@@ -39,6 +41,7 @@ import app.retvens.rown.databinding.ActivityDashBoardBinding
 import app.retvens.rown.utils.clearUserId
 import app.retvens.rown.utils.moveToClear
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -63,6 +66,9 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var dialog: Dialog
     private lateinit var popularUsersAdapter: PopularUsersAdapter
     private  var userList: List<MesiboUsersData> = emptyList()
+    private lateinit var profile:ImageView
+    private lateinit var name:TextView
+    private lateinit var phone:TextView
 
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +87,6 @@ class DashBoardActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         mActivityTitle = title.toString()
-
 
 
         toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close)
@@ -107,6 +112,12 @@ class DashBoardActivity : AppCompatActivity() {
         header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
             startActivity(Intent(this, UserName::class.java))
         }
+
+        profile = header.findViewById<ImageView>(R.id.nav_profile)
+        name = header.findViewById<TextView>(R.id.user_name)
+        phone = header.findViewById<TextView>(R.id.nav_phone)
+
+        getProfileInfo()
 
         //setUp BottomNav
         val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
@@ -178,6 +189,32 @@ class DashBoardActivity : AppCompatActivity() {
 
         val frame = findViewById<FrameLayout>(R.id.fragment_container)
 
+
+    }
+
+    private fun getProfileInfo() {
+
+        val send = RetrofitBuilder.retrofitBuilder.fetchUser("Oo7PCzo0-")
+
+        send.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    name.text = response.Full_name
+                    phone.text = response.Phone
+                    Glide.with(applicationContext).load(response.Profile_pic).into(profile)
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
 
     }
 

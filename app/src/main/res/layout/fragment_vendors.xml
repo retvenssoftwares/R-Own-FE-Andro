@@ -173,7 +173,6 @@ for your properties and other services too."
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="Photography , Digital Marketing, Video Creation"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>

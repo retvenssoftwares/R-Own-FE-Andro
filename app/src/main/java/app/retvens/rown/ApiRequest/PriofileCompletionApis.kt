@@ -77,5 +77,17 @@ interface PriofileCompletionApis{
         @Part("websiteLink") website: RequestBody
     ): Call<UpdateResponse>
 
+    @GET("getservicename")
+    fun getServices():Call<List<VendorServicesData>>
 
+    @PATCH("vendorservice/{user_id}")
+    fun setServices(
+        @Path("user_id") user_id : String,
+        @Body details: PostVendorSerivces
+    ):Call<UpdateResponse>
+
+    @POST("vendordata")
+    fun createVendor(
+        @Body vendor:CreateVendorDataClass
+    ):Call<UpdateResponse>
 }

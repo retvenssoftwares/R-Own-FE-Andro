@@ -164,8 +164,8 @@ class LocationFragment : Fragment(), BackHandler {
 
             override fun onJobClick(job: LocationDataClass) {
                for (x in job.states){
-                   for (y in x.cities){
-                       etLocation.setText(y.name)
+                   for (y in x.name){
+                       etLocation.setText(y.toString())
                    }
                }
                 dialogRole.dismiss()
