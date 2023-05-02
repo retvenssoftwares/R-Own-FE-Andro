@@ -14,6 +14,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -134,7 +135,14 @@ class JobFragment : Fragment() {
             dialogRole.window?.setGravity(Gravity.BOTTOM)
             dialogRole.show()
 
-
+            val jt= dialogRole.findViewById<RelativeLayout>(R.id.filter_job_type)
+            jt.setOnClickListener {
+                showBottomJobType()
+            }
+            val fL = dialogRole.findViewById<RelativeLayout>(R.id.filter_location)
+            fL.setOnClickListener {
+                openLocationSheet()
+            }
 
         }
 

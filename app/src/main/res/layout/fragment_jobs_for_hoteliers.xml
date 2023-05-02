@@ -40,7 +40,7 @@
             android:id="@+id/find_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Let’s find a work"
+            android:text="Let’s find employees"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/montserrat_semibold"
             android:textColor="@color/black"
