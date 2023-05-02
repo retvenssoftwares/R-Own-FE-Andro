@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/university"
+            android:id="@+id/jobTLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -46,10 +46,7 @@
             app:boxStrokeWidthFocused="2dp"
             app:endIconDrawable="@drawable/ic_arrow_down_24"
             app:endIconMode="custom"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dob_et"

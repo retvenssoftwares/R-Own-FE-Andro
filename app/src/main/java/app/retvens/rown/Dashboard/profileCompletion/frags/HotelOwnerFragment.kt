@@ -34,6 +34,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.HotelOwnerInfoData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -61,6 +62,7 @@ class HotelOwnerFragment : Fragment(), BackHandler {
     lateinit var dialog: Dialog
 
 
+    lateinit var progressDialog : Dialog
 
     /*-----------------------SINGLE HOTEL----------------------------------*/
     /*-----------------------SINGLE HOTEL--------------------------------*/
@@ -69,14 +71,20 @@ class HotelOwnerFragment : Fragment(), BackHandler {
     lateinit var hotelOwnerProfile  : ShapeableImageView
     lateinit var hotelOwnerCover  : ShapeableImageView
     lateinit var ownerHotel : TextInputEditText
-    lateinit var chainName:TextInputEditText
-    lateinit var website:TextInputEditText
-    lateinit var bookingLink:TextInputEditText
+    lateinit var ownerHotelLayout: TextInputLayout
 
     private var croppedOwnerProfileImageUri: Uri? = null // Final Uri for Owner Profile
     private var croppedOwnerCoverImageUri: Uri? = null  // Final Uri for Owner Cover
     /*-----------------------HOTEL CHAIN--------------------------------*/
     /*-----------------------HOTEL CHAIN--------------------------------*/
+
+    lateinit var chainName:TextInputEditText
+    lateinit var website:TextInputEditText
+    lateinit var bookingLink:TextInputEditText
+
+    lateinit var chainNameLayout : TextInputLayout
+    lateinit var websiteLayout : TextInputLayout
+    lateinit var bookingLinkLayout : TextInputLayout
 
     lateinit var cameraHotelChain : ImageView
     lateinit var hotelChainProfile : ShapeableImageView
@@ -117,10 +125,14 @@ class HotelOwnerFragment : Fragment(), BackHandler {
         super.onViewCreated(view, savedInstanceState)
 
         ownerHotel = view.findViewById(R.id.owner_Hotel)
+        ownerHotelLayout = view.findViewById(R.id.owner_Hotel_layout)
 
         chainName = view.findViewById(R.id.hotelchain_Name)
+        chainNameLayout = view.findViewById(R.id.hotelchain_Name_layout)
         website = view.findViewById(R.id.hotel_Website)
+        websiteLayout = view.findViewById(R.id.hotel_Website_layout)
         bookingLink = view.findViewById(R.id.hotel_bokkinglink)
+        bookingLinkLayout = view.findViewById(R.id.hotel_bokkinglink_layout)
 
         hotelType = view.findViewById<TextInputEditText>(R.id.hotel_type_et)
         singleHotelLayout = view.findViewById(R.id.cons_single_hotel)
@@ -162,17 +174,49 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
         view.findViewById<CardView>(R.id.card_owner_next).setOnClickListener {
             if (nextScreen == 1){
-
                 val hotels = noOfHotels.text.toString()
-                if (hotels.isEmpty()){
-                    Toast.makeText(requireContext(), "input hotels", Toast.LENGTH_SHORT).show()
-                } else{
 
+                    if (croppedHotelChainImageUri == null){
+                        Toast.makeText(context, "Please select an logo", Toast.LENGTH_SHORT).show()
+                    } else if(chainName.length() < 2){
+                        chainNameLayout.error = "Please enter Chain name"
+                    } else if(website.length() < 2){
+                        websiteLayout.error = "Website"
+                    } else if(bookingLink.length() < 2){
+                        bookingLinkLayout.error = "Booking Link"
+                    } else if (hotels.isEmpty()){
+                        Toast.makeText(requireContext(), "input hotels number", Toast.LENGTH_SHORT).show()
+                    } else {
+                        progressDialog = Dialog(requireContext())
+                        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                        progressDialog.setCancelable(false)
+                        progressDialog.setContentView(R.layout.progress_dialoge)
+                        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                        Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                        progressDialog.show()
 
-                    UploadChainData()
-                }
+                        UploadChainData()
+                    }
             }else{
-                UploadData()
+                if (croppedOwnerProfileImageUri == null){
+                    Toast.makeText(context, "Please select an Profile", Toast.LENGTH_SHORT).show()
+                } else if (croppedOwnerCoverImageUri == null){
+                    Toast.makeText(context, "Please select an Cover Image", Toast.LENGTH_SHORT).show()
+                } else if(ownerHotel.length() < 2){
+                    ownerHotelLayout.error = "Please enter owner name"
+                } else {
+
+                    progressDialog = Dialog(requireContext())
+                    progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    progressDialog.setCancelable(false)
+                    progressDialog.setContentView(R.layout.progress_dialoge)
+                    progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                    Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                    progressDialog.show()
+                    UploadData()
+                }
             }
         }
 
@@ -191,7 +235,10 @@ class HotelOwnerFragment : Fragment(), BackHandler {
 
         val data = HotelOwnerInfoData(name,type,number,website,book)
 
-        val update = RetrofitBuilder.profileCompletion.setHotelInfo("Oo7PCzo0-",data)
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val update = RetrofitBuilder.profileCompletion.setHotelInfo(user_id,data)
 
         update.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -200,6 +247,7 @@ class HotelOwnerFragment : Fragment(), BackHandler {
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
+                    progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     val fragment = HotelOwnerChainFragment()
 
@@ -212,11 +260,13 @@ class HotelOwnerFragment : Fragment(), BackHandler {
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
                 }else{
+                    progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
@@ -267,16 +317,19 @@ class HotelOwnerFragment : Fragment(), BackHandler {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
+                    progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                 }else{
+                    progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })

@@ -134,6 +134,8 @@ class JobFragment : Fragment() {
             dialogRole.window?.setGravity(Gravity.BOTTOM)
             dialogRole.show()
 
+
+
         }
 
         suggestedRecycler = requireView().findViewById(R.id.suggested_recycler)
@@ -278,14 +280,6 @@ class JobFragment : Fragment() {
         dialogRole.window?.setGravity(Gravity.BOTTOM)
         dialogRole.show()
 
-        dialogRole.findViewById<LinearLayout>(R.id.location).setOnClickListener {
-            selectJobLocationET.setText("Kharghar, Mumbai, Maharastra, India")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<LinearLayout>(R.id.location1).setOnClickListener {
-            selectJobLocationET.setText("Kharghar, Mumbai, Maharastra, India")
-            dialogRole.dismiss()
-        }
     }
     private fun showBottomNotice() {
 

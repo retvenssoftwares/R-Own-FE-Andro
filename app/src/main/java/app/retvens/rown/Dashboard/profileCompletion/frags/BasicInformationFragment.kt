@@ -31,6 +31,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
@@ -56,6 +57,7 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
     private lateinit var recyclerView:RecyclerView
     private lateinit var basicInformationAdapter: BasicInformationAdapter
 
+    lateinit var progressDialog : Dialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -137,6 +139,15 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
         }
 
         view.findViewById<CardView>(R.id.card_basic_next).setOnClickListener {
+            progressDialog = Dialog(requireContext())
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setCancelable(false)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
+
             setJobTitle()
         }
 
@@ -158,8 +169,8 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
     }
 
     private fun setJobTitle() {
-        val sharedPreferences =  requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences.getString("user_id", "").toString()
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val university = university.text.toString()
         val start = start.text.toString()
@@ -184,16 +195,18 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
 
         val info = BasicInfoClass(role, BasicInfoClass.EducationData(university,start,end))
 
-        val update = RetrofitBuilder.profileCompletion.setJobRole("Oo7PCzo0-",info)
+        val update = RetrofitBuilder.profileCompletion.setJobRole(user_id,info)
 
         update.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+
+                    progressDialog.dismiss()
 
                     when (nextFrag) {
                         0 -> {
@@ -229,11 +242,13 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
                     }
 
                 }else{
+                    progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })

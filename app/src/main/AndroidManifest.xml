@@ -44,11 +44,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.jobforvendors.JobPostActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"/>
+        <activity
             android:name=".NavigationFragments.job.JobDetailsAppliedActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.job.JobDetailsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"/>
         <activity
             android:name=".Dashboard.profileCompletion.UserName"
             android:exported="true"

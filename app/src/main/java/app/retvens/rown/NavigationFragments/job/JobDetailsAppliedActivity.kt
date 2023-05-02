@@ -16,6 +16,10 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
         binding = ActivityJobDetailsAppliedBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.backJobsDetails.setOnClickListener {
+            onBackPressed()
+        }
+
         binding.descriptionJobCardTextApplied.setOnClickListener {
             binding.descriptionJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             binding.descriptionJobCardTextApplied.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
@@ -28,6 +32,7 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
 
             binding.llDescApplied.visibility = View.VISIBLE
             binding.llCompanyApplied.visibility = View.GONE
+            binding.llActivitiesApplied.visibility = View.GONE
         }
         binding.companyJobCardTextApplied.setOnClickListener {
 
@@ -42,6 +47,7 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
 
             binding.llDescApplied.visibility = View.GONE
             binding.llCompanyApplied.visibility = View.VISIBLE
+            binding.llActivitiesApplied.visibility = View.GONE
         }
         binding.activitiesJobCardTextApplied.setOnClickListener {
 
@@ -54,6 +60,7 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
             binding.descriptionJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.descriptionJobCardTextApplied.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
+            binding.llActivitiesApplied.visibility = View.VISIBLE
             binding.llDescApplied.visibility = View.GONE
             binding.llCompanyApplied.visibility = View.GONE
         }

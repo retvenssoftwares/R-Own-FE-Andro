@@ -116,7 +116,8 @@ class DashBoardActivity : AppCompatActivity() {
                 R.id.home -> replaceFragment(HomeFragment())
                 R.id.jobs -> replaceFragment(JobFragment())
 //                R.id.jobs -> replaceFragment(JobsForHoteliers())
-                R.id.explore -> replaceFragment(ExploreFragment())
+//                R.id.explore -> replaceFragment(ExploreFragment())
+                R.id.explore -> replaceFragment(JobsForHoteliers())
                 R.id.events -> replaceFragment(EventFragment())
                 R.id.profile -> replaceFragment(ProfileFragment())
                 else -> null

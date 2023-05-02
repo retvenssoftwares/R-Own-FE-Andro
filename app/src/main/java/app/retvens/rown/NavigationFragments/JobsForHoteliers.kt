@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.NavigationFragments.jobforvendors.ExploreRequestingChildFragmnet
+import app.retvens.rown.NavigationFragments.jobforvendors.JobPostActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobPostedChildFragmnet
 import app.retvens.rown.NavigationFragments.jobforvendors.explore_employees_fragment
 import app.retvens.rown.R
@@ -76,6 +78,7 @@ class JobsForHoteliers : Fragment() {
         postAJob = view.findViewById(R.id.postAJob)
         postAJob.setOnClickListener {
             Toast.makeText(context, "Posted", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(context, JobPostActivity::class.java) )
         }
 
         view.findViewById<ImageView>(R.id.filter).setOnClickListener {

@@ -1,17 +1,22 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -22,6 +27,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
 import app.retvens.rown.R
 import app.retvens.rown.utils.saveUserId
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mesibo.calls.api.Utils
@@ -39,8 +45,14 @@ class UsernameFragment : Fragment() {
     private lateinit var firstName:TextInputEditText
     private lateinit var lastName:TextInputEditText
     private lateinit var userName:TextInputEditText
+    lateinit var dobEtLayout : TextInputLayout
+    private lateinit var firstNameLayout:TextInputLayout
+    private lateinit var lastNameLayout:TextInputLayout
+    private lateinit var userNameLayout:TextInputLayout
     private lateinit var sdf:SimpleDateFormat
     private lateinit var cal:Calendar
+
+    lateinit var progressDialog : Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +67,7 @@ class UsernameFragment : Fragment() {
 
         /*-------------Calendar Setup--------------*/
         dobEt = view.findViewById(R.id.dob_et)
+        dobEtLayout = view.findViewById(R.id.dob)
 
         cal = Calendar.getInstance()
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -79,13 +92,38 @@ class UsernameFragment : Fragment() {
 
         //Define Fields
         firstName = view.findViewById(R.id.first_name)
+        firstNameLayout = view.findViewById(R.id.first_name_layout)
         lastName = view.findViewById(R.id.last_name)
-         userName = view.findViewById(R.id.complete_username)
+        lastNameLayout = view.findViewById(R.id.last_name_layout)
+        userName = view.findViewById(R.id.complete_username)
+        userNameLayout = view.findViewById(R.id.complete_username_layout)
 
         val complete = view.findViewById<CardView>(R.id.card_complete_continue)
 
         complete.setOnClickListener {
-            sendInfo()
+            if(firstName.length() < 3){
+                firstNameLayout.error = "Please enter your first name"
+            } else if(lastName.length() < 3){
+                firstNameLayout.isErrorEnabled = false
+                lastNameLayout.error = "Please enter your last name"
+            } else if(dobEt.length() < 3){
+                lastNameLayout.isErrorEnabled = false
+                dobEtLayout.error = "Please select your D.O.B"
+            } else if(userName.length() < 3){
+                dobEtLayout.isErrorEnabled = false
+                userNameLayout.error = "Please enter an username"
+            } else {
+                userNameLayout.isErrorEnabled = false
+                progressDialog = Dialog(requireContext())
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
+                sendInfo()
+            }
         }
     }
 
@@ -99,9 +137,11 @@ class UsernameFragment : Fragment() {
 
         val date = sdf.format(cal.time).toString()
 
-        val update = UpdateUserName(fullName,date,username)
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val send = RetrofitBuilder.profileCompletion.setUsername("Oo7PCzo0-",update)
+        val update = UpdateUserName(fullName,date,username)
+        val send = RetrofitBuilder.profileCompletion.setUsername(user_id,update)
 
         send.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -111,18 +151,20 @@ class UsernameFragment : Fragment() {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
-
+                    progressDialog.dismiss()
                     val fragment = LocationFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
             }
         })
 

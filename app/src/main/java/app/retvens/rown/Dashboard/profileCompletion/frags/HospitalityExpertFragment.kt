@@ -11,9 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +26,9 @@ import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformati
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,6 +45,11 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
     private lateinit var hospitalityExpertAdapter: HospitalityExpertAdapter
     private lateinit var dialogRole:Dialog
 
+    lateinit var jobTitleLayout : TextInputLayout
+    lateinit var startLayout : TextInputLayout
+    lateinit var endLayout : TextInputLayout
+
+    lateinit var progressDialog : Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,10 +78,33 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
         start = view.findViewById(R.id.et_session_Start)
         end = view.findViewById(R.id.et_session_End)
 
+        jobTitleLayout = view.findViewById(R.id.jobTLayout)
+        startLayout = view.findViewById(R.id.session_start)
+        endLayout = view.findViewById(R.id.session_end)
+
         val submit = view.findViewById<CardView>(R.id.card_job_next)
 
         submit.setOnClickListener {
-            setJobDetail()
+            if(jobTitle.length() < 3){
+                jobTitleLayout.error = "Please enter your Job Tittle"
+            } else if(start.length() < 3){
+                jobTitleLayout.isErrorEnabled = false
+                startLayout.error = "Please enter start year"
+            } else if(end.length() < 3){
+                jobTitleLayout.isErrorEnabled = false
+                startLayout.isErrorEnabled = false
+                endLayout.error = "Please enter end year"
+            } else {
+                progressDialog = Dialog(requireContext())
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
+                setJobDetail()
+            }
         }
 
     }
@@ -86,14 +118,17 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
 
         val data = HospitalityexpertData(HospitalityexpertData.JobDetail(type,title,company,start,end))
 
-        val update = RetrofitBuilder.profileCompletion.setHospitalityExpertDetails("Oo7PCzo0-",data)
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val update = RetrofitBuilder.profileCompletion.setHospitalityExpertDetails(user_id,data)
 
         update.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful &&isAdded){
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(context, DashBoardActivity::class.java))

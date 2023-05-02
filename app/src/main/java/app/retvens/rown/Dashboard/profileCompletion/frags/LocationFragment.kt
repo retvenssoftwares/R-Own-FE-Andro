@@ -14,6 +14,7 @@ import android.view.Window
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -87,14 +88,17 @@ class LocationFragment : Fragment(), BackHandler {
 
         val location = etLocation.text.toString()
 
-        val update = RetrofitBuilder.profileCompletion.setLocation("Oo7PCzo0-", LocationClass(location))
+
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+        val update = RetrofitBuilder.profileCompletion.setLocation(user_id, LocationClass(location))
 
         update.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     val fragment = BasicInformationFragment()

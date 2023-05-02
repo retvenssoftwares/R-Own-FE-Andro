@@ -29,8 +29,10 @@ import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.theartofdev.edmodo.cropper.CropImage
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -51,9 +53,15 @@ class VendorsFragment : Fragment(), BackHandler {
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     private var logoOfImageUri: Uri? = null
     private lateinit var brandName:TextInputEditText
+    private lateinit var brandNameLayout: TextInputLayout
+    private lateinit var brandDescriptionLayout: TextInputLayout
+    private lateinit var portfolioLayout: TextInputLayout
+    private lateinit var websiteLayout: TextInputLayout
     private lateinit var brandDesc:TextInputEditText
     private lateinit var portfolio:TextInputEditText
     private lateinit var website:TextInputEditText
+
+    lateinit var progressDialog : Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,13 +86,44 @@ class VendorsFragment : Fragment(), BackHandler {
         }
 
         brandName = view.findViewById(R.id.brand_name)
+        brandNameLayout = view.findViewById(R.id.brand_name_layout)
         brandDesc = view.findViewById(R.id.brand_desc)
+        brandDescriptionLayout = view.findViewById(R.id.brand_desc_layout)
         portfolio = view.findViewById(R.id.portfolio_link)
+        portfolioLayout = view.findViewById(R.id.portfolio_link_layout)
         website = view.findViewById(R.id.website_link)
+        websiteLayout = view.findViewById(R.id.website_link_layout)
 
         val submit = view.findViewById<CardView>(R.id.card_job_next)
         submit.setOnClickListener {
-            uploadData()
+            if (logoOfImageUri == null){
+                Toast.makeText(context, "Please select an Logo", Toast.LENGTH_SHORT).show()
+            } else if(brandName.length() < 2){
+                brandNameLayout.error = "Please enter your brand name"
+            } else if(brandDesc.length() < 3){
+                brandNameLayout.isErrorEnabled = false
+                brandDescriptionLayout.error = "Please enter Description"
+            } else if(portfolio.length() < 3){
+                brandNameLayout.isErrorEnabled = false
+                brandDescriptionLayout.isErrorEnabled = false
+                portfolioLayout.error = "Please enter your Portfolio Link"
+            } else if(website.length() < 3){
+                brandNameLayout.isErrorEnabled = false
+                brandDescriptionLayout.isErrorEnabled = false
+                portfolioLayout.isErrorEnabled = false
+                websiteLayout.error = "Please enter your website link"
+            } else {
+                progressDialog = Dialog(requireContext())
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
+
+                uploadData()
+            }
         }
     }
 
@@ -98,6 +137,8 @@ class VendorsFragment : Fragment(), BackHandler {
             logoOfImageUri!!,"r",null
         )?:return
 
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
         val file =  File(requireContext().cacheDir, "cropped_${requireContext().contentResolver.getFileName(logoOfImageUri!!)}.jpg")
@@ -105,7 +146,7 @@ class VendorsFragment : Fragment(), BackHandler {
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
 
-        val send = RetrofitBuilder.profileCompletion.uploadVendorData("Oo7PCzo0-",
+        val send = RetrofitBuilder.profileCompletion.uploadVendorData(user_id,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),portfolio),
@@ -119,16 +160,19 @@ class VendorsFragment : Fragment(), BackHandler {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
+                    progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                 }else{
+                    progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
