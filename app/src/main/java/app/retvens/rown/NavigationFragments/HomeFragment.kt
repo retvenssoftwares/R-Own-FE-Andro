@@ -44,7 +44,12 @@ class HomeFragment : Fragment() {
     lateinit var postAdapter: PostAdapter
     lateinit var communityListAdapter: CommunityListAdapter
     lateinit var postsArrayList : ArrayList<Post>
-    lateinit var communityArrayList : ArrayList<Community>
+    lateinit var blogsList : ArrayList<DataItem.BlogsRecyclerData>
+    lateinit var  communityList : ArrayList<DataItem.CommunityRecyclerData>
+    lateinit var  vendorsList : ArrayList<DataItem.VendorsRecyclerData>
+    lateinit var  hotelAwardsList : ArrayList<DataItem.AwardsRecyclerData>
+    lateinit var  hotelSectionList : ArrayList<DataItem.HotelSectionRecyclerData>
+
     lateinit var adapter:MainAdapter
     var profilepic: String = ""
     var userName:String = ""
@@ -86,8 +91,8 @@ class HomeFragment : Fragment() {
         recyclerCommunity.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
         recyclerCommunity.setHasFixedSize(true)
 
-        communityArrayList = arrayListOf<Community>()
-        postsArrayList = arrayListOf<Post>()
+//        communityArrayList = arrayListOf<Community>()
+//        postsArrayList = arrayListOf<Post>()
 
 
 
@@ -106,51 +111,6 @@ class HomeFragment : Fragment() {
         btn.setOnClickListener {
             startActivity(Intent(context,CreateCommunity::class.java))
         }
-
-/*        val gesture = GestureDetector(
-            activity,
-            object : SimpleOnGestureListener() {
-                override fun onDown(e: MotionEvent): Boolean {
-                    return true
-                }
-
-                override fun onFling(
-                    e1: MotionEvent, e2: MotionEvent, velocityX: Float,
-                    velocityY: Float
-                ): Boolean {
-                    Log.i("tg", "onFling has been called!")
-                    val SWIPE_MIN_DISTANCE = 120
-                    val SWIPE_MAX_OFF_PATH = 250
-                    val SWIPE_THRESHOLD_VELOCITY = 200
-                    try {
-                        if (Math.abs(e1.y - e2.y) > SWIPE_MAX_OFF_PATH) return false
-                        if (e1.x - e2.x > SWIPE_MIN_DISTANCE
-                            && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-                        ) {
-                            val transaction: FragmentTransaction =
-                                fragmentManager!!.beginTransaction()
-                            transaction.replace(R.id.fragment_container, ChatFragment())
-                            transaction.addToBackStack(null)
-                            transaction.commit()
-                            Toast.makeText(context,"Chats",Toast.LENGTH_SHORT).show()
-                        } else if (e2.x - e1.x > SWIPE_MIN_DISTANCE
-                            && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-                        ) {
-                            Toast.makeText(context,"LtR",Toast.LENGTH_SHORT).show()
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show()
-                        Log.d("tag",e.toString())
-                    }
-                    return super.onFling(e1, e2, velocityX, velocityY)
-                }
-            })
-
-        view.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View, event: MotionEvent): Boolean {
-                return gesture.onTouchEvent(event)
-            }
-        })*/
 
     }
 
@@ -171,6 +131,7 @@ class HomeFragment : Fragment() {
                             post = x.post
                         }
                         getPostProfile(item.user_id)
+
                         mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(item._id,item.user_id,item.caption,item.likes,
                         listOf(),item.location,item.hashtags,
                             listOf<DataItem.Media>(DataItem.Media(post,"","")),
@@ -184,6 +145,27 @@ class HomeFragment : Fragment() {
 
                         adapter.notifyDataSetChanged()
                     }
+//                    mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
+                    mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
+                    mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
+                    response.forEach{      item ->
+                        var post:String = ""
+                        for ( x in item.media){
+                            post = x.post
+                        }
+                        getPostProfile(item.user_id)
+
+                        mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(item._id,item.user_id,item.caption,item.likes,
+                            listOf(),item.location,item.hashtags,
+                            listOf<DataItem.Media>(DataItem.Media(post,"","")),
+                            item.post_id,0,item.display_status,item.saved_post,
+                            profilepic,profileName,"",userName)))
+
+//                        Toast.makeText(requireContext(),profileName,Toast.LENGTH_SHORT).show()
+
+                    }
+                    mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
+                    mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
 
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -227,7 +209,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareData() {
-        val communityList = ArrayList<DataItem.CommunityRecyclerData>()
+        communityList = ArrayList<DataItem.CommunityRecyclerData>()
         communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12"))
         communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34"))
         communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3"))
@@ -239,39 +221,39 @@ class HomeFragment : Fragment() {
         createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3"))
         createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_post,"Vendor 4","78"))
 
-        val blogsList = ArrayList<DataItem.BlogsRecyclerData>()
+        blogsList = ArrayList<DataItem.BlogsRecyclerData>()
         blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_blog,"Tom", R.drawable.png_profile))
         blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_post,"Vendor", R.drawable.png_profile_post))
         blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_vendor,"Holland", R.drawable.png_profile))
         blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_blog,"Jason", R.drawable.png_profile_post))
 
-        val vendorsList = ArrayList<DataItem.VendorsRecyclerData>()
+        vendorsList = ArrayList<DataItem.VendorsRecyclerData>()
         vendorsList.add(DataItem.VendorsRecyclerData(R.drawable.png_blog, R.drawable.png_profile,"Thailand in budget","Tom"))
         vendorsList.add(DataItem.VendorsRecyclerData(R.drawable.png_post, R.drawable.png_profile_post,"Europe in budget","Vendor"))
         vendorsList.add(DataItem.VendorsRecyclerData(R.drawable.png_vendor, R.drawable.png_profile,"Europe in budget","Holland"))
         vendorsList.add(DataItem.VendorsRecyclerData(R.drawable.png_blog, R.drawable.png_profile_post,"China in budget","Jason"))
 
 
-        val hotelSectionList = ArrayList<DataItem.HotelSectionRecyclerData>()
+        hotelSectionList = ArrayList<DataItem.HotelSectionRecyclerData>()
         hotelSectionList.add(DataItem.HotelSectionRecyclerData(R.drawable.png_blog, "Paradise in"))
         hotelSectionList.add(DataItem.HotelSectionRecyclerData(R.drawable.png_post, "Hotel in Oman"))
         hotelSectionList.add(DataItem.HotelSectionRecyclerData(R.drawable.png_vendor, "Hotel 1"))
         hotelSectionList.add(DataItem.HotelSectionRecyclerData(R.drawable.png_blog, "Hotel 2"))
 
-        val hotelAwardsList = ArrayList<DataItem.AwardsRecyclerData>()
+        hotelAwardsList = ArrayList<DataItem.AwardsRecyclerData>()
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_events))
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_awards))
 
         mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
 //        mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(R.drawable.png_post, R.drawable.png_profile, "Jason Stathon")))
-        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
+//        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
 //        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_r_logo, "John")))
-        mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
-        mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
-        mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
+//        mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
+//        mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
+//        mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
 //        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Tom")))
-        mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
+//        mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
 //        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Chrish Hamswirth")))
-        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
+//        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
     }
 }
