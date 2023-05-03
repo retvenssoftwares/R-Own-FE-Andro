@@ -16,23 +16,37 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainData
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheet
+import app.retvens.rown.bottomsheet.BottomSheetRating
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.theartofdev.edmodo.cropper.CropImage
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
-class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCoverImageClickListener{
+class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRatingClickListener{
 
     lateinit var dialog: Dialog
-    lateinit var chainRecyclerView: RecyclerView
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
     private var croppedHotelChainCoverImageUri: Uri?= null  // Final Uri for Hotel chain Cover
@@ -41,12 +55,29 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraHotelChainImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-//        cropImage(cameraHotelChainImageUri)
-            croppedHotelChainCoverImageUri = cameraHotelChainImageUri
+        croppedHotelChainCoverImageUri = cameraHotelChainImageUri
+        chainCover.setImageURI(croppedHotelChainCoverImageUri)
     }
 
-    override fun onCreateView(
+    lateinit var nameET : TextInputEditText
+    lateinit var location : TextInputEditText
+    lateinit var rating : TextInputEditText
 
+    lateinit var progressDialog : Dialog
+
+    lateinit var nameTIL : TextInputLayout
+    lateinit var locationTIL : TextInputLayout
+    lateinit var ratingTIL : TextInputLayout
+
+    lateinit var counterText : TextView
+
+    lateinit var chainCover : ShapeableImageView
+
+    lateinit var next : CardView
+    var n : Int = 2
+    var counter : Int = 1
+
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -57,42 +88,85 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        cameraHotelChainImageUri = createImageUri()!!
 
-//        cameraHotelChainImageUri = createImageUri()!!
+        next = view.findViewById(R.id.card_chain_next)
 
-        chainRecyclerView = view.findViewById(R.id.chainHotelRecyclerView)
-        chainRecyclerView.layoutManager = LinearLayoutManager(context)
-        chainRecyclerView.setHasFixedSize(true)
+        nameET = view.findViewById<TextInputEditText>(R.id.chainHotelNameET)
+        location = view.findViewById<TextInputEditText>(R.id.chainHotelLocationET)
+        rating = view.findViewById<TextInputEditText>(R.id.chainHotelRatingET)
 
-        setUpChainAdapter()
+        nameTIL = view.findViewById<TextInputLayout>(R.id.chainHotelNameLayout)
+        locationTIL = view.findViewById<TextInputLayout>(R.id.chainHotelLocationLayout)
+        ratingTIL = view.findViewById<TextInputLayout>(R.id.chainHotelRatingLayout)
 
+        counterText = view.findViewById(R.id.counter_text)
+
+        chainCover = view.findViewById<ShapeableImageView>(R.id.hotel_chain_cover_1)
+        chainCover.setOnClickListener {
+            openBottomCameraSheet()
+        }
+        location.setOnClickListener {
+            openLocationSheet()
+        }
+
+        rating.setOnClickListener {
+            val bottomSheet = BottomSheetRating()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetRating.RATING_TAG)}
+        }
+
+        if(arguments?.getString("hotels") != null){
+            val no = arguments?.getString("hotels")
+            n = no!!.toInt()
+        }
+
+        counterText.text = "$counter/$n"
+
+        next.setOnClickListener {
+            if (croppedHotelChainCoverImageUri == null){
+                Toast.makeText(context, "Please select an Cover", Toast.LENGTH_SHORT).show()
+            } else if(nameET.length() < 2){
+                nameTIL.error = "Please enter Chain name"
+            } else {
+                nameTIL.isErrorEnabled = false
+                progressDialog = Dialog(requireContext())
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+//                progressDialog.show()
+                setUpChainAdapter()
+            }
+        }
     }
 
     private fun setUpChainAdapter() {
         chainHotelList = mutableListOf()
 
-        var n : Int = 2
+        if (counter < n){
 
-        if(arguments?.getString("hotels") != null){
-            val no = arguments?.getString("hotels")
-             n = no!!.toInt()
+            counter++
+            nameTIL.setHint("Hotel $counter Name")
+            locationTIL.setHint("Hotel $counter Location")
+            ratingTIL.setHint("Hotel $counter Star rating")
+
+            uploadData()
+        }else {
+            Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
         }
+    }
 
-        for (i in 1..n) {
-            val hotelChainData = HotelChainData(
-                R.drawable.png_post,
-                "Hotel $i Name",
-                "Hotel $i Star rating",
-                "Hotel $i Location",
-                croppedHotelChainCoverImageUri
-            )
-            chainHotelList!!.add(hotelChainData)
-        }
-
-        val hotelChainAdapter = HotelChainAdapter(chainHotelList!!, requireContext(), croppedHotelChainCoverImageUri)
-        chainRecyclerView.adapter = hotelChainAdapter
-        hotelChainAdapter.notifyDataSetChanged()
-        hotelChainAdapter.setOnCoverClickListener(this@HotelOwnerChainFragment)
+    private fun uploadData() {
+        val chainName = nameET.text.toString()
+        val chainLocation = location.text.toString()
+        val chainRating = rating.text.toString()
+        counterText.text = "$counter/$n"
+        nameET.setText("")
+        croppedHotelChainCoverImageUri = null
+        chainCover.setImageURI(croppedHotelChainCoverImageUri)
     }
 
     override fun handleBackPressed(): Boolean {
@@ -105,15 +179,24 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
         return true
 
     }
+    private fun openLocationSheet() {
 
-    override fun onCoverImageClick(userType: String) {
-        openBottomCameraSheet()
-        val hotelChainAdapter = HotelChainAdapter(chainHotelList!!, requireContext(), croppedHotelChainCoverImageUri)
-        chainRecyclerView.adapter = hotelChainAdapter
-        hotelChainAdapter.notifyDataSetChanged()
-        hotelChainAdapter.setOnCoverClickListener(this@HotelOwnerChainFragment)
+        val dialogRole = Dialog(requireContext())
+        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogRole.setContentView(R.layout.bottom_sheet_location)
+        dialogRole.setCancelable(true)
 
-        setUpChainAdapter()
+        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialogRole.window?.setGravity(Gravity.BOTTOM)
+        dialogRole.show()
+//        getUserLocation()
+//
+//        recyclerView = dialogRole.findViewById(R.id.location_recycler)
+//        recyclerView.setHasFixedSize(true)
+//        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
     }
 
     private fun openBottomCameraSheet() {
@@ -141,6 +224,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
     }
     private fun deleteImage() {
         croppedHotelChainCoverImageUri = null
+        chainCover.setImageURI(croppedHotelChainCoverImageUri)
         dialog.dismiss()
     }
     private fun openCamera() {
@@ -160,12 +244,14 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
             val imageUri = data.data
             if (imageUri != null) {
                 croppedHotelChainCoverImageUri = imageUri
+                chainCover.setImageURI(croppedHotelChainCoverImageUri)
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val resultingImage = CropImage.getActivityResult(data)
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = resultingImage.uri
                 croppedHotelChainCoverImageUri = croppedImage
+                chainCover.setImageURI(croppedHotelChainCoverImageUri)
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(context,"Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT).show()
             }
@@ -177,5 +263,9 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, HotelChainAdapter.onCov
             "app.retvens.rown.fileProvider",
             image
         )
+    }
+
+    override fun BottomRatongClick(ratingFrBo: String) {
+        rating.setText(ratingFrBo)
     }
 }

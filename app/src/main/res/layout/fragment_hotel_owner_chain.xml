@@ -27,15 +27,155 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
+            <LinearLayout
+                android:id="@+id/l"
+                app:layout_constraintTop_toBottomOf="@id/use_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="6dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/hotel_chain_cover_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/png_blog"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearance="@style/SquareCornerImage"
+                    android:layout_marginHorizontal="22dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/chainHotelNameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:hint="Hotel 1 Name"
+                    android:textColorHint="@color/black"
+                    app:hintTextColor="@color/black"
+                    app:boxStrokeColor="@color/black"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="20dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/ll"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/chainHotelNameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textColor="@color/black"
+                        android:hint="Hotel Name"
+                        android:textColorHint="@drawable/hint_selector"
+                        android:inputType="text"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/chainHotelLocationLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:hint="Hotel 1 Address*"
+                    android:textColorHint="@color/black"
+                    app:hintTextColor="@color/black"
+                    app:boxStrokeColor="@color/black"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="20dp"
+                    app:endIconDrawable="@drawable/png_location"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/ll"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/chainHotelLocationET"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textColor="@color/black"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:text="Indore, Madhya Pradesh, India"
+                        android:editable="false"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/chainHotelRatingLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:hint="Hotel 1 Star rating*"
+                    android:textColorHint="@color/black"
+                    app:hintTextColor="@color/black"
+                    app:boxStrokeColor="@color/black"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="20dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:endIconDrawable="@drawable/ic_arrow_down_24"
+                    app:endIconMode="custom"
+                    app:endIconTint="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/ll"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/chainHotelRatingET"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textColor="@color/black"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:text="5 Star"
+                        android:editable="false"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        <ImageView
+            android:id="@+id/rI"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/round_img"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintTop_toBottomOf="@id/l"
+            app:layout_constraintBottom_toTopOf="@id/card_chain_next"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/counter_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2/3"
+            android:textSize="24dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/green_own"
+            app:layout_constraintStart_toStartOf="@id/rI"
+            app:layout_constraintEnd_toEndOf="@id/rI"
+            app:layout_constraintTop_toTopOf="@id/rI"
+            app:layout_constraintBottom_toBottomOf="@id/rI"/>
+
+        <!--<androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chainHotelRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             tools:listitem="@layout/chain_hotels_item"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/use_text"
-            app:layout_constraintBottom_toTopOf="@id/card_chain_next"/>
+            app:layout_constraintBottom_toTopOf="@id/card_chain_next"/>-->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_chain_next"
@@ -47,7 +187,6 @@
             app:cardElevation="6dp"
             android:layout_gravity="center_horizontal"
             app:cardCornerRadius="11dp"
-            app:layout_constraintTop_toBottomOf="@id/chainHotelRecyclerView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
