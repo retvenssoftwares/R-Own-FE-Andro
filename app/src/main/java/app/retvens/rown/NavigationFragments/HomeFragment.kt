@@ -162,45 +162,61 @@ class HomeFragment : Fragment() {
                 call: Call<List<FetchPostDataClass>?>,
                 response: Response<List<FetchPostDataClass>?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val response = response.body()!!
 
-                    response.forEach{      item ->
-                        var post:String = ""
-                        for ( x in item.media){
+                    response.forEach { item ->
+                        var post: String = ""
+                        for (x in item.media) {
                             post = x.post
                         }
-                        getPostProfile(item.user_id)
-                        mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(item._id,item.user_id,item.caption,item.likes,
-                        listOf(),item.location,item.hashtags,
-                            listOf<DataItem.Media>(DataItem.Media(post,"","")),
-                            item.post_id,0,item.display_status,item.saved_post,
-                        profilepic,profileName,"",userName)))
+                        getPostProfile(item.user_id) { profileName ->
+                            Toast.makeText(
+                                requireContext(),
+                                profileName,
+                                Toast.LENGTH_SHORT
+                            ).show()
 
-//                        Toast.makeText(requireContext(),profileName,Toast.LENGTH_SHORT).show()
+                            mList.add(
+                                DataItem(
+                                    DataItemType.BANNER, banner = DataItem.Banner(
+                                        item._id, item.user_id, item.caption, item.likes,
+                                        listOf(), item.location, item.hashtags,
+                                        listOf<DataItem.Media>(
+                                            DataItem.Media(
+                                                post,
+                                                "",
+                                                ""
+                                            )
+                                        ),
+                                        item.post_id, 0, item.display_status, item.saved_post,
+                                        profilepic, profileName, "", userName
+                                    )
+                                )
+                            )
 
-                        adapter = MainAdapter(requireContext(),mList)
-                        mainRecyclerView.adapter = adapter
+                            adapter = MainAdapter(requireContext(), mList)
+                            mainRecyclerView.adapter = adapter
 
-                        adapter.notifyDataSetChanged()
+                            adapter.notifyDataSetChanged()
+                        }
                     }
-
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
-
             override fun onFailure(call: Call<List<FetchPostDataClass>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-                Log.e("error",t.message.toString())
+                Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT).show()
+                Log.e("error", t.message.toString())
             }
         })
     }
 
-    private fun getPostProfile(userId:String) {
+    private fun getPostProfile(userId:String,callback: (String) -> Unit) {
 
-        val data = RetrofitBuilder.retrofitBuilder.fetchUser("Oo7PCzo0-")
+        val data = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
 
         data.enqueue(object : Callback<UserProfileRequestItem?> {
             override fun onResponse(
@@ -212,7 +228,8 @@ class HomeFragment : Fragment() {
                     profileName = response.Full_name
                     profilepic = response.Profile_pic
                     userName = response.User_name
-                    Toast.makeText(requireContext(),profileName,Toast.LENGTH_SHORT).show()
+                    callback(profileName)
+
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
