@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +26,10 @@ import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragme
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
@@ -39,6 +43,8 @@ class LocationFragment : Fragment(), BackHandler {
     private lateinit var locationFragmentAdapter: LocationFragmentAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var dialogRole:Dialog
+    private lateinit var profile:ShapeableImageView
+    private lateinit var name:TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +88,39 @@ class LocationFragment : Fragment(), BackHandler {
 //                }
 //            }
 //        )
+
+        profile = view.findViewById(R.id.user_complete_profile1)
+        name = view.findViewById(R.id.user_complete_name)
+
+        getProfileInfo()
+    }
+
+    private fun getProfileInfo() {
+
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val send = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
+
+        send.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    name.setText("Hi ${response.Full_name}")
+
+                    Glide.with(requireContext()).load(response.Profile_pic).into(profile)
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 
     private fun setLocation() {

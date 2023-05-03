@@ -25,9 +25,11 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.utils.saveUserId
 import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mesibo.calls.api.Utils
@@ -51,6 +53,8 @@ class UsernameFragment : Fragment() {
     private lateinit var userNameLayout:TextInputLayout
     private lateinit var sdf:SimpleDateFormat
     private lateinit var cal:Calendar
+    private lateinit var profile: ShapeableImageView
+    private lateinit var name:TextView
 
     lateinit var progressDialog : Dialog
 
@@ -125,6 +129,37 @@ class UsernameFragment : Fragment() {
                 sendInfo()
             }
         }
+
+        profile = view.findViewById(R.id.user_complete_profile)
+        name = view.findViewById(R.id.user_complete_name)
+
+        getProfileInfo()
+    }
+
+    private fun getProfileInfo() {
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val send = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
+
+        send.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    name.setText("Hi ${response.Full_name}")
+
+                    Glide.with(requireContext()).load(response.Profile_pic).into(profile)
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun sendInfo() {

@@ -15,7 +15,8 @@ data class UserProfileRequestItem(
     val __v: Int,
     val _id: String,
     val connection_count: Int,
-    val vendorInfo:Details
+    val vendorInfo:Details,
+    val User_name:String
 ){
     data class Details(
         val vendor_id:String

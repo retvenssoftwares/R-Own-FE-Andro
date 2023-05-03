@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.opengl.Visibility
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +13,14 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.GONE
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.DataCollections.FeedCollection.FetchPostDataClass
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 
-class PostAdapter(val context: Context, val list : ArrayList<Post>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>(){
+class PostAdapter(val context: Context, val list : List<FetchPostDataClass>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>(){
 
     class PostViewHolder(itemView: View) : ViewHolder(itemView){
         val likedByProfile = itemView.findViewById<ImageView>(R.id.liked_by_profile)
-        val likedByLayout = itemView.findViewById<LinearLayout>(R.id.liked_by_layout)
         val likedByUser = itemView.findViewById<TextView>(R.id.liked_by_user)
         val postProfile = itemView.findViewById<ImageView>(R.id.post_profile)
         val likePost = itemView.findViewById<ImageView>(R.id.like_post)
@@ -45,16 +47,25 @@ class PostAdapter(val context: Context, val list : ArrayList<Post>) : RecyclerVi
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val currentItem = list[position]
-        holder.likedByProfile.setImageResource(currentItem.likedByProfile)
-        holder.likedByUser.text = currentItem.likedByUser
-        holder.postProfile.setImageResource(currentItem.postProfile)
-        holder.postImage.setImageResource(currentItem.postImage)
-        holder.postUserName.text = currentItem.postUserName
-        holder.postUserType.text = currentItem.postUserType
-        holder.postUserD.text = currentItem.postUserD
-        holder.postTime.text = currentItem.postTime
-        holder.userIdOnComment.text = currentItem.postUserOnComment
-        holder.recentCommentBy.text = currentItem.recentCommentBy
+//        holder.likedByProfile.setImageResource(currentItem.likedByProfile)
+//        holder.likedByUser.text = currentItem.likedByUser
+//        holder.postProfile.setImageResource(currentItem.postProfile)
+
+        for (x in currentItem.media){
+            Glide.with(context).load(x.post).into(holder.postImage)
+            Log.e("error",x.post)
+        }
+
+//        holder.postUserName.text = currentItem.postUserName
+//        holder.postUserType.text = currentItem.postUserType
+        holder.postUserD.text = currentItem.location
+//        holder.postTime.text = currentItem.postTime
+//        holder.userIdOnComment.text = currentItem.postUserOnComment
+        holder.recentCommentBy.text = currentItem.caption
+
+        Log.e("error",currentItem.caption)
+        Log.e("error",currentItem.location)
+
 
         holder.likePost.setOnClickListener {
             Toast.makeText(context,"Liked", Toast.LENGTH_SHORT).show()
@@ -68,9 +79,9 @@ class PostAdapter(val context: Context, val list : ArrayList<Post>) : RecyclerVi
             Toast.makeText(context,"Comment", Toast.LENGTH_SHORT).show()
         }
 
-        if (holder.postTime.toString() == "3Hr"){
-            holder.likedByLayout.visibility = GONE
-        }
+//        if (holder.postTime.toString() == "3Hr"){
+//            holder.likedByLayout.visibility = GONE
+//        }
     }
 
 }

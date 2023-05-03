@@ -195,7 +195,10 @@ class DashBoardActivity : AppCompatActivity() {
 
     private fun getProfileInfo() {
 
-        val send = RetrofitBuilder.retrofitBuilder.fetchUser("Oo7PCzo0-")
+        val sharedPreferences = applicationContext?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val send = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
 
         send.enqueue(object : Callback<UserProfileRequestItem?> {
             override fun onResponse(

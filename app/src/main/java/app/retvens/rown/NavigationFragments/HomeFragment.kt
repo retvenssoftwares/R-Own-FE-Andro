@@ -2,13 +2,19 @@ package app.retvens.rown.NavigationFragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
+import app.retvens.rown.DataCollections.FeedCollection.FetchPostDataClass
+import app.retvens.rown.DataCollections.FeedCollection.Media
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.home.Community
 import app.retvens.rown.NavigationFragments.home.CommunityListAdapter
@@ -19,6 +25,10 @@ import app.retvens.rown.bottomsheet.BottomSheet
 //import com.karan.multipleviewrecyclerview.Banner
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 
@@ -29,13 +39,17 @@ class HomeFragment : Fragment() {
 
     lateinit var mainRecyclerView : RecyclerView
     lateinit var mList : ArrayList<DataItem>
-
     lateinit var recyclerPost : RecyclerView
     lateinit var recyclerCommunity : RecyclerView
     lateinit var postAdapter: PostAdapter
     lateinit var communityListAdapter: CommunityListAdapter
     lateinit var postsArrayList : ArrayList<Post>
     lateinit var communityArrayList : ArrayList<Community>
+    lateinit var adapter:MainAdapter
+    var profilepic: String = ""
+    var userName:String = ""
+    var profileName:String = ""
+    var type:String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,8 +72,9 @@ class HomeFragment : Fragment() {
 
         mList = ArrayList()
         prepareData()
+        getPost()
 
-        val adapter = MainAdapter(requireContext(),mList)
+        adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
 
 
@@ -74,31 +89,17 @@ class HomeFragment : Fragment() {
         communityArrayList = arrayListOf<Community>()
         postsArrayList = arrayListOf<Post>()
 
-        val post1 = Post(R.drawable.png_profile,
-            "Walker",
-            R.drawable.png_profile_post,
-            R.drawable.png_post,
-            "Paul","Traveller","","2d","arjungupta08","Every gives you a reason!")
 
-        val post2 = Post(R.drawable.png_profile,
-            "D'souza",
-            R.drawable.png_profile_post,
-            R.drawable.png_posts,
-            "John","Blogger","Blogger community","3Hr","d_s","Every Stay Gives you a reason to smile!")
-        postsArrayList.add(post1)
-        postsArrayList.add(post2)
-        postsArrayList.add(post1)
 
-        recyclerPost.adapter = PostAdapter(requireContext(),postsArrayList)
 
         val cummunity = Community(R.drawable.png_profile_post,"Food community","70 members")
         val cummunity1 = Community(R.drawable.png_profile_post,"Travellers community","40 members")
-        communityArrayList.add(cummunity)
-        communityArrayList.add(cummunity1)
-        communityArrayList.add(cummunity)
-        communityArrayList.add(cummunity1)
-
-        recyclerCommunity.adapter = CommunityListAdapter(requireContext(),communityArrayList)
+//        communityArrayList.add(cummunity)
+//        communityArrayList.add(cummunity1)
+//        communityArrayList.add(cummunity)
+//        communityArrayList.add(cummunity1)
+//
+//        recyclerCommunity.adapter = CommunityListAdapter(requireContext(),communityArrayList)
 
         val btn = view.findViewById<ImageView>(R.id.community_btn)
 
@@ -150,6 +151,79 @@ class HomeFragment : Fragment() {
                 return gesture.onTouchEvent(event)
             }
         })*/
+
+    }
+
+    private fun getPost() {
+        val getPost = RetrofitBuilder.feedsApi.getPost()
+
+        getPost.enqueue(object : Callback<List<FetchPostDataClass>?> {
+            override fun onResponse(
+                call: Call<List<FetchPostDataClass>?>,
+                response: Response<List<FetchPostDataClass>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+
+                    response.forEach{      item ->
+                        var post:String = ""
+                        for ( x in item.media){
+                            post = x.post
+                        }
+                        getPostProfile(item.user_id)
+                        mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(item._id,item.user_id,item.caption,item.likes,
+                        listOf(),item.location,item.hashtags,
+                            listOf<DataItem.Media>(DataItem.Media(post,"","")),
+                            item.post_id,0,item.display_status,item.saved_post,
+                        profilepic,profileName,"",userName)))
+
+//                        Toast.makeText(requireContext(),profileName,Toast.LENGTH_SHORT).show()
+
+                        adapter = MainAdapter(requireContext(),mList)
+                        mainRecyclerView.adapter = adapter
+
+                        adapter.notifyDataSetChanged()
+                    }
+
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
+            override fun onFailure(call: Call<List<FetchPostDataClass>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                Log.e("error",t.message.toString())
+            }
+        })
+    }
+
+    private fun getPostProfile(userId:String) {
+
+        val data = RetrofitBuilder.retrofitBuilder.fetchUser("Oo7PCzo0-")
+
+        data.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    profileName = response.Full_name
+                    profilepic = response.Profile_pic
+                    userName = response.User_name
+                    Toast.makeText(requireContext(),profileName,Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
     }
 
     private fun prepareData() {
@@ -189,15 +263,15 @@ class HomeFragment : Fragment() {
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_awards))
 
         mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
-        mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(R.drawable.png_post, R.drawable.png_profile, "Jason Stathon")))
+//        mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(R.drawable.png_post, R.drawable.png_profile, "Jason Stathon")))
         mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
-        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_r_logo, "John")))
+//        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_r_logo, "John")))
         mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
         mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
         mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
-        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Tom")))
+//        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Tom")))
         mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
-        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Chrish Hamswirth")))
+//        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Chrish Hamswirth")))
         mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
     }
 }

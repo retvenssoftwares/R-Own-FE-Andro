@@ -12,13 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/user_complete_profile"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/rounded_image"
+            app:shapeAppearance="@style/RoundedCornerImage"
             android:src="@drawable/img"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="@font/montserrat_bold"
-            android:text="Hi Prashant"
             android:textColor="@color/black"
             android:textFontWeight="600"
             android:textSize="18dp"

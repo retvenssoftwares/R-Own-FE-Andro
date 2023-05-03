@@ -25,4 +25,6 @@ object RetrofitBuilder {
 
     val profileCompletion = retrofitBuilder2.create(PriofileCompletionApis::class.java)
 
+    val feedsApi = retrofitBuilder2.create(FeedsApi::class.java)
+
 }

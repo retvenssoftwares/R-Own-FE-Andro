@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
 import app.retvens.rown.databinding.UsersPostsCardBinding
+import com.bumptech.glide.Glide
+
 //import com.karan.multipleviewrecyclerview.Banner
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
@@ -19,9 +21,18 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner : DataItem.Banner){
-            binding.postPic.setImageResource(banner.image)
-            binding.postProfile.setImageResource(banner.UserProfile)
-            binding.userNamePost.text = banner.Name
+
+            for (x in banner.media!!){
+                Glide.with(context).load(x.post).into(binding.postPic)
+            }
+
+            binding.postUserDominican.text = banner.location
+            binding.recentCommentByUser.text = banner.caption
+
+            binding.userNamePost.text = banner.profileName
+
+            Glide.with(context).load(banner.profile_pic).into(binding.postProfile)
+            binding.userIdOnComment.text = banner.username
         }
     }
 
