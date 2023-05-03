@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -92,16 +94,79 @@ class JobsForHoteliers : Fragment() {
             dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
             dialogRole.window?.setGravity(Gravity.BOTTOM)
             dialogRole.show()
+
+            val  jobTypeText = dialogRole.findViewById<TextView>(R.id.jType_text)
+            val jt= dialogRole.findViewById<RelativeLayout>(R.id.filter_job_type)
+            jt.setOnClickListener {
+                showBottomJobType(jobTypeText)
+            }
+            val fL = dialogRole.findViewById<RelativeLayout>(R.id.filter_location)
+            fL.setOnClickListener {
+                openLocationSheet()
+            }
         }
 
 
-//        val fragment = JobPostedChildFragmnet
-//        val transaction = childFragmentManager.beginTransaction()
-//        transaction.replace(R.id.child_jobs_fragments_container,fragment)
-//        transaction.commit()
         val childFragment: Fragment = JobPostedChildFragmnet()
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_jobs_fragments_container, childFragment).commit()
+
+    }
+    private fun showBottomJobType(jobTypeText: TextView) {
+
+        val dialogRole = Dialog(requireContext())
+        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogRole.setContentView(R.layout.bottom_sheet_job_type)
+        dialogRole.setCancelable(true)
+
+        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialogRole.window?.setGravity(Gravity.BOTTOM)
+        dialogRole.show()
+
+        dialogRole.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
+            jobTypeText.text = "Select one"
+            dialogRole.dismiss()
+        }
+        dialogRole.findViewById<RelativeLayout>(R.id.fullTime).setOnClickListener {
+            jobTypeText.text = "Full-Time"
+            dialogRole.dismiss()
+        }
+        dialogRole.findViewById<RelativeLayout>(R.id.partTime).setOnClickListener {
+            jobTypeText.text = "Part-Time"
+            dialogRole.dismiss()
+        }
+        dialogRole.findViewById<RelativeLayout>(R.id.selfE).setOnClickListener {
+            jobTypeText.text = "Self-Employed"
+            dialogRole.dismiss()
+        }
+        dialogRole.findViewById<RelativeLayout>(R.id.Freelancer).setOnClickListener {
+            jobTypeText.text = "Freelancer"
+            dialogRole.dismiss()
+        }
+        dialogRole.findViewById<RelativeLayout>(R.id.Internship).setOnClickListener {
+            jobTypeText.text = "Internship"
+            dialogRole.dismiss()
+        }
+        dialogRole.findViewById<RelativeLayout>(R.id.Trainee).setOnClickListener {
+            jobTypeText.text = "Trainee"
+            dialogRole.dismiss()
+        }
+    }
+    private fun openLocationSheet() {
+
+        val dialogRole = Dialog(requireContext())
+        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogRole.setContentView(R.layout.bottom_sheet_location)
+        dialogRole.setCancelable(true)
+
+        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialogRole.window?.setGravity(Gravity.BOTTOM)
+        dialogRole.show()
+
 
     }
 }

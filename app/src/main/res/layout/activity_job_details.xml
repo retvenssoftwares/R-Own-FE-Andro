@@ -7,6 +7,19 @@
     android:background="@color/white"
     tools:context=".NavigationFragments.job.JobDetailsActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/card_apply_job"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white">
+
     <ImageView
         android:id="@+id/back_jobs_details"
         android:layout_width="30dp"
@@ -152,8 +165,6 @@
 
     </LinearLayout>
 
-
-
     <LinearLayout
         android:id="@+id/ll_for_t"
         android:layout_width="wrap_content"
@@ -244,10 +255,12 @@
     <LinearLayout
         android:id="@+id/ll_desc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/ll_for_t"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp">
 
         <TextView
@@ -354,8 +367,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/employee_profile_explore"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:src="@drawable/profile"
             app:shapeAppearance="@style/RoundedCornerImage"
             android:scaleType="centerCrop"
@@ -372,9 +385,14 @@
             android:fontFamily="@font/montserrat_semibold"
             android:textColor="@color/black"
             android:textAlignment="center"
-            android:textSize="16dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
+            android:textSize="14dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintEnd_toStartOf="@id/card_view_profile"
+            app:layout_constraintBottom_toBottomOf="@id/employee_profile_explore"
             app:layout_constraintStart_toEndOf="@id/employee_profile_explore"
             app:layout_constraintTop_toTopOf="@id/employee_profile_explore"/>
 
@@ -386,19 +404,26 @@
             android:fontFamily="@font/montserrat_semibold"
             android:textColor="@color/grey_40"
             android:textAlignment="center"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textSize="12dp"
+            app:layout_constraintEnd_toStartOf="@id/employee_experience"
             app:layout_constraintTop_toBottomOf="@id/employee_name_explore"
             app:layout_constraintStart_toStartOf="@id/employee_name_explore"/>
 
         <TextView
             android:id="@+id/employee_experience"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text=", Retvence Services"
             android:fontFamily="@font/montserrat_semibold"
             android:textColor="@color/grey_40"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textSize="12dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toStartOf="@id/card_view_profile"
             app:layout_constraintTop_toBottomOf="@id/employee_name_explore"
             app:layout_constraintStart_toEndOf="@id/employee_role"/>
 
@@ -420,9 +445,9 @@
                 android:textAlignment="center"
                 android:text="View profile"
                 android:fontFamily="@font/montserrat_semibold"
-                android:textSize="18dp"
-                android:paddingVertical="7dp"
-                android:paddingHorizontal="14dp"
+                android:textSize="16dp"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
                 android:background="@color/suggested_job_yellow"
                 android:textColor="@color/black"/>
 
@@ -448,6 +473,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_apply_job"
@@ -456,7 +483,7 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="8dp"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="16dp"
         android:layout_weight="1"
         app:cardBackgroundColor="@color/green_own"
         app:layout_constraintStart_toStartOf="parent"
@@ -475,5 +502,4 @@
             android:text="Apply Now"/>
 
     </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
