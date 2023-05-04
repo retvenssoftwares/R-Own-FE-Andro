@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -26,6 +27,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetLocation
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -35,7 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class LocationFragment : Fragment(), BackHandler {
+class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLocationClickListener {
 
     lateinit var etLocation : TextInputEditText
     private lateinit var locationFragmentAdapter: LocationFragmentAdapter
@@ -63,7 +65,11 @@ class LocationFragment : Fragment(), BackHandler {
         etLocation = view.findViewById(R.id.et_location)
 
         etLocation.setOnClickListener {
-            openLocationSheet()
+//            openLocationSheet()
+            val bottomSheet = BottomSheetLocation()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
+            bottomSheet.setOnLocationClickListener(this)
         }
 
         view.findViewById<CardView>(R.id.card_location_next).setOnClickListener {
@@ -223,6 +229,10 @@ class LocationFragment : Fragment(), BackHandler {
         transaction?.commit()
 
         return true
+    }
+
+    override fun bottomLocationClick(LocationFrBo: String) {
+        etLocation.setText(LocationFrBo)
     }
 
 }

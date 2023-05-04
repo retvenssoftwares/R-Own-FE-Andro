@@ -16,15 +16,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.NavigationFragments.jobforvendors.ExploreRequestingChildFragmnet
 import app.retvens.rown.NavigationFragments.jobforvendors.JobPostActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobPostedChildFragmnet
 import app.retvens.rown.NavigationFragments.jobforvendors.explore_employees_fragment
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetJobFilter
 
 
-class JobsForHoteliers : Fragment() {
+class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener {
 
     lateinit var postAJob : CardView
 
@@ -84,26 +86,10 @@ class JobsForHoteliers : Fragment() {
         }
 
         view.findViewById<ImageView>(R.id.filter).setOnClickListener {
-            val dialogRole = Dialog(requireContext())
-            dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialogRole.setContentView(R.layout.bottom_sheet_job_filter)
-            dialogRole.setCancelable(true)
-
-            dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
-            dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-            dialogRole.window?.setGravity(Gravity.BOTTOM)
-            dialogRole.show()
-
-            val  jobTypeText = dialogRole.findViewById<TextView>(R.id.jType_text)
-            val jt= dialogRole.findViewById<RelativeLayout>(R.id.filter_job_type)
-            jt.setOnClickListener {
-                showBottomJobType(jobTypeText)
-            }
-            val fL = dialogRole.findViewById<RelativeLayout>(R.id.filter_location)
-            fL.setOnClickListener {
-                openLocationSheet()
-            }
+            val bottomSheet = BottomSheetJobFilter()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobFilter.Job_TAG)}
+            bottomSheet.setOnJobClickListener(this)
         }
 
 
@@ -167,6 +153,10 @@ class JobsForHoteliers : Fragment() {
         dialogRole.window?.setGravity(Gravity.BOTTOM)
         dialogRole.show()
 
+
+    }
+
+    override fun bottomJobClick(jobFrBo: String) {
 
     }
 }

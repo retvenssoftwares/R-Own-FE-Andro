@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.Dashboard.explorejob.Applied
@@ -24,10 +25,24 @@ import app.retvens.rown.NavigationFragments.job.RecentJobAdapter
 import app.retvens.rown.NavigationFragments.job.SuggestedJobAdapter
 import app.retvens.rown.NavigationFragments.job.SuggestedJobData
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetCTC
+import app.retvens.rown.bottomsheet.BottomSheetJobDepartment
+import app.retvens.rown.bottomsheet.BottomSheetJobDesignation
+import app.retvens.rown.bottomsheet.BottomSheetJobFilter
+import app.retvens.rown.bottomsheet.BottomSheetJobType
+import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.bottomsheet.BottomSheetNoticePeriod
+import app.retvens.rown.bottomsheet.BottomSheetRating
 import com.google.android.material.textfield.TextInputEditText
 
 
-class JobFragment : Fragment() {
+class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
+    BottomSheetJobDepartment.OnBottomJobDepartmentClickListener,
+    BottomSheetJobDesignation.OnBottomJobDesignationClickListener,
+    BottomSheetJobType.OnBottomJobTypeClickListener,
+    BottomSheetNoticePeriod.OnBottomNoticeClickListener,
+    BottomSheetCTC.OnBottomCTCClickListener,
+    BottomSheetLocation.OnBottomLocationClickListener{
 
     lateinit var exploreJob :CardView
     lateinit var requestJob :CardView
@@ -123,27 +138,10 @@ class JobFragment : Fragment() {
 
         filter = requireView().findViewById(R.id.filter_user_jobs)
         filter.setOnClickListener {
-
-            val dialogRole = Dialog(requireContext())
-            dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialogRole.setContentView(R.layout.bottom_sheet_job_filter)
-            dialogRole.setCancelable(true)
-
-            dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
-            dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-            dialogRole.window?.setGravity(Gravity.BOTTOM)
-            dialogRole.show()
-
-            val jt= dialogRole.findViewById<RelativeLayout>(R.id.filter_job_type)
-            jt.setOnClickListener {
-                showBottomJobType()
-            }
-            val fL = dialogRole.findViewById<RelativeLayout>(R.id.filter_location)
-            fL.setOnClickListener {
-                openLocationSheet()
-            }
-
+            val bottomSheet = BottomSheetJobFilter()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobFilter.Job_TAG)}
+            bottomSheet.setOnJobClickListener(this)
         }
 
         suggestedRecycler = requireView().findViewById(R.id.suggested_recycler)
@@ -178,201 +176,62 @@ class JobFragment : Fragment() {
     private fun requestAJob() {
         selectDepartmentET = requireView().findViewById(R.id.select_department_et)
         selectDepartmentET.setOnClickListener {
-            openBottomDepartment()
+            val bottomSheet = BottomSheetJobDepartment()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobDepartment.Job_D_TAG)}
+            bottomSheet.setOnJobDepartmentClickListener(this)
         }
+
         selectDesignationET = requireView().findViewById(R.id.select_designation_et)
         selectDesignationET.setOnClickListener {
-            openBottomDesignation()
+            val bottomSheet = BottomSheetJobDesignation()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobDesignation.Job_Designation_TAG)}
+            bottomSheet.setOnJobDesignationClickListener(this)
         }
+
         selectJobEmploymentET = requireView().findViewById(R.id.select_job_employment_et)
         selectJobEmploymentET.setOnClickListener {
-            showBottomJobType()
+            val bottomSheet = BottomSheetJobType()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobType.Job_TYPE_TAG)}
+            bottomSheet.setOnJobTypeClickListener(this)
         }
+
         selectJobLocationET = requireView().findViewById(R.id.select_job_location_et)
         selectJobLocationET.setOnClickListener {
-            openLocationSheet()
+            val bottomSheet = BottomSheetLocation()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
+            bottomSheet.setOnLocationClickListener(this)
         }
+
         selectNoticeET = requireView().findViewById(R.id.select_notice_et)
         selectNoticeET.setOnClickListener {
-            showBottomNotice()
+            val bottomSheet = BottomSheetNoticePeriod()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetNoticePeriod.Notice_TAG)}
+            bottomSheet.setOnNoticeClickListener(this)
         }
+
         expectedCTCeET = requireView().findViewById(R.id.select_ctc_et)
         expectedCTCeET.setOnClickListener {
-            showBottomCTC()
+            val bottomSheet = BottomSheetCTC()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCTC.CTC_TAG)}
+            bottomSheet.setOnCTCClickListener(this)
         }
     }
-    private fun openBottomDepartment() {
-
-        val dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_select_department)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-
-
+    override fun bottomJobTypeClick(jobTypeFrBo: String) {
+        selectJobEmploymentET.setText(jobTypeFrBo)
     }
-    private fun openBottomDesignation() {
 
-        val dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_select_designation)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-
-
+    override fun bottomNoticeClick(noticeFrBo: String) {
+        selectNoticeET.setText(noticeFrBo)
     }
-    private fun showBottomJobType() {
 
-        val dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_job_type)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-        dialogRole.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            selectJobEmploymentET.setText("Select one -")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.fullTime).setOnClickListener {
-            selectJobEmploymentET.setText("Full-Time")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.partTime).setOnClickListener {
-            selectJobEmploymentET.setText("Part-Time")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.selfE).setOnClickListener {
-            selectJobEmploymentET.setText("Self-Employed")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Freelancer).setOnClickListener {
-            selectJobEmploymentET.setText("Freelancer")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Internship).setOnClickListener {
-            selectJobEmploymentET.setText("Internship")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Trainee).setOnClickListener {
-            selectJobEmploymentET.setText("Trainee")
-            dialogRole.dismiss()
-        }
-    }
-    private fun openLocationSheet() {
-
-        val dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_location)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-
-    }
-    private fun showBottomNotice() {
-
-        val dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_notice_period)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-        dialogRole.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            selectNoticeET.setText("Select one -")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.no).setOnClickListener {
-            selectNoticeET.setText("No")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.one_month_less).setOnClickListener {
-            selectNoticeET.setText("< 1 Month")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.one_month).setOnClickListener {
-            selectNoticeET.setText("1 Month")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.two_month).setOnClickListener {
-            selectNoticeET.setText("2 Month")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.three_month).setOnClickListener {
-            selectNoticeET.setText("3 Month")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.more_three_month).setOnClickListener {
-            selectNoticeET.setText(">3 Month")
-            dialogRole.dismiss()
-        }
-    }
-    private fun showBottomCTC() {
-
-        val dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_expected_ctc)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-        dialogRole.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            expectedCTCeET.setText("Select one -")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.one_to_three).setOnClickListener {
-            expectedCTCeET.setText("1-3 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.three_to_six).setOnClickListener {
-            expectedCTCeET.setText("3-6 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.six_to_ten).setOnClickListener {
-            expectedCTCeET.setText("6-10 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.ten_to_fif).setOnClickListener {
-            expectedCTCeET.setText("10-15  Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.fif_to_tf).setOnClickListener {
-            expectedCTCeET.setText("15-25 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.more_than_tf).setOnClickListener {
-            expectedCTCeET.setText(">25 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
+    override fun bottomCTCClick(CTCFrBo: String) {
+        expectedCTCeET.setText(CTCFrBo)
     }
 
 /*----------------------------APPLY FOR A JOB-----------------------------*/
@@ -396,6 +255,22 @@ class JobFragment : Fragment() {
         val appliedJobAdapter = AppliedJobAdapter(requireContext(), listJobs)
         appliedRecyclerView.adapter = appliedJobAdapter
         appliedJobAdapter.notifyDataSetChanged()
+    }
+
+    override fun bottomJobClick(jobFrBo: String) {
+
+    }
+
+    override fun bottomJobDepartmentClick(jobDepartFrBo: String) {
+
+    }
+
+    override fun bottomJobDesignationClick(jobDesignationFrBo: String) {
+
+    }
+
+    override fun bottomLocationClick(LocationFrBo: String) {
+
     }
 
 }
