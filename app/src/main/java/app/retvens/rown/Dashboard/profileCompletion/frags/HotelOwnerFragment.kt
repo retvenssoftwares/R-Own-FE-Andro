@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
@@ -34,6 +35,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.HotelOwnerInfoData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import app.retvens.rown.bottomsheet.BottomSheetRating
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -51,7 +53,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-class HotelOwnerFragment : Fragment(), BackHandler {
+class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRatingClickListener {
 
 
     lateinit var hotelType : TextInputEditText
@@ -147,7 +149,11 @@ class HotelOwnerFragment : Fragment(), BackHandler {
         hotelOwnerStarET = view.findViewById<TextInputEditText>(R.id.hotel_owner_star_et)
 
         hotelOwnerStarET.setOnClickListener {
-            openBottomStarSelection()
+            val bottomSheet = BottomSheetRating()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetRating.RATING_TAG)}
+            bottomSheet.setOnRatingClickListener(this)
+//            openBottomStarSelection()
         }
 
         hotelOwnerProfile = view.findViewById(R.id.hotel_owner_profile)
@@ -543,6 +549,10 @@ class HotelOwnerFragment : Fragment(), BackHandler {
             returnCursor.close()
         }
         return name
+    }
+
+    override fun bottomRatingClick(ratingFrBo: String) {
+        hotelOwnerStarET.setText(ratingFrBo)
     }
 
 }

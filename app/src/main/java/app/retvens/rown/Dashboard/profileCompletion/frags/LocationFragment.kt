@@ -1,6 +1,7 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,13 +12,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -70,7 +68,7 @@ class LocationFragment : Fragment(), BackHandler {
 
         view.findViewById<CardView>(R.id.card_location_next).setOnClickListener {
 
-            setLocation()
+            setLocation(context)
         }
 
 //        requireActivity().onBackPressedDispatcher.addCallback(
@@ -92,10 +90,10 @@ class LocationFragment : Fragment(), BackHandler {
         profile = view.findViewById(R.id.user_complete_profile1)
         name = view.findViewById(R.id.user_complete_name)
 
-        getProfileInfo()
+        getProfileInfo(context)
     }
 
-    private fun getProfileInfo() {
+    private fun getProfileInfo(context: Context?) {
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -111,19 +109,19 @@ class LocationFragment : Fragment(), BackHandler {
                     val response = response.body()!!
                     name.setText("Hi ${response.Full_name}")
 
-                    Glide.with(requireContext()).load(response.Profile_pic).into(profile)
+                    Glide.with(context!!).load(response.Profile_pic).into(profile)
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,t.message!!.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
     }
 
-    private fun setLocation() {
+    private fun setLocation(context: Context?) {
 
         val location = etLocation.text.toString()
 
@@ -139,19 +137,19 @@ class LocationFragment : Fragment(), BackHandler {
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
                     val fragment = BasicInformationFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
 
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,t.localizedMessage!!.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 

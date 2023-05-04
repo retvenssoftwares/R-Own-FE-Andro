@@ -1,28 +1,25 @@
 package app.retvens.rown.bottomsheet
 
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import app.retvens.rown.Dashboard.profileCompletion.frags.HotelOwnerChainFragment
 import app.retvens.rown.R
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
 class BottomSheetRating : BottomSheetDialogFragment() {
 
     var mListener: OnBottomRatingClickListener ? = null
-//    private var OnBottomRatingClickListener: String? = ""
     fun setOnRatingClickListener(listener: OnBottomRatingClickListener?){
         mListener = listener
     }
-
+    fun newInstance(): BottomSheetRating? {
+        return BottomSheetRating()
+    }
     interface OnBottomRatingClickListener{
-        fun BottomRatongClick(ratingFrBo : String)
+        fun bottomRatingClick(ratingFrBo : String)
     }
 
     companion object {
@@ -43,8 +40,47 @@ class BottomSheetRating : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<RelativeLayout>(R.id.oneStar).setOnClickListener {
-            mListener?.BottomRatongClick("1 -3 Star")
+            mListener?.bottomRatingClick("1 -3 Star")
+            dismiss()
+        }
+        view.findViewById<RelativeLayout>(R.id.fourStar).setOnClickListener {
+            mListener?.bottomRatingClick("4 Star")
+            dismiss()
         }
 
+        view.findViewById<RelativeLayout>(R.id.fiveStar).setOnClickListener {
+            mListener?.bottomRatingClick("5 Star")
+            dismiss()
+        }
+
+        view.findViewById<RelativeLayout>(R.id.sixStar).setOnClickListener {
+            mListener?.bottomRatingClick("6 Star")
+            dismiss()
+        }
+        view.findViewById<RelativeLayout>(R.id.sevenStar).setOnClickListener {
+            mListener?.bottomRatingClick("7 Star")
+            dismiss()
+        }
+        view.findViewById<RelativeLayout>(R.id.eightStar).setOnClickListener {
+            mListener?.bottomRatingClick("8 Star")
+            dismiss()
+        }
+        view.findViewById<RelativeLayout>(R.id.nineStar).setOnClickListener {
+            mListener?.bottomRatingClick("9 Star")
+            dismiss()
+        }
+        view.findViewById<RelativeLayout>(R.id.tenStar).setOnClickListener {
+            mListener?.bottomRatingClick("10 Star")
+            dismiss()
+        }
+        view.findViewById<RelativeLayout>(R.id.elevenStar).setOnClickListener {
+            mListener?.bottomRatingClick(">11 Star")
+            dismiss()
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
     }
 }
