@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".CreateCommunity.CreateCummVisibilitySetting">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Create Community"
+            android:textColor="#000000"
+            android:textFontWeight="700"
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/createCommunity_backBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            android:src="@drawable/community_btn" />
+
+        <ImageButton
+            android:id="@+id/createCommunity_cut"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@color/white"
+            android:src="@drawable/close_circle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#272A3D"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relative">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Visibility Settings for your Community"
+            android:textAlignment="center"
+            android:textColor="#ADD314"
+            android:textFontWeight="700"
+            android:textSize="18dp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative2"
+        android:background="#A4D71D" />
+
+    <ImageView
+        android:id="@+id/ccI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/png_create_cumm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative2"/>
+
+    <TextView
+        android:id="@+id/who"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="Who can be a part of your community ?"
+        android:textAlignment="center"
+        android:textColor="#ADD314"
+        android:textFontWeight="700"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ccI"/>
+
+    <LinearLayout
+        android:id="@+id/ldl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/who">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:cardCornerRadius="10dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:id="@+id/closed_cumm_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="7dp"
+                android:background="@color/grey_5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Closed Community"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="16dp"
+                android:paddingHorizontal="24dp"
+                android:textColor="@color/green_own"/>
+            <TextView
+                android:id="@+id/closed_cumm_hint_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Only you would be able to let the person in your community"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="8dp"
+                android:paddingLeft="25dp"
+                android:visibility="gone"
+                android:textColor="@color/green_own"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:cardCornerRadius="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:id="@+id/open_cumm_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="7dp"
+                android:background="@color/grey_5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Open Community"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="16dp"
+                android:paddingHorizontal="24dp"
+                android:textColor="@color/green_own"/>
+            <TextView
+                android:id="@+id/open_hint_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Anyone can request to join your community"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="8dp"
+                android:paddingLeft="25dp"
+                android:textColor="@color/green_own"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/lay_visibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Where do want your community \nto be visible ?"
+                android:textAlignment="center"
+                android:textColor="#ADD314"
+                android:textFontWeight="700"
+                android:textSize="16dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Location"
+                android:textColorHint="@color/grey_40"
+                app:boxStrokeColor="@color/grey_20"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/black"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="25dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cumunity_location_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey_40"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Auto Detect Location"
+                android:textAlignment="textEnd"
+                android:textColor="#ADD314"
+                android:textFontWeight="700"
+                android:layout_marginEnd="25dp"
+                android:drawableEnd="@drawable/svg_auto_detect"
+                android:drawablePadding="2dp"
+                android:textSize="9dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/next_cumm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="6dp"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginHorizontal="30dp"
+                    app:cardCornerRadius="11dp"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingVertical="5dp"
+                        android:paddingHorizontal="14dp"
+                        android:textAlignment="center"
+                        android:text="Next"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:textFontWeight="600"
+                        android:textSize="18dp"
+                        android:background="@color/green_own"
+                        android:textColor="@color/black"/>
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
