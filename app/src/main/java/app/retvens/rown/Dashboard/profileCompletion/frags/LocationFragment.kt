@@ -12,13 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -29,6 +27,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetLocation
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -38,7 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class LocationFragment : Fragment(), BackHandler {
+class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLocationClickListener {
 
     lateinit var etLocation : TextInputEditText
     private lateinit var locationFragmentAdapter: LocationFragmentAdapter
@@ -66,12 +65,16 @@ class LocationFragment : Fragment(), BackHandler {
         etLocation = view.findViewById(R.id.et_location)
 
         etLocation.setOnClickListener {
-            openLocationSheet()
+//            openLocationSheet()
+            val bottomSheet = BottomSheetLocation()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
+            bottomSheet.setOnLocationClickListener(this)
         }
 
         view.findViewById<CardView>(R.id.card_location_next).setOnClickListener {
 
-            setLocation()
+            setLocation(context)
         }
 
 //        requireActivity().onBackPressedDispatcher.addCallback(
@@ -93,10 +96,10 @@ class LocationFragment : Fragment(), BackHandler {
         profile = view.findViewById(R.id.user_complete_profile1)
         name = view.findViewById(R.id.user_complete_name)
 
-        getProfileInfo()
+        getProfileInfo(context)
     }
 
-    private fun getProfileInfo() {
+    private fun getProfileInfo(context: Context?) {
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -112,19 +115,19 @@ class LocationFragment : Fragment(), BackHandler {
                     val response = response.body()!!
                     name.setText("Hi ${response.Full_name}")
 
-                    Glide.with(requireContext()).load(response.Profile_pic).into(profile)
+                    Glide.with(context!!).load(response.Profile_pic).into(profile)
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,t.message!!.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
     }
 
-    private fun setLocation() {
+    private fun setLocation(context: Context?) {
 
         val location = etLocation.text.toString()
 
@@ -145,19 +148,19 @@ class LocationFragment : Fragment(), BackHandler {
                     editor.apply()
 
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
                     val fragment = BasicInformationFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
 
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.localizedMessage.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,t.localizedMessage!!.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -231,6 +234,10 @@ class LocationFragment : Fragment(), BackHandler {
         transaction?.commit()
 
         return true
+    }
+
+    override fun bottomLocationClick(LocationFrBo: String) {
+        etLocation.setText(LocationFrBo)
     }
 
 }

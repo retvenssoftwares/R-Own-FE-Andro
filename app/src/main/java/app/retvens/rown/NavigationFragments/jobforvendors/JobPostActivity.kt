@@ -9,14 +9,23 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.RelativeLayout
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetCTC
+import app.retvens.rown.bottomsheet.BottomSheetJobType
+import app.retvens.rown.bottomsheet.BottomSheetLocation
 import com.google.android.material.textfield.TextInputEditText
 
-class JobPostActivity : AppCompatActivity() {
+class JobPostActivity : AppCompatActivity(),
+    BottomSheetJobType.OnBottomJobTypeClickListener,
+    BottomSheetCTC.OnBottomCTCClickListener, BottomSheetLocation.OnBottomLocationClickListener {
 
     lateinit var jobTypeEt : TextInputEditText
     lateinit var postMinSalaryEt : TextInputEditText
     lateinit var postMaxSalaryEt : TextInputEditText
+    lateinit var postLocationEt : TextInputEditText
+
+    var etType : Int ? = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,102 +34,48 @@ class JobPostActivity : AppCompatActivity() {
         jobTypeEt = findViewById(R.id.et_post_job_type)
         postMinSalaryEt = findViewById(R.id.et_post_min_salary)
         postMaxSalaryEt = findViewById(R.id.et_post_max_salary)
+        postLocationEt = findViewById(R.id.et_location_job_post)
+        postLocationEt.setOnClickListener {
+            val bottomSheet = BottomSheetLocation()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
+            bottomSheet.setOnLocationClickListener(this)
+        }
 
         jobTypeEt.setOnClickListener {
-            showBottomJobType()
+            val bottomSheet = BottomSheetJobType()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobType.Job_TYPE_TAG)}
+            bottomSheet.setOnJobTypeClickListener(this)
         }
         postMinSalaryEt.setOnClickListener {
-            showBottomCTC(postMinSalaryEt)
+            etType = 1
+            val bottomSheet = BottomSheetCTC()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCTC.CTC_TAG)}
+            bottomSheet.setOnCTCClickListener(this)
         }
         postMaxSalaryEt.setOnClickListener {
-            showBottomCTC(postMaxSalaryEt)
+            etType = 2
+            val bottomSheet = BottomSheetCTC()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCTC.CTC_TAG)}
+            bottomSheet.setOnCTCClickListener(this)
+        }
+    }
+    override fun bottomJobTypeClick(jobTypeFrBo: String) {
+        jobTypeEt.setText(jobTypeFrBo)
+    }
+
+    override fun bottomCTCClick(CTCFrBo: String) {
+        if (etType == 1){
+            postMinSalaryEt.setText(CTCFrBo)
+        }else{
+            postMaxSalaryEt.setText(CTCFrBo)
         }
     }
 
-    private fun showBottomJobType() {
+    override fun bottomLocationClick(LocationFrBo: String) {
 
-        val dialogRole = Dialog(this)
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_job_type)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-        dialogRole.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            jobTypeEt.setText("Select one -")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.fullTime).setOnClickListener {
-            jobTypeEt.setText("Full-Time")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.partTime).setOnClickListener {
-            jobTypeEt.setText("Part-Time")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.selfE).setOnClickListener {
-            jobTypeEt.setText("Self-Employed")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Freelancer).setOnClickListener {
-            jobTypeEt.setText("Freelancer")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Internship).setOnClickListener {
-            jobTypeEt.setText("Internship")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Trainee).setOnClickListener {
-            jobTypeEt.setText("Trainee")
-            dialogRole.dismiss()
-        }
     }
-
-    private fun showBottomCTC(salaryEt: TextInputEditText) {
-
-        val dialogRole = Dialog(this)
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_expected_ctc)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-        dialogRole.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            salaryEt.setText("Select one -")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.one_to_three).setOnClickListener {
-            salaryEt.setText("1-3 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.three_to_six).setOnClickListener {
-            salaryEt.setText("3-6 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.six_to_ten).setOnClickListener {
-            salaryEt.setText("6-10 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.ten_to_fif).setOnClickListener {
-            salaryEt.setText("10-15  Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.fif_to_tf).setOnClickListener {
-            salaryEt.setText("15-25 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.more_than_tf).setOnClickListener {
-            salaryEt.setText(">25 Lakhs/p.a")
-            dialogRole.dismiss()
-        }
-    }
-
 }

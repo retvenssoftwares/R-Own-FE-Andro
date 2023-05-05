@@ -124,6 +124,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
             val bottomSheet = BottomSheetRating()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetRating.RATING_TAG)}
+            bottomSheet.setOnRatingClickListener(this)
         }
 
         if(arguments?.getString("hotels") != null){
@@ -316,7 +317,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
         )
     }
 
-    override fun BottomRatongClick(ratingFrBo: String) {
+    override fun bottomRatingClick(ratingFrBo: String) {
         rating.setText(ratingFrBo)
     }
 

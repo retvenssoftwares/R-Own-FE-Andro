@@ -20,6 +20,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -29,6 +30,7 @@ import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformati
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetJobType
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -36,7 +38,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HospitalityExpertFragment : Fragment(), BackHandler {
+class HospitalityExpertFragment : Fragment(), BackHandler, BottomSheetJobType.OnBottomJobTypeClickListener {
 
 
     lateinit var eTypeET : TextInputEditText
@@ -75,7 +77,11 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
         }
 
         eTypeET.setOnClickListener {
-            showBottomJobType()
+            val bottomSheet = BottomSheetJobType()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobType.Job_TYPE_TAG)}
+            bottomSheet.setOnJobTypeClickListener(this)
+//            showBottomJobType()
         }
 
 
@@ -231,51 +237,6 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
             }
         })
     }
-
-    private fun showBottomJobType() {
-
-        val dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_job_type)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-        dialogRole.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            eTypeET.setText("Select one -")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.fullTime).setOnClickListener {
-            eTypeET.setText("Full-Time")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.partTime).setOnClickListener {
-            eTypeET.setText("Part-Time")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.selfE).setOnClickListener {
-            eTypeET.setText("Self-Employed")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Freelancer).setOnClickListener {
-            eTypeET.setText("Freelancer")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Internship).setOnClickListener {
-            eTypeET.setText("Internship")
-            dialogRole.dismiss()
-        }
-        dialogRole.findViewById<RelativeLayout>(R.id.Trainee).setOnClickListener {
-            eTypeET.setText("Trainee")
-            dialogRole.dismiss()
-        }
-    }
-
-
     override fun handleBackPressed(): Boolean {
 
         val fragment = BasicInformationFragment()
@@ -285,6 +246,10 @@ class HospitalityExpertFragment : Fragment(), BackHandler {
 
         return true
 
+    }
+
+    override fun bottomJobTypeClick(jobTypeFrBo: String) {
+        eTypeET.setText(jobTypeFrBo)
     }
 
 }
