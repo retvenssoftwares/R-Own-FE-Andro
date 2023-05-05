@@ -37,7 +37,7 @@ class UsersProfileAdapter(val context: Context, var profileList : List<UserProfi
             Glide.with(context).load(currentItem.Profile_pic).into(holder.profile)
 
         holder.profile.setOnClickListener {
-            showBottomDialog(currentItem.Profile_pic, currentItem.Full_name)
+            showBottomDialog(currentItem.Profile_pic!!, currentItem.Full_name!!)
         }
 
 

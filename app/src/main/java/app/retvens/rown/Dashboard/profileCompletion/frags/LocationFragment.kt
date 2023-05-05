@@ -142,6 +142,11 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+                    val editor = onboardingPrefs.edit()
+                    editor.putBoolean("LocationFragment", true)
+                    editor.apply()
+
                     val response = response.body()!!
                     Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
                     val fragment = BasicInformationFragment()

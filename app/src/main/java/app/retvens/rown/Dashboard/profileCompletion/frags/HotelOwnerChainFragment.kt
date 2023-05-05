@@ -1,12 +1,14 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.Dialog
+import android.content.ContentResolver
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -26,12 +28,15 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainData
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetRating
 import com.bumptech.glide.Glide
@@ -39,10 +44,15 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.theartofdev.edmodo.cropper.CropImage
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRatingClickListener{
 
@@ -161,13 +171,54 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
     }
 
     private fun uploadData() {
-        val chainName = nameET.text.toString()
+        val hotelName = nameET.text.toString()
         val chainLocation = location.text.toString()
         val chainRating = rating.text.toString()
-        counterText.text = "$counter/$n"
-        nameET.setText("")
-        croppedHotelChainCoverImageUri = null
-        chainCover.setImageURI(croppedHotelChainCoverImageUri)
+
+
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(
+            croppedHotelChainCoverImageUri!!,"r",null
+        )?:return
+
+
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        val file =  File(requireContext().cacheDir, "cropped_${requireContext().contentResolver.getFileName(croppedHotelChainCoverImageUri!!)}.jpg")
+        val outputStream = FileOutputStream(file)
+        inputStream.copyTo(outputStream)
+        val body = UploadRequestBody(file,"image")
+
+        val send = RetrofitBuilder.profileCompletion.uploadHotelChainData(
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainLocation),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainRating),
+            MultipartBody.Part.createFormData("hotelProfilepic", file.name, body),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id)
+        )
+
+        send.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                }else{
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(),response.message().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                progressDialog.dismiss()
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 
     override fun handleBackPressed(): Boolean {
@@ -268,5 +319,18 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
 
     override fun bottomRatingClick(ratingFrBo: String) {
         rating.setText(ratingFrBo)
+    }
+
+    private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
+
+        var name = ""
+        val returnCursor = this.query(coverPhotoPart,null,null,null,null)
+        if (returnCursor!=null){
+            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            returnCursor.moveToFirst()
+            name = returnCursor.getString(nameIndex)
+            returnCursor.close()
+        }
+        return name
     }
 }

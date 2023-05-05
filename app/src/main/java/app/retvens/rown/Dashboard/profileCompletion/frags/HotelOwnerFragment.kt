@@ -1,5 +1,6 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Intent
@@ -123,6 +124,7 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
         return inflater.inflate(R.layout.fragment_hotel_owner, container, false)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

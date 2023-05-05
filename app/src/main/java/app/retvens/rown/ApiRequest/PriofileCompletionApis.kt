@@ -56,6 +56,16 @@ interface PriofileCompletionApis{
         @Part("hotelOwnerId") id: RequestBody,
     ): Call<UpdateResponse>
 
+    @Multipart
+    @POST("hotelpost")
+    fun uploadHotelChainData(
+        @Part("hotelName") Name: RequestBody,
+        @Part("hotelAddress") address: RequestBody,
+        @Part("hotelRating") hotel_rating: RequestBody,
+        @Part hotelProfilepic: MultipartBody.Part,
+        @Part("hotelOwnerId") id: RequestBody,
+    ): Call<UpdateResponse>
+
     @GET("location_fetch")
     fun getLocation():Call<List<LocationDataClass>>
 

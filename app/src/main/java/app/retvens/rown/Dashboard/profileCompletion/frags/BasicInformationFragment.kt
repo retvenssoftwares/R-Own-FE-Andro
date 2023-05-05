@@ -2,6 +2,7 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -207,10 +208,19 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+
+                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+                    val editor = onboardingPrefs.edit()
+                    editor.putBoolean("BasicInformationFragment", true)
+                    editor.apply()
+
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
 
                     progressDialog.dismiss()
+
+                    editor.putInt("nextFrag", nextFrag)
+                    editor.apply()
 
                     when (nextFrag) {
                         0 -> {
