@@ -48,10 +48,8 @@ class HomeFragment : Fragment() {
 
     lateinit var mainRecyclerView : RecyclerView
     lateinit var mList : ArrayList<DataItem>
-    lateinit var recyclerPost : RecyclerView
+
     lateinit var recyclerCommunity : RecyclerView
-    lateinit var postAdapter: PostAdapter
-    lateinit var communityListAdapter: CommunityListAdapter
     lateinit var postsArrayList : ArrayList<Post>
     lateinit var communityArrayList : ArrayList<Community>
     lateinit var adapter:MainAdapter
@@ -92,11 +90,6 @@ class HomeFragment : Fragment() {
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
 
-
-        recyclerPost = view.findViewById(R.id.recyclerPost)
-        recyclerPost.layoutManager = LinearLayoutManager(context)
-        recyclerPost.setHasFixedSize(true)
-
         recyclerCommunity = view.findViewById(R.id.recyclerCommunity)
         recyclerCommunity.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
         recyclerCommunity.setHasFixedSize(true)
@@ -110,63 +103,18 @@ class HomeFragment : Fragment() {
 
         val cummunity = Community(R.drawable.png_profile_post,"Food community","70 members")
         val cummunity1 = Community(R.drawable.png_profile_post,"Travellers community","40 members")
-//        communityArrayList.add(cummunity)
-//        communityArrayList.add(cummunity1)
-//        communityArrayList.add(cummunity)
-//        communityArrayList.add(cummunity1)
-//
-//        recyclerCommunity.adapter = CommunityListAdapter(requireContext(),communityArrayList)
+        communityArrayList.add(cummunity)
+        communityArrayList.add(cummunity1)
+        communityArrayList.add(cummunity)
+        communityArrayList.add(cummunity1)
+
+        recyclerCommunity.adapter = CommunityListAdapter(requireContext(),communityArrayList)
 
         val btn = view.findViewById<ImageView>(R.id.community_btn)
 
         btn.setOnClickListener {
             startActivity(Intent(context,CreateCommunity::class.java))
         }
-
-/*        val gesture = GestureDetector(
-            activity,
-            object : SimpleOnGestureListener() {
-                override fun onDown(e: MotionEvent): Boolean {
-                    return true
-                }
-
-                override fun onFling(
-                    e1: MotionEvent, e2: MotionEvent, velocityX: Float,
-                    velocityY: Float
-                ): Boolean {
-                    Log.i("tg", "onFling has been called!")
-                    val SWIPE_MIN_DISTANCE = 120
-                    val SWIPE_MAX_OFF_PATH = 250
-                    val SWIPE_THRESHOLD_VELOCITY = 200
-                    try {
-                        if (Math.abs(e1.y - e2.y) > SWIPE_MAX_OFF_PATH) return false
-                        if (e1.x - e2.x > SWIPE_MIN_DISTANCE
-                            && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-                        ) {
-                            val transaction: FragmentTransaction =
-                                fragmentManager!!.beginTransaction()
-                            transaction.replace(R.id.fragment_container, ChatFragment())
-                            transaction.addToBackStack(null)
-                            transaction.commit()
-                            Toast.makeText(context,"Chats",Toast.LENGTH_SHORT).show()
-                        } else if (e2.x - e1.x > SWIPE_MIN_DISTANCE
-                            && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-                        ) {
-                            Toast.makeText(context,"LtR",Toast.LENGTH_SHORT).show()
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(context,e.toString(),Toast.LENGTH_SHORT).show()
-                        Log.d("tag",e.toString())
-                    }
-                    return super.onFling(e1, e2, velocityX, velocityY)
-                }
-            })
-
-        view.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View, event: MotionEvent): Boolean {
-                return gesture.onTouchEvent(event)
-            }
-        })*/
 
     }
 
@@ -409,7 +357,7 @@ class HomeFragment : Fragment() {
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_events))
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_awards))
 
-        mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
+//        mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
 //        mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(R.drawable.png_post, R.drawable.png_profile, "Jason Stathon")))
         mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
 //        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_r_logo, "John")))

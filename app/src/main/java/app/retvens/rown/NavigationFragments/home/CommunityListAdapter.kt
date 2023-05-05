@@ -25,7 +25,7 @@ class CommunityListAdapter(val context : Context, val list: ArrayList<Community>
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return 5
     }
 
     override fun onBindViewHolder(holder: CommuListViewHolder, position: Int) {
