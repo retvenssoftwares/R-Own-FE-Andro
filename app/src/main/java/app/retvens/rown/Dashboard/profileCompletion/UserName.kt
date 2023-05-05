@@ -86,28 +86,63 @@ class UserName : AppCompatActivity() {
             val nextFrag = sharedPreferences?.getInt("nextFrag", 0)
             when (nextFrag) {
                 0 -> {
-                    val fragment = JobTitleFragment()
-                    val transaction = supportFragmentManager?.beginTransaction()
-                    transaction?.replace(R.id.fragment_username,fragment)
-                    transaction?.commit()
+                    if (!isJobTitleCompleted){
+                        val fragment = JobTitleFragment()
+                        val transaction = supportFragmentManager?.beginTransaction()
+                        transaction?.replace(R.id.fragment_username,fragment)
+                        transaction?.commit()
+                    }else{
+                        Toast.makeText(applicationContext,"Profile Completed",Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, DashBoardActivity::class.java)
+                        startActivity(intent)
+                    }
+
                 }
                 1 -> {
-                    val fragment = HotelOwnerFragment()
-                    val transaction = supportFragmentManager?.beginTransaction()
-                    transaction?.replace(R.id.fragment_username,fragment)
-                    transaction?.commit()
+                    if (!isHotelOwnerCompleted){
+                        val fragment = HotelOwnerFragment()
+                        val transaction = supportFragmentManager?.beginTransaction()
+                        transaction?.replace(R.id.fragment_username,fragment)
+                        transaction?.commit()
+                    }else{
+                        if (!isHotelOwnerChainCompleted){
+                            val fragment = HotelOwnerChainFragment()
+                            val transaction = supportFragmentManager?.beginTransaction()
+                            transaction?.replace(R.id.fragment_username,fragment)
+                            transaction?.commit()
+                        }else{
+                            Toast.makeText(applicationContext,"Profile Completed",Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, DashBoardActivity::class.java)
+                            startActivity(intent)
+                        }
+
+                    }
+
                 }
                 2 -> {
-                    val fragment = HospitalityExpertFragment()
-                    val transaction =supportFragmentManager?.beginTransaction()
-                    transaction?.replace(R.id.fragment_username,fragment)
-                    transaction?.commit()
+                    if(!isHospitalityExpertCompleted){
+                        val fragment = app.retvens.rown.Dashboard.profileCompletion.frags.HospitalityExpertFragment()
+                        val transaction =supportFragmentManager?.beginTransaction()
+                        transaction?.replace(app.retvens.rown.R.id.fragment_username,fragment)
+                        transaction?.commit()
+                    }else{
+                        Toast.makeText(applicationContext,"Profile Completed",Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, DashBoardActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
                 3 -> {
-                    val fragment = VendorsFragment()
-                    val transaction = supportFragmentManager?.beginTransaction()
-                    transaction?.replace(R.id.fragment_username,fragment)
-                    transaction?.commit()
+                    if (!isVendorsCompleted){
+                        val fragment = VendorsFragment()
+                        val transaction = supportFragmentManager?.beginTransaction()
+                        transaction?.replace(R.id.fragment_username,fragment)
+                        transaction?.commit()
+                    }else{
+                        Toast.makeText(applicationContext,"Profile Completed",Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, DashBoardActivity::class.java)
+                        startActivity(intent)
+                    }
+
                 }
             }
         }

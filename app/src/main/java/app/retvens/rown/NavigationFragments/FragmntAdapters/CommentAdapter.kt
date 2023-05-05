@@ -22,7 +22,7 @@ class CommentAdapter(val context: Context, var commentList:List<GetComments>): R
     class MyViewHolderClass3(itemview: View): RecyclerView.ViewHolder(itemview){
         val name = itemview.findViewById<TextView>(R.id.commented_username)
         val profile = itemview.findViewById<ShapeableImageView>(R.id.comment_profile)
-        val comment = itemview.findViewById<TextView>(R.id.comment)
+        val comment = itemview.findViewById<TextView>(R.id.commentOfUser)
 
     }
 

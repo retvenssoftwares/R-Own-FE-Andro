@@ -2,6 +2,7 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.Dialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -204,8 +205,15 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+
+                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+                    val editor = onboardingPrefs.edit()
+                    editor.putBoolean("HotelOwnerChainFragment", true)
+                    editor.apply()
+
                     val response = response.body()!!
                     progressDialog.dismiss()
+                    startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                 }else{
                     progressDialog.dismiss()

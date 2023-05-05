@@ -14,10 +14,11 @@
         android:padding="10dp"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/memberspic"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            app:shapeAppearance="@style/RoundedCornerImage"
             android:background="@drawable/rounded_image"
             android:src="@drawable/dummy"
             app:layout_constraintTop_toTopOf="parent"

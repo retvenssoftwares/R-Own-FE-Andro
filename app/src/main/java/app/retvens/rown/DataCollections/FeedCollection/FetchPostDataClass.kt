@@ -12,7 +12,8 @@ data class FetchPostDataClass(
     val post_id: String,
     val __v: Int,
     val display_status: String,
-    val saved_post: List<String>
+    val saved_post: List<String>,
+    val profile:Profile
 )
 
 data class Comment(
@@ -26,4 +27,10 @@ data class Media(
     val post: String,
     val date_added: String,
     val _id: String
+)
+
+data class Profile(
+    val Full_name:String,
+    val User_name:String,
+    val Profile_pic:String
 )

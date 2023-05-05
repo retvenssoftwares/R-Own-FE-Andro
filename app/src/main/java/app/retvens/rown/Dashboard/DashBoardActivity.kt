@@ -30,6 +30,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.ChatSection.MesiboUsers
 import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.ChatSection.UserChatList
+import app.retvens.rown.CreateCommunity.CreateCommunity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
@@ -282,7 +283,7 @@ class DashBoardActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_notify -> {
-                Toast.makeText(applicationContext,"Notification",Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this,CreateCommunity::class.java))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

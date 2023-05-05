@@ -16,7 +16,8 @@ data class UserProfileRequestItem(
     val _id: String,
     val connection_count: Int,
     val vendorInfo:Details,
-    val User_name:String?
+    val User_name:String?,
+    var isSelected:Boolean
 ){
     data class Details(
         val vendor_id:String

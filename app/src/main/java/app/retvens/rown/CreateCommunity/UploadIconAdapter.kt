@@ -9,14 +9,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import okhttp3.internal.immutableListOf
 import java.util.ArrayList
 
-class UploadIconAdapter(val context: Context,private val dataList: ArrayList<String>?) : RecyclerView.Adapter<UploadIconAdapter.ViewHolder>() {
+class UploadIconAdapter(val context: Context,private val number: ArrayList<String>?,private val name: ArrayList<String>?,private val profile: ArrayList<String>?) : RecyclerView.Adapter<UploadIconAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.membersName)
-        val image = itemView.findViewById<ImageView>(R.id.check)
+        val image = itemView.findViewById<ImageView>(R.id.memberspic)
 
     }
 
@@ -26,12 +27,15 @@ class UploadIconAdapter(val context: Context,private val dataList: ArrayList<Str
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = dataList?.get(position)
+        val data = name?.get(position)
         holder.name.text = data.toString()
         holder.image.visibility = View.VISIBLE
+
+        val pic = profile?.get(position)
+        Glide.with(context).load(pic).into(holder.image)
     }
 
     override fun getItemCount(): Int {
-        return dataList!!.size
+        return name!!.size
     }
 }

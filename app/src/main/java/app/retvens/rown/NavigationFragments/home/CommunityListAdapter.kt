@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 
 class CommunityListAdapter(val context : Context, val list: ArrayList<Community>) : RecyclerView.Adapter<CommunityListAdapter.CommuListViewHolder>() {
 
@@ -25,12 +26,12 @@ class CommunityListAdapter(val context : Context, val list: ArrayList<Community>
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return list.size
     }
 
     override fun onBindViewHolder(holder: CommuListViewHolder, position: Int) {
         val currentItem = list[position]
-        holder.cumm_pic.setImageResource(currentItem.image)
+        Glide.with(context).load(currentItem.image).into(holder.cumm_pic)
         holder.title.text = currentItem.title
         holder.member.text = currentItem.members
     }

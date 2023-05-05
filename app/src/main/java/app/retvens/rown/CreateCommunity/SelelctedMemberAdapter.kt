@@ -9,12 +9,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.MesiboUsersData
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
+import javax.microedition.khronos.opengles.GL
 
 class SelectedMembersAdapter(private val context: Context) :
     RecyclerView.Adapter<SelectedMembersAdapter.SelectedMemberViewHolder>() {
 
-    var selectedMembersList: MutableList<MesiboUsersData> = mutableListOf()
+    var selectedMembersList: MutableList<UserProfileRequestItem> = mutableListOf()
 
     class SelectedMemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileImageView = itemView.findViewById<ImageView>(R.id.selectedpic)
@@ -28,7 +31,7 @@ class SelectedMembersAdapter(private val context: Context) :
     override fun onBindViewHolder(holder: SelectedMemberViewHolder, position: Int) {
         val member = selectedMembersList[position]
 
-        holder.profileImageView.setImageResource(R.drawable.dummy)
+        Glide.with(context).load(member.Profile_pic).into(holder.profileImageView)
 
 
 
@@ -39,7 +42,7 @@ class SelectedMembersAdapter(private val context: Context) :
         return selectedMembersList.size
     }
 
-    fun addSelectedMember(member: MesiboUsersData) {
+    fun addSelectedMember(member: UserProfileRequestItem) {
         val index = selectedMembersList.indexOf(member)
         if (index == -1) {
             selectedMembersList.add(member)

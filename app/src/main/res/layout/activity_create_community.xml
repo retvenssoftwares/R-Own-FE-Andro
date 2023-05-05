@@ -125,6 +125,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="30dp"
+            android:textColor="#000000"
             android:background="@drawable/communityedittext"
             android:hint="Community Description"
             android:padding="10dp"

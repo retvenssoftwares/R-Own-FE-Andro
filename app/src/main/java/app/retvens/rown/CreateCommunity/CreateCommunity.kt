@@ -25,7 +25,7 @@ class CreateCommunity : AppCompatActivity() {
             val name = communityName.text.toString().trim()
             val description = communityDescrip.text.toString().trim()
 
-            val intent = Intent(this,SelectMembers::class.java)
+            val intent = Intent(this,CreateCummVisibilitySetting::class.java)
             intent.putExtra("name",name)
             intent.putExtra("desc",description)
             startActivity(intent)

@@ -2,6 +2,7 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -140,6 +141,12 @@ class JobTitleFragment : Fragment(), BackHandler, BottomSheetJobType.OnBottomJob
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+
+                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+                    val editor = onboardingPrefs.edit()
+                    editor.putBoolean("JobTitleFragment", true)
+                    editor.apply()
+
                     val response = response.body()!!
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()

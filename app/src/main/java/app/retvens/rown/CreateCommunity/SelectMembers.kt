@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.DataCollections.MesiboUsersData
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.R
 import retrofit2.Call
@@ -27,8 +28,11 @@ class SelectMembers : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var selectedMembersAdapter: SelectedMembersAdapter
     private lateinit var selectedMembersRecyclerView: RecyclerView
-    private  var selectedMember:ArrayList<String> = ArrayList()
-    private  var userList: List<MesiboUsersData> = emptyList()
+    private  var selectedMembe: ArrayList<UserProfileRequestItem> = ArrayList()
+    private  var number:ArrayList<String> = ArrayList()
+    private  var names:ArrayList<String> = ArrayList()
+    private  var profile:ArrayList<String> = ArrayList()
+    private  var userList: List<UserProfileRequestItem> = emptyList()
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,37 +56,39 @@ class SelectMembers : AppCompatActivity() {
 
         val name = intent.getStringExtra("name")
         val description = intent.getStringExtra("desc")
-
+        val type = intent.getStringExtra("type")
 
 
         next.setOnClickListener {
                 val intent = Intent(this,UploadIcon::class.java)
-            intent.putStringArrayListExtra("selectedMembers", selectedMember)
-            intent.putExtra("name",name)
-            intent.putExtra("desc",description)
-            startActivity(intent)
+                intent.putStringArrayListExtra("number", number)
+                intent.putStringArrayListExtra("names", names)
+                intent.putStringArrayListExtra("pic", profile)
+                intent.putExtra("name",name)
+                intent.putExtra("desc",description)
+                intent.putExtra("type",type)
+                startActivity(intent)
         }
 
         receiverProfileAdapter.setOnItemClickListener(object : SelectMembersAdapter.OnItemClickListener {
-            override fun onItemClick(member: MesiboUsersData) {
-
+            override fun onItemClick(member: UserProfileRequestItem) {
                 next.visibility = View.VISIBLE
 
-                val index = selectedMember.indexOf(member.address)
+                val index = selectedMembe.indexOf(member)
                 if (index == -1) {
-                    selectedMember.add(member.address)
+                    number.add(member.Phone)
+                    names.add(member.Full_name!!)
+                    profile.add(member.Profile_pic!!)
                 } else {
-                    selectedMember.removeAt(index)
+                    selectedMembe.removeAt(index)
                 }
 
                 selectedMembersAdapter.addSelectedMember(member)
                 selectedMembersAdapter.notifyDataSetChanged()
-
-
             }
         })
 
-        getMesiboUsers()
+        getUsers()
 
         val backbtn = findViewById<ImageView>(R.id.createCommunity_backBtn_members)
 
@@ -92,32 +98,29 @@ class SelectMembers : AppCompatActivity() {
 
     }
 
-    private fun getMesiboUsers() {
-        val send = RetrofitBuilder.retrofitBuilder.getMesiboUsers()
+    private fun getUsers() {
+        val send = RetrofitBuilder.retrofitBuilder.getProfile()
 
-        send.enqueue(object : Callback<UsersList?> {
-            override fun onResponse(call: Call<UsersList?>, response: Response<UsersList?>) {
-                if (response.isSuccessful) {
+        send.enqueue(object : Callback<List<UserProfileRequestItem>?> {
+            override fun onResponse(
+                call: Call<List<UserProfileRequestItem>?>,
+                response: Response<List<UserProfileRequestItem>?>
+            ) {
+                if (response.isSuccessful){
                     val response = response.body()!!
-                    if (response.result) {
-                        userList = response.users
-                        // Update the adapter with the new data
-                        receiverProfileAdapter.userList = userList ?: emptyList()
-                        receiverProfileAdapter.notifyDataSetChanged()
-
-
-                    }
-                }else{
-                    Toast.makeText(applicationContext,response.message().toString(), Toast.LENGTH_SHORT).show()
-                    Log.e("",response.message().toString())
+                    userList = response
+                    // Update the adapter with the new data
+                    receiverProfileAdapter.userList = userList ?: emptyList()
+                    receiverProfileAdapter.notifyDataSetChanged()
                 }
             }
 
-            override fun onFailure(call: Call<UsersList?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message, Toast.LENGTH_SHORT).show()
-                Log.e("",t.message.toString())
+            override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
+                TODO("Not yet implemented")
             }
         })
+
+
 
     }
 

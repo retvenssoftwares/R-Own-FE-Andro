@@ -2,6 +2,7 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.Dialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -252,7 +253,7 @@ class VendorsFragment : Fragment(), BackHandler {
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),portfolio),
             MultipartBody.Part.createFormData("vendorImage", file.name, body),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"Oo7PCzo0-"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),website)
         )
 
@@ -262,6 +263,12 @@ class VendorsFragment : Fragment(), BackHandler {
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+
+                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+                    val editor = onboardingPrefs.edit()
+                    editor.putBoolean("VendorsFragment", true)
+                    editor.apply()
+
                     val response = response.body()!!
                     progressDialog.dismiss()
                     createService()

@@ -12,16 +12,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ChatSection.ChatScreen
 import app.retvens.rown.DataCollections.MesiboUsersData
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 
-class SelectMembersAdapter(val context: Context, var userList:List<MesiboUsersData>) :
+class SelectMembersAdapter(val context: Context, var userList:List<UserProfileRequestItem>) :
     RecyclerView.Adapter<SelectMembersAdapter.ProfileViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
 
     // Define an interface for the listener
     interface OnItemClickListener {
-        fun onItemClick(member: MesiboUsersData)
+        fun onItemClick(member: UserProfileRequestItem)
     }
 
     // Define a function to set the listener
@@ -47,8 +49,8 @@ class SelectMembersAdapter(val context: Context, var userList:List<MesiboUsersDa
 
         val data = userList[position]
 
-        holder.nameTextView.text = data.address
-
+        holder.nameTextView.text = data.Full_name
+        Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
 
         holder.itemView.setOnClickListener {

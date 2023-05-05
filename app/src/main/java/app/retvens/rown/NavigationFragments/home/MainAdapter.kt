@@ -35,17 +35,17 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner : DataItem.Banner){
 
-            for (x in banner.media!!){
+            for (x in banner.banner.media!!){
                 Glide.with(context).load(x.post).into(binding.postPic)
             }
 
-            binding.postUserDominican.text = banner.location
-            binding.recentCommentByUser.text = banner.caption
+            binding.postUserDominican.text = banner.banner.location
+            binding.recentCommentByUser.text = banner.banner.caption
 
-            binding.userNamePost.text = banner.profileName
-
-            Glide.with(context).load(banner.profile_pic).into(binding.postProfile)
-            binding.userIdOnComment.text = banner.username
+//            binding.userNamePost.text = banner.profileName
+//
+//            Glide.with(context).load(banner.profile_pic).into(binding.postProfile)
+//            binding.userIdOnComment.text = banner.username
 
             binding.likePost.setOnClickListener {
                 onItemClickListener?.onItemClick(banner)

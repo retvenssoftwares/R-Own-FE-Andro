@@ -3,6 +3,7 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -264,6 +265,11 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
 
                     fragment.arguments = bundle
 
+                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+                    val editor = onboardingPrefs.edit()
+                    editor.putBoolean("HotelOwnerFragment", true)
+                    editor.apply()
+
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
@@ -326,6 +332,12 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+
+                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+                    val editor = onboardingPrefs.edit()
+                    editor.putBoolean("HotelOwnerFragment", true)
+                    editor.apply()
+
                     val response = response.body()!!
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
