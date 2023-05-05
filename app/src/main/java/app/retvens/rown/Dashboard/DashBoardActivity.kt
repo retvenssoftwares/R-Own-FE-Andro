@@ -2,6 +2,7 @@ package app.retvens.rown.Dashboard
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -53,6 +54,10 @@ import java.lang.Math.abs
 
 class DashBoardActivity : AppCompatActivity() {
 
+    companion object number{
+        var progress = ""
+    }
+
     lateinit var binding: ActivityDashBoardBinding
 
     private lateinit var drawerLayout:DrawerLayout
@@ -88,6 +93,7 @@ class DashBoardActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         mActivityTitle = title.toString()
 
+        Toast.makeText(applicationContext,number.progress,Toast.LENGTH_SHORT).show()
 
         toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
@@ -187,8 +193,6 @@ class DashBoardActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
-
-        val frame = findViewById<FrameLayout>(R.id.fragment_container)
 
 
     }

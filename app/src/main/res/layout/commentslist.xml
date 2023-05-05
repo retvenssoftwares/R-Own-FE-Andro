@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFFFF"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/comment_profile"
+        android:layout_width="wrap_content"
+        app:shapeAppearance="@style/RoundedCornerImage"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/dummy"
+        />
+
+    <TextView
+        android:id="@+id/commented_username"
+        android:text="Rahul Bhalerao"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textFontWeight="700"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/comment_profile"
+        android:layout_marginStart="20dp"
+        />
+    <TextView
+        android:id="@+id/commentOfUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/comment_profile"
+        android:layout_marginStart="20dp"
+        android:textColor="#8C8C8C"
+        android:textSize="14dp"
+        android:text="This is the Comment"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textFontWeight="700"
+        app:layout_constraintTop_toBottomOf="@+id/commented_username"
+        android:layout_marginTop="10dp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

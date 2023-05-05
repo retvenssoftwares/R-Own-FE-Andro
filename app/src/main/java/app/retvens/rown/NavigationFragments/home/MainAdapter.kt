@@ -19,6 +19,19 @@ import com.bumptech.glide.Glide
 class MainAdapter(val context: Context, private val dataItemList: List<DataItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var onItemClickListener: OnItemClickListener? = null
+
+
+    interface OnItemClickListener {
+        fun onItemClick(dataItem: DataItem.Banner)
+        fun onItemClickForComment(banner: DataItem.Banner)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        onItemClickListener = listener
+    }
+
+
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner : DataItem.Banner){
 
@@ -33,6 +46,15 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             Glide.with(context).load(banner.profile_pic).into(binding.postProfile)
             binding.userIdOnComment.text = banner.username
+
+            binding.likePost.setOnClickListener {
+                onItemClickListener?.onItemClick(banner)
+            }
+
+            binding.comment.setOnClickListener {
+                onItemClickListener?.onItemClickForComment(banner)
+            }
+
         }
     }
 

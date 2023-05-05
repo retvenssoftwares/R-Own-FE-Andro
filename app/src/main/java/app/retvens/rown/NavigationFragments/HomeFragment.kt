@@ -1,20 +1,29 @@
 package app.retvens.rown.NavigationFragments
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
+import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.FeedCollection.FetchPostDataClass
+import app.retvens.rown.DataCollections.FeedCollection.GetComments
+import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
 import app.retvens.rown.DataCollections.FeedCollection.Media
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.NavigationFragments.FragmntAdapters.CommentAdapter
 import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.home.Community
 import app.retvens.rown.NavigationFragments.home.CommunityListAdapter
@@ -50,6 +59,12 @@ class HomeFragment : Fragment() {
     var userName:String = ""
     var profileName:String = ""
     var type:String = ""
+    private lateinit var dialogRole:Dialog
+    private lateinit var recyclerView:RecyclerView
+    private lateinit var commentAdapter: CommentAdapter
+    private lateinit var commentList:ArrayList<GetComments>
+    private  var userProfilePic:String = ""
+    private  var UserName:String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,6 +103,7 @@ class HomeFragment : Fragment() {
 
         communityArrayList = arrayListOf<Community>()
         postsArrayList = arrayListOf<Post>()
+        commentList = ArrayList()
 
 
 
@@ -162,7 +178,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<FetchPostDataClass>?>,
                 response: Response<List<FetchPostDataClass>?>
             ) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful && isAdded) {
                     val response = response.body()!!
 
                     response.forEach { item ->
@@ -171,24 +187,12 @@ class HomeFragment : Fragment() {
                             post = x.post
                         }
                         getPostProfile(item.user_id) { profileName ->
-                            Toast.makeText(
-                                requireContext(),
-                                profileName,
-                                Toast.LENGTH_SHORT
-                            ).show()
-
                             mList.add(
                                 DataItem(
                                     DataItemType.BANNER, banner = DataItem.Banner(
                                         item._id, item.user_id, item.caption, item.likes,
                                         listOf(), item.location, item.hashtags,
-                                        listOf<DataItem.Media>(
-                                            DataItem.Media(
-                                                post,
-                                                "",
-                                                ""
-                                            )
-                                        ),
+                                        listOf<DataItem.Media>(DataItem.Media(post, "", "")),
                                         item.post_id, 0, item.display_status, item.saved_post,
                                         profilepic, profileName, "", userName
                                     )
@@ -197,8 +201,21 @@ class HomeFragment : Fragment() {
 
                             adapter = MainAdapter(requireContext(), mList)
                             mainRecyclerView.adapter = adapter
-
                             adapter.notifyDataSetChanged()
+
+                            adapter.setOnItemClickListener(object : MainAdapter.OnItemClickListener {
+                                override fun onItemClick(dataItem: DataItem.Banner) {
+                                    postLike(dataItem.post_id!!)
+                                }
+
+                                override fun onItemClickForComment(banner: DataItem.Banner) {
+                                    openCommentShit()
+                                    getComment(banner.post_id!!)
+                                }
+                            })
+
+
+
                         }
                     }
                 } else {
@@ -214,7 +231,63 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun getPostProfile(userId:String,callback: (String) -> Unit) {
+    private fun openCommentShit() {
+        dialogRole = Dialog(requireContext())
+        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogRole.setContentView(R.layout.commentbottomshit)
+        dialogRole.setCancelable(true)
+
+        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialogRole.window?.setGravity(Gravity.BOTTOM)
+        dialogRole.show()
+
+        recyclerView = dialogRole.findViewById(R.id.comment_recyclerview)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+    }
+
+    private fun getComment(postId: String) {
+
+        Toast.makeText(requireContext(),postId,Toast.LENGTH_SHORT).show()
+
+        val comments = RetrofitBuilder.feedsApi.getComment(postId)
+        comments.enqueue(object : Callback<List<GetComments>?> {
+            override fun onResponse(
+                call: Call<List<GetComments>?>,
+                response: Response<List<GetComments>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+
+                    response.forEach{ it ->
+
+                        getCommentProfile(it.user_id){ userName ->
+                            commentList.add(GetComments(it.user_id,it.comment,userName,userProfilePic))
+                        }
+
+                        commentAdapter = CommentAdapter(requireContext(),commentList)
+                        commentAdapter.notifyDataSetChanged()
+                        recyclerView.adapter = commentAdapter
+                    }
+
+                    Toast.makeText(requireContext(),response.size.toString(),Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(requireContext(),response.body().toString(),Toast.LENGTH_SHORT).show()
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<GetComments>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun getCommentProfile(userId: String,callback: (String) -> Unit) {
 
         val data = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
 
@@ -225,9 +298,66 @@ class HomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    profileName = response.Full_name
-                    profilepic = response.Profile_pic
-                    userName = response.User_name
+
+                    userProfilePic = response.Profile_pic!!
+                    userName = response.Full_name!!
+                    callback(userName)
+
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+
+            }
+        })
+
+    }
+
+    private fun postLike(postId:String) {
+
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+
+        val data = LikesCollection(user_id)
+
+        val like = RetrofitBuilder.feedsApi.postLike(postId,data)
+
+        like.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun getPostProfile(userId:String,callback: (String) -> Unit) {
+
+        val data = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
+
+        data.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    profileName = response.Full_name!!
+                    profilepic = response.Profile_pic!!
+                    userName = response.User_name!!
                     callback(profileName)
 
                 }else{

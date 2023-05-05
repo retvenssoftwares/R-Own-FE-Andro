@@ -123,7 +123,7 @@ class BottomSheet : BottomSheetDialogFragment() {
                          ) {
                              val original = data.toList()
                              val filter = original.filter { searchUser ->
-                                 searchUser.Full_name.contains(s.toString(),ignoreCase = false)
+                                 searchUser.Full_name!!.contains(s.toString(),ignoreCase = false)
                              }
                              usersProfileAdapter.searchConnection(filter)
                          }

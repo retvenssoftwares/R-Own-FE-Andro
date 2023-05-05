@@ -2,7 +2,9 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -55,6 +57,7 @@ class UsernameFragment : Fragment() {
     private lateinit var cal:Calendar
     private lateinit var profile: ShapeableImageView
     private lateinit var name:TextView
+    private lateinit var editor:Editor
 
     lateinit var progressDialog : Dialog
 
@@ -134,6 +137,7 @@ class UsernameFragment : Fragment() {
         name = view.findViewById(R.id.user_complete_name)
 
         getProfileInfo()
+
     }
 
     private fun getProfileInfo() {
@@ -147,7 +151,8 @@ class UsernameFragment : Fragment() {
                 call: Call<UserProfileRequestItem?>,
                 response: Response<UserProfileRequestItem?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
+
                     val response = response.body()!!
                     name.setText("Hi ${response.Full_name}")
 
@@ -183,7 +188,21 @@ class UsernameFragment : Fragment() {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                if (response.isSuccessful && isAdded){
+                if (response.isSuccessful){
+
+                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+
+                    editor = onboardingPrefs.edit()
+
+                    editor.putBoolean("UsernameFragment", true)
+                    Log.e("Onboarding", "UsernameFragment set to true")
+                    editor.apply()
+
+                    DashBoardActivity.number.progress = "50"
+
+                    val prefValue = onboardingPrefs.getBoolean("UsernameFragment", false)
+                    Log.e("PrefValue", "UsernameFragment preference value: $prefValue")
+
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
