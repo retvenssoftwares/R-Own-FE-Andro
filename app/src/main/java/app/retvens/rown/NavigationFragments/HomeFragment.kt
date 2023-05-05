@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
+import app.retvens.rown.Dashboard.createPosts.CreatePost
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.FeedCollection.FetchPostDataClass
 import app.retvens.rown.DataCollections.FeedCollection.GetComments
@@ -50,7 +52,6 @@ class HomeFragment : Fragment() {
     lateinit var mList : ArrayList<DataItem>
 
     lateinit var recyclerCommunity : RecyclerView
-    lateinit var postsArrayList : ArrayList<Post>
     lateinit var communityArrayList : ArrayList<Community>
     lateinit var adapter:MainAdapter
     var profilepic: String = ""
@@ -79,27 +80,16 @@ class HomeFragment : Fragment() {
         val fragManager = (activity as FragmentActivity).supportFragmentManager
         fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
 
-        mainRecyclerView = view.findViewById(R.id.mainRecyclerView)
-        mainRecyclerView.setHasFixedSize(true)
-        mainRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        mList = ArrayList()
-        prepareData()
-        getPost()
-
-        adapter = MainAdapter(requireContext(),mList)
-        mainRecyclerView.adapter = adapter
+        view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {
+            startActivity(Intent(context, CreatePost::class.java))
+        }
 
         recyclerCommunity = view.findViewById(R.id.recyclerCommunity)
         recyclerCommunity.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
         recyclerCommunity.setHasFixedSize(true)
 
         communityArrayList = arrayListOf<Community>()
-        postsArrayList = arrayListOf<Post>()
         commentList = ArrayList()
-
-
-
 
         val cummunity = Community(R.drawable.png_profile_post,"Food community","70 members")
         val cummunity1 = Community(R.drawable.png_profile_post,"Travellers community","40 members")
@@ -111,10 +101,20 @@ class HomeFragment : Fragment() {
         recyclerCommunity.adapter = CommunityListAdapter(requireContext(),communityArrayList)
 
         val btn = view.findViewById<ImageView>(R.id.community_btn)
-
         btn.setOnClickListener {
             startActivity(Intent(context,CreateCommunity::class.java))
         }
+
+        mainRecyclerView = view.findViewById(R.id.mainRecyclerView)
+        mainRecyclerView.setHasFixedSize(true)
+        mainRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        mList = ArrayList()
+        prepareData()
+        getPost()
+
+        adapter = MainAdapter(requireContext(),mList)
+        mainRecyclerView.adapter = adapter
 
     }
 
@@ -129,6 +129,43 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful && isAdded) {
                     val response = response.body()!!
 
+                    response.forEach { item ->
+                        var post: String = ""
+                        for (x in item.media) {
+                            post = x.post
+                        }
+                        getPostProfile(item.user_id) { profileName ->
+                            mList.add(1,
+                                DataItem(
+                                    DataItemType.BANNER, banner = DataItem.Banner(
+                                        item._id, item.user_id, item.caption, item.likes,
+                                        listOf(), item.location, item.hashtags,
+                                        listOf<DataItem.Media>(DataItem.Media(post, "", "")),
+                                        item.post_id, 0, item.display_status, item.saved_post,
+                                        profilepic, profileName, "", userName
+                                    )
+                                )
+                            )
+
+                            adapter = MainAdapter(requireContext(), mList)
+                            mainRecyclerView.adapter = adapter
+                            adapter.notifyDataSetChanged()
+
+                            adapter.setOnItemClickListener(object : MainAdapter.OnItemClickListener {
+                                override fun onItemClick(dataItem: DataItem.Banner) {
+                                    postLike(dataItem.post_id!!)
+                                }
+
+                                override fun onItemClickForComment(banner: DataItem.Banner) {
+                                    openCommentShit()
+                                    getComment(banner.post_id!!)
+                                }
+                            })
+
+
+
+                        }
+                    }
                     response.forEach { item ->
                         var post: String = ""
                         for (x in item.media) {
@@ -358,15 +395,11 @@ class HomeFragment : Fragment() {
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_awards))
 
 //        mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
-//        mList.add(DataItem(DataItemType.BANNER, banner =  DataItem.Banner(R.drawable.png_post, R.drawable.png_profile, "Jason Stathon")))
         mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
-//        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_r_logo, "John")))
         mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
         mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
         mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
-//        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Tom")))
         mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
-//        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_posts, R.drawable.png_profile, "Chrish Hamswirth")))
         mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
     }
 }

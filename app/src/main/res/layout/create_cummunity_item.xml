@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:text="CREATE"
+                android:text="Chat"
                 android:textSize="11dp"
                 android:paddingVertical="5dp"
                 android:textColor="@color/white"

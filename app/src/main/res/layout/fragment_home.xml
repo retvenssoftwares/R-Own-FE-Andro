@@ -18,6 +18,50 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
+            <RelativeLayout
+                android:id="@+id/relative_create"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/home_profile"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/img"
+                    app:shapeAppearanceOverlay="@style/RoundedCornerImage"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Share with your community"
+                    android:textColor="@color/grey_60"
+                    android:layout_marginStart="60dp"
+                    android:textSize="12dp" />
+
+                <ImageButton
+                    android:id="@+id/createCommunity_cut"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/white"
+                    android:src="@drawable/select_img" />
+
+            </RelativeLayout>
+
+
             <HorizontalScrollView
                 android:id="@+id/create_scroll"
                 android:layout_width="match_parent"
