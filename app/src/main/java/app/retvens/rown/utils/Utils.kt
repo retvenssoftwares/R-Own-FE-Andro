@@ -33,3 +33,24 @@ fun clearUserId(context: Context){
     editor.clear()
     editor.apply()
 }
+
+fun saveProgress(context:Context,progress : String){
+    val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveProgress",
+        AppCompatActivity.MODE_PRIVATE
+    ).edit()
+    editor.putString("progress", progress)
+    editor.apply()
+}
+
+fun clearProgress(context: Context){
+    val settings = context.getSharedPreferences("SaveProgress", Context.MODE_PRIVATE)
+    val editor = settings.edit()
+    editor.clear()
+    editor.apply()
+}
+fun clearUserType(context: Context){
+    val settings = context.getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+    val editor = settings.edit()
+    editor.clear()
+    editor.apply()
+}

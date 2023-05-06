@@ -28,6 +28,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -149,6 +150,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
 
                     val response = response.body()!!
                     Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
+                    saveProgress(requireContext(), "70")
                     val fragment = BasicInformationFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)

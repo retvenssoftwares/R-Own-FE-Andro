@@ -34,6 +34,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.JobData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobType
+import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -147,6 +148,7 @@ class JobTitleFragment : Fragment(), BackHandler, BottomSheetJobType.OnBottomJob
                     editor.putBoolean("JobTitleFragment", true)
                     editor.apply()
 
+                    saveProgress(requireContext(), "100")
                     val response = response.body()!!
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()

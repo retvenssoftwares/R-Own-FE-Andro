@@ -31,6 +31,7 @@ import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExp
 import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobType
+import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -141,6 +142,7 @@ class HospitalityExpertFragment : Fragment(), BackHandler, BottomSheetJobType.On
             ) {
                 if (response.isSuccessful &&isAdded){
                     val response = response.body()!!
+                    saveProgress(requireContext(), "100")
                     Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(context, DashBoardActivity::class.java))
                 }else{

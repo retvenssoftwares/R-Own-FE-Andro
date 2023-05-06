@@ -52,7 +52,7 @@ class UploadIcon : AppCompatActivity() {
     private lateinit var description:String
     private var type:String = ""
     private lateinit var myRecyclerView: RecyclerView
-    private lateinit var adapter:UploadIconAdapter
+    private lateinit var adapter: UploadIconAdapter
     private lateinit var profile:ShapeableImageView
     private lateinit var select:ImageView
     private lateinit var dialog:Dialog
