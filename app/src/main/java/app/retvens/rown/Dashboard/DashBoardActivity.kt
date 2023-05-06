@@ -43,6 +43,7 @@ import app.retvens.rown.authentication.LoginActivity
 import app.retvens.rown.databinding.ActivityDashBoardBinding
 import app.retvens.rown.utils.clearProgress
 import app.retvens.rown.utils.clearUserId
+import app.retvens.rown.utils.clearUserType
 import app.retvens.rown.utils.moveToClear
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
@@ -147,14 +148,19 @@ class DashBoardActivity : AppCompatActivity() {
 
         //setUp BottomNav
         val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
+        val sp = getSharedPreferences("onboarding_prefs", AppCompatActivity.MODE_PRIVATE)
+        val hotelVendor = sp.getBoolean("VendorsFragment", false)
+        val hotelOwner = sp.getBoolean("HotelOwnerFragment", false)
 
         bottom_Nav.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.home -> replaceFragment(HomeFragment())
-                R.id.jobs -> replaceFragment(JobFragment())
-//                R.id.jobs -> replaceFragment(JobsForHoteliers())
-//                R.id.explore -> replaceFragment(ExploreFragment())
-                R.id.explore -> replaceFragment(JobsForHoteliers())
+                R.id.jobs -> if (hotelOwner || hotelVendor){
+                    replaceFragment(JobsForHoteliers())
+                }else{
+                    replaceFragment(JobFragment())
+                }
+                R.id.explore -> replaceFragment(ExploreFragment())
                 R.id.events -> replaceFragment(EventFragment())
                 R.id.profile -> replaceFragment(ProfileFragment())
                 else -> null
@@ -211,6 +217,7 @@ class DashBoardActivity : AppCompatActivity() {
             moveToClear(applicationContext)
             clearUserId(applicationContext)
             clearProgress(applicationContext)
+            clearUserType(applicationContext)
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }

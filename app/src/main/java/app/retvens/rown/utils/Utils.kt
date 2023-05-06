@@ -48,3 +48,9 @@ fun clearProgress(context: Context){
     editor.clear()
     editor.apply()
 }
+fun clearUserType(context: Context){
+    val settings = context.getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+    val editor = settings.edit()
+    editor.clear()
+    editor.apply()
+}

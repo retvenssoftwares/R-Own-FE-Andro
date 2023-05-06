@@ -108,7 +108,7 @@ class HomeFragment : Fragment() {
 
         mList = ArrayList()
         prepareData()
-        getPost()
+//        getPost()
 
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
@@ -123,7 +123,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<GetCommunitiesData>?>,
                 response: Response<List<GetCommunitiesData>?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     response.forEach{ it ->
 
