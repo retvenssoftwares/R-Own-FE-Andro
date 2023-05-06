@@ -6,16 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
+import app.retvens.rown.DataCollections.JobsCollection.JobsData
+import app.retvens.rown.DataCollections.ProfileCompletion.JobData
 import app.retvens.rown.R
 
-class RecentJobAdapter(val listS : MutableList<SuggestedJobData>, val context: Context) : RecyclerView.Adapter<RecentJobAdapter.RecentJobViewHolder>() {
+class RecentJobAdapter(val context: Context, val jobsList:List<JobsData>) : RecyclerView.Adapter<RecentJobAdapter.RecentJobViewHolder>() {
 
     class RecentJobViewHolder(itemView: View) : ViewHolder(itemView){
-        val title = itemView.findViewById<TextView>(R.id.recent_job_title)
+        val designation = itemView.findViewById<TextView>(R.id.recent_job_designation)
+        val location = itemView.findViewById<TextView>(R.id.recent_job_location)
+        val title = itemView.findViewById<TextView>(R.id.jobs_title)
+        val type = itemView.findViewById<TextView>(R.id.jobs_type)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentJobViewHolder {
@@ -25,11 +31,20 @@ class RecentJobAdapter(val listS : MutableList<SuggestedJobData>, val context: C
     }
 
     override fun getItemCount(): Int {
-        return listS.size
+        return jobsList.size
     }
 
     override fun onBindViewHolder(holder: RecentJobViewHolder, position: Int) {
-        holder.title.text = listS[position].title
+
+        val data = jobsList[position]
+
+        for (x in data.joblist){
+
+            holder.designation.text = x.designationType
+            holder.location.text = x.jobLocation
+            holder.type.text = x.jobType
+            holder.title.text = x.jobTitle
+        }
 
         holder.itemView.setOnClickListener{
             context.startActivity(Intent(context, JobDetailsActivity::class.java))

@@ -41,7 +41,7 @@ class JobPostedChildFragmnet : Fragment() {
         listSuggeJobs.add(SuggestedJobData("UI Devloper"))
         listSuggeJobs.add(SuggestedJobData("Devloper"))
 
-        val suggestedJobAdapter = SuggestedJobAdapter(listSuggeJobs, requireContext())
+        val suggestedJobAdapter = SuggestedJobAdapter(requireContext(), emptyList())
         suggestedRecycler.adapter = suggestedJobAdapter
         suggestedJobAdapter.notifyDataSetChanged()
 
@@ -50,7 +50,7 @@ class JobPostedChildFragmnet : Fragment() {
         recentJobRecycler.layoutManager = LinearLayoutManager(context)
         recentJobRecycler.setHasFixedSize(true)
 
-        val recentJobAdapter = RecentJobAdapter(listSuggeJobs, requireContext())
+        val recentJobAdapter = RecentJobAdapter(requireContext(), emptyList())
         recentJobRecycler.adapter = recentJobAdapter
         recentJobAdapter.notifyDataSetChanged()
     }

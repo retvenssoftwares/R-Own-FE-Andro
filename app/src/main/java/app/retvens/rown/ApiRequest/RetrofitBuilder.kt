@@ -27,4 +27,6 @@ object RetrofitBuilder {
 
     val feedsApi = retrofitBuilder2.create(FeedsApi::class.java)
 
+    val jobsApis = retrofitBuilder2.create(JobsApis::class.java)
+
 }

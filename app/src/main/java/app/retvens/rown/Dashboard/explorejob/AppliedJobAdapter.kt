@@ -8,14 +8,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.DataCollections.JobsCollection.AppliedJobData
 import app.retvens.rown.NavigationFragments.job.JobDetailsAppliedActivity
 import app.retvens.rown.R
 
-class AppliedJobAdapter(val context: Context, val al : MutableList<Applied>) : RecyclerView.Adapter<AppliedJobAdapter.AppliedViewHolder>() {
+class AppliedJobAdapter(val context: Context, val appList : AppliedJobData) : RecyclerView.Adapter<AppliedJobAdapter.AppliedViewHolder>() {
 
     class AppliedViewHolder(itemView: View) : ViewHolder(itemView){
-        val title = itemView.findViewById<TextView>(R.id.applied_job_title)
-//        val status = itemView.findViewById<TextView>(R.id.applied_job_title)
+        val designation = itemView.findViewById<TextView>(R.id.applied_job_title)
+        val location = itemView.findViewById<TextView>(R.id.applied_job_location)
+        val type = itemView.findViewById<TextView>(R.id.applied_type)
+        val title = itemView.findViewById<TextView>(R.id.appiled_title)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppliedViewHolder {
@@ -25,11 +28,17 @@ class AppliedJobAdapter(val context: Context, val al : MutableList<Applied>) : R
     }
 
     override fun getItemCount(): Int {
-        return al.size
+        return 1
     }
 
     override fun onBindViewHolder(holder: AppliedViewHolder, position: Int) {
-        holder.title.text = al[position].title
+
+        val data = appList
+
+        holder.designation.text = data.designationType
+        holder.type.text = data.jobType
+        holder.location.text = data.jobLocation
+        holder.title.text = data.jobTitle
 
         holder.itemView.setOnClickListener{
             context.startActivity(Intent(context, JobDetailsAppliedActivity::class.java))

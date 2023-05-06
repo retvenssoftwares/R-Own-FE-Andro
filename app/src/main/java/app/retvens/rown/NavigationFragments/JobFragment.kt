@@ -15,12 +15,19 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.explorejob.Applied
 import app.retvens.rown.Dashboard.explorejob.AppliedJobAdapter
+import app.retvens.rown.DataCollections.JobsCollection.AppliedJobData
+import app.retvens.rown.DataCollections.JobsCollection.JobResponseDataClass
+import app.retvens.rown.DataCollections.JobsCollection.JobsData
+import app.retvens.rown.DataCollections.JobsCollection.RequestJobDataClass
 import app.retvens.rown.NavigationFragments.job.RecentJobAdapter
 import app.retvens.rown.NavigationFragments.job.SuggestedJobAdapter
 import app.retvens.rown.NavigationFragments.job.SuggestedJobData
@@ -34,6 +41,9 @@ import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetNoticePeriod
 import app.retvens.rown.bottomsheet.BottomSheetRating
 import com.google.android.material.textfield.TextInputEditText
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
@@ -156,9 +166,7 @@ class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
         listSuggeJobs.add(SuggestedJobData("UI Devloper"))
         listSuggeJobs.add(SuggestedJobData("Devloper"))
 
-        val suggestedJobAdapter = SuggestedJobAdapter(listSuggeJobs, requireContext())
-        suggestedRecycler.adapter = suggestedJobAdapter
-        suggestedJobAdapter.notifyDataSetChanged()
+        getJobs()
 
         /*-----------------------EXPLORE FOR A JOB--------------------------------*/
         /*-----------------------EXPLORE FOR A JOB--------------------------------*/
@@ -166,9 +174,75 @@ class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
         recentJobRecycler.layoutManager = LinearLayoutManager(context)
         recentJobRecycler.setHasFixedSize(true)
 
-        val recentJobAdapter = RecentJobAdapter(listSuggeJobs, requireContext())
-        recentJobRecycler.adapter = recentJobAdapter
-        recentJobAdapter.notifyDataSetChanged()
+
+
+    }
+
+    private fun RequestJob() {
+
+        selectDepartmentET.setText("")
+
+        val department = selectDepartmentET.text.toString()
+        val designation = selectDesignationET.text.toString()
+        val type = selectJobEmploymentET.text.toString()
+        val location = selectJobLocationET.text.toString()
+        val noticePeriod = selectNoticeET.text.toString()
+        val ctc = expectedCTCeET.text.toString()
+
+        val sharedPreferences = requireContext()?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val data = RequestJobDataClass(user_id,department,"","","",type,designation,noticePeriod
+        ,"","",location,"","",ctc)
+
+        val send = RetrofitBuilder.jobsApis.requestJob(data)
+
+        send.enqueue(object : Callback<JobResponseDataClass?> {
+            override fun onResponse(
+                call: Call<JobResponseDataClass?>,
+                response: Response<JobResponseDataClass?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<JobResponseDataClass?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
+    private fun getJobs() {
+        val getJob = RetrofitBuilder.jobsApis.getJobs()
+
+        getJob.enqueue(object : Callback<List<JobsData>?> {
+            override fun onResponse(
+                call: Call<List<JobsData>?>,
+                response: Response<List<JobsData>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                  val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
+                    suggestedRecycler.adapter = suggestedJobAdapter
+                    suggestedJobAdapter.notifyDataSetChanged()
+
+                    val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+                    recentJobRecycler.adapter = recentJobAdapter
+                    recentJobAdapter.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     /*-----------------------REQUEST FOR A JOB--------------------------------*/
@@ -221,6 +295,8 @@ class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
             fragManager.let{bottomSheet.show(it, BottomSheetCTC.CTC_TAG)}
             bottomSheet.setOnCTCClickListener(this)
         }
+
+//        RequestJob()
     }
     override fun bottomJobTypeClick(jobTypeFrBo: String) {
         selectJobEmploymentET.setText(jobTypeFrBo)
@@ -241,20 +317,40 @@ class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
         appliedRecyclerView.layoutManager = LinearLayoutManager(context)
         appliedRecyclerView.setHasFixedSize(true)
 
-        val listJobs = mutableListOf<Applied>()
-        listJobs.add(Applied("Android Devloper", ""))
-        listJobs.add(Applied("UI Devloper", ""))
-        listJobs.add(Applied("Devloper", ""))
-        listJobs.add(Applied("Android Devloper", ""))
-        listJobs.add(Applied("UI Devloper", ""))
-        listJobs.add(Applied("Devloper", ""))
-        listJobs.add(Applied("Android Devloper", ""))
-        listJobs.add(Applied("UI Devloper", ""))
-        listJobs.add(Applied("Devloper", ""))
 
-        val appliedJobAdapter = AppliedJobAdapter(requireContext(), listJobs)
-        appliedRecyclerView.adapter = appliedJobAdapter
-        appliedJobAdapter.notifyDataSetChanged()
+
+
+        appliedJobList()
+    }
+
+    private fun appliedJobList() {
+        val sharedPreferences = requireContext()?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+
+        val data = RetrofitBuilder.jobsApis.appliedJobs(user_id)
+
+        data.enqueue(object : Callback<AppliedJobData?> {
+            override fun onResponse(
+                call: Call<AppliedJobData?>,
+                response: Response<AppliedJobData?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    val appliedJobAdapter = AppliedJobAdapter(requireContext(), response)
+                    appliedRecyclerView.adapter = appliedJobAdapter
+                    appliedJobAdapter.notifyDataSetChanged()
+                    Toast.makeText(requireContext(),"ok",Toast.LENGTH_SHORT).show()
+
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<AppliedJobData?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun bottomJobClick(jobFrBo: String) {
