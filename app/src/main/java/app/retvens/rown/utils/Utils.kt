@@ -43,7 +43,7 @@ fun saveProgress(context:Context,progress : String){
 }
 
 fun clearProgress(context: Context){
-    val settings = context.getSharedPreferences("progress", Context.MODE_PRIVATE)
+    val settings = context.getSharedPreferences("SaveProgress", Context.MODE_PRIVATE)
     val editor = settings.edit()
     editor.clear()
     editor.apply()

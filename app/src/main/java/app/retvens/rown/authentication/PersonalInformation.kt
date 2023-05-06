@@ -281,7 +281,7 @@ class PersonalInformation : AppCompatActivity() {
 
             val randomString = Random().ints(username.length.toLong(), 0, username.length)
                 .asSequence()
-                .map(username::get)
+                .map(eMail::get)
                 .joinToString("")
 
             val filesDir = applicationContext.filesDir
