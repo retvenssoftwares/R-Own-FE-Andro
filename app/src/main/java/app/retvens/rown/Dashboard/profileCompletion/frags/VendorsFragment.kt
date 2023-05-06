@@ -41,6 +41,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.VendorServicesData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -174,8 +175,10 @@ class VendorsFragment : Fragment(), BackHandler {
     }
 
     private fun getVendor() {
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-       val data = RetrofitBuilder.retrofitBuilder.fetchUser("Oo7PCzo0-")
+        val data = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
 
         data.enqueue(object : Callback<UserProfileRequestItem?> {
             override fun onResponse(
@@ -272,6 +275,7 @@ class VendorsFragment : Fragment(), BackHandler {
                     val response = response.body()!!
                     progressDialog.dismiss()
                     createService()
+                    saveProgress(requireContext(), "100")
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                 }else{

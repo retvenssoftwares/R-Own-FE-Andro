@@ -35,6 +35,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -224,13 +225,14 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
 
                     when (nextFrag) {
                         0 -> {
+                            saveProgress(requireContext(), "80")
                             val fragment = JobTitleFragment()
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
                             transaction?.commit()
                         }
                         1 -> {
-
+                            saveProgress(requireContext(), "80")
                             val fragment = HotelOwnerFragment()
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
@@ -238,7 +240,7 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
 
                         }
                         2 -> {
-
+                            saveProgress(requireContext(), "80")
                             val fragment = HospitalityExpertFragment()
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
@@ -246,7 +248,7 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
 
                         }
                         3 -> {
-
+                            saveProgress(requireContext(), "80")
                             val fragment = VendorsFragment()
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)

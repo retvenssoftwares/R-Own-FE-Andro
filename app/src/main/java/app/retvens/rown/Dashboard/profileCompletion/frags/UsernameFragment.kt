@@ -29,6 +29,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import app.retvens.rown.utils.saveProgress
 import app.retvens.rown.utils.saveUserId
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -198,7 +199,8 @@ class UsernameFragment : Fragment() {
                     Log.e("Onboarding", "UsernameFragment set to true")
                     editor.apply()
 
-                    DashBoardActivity.number.progress = "50"
+//                    DashBoardActivity.number.progress = "50"
+                    saveProgress(requireContext(), "60")
 
                     val prefValue = onboardingPrefs.getBoolean("UsernameFragment", false)
                     Log.e("PrefValue", "UsernameFragment preference value: $prefValue")

@@ -40,6 +40,7 @@ import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetRating
+import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -168,6 +169,8 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
             uploadData()
         }else {
             Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
+            saveProgress(requireContext(), "100")
+            startActivity(Intent(requireContext(),DashBoardActivity::class.java))
         }
     }
 
@@ -212,6 +215,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                     editor.apply()
 
                     val response = response.body()!!
+                    saveProgress(requireContext(), "100")
                     progressDialog.dismiss()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()

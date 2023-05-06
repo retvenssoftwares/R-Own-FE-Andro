@@ -38,6 +38,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetRating
+import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -339,6 +340,7 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
                     editor.apply()
 
                     val response = response.body()!!
+                    saveProgress(requireContext(), "100")
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))

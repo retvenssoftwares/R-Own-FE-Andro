@@ -13,6 +13,7 @@ import android.view.*
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -40,12 +41,14 @@ import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
 import app.retvens.rown.databinding.ActivityDashBoardBinding
+import app.retvens.rown.utils.clearProgress
 import app.retvens.rown.utils.clearUserId
 import app.retvens.rown.utils.moveToClear
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
@@ -116,9 +119,25 @@ class DashBoardActivity : AppCompatActivity() {
         //setUp Header
         val header = LayoutInflater.from(this).inflate(R.layout.nav_header_dashboard,navView,false)
         navView.addHeaderView(header)
+        val sharedPreferences = getSharedPreferences("SaveProgress", AppCompatActivity.MODE_PRIVATE)
+        val toPo = sharedPreferences.getString("progress", "50").toString()
+        val progress :Int = toPo.toInt()
         header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
-            startActivity(Intent(this, UserName::class.java))
+            if (progress == 100){
+                Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
+            }else {
+                startActivity(Intent(this, UserName::class.java))
+            }
         }
+        val progressBar = header.findViewById<LinearProgressIndicator>(R.id.progress_Bar)
+
+        if (progress != null) {
+            if (progress >= 50){
+                header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $progress% Complete"
+                progressBar.progress = progress
+            }
+        }
+
 
         profile = header.findViewById<ImageView>(R.id.nav_profile)
         name = header.findViewById<TextView>(R.id.user_name)
@@ -191,6 +210,7 @@ class DashBoardActivity : AppCompatActivity() {
             SharedPreferenceManagerAdmin.getInstance(applicationContext).clear()
             moveToClear(applicationContext)
             clearUserId(applicationContext)
+            clearProgress(applicationContext)
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }

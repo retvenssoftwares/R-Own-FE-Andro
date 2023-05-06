@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
 
         val btn = view.findViewById<ImageView>(R.id.community_btn)
         btn.setOnClickListener {
-            startActivity(Intent(context,CreateCommunity::class.java))
+            startActivity(Intent(context, CreateCommunity::class.java))
         }
 
         mainRecyclerView = view.findViewById(R.id.mainRecyclerView)

@@ -60,7 +60,7 @@ class SelectMembers : AppCompatActivity() {
 
 
         next.setOnClickListener {
-                val intent = Intent(this,UploadIcon::class.java)
+                val intent = Intent(this, UploadIcon::class.java)
                 intent.putStringArrayListExtra("number", number)
                 intent.putStringArrayListExtra("names", names)
                 intent.putStringArrayListExtra("pic", profile)
@@ -70,7 +70,8 @@ class SelectMembers : AppCompatActivity() {
                 startActivity(intent)
         }
 
-        receiverProfileAdapter.setOnItemClickListener(object : SelectMembersAdapter.OnItemClickListener {
+        receiverProfileAdapter.setOnItemClickListener(object :
+            SelectMembersAdapter.OnItemClickListener {
             override fun onItemClick(member: UserProfileRequestItem) {
                 next.visibility = View.VISIBLE
 
@@ -93,7 +94,7 @@ class SelectMembers : AppCompatActivity() {
         val backbtn = findViewById<ImageView>(R.id.createCommunity_backBtn_members)
 
         backbtn.setOnClickListener {
-            startActivity(Intent(this,CreateCommunity::class.java))
+            startActivity(Intent(this, CreateCommunity::class.java))
         }
 
     }
