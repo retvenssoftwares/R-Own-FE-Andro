@@ -64,6 +64,7 @@
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
+        android:id="@+id/ll_ss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -92,6 +93,7 @@
         android:layout_marginHorizontal="30dp"/>
 
     <LinearLayout
+        android:id="@+id/ll_sm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -118,6 +120,7 @@
         android:layout_marginHorizontal="30dp"/>
 
     <LinearLayout
+        android:id="@+id/ll_smo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

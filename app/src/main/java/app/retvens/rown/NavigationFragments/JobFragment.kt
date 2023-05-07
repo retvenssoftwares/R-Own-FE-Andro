@@ -298,6 +298,14 @@ class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
 
 //        RequestJob()
     }
+    override fun bottomJobDepartmentClick(jobDepartFrBo: String) {
+        selectDepartmentET.setText(jobDepartFrBo)
+    }
+
+    override fun bottomJobDesignationClick(jobDesignationFrBo: String) {
+        selectDesignationET.setText(jobDesignationFrBo)
+    }
+
     override fun bottomJobTypeClick(jobTypeFrBo: String) {
         selectJobEmploymentET.setText(jobTypeFrBo)
     }
@@ -309,8 +317,16 @@ class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
     override fun bottomCTCClick(CTCFrBo: String) {
         expectedCTCeET.setText(CTCFrBo)
     }
+    override fun bottomJobClick(jobFrBo: String) {
 
-/*----------------------------APPLY FOR A JOB-----------------------------*/
+    }
+
+    override fun bottomLocationClick(LocationFrBo: String) {
+
+    }
+
+
+    /*----------------------------APPLY FOR A JOB-----------------------------*/
 /*----------------------------APPLY FOR A JOB-----------------------------*/
     private fun appliedForAJob() {
         appliedRecyclerView = requireView().findViewById(R.id.applied_recycler)
@@ -328,14 +344,14 @@ class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
 
-        val data = RetrofitBuilder.jobsApis.appliedJobs(user_id)
+        val data = RetrofitBuilder.jobsApis.appliedJobs("$user_id")
 
         data.enqueue(object : Callback<AppliedJobData?> {
             override fun onResponse(
                 call: Call<AppliedJobData?>,
                 response: Response<AppliedJobData?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     val appliedJobAdapter = AppliedJobAdapter(requireContext(), response)
                     appliedRecyclerView.adapter = appliedJobAdapter
@@ -351,22 +367,6 @@ class JobFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener,
                 Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    override fun bottomJobClick(jobFrBo: String) {
-
-    }
-
-    override fun bottomJobDepartmentClick(jobDepartFrBo: String) {
-
-    }
-
-    override fun bottomJobDesignationClick(jobDesignationFrBo: String) {
-
-    }
-
-    override fun bottomLocationClick(LocationFrBo: String) {
-
     }
 
 }

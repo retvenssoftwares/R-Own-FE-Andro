@@ -26,7 +26,9 @@ import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetJobDepartment
+import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
+import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
 import app.retvens.rown.databinding.ActivityCreatePostBinding
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -36,7 +38,7 @@ import java.io.IOException
 
 class CreatePost : AppCompatActivity(),
     BottomSheetSelectAudience.OnBottomSelectAudienceClickListener,
-    BottomSheetGoingBack.OnBottomGoingBackClickListener {
+    BottomSheetGoingBack.OnBottomGoingBackClickListener, BottomSheetWhatToPost.OnBottomWhatToPostClickListener {
     lateinit var binding : ActivityCreatePostBinding
 
     var PICK_IMAGE_REQUEST_CODE : Int = 0
@@ -72,64 +74,11 @@ class CreatePost : AppCompatActivity(),
 
         binding.createP.setOnClickListener {
             selectedImg = 1
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
-            }
-            openBottomSheet()
-        }
-
-        binding.img1.setOnClickListener {
-            selectedImg = 1
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
-            }
-            openBottomSheet()
-        }
-        binding.img2.setOnClickListener {
-            selectedImg = 2
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
-            }
-            openBottomSheet()
-        }
-        binding.img3.setOnClickListener {
-            selectedImg = 3
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
-            }
-            openBottomSheet()
-        }
-        binding.img4.setOnClickListener {
-            selectedImg = 4
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
-            }
-            openBottomSheet()
-        }
-        binding.img5.setOnClickListener {
-            selectedImg = 5
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
-            }
-            openBottomSheet()
+            val bottomSheet = BottomSheetWhatToPost()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetWhatToPost.WTP_TAG)}
+            bottomSheet.setOnWhatToPostClickListener(this)
+//            openBottomSheet()
         }
 
         binding.canSee.setOnClickListener {
@@ -145,6 +94,134 @@ class CreatePost : AppCompatActivity(),
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetSelectAudience.S_A_TAG)}
             bottomSheet.setOnSelectAudienceClickListener(this)
+        }
+
+        binding.img1.setOnClickListener {
+            selectedImg = 1
+            if (imgUri1 == null) {
+                //Requesting Permission For CAMERA
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.CAMERA
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                    )
+                }
+                openGallery()
+            } else {
+                imgUriP = imgUri1
+                binding.imgPreview.setImageURI(imgUri1)
+            }
+        }
+        binding.img2.setOnClickListener {
+            selectedImg = 2
+            if (imgUri2 == null) {
+                //Requesting Permission For CAMERA
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.CAMERA
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                    )
+                }
+                openGallery()
+            } else {
+                imgUriP = imgUri2
+                binding.imgPreview.setImageURI(imgUri2)
+            }
+        }
+        binding.img3.setOnClickListener {
+            selectedImg = 3
+            if (imgUri3 == null) {
+                //Requesting Permission For CAMERA
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.CAMERA
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                    )
+                }
+                openGallery()
+            } else {
+                imgUriP = imgUri3
+                binding.imgPreview.setImageURI(imgUri3)
+            }
+        }
+        binding.img4.setOnClickListener {
+            selectedImg = 4
+            if (imgUri4 == null){
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                )
+            }
+            openGallery()
+            }else{
+                imgUriP = imgUri4
+                binding.imgPreview.setImageURI(imgUri4)
+            }
+        }
+        binding.img5.setOnClickListener {
+            selectedImg = 5
+            if (imgUri5 == null) {
+                //Requesting Permission For CAMERA
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.CAMERA
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                    )
+                }
+                openGallery()
+            }else{
+                imgUriP = imgUri5
+                binding.imgPreview.setImageURI(imgUri5)
+            }
+        }
+
+        binding.deletePost.setOnClickListener {
+            if (imgUriP == imgUri1){
+                imgUriP = null
+                imgUri1 = null
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img1.setImageURI(imgUriP)
+            } else if(imgUriP == imgUri2){
+                imgUriP = null
+                imgUri2 = null
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img2.setImageURI(imgUriP)
+            } else if(imgUriP == imgUri3){
+                imgUriP = null
+                imgUri3 = null
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img3.setImageURI(imgUriP)
+            } else if(imgUriP == imgUri4){
+                imgUriP = null
+                imgUri4 = null
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img4.setImageURI(imgUriP)
+            } else if(imgUriP == imgUri5){
+                imgUriP = null
+                imgUri5 = null
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img5.setImageURI(imgUriP)
+            }else{
+                Toast.makeText(this, "can't del", Toast.LENGTH_SHORT).show()
+            }
         }
     }
     /*------------------------------CAMERA FUNCTIONALITIES AND SET LOCALE LANGUAGE--------------*/
@@ -177,12 +254,12 @@ class CreatePost : AppCompatActivity(),
     }
     private fun openCamera() {
         contract.launch(cameraImageUri)
-        dialog.dismiss()
+//        dialog.dismiss()
     }
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
-        dialog.dismiss()
+//        dialog.dismiss()
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -200,25 +277,31 @@ class CreatePost : AppCompatActivity(),
 
                 if (selectedImg == 1){
                     binding.postsLayout.visibility = View.VISIBLE
+                    binding.deletePost.visibility = View.VISIBLE
                     binding.imgPreview.setImageURI(croppedImage)
                     binding.img1.setImageURI(croppedImage)
                     imgUri1 = compressImage(croppedImage)
+                    imgUriP = imgUri1
                 } else if (selectedImg == 2){
                     binding.imgPreview.setImageURI(croppedImage)
                     binding.img2.setImageURI(croppedImage)
                     imgUri2 = compressImage(croppedImage)
+                    imgUriP = imgUri2
                 } else if (selectedImg == 3){
                     binding.imgPreview.setImageURI(croppedImage)
                     binding.img3.setImageURI(croppedImage)
                     imgUri3 = compressImage(croppedImage)
+                    imgUriP = imgUri3
                 } else if (selectedImg == 4){
                     binding.imgPreview.setImageURI(croppedImage)
                     binding.img4.setImageURI(croppedImage)
                     imgUri4 = compressImage(croppedImage)
+                    imgUriP = imgUri4
                 } else if (selectedImg == 5){
                     binding.imgPreview.setImageURI(croppedImage)
                     binding.img5.setImageURI(croppedImage)
                     imgUri5 = compressImage(croppedImage)
+                    imgUriP = imgUri5
                 }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(this, "Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT)
@@ -237,8 +320,8 @@ class CreatePost : AppCompatActivity(),
         val options = CropImage.activity(imageUri)
             .setGuidelines(CropImageView.Guidelines.ON)
 
-        options.setAspectRatio(1, 1)
-            .setCropShape(CropImageView.CropShape.OVAL)
+        options.setAspectRatio(16, 9)
+            .setCropShape(CropImageView.CropShape.RECTANGLE)
             .setOutputCompressQuality(20)
             .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
             .start(this)
@@ -274,6 +357,23 @@ class CreatePost : AppCompatActivity(),
             binding.canCommentText.text = audienceFrBo
         }
     }
+    /*------------------------------CAMERA FUNCTIONALITIES AND SET LOCALE LANGUAGE--------------*/
+    override fun bottomWhatToPostClick(WhatToPostFrBo: String) {
+        when (WhatToPostFrBo) {
+            "Click" -> {
+                openCamera()
+            }
+            "Share" -> {
+                openGallery()
+            }
+            "Update" -> {
+
+            }
+            "Check" -> {
+
+            }
+        }
+    }
 
     override fun onBackPressed() {
 //        super.onBackPressed()
@@ -282,11 +382,9 @@ class CreatePost : AppCompatActivity(),
         fragManager.let{bottomSheet.show(it, BottomSheetGoingBack.GoingBack_TAG)}
         bottomSheet.setOnGoingBackClickListener(this)
     }
-
     override fun bottomGoingBackClick(GoingBackFrBo: String) {
         if (GoingBackFrBo == "Discard"){
             super.onBackPressed()
         }
     }
-    /*------------------------------CAMERA FUNCTIONALITIES AND SET LOCALE LANGUAGE--------------*/
 }

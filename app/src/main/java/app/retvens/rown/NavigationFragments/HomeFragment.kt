@@ -133,12 +133,21 @@ class HomeFragment : Fragment() {
 
                     }
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    if (isAdded) {
+                        Toast.makeText(
+                            requireContext(),
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<GetCommunitiesData>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         })
     }
@@ -211,17 +220,26 @@ class HomeFragment : Fragment() {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT)
+                            .show()
 
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
-
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         })
 

@@ -39,8 +39,19 @@ class BottomSheetJobDesignation : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val jt= view.findViewById<LinearLayout>(R.id.mainDesLL)
+        val jt= view.findViewById<LinearLayout>(R.id.hotel_owner)
         jt.setOnClickListener {
+            mListener?.bottomJobDesignationClick("Assistance")
+            dismiss()
+        }
+        val jtm= view.findViewById<LinearLayout>(R.id.hos_expert)
+        jtm.setOnClickListener {
+            mListener?.bottomJobDesignationClick("Associate")
+            dismiss()
+        }
+        val jtmd= view.findViewById<LinearLayout>(R.id.vendor)
+        jtmd.setOnClickListener {
+            mListener?.bottomJobDesignationClick("Administrative Assistant")
             dismiss()
         }
     }

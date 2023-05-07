@@ -66,7 +66,7 @@ class BottomSheet : BottomSheetDialogFragment() {
 
         send.enqueue(object : Callback<UsersList?> {
             override fun onResponse(call: Call<UsersList?>, response: Response<UsersList?>) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful && isAdded) {
                     val response = response.body()!!
                     if (response.result) {
                         userList = response.users
@@ -78,12 +78,17 @@ class BottomSheet : BottomSheetDialogFragment() {
 
                     }
                 }else{
-                    Toast.makeText(context,response.message().toString(),Toast.LENGTH_SHORT).show()
+                    if (isAdded) {
+                        Toast.makeText(context, response.message().toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<UsersList?>, t: Throwable) {
-//                Toast.makeText(context,t.message.toString(), Toast.LENGTH_SHORT).show()
+                if (isAdded){
+                Toast.makeText(context,t.message.toString(), Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
@@ -99,7 +104,7 @@ class BottomSheet : BottomSheetDialogFragment() {
                 Log.d("Profile",response.toString())
                 Log.d("Profile",response.body().toString())
 
-                if(response.isSuccessful){
+                if(response.isSuccessful && isAdded){
                     val data = response.body()!!
                     usersProfileAdapter = UsersProfileAdapter(requireContext(), data)
                     usersProfileAdapter.notifyDataSetChanged()

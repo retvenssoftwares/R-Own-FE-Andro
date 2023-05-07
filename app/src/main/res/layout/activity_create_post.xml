@@ -181,18 +181,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/can_see"/>
 
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/whatDY"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="What do you want to share today ?"
+        app:boxStrokeColor="@color/black"
+        android:layout_marginHorizontal="20dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/black"
         android:layout_marginTop="18dp"
-        android:text="What do you want to share today ?"
         android:fontFamily="@font/montserrat_semibold"
-        android:textColor="@color/grey_40"
-        android:textSize="14dp"
+        android:textColorHint="@color/grey_40"
         app:layout_constraintStart_toStartOf="@id/user_complete_profile"
-        app:layout_constraintTop_toBottomOf="@id/user_complete_profile"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_complete_profile">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/whatDYEt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/black"
+            android:inputType="text"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/postsLayout"
@@ -211,7 +226,7 @@
             android:layout_width="match_parent"
             android:layout_height="252dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/png_post"
+            android:background="@drawable/png_cover"
             android:scaleType="centerCrop"/>
 
         <LinearLayout
@@ -268,6 +283,33 @@
         </LinearLayout>
 
     </LinearLayout>
+    <ImageView
+        android:id="@+id/delete_post"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/delete_svg"
+        android:elevation="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="3dp"
+        android:visibility="gone"
+        app:tint="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/postsLayout"
+        app:layout_constraintTop_toTopOf="@id/postsLayout"/>
 
+    <LinearLayout
+        android:id="@+id/updateEvent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_marginHorizontal="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/whatDY">
+
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

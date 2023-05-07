@@ -39,8 +39,19 @@ class BottomSheetJobDepartment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val jt= view.findViewById<LinearLayout>(R.id.mainDLL)
+        val jt= view.findViewById<LinearLayout>(R.id.ll_ss)
         jt.setOnClickListener {
+            mListener?.bottomJobDepartmentClick("Software and Sales")
+            dismiss()
+        }
+        val jtm= view.findViewById<LinearLayout>(R.id.ll_sm)
+        jtm.setOnClickListener {
+            mListener?.bottomJobDepartmentClick("Sales and Marketing")
+            dismiss()
+        }
+        val jtmd= view.findViewById<LinearLayout>(R.id.ll_smo)
+        jtmd.setOnClickListener {
+            mListener?.bottomJobDepartmentClick("Online Sales")
             dismiss()
         }
     }
