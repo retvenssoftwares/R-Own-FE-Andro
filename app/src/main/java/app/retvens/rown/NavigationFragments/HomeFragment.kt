@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -33,6 +34,8 @@ import app.retvens.rown.bottomsheet.BottomSheet
 //import com.karan.multipleviewrecyclerview.Banner
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -74,13 +77,24 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val bottomSheet = BottomSheet()
-        val fragManager = (activity as FragmentActivity).supportFragmentManager
-        fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
+
+        val sharedPreferencesPro = context?.getSharedPreferences("SaveProgress", AppCompatActivity.MODE_PRIVATE)
+        val toPo = sharedPreferencesPro?.getString("progress", "50").toString()
+        val progress :Int = toPo.toInt()
+            if (progress < 100){
+                val bottomSheet = BottomSheet()
+                val fragManager = (activity as FragmentActivity).supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
+            }
 
         view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {
             startActivity(Intent(context, CreatePost::class.java))
         }
+
+        val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
+        val profilePic = sharedPreferences?.getString("profile_image", "").toString()
+        val homeProfile = view.findViewById<ShapeableImageView>(R.id.home_profile)
+        Glide.with(requireContext()).load(profilePic).into(homeProfile)
 
         recyclerCommunity = view.findViewById(R.id.recyclerCommunity)
         recyclerCommunity.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)

@@ -37,6 +37,8 @@ import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 import app.retvens.rown.utils.moveTo
+import app.retvens.rown.utils.saveFullName
+import app.retvens.rown.utils.saveProfileImage
 import app.retvens.rown.utils.saveUserId
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
@@ -140,13 +142,14 @@ class PersonalInformation : AppCompatActivity() {
                 call: Call<UserProfileRequestItem?>,
                 response: Response<UserProfileRequestItem?>
             ) {
-                Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
                 Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
                 Log.d("fetch",response.body().toString())
 
                 if (response.isSuccessful){
                     val image = response.body()?.Profile_pic
                     val name = response.body()?.Full_name
+                    saveFullName(applicationContext, name.toString())
+                    saveProfileImage(applicationContext, "$image")
                     val mail = response.body()?.Email
                     Glide.with(applicationContext).load(image).into(binding.profile)
                     binding.etName.setText(name)
@@ -319,6 +322,7 @@ class PersonalInformation : AppCompatActivity() {
                     if (response.message().toString() != "Request Entity Too Large"){
                         if (message != "user already exist"){
                             moveTo(this@PersonalInformation,"MoveToI")
+                            saveFullName(applicationContext, username)
                             val intent = Intent(applicationContext,UserInterest::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
@@ -326,6 +330,7 @@ class PersonalInformation : AppCompatActivity() {
                             finish()
                         }else{
                             moveTo(this@PersonalInformation,"MoveToD")
+                            saveFullName(applicationContext, username)
                             Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -364,6 +369,7 @@ class PersonalInformation : AppCompatActivity() {
                     if (response.message().toString() != "Request Entity Too Large"){
                         if (message != "user already exist"){
                             moveTo(this@PersonalInformation,"MoveToI")
+                            saveFullName(applicationContext, username)
                             val intent = Intent(applicationContext,UserInterest::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
@@ -371,6 +377,7 @@ class PersonalInformation : AppCompatActivity() {
                             finish()
                         }else{
                             moveTo(this@PersonalInformation,"MoveToD")
+                            saveFullName(applicationContext, username)
                             Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
