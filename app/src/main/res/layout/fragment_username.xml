@@ -196,6 +196,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
                 android:layout_marginTop="15dp"
+                android:visibility="gone"
                 android:text="Congratulations! prashantmishra username is available"
                 android:textColor="@color/green_own"/>
 

@@ -137,37 +137,16 @@ class UsernameFragment : Fragment() {
         profile = view.findViewById(R.id.user_complete_profile)
         name = view.findViewById(R.id.user_complete_name)
 
-        getProfileInfo()
+        val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
+        val profileName = sharedPreferencesName?.getString("full_name", "").toString()
+
+        val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
+        val profilePic = sharedPreferences?.getString("profile_image", "").toString()
+
+        Glide.with(requireContext()).load(profilePic).into(profile)
+        name.setText("Hi $profileName")
 
     }
-
-    private fun getProfileInfo() {
-        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        val send = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
-
-        send.enqueue(object : Callback<UserProfileRequestItem?> {
-            override fun onResponse(
-                call: Call<UserProfileRequestItem?>,
-                response: Response<UserProfileRequestItem?>
-            ) {
-                if (response.isSuccessful && isAdded){
-
-                    val response = response.body()!!
-                    name.setText("Hi ${response.Full_name}")
-
-                    Glide.with(requireContext()).load(response.Profile_pic).into(profile)
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
     private fun sendInfo() {
 
         val first = firstName.text.toString()
