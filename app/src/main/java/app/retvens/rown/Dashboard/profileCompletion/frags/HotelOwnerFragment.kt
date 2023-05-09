@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -28,6 +29,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -100,22 +103,22 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraHotelChainImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-//        cropImage(cameraHotelChainImageUri)
+        cropImage(cameraHotelChainImageUri)
 
-        Log.d("owner", "cameraUser")
-        if (cameraUser == "ChainProfile") {
-            Log.d("owner", cameraUser)
-            croppedHotelChainImageUri = cameraHotelChainImageUri
-            hotelChainProfile.setImageURI(croppedHotelChainImageUri)
-        }else if (cameraUser == "OwnerProfile"){
-            Log.d("owner", cameraUser)
-            croppedOwnerProfileImageUri = cameraHotelChainImageUri
-            hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
-        }else{
-            Log.d("owner", cameraUser)
-            croppedOwnerCoverImageUri = cameraHotelChainImageUri
-            hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
-        }
+//        Log.d("owner", "cameraUser")
+//        if (cameraUser == "ChainProfile") {
+//            Log.d("owner", cameraUser)
+//            croppedHotelChainImageUri = cameraHotelChainImageUri
+//            hotelChainProfile.setImageURI(croppedHotelChainImageUri)
+//        }else if (cameraUser == "OwnerProfile"){
+//            Log.d("owner", cameraUser)
+//            croppedOwnerProfileImageUri = cameraHotelChainImageUri
+//            hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
+//        }else{
+//            Log.d("owner", cameraUser)
+//            croppedOwnerCoverImageUri = cameraHotelChainImageUri
+//            hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
+//        }
     }
 
     override fun onCreateView(
@@ -157,17 +160,30 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
             val fragManager = (activity as FragmentActivity).supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetRating.RATING_TAG)}
             bottomSheet.setOnRatingClickListener(this)
-//            openBottomStarSelection()
         }
 
         hotelOwnerProfile = view.findViewById(R.id.hotel_owner_profile)
         hotelOwnerProfile.setOnClickListener {
             cameraUser = "OwnerProfile"
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(
+                    activity?.parent ?: requireActivity(),
+                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                )
+            }
             openBottomCameraSheet("OwnerProfile")
         }
         hotelOwnerCover = view.findViewById(R.id.hotel_owner_cover)
         hotelOwnerCover.setOnClickListener {
             cameraUser = "OwnerCover"
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(
+                    activity?.parent ?: requireActivity(),
+                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                )
+            }
             openBottomCameraSheet("OwnerCover")
         }
 
@@ -179,6 +195,13 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
         cameraHotelChain = view.findViewById(R.id.camera_hotelChain)
         cameraHotelChain.setOnClickListener {
             cameraUser = "ChainProfile"
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(
+                    activity?.parent ?: requireActivity(),
+                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                )
+            }
             openBottomCameraSheet("ChainProfile")
         }
 
@@ -344,6 +367,7 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
+                    activity?.finish()
                 }else{
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message().toString(),Toast.LENGTH_SHORT).show()
@@ -403,22 +427,7 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
             val imageUri = data.data
             if (imageUri != null) {
 
-//                cropImage(imageUri)
-
-                Log.d("owner", "cameraUser")
-                if (cameraUser == "ChainProfile") {
-                    Log.d("owner", cameraUser)
-                    croppedHotelChainImageUri = imageUri
-                    hotelChainProfile.setImageURI(croppedHotelChainImageUri)
-                }else if (cameraUser == "OwnerProfile"){
-                    Log.d("owner", cameraUser)
-                    croppedOwnerProfileImageUri = imageUri
-                    hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
-                }else{
-                    Log.d("owner", cameraUser)
-                    croppedOwnerCoverImageUri = imageUri
-                    hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
-                }
+                cropImage(imageUri)
 
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -426,17 +435,8 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = resultingImage.uri
 
-                Log.d("owner", "cameraUser")
-                if (cameraUser == "ChainProfile") {
-                    Log.d("owner", cameraUser)
-                    croppedHotelChainImageUri = croppedImage
-                }else if (cameraUser == "OwnerProfile"){
-                    Log.d("owner", cameraUser)
-                    croppedOwnerProfileImageUri = croppedImage
-                }else{
-                    Log.d("owner", cameraUser)
-                    croppedOwnerCoverImageUri = croppedImage
-                }
+                compressImage(croppedImage)
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(context,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
             }
@@ -444,14 +444,53 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
     }
     private fun cropImage(imageUri: Uri) {
         val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.ON)
+            .setGuidelines(CropImageView.Guidelines.OFF).also {
 
-        options.setAspectRatio(1, 1)
-            .setCropShape(CropImageView.CropShape.OVAL)
-            .setOutputCompressQuality(20)
-            .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-            .start(requireActivity())
+                it.setAspectRatio(1, 1)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setOutputCompressQuality(20)
+                    .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
+                    .start(requireContext(), this)
+            }
     }
+    fun compressImage(imageUri: Uri): Uri {
+        lateinit var compressed : Uri
+        try {
+            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver,imageUri)
+            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val fileName = String.format("%d.jpg",System.currentTimeMillis())
+            val finalFile = File(path,fileName)
+            val fileOutputStream = FileOutputStream(finalFile)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+
+            compressed = Uri.fromFile(finalFile)
+
+            Log.d("owner", "cameraUser")
+            if (cameraUser == "ChainProfile") {
+                Log.d("owner", cameraUser)
+                croppedHotelChainImageUri = compressed
+                hotelChainProfile.setImageURI(croppedHotelChainImageUri)
+            }else if (cameraUser == "OwnerProfile"){
+                Log.d("owner", cameraUser)
+                croppedOwnerProfileImageUri = compressed
+                hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
+            }else{
+                Log.d("owner", cameraUser)
+                croppedOwnerCoverImageUri = compressed
+                hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
+            }
+
+            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            intent.setData(compressed)
+            context?.sendBroadcast(intent)
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+        return compressed
+    }
+
     private fun createImageUri(): Uri? {
         val image = File(requireContext().filesDir,"camera_photo.png")
         return FileProvider.getUriForFile(requireContext(),

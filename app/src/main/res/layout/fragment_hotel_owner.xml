@@ -154,7 +154,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:text="Indore, Madhya Pradesh"
+                android:text="Select Your Location"
                 android:editable="false"
                 android:clickable="true"
                 android:focusable="false"/>
@@ -318,8 +318,6 @@
                         android:layout_height="match_parent"
                         android:fontFamily="@font/montserrat_regular"
                         android:textColor="@color/black"
-                        android:hint="Sahpura group"
-                        android:textColorHint="@drawable/hint_selector"
                         android:inputType="text"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
