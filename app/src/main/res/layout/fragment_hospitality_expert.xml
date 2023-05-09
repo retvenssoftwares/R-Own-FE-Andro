@@ -54,9 +54,10 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:hint="Reservation and Oprations"
-                android:textColorHint="@drawable/hint_selector"
-                android:inputType="text"/>
+                android:text="Reservation and Oprations"
+                android:clickable="true"
+                android:focusable="false"
+                android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,7 +126,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
             android:weightSum="2"
             android:orientation="horizontal">
 
@@ -139,8 +140,7 @@
                 android:textColorHint="@color/black"
                 app:hintTextColor="@color/black"
                 app:boxStrokeColor="@color/black"
-                app:endIconDrawable="@drawable/ic_arrow_down_24"
-                app:endIconMode="custom"
+                app:endIconMode="clear_text"
                 app:endIconTint="@color/black"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
@@ -170,8 +170,7 @@
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:boxStrokeWidthFocused="2dp"
-                app:endIconDrawable="@drawable/ic_arrow_down_24"
-                app:endIconMode="custom"
+                app:endIconMode="clear_text"
                 app:endIconTint="@color/black"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="20dp"

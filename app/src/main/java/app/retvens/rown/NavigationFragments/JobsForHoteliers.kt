@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -48,6 +49,11 @@ class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListen
         cardJobPosted = view.findViewById(R.id.card_job_posted)
         cardExploreRequestedJob = view.findViewById(R.id.card_explore_request_job)
         cardExploreEmployees = view.findViewById(R.id.card_explore_employees)
+
+        val welcome = view.findViewById<TextView>(R.id.welcome_name)
+        val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
+        val profileName = sharedPreferencesName?.getString("full_name", "").toString()
+        welcome.text = "Welcome, $profileName!"
 
         cardJobPosted.setOnClickListener {
             cardJobPosted.setCardBackgroundColor(Color.parseColor("#ADD134"))

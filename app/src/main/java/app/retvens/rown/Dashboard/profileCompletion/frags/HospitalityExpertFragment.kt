@@ -30,6 +30,7 @@ import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformati
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.bottomsheet.BottomSheetJobType
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
@@ -39,7 +40,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HospitalityExpertFragment : Fragment(), BackHandler, BottomSheetJobType.OnBottomJobTypeClickListener {
+class HospitalityExpertFragment : Fragment(), BackHandler,
+    BottomSheetJobType.OnBottomJobTypeClickListener,
+    BottomSheetJobTitle.OnBottomJobTitleClickListener {
 
 
     lateinit var eTypeET : TextInputEditText
@@ -93,6 +96,14 @@ class HospitalityExpertFragment : Fragment(), BackHandler, BottomSheetJobType.On
         jobTitleLayout = view.findViewById(R.id.jobTLayout)
         startLayout = view.findViewById(R.id.session_start)
         endLayout = view.findViewById(R.id.session_end)
+
+        jobTitle.setOnClickListener {
+            val bottomSheet = BottomSheetJobTitle()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobTitle.Job_Title_TAG)}
+            bottomSheet.setOnJobTitleClickListener(this)
+        }
+
 
         val submit = view.findViewById<CardView>(R.id.card_job_next)
 
@@ -252,6 +263,10 @@ class HospitalityExpertFragment : Fragment(), BackHandler, BottomSheetJobType.On
 
     override fun bottomJobTypeClick(jobTypeFrBo: String) {
         eTypeET.setText(jobTypeFrBo)
+    }
+
+    override fun bottomJobTitleClick(jobTitleFrBo: String) {
+        jobTitle.setText(jobTitleFrBo)
     }
 
 }
