@@ -66,7 +66,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
         fun bindCreateCommunityRecyclerView(recyclerItemList : List<DataItem.CreateCommunityRecyclerData>){
             val adapter = CreateCommunityChildAdapter(DataItemType.CREATE_COMMUNITY, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
-            binding.relativeRecycler.visibility = View.GONE
+            binding.constRecycler.visibility = View.GONE
         }
         fun bindCommunityRecyclerView(recyclerItemList : List<DataItem.CommunityRecyclerData>){
             val adapter = CommunityChildAdapter(DataItemType.COMMUNITY, recyclerItemList)
