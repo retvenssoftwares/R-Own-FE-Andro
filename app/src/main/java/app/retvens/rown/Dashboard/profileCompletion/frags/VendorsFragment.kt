@@ -1,13 +1,17 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.text.Editable
@@ -27,6 +31,9 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -47,6 +54,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -56,6 +64,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 
 class VendorsFragment : Fragment(), BackHandler {
 
@@ -63,8 +72,9 @@ class VendorsFragment : Fragment(), BackHandler {
     private lateinit var selectLogo:ImageView
     private lateinit var setLogo:ShapeableImageView
     lateinit var dialog: Dialog
+    var REQUEST_CAMERA_PERMISSION : Int = 0
     var PICK_IMAGE_REQUEST_CODE : Int = 0
-    private var logoOfImageUri: Uri? = null
+    private var logoOfImageUri: Uri? = null //finalUri
     private lateinit var brandName:TextInputEditText
     private lateinit var brandNameLayout: TextInputLayout
     private lateinit var brandDescriptionLayout: TextInputLayout
@@ -81,6 +91,11 @@ class VendorsFragment : Fragment(), BackHandler {
 
     lateinit var progressDialog : Dialog
 
+    private var cameraImageUri: Uri? = null
+    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
+        cropImage(cameraImageUri!!)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -92,6 +107,8 @@ class VendorsFragment : Fragment(), BackHandler {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        cameraImageUri = createImageUri()!!
+
         servicesET = view.findViewById(R.id.vendor_services_et)
         servicesET.setOnClickListener {
             openVendorService()
@@ -100,6 +117,13 @@ class VendorsFragment : Fragment(), BackHandler {
         selectLogo = view.findViewById(R.id.camera_vendor)
         setLogo = view.findViewById(R.id.hotel_vendor_profile)
         selectLogo.setOnClickListener {
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(
+                    activity?.parent ?: requireActivity(),
+                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                )
+            }
             openBottomCameraSheet()
         }
 
@@ -300,7 +324,8 @@ class VendorsFragment : Fragment(), BackHandler {
             if (imageUri != null) {
 
                 logoOfImageUri = imageUri
-                setLogo.setImageURI(logoOfImageUri)
+                cropImage(logoOfImageUri!!)
+//                setLogo.setImageURI(logoOfImageUri)
 
 
             }
@@ -310,6 +335,8 @@ class VendorsFragment : Fragment(), BackHandler {
                 val croppedImage = resultingImage.uri
 
                     logoOfImageUri = croppedImage
+                compressImage(logoOfImageUri!!)
+//                setLogo.setImageURI(logoOfImageUri)
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(context,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
@@ -450,7 +477,7 @@ class VendorsFragment : Fragment(), BackHandler {
         dialog.dismiss()
     }
     private fun openCamera() {
-        contract.launch(logoOfImageUri)
+        contract.launch(cameraImageUri)
         dialog.dismiss()
     }
     private fun openGallery() {
@@ -459,10 +486,47 @@ class VendorsFragment : Fragment(), BackHandler {
         dialog.dismiss()
     }
 
-    private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-//        cropImage(cameraHotelChainImageUri)
+    private fun createImageUri(): Uri? {
+        val image = File(context?.filesDir,"camera_photo.png")
+        return FileProvider.getUriForFile(requireContext(),
+            "app.retvens.rown.fileProvider",
+            image
+        )
+    }
+    private fun cropImage(imageUri: Uri) {
+        val options = CropImage.activity(imageUri)
+            .setGuidelines(CropImageView.Guidelines.OFF).also {
 
+                it.setAspectRatio(1, 1)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setOutputCompressQuality(20)
+                    .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
+                    .start(requireContext(), this)
+            }
+    }
+    fun compressImage(imageUri: Uri): Uri {
+        lateinit var compressed : Uri
+        try {
+            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver,imageUri)
+            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val fileName = String.format("%d.jpg",System.currentTimeMillis())
+            val finalFile = File(path,fileName)
+            val fileOutputStream = FileOutputStream(finalFile)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+
+            compressed = Uri.fromFile(finalFile)
+
+            logoOfImageUri = compressed
             setLogo.setImageURI(logoOfImageUri)
+            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            intent.setData(compressed)
+            context?.sendBroadcast(intent)
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+        return compressed
     }
 
     private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {

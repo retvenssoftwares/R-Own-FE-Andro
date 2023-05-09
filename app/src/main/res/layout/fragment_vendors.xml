@@ -45,7 +45,7 @@
         android:id="@+id/hotel_vendor_profile"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/svg_vendor"
+        android:background="@drawable/svg_vendor"
         app:shapeAppearance="@style/RoundedCornerImage"
         android:scaleType="centerCrop"
         android:layout_marginStart="22dp"
