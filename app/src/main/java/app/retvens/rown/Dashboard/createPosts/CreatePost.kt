@@ -30,6 +30,7 @@ import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
 import app.retvens.rown.databinding.ActivityCreatePostBinding
+import com.bumptech.glide.Glide
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.File
@@ -71,6 +72,16 @@ class CreatePost : AppCompatActivity(),
         setContentView(binding.root)
 
         cameraImageUri = createImageUri()!!
+
+        val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
+        val profileName = sharedPreferencesName?.getString("full_name", "").toString()
+
+        val sharedPreferences = getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
+        val profilePic = sharedPreferences?.getString("profile_image", "").toString()
+
+        Glide.with(applicationContext).load(profilePic).into(binding.userCompleteProfile)
+        binding.userCompleteName.setText(profileName)
+
 
         binding.createP.setOnClickListener {
             selectedImg = 1
