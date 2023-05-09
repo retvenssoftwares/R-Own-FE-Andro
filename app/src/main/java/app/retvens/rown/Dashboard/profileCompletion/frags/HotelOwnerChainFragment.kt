@@ -4,10 +4,13 @@ import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
@@ -24,6 +27,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +51,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -55,6 +61,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 
 class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRatingClickListener{
 
@@ -67,8 +74,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraHotelChainImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        croppedHotelChainCoverImageUri = cameraHotelChainImageUri
-        chainCover.setImageURI(croppedHotelChainCoverImageUri)
+        cropImage(cameraHotelChainImageUri)
     }
 
     lateinit var nameET : TextInputEditText
@@ -116,6 +122,13 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
 
         chainCover = view.findViewById<ShapeableImageView>(R.id.hotel_chain_cover_1)
         chainCover.setOnClickListener {
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(
+                    activity?.parent ?: requireActivity(),
+                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
+                )
+            }
             openBottomCameraSheet()
         }
         location.setOnClickListener {
@@ -218,6 +231,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                     saveProgress(requireContext(), "100")
                     progressDialog.dismiss()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
+                    activity?.finish()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                 }else{
                     progressDialog.dismiss()
@@ -307,15 +321,15 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val imageUri = data.data
             if (imageUri != null) {
-                croppedHotelChainCoverImageUri = imageUri
-                chainCover.setImageURI(croppedHotelChainCoverImageUri)
+                cropImage(imageUri)
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val resultingImage = CropImage.getActivityResult(data)
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = resultingImage.uri
-                croppedHotelChainCoverImageUri = croppedImage
-                chainCover.setImageURI(croppedHotelChainCoverImageUri)
+
+                compressImage(croppedImage)
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(context,"Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT).show()
             }
@@ -327,6 +341,41 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
             "app.retvens.rown.fileProvider",
             image
         )
+    }
+    private fun cropImage(imageUri: Uri) {
+        val options = CropImage.activity(imageUri)
+            .setGuidelines(CropImageView.Guidelines.OFF).also {
+
+                it.setAspectRatio(1, 1)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setOutputCompressQuality(20)
+                    .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
+                    .start(requireContext(), this)
+            }
+    }
+    fun compressImage(imageUri: Uri): Uri {
+        lateinit var compressed : Uri
+        try {
+            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver,imageUri)
+            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val fileName = String.format("%d.jpg",System.currentTimeMillis())
+            val finalFile = File(path,fileName)
+            val fileOutputStream = FileOutputStream(finalFile)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+
+            compressed = Uri.fromFile(finalFile)
+
+            croppedHotelChainCoverImageUri = compressed
+            chainCover.setImageURI(croppedHotelChainCoverImageUri)
+            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            intent.setData(compressed)
+            context?.sendBroadcast(intent)
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+        return compressed
     }
 
     override fun bottomRatingClick(ratingFrBo: String) {
