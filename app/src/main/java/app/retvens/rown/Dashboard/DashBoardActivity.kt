@@ -41,10 +41,14 @@ import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
 import app.retvens.rown.databinding.ActivityDashBoardBinding
+import app.retvens.rown.utils.clearFullName
+import app.retvens.rown.utils.clearProfileImage
 import app.retvens.rown.utils.clearProgress
 import app.retvens.rown.utils.clearUserId
 import app.retvens.rown.utils.clearUserType
 import app.retvens.rown.utils.moveToClear
+import app.retvens.rown.utils.saveFullName
+import app.retvens.rown.utils.saveProfileImage
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -86,6 +90,7 @@ class DashBoardActivity : AppCompatActivity() {
         binding = ActivityDashBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        getProfileInfo()
         auth = FirebaseAuth.getInstance()
 
 //        replaceFragment(HomeFragment())
@@ -123,7 +128,7 @@ class DashBoardActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("SaveProgress", AppCompatActivity.MODE_PRIVATE)
         val toPo = sharedPreferences.getString("progress", "50").toString()
         val progress :Int = toPo.toInt()
-        header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
+         header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
             if (progress == 100){
                 Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
             }else {
@@ -136,6 +141,9 @@ class DashBoardActivity : AppCompatActivity() {
             if (progress >= 50){
                 header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $progress% Complete"
                 progressBar.progress = progress
+                if (progress == 100){
+                    header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
+                }
             }
         }
 
@@ -144,7 +152,14 @@ class DashBoardActivity : AppCompatActivity() {
         name = header.findViewById<TextView>(R.id.user_name)
         phone = header.findViewById<TextView>(R.id.nav_phone)
 
-        getProfileInfo()
+        val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
+        val profileName = sharedPreferencesName?.getString("full_name", "").toString()
+
+        val sharedPreferencesPic = getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
+        val profilePic = sharedPreferencesPic?.getString("profile_image", "").toString()
+
+        Glide.with(applicationContext).load(profilePic).into(profile)
+        name.setText("Hi $profileName")
 
         //setUp BottomNav
         val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
@@ -216,6 +231,8 @@ class DashBoardActivity : AppCompatActivity() {
             SharedPreferenceManagerAdmin.getInstance(applicationContext).clear()
             moveToClear(applicationContext)
             clearUserId(applicationContext)
+            clearFullName(applicationContext)
+            clearProfileImage(applicationContext)
             clearProgress(applicationContext)
             clearUserType(applicationContext)
             startActivity(Intent(this, MainActivity::class.java))
@@ -239,9 +256,9 @@ class DashBoardActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    name.text = response.Full_name
                     phone.text = response.Phone
-                    Glide.with(applicationContext).load(response.Profile_pic).into(profile)
+                    saveFullName(applicationContext, "${response.Full_name}")
+                    saveProfileImage(applicationContext, "${response.Profile_pic}")
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }

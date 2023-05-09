@@ -33,6 +33,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
 import app.retvens.rown.DataCollections.ProfileCompletion.JobData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.bottomsheet.BottomSheetJobType
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
@@ -42,7 +43,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class JobTitleFragment : Fragment(), BackHandler, BottomSheetJobType.OnBottomJobTypeClickListener {
+class JobTitleFragment : Fragment(), BackHandler,
+    BottomSheetJobType.OnBottomJobTypeClickListener, BottomSheetJobTitle.OnBottomJobTitleClickListener {
 
     lateinit var eTypeET : TextInputEditText
     lateinit var recentCoET : TextInputEditText
@@ -96,6 +98,13 @@ class JobTitleFragment : Fragment(), BackHandler, BottomSheetJobType.OnBottomJob
         jobTitleLayout = view.findViewById(R.id.rJob_etLayout)
         startLayout = view.findViewById(R.id.session_start)
         endLayout = view.findViewById(R.id.session_end)
+
+        jobTitle.setOnClickListener {
+            val bottomSheet = BottomSheetJobTitle()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobTitle.Job_Title_TAG)}
+            bottomSheet.setOnJobTitleClickListener(this)
+        }
 
         submit.setOnClickListener {
             if(jobTitle.length() < 3){
@@ -259,6 +268,10 @@ class JobTitleFragment : Fragment(), BackHandler, BottomSheetJobType.OnBottomJob
 
     override fun bottomJobTypeClick(jobTypeFrBo: String) {
         eTypeET.setText(jobTypeFrBo)
+    }
+
+    override fun bottomJobTitleClick(jobTitleFrBo: String) {
+        jobTitle.setText(jobTitleFrBo)
     }
 
 }
