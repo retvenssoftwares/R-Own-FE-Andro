@@ -27,10 +27,19 @@ fun saveUserId(context:Context,user_id : String){
     editor.apply()
 }
 
-fun clearUserId(context: Context){
-    val settings = context.getSharedPreferences("SaveUserId", Context.MODE_PRIVATE)
-    val editor = settings.edit()
-    editor.clear()
+fun saveFullName(context:Context,fullName : String){
+    val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveFullName",
+        AppCompatActivity.MODE_PRIVATE
+    ).edit()
+    editor.putString("full_name", fullName)
+    editor.apply()
+}
+
+fun saveProfileImage(context:Context,profile : String){
+    val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveProfileImage",
+        AppCompatActivity.MODE_PRIVATE
+    ).edit()
+    editor.putString("profile_image", profile)
     editor.apply()
 }
 
@@ -39,6 +48,25 @@ fun saveProgress(context:Context,progress : String){
         AppCompatActivity.MODE_PRIVATE
     ).edit()
     editor.putString("progress", progress)
+    editor.apply()
+}
+fun clearUserId(context: Context){
+    val settings = context.getSharedPreferences("SaveUserId", Context.MODE_PRIVATE)
+    val editor = settings.edit()
+    editor.clear()
+    editor.apply()
+}
+fun clearFullName(context: Context){
+    val settings = context.getSharedPreferences("SaveFullName", Context.MODE_PRIVATE)
+    val editor = settings.edit()
+    editor.clear()
+    editor.apply()
+}
+
+fun clearProfileImage(context: Context){
+    val settings = context.getSharedPreferences("SaveProfileImage", Context.MODE_PRIVATE)
+    val editor = settings.edit()
+    editor.clear()
     editor.apply()
 }
 
