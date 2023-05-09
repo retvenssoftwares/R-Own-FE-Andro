@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
@@ -21,6 +23,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -35,6 +38,7 @@ import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import com.google.android.material.imageview.ShapeableImageView
 import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -44,6 +48,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.IOException
 import java.net.URI
 
 class UploadIcon : AppCompatActivity() {
@@ -59,9 +64,9 @@ class UploadIcon : AppCompatActivity() {
     private  var communityUri:Uri? = null
     var PICK_IMAGE_REQUEST_CODE : Int = 0
 
+    private  var cameraImageUri:Uri? = null
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-
-        profile.setImageURI(communityUri)
+        cropImage(cameraImageUri!!)
     }
 
     lateinit var name: String
@@ -69,6 +74,8 @@ class UploadIcon : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_icon)
+
+        cameraImageUri = createImageUri()!!
 
         profile = findViewById(R.id.profile)
         select = findViewById(R.id.camera)
@@ -140,7 +147,7 @@ class UploadIcon : AppCompatActivity() {
     }
 
     private fun openCamera() {
-        contract.launch(communityUri)
+        contract.launch(cameraImageUri)
         dialog.dismiss()
     }
 
@@ -162,15 +169,15 @@ class UploadIcon : AppCompatActivity() {
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val imageUri = data.data
             if (imageUri != null) {
-                communityUri = imageUri
-                profile.setImageURI(communityUri)
+                cropImage(imageUri)
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val resultingImage = CropImage.getActivityResult(data)
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = resultingImage.uri
-                communityUri = croppedImage
-                profile.setImageURI(communityUri)
+
+                compressImage(croppedImage)
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(applicationContext,"Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT).show()
             }
@@ -300,6 +307,7 @@ class UploadIcon : AppCompatActivity() {
                         val response = response.body()!!
                         Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                         startActivity(Intent(applicationContext,DashBoardActivity::class.java))
+                        finish()
                     }else{
                         Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                     }
@@ -314,6 +322,48 @@ class UploadIcon : AppCompatActivity() {
 
 
 
+    }
+
+    private fun createImageUri(): Uri? {
+        val image = File(applicationContext.filesDir,"camera_photo.png")
+        return FileProvider.getUriForFile(applicationContext,
+            "app.retvens.rown.fileProvider",
+            image
+        )
+    }
+    private fun cropImage(imageUri: Uri) {
+        val options = CropImage.activity(imageUri)
+            .setGuidelines(CropImageView.Guidelines.ON)
+
+        options.setAspectRatio(1, 1)
+            .setCropShape(CropImageView.CropShape.OVAL)
+            .setOutputCompressQuality(20)
+            .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
+            .start(this)
+    }
+    fun compressImage(imageUri: Uri): Uri {
+        lateinit var compressed : Uri
+        try {
+            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
+            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val fileName = String.format("%d.jpg",System.currentTimeMillis())
+            val finalFile = File(path,fileName)
+            val fileOutputStream = FileOutputStream(finalFile)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+
+            compressed = Uri.fromFile(finalFile)
+
+            communityUri = compressed
+            profile.setImageURI(communityUri)
+            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            intent.setData(compressed)
+            sendBroadcast(intent)
+        }catch (e: IOException){
+            e.printStackTrace()
+        }
+        return compressed
     }
 
     private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
