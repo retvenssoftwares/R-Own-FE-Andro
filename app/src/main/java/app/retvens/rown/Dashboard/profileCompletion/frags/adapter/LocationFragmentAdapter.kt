@@ -15,13 +15,21 @@ import com.bumptech.glide.Glide
 
 class LocationFragmentAdapter(val context: Context, var cityList:List<LocationDataClass>): RecyclerView.Adapter<LocationFragmentAdapter.MyViewHolderClass>() {
 
-    private var jobClickListener: OnLocationClickListener? = null
+    private var countryClickListener: OnLocationClickListener? = null
+
+    interface OnLocationClickListener {
+        fun onCountryClick(country: String)
+    }
+
+    fun setOnLocationClickListener(listener: OnLocationClickListener) {
+        countryClickListener = listener
+    }
 
     class MyViewHolderClass(itemview: View): RecyclerView.ViewHolder(itemview){
 
-        val city = itemview.findViewById<TextView>(R.id.city)
-        val state = itemview.findViewById<TextView>(R.id.state)
-        val country = itemview.findViewById<TextView>(R.id.country)
+        val location = itemview.findViewById<TextView>(R.id.location)
+//        val state = itemview.findViewById<TextView>(R.id.state)
+//        val country = itemview.findViewById<TextView>(R.id.country)
 
     }
 
@@ -33,7 +41,12 @@ class LocationFragmentAdapter(val context: Context, var cityList:List<LocationDa
     override fun onBindViewHolder(holder: MyViewHolderClass, position: Int) {
             val data = cityList[position]
 
-        holder.country.text = data.name
+        holder.location.text = data.name
+        holder.itemView.setOnClickListener {
+            countryClickListener?.onCountryClick(data.name)
+        }
+
+/*        holder.country.text = data.name
         for (x in data.states){
             holder.state.text = x.name
 
@@ -41,21 +54,13 @@ class LocationFragmentAdapter(val context: Context, var cityList:List<LocationDa
                 holder.city.text = y.name
             }
 
-        }
+        }*/
 
 
     }
 
     override fun getItemCount(): Int {
         return cityList.size
-    }
-
-    interface OnLocationClickListener {
-        fun onJobClick(job: LocationDataClass)
-    }
-
-    fun setOnJobClickListener(listener: OnLocationClickListener) {
-        jobClickListener = listener
     }
 
 }

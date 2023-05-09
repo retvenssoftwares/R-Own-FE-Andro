@@ -40,12 +40,19 @@ import retrofit2.Response
 
 class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLocationClickListener {
 
-    lateinit var etLocation : TextInputEditText
+    private lateinit var etLocationCountry : TextInputEditText
+    lateinit var etLocationState : TextInputEditText
+    lateinit var userLocationCountry : TextInputLayout
+    private lateinit var userLocationState : TextInputLayout
+    lateinit var userLocationCity : TextInputLayout
+    private lateinit var etLocationCity : TextInputEditText
     private lateinit var locationFragmentAdapter: LocationFragmentAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var dialogRole:Dialog
     private lateinit var profile:ShapeableImageView
     private lateinit var name:TextView
+
+    lateinit var progressDialog : Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,23 +66,42 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
         super.onViewCreated(view, savedInstanceState)
 
 
-        view.findViewById<TextInputLayout>(R.id.user_location_field).setEndIconOnClickListener {
-            Toast.makeText(context, "Location", Toast.LENGTH_SHORT).show()
-        }
+        userLocationCountry = view.findViewById(R.id.user_location_country)
+        userLocationState = view.findViewById(R.id.user_location_state)
+        userLocationCity = view.findViewById(R.id.user_location_city)
+        etLocationCountry = view.findViewById(R.id.et_location_country)
+        etLocationState = view.findViewById(R.id.et_location_state)
+        etLocationCity = view.findViewById(R.id.et_location_city)
 
-        etLocation = view.findViewById(R.id.et_location)
-
-        etLocation.setOnClickListener {
-//            openLocationSheet()
+        etLocationCountry.setOnClickListener {
             val bottomSheet = BottomSheetLocation()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
             bottomSheet.setOnLocationClickListener(this)
         }
+        etLocationState.setOnClickListener {
+            openStateLocationSheet()
+        }
 
         view.findViewById<CardView>(R.id.card_location_next).setOnClickListener {
+            if(etLocationCountry.text.toString() == "Select Your Country"){
+                userLocationCountry.error = "Select Your Country"
+            } else if (etLocationState.text.toString() == "Select Your State"){
+                userLocationCountry.isErrorEnabled = false
+                userLocationState.error = "Select Your State"
+            } else if (etLocationCity.text.toString() == "Select Your City"){
+                userLocationCountry.isErrorEnabled = false
+                userLocationState.isErrorEnabled = false
+                userLocationCity.error = "Select Your City"
+                setLocation(context)
+            } else {
+                progressDialog = Dialog(requireContext())
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            setLocation(context)
+            }
         }
         profile = view.findViewById(R.id.user_complete_profile1)
         name = view.findViewById(R.id.user_complete_name)
@@ -93,8 +119,10 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
 
     private fun setLocation(context: Context?) {
 
-        val location = etLocation.text.toString()
-
+        val country = etLocationCountry.text.toString()
+        val state = etLocationState.text.toString()
+        val city = etLocationCity.text.toString()
+        val location = "$city $state $country"
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -108,7 +136,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
                 if (response.isSuccessful && isAdded){
                     val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
                     val editor = onboardingPrefs.edit()
-                    editor.putBoolean("LocationFragment", true)
+                    editor.putBoolean("LocationFragment", false)
                     editor.apply()
 
                     val response = response.body()!!
@@ -132,7 +160,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
 
     }
 
-    private fun openLocationSheet() {
+    private fun openStateLocationSheet() {
 
         dialogRole = Dialog(requireContext())
         dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -167,7 +195,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
                     locationFragmentAdapter = LocationFragmentAdapter(requireContext(),response)
                     locationFragmentAdapter.notifyDataSetChanged()
                     recyclerView.adapter = locationFragmentAdapter
-                    locationFragmentAdapter.setOnJobClickListener(this)
+                    locationFragmentAdapter.setOnLocationClickListener(this)
                 }
                 else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -179,14 +207,23 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
                 Log.e("error",t.message.toString())
             }
 
-            override fun onJobClick(job: LocationDataClass) {
+            override fun onCountryClick(country: String) {
+                etLocationState.setText(country)
+                dialogRole.dismiss()
+                userLocationCity.visibility = View.VISIBLE
+            }
+/*
+
+            override fun onLocationClick(job: LocationDataClass) {
                for (x in job.states){
                    for (y in x.name){
-                       etLocation.setText(y.toString())
+                       etLocationCountry.setText(y.toString())
                    }
                }
                 dialogRole.dismiss()
             }
+*/
+
         })
 
     }
@@ -202,7 +239,8 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
     }
 
     override fun bottomLocationClick(LocationFrBo: String) {
-        etLocation.setText(LocationFrBo)
+        etLocationCountry.setText(LocationFrBo)
+        userLocationState.visibility  = View.VISIBLE
     }
 
 }

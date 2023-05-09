@@ -66,8 +66,10 @@ interface PriofileCompletionApis{
         @Part("hotelOwnerId") id: RequestBody,
     ): Call<UpdateResponse>
 
-    @GET("location_fetch")
+    @GET("countries")
     fun getLocation():Call<List<LocationDataClass>>
+    @GET("countries")
+    fun getCountries():Call<List<LocationDataClass>>
 
     @GET("getjobtitle")
     fun getJobTitle():Call<List<GetJobDataClass>>

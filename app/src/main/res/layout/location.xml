@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
-    android:layout_marginTop="20dp"
-    android:orientation="horizontal"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -18,12 +16,13 @@
         >
 
         <TextView
-            android:id="@+id/city"
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mumbai"
             android:textSize="14dp"
-            android:paddingRight="10dp"
+            android:paddingHorizontal="12dp"
+            android:layout_marginVertical="5dp"
             android:textColor="@color/black"
             android:fontFamily="@font/montserrat_regular"
             />
@@ -32,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Maharashtra"
+            android:visibility="gone"
             android:textSize="14dp"
             android:paddingRight="10dp"
             android:textColor="@color/black"
@@ -42,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="India"
+            android:visibility="gone"
             android:textSize="14dp"
             android:paddingRight="10dp"
             android:textColor="@color/black"
