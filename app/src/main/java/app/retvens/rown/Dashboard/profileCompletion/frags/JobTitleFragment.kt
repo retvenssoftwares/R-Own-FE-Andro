@@ -154,7 +154,7 @@ class JobTitleFragment : Fragment(), BackHandler,
 
                     val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
                     val editor = onboardingPrefs.edit()
-                    editor.putBoolean("JobTitleFragment", true)
+                    editor.putBoolean("JobTitleFragment", false)
                     editor.apply()
 
                     saveProgress(requireContext(), "100")

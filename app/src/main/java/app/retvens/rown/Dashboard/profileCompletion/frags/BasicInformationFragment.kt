@@ -24,6 +24,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -35,6 +36,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
@@ -44,25 +46,23 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter.OnJobClickListener {
+class BasicInformationFragment : Fragment(),
+    BackHandler,BasicInformationAdapter.OnJobClickListener,
+    BottomSheetJobTitle.OnBottomJobTitleClickListener {
 
     private var isStudent : Boolean = true
     private var isHotelier : Boolean = true
 
     private var nextFrag : Int = 0
 
-    lateinit var myRoleInHos : TextInputLayout
+    private lateinit var myRoleInHos : TextInputLayout
+    lateinit var myRoleInJob : TextInputLayout
     lateinit var myRoleInHosET : TextInputEditText
     lateinit var myRecentJobET : TextInputEditText
-    private lateinit var dialogRole:Dialog
 
     private lateinit var university:TextInputEditText
     private lateinit var start:TextInputEditText
     private lateinit var end:TextInputEditText
-    private lateinit var recyclerView:RecyclerView
-    private lateinit var basicInformationAdapter: BasicInformationAdapter
-    private lateinit var serarchBar:EditText
-
     lateinit var progressDialog : Dialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +82,7 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
         val switchHotelier = view.findViewById<ImageView>(R.id.switch_hotel)
         val switchHotelText = view.findViewById<TextView>(R.id.switch_hotel_text)
         myRoleInHos = view.findViewById(R.id.my_role_hospitality)
+        myRoleInJob = view.findViewById(R.id.recentJobLayout)
         myRoleInHosET = view.findViewById(R.id.myRoleInHosET)
         myRecentJobET = view.findViewById(R.id.my_recent_job)
 
@@ -120,6 +121,7 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
                 switchHotelier.setImageResource(R.drawable.switch_yes)
                 switchHotelText.text = "Yes"
                 nextFrag = 1
+                openBottomRoleinHos()
                 myRoleInHos.visibility = View.VISIBLE
                 recentJob.visibility = View.GONE
                 isHotelier = false
@@ -145,33 +147,38 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
         }
 
         view.findViewById<CardView>(R.id.card_basic_next).setOnClickListener {
-            progressDialog = Dialog(requireContext())
-            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            progressDialog.setCancelable(false)
-            progressDialog.setContentView(R.layout.progress_dialoge)
-            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-            Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
-            progressDialog.show()
+            if (!isHotelier){
+                if (myRoleInHosET.text.toString() == "My Role in hospitality"){
+                    myRoleInHos.error = "Select your Role in hospitality"
+                } else {
+                    progressDialog = Dialog(requireContext())
+                    progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    progressDialog.setCancelable(false)
+                    progressDialog.setContentView(R.layout.progress_dialoge)
+                    progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                    Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                    progressDialog.show()
 
-            setJobTitle()
+                    setJobTitle()
+                }
+            } else {
+                if (myRecentJobET.text.toString() == "Most Recent Job Title"){
+                    myRoleInJob.error = "Select your Recent Job Title"
+                } else  {
+                    progressDialog = Dialog(requireContext())
+                    progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    progressDialog.setCancelable(false)
+                    progressDialog.setContentView(R.layout.progress_dialoge)
+                    progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                    Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                    progressDialog.show()
+
+                    setJobTitle()
+                }
+            }
         }
-
-//        requireActivity().onBackPressedDispatcher.addCallback(
-//            requireActivity(),
-//            object : OnBackPressedCallback(true) {
-//                override fun handleOnBackPressed() {
-//                    Log.d("TAG", "Fragment back pressed invoked")
-//                    // Do custom work here
-//
-//                    // if you want onBackPressed() to be called as normal afterwards
-////            if (isEnabled) {
-////                isEnabled = false
-////                requireActivity().onBackPressed()
-////            }
-//                }
-//            }
-//        )
     }
 
     private fun setJobTitle() {
@@ -212,7 +219,7 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
 
                     val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
                     val editor = onboardingPrefs.edit()
-                    editor.putBoolean("BasicInformationFragment", true)
+                    editor.putBoolean("BasicInformationFragment", false)
                     editor.apply()
 
                     val response = response.body()!!
@@ -272,94 +279,12 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
 
     }
 
-    @SuppressLint("SetTextI18n")
     private fun openBottomRecentJob() {
-        dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_job_title)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-        recyclerView = dialogRole.findViewById(R.id.jobs_recycler)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        serarchBar = dialogRole.findViewById(R.id.searchJob)
-
-        getJobsList()
-
-
+        val bottomSheet = BottomSheetJobTitle()
+        val fragManager = (activity as FragmentActivity).supportFragmentManager
+        fragManager.let{bottomSheet.show(it, BottomSheetJobTitle.Job_Title_TAG)}
+        bottomSheet.setOnJobTitleClickListener(this)
     }
-
-    private fun getJobsList() {
-
-        val getJob = RetrofitBuilder.profileCompletion.getJobTitle()
-
-        getJob.enqueue(object : Callback<List<GetJobDataClass>?>,
-            BasicInformationAdapter.OnJobClickListener {
-            override fun onResponse(
-                call: Call<List<GetJobDataClass>?>,
-                response: Response<List<GetJobDataClass>?>
-            ) {
-                if (response.isSuccessful && isAdded){
-                    val response = response.body()!!
-                    val originalData = response.toList()
-                    basicInformationAdapter = BasicInformationAdapter(requireContext(),response)
-                    basicInformationAdapter.notifyDataSetChanged()
-                    recyclerView.adapter = basicInformationAdapter
-
-                    basicInformationAdapter.setOnJobClickListener(this)
-
-                    serarchBar.addTextChangedListener(object : TextWatcher {
-                        override fun beforeTextChanged(
-                            p0: CharSequence?,
-                            p1: Int,
-                            p2: Int,
-                            p3: Int
-                        ) {
-
-                        }
-
-                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            val filterData = originalData.filter { item ->
-                                item.job_title.contains(p0.toString(),ignoreCase = true)
-                            }
-
-                            basicInformationAdapter.updateData(filterData)
-                        }
-
-                        override fun afterTextChanged(p0: Editable?) {
-
-                        }
-
-                    })
-
-                }
-                else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<GetJobDataClass>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onJobClick(job: GetJobDataClass) {
-                    myRecentJobET.setText(job.job_title)
-                    dialogRole.dismiss()
-            }
-        })
-
-
-
-
-    }
-
 
     @SuppressLint("SetTextI18n")
     private fun openBottomRoleinHos() {
@@ -405,4 +330,7 @@ class BasicInformationFragment : Fragment(), BackHandler,BasicInformationAdapter
         TODO("Not yet implemented")
     }
 
+    override fun bottomJobTitleClick(jobTitleFrBo: String) {
+        myRecentJobET.setText(jobTitleFrBo)
+    }
 }

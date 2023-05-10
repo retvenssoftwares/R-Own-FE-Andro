@@ -158,4 +158,9 @@ dependencies {
 
     implementation 'com.android.support:multidex:2.0.1'
 
+    //shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //Photo Editor
+    implementation 'com.github.iamutkarshtiwari:Ananas:1.2.6'
 }

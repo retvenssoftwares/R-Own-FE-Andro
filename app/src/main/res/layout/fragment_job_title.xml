@@ -46,10 +46,7 @@
             app:boxStrokeWidthFocused="2dp"
             app:endIconDrawable="@drawable/ic_arrow_down_24"
             app:endIconMode="custom"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/rJob_et"
@@ -77,10 +74,7 @@
             app:boxStrokeWidthFocused="2dp"
             app:endIconDrawable="@drawable/ic_arrow_down_24"
             app:endIconMode="custom"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/eType_et"
@@ -108,10 +102,7 @@
             app:boxStrokeWidthFocused="2dp"
             app:endIconDrawable="@drawable/ic_arrow_down_24"
             app:endIconMode="custom"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/recentComET"
@@ -146,10 +137,7 @@
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/black"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintTop_toBottomOf="@id/user_complete_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:layout_marginEnd="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_session_Start"
@@ -158,6 +146,9 @@
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:hint="2020"
+                    android:maxLines="1"
+                    android:maxLength="4"
+                    android:singleLine="true"
                     android:textColorHint="@drawable/hint_selector"
                     android:inputType="number"/>
 
@@ -177,10 +168,7 @@
                 app:endIconTint="@color/black"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintTop_toBottomOf="@id/user_complete_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:layout_marginBottom="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_session_end"
@@ -189,6 +177,9 @@
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:hint="2024"
+                    android:maxLines="1"
+                    android:maxLength="4"
+                    android:singleLine="true"
                     android:textColorHint="@drawable/hint_selector"
                     android:inputType="number"/>
 

@@ -21,6 +21,12 @@ interface PriofileCompletionApis{
     ):Call<UpdateResponse>
 
     @PATCH("/update/{user_id}")
+    fun verifyUsername(
+        @Path("user_id") user_id : String,
+        @Body verifyUsername: VerifyUsername
+    ):Call<UpdateResponse>
+
+    @PATCH("/update/{user_id}")
     fun setJobRole(
         @Path("user_id") user_id : String,
         @Body role: BasicInfoClass

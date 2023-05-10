@@ -45,8 +45,6 @@
                     android:scaleType="centerCrop"
                     app:shapeAppearance="@style/SquareCornerImage"
                     android:layout_marginHorizontal="22dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="12dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -62,10 +60,7 @@
                     android:layout_marginHorizontal="20dp"
                     app:boxStrokeWidthFocused="2dp"
                     app:endIconMode="clear_text"
-                    app:endIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/ll"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+                    app:endIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/chainHotelNameET"
@@ -92,10 +87,7 @@
                     android:layout_marginHorizontal="20dp"
                     app:endIconDrawable="@drawable/png_location"
                     app:endIconMode="custom"
-                    app:endIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/ll"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+                    app:endIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/chainHotelLocationET"
@@ -124,10 +116,7 @@
                     app:boxStrokeWidthFocused="2dp"
                     app:endIconDrawable="@drawable/ic_arrow_down_24"
                     app:endIconMode="custom"
-                    app:endIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/ll"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+                    app:endIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/chainHotelRatingET"

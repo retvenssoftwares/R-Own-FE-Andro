@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -27,6 +28,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
+import app.retvens.rown.DataCollections.ProfileCompletion.VerifyUsername
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.utils.saveProgress
@@ -58,9 +60,14 @@ class UsernameFragment : Fragment() {
     private lateinit var cal:Calendar
     private lateinit var profile: ShapeableImageView
     private lateinit var name:TextView
+    private lateinit var usernameVerified:TextView
     private lateinit var editor:Editor
 
     lateinit var progressDialog : Dialog
+
+    var user_id : String ?= ""
+
+    var isUsernameVerified : Boolean ?= false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +79,9 @@ class UsernameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val sharedPreferencesU = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        user_id = sharedPreferencesU?.getString("user_id", "").toString()
 
         /*-------------Calendar Setup--------------*/
         dobEt = view.findViewById(R.id.dob_et)
@@ -89,7 +99,7 @@ class UsernameFragment : Fragment() {
 
 
         }
-        view.findViewById<ImageView>(R.id.dob_cal_img).setOnClickListener {
+        view.findViewById<TextInputEditText>(R.id.dob_et).setOnClickListener {
             DatePickerDialog(requireContext(), dateSetListener,
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
@@ -106,6 +116,16 @@ class UsernameFragment : Fragment() {
         userName = view.findViewById(R.id.complete_username)
         userNameLayout = view.findViewById(R.id.complete_username_layout)
 
+        usernameVerified = view.findViewById(R.id.usernameVerified)
+
+        userNameLayout.setEndIconOnClickListener {
+            if(userName.length() < 4) {
+                Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
+            } else {
+                verifyUserName()
+            }
+        }
+
         val complete = view.findViewById<CardView>(R.id.card_complete_continue)
 
         complete.setOnClickListener {
@@ -114,13 +134,24 @@ class UsernameFragment : Fragment() {
             } else if(lastName.length() < 3){
                 firstNameLayout.isErrorEnabled = false
                 lastNameLayout.error = "Please enter your last name"
-            } else if(dobEt.length() < 3){
+            } else if(dobEt.text.toString() == "XX/XX/XXXX"){
                 lastNameLayout.isErrorEnabled = false
+                firstNameLayout.isErrorEnabled = false
                 dobEtLayout.error = "Please select your D.O.B"
             } else if(userName.length() < 3){
+                lastNameLayout.isErrorEnabled = false
+                firstNameLayout.isErrorEnabled = false
                 dobEtLayout.isErrorEnabled = false
-                userNameLayout.error = "Please enter an username"
+                Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
+            } else if(!isUsernameVerified!!){
+                lastNameLayout.isErrorEnabled = false
+                firstNameLayout.isErrorEnabled = false
+                dobEtLayout.isErrorEnabled = false
+                usernameVerified.text = "Please verify your username"
             } else {
+                lastNameLayout.isErrorEnabled = false
+                firstNameLayout.isErrorEnabled = false
+                dobEtLayout.isErrorEnabled = false
                 userNameLayout.isErrorEnabled = false
                 progressDialog = Dialog(requireContext())
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -147,6 +178,34 @@ class UsernameFragment : Fragment() {
         name.setText("Hi $profileName")
 
     }
+    private fun verifyUserName() {
+
+        val username = userName.text.toString()
+
+        val verify = RetrofitBuilder.profileCompletion.verifyUsername(user_id!!, VerifyUsername(username))
+        verify.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    if (response.body()?.message == "user_name already exist"){
+                        isUsernameVerified = false
+                        usernameVerified.text = "Username already exist, Please enter another username"
+                    } else {
+                        isUsernameVerified = true
+                        userNameLayout.setEndIconDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.png_check))
+                        usernameVerified.text = "Congratulations! $username username is available"
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(context, "${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun sendInfo() {
 
         val first = firstName.text.toString()
@@ -157,11 +216,8 @@ class UsernameFragment : Fragment() {
 
         val date = sdf.format(cal.time).toString()
 
-        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
         val update = UpdateUserName(fullName,date,username)
-        val send = RetrofitBuilder.profileCompletion.setUsername(user_id,update)
+        val send = RetrofitBuilder.profileCompletion.setUsername(user_id!!,update)
 
         send.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -174,8 +230,8 @@ class UsernameFragment : Fragment() {
 
                     editor = onboardingPrefs.edit()
 
-                    editor.putBoolean("UsernameFragment", true)
-                    Log.e("Onboarding", "UsernameFragment set to true")
+                    editor.putBoolean("UsernameFragment", false)
+                    Log.e("Onboarding", "UsernameFragment set to false")
                     editor.apply()
 
 //                    DashBoardActivity.number.progress = "50"

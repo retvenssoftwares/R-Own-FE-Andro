@@ -65,6 +65,11 @@
         android:id="@+id/cons_single_hotel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintVertical_bias="0.04"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/card_owner_next"
         app:layout_constraintTop_toBottomOf="@id/hotelType">
 
 
@@ -114,10 +119,7 @@
             android:layout_marginHorizontal="20dp"
             app:boxStrokeWidthFocused="2dp"
             app:endIconMode="clear_text"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/owner_Hotel"
@@ -143,10 +145,7 @@
             app:endIconMode="custom"
             app:endIconTint="@color/black"
             android:layout_marginTop="8dp"
-            android:layout_marginHorizontal="20dp"
-            app:layout_constraintTop_toBottomOf="@id/user_complete_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_marginHorizontal="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_location"
@@ -175,10 +174,7 @@
             android:focusable="true"
             app:endIconDrawable="@drawable/ic_arrow_down_24"
             app:endIconMode="custom"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/hotel_owner_star_et"
@@ -188,7 +184,7 @@
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="5 Star"
+                android:text="Select Your Hotel Rating"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -200,10 +196,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_chain_hotel"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
+        app:layout_constraintVertical_bias="0.05"
+        app:layout_constraintBottom_toTopOf="@id/card_owner_next"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cons_single_hotel">
 
@@ -277,10 +274,7 @@
                     android:layout_marginHorizontal="20dp"
                     app:boxStrokeWidthFocused="2dp"
                     app:endIconMode="clear_text"
-                    app:endIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/ll"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+                    app:endIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/noOfHotels"
@@ -307,10 +301,7 @@
                     android:layout_marginHorizontal="20dp"
                     app:boxStrokeWidthFocused="2dp"
                     app:endIconMode="clear_text"
-                    app:endIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/ll"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+                    app:endIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/hotelchain_Name"
@@ -335,10 +326,7 @@
                     android:layout_marginHorizontal="20dp"
                     app:boxStrokeWidthFocused="2dp"
                     app:endIconMode="clear_text"
-                    app:endIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/ll"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+                    app:endIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/hotel_Website"
@@ -365,10 +353,7 @@
                     android:layout_marginHorizontal="20dp"
                     app:boxStrokeWidthFocused="2dp"
                     app:endIconMode="clear_text"
-                    app:endIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/ll"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+                    app:endIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/hotel_bokkinglink"
@@ -390,11 +375,12 @@
         android:id="@+id/card_owner_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
         android:layout_marginHorizontal="45dp"
         app:cardElevation="6dp"
         android:layout_gravity="center_horizontal"
         app:cardCornerRadius="11dp"
+        app:layout_constraintVertical_bias="0.97"
+        app:layout_constraintTop_toBottomOf="@id/hotelType"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

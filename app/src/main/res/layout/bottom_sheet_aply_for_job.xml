@@ -39,10 +39,7 @@
         android:layout_marginHorizontal="20dp"
         app:boxStrokeWidthFocused="2dp"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/ll"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+        app:endIconTint="@color/black">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -67,10 +64,7 @@
         android:layout_marginTop="12dp"
         app:boxStrokeWidthFocused="2dp"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/ll"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+        app:endIconTint="@color/black">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"

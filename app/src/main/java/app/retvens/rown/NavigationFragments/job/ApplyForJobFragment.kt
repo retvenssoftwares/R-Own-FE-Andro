@@ -22,6 +22,8 @@ class ApplyForJobFragment : Fragment() {
 
     lateinit var appliedRecyclerView: RecyclerView
 
+    lateinit var shimmerLayout: LinearLayout
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,6 +34,7 @@ class ApplyForJobFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        shimmerLayout = view.findViewById(R.id.shimmer_layout_tasks)
         appliedForAJob()
     }
 
@@ -60,6 +63,7 @@ class ApplyForJobFragment : Fragment() {
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
+                    shimmerLayout.visibility = View.GONE
                     val appliedJobAdapter = AppliedJobAdapter(requireContext(), response)
                     appliedRecyclerView.adapter = appliedJobAdapter
                     appliedJobAdapter.notifyDataSetChanged()

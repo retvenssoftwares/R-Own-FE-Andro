@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentTransaction
+import app.retvens.rown.NavigationFragments.job.ApplyForJobFragment
 import app.retvens.rown.NavigationFragments.job.JobExploreFragment
 import app.retvens.rown.NavigationFragments.job.RequestForJobFragment
 import app.retvens.rown.R
@@ -78,7 +79,7 @@ class JobFragment : Fragment(){
             appliedJob.setCardBackgroundColor(Color.parseColor("#ADD134"))
 
 
-            val childFragment: Fragment = JobExploreFragment()
+            val childFragment: Fragment = ApplyForJobFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_j_fragments_container, childFragment).commit()
         }

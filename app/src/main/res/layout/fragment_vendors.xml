@@ -100,10 +100,7 @@
             android:layout_marginHorizontal="20dp"
             app:boxStrokeWidthFocused="2dp"
             app:endIconMode="clear_text"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/brand_name"
@@ -130,10 +127,7 @@
             android:layout_marginHorizontal="20dp"
             app:boxStrokeWidthFocused="2dp"
             app:endIconMode="clear_text"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/brand_desc"
@@ -162,10 +156,7 @@ for your properties and other services too."
             app:boxStrokeWidthFocused="2dp"
             app:endIconDrawable="@drawable/ic_arrow_down_24"
             app:endIconMode="custom"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/vendor_services_et"
@@ -192,10 +183,7 @@ for your properties and other services too."
             android:layout_marginHorizontal="20dp"
             app:boxStrokeWidthFocused="2dp"
             app:endIconMode="clear_text"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/portfolio_link"
@@ -222,10 +210,7 @@ for your properties and other services too."
             android:layout_marginHorizontal="20dp"
             app:boxStrokeWidthFocused="2dp"
             app:endIconMode="clear_text"
-            app:endIconTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dob_cal_img">
+            app:endIconTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/website_link"
@@ -250,6 +235,8 @@ for your properties and other services too."
         app:cardElevation="6dp"
         android:layout_gravity="center_horizontal"
         app:cardCornerRadius="11dp"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintTop_toBottomOf="@id/ll_stud"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

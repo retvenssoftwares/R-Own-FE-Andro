@@ -60,6 +60,11 @@ class BottomSheetWhatToPost : BottomSheetDialogFragment() {
             mListener?.bottomWhatToPostClick("Check")
             dismiss()
         }
+        val poll= view.findViewById<LinearLayout>(R.id.poll)
+        poll.setOnClickListener {
+            mListener?.bottomWhatToPostClick("Poll")
+            dismiss()
+        }
     }
 
     override fun onDetach() {

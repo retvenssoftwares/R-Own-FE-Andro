@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,9 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
     lateinit var recentJobRecycler : RecyclerView
     lateinit var filter : ImageView
 
+
+    lateinit var shimmerLayout: LinearLayout
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +38,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        shimmerLayout = view.findViewById(R.id.shimmer_layout_tasks)
 
         filter = requireView().findViewById(R.id.filter_user_jobs)
         filter.setOnClickListener {
@@ -84,6 +90,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                     suggestedJobAdapter.notifyDataSetChanged()
 
                     val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+                    recentJobRecycler.visibility = View.VISIBLE
+                    shimmerLayout.visibility = View.GONE
                     recentJobRecycler.adapter = recentJobAdapter
                     recentJobAdapter.notifyDataSetChanged()
                 }else{

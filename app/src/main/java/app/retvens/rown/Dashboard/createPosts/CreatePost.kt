@@ -7,10 +7,10 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -19,28 +19,35 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetGoingBack
-import app.retvens.rown.bottomsheet.BottomSheetJobDepartment
-import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
 import app.retvens.rown.databinding.ActivityCreatePostBinding
 import com.bumptech.glide.Glide
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity
+import iamutkarshtiwari.github.io.ananas.editimage.ImageEditorIntentBuilder
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+
 class CreatePost : AppCompatActivity(),
     BottomSheetSelectAudience.OnBottomSelectAudienceClickListener,
-    BottomSheetGoingBack.OnBottomGoingBackClickListener, BottomSheetWhatToPost.OnBottomWhatToPostClickListener {
+    BottomSheetGoingBack.OnBottomGoingBackClickListener,
+    BottomSheetWhatToPost.OnBottomWhatToPostClickListener,
+    BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
     lateinit var binding : ActivityCreatePostBinding
+
+
+    private val PHOTO_EDITOR_REQUEST_CODE = 231 // Any integer value as a request code.
 
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
@@ -66,6 +73,9 @@ class CreatePost : AppCompatActivity(),
     var canSee : Int ?= 0
 
     var selectedImg : Int = 0
+
+    var isEvent : Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
@@ -83,15 +93,6 @@ class CreatePost : AppCompatActivity(),
         binding.userCompleteName.setText(profileName)
 
 
-        binding.createP.setOnClickListener {
-            selectedImg = 1
-            val bottomSheet = BottomSheetWhatToPost()
-            val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetWhatToPost.WTP_TAG)}
-            bottomSheet.setOnWhatToPostClickListener(this)
-//            openBottomSheet()
-        }
-
         binding.canSee.setOnClickListener {
             canSee = 1
             val bottomSheet = BottomSheetSelectAudience()
@@ -105,6 +106,15 @@ class CreatePost : AppCompatActivity(),
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetSelectAudience.S_A_TAG)}
             bottomSheet.setOnSelectAudienceClickListener(this)
+        }
+
+        binding.createP.setOnClickListener {
+            selectedImg = 1
+            val bottomSheet = BottomSheetWhatToPost()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetWhatToPost.WTP_TAG)}
+            bottomSheet.setOnWhatToPostClickListener(this)
+//            openBottomSheet()
         }
 
         binding.img1.setOnClickListener {
@@ -204,6 +214,33 @@ class CreatePost : AppCompatActivity(),
             }
         }
 
+        binding.imgPreview.setOnClickListener {
+            if (imgUriP != null){
+
+                /*try {
+                    val intent = ImageEditorIntentBuilder(this, sourceImagePath, outputFilePath)
+                        .withAddText() // Add the features you need
+                        .withPaintFeature()
+                        .withFilterFeature()
+                        .withRotateFeature()
+                        .withCropFeature()
+                        .withBrightnessFeature()
+                        .withSaturationFeature()
+                        .withBeautyFeature()
+                        .withStickerFeature()
+                        .forcePortrait(true) // Add this to force portrait mode (It's set to false by default)
+                        .setSupportActionBarVisibility(false) // To hide app's default action bar
+                        .build()
+                    EditImageActivity.start(activity, intent, PHOTO_EDITOR_REQUEST_CODE)
+                } catch (e: Exception) {
+                    Log.e(
+                        "Demo App",
+                        e.message!!
+                    ) // This could throw if either `sourcePath` or `outputPath` is blank or Null
+                }*/
+            }
+        }
+
         binding.deletePost.setOnClickListener {
             if (imgUriP == imgUri1){
                 imgUriP = null
@@ -233,6 +270,13 @@ class CreatePost : AppCompatActivity(),
             }else{
                 Toast.makeText(this, "can't del", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.userLocationPost.setOnClickListener {
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
     }
     /*------------------------------CAMERA FUNCTIONALITIES AND SET LOCALE LANGUAGE--------------*/
@@ -287,8 +331,14 @@ class CreatePost : AppCompatActivity(),
                 val croppedImage = resultingImage.uri
 
                 if (selectedImg == 1){
+                    binding.whatDY.visibility = View.VISIBLE
                     binding.postsLayout.visibility = View.VISIBLE
                     binding.deletePost.visibility = View.VISIBLE
+                    binding.updateEvent.visibility = View.GONE
+                    binding.cardEventPost.visibility = View.GONE
+                    binding.cardVenue.visibility = View.GONE
+                    binding.checkIn.visibility = View.GONE
+
                     binding.imgPreview.setImageURI(croppedImage)
                     binding.img1.setImageURI(croppedImage)
                     imgUri1 = compressImage(croppedImage)
@@ -378,11 +428,72 @@ class CreatePost : AppCompatActivity(),
                 openGallery()
             }
             "Update" -> {
-
+                binding.postsLayout.visibility = View.GONE
+                binding.deletePost.visibility = View.GONE
+                binding.whatDY.visibility = View.GONE
+                binding.updateEvent.visibility = View.VISIBLE
+                binding.cardEventPost.visibility = View.GONE
+                binding.cardVenue.visibility = View.GONE
+                binding.checkIn.visibility = View.GONE
+                postUpdateEvent()
             }
             "Check" -> {
-
+                binding.postsLayout.visibility = View.GONE
+                binding.deletePost.visibility = View.GONE
+                binding.whatDY.visibility = View.GONE
+                binding.updateEvent.visibility = View.GONE
+                binding.cardEventPost.visibility = View.GONE
+                binding.cardVenue.visibility = View.GONE
+                binding.checkIn.visibility = View.VISIBLE
+                checkIn()
             }
+            "Poll" -> {
+                binding.postsLayout.visibility = View.GONE
+                binding.deletePost.visibility = View.GONE
+                binding.whatDY.visibility = View.VISIBLE
+                binding.updateEvent.visibility = View.GONE
+                binding.cardEventPost.visibility = View.GONE
+                binding.cardVenue.visibility = View.GONE
+                binding.checkIn.visibility = View.GONE
+                startActivity(Intent(applicationContext, CreatePollActivity::class.java))
+            }
+        }
+    }
+    private fun postUpdateEvent() {
+        binding.etLocationPostEvent.setOnClickListener {
+            isEvent = true
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
+        }
+
+        binding.etEventVenuePost.setOnClickListener {
+            Toast.makeText(applicationContext, "Will implement along with api", Toast.LENGTH_SHORT).show()
+        }
+        binding.nextUpdateEvent.setOnClickListener {
+            binding.whatDY.visibility = View.VISIBLE
+            binding.updateEvent.visibility = View.GONE
+            binding.cardEventPost.visibility = View.VISIBLE
+        }
+    }
+
+    private fun checkIn() {
+        binding.etLocationPost.setOnClickListener {
+            isEvent = false
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
+        }
+        binding.etVenuePost.setOnClickListener {
+            Toast.makeText(applicationContext, "Will implement along with api", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.nextCheckIn.setOnClickListener {
+            binding.whatDY.visibility = View.VISIBLE
+            binding.checkIn.visibility = View.GONE
+            binding.cardVenue.visibility = View.VISIBLE
         }
     }
 
@@ -396,6 +507,13 @@ class CreatePost : AppCompatActivity(),
     override fun bottomGoingBackClick(GoingBackFrBo: String) {
         if (GoingBackFrBo == "Discard"){
             super.onBackPressed()
+        }
+    }
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        if (isEvent){
+            binding.etLocationPostEvent.setText(CountryStateCityFrBo)
+        } else {
+            binding.etLocationPost.setText(CountryStateCityFrBo)
         }
     }
 }

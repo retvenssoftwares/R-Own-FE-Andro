@@ -163,7 +163,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                 progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 val image = progressDialog.findViewById<ImageView>(R.id.imageview)
                 Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
-//                progressDialog.show()
+                progressDialog.show()
                 setUpChainAdapter()
             }
         }
@@ -175,15 +175,20 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
         if (counter < n){
 
             counter++
+            uploadData()
+
+            counterText.text = "$counter/$n"
+
             nameTIL.setHint("Hotel $counter Name")
             locationTIL.setHint("Hotel $counter Location")
             ratingTIL.setHint("Hotel $counter Star rating")
 
-            uploadData()
         }else {
             Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
             saveProgress(requireContext(), "100")
+            progressDialog.dismiss()
             startActivity(Intent(requireContext(),DashBoardActivity::class.java))
+            activity?.finish()
         }
     }
 
@@ -230,8 +235,6 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                     val response = response.body()!!
                     saveProgress(requireContext(), "100")
                     progressDialog.dismiss()
-                    startActivity(Intent(requireContext(),DashBoardActivity::class.java))
-                    activity?.finish()
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                 }else{
                     progressDialog.dismiss()

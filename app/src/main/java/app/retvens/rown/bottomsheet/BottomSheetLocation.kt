@@ -26,7 +26,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BottomSheetLocation : BottomSheetDialogFragment() {
+class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter.OnLocationClickListener {
 
     var mListener: OnBottomLocationClickListener ? = null
     fun setOnLocationClickListener(listener: OnBottomLocationClickListener?){
@@ -59,18 +59,17 @@ class BottomSheetLocation : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        getUserLocation()
 
         recyclerView = view.findViewById(R.id.location_recycler)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-
+        getUserLocation()
     }
 
     private fun getUserLocation() {
 
-        val getLocation = RetrofitBuilder.profileCompletion.getLocation()
+        val getLocation = RetrofitBuilder.profileCompletion.getCountries()
 
         getLocation.enqueue(object : Callback<List<LocationDataClass>?>,
             LocationFragmentAdapter.OnLocationClickListener {
@@ -83,7 +82,7 @@ class BottomSheetLocation : BottomSheetDialogFragment() {
                     locationFragmentAdapter = LocationFragmentAdapter(requireContext(),response)
                     locationFragmentAdapter.notifyDataSetChanged()
                     recyclerView.adapter = locationFragmentAdapter
-                    locationFragmentAdapter.setOnJobClickListener(this)
+                    locationFragmentAdapter.setOnLocationClickListener(this)
                 }
                 else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
@@ -95,12 +94,8 @@ class BottomSheetLocation : BottomSheetDialogFragment() {
                 Log.e("error",t.message.toString())
             }
 
-            override fun onJobClick(job: LocationDataClass) {
-                for (x in job.states){
-                    for (y in x.name){
-                        mListener?.bottomLocationClick(y.toString())
-                    }
-                }
+            override fun onCountryClick(country: String) {
+                mListener?.bottomLocationClick(country)
                 dismiss()
             }
         })
@@ -112,4 +107,8 @@ class BottomSheetLocation : BottomSheetDialogFragment() {
         mListener = null
     }
 
+    override fun onCountryClick(country: String) {
+        mListener?.bottomLocationClick(country)
+        dismiss()
+    }
 }

@@ -32,6 +32,7 @@ import app.retvens.rown.ChatSection.MesiboUsers
 import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.ChatSection.UserChatList
 import app.retvens.rown.CreateCommunity.CreateCommunity
+import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
@@ -166,11 +167,12 @@ class DashBoardActivity : AppCompatActivity() {
         val sp = getSharedPreferences("onboarding_prefs", AppCompatActivity.MODE_PRIVATE)
         val hotelVendor = sp.getBoolean("VendorsFragment", false)
         val hotelOwner = sp.getBoolean("HotelOwnerFragment", false)
+        val hotelOwnerChain = sp.getBoolean("HotelOwnerChainFragment", false)
 
         bottom_Nav.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.home -> replaceFragment(HomeFragment())
-                R.id.jobs -> if (hotelOwner || hotelVendor){
+                R.id.jobs -> if (hotelOwner || hotelVendor || hotelOwnerChain){
                     replaceFragment(JobsForHoteliers())
                 }else{
                     replaceFragment(JobFragment())
@@ -327,12 +329,11 @@ class DashBoardActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_notify -> {
-                startActivity(Intent(this,CreateCommunity::class.java))
+                startActivity(Intent(this,NotificationActivity::class.java))
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
     }
-
 }
 

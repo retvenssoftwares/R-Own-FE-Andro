@@ -40,6 +40,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.HotelOwnerInfoData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetRating
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
@@ -59,7 +60,9 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRatingClickListener {
+class HotelOwnerFragment : Fragment(), BackHandler,
+    BottomSheetRating.OnBottomRatingClickListener,
+    BottomSheetLocation.OnBottomLocationClickListener{
 
 
     lateinit var hotelType : TextInputEditText
@@ -76,10 +79,13 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
     /*-----------------------SINGLE HOTEL--------------------------------*/
     lateinit var noOfHotels : TextInputEditText
     lateinit var hotelOwnerStarET : TextInputEditText
+    lateinit var hotelOwnerLocationET : TextInputEditText
     lateinit var hotelOwnerProfile  : ShapeableImageView
     lateinit var hotelOwnerCover  : ShapeableImageView
     lateinit var ownerHotel : TextInputEditText
     lateinit var ownerHotelLayout: TextInputLayout
+    lateinit var hotelOwnerStarLayout: TextInputLayout
+    lateinit var hotelOwnerLocationLayout: TextInputLayout
 
     private var croppedOwnerProfileImageUri: Uri? = null // Final Uri for Owner Profile
     private var croppedOwnerCoverImageUri: Uri? = null  // Final Uri for Owner Cover
@@ -104,21 +110,6 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
     lateinit var cameraHotelChainImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
         cropImage(cameraHotelChainImageUri)
-
-//        Log.d("owner", "cameraUser")
-//        if (cameraUser == "ChainProfile") {
-//            Log.d("owner", cameraUser)
-//            croppedHotelChainImageUri = cameraHotelChainImageUri
-//            hotelChainProfile.setImageURI(croppedHotelChainImageUri)
-//        }else if (cameraUser == "OwnerProfile"){
-//            Log.d("owner", cameraUser)
-//            croppedOwnerProfileImageUri = cameraHotelChainImageUri
-//            hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
-//        }else{
-//            Log.d("owner", cameraUser)
-//            croppedOwnerCoverImageUri = cameraHotelChainImageUri
-//            hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
-//        }
     }
 
     override fun onCreateView(
@@ -154,6 +145,16 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
         /*-----------------------SINGLE HOTEL--------------------------------*/
         noOfHotels = view.findViewById<TextInputEditText>(R.id.noOfHotels)
         hotelOwnerStarET = view.findViewById<TextInputEditText>(R.id.hotel_owner_star_et)
+        hotelOwnerStarLayout = view.findViewById(R.id.hotel_owner_star)
+        hotelOwnerLocationLayout = view.findViewById(R.id.hotel_location_field)
+        hotelOwnerLocationET = view.findViewById(R.id.et_location)
+
+        hotelOwnerLocationET.setOnClickListener {
+            val bottomSheet = BottomSheetLocation()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
+            bottomSheet.setOnLocationClickListener(this)
+        }
 
         hotelOwnerStarET.setOnClickListener {
             val bottomSheet = BottomSheetRating()
@@ -231,30 +232,35 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
 
                         UploadChainData()
                     }
-            }else{
-                if (croppedOwnerProfileImageUri == null){
+            }else {
+                if (croppedOwnerProfileImageUri == null) {
                     Toast.makeText(context, "Please select an Profile", Toast.LENGTH_SHORT).show()
-                } else if (croppedOwnerCoverImageUri == null){
-                    Toast.makeText(context, "Please select an Cover Image", Toast.LENGTH_SHORT).show()
-                } else if(ownerHotel.length() < 2){
+                } else if (croppedOwnerCoverImageUri == null) {
+                    Toast.makeText(context, "Please select an Cover Image", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (ownerHotel.length() < 2) {
                     ownerHotelLayout.error = "Please enter owner name"
+                } else if (hotelOwnerStarET.text.toString() == "Select Your Hotel Rating") {
+                    ownerHotelLayout.isErrorEnabled = false
+                    hotelOwnerStarLayout.error = "Select Your Hotel Rating"
+                } else if (hotelOwnerLocationET.text.toString() == "Select Your Location") {
+                    ownerHotelLayout.isErrorEnabled = false
+                    hotelOwnerStarLayout.isErrorEnabled = false
+                    hotelOwnerLocationLayout.error = "Select Your Location"
                 } else {
-
                     progressDialog = Dialog(requireContext())
                     progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                     progressDialog.setCancelable(false)
                     progressDialog.setContentView(R.layout.progress_dialoge)
                     progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                     val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-                    Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                    Glide.with(requireContext()).load(R.drawable.animated_logo_transparent)
+                        .into(image)
                     progressDialog.show()
                     UploadData()
                 }
             }
         }
-
-        val submit = view.findViewById<CardView>(R.id.card_owner_next)
-
 
     }
 
@@ -291,7 +297,7 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
 
                     val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
                     val editor = onboardingPrefs.edit()
-                    editor.putBoolean("HotelOwnerFragment", true)
+                    editor.putBoolean("HotelOwnerFragment", false)
                     editor.apply()
 
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -608,6 +614,10 @@ class HotelOwnerFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRa
 
     override fun bottomRatingClick(ratingFrBo: String) {
         hotelOwnerStarET.setText(ratingFrBo)
+    }
+
+    override fun bottomLocationClick(LocationFrBo: String) {
+        hotelOwnerLocationET.setText(LocationFrBo)
     }
 
 }
