@@ -44,6 +44,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".communityDetails.CommunityEditActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"/>
+        <activity
+            android:name=".communityDetails.CommunityDetailsActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
             android:name=".Dashboard.createPosts.CreatePollActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
