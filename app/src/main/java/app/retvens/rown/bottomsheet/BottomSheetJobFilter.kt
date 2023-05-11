@@ -17,7 +17,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
 class BottomSheetJobFilter : BottomSheetDialogFragment(),
-    BottomSheetJobType.OnBottomJobTypeClickListener, BottomSheetLocation.OnBottomLocationClickListener {
+    BottomSheetJobType.OnBottomJobTypeClickListener, BottomSheetLocation.OnBottomLocationClickListener,
+BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener{
 
     var mListener: OnBottomJobClickListener ? = null
     fun setOnJobClickListener(listener: OnBottomJobClickListener?){
@@ -35,6 +36,7 @@ class BottomSheetJobFilter : BottomSheetDialogFragment(),
     }
 
     lateinit var jobTypeText :TextView
+    lateinit var locationText :TextView
 
     override fun getTheme(): Int = R.style.Theme_AppBottomSheetDialogTheme
 
@@ -50,6 +52,7 @@ class BottomSheetJobFilter : BottomSheetDialogFragment(),
         super.onViewCreated(view, savedInstanceState)
         val jt= view.findViewById<RelativeLayout>(R.id.filter_job_type)
         jobTypeText = view.findViewById(R.id.jType_text)
+        locationText = view.findViewById(R.id.filter_location_text)
         jt.setOnClickListener {
             val bottomSheet = BottomSheetJobType()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
@@ -58,10 +61,10 @@ class BottomSheetJobFilter : BottomSheetDialogFragment(),
         }
         val fL = view.findViewById<RelativeLayout>(R.id.filter_location)
         fL.setOnClickListener {
-             val bottomSheet = BottomSheetLocation()
+             val bottomSheet = BottomSheetCountryStateCity()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
-            bottomSheet.setOnLocationClickListener(this)
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
     }
 
@@ -76,5 +79,8 @@ class BottomSheetJobFilter : BottomSheetDialogFragment(),
 
     override fun bottomLocationClick(LocationFrBo: String) {
 
+    }
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        locationText.text = CountryStateCityFrBo
     }
 }

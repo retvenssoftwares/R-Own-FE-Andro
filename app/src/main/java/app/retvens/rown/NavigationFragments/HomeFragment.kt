@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -18,17 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
-import app.retvens.rown.Dashboard.createPosts.CreatePost
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
+import app.retvens.rown.Dashboard.createPosts.CreateTextPost
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.FragmntAdapters.CommentAdapter
 import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.home.Community
 import app.retvens.rown.NavigationFragments.home.CommunityListAdapter
-import app.retvens.rown.NavigationFragments.home.Post
-import app.retvens.rown.NavigationFragments.home.PostAdapter
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
 //import com.karan.multipleviewrecyclerview.Banner
@@ -96,7 +91,7 @@ class HomeFragment : Fragment() {
             }
 
         view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {
-            startActivity(Intent(context, CreatePost::class.java))
+            startActivity(Intent(context, CreateTextPost::class.java))
         }
 
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
