@@ -34,6 +34,7 @@ import app.retvens.rown.bottomsheet.BottomSheet
 //import com.karan.multipleviewrecyclerview.Banner
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
+import app.retvens.rown.communityDetails.CommunityDetailsActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -66,6 +67,8 @@ class HomeFragment : Fragment() {
     private  var UserName:String = ""
     private lateinit var cummunity:Community
 
+    lateinit var viewAllCommunity : ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,6 +80,11 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewAllCommunity = view.findViewById(R.id.view_all_bg)
+        viewAllCommunity.setOnClickListener{
+            startActivity(Intent(context, CommunityDetailsActivity::class.java))
+        }
 
         val sharedPreferencesPro = context?.getSharedPreferences("SaveProgress", AppCompatActivity.MODE_PRIVATE)
         val toPo = sharedPreferencesPro?.getString("progress", "50").toString()
