@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -48,6 +50,8 @@ class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter
 
     override fun getTheme(): Int = R.style.Theme_AppBottomSheetDialogTheme
 
+    lateinit var ssearchLocation : TextView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +63,7 @@ class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        ssearchLocation = view.findViewById(R.id.search_country)
 
         recyclerView = view.findViewById(R.id.location_recycler)
         recyclerView.setHasFixedSize(true)
@@ -83,6 +88,34 @@ class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter
                     locationFragmentAdapter.notifyDataSetChanged()
                     recyclerView.adapter = locationFragmentAdapter
                     locationFragmentAdapter.setOnLocationClickListener(this)
+
+                    ssearchLocation.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            count: Int,
+                            after: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            before: Int,
+                            count: Int
+                        ) {
+                            val original = response.toList()
+                            val filter = original.filter { searchUser ->
+                                searchUser.name.contains(s.toString(),ignoreCase = false)
+                            }
+                            locationFragmentAdapter.searchLocation(filter)
+                        }
+
+                        override fun afterTextChanged(s: Editable?) {
+
+                        }
+                    })
                 }
                 else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
@@ -57,6 +58,10 @@ class LocationFragmentAdapter(val context: Context, var cityList:List<LocationDa
         }*/
 
 
+    }
+    fun searchLocation(searchText : List<LocationDataClass>){
+        cityList = searchText
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

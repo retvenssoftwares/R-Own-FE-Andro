@@ -44,9 +44,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Dashboard.createPosts.CreatCheackInPostActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.createPosts.CreateEventPostActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"  />
+        <activity
             android:name=".communityDetails.CommunityEditActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash"/>
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".communityDetails.CommunityDetailsActivity"
             android:exported="false"
@@ -56,11 +64,15 @@
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
+            android:name=".Dashboard.createPosts.CreatePostActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
             android:name=".Dashboard.notificationScreen.NotificationActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
-            android:name=".Dashboard.createPosts.CreatePost"
+            android:name=".Dashboard.createPosts.CreateTextPost"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
