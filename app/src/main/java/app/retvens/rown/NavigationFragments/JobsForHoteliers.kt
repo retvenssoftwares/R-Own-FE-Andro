@@ -59,6 +59,7 @@ class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListen
             cardJobPosted.setCardBackgroundColor(Color.parseColor("#ADD134"))
             cardExploreRequestedJob.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             cardExploreEmployees.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            postAJob.visibility = View.VISIBLE
 
             val childFragment: Fragment = JobPostedChildFragmnet()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -69,6 +70,7 @@ class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListen
             cardJobPosted.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             cardExploreRequestedJob.setCardBackgroundColor(Color.parseColor("#ADD134"))
             cardExploreEmployees.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            postAJob.visibility = View.GONE
 
             val childFragment: Fragment = ExploreRequestingChildFragmnet()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -79,6 +81,7 @@ class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListen
             cardJobPosted.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             cardExploreRequestedJob.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             cardExploreEmployees.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            postAJob.visibility = View.GONE
 
             val childFragment: Fragment = explore_employees_fragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()

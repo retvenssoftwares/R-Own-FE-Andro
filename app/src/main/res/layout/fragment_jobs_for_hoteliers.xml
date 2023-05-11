@@ -49,7 +49,7 @@
             app:layout_constraintStart_toStartOf="@id/welcome_name"
             app:layout_constraintTop_toBottomOf="@id/welcome_name" />
 
-            <ScrollView
+            <HorizontalScrollView
                 android:id="@+id/ll_menu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
 
                 </LinearLayout>
 
-            </ScrollView>
+            </HorizontalScrollView>
 
         <EditText
             android:id="@+id/jobs_search_hoteliers"
