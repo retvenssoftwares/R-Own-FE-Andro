@@ -30,6 +30,8 @@ import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
 import app.retvens.rown.communityDetails.CommunityDetailsActivity
+import app.retvens.rown.communityDetails.ViewAllCommmunitiesActivity
+import app.retvens.rown.communityDetails.ViewAllCommunitiesAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -78,7 +80,7 @@ class HomeFragment : Fragment() {
 
         viewAllCommunity = view.findViewById(R.id.view_all_bg)
         viewAllCommunity.setOnClickListener{
-            startActivity(Intent(context, CommunityDetailsActivity::class.java))
+            startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
         }
 
         val sharedPreferencesPro = context?.getSharedPreferences("SaveProgress", AppCompatActivity.MODE_PRIVATE)

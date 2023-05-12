@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
 import app.retvens.rown.databinding.UsersPostsCardBinding
+import app.retvens.rown.vendorsDetails.ViewAllVendorsActivity
 import com.bumptech.glide.Glide
 
 //import com.karan.multipleviewrecyclerview.Banner
@@ -101,11 +103,12 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
         }
         fun bindVendorsRecyclerView(recyclerItemList : List<DataItem.VendorsRecyclerData>){
-            val adapter = VendorsChildAdapter(DataItemType.VENDORS, recyclerItemList)
+            val adapter = VendorsChildAdapter(context, DataItemType.VENDORS, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Avail the Best-in-class service for yourself."
+
             binding.viewAllItem.setOnClickListener {
-                Toast.makeText(context, "Vendors", Toast.LENGTH_SHORT).show()
+                context.startActivity(Intent(context, ViewAllVendorsActivity::class.java))
             }
         }
 

@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
+import app.retvens.rown.communityDetails.CommunityDetailsActivity
 import com.bumptech.glide.Glide
 
 class CommunityListAdapter(val context : Context, val list: ArrayList<Community>) : RecyclerView.Adapter<CommunityListAdapter.CommuListViewHolder>() {
@@ -34,5 +36,12 @@ class CommunityListAdapter(val context : Context, val list: ArrayList<Community>
         Glide.with(context).load(currentItem.image).into(holder.cumm_pic)
         holder.title.text = currentItem.title
         holder.member.text = currentItem.members
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, CommunityDetailsActivity::class.java)
+            intent.putExtra("image", currentItem.image)
+            intent.putExtra("title", currentItem.title)
+            context.startActivity(intent)
+        }
     }
 }

@@ -20,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityCommunityEditBinding
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -45,6 +46,13 @@ class CommunityEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCommunityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val image = intent.getStringExtra("image")
+        val title = intent.getStringExtra("title")
+
+        binding.communityNameEdit.setText(title)
+
+        Glide.with(applicationContext).load(image).into(binding.communityEditProfile)
 
         profile = findViewById(R.id.community_edit_profile)
 

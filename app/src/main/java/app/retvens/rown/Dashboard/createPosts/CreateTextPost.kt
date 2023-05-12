@@ -108,7 +108,7 @@ class CreateTextPost : AppCompatActivity(),
                 startActivity(Intent(applicationContext, CreateEventPostActivity::class.java))
             }
             "Check" -> {
-                startActivity(Intent(applicationContext, CreateEventPostActivity::class.java))
+                startActivity(Intent(applicationContext, CreatCheackInPostActivity::class.java))
             }
             "Poll" -> {
                 startActivity(Intent(applicationContext, CreatePollActivity::class.java))

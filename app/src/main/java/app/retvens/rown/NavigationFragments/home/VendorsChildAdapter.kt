@@ -1,13 +1,16 @@
 package app.retvens.rown.NavigationFragments.home
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.databinding.VendorsCardHomeBinding
+import app.retvens.rown.vendorsDetails.VendorDetailsActivity
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
-class VendorsChildAdapter(private val viewType: Int,
+class VendorsChildAdapter(private val context: Context, private val viewType: Int,
                           private val vendorsRecyclerData : List<DataItem.VendorsRecyclerData>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -15,7 +18,9 @@ class VendorsChildAdapter(private val viewType: Int,
     inner class VendorsViewHolder(private val binding : VendorsCardHomeBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindVendorsView(recyclerItem: DataItem.VendorsRecyclerData){
             binding.vendorCover.setImageResource(recyclerItem.VendorCover)
-
+            binding.vendorCover.setOnClickListener {
+                context.startActivity(Intent(context, VendorDetailsActivity::class.java))
+            }
         }
     }
 

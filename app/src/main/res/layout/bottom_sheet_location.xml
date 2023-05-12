@@ -55,15 +55,13 @@
             android:layout_height="wrap_content"
             android:hint="Search for country"
             android:textColorHint="@color/grey_40"
+            android:textColor="@color/black"
             style="@style/TextAppearance.AppCompat.Body1"
             android:background="@null"
             android:padding="12dp"
             android:singleLine="true"
             android:maxLines="1"
-            android:drawableEnd="@drawable/svg_search"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/syjh"/>
+            android:drawableEnd="@drawable/svg_search"/>
     </androidx.cardview.widget.CardView>
 
 

@@ -204,7 +204,8 @@
         app:layout_constraintStart_toStartOf="parent">
         <include layout = "@layout/item_suggetions_notification"/>
         <include layout = "@layout/item_suggetions_notification"/>
-        <include layout = "@layout/item_suggetions_notification"/>
+        <include layout = "@layout/item_notification_community"/>
+        <include layout = "@layout/item_notification_event"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
