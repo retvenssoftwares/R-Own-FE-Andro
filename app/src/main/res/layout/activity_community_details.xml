@@ -198,6 +198,7 @@
             app:cardBackgroundColor="@color/green_own">
 
             <TextView
+                android:id="@+id/users_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/black"
@@ -221,6 +222,7 @@
             app:cardBackgroundColor="@color/green_own">
 
             <TextView
+                android:id="@+id/mediaText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/black"
@@ -237,6 +239,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
