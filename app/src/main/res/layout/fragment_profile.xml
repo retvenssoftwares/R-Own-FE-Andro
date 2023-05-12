@@ -282,6 +282,7 @@
                 app:cardBackgroundColor="@color/green_own">
 
                 <TextView
+                    android:id="@+id/media"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
@@ -305,6 +306,7 @@
                 app:cardBackgroundColor="@color/green_own">
 
                 <TextView
+                    android:id="@+id/polls"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textColor="@color/black"
@@ -321,6 +323,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_poll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/lll2">

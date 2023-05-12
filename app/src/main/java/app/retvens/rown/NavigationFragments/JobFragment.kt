@@ -32,9 +32,11 @@ class JobFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         exploreJob = view.findViewById(R.id.card_job_explore)
         requestJob = view.findViewById(R.id.card_request_job)
         appliedJob = view.findViewById(R.id.card_applied_job)
+
 
         val welcome = view.findViewById<TextView>(R.id.welcome_name)
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)

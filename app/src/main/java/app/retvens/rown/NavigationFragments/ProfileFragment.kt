@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.Dashboard.createPosts.CreatCheackInPostActivity
 import app.retvens.rown.Dashboard.createPosts.CreateEventPostActivity
@@ -28,6 +30,13 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
     lateinit var profile : ShapeableImageView
     lateinit var name : TextView
 
+    lateinit var polls : TextView
+    lateinit var media : TextView
+
+    lateinit var layoutPoll : LinearLayout
+
+    var isPoll = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,8 +47,13 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        layoutPoll = view.findViewById(R.id.layout_poll)
+
         profile = view.findViewById(R.id.profile)
         name = view.findViewById(R.id.profile_name)
+
+        polls = view.findViewById(R.id.polls)
+        media = view.findViewById(R.id.media)
 
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
@@ -52,6 +66,17 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
         view.findViewById<TextView>(R.id.requests_count).setOnClickListener {
             startActivity(Intent(context, ViewRequestsActivity::class.java))
+        }
+
+        polls.setOnClickListener {
+            layoutPoll.visibility = View.VISIBLE
+            polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+            media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+        }
+        media.setOnClickListener {
+            layoutPoll.visibility = View.GONE
+            media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+            polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
         }
 
         setting = view.findViewById(R.id.profile_setting)
