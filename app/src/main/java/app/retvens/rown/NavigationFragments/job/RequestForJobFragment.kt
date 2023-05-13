@@ -163,7 +163,8 @@ class RequestForJobFragment : Fragment(),
         expectedCTCeET.setText(CTCFrBo)
     }
 
-    override fun bottomLocationClick(LocationFrBo: String) {
-            selectJobLocationET.setText(LocationFrBo)
+
+    override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {
+        selectJobLocationET.setText(LocationFrBo)
     }
 }

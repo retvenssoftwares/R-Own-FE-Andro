@@ -556,6 +556,7 @@
                           android:visibility="gone">
 
                           <androidx.cardview.widget.CardView
+                              android:id="@+id/chatWithUs"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="4dp"
@@ -589,6 +590,7 @@
                             </androidx.cardview.widget.CardView>
 
                           <androidx.cardview.widget.CardView
+                              android:id="@+id/dropMail"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="4dp"
@@ -622,6 +624,7 @@
                             </androidx.cardview.widget.CardView>
 
                           <androidx.cardview.widget.CardView
+                              android:id="@+id/card_faq"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="4dp"
@@ -655,6 +658,7 @@
                 </androidx.cardview.widget.CardView>
 
                           <androidx.cardview.widget.CardView
+                              android:id="@+id/card_bug"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="4dp"

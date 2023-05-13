@@ -77,10 +77,11 @@ BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener{
         jobTypeText.text = jobTypeFrBo
     }
 
-    override fun bottomLocationClick(LocationFrBo: String) {
-
-    }
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         locationText.text = CountryStateCityFrBo
+    }
+
+    override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {
+        TODO("Not yet implemented")
     }
 }

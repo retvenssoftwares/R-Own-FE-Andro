@@ -1,25 +1,20 @@
 package app.retvens.rown.NavigationFragments.jobforvendors
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.JobResponseDataClass
 import app.retvens.rown.DataCollections.JobsCollection.PostJobDataCLass
-import app.retvens.rown.DataCollections.JobsCollection.RequestJobDataClass
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetCTC
+import app.retvens.rown.bottomsheet.BottomSheetCompany
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
+import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.bottomsheet.BottomSheetJobType
-import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.databinding.ActivityJobPostBinding
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,11 +22,15 @@ import retrofit2.Response
 
 class JobPostActivity : AppCompatActivity(),
     BottomSheetJobType.OnBottomJobTypeClickListener,
-    BottomSheetCTC.OnBottomCTCClickListener, BottomSheetLocation.OnBottomLocationClickListener {
+    BottomSheetCTC.OnBottomCTCClickListener,
+    BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener,
+    BottomSheetJobTitle.OnBottomJobTitleClickListener,
+    BottomSheetCompany.OnBottomCompanyClickListener {
+
+    lateinit var binding:ActivityJobPostBinding
 
     lateinit var jobTypeEt : TextInputEditText
     lateinit var postMinSalaryEt : TextInputEditText
-    lateinit var postMaxSalaryEt : TextInputEditText
     lateinit var postLocationEt : TextInputEditText
     private lateinit var jobTitle:TextInputEditText
     private lateinit var company:TextInputEditText
@@ -42,23 +41,23 @@ class JobPostActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_job_post)
+        binding =  ActivityJobPostBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //define variables
         jobTitle = findViewById(R.id.post_job_title)
-        company = findViewById(R.id.PostComET)
+        company = findViewById(R.id.postCompaET)
         jobDescription = findViewById(R.id.post_job_description_et)
         jobsSkill = findViewById(R.id.post_job_skills_et)
 
         jobTypeEt = findViewById(R.id.et_post_job_type)
         postMinSalaryEt = findViewById(R.id.et_post_min_salary)
-        postMaxSalaryEt = findViewById(R.id.et_post_max_salary)
         postLocationEt = findViewById(R.id.et_location_job_post)
         postLocationEt.setOnClickListener {
-            val bottomSheet = BottomSheetLocation()
+            val bottomSheet = BottomSheetCountryStateCity()
             val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
-            bottomSheet.setOnLocationClickListener(this)
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
 
         jobTypeEt.setOnClickListener {
@@ -74,13 +73,28 @@ class JobPostActivity : AppCompatActivity(),
             fragManager.let{bottomSheet.show(it, BottomSheetCTC.CTC_TAG)}
             bottomSheet.setOnCTCClickListener(this)
         }
-        postMaxSalaryEt.setOnClickListener {
+
+        jobTitle.setOnClickListener {
+            val bottomSheet = BottomSheetJobTitle()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobTitle.Job_Title_TAG)}
+            bottomSheet.setOnJobTitleClickListener(this)
+        }
+
+        company.setOnClickListener {
+            val bottomSheet = BottomSheetCompany()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCompany.Company_TAG)}
+            bottomSheet.setOnCompanyClickListener(this)
+        }
+
+       /* postMaxSalaryEt.setOnClickListener {
             etType = 2
             val bottomSheet = BottomSheetCTC()
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetCTC.CTC_TAG)}
             bottomSheet.setOnCTCClickListener(this)
-        }
+        }*/
 
         val post = findViewById<CardView>(R.id.card_post_job)
 
@@ -97,15 +111,14 @@ class JobPostActivity : AppCompatActivity(),
         val description = jobDescription.text.toString()
         val skill = jobsSkill.text.toString()
         val type = jobTypeEt.text.toString()
-        val min = postMinSalaryEt.text.toString()
-        val max = postMaxSalaryEt.text.toString()
+        val expacted = postMinSalaryEt.text.toString()
         val location = postLocationEt.text.toString()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val jobsData = PostJobDataCLass(user_id,"1","",title,company,"",type,"",
-        "",min,max,location,description,skill)
+        "",expacted,"max",location,description,skill)
 
         val postJob = RetrofitBuilder.jobsApis.postJob(user_id,jobsData)
 
@@ -134,14 +147,16 @@ class JobPostActivity : AppCompatActivity(),
     }
 
     override fun bottomCTCClick(CTCFrBo: String) {
-        if (etType == 1){
             postMinSalaryEt.setText(CTCFrBo)
-        }else{
-            postMaxSalaryEt.setText(CTCFrBo)
-        }
     }
 
-    override fun bottomLocationClick(LocationFrBo: String) {
-        postLocationEt.setText(LocationFrBo)
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        postLocationEt.setText(CountryStateCityFrBo)
+    }
+    override fun bottomJobTitleClick(jobTitleFrBo: String) {
+        jobTitle.setText(jobTitleFrBo)
+    }
+    override fun bottomLocationClick(CompanyFrBo: String) {
+        company.setText(CompanyFrBo)
     }
 }

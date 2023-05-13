@@ -1,6 +1,9 @@
 package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.ProfileCompletion.*
+import app.retvens.rown.DataCollections.location.CityData
+import app.retvens.rown.DataCollections.location.CountryData
+import app.retvens.rown.DataCollections.location.StateData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -75,7 +78,17 @@ interface PriofileCompletionApis{
     @GET("countries")
     fun getLocation():Call<List<LocationDataClass>>
     @GET("countries")
-    fun getCountries():Call<List<LocationDataClass>>
+    fun getCountries():Call<List<CountryData>>
+    @GET("countries/{numeric_code}/states")
+    fun getStates(
+        @Path("numeric_code") numeric_code : String
+    ):Call<List<StateData>>
+
+    @GET("countries/{numeric_code}/states/{state_code}/cities")
+    fun getCities(
+        @Path("numeric_code") numeric_code : String,
+        @Path("state_code") state_code : String
+    ):Call<CityData>
 
     @GET("getjobtitle")
     fun getJobTitle():Call<List<GetJobDataClass>>

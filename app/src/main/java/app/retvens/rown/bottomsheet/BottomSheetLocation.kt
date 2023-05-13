@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
+import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
@@ -28,7 +29,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter.OnLocationClickListener {
+class BottomSheetLocation : BottomSheetDialogFragment() {
 
     var mListener: OnBottomLocationClickListener ? = null
     fun setOnLocationClickListener(listener: OnBottomLocationClickListener?){
@@ -38,7 +39,7 @@ class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter
         return BottomSheetLocation()
     }
     interface OnBottomLocationClickListener{
-        fun bottomLocationClick(LocationFrBo : String)
+        fun bottomLocationClick(LocationFrBo : String, NumericCodeFrBo : String)
     }
 
     companion object {
@@ -76,11 +77,11 @@ class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter
 
         val getLocation = RetrofitBuilder.profileCompletion.getCountries()
 
-        getLocation.enqueue(object : Callback<List<LocationDataClass>?>,
+        getLocation.enqueue(object : Callback<List<CountryData>?>,
             LocationFragmentAdapter.OnLocationClickListener {
             override fun onResponse(
-                call: Call<List<LocationDataClass>?>,
-                response: Response<List<LocationDataClass>?>
+                call: Call<List<CountryData>?>,
+                response: Response<List<CountryData>?>
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
@@ -122,13 +123,13 @@ class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter
                 }
             }
 
-            override fun onFailure(call: Call<List<LocationDataClass>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<CountryData>?>, t: Throwable) {
                 Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
                 Log.e("error",t.message.toString())
             }
 
-            override fun onCountryClick(country: String) {
-                mListener?.bottomLocationClick(country)
+            override fun onCountryClick(country: String, code:String) {
+                mListener?.bottomLocationClick(country, code)
                 dismiss()
             }
         })
@@ -138,10 +139,5 @@ class BottomSheetLocation : BottomSheetDialogFragment(), LocationFragmentAdapter
     override fun onDetach() {
         super.onDetach()
         mListener = null
-    }
-
-    override fun onCountryClick(country: String) {
-        mListener?.bottomLocationClick(country)
-        dismiss()
     }
 }

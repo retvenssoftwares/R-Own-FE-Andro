@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/white"
+    tools:context=".sideNavigation.BugSpottedActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relative_n"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Spotted A bug"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textFontWeight="700"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="12dp"
+            android:textSize="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/bug_backBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            android:src="@drawable/community_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/llv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/relative_n"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="12dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="20dp"
+            app:cardBackgroundColor="@color/white">
+            <EditText
+                android:id="@+id/bug_ET"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:hint="So you spotted a bug? Report it to us...!!"
+                android:textColorHint="@color/grey_40"
+                android:textColor="@color/black"
+                android:layout_gravity="top"
+                android:gravity="top"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:background="@null"
+                android:paddingTop="16dp"
+                android:paddingHorizontal="20dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginHorizontal="20dp"
+            app:cardBackgroundColor="@color/green_own">
+
+            <TextView
+                android:id="@+id/addAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="16dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:textAlignment="center"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/white"
+                android:drawableStart="@drawable/attach"
+                android:drawableTint="@color/white"
+                android:drawablePadding="3dp"
+                android:background="@color/green_own"
+                android:text="Add Attachment"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+        <ImageView
+            android:id="@+id/delete_img1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/svg_cross"
+            android:visibility="gone"
+            android:elevation="5dp"
+            android:layout_marginEnd="-5dp"
+            android:layout_marginBottom="-12dp"
+            app:layout_constraintEnd_toEndOf="@id/bgi1"
+            app:layout_constraintBottom_toTopOf="@id/bgi1"/>
+
+        <ImageView
+            android:id="@+id/delete_img2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/svg_cross"
+            android:visibility="gone"
+            android:elevation="5dp"
+            android:layout_marginEnd="-5dp"
+            android:layout_marginBottom="-12dp"
+            app:layout_constraintEnd_toEndOf="@id/bgi2"
+            app:layout_constraintBottom_toTopOf="@id/bgi2"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/bgi1"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginEnd="10dp"
+                style="@style/SquareCornerImage"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/svg_attachment"
+                app:layout_constraintTop_toBottomOf="@id/llv"
+                app:layout_constraintEnd_toStartOf="@id/bgi2"/>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/bgi2"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:scaleType="centerCrop"
+                style="@style/SquareCornerImage"
+                android:background="@drawable/svg_attachment"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintTop_toTopOf="@id/bgi1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/bgi1"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The report will include some details about your device and account to provide us with further context for your report. We may contact you via email if you've confirmed your email address. Visit our Privacy Policy to find out what information we use and how."
+                android:textColor="@color/grey_40"
+                android:layout_marginHorizontal="20dp"
+                android:textAlignment="center"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_marginVertical="30dp"
+                android:layout_marginHorizontal="20dp"
+                app:cardBackgroundColor="@color/green_own">
+
+                <TextView
+                    android:id="@+id/send_bug"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="16dp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textAlignment="center"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="28dp"
+                    android:textColor="@color/green_own"
+                    android:background="@color/black"
+                    android:text="Send"/>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

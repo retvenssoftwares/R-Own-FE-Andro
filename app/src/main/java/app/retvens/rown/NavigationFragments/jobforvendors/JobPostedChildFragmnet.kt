@@ -64,7 +64,7 @@ class JobPostedChildFragmnet : Fragment() {
                 call: Call<List<JobsData>?>,
                 response: Response<List<JobsData>?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
                     suggestedRecycler.adapter = suggestedJobAdapter

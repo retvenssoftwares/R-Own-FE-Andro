@@ -26,6 +26,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.utils.saveProgress
@@ -182,13 +183,13 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
 
     private fun getUserLocation() {
 
-        val getLocation = RetrofitBuilder.profileCompletion.getLocation()
+        val getLocation = RetrofitBuilder.profileCompletion.getCountries()
 
-        getLocation.enqueue(object : Callback<List<LocationDataClass>?>,
+        getLocation.enqueue(object : Callback<List<CountryData>?>,
             LocationFragmentAdapter.OnLocationClickListener {
             override fun onResponse(
-                call: Call<List<LocationDataClass>?>,
-                response: Response<List<LocationDataClass>?>
+                call: Call<List<CountryData>?>,
+                response: Response<List<CountryData>?>
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
@@ -202,27 +203,27 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
                 }
             }
 
-            override fun onFailure(call: Call<List<LocationDataClass>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<CountryData>?>, t: Throwable) {
                 Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
                 Log.e("error",t.message.toString())
             }
 
-            override fun onCountryClick(country: String) {
+            override fun onCountryClick(country: String, code: String) {
                 etLocationState.setText(country)
                 dialogRole.dismiss()
                 userLocationCity.visibility = View.VISIBLE
             }
-/*
+            /*
 
-            override fun onLocationClick(job: LocationDataClass) {
-               for (x in job.states){
-                   for (y in x.name){
-                       etLocationCountry.setText(y.toString())
-                   }
-               }
-                dialogRole.dismiss()
-            }
-*/
+                        override fun onLocationClick(job: LocationDataClass) {
+                           for (x in job.states){
+                               for (y in x.name){
+                                   etLocationCountry.setText(y.toString())
+                               }
+                           }
+                            dialogRole.dismiss()
+                        }
+            */
 
         })
 
@@ -238,7 +239,8 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
         return true
     }
 
-    override fun bottomLocationClick(LocationFrBo: String) {
+
+    override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {
         etLocationCountry.setText(LocationFrBo)
         userLocationState.visibility  = View.VISIBLE
     }

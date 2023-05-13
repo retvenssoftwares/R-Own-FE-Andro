@@ -42,6 +42,9 @@ import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
 import app.retvens.rown.databinding.ActivityDashBoardBinding
+import app.retvens.rown.sideNavigation.BugSpottedActivity
+import app.retvens.rown.sideNavigation.ChatWithUsActivity
+import app.retvens.rown.sideNavigation.FAQ_Activity
 import app.retvens.rown.utils.clearFullName
 import app.retvens.rown.utils.clearProfileImage
 import app.retvens.rown.utils.clearProgress
@@ -178,7 +181,11 @@ class DashBoardActivity : AppCompatActivity() {
                     replaceFragment(JobFragment())
                 }
                 R.id.explore -> replaceFragment(ExploreFragment())
-                R.id.events -> replaceFragment(EventFragment())
+                R.id.events -> if (hotelOwner || hotelVendor || hotelOwnerChain){
+                    replaceFragment(EventFragmentForHoteliers())
+                }else{
+                    replaceFragment(EventFragment())
+                }
                 R.id.profile -> replaceFragment(ProfileFragment())
                 else -> null
             }
@@ -221,6 +228,23 @@ class DashBoardActivity : AppCompatActivity() {
                 binding.navHelpList.visibility = View.GONE
                 isHLVisible = false
             }
+        }
+
+        binding.dropMail.setOnClickListener {
+
+        }
+
+        binding.chatWithUs.setOnClickListener {
+            startActivity(Intent(applicationContext, ChatWithUsActivity::class.java))
+        }
+
+        binding.cardFaq.setOnClickListener {
+            startActivity(Intent(applicationContext, FAQ_Activity::class.java))
+
+        }
+
+        binding.cardBug.setOnClickListener {
+            startActivity(Intent(applicationContext, BugSpottedActivity::class.java))
         }
 
         binding.Setting.setOnClickListener {

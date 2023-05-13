@@ -616,7 +616,8 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         hotelOwnerStarET.setText(ratingFrBo)
     }
 
-    override fun bottomLocationClick(LocationFrBo: String) {
+
+    override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {
         hotelOwnerLocationET.setText(LocationFrBo)
     }
 

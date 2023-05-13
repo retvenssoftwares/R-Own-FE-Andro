@@ -1,4 +1,4 @@
-package app.retvens.rown.Dashboard.profileCompletion.frags.adapter
+package app.retvens.rown.DataCollections.location
 
 import android.content.Context
 import android.content.Intent
@@ -15,12 +15,12 @@ import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class LocationFragmentAdapter(val context: Context, var cityList:List<CountryData>): RecyclerView.Adapter<LocationFragmentAdapter.MyViewHolderClass>() {
+class StateAdapter(val context: Context, var cityList:List<StateData>): RecyclerView.Adapter<StateAdapter.MyViewHolderClass>() {
 
     private var countryClickListener: OnLocationClickListener? = null
 
     interface OnLocationClickListener {
-        fun onCountryClick(country: String, code:String)
+        fun onStateDataClick(StateData: String, code:String)
     }
 
     fun setOnLocationClickListener(listener: OnLocationClickListener) {
@@ -43,11 +43,11 @@ class LocationFragmentAdapter(val context: Context, var cityList:List<CountryDat
 
         holder.location.text = data.name
         holder.itemView.setOnClickListener {
-            countryClickListener?.onCountryClick(data.name, data.numeric_code)
+            countryClickListener?.onStateDataClick(data.name, data.state_code)
         }
 
     }
-    fun searchLocation(searchText : List<CountryData>){
+    fun searchLocation(searchText : List<StateData>){
         cityList = searchText
         notifyDataSetChanged()
     }

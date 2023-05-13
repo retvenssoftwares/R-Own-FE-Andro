@@ -44,6 +44,26 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.eventsForHoteliers.EvenDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.CreateEventActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"  />
+        <activity
+            android:name=".sideNavigation.ChatWithUsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".sideNavigation.BugSpottedActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".sideNavigation.FAQ_Activity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
             android:name=".NavigationFragments.jobforvendors.JobsDetailsVendor"
             android:exported="false">
             <meta-data

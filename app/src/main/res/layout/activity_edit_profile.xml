@@ -219,7 +219,7 @@
             android:id="@+id/bioEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis aliquam elit sit amet dignissim. "
+            android:hint="Enter Description"
             android:textColorHint="@color/grey_40"
             android:textColor="@color/black"
             style="@style/TextAppearance.AppCompat.Body1"

@@ -4,22 +4,25 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
-import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
+import app.retvens.rown.DataCollections.location.CityAdapter
+import app.retvens.rown.DataCollections.location.CityData
+import app.retvens.rown.DataCollections.location.StateAdapter
+import app.retvens.rown.DataCollections.location.StateData
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
@@ -48,8 +51,11 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
     }
 
     lateinit var recyclerView : RecyclerView
-    lateinit var locationFragmentAdapter : LocationFragmentAdapter
+    lateinit var locationFragmentAdapter : StateAdapter
+    lateinit var locationCityAdapter : CityAdapter
 
+    lateinit var numericCode : String
+    lateinit var cCode : String
 
     lateinit var locationStateLayout : TextInputLayout
     lateinit var locationCityLayout : TextInputLayout
@@ -85,6 +91,14 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
             bottomSheet.setOnLocationClickListener(this)
         }
 
+        locationStateET.setOnClickListener {
+            openBottomSheet("state")
+        }
+
+        locationCityET.setOnClickListener {
+            openBottomSheet("city")
+        }
+
         view.findViewById<CardView>(R.id.card_location_done).setOnClickListener {
             val country = locationCountryET.text.toString()
             val state = locationStateET.text.toString()
@@ -96,13 +110,169 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
         }
     }
 
+    private fun openBottomSheet(s:String) {
+        val dialogLanguage = Dialog(requireContext())
+        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogLanguage.setContentView(R.layout.bottom_sheet_location)
+        dialogLanguage.setCancelable(true)
+
+        dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialogLanguage.window?.setGravity(Gravity.BOTTOM)
+        dialogLanguage.show()
+        val recyclerViewD = dialogLanguage.findViewById<RecyclerView>(R.id.location_recycler)
+        val search = dialogLanguage.findViewById<EditText>(R.id.search_country)
+        recyclerViewD.setHasFixedSize(true)
+        recyclerViewD.layoutManager = LinearLayoutManager(requireContext())
+        if (s=="state") {
+            getUserState(recyclerViewD, dialogLanguage, search)
+        } else {
+            getUserCity(recyclerViewD, dialogLanguage, search)
+        }
+    }
+    private fun getUserState(
+        recyclerViewD: RecyclerView,
+        dialogLanguage: Dialog,
+        search: EditText
+    ) {
+
+        val getLocation = RetrofitBuilder.profileCompletion.getStates(numericCode)
+
+        getLocation.enqueue(object : Callback<List<StateData>?>,
+            StateAdapter.OnLocationClickListener {
+            override fun onResponse(
+                call: Call<List<StateData>?>,
+                response: Response<List<StateData>?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    locationFragmentAdapter = StateAdapter(requireContext(),response)
+                    locationFragmentAdapter.notifyDataSetChanged()
+                    recyclerViewD.adapter = locationFragmentAdapter
+                    locationFragmentAdapter.setOnLocationClickListener(this)
+
+                    search.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            count: Int,
+                            after: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            before: Int,
+                            count: Int
+                        ) {
+                            val original = response.toList()
+                            val filter = original.filter { searchUser ->
+                                searchUser.name.contains(s.toString(),ignoreCase = false)
+                            }
+                            locationFragmentAdapter.searchLocation(filter)
+                        }
+
+                        override fun afterTextChanged(s: Editable?) {
+
+                        }
+                    })
+                }
+                else{
+                    Toast.makeText(requireContext(), "Reload : ${ response.code().toString() }", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<StateData>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+                Log.e("error",t.message.toString())
+            }
+
+            override fun onStateDataClick(StateData: String, code: String) {
+                locationStateET.setText(StateData)
+                cCode = code
+                locationCityLayout.visibility = View.VISIBLE
+                dialogLanguage.dismiss()
+            }
+        })
+    }
+
+    private fun getUserCity(
+        recyclerViewD: RecyclerView,
+        dialogLanguage: Dialog,
+        search: EditText
+    ) {
+
+        val getLocation = RetrofitBuilder.profileCompletion.getCities(numericCode,cCode)
+
+        getLocation.enqueue(object : Callback<CityData?>,
+            CityAdapter.OnLocationClickListener {
+            override fun onResponse(
+                call: Call<CityData?>,
+                response: Response<CityData?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    locationCityAdapter = CityAdapter(requireContext(),response.cityNames)
+                    locationCityAdapter.notifyDataSetChanged()
+                    recyclerViewD.adapter = locationCityAdapter
+                    locationCityAdapter.setOnLocationClickListener(this)
+
+                    /*search.addTextChangedListener(object : TextWatcher {
+                        override fun beforeTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            count: Int,
+                            after: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(
+                            s: CharSequence?,
+                            start: Int,
+                            before: Int,
+                            count: Int
+                        ) {
+                            val original = response.toList()
+                            val filter = original.filter { searchUser ->
+                                searchUser.cityNames.contains(s.toString(),ignoreCase = false)
+                            }
+                            locationCityAdapter.searchLocation(filter)
+                        }
+
+                        override fun afterTextChanged(s: Editable?) {
+
+                        }
+                    })*/
+                }
+                else{
+                    Toast.makeText(requireContext(), "Reload : ${ response.code().toString() }", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<CityData?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+                Log.e("error",t.message.toString())
+            }
+
+            override fun onStateDataClick(cityData: String) {
+                locationCityET.setText(cityData)
+            }
+        })
+    }
+
     override fun onDetach() {
         super.onDetach()
         mListener = null
     }
 
-    override fun bottomLocationClick(LocationFrBo: String) {
+    override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo : String) {
         locationCountryET.setText(LocationFrBo)
+        numericCode = NumericCodeFrBo
+        Log.d("codeNumeric", NumericCodeFrBo)
         locationStateLayout.visibility = View.VISIBLE
     }
 
