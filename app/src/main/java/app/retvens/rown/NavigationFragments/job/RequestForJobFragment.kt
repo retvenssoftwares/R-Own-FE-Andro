@@ -119,8 +119,7 @@ class RequestForJobFragment : Fragment(),
         val sharedPreferences = requireContext()?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val data = RequestJobDataClass(user_id,department,"","","",type,designation,noticePeriod
-            ,"","",location,"","",ctc)
+        val data = RequestJobDataClass(user_id,department,type,designation,noticePeriod,location,ctc)
 
         val send = RetrofitBuilder.jobsApis.requestJob(data)
 
@@ -165,6 +164,6 @@ class RequestForJobFragment : Fragment(),
     }
 
     override fun bottomLocationClick(LocationFrBo: String) {
-
+            selectJobLocationET.setText(LocationFrBo)
     }
 }

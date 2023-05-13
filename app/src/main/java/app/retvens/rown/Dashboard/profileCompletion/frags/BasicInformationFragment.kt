@@ -195,16 +195,16 @@ class BasicInformationFragment : Fragment(),
 
 
 
-        Toast.makeText(requireContext(),"${myRecentJobET.text.toString()}",Toast.LENGTH_SHORT).show()
-
-        if (roleInJob.isNotEmpty()){
-            role = roleInJob
-        }else if (roleInHotel.isNotEmpty()){
+        if (myRoleInHosET.text.toString() == "My Role in hospitality"){
             role = roleInHotel
+        }else if (myRecentJobET.text.toString() == "Most Recent Job Title"){
+            role = roleInJob
         }
         else{
             role = ""
         }
+
+
 
         val info = BasicInfoClass(role, BasicInfoClass.EducationData(university,start,end))
 

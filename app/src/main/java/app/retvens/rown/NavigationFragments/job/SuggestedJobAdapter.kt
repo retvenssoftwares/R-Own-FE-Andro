@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -21,6 +22,8 @@ class SuggestedJobAdapter(val context: Context, val jobList:List<JobsData>) : Re
         val location = itemView.findViewById<TextView>(R.id.suggested_job_location)
         val type = itemView.findViewById<TextView>(R.id.workType)
         val title = itemView.findViewById<TextView>(R.id.jobTitle)
+        val salary = itemView.findViewById<TextView>(R.id.salary)
+        val button = itemView.findViewById<CardView>(R.id.apply_btn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestedJobViewHolder {
@@ -37,16 +40,28 @@ class SuggestedJobAdapter(val context: Context, val jobList:List<JobsData>) : Re
 
         val jobs = jobList[position]
 
-        for (x in jobs.joblist){
 
-            holder.position.text = x.designationType
-            holder.location.text = x.jobLocation
-            holder.type.text = x.jobType
-            holder.title.text = x.jobTitle
-        }
+            holder.position.text = jobs.jobTitle
+            holder.location.text = jobs.jobLocation
+            holder.type.text = jobs.jobType
+            holder.title.text = "Remote"
 
-        holder.itemView.setOnClickListener{
-            context.startActivity(Intent(context, JobDetailsActivity::class.java))
+        val min = jobs.minSalary
+        val max = jobs.maxSalary
+
+        holder.salary.text = max
+
+        holder.button.setOnClickListener{
+           val intent = Intent(context,JobDetailsActivity::class.java)
+            intent.putExtra("title",jobs.jobTitle)
+            intent.putExtra("company",jobs.companyName)
+            intent.putExtra("location",jobs.jobLocation)
+            intent.putExtra("type",jobs.jobType)
+            intent.putExtra("worktype",jobs.workplaceType)
+            intent.putExtra("description",jobs.jobDescription)
+            intent.putExtra("skill",jobs.skillsRecq)
+            intent.putExtra("jobId",jobs.jID)
+            context.startActivity(intent)
         }
     }
 }

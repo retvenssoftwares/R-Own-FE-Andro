@@ -4,13 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.job.RecentJobAdapter
 import app.retvens.rown.NavigationFragments.job.SuggestedJobAdapter
 import app.retvens.rown.NavigationFragments.job.SuggestedJobData
 import app.retvens.rown.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class JobPostedChildFragmnet : Fragment() {
 
@@ -29,29 +35,44 @@ class JobPostedChildFragmnet : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         suggestedRecycler = view.findViewById(R.id.suggested_hotelier_job_recycler)
-
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         suggestedRecycler.setHasFixedSize(true)
 
-        val listSuggeJobs = mutableListOf<SuggestedJobData>()
-        listSuggeJobs.add(SuggestedJobData("Android Devloper"))
-        listSuggeJobs.add(SuggestedJobData("UI Devloper"))
-        listSuggeJobs.add(SuggestedJobData("Devloper"))
-        listSuggeJobs.add(SuggestedJobData("Android Devloper"))
-        listSuggeJobs.add(SuggestedJobData("UI Devloper"))
-        listSuggeJobs.add(SuggestedJobData("Devloper"))
-
-        val suggestedJobAdapter = SuggestedJobAdapter(requireContext(), emptyList())
-        suggestedRecycler.adapter = suggestedJobAdapter
-        suggestedJobAdapter.notifyDataSetChanged()
 
 
         recentJobRecycler = view.findViewById(R.id.recent_job_recycler_hotelier)
         recentJobRecycler.layoutManager = LinearLayoutManager(context)
         recentJobRecycler.setHasFixedSize(true)
 
-        val recentJobAdapter = RecentJobAdapter(requireContext(), emptyList())
-        recentJobRecycler.adapter = recentJobAdapter
-        recentJobAdapter.notifyDataSetChanged()
+        getJobs()
+    }
+
+    private fun getJobs() {
+
+        val getJob = RetrofitBuilder.jobsApis.getJobs()
+
+        getJob.enqueue(object : Callback<List<JobsData>?> {
+            override fun onResponse(
+                call: Call<List<JobsData>?>,
+                response: Response<List<JobsData>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
+                    suggestedRecycler.adapter = suggestedJobAdapter
+                    suggestedJobAdapter.notifyDataSetChanged()
+
+                    val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+                    recentJobRecycler.adapter = recentJobAdapter
+                    recentJobAdapter.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

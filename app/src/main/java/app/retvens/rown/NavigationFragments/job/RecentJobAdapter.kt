@@ -22,6 +22,7 @@ class RecentJobAdapter(val context: Context, val jobsList:List<JobsData>) : Recy
         val location = itemView.findViewById<TextView>(R.id.recent_job_location)
         val title = itemView.findViewById<TextView>(R.id.jobs_title)
         val type = itemView.findViewById<TextView>(R.id.jobs_type)
+        val salary = itemView.findViewById<TextView>(R.id.salary)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentJobViewHolder {
@@ -38,16 +39,29 @@ class RecentJobAdapter(val context: Context, val jobsList:List<JobsData>) : Recy
 
         val data = jobsList[position]
 
-        for (x in data.joblist){
 
-            holder.designation.text = x.designationType
-            holder.location.text = x.jobLocation
-            holder.type.text = x.jobType
-            holder.title.text = x.jobTitle
-        }
+        holder.designation.text = data.jobTitle
+        holder.location.text = data.jobLocation
+        holder.type.text = data.jobType
+        holder.title.text = "Remote"
+
+        val min = data.minSalary
+        val max = data.maxSalary
+
+        holder.salary.text = max
+
 
         holder.itemView.setOnClickListener{
-            context.startActivity(Intent(context, JobDetailsActivity::class.java))
+            val intent = Intent(context,JobDetailsActivity::class.java)
+            intent.putExtra("title",data.jobTitle)
+            intent.putExtra("company",data.companyName)
+            intent.putExtra("location",data.jobLocation)
+            intent.putExtra("type",data.jobType)
+            intent.putExtra("worktype",data.workplaceType)
+            intent.putExtra("description",data.jobDescription)
+            intent.putExtra("skill",data.skillsRecq)
+            intent.putExtra("jobId",data.jID)
+            context.startActivity(intent)
         }
 
     }

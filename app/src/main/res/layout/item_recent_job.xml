@@ -135,22 +135,13 @@
         android:fontFamily="@font/montserrat_semibold"
         android:textSize="16dp"
         android:textColor="@color/green_own"
-        app:layout_constraintBottom_toBottomOf="@id/monthly"
-        app:layout_constraintEnd_toStartOf="@id/monthly"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="10dp"
+        />
 
-    <TextView
-        android:id="@+id/monthly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="/month"
-        android:fontFamily="@font/montserrat_semibold"
-        android:textSize="14dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="6dp"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@id/linear_layout_recent_jobs"
-        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <View
         android:layout_width="match_parent"

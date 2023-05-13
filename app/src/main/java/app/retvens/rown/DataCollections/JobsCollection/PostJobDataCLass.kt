@@ -1,12 +1,12 @@
 package app.retvens.rown.DataCollections.JobsCollection
 
-data class JobsData(
-    val _id: String,
-    val user_id: String,
+data class PostJobDataCLass(
+    val user_id:String,
+    val display_status: String,
     val jobCategory: String,
     val jobTitle: String,
     val companyName: String,
-    val workplaceType: String?,
+    val workplaceType: String,
     val jobType: String,
     val designationType: String,
     val noticePeriod: String,
@@ -15,8 +15,4 @@ data class JobsData(
     val jobLocation: String,
     val jobDescription: String,
     val skillsRecq: String,
-    val display_status: String,
-    val jobApplicants: List<Any>,
-    val jID: String,
-    val __v: Int
 )

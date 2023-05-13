@@ -168,4 +168,5 @@ class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListen
     override fun bottomJobClick(jobFrBo: String) {
 
     }
+
 }
