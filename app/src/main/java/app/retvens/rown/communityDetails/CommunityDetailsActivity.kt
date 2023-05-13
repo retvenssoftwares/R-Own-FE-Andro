@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityCommunityDetailsBinding
 import com.bumptech.glide.Glide
@@ -19,7 +20,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
     lateinit var binding: ActivityCommunityDetailsBinding
 
     private var isSwitchToCloseCommunity = true
-    var isBusinessVisible = false
+    var isBusinessVisible = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,10 +82,21 @@ class CommunityDetailsActivity : AppCompatActivity() {
             }
         }
 
+        binding.usersText.setOnClickListener {
+            binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+            binding.llu.visibility = View.VISIBLE
+        }
+        binding.mediaText.setOnClickListener {
+            binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+            binding.llu.visibility = View.GONE
+        }
+
         binding.business.setOnClickListener {
             if (isBusinessVisible){
                 binding.staticCard.visibility = View.VISIBLE
-                isBusinessVisible = true
+                isBusinessVisible = false
             } else {
                 binding.staticCard.visibility = View.GONE
                 isBusinessVisible = true
