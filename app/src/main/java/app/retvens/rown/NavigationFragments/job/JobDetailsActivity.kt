@@ -20,6 +20,8 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.JobsCollection.ApplyJobsResponse
+import app.retvens.rown.DataCollections.JobsCollection.PushApplicantIdData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
@@ -171,11 +173,43 @@ class JobDetailsActivity : AppCompatActivity() {
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val send = RetrofitBuilder.jobsApis.applyJob(
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),experience),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),intro),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),jobId),
             MultipartBody.Part.createFormData("resume", file.name, body)
         )
 
+        send.enqueue(object : Callback<ApplyJobsResponse?> {
+            override fun onResponse(
+                call: Call<ApplyJobsResponse?>,
+                response: Response<ApplyJobsResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,response.job_id,Toast.LENGTH_SHORT).show()
+                    pushId(response.job_id)
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ApplyJobsResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun pushId(jid:String) {
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val push = PushApplicantIdData(user_id,jid)
+
+        val send = RetrofitBuilder.jobsApis.pushId(user_id,push)
         send.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
@@ -193,6 +227,7 @@ class JobDetailsActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

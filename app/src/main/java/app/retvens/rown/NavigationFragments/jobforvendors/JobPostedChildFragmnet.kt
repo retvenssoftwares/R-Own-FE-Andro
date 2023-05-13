@@ -1,9 +1,11 @@
 package app.retvens.rown.NavigationFragments.jobforvendors
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +35,12 @@ class JobPostedChildFragmnet : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val viewAll = view.findViewById<TextView>(R.id.view_all_recent)
+
+        viewAll.setOnClickListener {
+            startActivity(Intent(requireContext(),JobsPostedByUser::class.java))
+        }
 
         suggestedRecycler = view.findViewById(R.id.suggested_hotelier_job_recycler)
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

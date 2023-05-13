@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -40,8 +41,17 @@ interface JobsApis {
     @Multipart
     @POST("applyjob")
     fun applyJob(
+        @Part("Full_name")Full_name:RequestBody,
+        @Part("Experience")Experience:RequestBody,
+        @Part("self_introduction")self_introduction:RequestBody,
         @Part("user_id")user_id:RequestBody,
         @Part("jobId")jobId:RequestBody,
         @Part resume: MultipartBody.Part
+    ):Call<ApplyJobsResponse>
+
+    @PATCH("pushid/{userId}")
+    fun pushId(
+        @Path("userId") userId:String,
+        @Body push:PushApplicantIdData
     ):Call<UpdateResponse>
 }
