@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
-import app.retvens.rown.NavigationFragments.job.RecentJobAdapter
-import app.retvens.rown.NavigationFragments.job.SuggestedJobAdapter
-import app.retvens.rown.NavigationFragments.job.SuggestedJobData
+import app.retvens.rown.NavigationFragments.job.*
 import app.retvens.rown.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,11 +64,11 @@ class JobPostedChildFragmnet : Fragment() {
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-                    val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
+                    val suggestedJobAdapter = SuggestedJobAdaperHotelOwner(requireContext(),response)
                     suggestedRecycler.adapter = suggestedJobAdapter
                     suggestedJobAdapter.notifyDataSetChanged()
 
-                    val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+                    val recentJobAdapter = RecentJobAdapterOwner(requireContext(), response)
                     recentJobRecycler.adapter = recentJobAdapter
                     recentJobAdapter.notifyDataSetChanged()
                 }else{

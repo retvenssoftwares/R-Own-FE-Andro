@@ -345,29 +345,29 @@
     </RelativeLayout>
 
 
-       <TextView
-           android:id="@+id/applied"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           app:layout_constraintTop_toBottomOf="@id/descriptionView"
-           android:layout_marginTop="30dp"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintEnd_toEndOf="parent"
-           android:layout_marginHorizontal="20dp"
-           android:text="Candidates who have applied"
-           android:textColor="#1F2933"
-           android:fontFamily="@font/montserrat_semibold"
-           android:textFontWeight="700"
-           android:textSize="18dp"
-           />
+<!--       <TextView-->
+<!--           android:id="@+id/applied"-->
+<!--           android:layout_width="match_parent"-->
+<!--           android:layout_height="match_parent"-->
+<!--           app:layout_constraintTop_toBottomOf="@id/descriptionView"-->
+<!--           android:layout_marginTop="30dp"-->
+<!--           app:layout_constraintStart_toStartOf="parent"-->
+<!--           app:layout_constraintEnd_toEndOf="parent"-->
+<!--           android:layout_marginHorizontal="20dp"-->
+<!--           android:text="Candidates who have applied"-->
+<!--           android:textColor="#1F2933"-->
+<!--           android:fontFamily="@font/montserrat_semibold"-->
+<!--           android:textFontWeight="700"-->
+<!--           android:textSize="18dp"-->
+<!--           />-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/applied_candidate_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/applied"
-            android:layout_marginTop="30dp"
-            />
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/applied_candidate_recycler"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/applied"-->
+<!--            android:layout_marginTop="30dp"-->
+<!--            />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
