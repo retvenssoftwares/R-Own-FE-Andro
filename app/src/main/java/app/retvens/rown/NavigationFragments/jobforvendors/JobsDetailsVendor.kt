@@ -10,10 +10,15 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.R
 
 class JobsDetailsVendor : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var jobsDetailsVendorAdapter: JobsDetailsVendorAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jobs_details_vendor)
@@ -66,7 +71,6 @@ class JobsDetailsVendor : AppCompatActivity() {
         val locat = intent.getStringExtra("location")
 
         location.setText("$company.$locat")
-
 
 
 

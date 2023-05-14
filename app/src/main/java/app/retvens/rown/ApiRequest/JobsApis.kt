@@ -54,4 +54,10 @@ interface JobsApis {
         @Path("userId") userId:String,
         @Body push:PushApplicantIdData
     ):Call<UpdateResponse>
+
+
+    @GET("getapplicant/{jId}")
+    fun getApplicant(
+
+    )
 }

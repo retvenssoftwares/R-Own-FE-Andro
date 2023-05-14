@@ -118,13 +118,13 @@ class UsernameFragment : Fragment() {
 
         usernameVerified = view.findViewById(R.id.usernameVerified)
 
-        userNameLayout.setEndIconOnClickListener {
-            if(userName.length() < 4) {
-                Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
-            } else {
-                verifyUserName()
-            }
-        }
+//        userNameLayout.setEndIconOnClickListener {
+//            if(userName.length() < 4) {
+//                Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
+//            } else {
+//                verifyUserName()
+//            }
+//        }
 
         val complete = view.findViewById<CardView>(R.id.card_complete_continue)
 
@@ -143,12 +143,14 @@ class UsernameFragment : Fragment() {
                 firstNameLayout.isErrorEnabled = false
                 dobEtLayout.isErrorEnabled = false
                 Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
-            } else if(!isUsernameVerified!!){
-                lastNameLayout.isErrorEnabled = false
-                firstNameLayout.isErrorEnabled = false
-                dobEtLayout.isErrorEnabled = false
-                usernameVerified.text = "Please verify your username"
-            } else {
+            }
+//            else if(!isUsernameVerified!!){
+//                lastNameLayout.isErrorEnabled = false
+//                firstNameLayout.isErrorEnabled = false
+//                dobEtLayout.isErrorEnabled = false
+//                usernameVerified.text = "Please verify your username"
+//            }
+            else {
                 lastNameLayout.isErrorEnabled = false
                 firstNameLayout.isErrorEnabled = false
                 dobEtLayout.isErrorEnabled = false

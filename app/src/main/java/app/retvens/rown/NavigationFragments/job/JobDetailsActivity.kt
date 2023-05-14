@@ -147,6 +147,7 @@ class JobDetailsActivity : AppCompatActivity() {
         description.text = intent.getStringExtra("description")
         skill.text = intent.getStringExtra("skill")
 
+
         val locat = intent.getStringExtra("location")
         val company = intent.getStringExtra("company")
 
@@ -207,9 +208,11 @@ class JobDetailsActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val push = PushApplicantIdData(user_id,jid)
+        val jobUserID = intent.getStringExtra("userId")
 
-        val send = RetrofitBuilder.jobsApis.pushId(user_id,push)
+        val push = PushApplicantIdData(user_id,jid)
+        Toast.makeText(applicationContext,jobUserID.toString(),Toast.LENGTH_SHORT).show()
+        val send = RetrofitBuilder.jobsApis.pushId(jobUserID.toString(),push)
         send.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
