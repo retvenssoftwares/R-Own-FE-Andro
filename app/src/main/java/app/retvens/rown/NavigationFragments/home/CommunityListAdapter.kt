@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
-import app.retvens.rown.communityDetails.CommunityDetailsActivity
+import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity
 import com.bumptech.glide.Glide
 
 class CommunityListAdapter(val context : Context, val list: ArrayList<Community>) : RecyclerView.Adapter<CommunityListAdapter.CommuListViewHolder>() {

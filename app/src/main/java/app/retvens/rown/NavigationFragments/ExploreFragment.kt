@@ -1,15 +1,31 @@
 package app.retvens.rown.NavigationFragments
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentTransaction
+import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsFragment
+import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobsFragment
+import app.retvens.rown.NavigationFragments.exploreForUsers.ExplorePostsFragment
+import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventFragment
+import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsFragment
+import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesFragment
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheet
 
 class ExploreFragment : Fragment() {
+
+    private lateinit var explorePosts : CardView
+    private lateinit var exploreJobs : CardView
+    private lateinit var exploreBlogs : CardView
+    private lateinit var exploreEvents : CardView
+    private lateinit var exploreHotels : CardView
+    private lateinit var exploreServices : CardView
 
 
     override fun onCreateView(
@@ -20,5 +36,114 @@ class ExploreFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_explore, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        explorePosts = view.findViewById(R.id.explorePosts)
+        exploreJobs = view.findViewById(R.id.exploreJobs)
+        exploreBlogs = view.findViewById(R.id.exploreBlogs)
+        exploreEvents = view.findViewById(R.id.exploreEvents)
+        exploreHotels = view.findViewById(R.id.exploreHotels)
+        exploreServices = view.findViewById(R.id.exploreServices)
+
+        val welcome = view.findViewById<TextView>(R.id.welcome_name)
+        val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
+        val profileName = sharedPreferencesName?.getString("full_name", "").toString()
+        welcome.text = "Welcome, $profileName!"
+
+        val childFragment: Fragment = ExplorePostsFragment()
+        val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+
+        /*-----------------------EXPLORE FOR Posts--------------------------------*/
+        /*-----------------------EXPLORE FOR Posts--------------------------------*/
+        explorePosts.setOnClickListener {
+            explorePosts.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            val childFragment: Fragment = ExplorePostsFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+        }
+
+        /*-----------------------EXPLORE FOR Jobs--------------------------------*/
+        /*-----------------------EXPLORE FOR Jobs--------------------------------*/
+        exploreJobs.setOnClickListener {
+            explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreJobs.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            val childFragment: Fragment = ExploreJobsFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+        }
+
+        /*-----------------------EXPLORE FOR Blogs--------------------------------*/
+        /*-----------------------EXPLORE FOR Blogs--------------------------------*/
+        exploreBlogs.setOnClickListener {
+            explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreBlogs.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            val childFragment: Fragment = ExploreBlogsFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+        }
+
+        /*-----------------------EXPLORE FOR Events--------------------------------*/
+        /*-----------------------EXPLORE FOR Events--------------------------------*/
+        exploreEvents.setOnClickListener {
+            explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreEvents.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            val childFragment: Fragment = ExploreEventFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+        }
+
+        /*-----------------------EXPLORE FOR Hotels--------------------------------*/
+        /*-----------------------EXPLORE FOR Hotels--------------------------------*/
+        exploreHotels.setOnClickListener {
+            explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreHotels.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            val childFragment: Fragment = ExploreHotelsFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+        }
+
+        /*-----------------------EXPLORE FOR Services--------------------------------*/
+        /*-----------------------EXPLORE FOR Services--------------------------------*/
+        exploreServices.setOnClickListener {
+            explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreServices.setCardBackgroundColor(Color.parseColor("#ADD134"))
+
+            val childFragment: Fragment = ExploreServicesFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+        }
+
+    }
 }
