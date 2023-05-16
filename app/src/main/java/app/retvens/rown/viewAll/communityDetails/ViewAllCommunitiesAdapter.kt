@@ -1,4 +1,4 @@
-package app.retvens.rown.communityDetails
+package app.retvens.rown.viewAll.communityDetails
 
 import android.content.Context
 import android.content.Intent
