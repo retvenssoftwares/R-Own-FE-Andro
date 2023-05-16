@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:fillViewport="true"
     android:background="@color/white"
-    tools:context=".communityDetails.CommunityDetailsActivity">
+    tools:context=".viewAll.communityDetails.CommunityDetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
