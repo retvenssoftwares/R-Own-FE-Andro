@@ -118,13 +118,13 @@ class UsernameFragment : Fragment() {
 
         usernameVerified = view.findViewById(R.id.usernameVerified)
 
-//        userNameLayout.setEndIconOnClickListener {
-//            if(userName.length() < 4) {
-//                Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
-//            } else {
-//                verifyUserName()
-//            }
-//        }
+        userNameLayout.setEndIconOnClickListener {
+            if(userName.length() < 4) {
+                Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
+            } else {
+                verifyUserName()
+            }
+        }
 
         val complete = view.findViewById<CardView>(R.id.card_complete_continue)
 
@@ -183,7 +183,7 @@ class UsernameFragment : Fragment() {
     private fun verifyUserName() {
 
         val username = userName.text.toString()
-
+        Toast.makeText(context, user_id, Toast.LENGTH_SHORT).show()
         val verify = RetrofitBuilder.profileCompletion.verifyUsername(user_id!!, VerifyUsername(username))
         verify.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -199,6 +199,8 @@ class UsernameFragment : Fragment() {
                         userNameLayout.setEndIconDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.png_check))
                         usernameVerified.text = "Congratulations! $username username is available"
                     }
+                } else {
+                    usernameVerified.text = "Retry - ${response.code()}"
                 }
             }
 

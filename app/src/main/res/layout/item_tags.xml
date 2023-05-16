@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@drawable/black_border">
+
+    <TextView
+        android:id="@+id/tag_name"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="Beaches"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:singleLine="true"
+        android:textSize="13dp"
+        android:paddingVertical="3dp"
+        android:layout_marginHorizontal="8dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/montserrat_semibold"/>
+
+</LinearLayout>
