@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
 import app.retvens.rown.databinding.UsersPostsCardBinding
-import app.retvens.rown.vendorsDetails.ViewAllVendorsActivity
+import app.retvens.rown.viewAll.vendorsDetails.ViewAllVendorsActivity
+import app.retvens.rown.viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity
 import com.bumptech.glide.Glide
 
 //import com.karan.multipleviewrecyclerview.Banner
@@ -37,13 +38,19 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner : DataItem.Banner){
 
-            for (x in banner.banner.media!!){
-                Glide.with(context).load(x.post).into(binding.postPic)
+//            for (x in banner.banner.media!!){
+//                Glide.with(context).load(x.post).into(binding.postPic)
+//            }
+//
+//            binding.postUserDominican.text = banner.banner.location
+//            binding.recentCommentByUser.text = banner.banner.caption
+
+            binding.postPic.setOnClickListener {
+                context.startActivity(Intent(context, PostsViewActivity::class.java))
             }
-
-            binding.postUserDominican.text = banner.banner.location
-            binding.recentCommentByUser.text = banner.banner.caption
-
+            binding.postCard.setOnClickListener {
+                context.startActivity(Intent(context, PostDetailsActivity::class.java))
+            }
 //            binding.userNamePost.text = banner.profileName
 //
 //            Glide.with(context).load(banner.profile_pic).into(binding.postProfile)
@@ -71,11 +78,11 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             binding.constRecycler.visibility = View.GONE
         }
         fun bindCommunityRecyclerView(recyclerItemList : List<DataItem.CommunityRecyclerData>){
-            val adapter = CommunityChildAdapter(DataItemType.COMMUNITY, recyclerItemList)
+            val adapter = CommunityChildAdapter(context, DataItemType.COMMUNITY, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Check into the most comfortable stays."
             binding.viewAllItem.setOnClickListener {
-                Toast.makeText(context, "Community", Toast.LENGTH_SHORT).show()
+                context.startActivity(Intent(context, ViewAllAvailableCommunitiesActivity::class.java))
             }
         }
         fun bindHotelSectionRecyclerView(recyclerItemList : List<DataItem.HotelSectionRecyclerData>){

@@ -29,9 +29,9 @@ import app.retvens.rown.bottomsheet.BottomSheet
 //import com.karan.multipleviewrecyclerview.Banner
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
-import app.retvens.rown.communityDetails.CommunityDetailsActivity
-import app.retvens.rown.communityDetails.ViewAllCommmunitiesActivity
-import app.retvens.rown.communityDetails.ViewAllCommunitiesAdapter
+import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity
+import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
+import app.retvens.rown.viewAll.communityDetails.ViewAllCommunitiesAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -267,10 +267,10 @@ class HomeFragment : Fragment() {
 
     private fun prepareData() {
         val communityList = ArrayList<DataItem.CommunityRecyclerData>()
-        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12"))
-        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34"))
-        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3"))
-        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_post,"Vendor 4","78"))
+        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12", "Join"))
+        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34", "Request"))
+        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3", "Join"))
+        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_post,"Vendor 4","78", "Request"))
 
         val createCommunityList = ArrayList<DataItem.CreateCommunityRecyclerData>()
         createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12"))
@@ -306,6 +306,7 @@ class HomeFragment : Fragment() {
         mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
         mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
         mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
+        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_post)))
         mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
         mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
     }

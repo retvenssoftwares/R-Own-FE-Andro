@@ -18,8 +18,9 @@ data class DataItem(
     data class RecyclerItem(val image : Int, val title : String)
 
     data class Banner(
-        val banner:Post,
-        val posts:Profile
+//        val banner:Post,
+//        val posts:Profile
+    val image: Int,
     )
 
     data class Post(
@@ -152,7 +153,7 @@ data class DataItem(
     data class BlogsRecyclerData(val BlogsCover : Int, val BlogTitle : String, val Profile : Int)
     data class AwardsRecyclerData(val Cover : Int)
     data class HotelSectionRecyclerData(val Cover : Int, val Title : String)
-    data class CommunityRecyclerData(var image : Int, var title : String, var members : String)
+    data class CommunityRecyclerData(var image : Int, var title : String, var members : String, val join : String)
     data class CreateCommunityRecyclerData(var image : Int, var title : String, var members : String)
 
 //    constructor(viewType: Int, recyclerItemList: List<RecyclerItem>) : this(viewType){

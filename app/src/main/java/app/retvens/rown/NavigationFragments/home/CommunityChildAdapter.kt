@@ -1,13 +1,16 @@
 package app.retvens.rown.NavigationFragments.home
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.databinding.CreateCummunityItemBinding
-
+import app.retvens.rown.viewAll.viewAllCommunities.ClosedCommunityDetailsActivity
+import app.retvens.rown.viewAll.viewAllCommunities.OpenCommunityDetailsActivity
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
-class CommunityChildAdapter(private val viewType: Int,
+class CommunityChildAdapter(private val context: Context, private val viewType: Int,
                             private val communityRecyclerData : List<DataItem.CommunityRecyclerData>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -17,6 +20,15 @@ class CommunityChildAdapter(private val viewType: Int,
             binding.cImg.setImageResource(recyclerItem.image)
             binding.title.text = recyclerItem.title
             binding.members.text = recyclerItem.members
+            binding.joinG.text = recyclerItem.join
+
+            binding.joinG.setOnClickListener {
+                if (recyclerItem.join == "Join"){
+                    context.startActivity(Intent(context, OpenCommunityDetailsActivity::class.java))
+                } else {
+                    context.startActivity(Intent(context, ClosedCommunityDetailsActivity::class.java))
+                }
+            }
         }
     }
 

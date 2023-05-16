@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.databinding.VendorsCardHomeBinding
-import app.retvens.rown.vendorsDetails.VendorDetailsActivity
+import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
