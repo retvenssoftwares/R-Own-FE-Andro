@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="@color/white"
-    tools:context=".vendorsDetails.ViewAllVendorsActivity">
+    tools:context=".viewAll.vendorsDetails.ViewAllVendorsActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/relative"
@@ -40,251 +45,70 @@
 
     </RelativeLayout>
 
+        <TextView
+            android:id="@+id/text_head"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Let’s find you a Best-In-Class service"
+            android:textColor="#000000"
+            android:textFontWeight="700"
+            android:textSize="24dp"
+            android:layout_margin="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relative"/>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="6dp"
-        android:layout_marginHorizontal="20dp"
+        android:layout_margin="20dp"
         app:cardBackgroundColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/relative"
+        app:layout_constraintTop_toBottomOf="@id/text_head"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        <EditText
-            android:id="@+id/search_country"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Search for country"
-            android:textColorHint="@color/grey_40"
-            android:textColor="@color/black"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:background="@null"
-            android:padding="12dp"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:drawableEnd="@drawable/svg_search"/>
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/search_vendor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Travel, Luxury Stay, Food..."
+                android:textColorHint="@color/grey_40"
+                android:textColor="@color/black"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:background="@null"
+                android:padding="12dp"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/svg_search"
+                android:drawableTint="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/filter_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:id="@+id/filter_search"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/svg_filter_in_search"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.cardview.widget.CardView>
-
-    <HorizontalScrollView
-        android:id="@+id/ll_for_n"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/card_search"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="16dp"
-            android:layout_marginHorizontal="6dp">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="8dp"
-                android:layout_margin="6dp"
-                app:cardBackgroundColor="@color/green_own">
-
-                <TextView
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:textSize="12dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textAlignment="center"
-                    android:paddingVertical="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@color/white"
-                    android:text="Graphic Design"/>
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="8dp"
-                android:layout_margin="6dp"
-                app:cardBackgroundColor="@color/green_own">
-
-                <TextView
-                    android:id="@+id/community_notification"
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:textSize="12dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textAlignment="center"
-                    android:paddingVertical="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@color/white"
-                    android:text="Fashion Design"/>
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="8dp"
-                android:layout_margin="6dp"
-                app:cardBackgroundColor="@color/green_own">
-
-                <TextView
-                    android:id="@+id/connection_notification"
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:textSize="12dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textAlignment="center"
-                    android:paddingVertical="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@color/white"
-                    android:text="Photography"/>
-
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
-
-    <HorizontalScrollView
-        android:id="@+id/ll_for_sort"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ll_for_n"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginVertical="16dp"
-            android:layout_marginHorizontal="6dp">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="8dp"
-                android:layout_margin="6dp"
-                app:cardBackgroundColor="@color/green_own">
-
-                <TextView
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:textSize="12dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textAlignment="center"
-                    android:paddingVertical="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@color/white"
-                    android:text="Sort"/>
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="8dp"
-                android:layout_margin="6dp"
-                app:cardBackgroundColor="@color/green_own">
-
-                <TextView
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:textSize="12dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textAlignment="center"
-                    android:paddingVertical="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@color/white"
-                    android:text="Rating"/>
-
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="8dp"
-                android:layout_margin="6dp"
-                app:cardBackgroundColor="@color/green_own">
-
-                <TextView
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:textSize="12dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textAlignment="center"
-                    android:paddingVertical="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@color/white"
-                    android:text="Clients"/>
-
-            </androidx.cardview.widget.CardView>
-           <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="8dp"
-                android:layout_margin="6dp"
-                app:cardBackgroundColor="@color/green_own">
-
-                <TextView
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:textSize="12dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textAlignment="center"
-                    android:paddingVertical="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@color/white"
-                    android:text="Pricing"/>
-
-            </androidx.cardview.widget.CardView>
-          <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="8dp"
-                android:layout_margin="6dp"
-                app:cardBackgroundColor="@color/green_own">
-
-                <TextView
-                    android:singleLine="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:textSize="12dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textAlignment="center"
-                    android:paddingVertical="4dp"
-                    android:paddingHorizontal="8dp"
-                    android:background="@color/white"
-                    android:text="Verified"/>
-
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
 
 
     <View
@@ -302,13 +126,12 @@
         android:id="@+id/text_h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:fontFamily="@font/montserrat_regular"
         android:text="Suggested Vendors"
         android:textColor="#000000"
         android:textSize="18dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_for_sort"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@id/card_search"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -324,11 +147,18 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/viewAllVendorsRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        app:layout_goneMarginTop="8dp"
+        tools:listitem="@layout/vendors_card_home"
         app:layout_constraintTop_toBottomOf="@id/text_h"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
