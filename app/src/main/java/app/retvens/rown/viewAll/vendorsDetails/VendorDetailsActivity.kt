@@ -1,4 +1,4 @@
-package app.retvens.rown.vendorsDetails
+package app.retvens.rown.viewAll.vendorsDetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
