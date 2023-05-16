@@ -21,8 +21,13 @@
 
     <style name="SquareCornerImage">
         <item name="cornerSize">5%</item>
+    </style>
 
-    </style> <style name="SquareCornerImageForCards">
+    <style name="SquareCornerImageM">
+        <item name="cornerSize">10%</item>
+    </style>
+
+    <style name="SquareCornerImageForCards">
         <item name="cornerSize">15%</item>
     </style>
 
