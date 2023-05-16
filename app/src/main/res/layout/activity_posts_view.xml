@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".NavigationFragments.home.PostsViewActivity">
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/createCommunity_backBtn"
+            android:layout_width="45dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@color/black"
+            app:tint = "@color/white"
+            android:src="@drawable/community_btn" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/post_pic"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="83dp"
+        android:layout_marginHorizontal="15dp"
+        android:src="@drawable/png_post"
+        app:shapeAppearanceOverlay="@style/SquareCornerImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Every stay gives you a reason to smile :)Every stay gives you a reason to smile :)Every stay gives you a reason to smile :)"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintTop_toBottomOf="@id/post_pic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ll"/>
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:weightSum="7"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/transparent_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/like_post"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_weight="1"
+            android:src="@drawable/svg_like_post"/>
+        <ImageView
+            android:id="@+id/comment"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_weight="1"
+            android:src="@drawable/svg_post_comment"/>
+        <ImageView
+            android:id="@+id/share_post"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_weight="1"
+            android:src="@drawable/svg_share_post"/>
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_weight="1"
+            android:src="@drawable/svg_save_post"/>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
