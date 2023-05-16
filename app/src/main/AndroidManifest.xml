@@ -44,13 +44,49 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.home.PostsViewActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".NavigationFragments.home.PostDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"/>
+        <activity
+            android:name=".viewAll.viewAllCommunities.OpenCommunityDetailsActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".viewAll.viewAllCommunities.ClosedCommunityDetailsActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.exploreForUsers.blogs.BlogsDetailsActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".NavigationFragments.exploreForUsers.events.EventDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.exploreForUsers.hotels.HotelReviewsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
             android:name=".NavigationFragments.eventsForHoteliers.EvenDetailsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.eventsForHoteliers.CreateEventActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash"  />
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".sideNavigation.ChatWithUsActivity"
             android:exported="false"
@@ -86,15 +122,15 @@
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
-            android:name=".vendorsDetails.ViewAllVendorsActivity"
+            android:name=".viewAll.vendorsDetails.ViewAllVendorsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
-            android:name=".vendorsDetails.VendorDetailsActivity"
+            android:name=".viewAll.vendorsDetails.VendorDetailsActivity"
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
-            android:name=".communityDetails.ViewAllCommmunitiesActivity"
+            android:name=".viewAll.communityDetails.ViewAllCommmunitiesActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
@@ -106,11 +142,11 @@
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
-            android:name=".communityDetails.CommunityEditActivity"
+            android:name=".viewAll.communityDetails.CommunityEditActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
-            android:name=".communityDetails.CommunityDetailsActivity"
+            android:name=".viewAll.communityDetails.CommunityDetailsActivity"
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
