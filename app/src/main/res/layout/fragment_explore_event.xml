@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".NavigationFragments.exploreForUsers.events.ExploreEventFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_se"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="6dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <EditText
+            android:id="@+id/search_explore_events"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search for Events"
+            android:textColorHint="@color/grey_40"
+            android:textColor="@color/black"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:background="@null"
+            android:padding="12dp"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:drawableEnd="@drawable/svg_search"/>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_se"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <include layout="@layout/item_tags"/>
+        <include layout="@layout/item_tags"/>
+        <include layout="@layout/item_tags"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/explore_events_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="2"
+        tools:listitem="@layout/item_explore_blogs_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
