@@ -195,7 +195,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Salary"
+        android:text="Expacted Salary"
         android:textSize="14dp"
         android:textFontWeight="600"
         android:fontFamily="@font/montserrat_semibold"
@@ -206,73 +206,27 @@
 </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/expacted_salary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingVertical="10dp"
         android:paddingHorizontal="20dp">
 
-        <EditText
-            android:id="@+id/min_sal"
+        <TextView
+            android:id="@+id/expacted_salary_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="800"
+            android:text="Select One"
             android:textSize="15dp"
-            android:textAlignment="center"
             android:textFontWeight="600"
             android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
             android:textColor="@color/black"
-            android:textColorHint="@color/grey_40"
-            android:drawableStart="@drawable/doller_24"
+            android:drawableEnd="@drawable/ic_arrow_down_24"
             android:layout_marginHorizontal="12dp"
-            app:layout_constraintEnd_toStartOf="@id/max_sal"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Min. Salary"
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/grey_60"
-            app:layout_constraintTop_toBottomOf="@id/min_sal"
-            app:layout_constraintStart_toStartOf="@id/min_sal"
-            app:layout_constraintEnd_toEndOf="@id/min_sal"/>
-
-        <EditText
-            android:id="@+id/max_sal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="3500"
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:textAlignment="center"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/black"
-            android:textColorHint="@color/grey_40"
-            android:drawableStart="@drawable/doller_24"
-            android:layout_marginHorizontal="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/min_sal"
-            app:layout_constraintStart_toEndOf="@id/min_sal"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Max. Salary"
-            android:textSize="15dp"
-            android:textFontWeight="600"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/grey_60"
-            app:layout_constraintTop_toBottomOf="@id/max_sal"
-            app:layout_constraintStart_toStartOf="@id/max_sal"
-            app:layout_constraintEnd_toEndOf="@id/max_sal"/>
-
+            app:layout_constraintStart_toStartOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
