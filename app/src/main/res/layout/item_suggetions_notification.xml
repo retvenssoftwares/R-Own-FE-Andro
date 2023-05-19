@@ -56,11 +56,10 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/ca_connect"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             app:cardCornerRadius="6dp"
             app:cardElevation="8dp"
-            android:layout_weight="1"
             app:cardBackgroundColor="@color/green_own"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
@@ -77,7 +76,6 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:textAlignment="center"
                 android:paddingVertical="6dp"
-                android:paddingHorizontal="25dp"
                 android:background="@color/green_own"
                 android:text="CONNECT"/>
 
@@ -85,11 +83,10 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/ca_view_profile"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             app:cardCornerRadius="6dp"
             app:cardElevation="8dp"
-            android:layout_weight="1"
             app:cardBackgroundColor="@color/white"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
@@ -106,7 +103,6 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:textAlignment="center"
                 android:paddingVertical="6dp"
-                android:paddingHorizontal="12dp"
                 android:background="@color/black"
                 android:text="VIEW PROFILE"/>
 
