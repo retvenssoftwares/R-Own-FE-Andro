@@ -17,6 +17,7 @@ import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.events.EventsProfileFragment
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsFragmentProfile
+import app.retvens.rown.NavigationFragments.profile.jobs.JobsOnProfileFragment
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
 import app.retvens.rown.NavigationFragments.profile.setting.profileSetting.OwnerSettingActivity
@@ -40,6 +41,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
     lateinit var name : TextView
 
     lateinit var polls : TextView
+    lateinit var jobs : TextView
     lateinit var media : TextView
     lateinit var status : TextView
     lateinit var hotels : TextView
@@ -60,6 +62,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
         name = view.findViewById(R.id.profile_name)
 
         polls = view.findViewById(R.id.polls)
+        jobs = view.findViewById(R.id.jobs)
         media = view.findViewById(R.id.media)
         status = view.findViewById(R.id.status)
         hotels = view.findViewById(R.id.hotels)
@@ -74,7 +77,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
         Glide.with(requireContext()).load(profilePic).into(profile)
         name.text = profileName
 
-        val childFragment: Fragment = MediaFragment()
+        val childFragment: Fragment = JobsOnProfileFragment()
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -86,6 +89,18 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             startActivity(Intent(context, ViewConnectionsActivity::class.java))
         }
 
+        jobs.setOnClickListener {
+            jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+            media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            hotels.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+
+            val childFragment: Fragment = JobsOnProfileFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+        }
         media.setOnClickListener {
             media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
