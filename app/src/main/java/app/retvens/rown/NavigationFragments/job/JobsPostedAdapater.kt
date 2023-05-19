@@ -50,6 +50,7 @@ class JobsPostedAdapater(val context: Context, val jobList:List<JobsData>):Recyc
 
         holder.button.setOnClickListener {
            val intent = Intent(context,JobsDetailsVendor::class.java)
+            intent.putExtra("jid",jobs.jid)
             intent.putExtra("title",jobs.jobTitle)
             intent.putExtra("company",jobs.companyName)
             intent.putExtra("location",jobs.jobLocation)

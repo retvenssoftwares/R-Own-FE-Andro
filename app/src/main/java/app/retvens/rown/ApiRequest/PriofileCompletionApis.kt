@@ -1,5 +1,6 @@
 package app.retvens.rown.ApiRequest
 
+import androidx.room.SkipQueryVerification
 import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.DataCollections.location.CityData
 import app.retvens.rown.DataCollections.location.CountryData
@@ -11,23 +12,34 @@ import retrofit2.http.*
 
 interface PriofileCompletionApis{
 
+    @Multipart
     @PATCH("/update/{user_id}")
     fun setUsername(
         @Path("user_id") user_id : String,
-        @Body userName: UpdateUserName
+        @Part("Full_name")Full_name:RequestBody,
+        @Part("DOB")DOB:RequestBody,
+        @Part("User_id")User_id:RequestBody
     ):Call<UpdateResponse>
 
+    @Multipart
     @PATCH("/update/{user_id}")
     fun setLocation(
         @Path("user_id") user_id : String,
-        @Body location: LocationClass
+        @Part("location")location:String
     ):Call<UpdateResponse>
 
+    @Multipart
     @PATCH("/update/{user_id}")
     fun verifyUsername(
-        @Path("user_id") user_id : String,
-        @Body verifyUsername: VerifyUsername
+        @Path("user_id")user_id:String,
+        @Part("User_name")User_name:RequestBody
     ):Call<UpdateResponse>
+
+//    @PATCH("/update/{user_id}")
+//    fun verifyUsername(
+//        @Path("user_id") user_id : String,
+//        @Body verifyUsername: VerifyUsername
+//    ):Call<UpdateResponse>
 
     @PATCH("/update/{user_id}")
     fun setJobRole(

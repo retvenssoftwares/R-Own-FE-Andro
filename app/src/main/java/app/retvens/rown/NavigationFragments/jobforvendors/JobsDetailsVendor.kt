@@ -8,16 +8,23 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.JobsCollection.ApplicantDataClass
 import app.retvens.rown.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class JobsDetailsVendor : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var jobsDetailsVendorAdapter: JobsDetailsVendorAdapter
+    private lateinit var appliedCandidateAdapter: AppliedCandidateAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +77,43 @@ class JobsDetailsVendor : AppCompatActivity() {
         val company = intent.getStringExtra("company")
         val locat = intent.getStringExtra("location")
 
+        val jid = intent.getStringExtra("jid")
+
         location.setText("$company.$locat")
 
 
+        recyclerView = findViewById(R.id.applied_candidate_recycler)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
 
+        getApplicant(jid)
+
+
+    }
+
+    private fun getApplicant(jid: String?) {
+
+        val getApplicant = RetrofitBuilder.jobsApis.getApplicant(jid!!)
+
+        getApplicant.enqueue(object : Callback<List<ApplicantDataClass>?> {
+            override fun onResponse(
+                call: Call<List<ApplicantDataClass>?>,
+                response: Response<List<ApplicantDataClass>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    appliedCandidateAdapter = AppliedCandidateAdapter(applicationContext,response)
+                    recyclerView.adapter = appliedCandidateAdapter
+                    appliedCandidateAdapter.notifyDataSetChanged()
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<ApplicantDataClass>?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

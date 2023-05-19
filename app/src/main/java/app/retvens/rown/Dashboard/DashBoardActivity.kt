@@ -71,6 +71,7 @@ class DashBoardActivity : AppCompatActivity() {
         var progress = ""
     }
 
+
     lateinit var binding: ActivityDashBoardBinding
 
     private lateinit var drawerLayout:DrawerLayout

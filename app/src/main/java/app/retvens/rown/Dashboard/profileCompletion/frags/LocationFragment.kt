@@ -34,6 +34,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -127,7 +129,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
-        val update = RetrofitBuilder.profileCompletion.setLocation(user_id, LocationClass(location))
+        val update = RetrofitBuilder.profileCompletion.setLocation(user_id,location)
 
         update.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
