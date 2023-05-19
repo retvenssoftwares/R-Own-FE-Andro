@@ -1,22 +1,32 @@
 package app.retvens.rown.NavigationFragments.home
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.BlogsDetailsActivity
 import app.retvens.rown.databinding.PopularBlogsCardHomeBinding
+import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
-class BlogsChildAdapter(private val viewType: Int,
-                        private val blogsRecyclerData : List<DataItem.BlogsRecyclerData>,
+class BlogsChildAdapter(
+    private val context: Context,
+    private val viewType: Int,
+    private val blogsRecyclerData: List<DataItem.BlogsRecyclerData>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class BlogsViewHolder(private val binding : PopularBlogsCardHomeBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class BlogsViewHolder( private val binding : PopularBlogsCardHomeBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBlogsView(recyclerItem: DataItem.BlogsRecyclerData){
             binding.blogCover.setImageResource(recyclerItem.BlogsCover)
             binding.bloggerProfile.setImageResource(recyclerItem.Profile)
             binding.blogTitle.text = recyclerItem.BlogTitle
+
+            binding.blogCover.setOnClickListener {
+                context.startActivity(Intent(context, BlogsDetailsActivity::class.java))
+            }
         }
     }
 

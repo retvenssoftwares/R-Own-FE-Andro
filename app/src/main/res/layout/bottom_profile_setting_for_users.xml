@@ -7,43 +7,14 @@
     android:paddingBottom="20dp"
     android:background="@drawable/top_round">
 
-    <LinearLayout
-        android:id="@+id/reviews"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="40dp">
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/ic_star_black_18dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reviews"
-            android:layout_marginStart="9dp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textSize="14dp"
-            android:textColor="@color/black"/>
-
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_40" />
-    <LinearLayout
+      <LinearLayout
         android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="20dp"
+          android:layout_marginHorizontal="20dp"
+          android:layout_marginBottom="20dp"
+          android:layout_marginTop="40dp"
         android:gravity="center_vertical">
 
         <ImageView
@@ -62,41 +33,41 @@
             android:textSize="14dp"
             android:textColor="@color/black"/>
 
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_40" />
+</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_40" />
 
-    <LinearLayout
-        android:id="@+id/edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="20dp"
-        android:gravity="center_vertical">
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/svg_edit_pen"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/edit"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edit Profile"
-            android:layout_marginStart="13dp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textSize="14dp"
-            android:textColor="@color/black"/>
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:gravity="center_vertical">
 
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_40" />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/svg_edit_pen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile"
+                android:layout_marginStart="13dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="14dp"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_40" />
 
     <LinearLayout
         android:id="@+id/saved"
@@ -122,7 +93,7 @@
             android:textSize="14dp"
             android:textColor="@color/black"/>
 
-    </LinearLayout>
+        </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -153,11 +124,10 @@
             android:textSize="14dp"
             android:textColor="@color/black"/>
 
-    </LinearLayout>
+</LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey_40" />
-
 
 </LinearLayout>

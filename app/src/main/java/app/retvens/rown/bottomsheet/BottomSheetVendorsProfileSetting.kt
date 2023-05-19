@@ -11,17 +11,17 @@ import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class BottomSheetProfileSetting : BottomSheetDialogFragment() {
+class BottomSheetVendorsProfileSetting : BottomSheetDialogFragment() {
 
-    var mListener: OnBottomSheetProfileSettingClickListener ? = null
-    fun setOnBottomSheetProfileSettingClickListener(listener: OnBottomSheetProfileSettingClickListener?){
+    var mListener: OnBottomSheetVendorsProfileSettingClickListener ? = null
+    fun setOnBottomSheetProfileSettingClickListener(listener: OnBottomSheetVendorsProfileSettingClickListener?){
         mListener = listener
     }
-    fun newInstance(): BottomSheetProfileSetting? {
-        return BottomSheetProfileSetting()
+    fun newInstance(): BottomSheetVendorsProfileSetting? {
+        return BottomSheetVendorsProfileSetting()
     }
-    interface OnBottomSheetProfileSettingClickListener{
-        fun bottomSheetProfileSettingClick(bottomSheetProfileSettingFrBo : String)
+    interface OnBottomSheetVendorsProfileSettingClickListener{
+        fun bottomSheetVendorsProfileSettingClick(bottomSheetProfileSettingFrBo : String)
     }
 
     companion object {
@@ -35,36 +35,36 @@ class BottomSheetProfileSetting : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.bottom_profile_setting_for_users, container, false)
+        return inflater.inflate(R.layout.bottom_profile_setting, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val profile= view.findViewById<LinearLayout>(R.id.profile)
-//        profile.setOnClickListener {
-//            mListener?.bottomSheetProfileSettingClick("profile")
-//            dismiss()
-//        }
+        val reviews= view.findViewById<LinearLayout>(R.id.reviews)
+        reviews.setOnClickListener {
+            mListener?.bottomSheetVendorsProfileSettingClick("reviews")
+            dismiss()
+        }
 
         val settings= view.findViewById<LinearLayout>(R.id.settings)
         settings.setOnClickListener {
-            mListener?.bottomSheetProfileSettingClick("settings")
+            mListener?.bottomSheetVendorsProfileSettingClick("settings")
             dismiss()
         }
         val edit= view.findViewById<LinearLayout>(R.id.edit)
         edit.setOnClickListener {
-            mListener?.bottomSheetProfileSettingClick("edit")
+            mListener?.bottomSheetVendorsProfileSettingClick("edit")
             dismiss()
         }
         val saved= view.findViewById<LinearLayout>(R.id.saved)
         saved.setOnClickListener {
-            mListener?.bottomSheetProfileSettingClick("saved")
+            mListener?.bottomSheetVendorsProfileSettingClick("saved")
             dismiss()
         }
         val discover= view.findViewById<LinearLayout>(R.id.discover)
         discover.setOnClickListener {
-            mListener?.bottomSheetProfileSettingClick("discover")
+            mListener?.bottomSheetVendorsProfileSettingClick("discover")
             dismiss()
         }
     }
