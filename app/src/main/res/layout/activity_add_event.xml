@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".NavigationFragments.eventsForHoteliers.AddEventActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relative_n"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Create an Event"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:textFontWeight="700"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="32dp"
+            android:textSize="18dp"
+            app:layout_constraintStart_toEndOf="@id/faq_backBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageButton
+            android:id="@+id/faq_backBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            android:src="@drawable/community_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/lEvent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative_n">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Please enter the details about your venue"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:layout_marginTop="60dp"
+            android:fontFamily="@font/montserrat_bold"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Where is your venue ?"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:textFontWeight="600"
+            android:layout_marginTop="60dp"
+            android:layout_marginHorizontal="32dp"
+            android:textSize="20dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/user_location_post_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Location"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/black"
+            app:endIconDrawable="@drawable/png_location"
+            app:endIconMode="custom"
+            app:endIconTint="@color/black"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_location_event"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:clickable="true"
+                android:focusable="false"
+                android:text="Select Venue Location"
+                android:editable="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Enter the name of your venue"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:textFontWeight="600"
+            android:layout_marginTop="40dp"
+            android:layout_marginHorizontal="12dp"
+            android:textSize="20dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_post_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Venue"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginTop="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_event_venue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/next_Event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="6dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintTop_toBottomOf="@id/lEvent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="17dp"
+            android:textAlignment="center"
+            android:text="Next"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="18dp"
+            android:background="@color/green_own"
+            android:textColor="@color/black"/>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
