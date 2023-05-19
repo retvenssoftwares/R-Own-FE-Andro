@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".NavigationFragments.profile.settingForViewers.ReportProfileActivity">
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Report"
+            android:textColor="#000000"
+            android:textFontWeight="700"
+            android:textSize="18dp" />
+
+        <ImageButton
+            android:id="@+id/community_backBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            android:src="@drawable/community_btn" />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative">
+
+        <TextView
+            android:id="@+id/profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="What do you want to report ?"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="600"
+            android:textSize="20dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="26dp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/bio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="It's important to know that your report is anonymous, except for cases of intellectual property infringement. If you are reporting such an infringement, we may need to share your identity with the relevant parties. Also, if someone is in immediate danger, call the local emergency services"
+            android:fontFamily="@font/montserrat_regular"
+            android:textSize="13dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="12dp"
+            android:textFontWeight="600"
+            android:textColor="@color/grey_40"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_20"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="30dp"/>
+
+            <TextView
+                android:id="@+id/specificPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="A Specific Post"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="16dp"
+                android:layout_marginTop="12dp"
+                android:paddingVertical="12dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_gravity="center"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/bio"
+                app:layout_constraintStart_toStartOf="@id/profile"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
+
+            <TextView
+                android:id="@+id/wrongWith"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Something is wrong with profile"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="16dp"
+                android:layout_marginTop="12dp"
+                android:paddingVertical="12dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_gravity="center"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/bio"
+                app:layout_constraintStart_toStartOf="@id/profile"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
