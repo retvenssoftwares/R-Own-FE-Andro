@@ -14,7 +14,7 @@ class CreateEventActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.nextEventCreate.setOnClickListener {
-            startActivity(Intent(applicationContext, EvenDetailsActivity::class.java))
+            startActivity(Intent(applicationContext, AddEventDeatailsActivity::class.java))
         }
 
     }
