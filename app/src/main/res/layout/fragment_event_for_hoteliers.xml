@@ -7,144 +7,259 @@
     android:background="@color/white"
     tools:context=".NavigationFragments.EventFragmentForHoteliers">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/relative_n"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="Create an Event"
-            android:textColor="#000000"
-            android:textAlignment="center"
-            android:textFontWeight="700"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="32dp"
-            android:textSize="18dp"
-            app:layout_constraintStart_toEndOf="@id/faq_backBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageButton
-            android:id="@+id/faq_backBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="10dp"
-            android:background="@color/white"
-            android:src="@drawable/community_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <LinearLayout
-        android:id="@+id/lEvent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relative_n">
-
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Please enter the details about your venue"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            android:layout_marginTop="100dp"
-            android:fontFamily="@font/montserrat_bold"/>
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/user_location_post_event"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Location"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/black"
-            app:endIconDrawable="@drawable/png_location"
-            app:endIconMode="custom"
-            app:endIconTint="@color/black"
-            android:layout_marginTop="30dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_location_event"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/welcome_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Welcome, Prashant!"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:clickable="true"
-                android:focusable="false"
-                android:text="Select Your Location"
-                android:editable="false"/>
+                android:layout_marginStart="12dp"
+                android:textSize="16dp"
+                app:layout_constraintVertical_bias="0.04"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/card_location"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="6dp"
+                android:layout_marginHorizontal="20dp"
+                app:cardBackgroundColor="@color/black"
+                app:layout_constraintTop_toTopOf="@id/welcome_name"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_post_event"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="What event are you going to ?"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/black"
-            android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Location"
+                    android:textSize="12dp"
+                    android:textColor="@color/white"
+                    android:background="@color/black"
+                    android:drawableStart="@drawable/svg_navigation_location"
+                    android:drawablePadding="6dp"
+                    android:paddingHorizontal="5dp"
+                    android:layout_marginVertical="5dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/montserrat_bold"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_event_venue"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/montserrat_regular"
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/find_txt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Let’s discover an event."
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/montserrat_semibold"
                 android:textColor="@color/black"
-                android:clickable="true"
-                android:focusable="false"
-                android:text="Select event"
-                android:editable="false"/>
+                android:textSize="26dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/welcome_name"
+                app:layout_constraintTop_toBottomOf="@id/welcome_name" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="50dp"
+                app:cardBackgroundColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/find_txt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/search_community"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Art exhibition, concerts, Open mics..."
+                        android:textColorHint="@color/grey_40"
+                        android:textColor="@color/black"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:background="@null"
+                        android:padding="12dp"
+                        android:paddingEnd="12dp"
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:drawablePadding="8dp"
+                        android:drawableStart="@drawable/svg_search"
+                        android:drawableTint="@color/black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="22dp"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/card_search"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <include layout="@layout/item_tags"/>
+                <include layout="@layout/item_tags"/>
+                <include layout="@layout/item_tags"/>
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/ll"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/recycler_heading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Nearest Concert"
+                    android:textAlignment="textStart"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintEnd_toStartOf="@id/viewAllItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/viewAllItem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="See All"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/blogsRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="260dp"
+                tools:listitem="@layout/item_explore_events_card"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/constRecycler" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/blogsRecyclerView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:textAlignment="textStart"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintEnd_toStartOf="@id/viewAllCategory"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/viewAllCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="See All"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/black"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoryRecyclerView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                tools:listitem="@layout/item_personal_notification"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cal" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/next_Event"
+        android:id="@+id/addEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="6dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="12dp"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="40dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintVertical_bias="0.9"
-        app:layout_constraintTop_toBottomOf="@id/lEvent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add \nEvent"
+            android:textSize="12dp"
+            android:textColor="@color/white"
+            android:background="@color/black"
+            android:padding="15dp"
             android:textAlignment="center"
-            android:text="Next"
-            android:fontFamily="@font/montserrat_bold"
-            android:textSize="18dp"
-            android:background="@color/green_own"
-            android:textColor="@color/black"/>
+            android:fontFamily="@font/montserrat_bold"/>
+
 
     </androidx.cardview.widget.CardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
