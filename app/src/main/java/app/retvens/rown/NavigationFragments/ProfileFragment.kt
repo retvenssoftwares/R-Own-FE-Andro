@@ -7,19 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import app.retvens.rown.Dashboard.createPosts.CreatCheackInPostActivity
-import app.retvens.rown.Dashboard.createPosts.CreateEventPostActivity
-import app.retvens.rown.Dashboard.createPosts.CreatePollActivity
-import app.retvens.rown.Dashboard.createPosts.CreatePostActivity
+import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.NavigationFragments.profile.EditProfileActivity
-import app.retvens.rown.NavigationFragments.profile.ViewRequestsActivity
+import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
+import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
+import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
+import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
+import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
+import app.retvens.rown.NavigationFragments.profile.viewRequests.ViewRequestsActivity
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -32,10 +33,8 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
     lateinit var polls : TextView
     lateinit var media : TextView
+    lateinit var status : TextView
 
-    lateinit var layoutPoll : LinearLayout
-
-    var isPoll = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,13 +46,12 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        layoutPoll = view.findViewById(R.id.layout_poll)
-
         profile = view.findViewById(R.id.profile)
         name = view.findViewById(R.id.profile_name)
 
         polls = view.findViewById(R.id.polls)
         media = view.findViewById(R.id.media)
+        status = view.findViewById(R.id.status)
 
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
@@ -64,19 +62,44 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         Glide.with(requireContext()).load(profilePic).into(profile)
         name.text = profileName
 
+        val childFragment: Fragment = MediaFragment()
+        val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+
         view.findViewById<TextView>(R.id.requests_count).setOnClickListener {
             startActivity(Intent(context, ViewRequestsActivity::class.java))
         }
 
+        view.findViewById<TextView>(R.id.connections_count).setOnClickListener {
+            startActivity(Intent(context, ViewConnectionsActivity::class.java))
+        }
+
         polls.setOnClickListener {
-            layoutPoll.visibility = View.VISIBLE
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+
+            val childFragment: Fragment = PollsFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
         media.setOnClickListener {
-            layoutPoll.visibility = View.GONE
             media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+
+            val childFragment: Fragment = MediaFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+        }
+        status.setOnClickListener {
+            media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+            val childFragment: Fragment = StatusFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
 
         setting = view.findViewById(R.id.profile_setting)
@@ -102,7 +125,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
             }
             "discover" -> {
-
+                startActivity(Intent(context, DiscoverPeopleActivity::class.java))
             }
         }
     }

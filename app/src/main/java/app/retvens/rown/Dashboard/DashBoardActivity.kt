@@ -182,12 +182,14 @@ class DashBoardActivity : AppCompatActivity() {
                     replaceFragment(JobFragment())
                 }
                 R.id.explore -> replaceFragment(ExploreFragment())
-                R.id.events -> if (hotelOwner || hotelVendor || hotelOwnerChain){
-                    replaceFragment(EventFragmentForHoteliers())
-                }else{
-                    replaceFragment(EventFragment())
-                }
-                R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.events -> replaceFragment(EventFragmentForHoteliers())
+//                    if (hotelOwner || hotelVendor || hotelOwnerChain){
+//                    replaceFragment(EventFragmentForHoteliers())
+//                }else{
+//                    replaceFragment(EventFragment())
+//                }
+//                R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.profile -> replaceFragment(ProfileFragmentForHotelOwner())
                 else -> null
             }
             true
@@ -282,10 +284,12 @@ class DashBoardActivity : AppCompatActivity() {
                 response: Response<UserProfileRequestItem?>
             ) {
                 if (response.isSuccessful){
-                    val response = response.body()!!
-                    phone.text = response.Phone
-                    saveFullName(applicationContext, "${response.Full_name}")
-                    saveProfileImage(applicationContext, "${response.Profile_pic}")
+                    if (response.body() != null) {
+                        val response = response.body()!!
+                        phone.text = response.Phone
+                        saveFullName(applicationContext, "${response.Full_name}")
+                        saveProfileImage(applicationContext, "${response.Profile_pic}")
+                    }
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }

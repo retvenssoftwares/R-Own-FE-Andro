@@ -1,9 +1,11 @@
 package app.retvens.rown.NavigationFragments.home
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.databinding.HotelSectionItemBinding
+import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 

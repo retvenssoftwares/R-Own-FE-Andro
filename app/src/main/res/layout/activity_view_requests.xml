@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".NavigationFragments.profile.ViewRequestsActivity">
+    tools:context=".NavigationFragments.profile.viewRequests.ViewRequestsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relative"
@@ -31,7 +31,7 @@
             android:id="@+id/profile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Connections"
+            android:text="My Request"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="18dp"
             android:layout_marginStart="8dp"
@@ -54,18 +54,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/relative"/>
 
-    <LinearLayout
-        android:id="@+id/layout_connection"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/requestsRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/relative"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <include layout = "@layout/item_suggetions_notification"/>
-        <include layout = "@layout/item_suggetions_notification"/>
-        <include layout = "@layout/item_suggetions_notification"/>
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

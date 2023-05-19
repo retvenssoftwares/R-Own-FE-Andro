@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".NavigationFragments.profile.polls.VotersActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relative_n"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Voters"
+            android:textColor="#000000"
+            android:textFontWeight="700"
+            android:textSize="18dp"
+            app:layout_constraintHorizontal_bias="0.42"
+            app:layout_constraintStart_toEndOf="@id/vote_backBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/vote_backBtn"
+            app:layout_constraintTop_toTopOf="@id/vote_backBtn"/>
+
+        <ImageButton
+            android:id="@+id/vote_backBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            android:src="@drawable/community_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+   <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative_n"
+        android:background="@color/grey_20" />
+
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="60dp"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="@id/text_h"
+        app:layout_constraintBottom_toBottomOf="@id/text_h"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+        android:id="@+id/text_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Hostels 13 Votes"
+        android:textColor="#000000"
+        android:textSize="14dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/view1"
+        app:layout_constraintTop_toBottomOf="@id/relative_n"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="@id/text_h"
+        app:layout_constraintBottom_toBottomOf="@id/text_h"
+        app:layout_constraintStart_toEndOf="@id/text_h"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hotelVotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_h"/>
+
+    <View
+        android:id="@+id/Posts_hview1"
+        android:layout_width="60dp"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="@id/Posts_h"
+        app:layout_constraintBottom_toBottomOf="@id/Posts_h"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+        android:id="@+id/Posts_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Luxury Stays 12 Votes"
+        android:textColor="#000000"
+        android:textSize="14dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/Posts_hview1"
+        app:layout_constraintTop_toBottomOf="@id/hotelVotes"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="@id/Posts_h"
+        app:layout_constraintBottom_toBottomOf="@id/Posts_h"
+        app:layout_constraintStart_toEndOf="@id/Posts_h"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lsVotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Posts_h"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

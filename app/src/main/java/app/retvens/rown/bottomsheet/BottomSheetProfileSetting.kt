@@ -35,16 +35,18 @@ class BottomSheetProfileSetting : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.bottom_profile_setting, container, false)
+        return inflater.inflate(R.layout.bottom_profile_setting_for_users, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val profile= view.findViewById<LinearLayout>(R.id.profile)
-        profile.setOnClickListener {
-            mListener?.bottomSheetProfileSettingClick("profile")
-            dismiss()
-        }
+
+//        val profile= view.findViewById<LinearLayout>(R.id.profile)
+//        profile.setOnClickListener {
+//            mListener?.bottomSheetProfileSettingClick("profile")
+//            dismiss()
+//        }
+
         val settings= view.findViewById<LinearLayout>(R.id.settings)
         settings.setOnClickListener {
             mListener?.bottomSheetProfileSettingClick("settings")
