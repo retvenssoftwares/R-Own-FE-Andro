@@ -60,7 +60,7 @@ class SuggestedJobAdapter(val context: Context, val jobList:List<JobsData>) : Re
             intent.putExtra("worktype",jobs.workplaceType)
             intent.putExtra("description",jobs.jobDescription)
             intent.putExtra("skill",jobs.skillsRecq)
-            intent.putExtra("jobId",jobs.jID)
+            intent.putExtra("jobId",jobs.jid)
             intent.putExtra("userId",jobs.user_id)
             context.startActivity(intent)
         }

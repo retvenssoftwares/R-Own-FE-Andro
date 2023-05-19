@@ -38,6 +38,8 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mesibo.calls.api.Utils
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -183,8 +185,11 @@ class UsernameFragment : Fragment() {
     private fun verifyUserName() {
 
         val username = userName.text.toString()
-        Toast.makeText(context, user_id, Toast.LENGTH_SHORT).show()
-        val verify = RetrofitBuilder.profileCompletion.verifyUsername(user_id!!, VerifyUsername(username))
+        val sharedPreferencesU = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        user_id = sharedPreferencesU?.getString("user_id", "").toString()
+        val verify = RetrofitBuilder.profileCompletion.verifyUsername(user_id!!,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username))
+
         verify.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
@@ -205,9 +210,11 @@ class UsernameFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(context, "${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+               Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
+
+
     }
 
     private fun sendInfo() {
@@ -221,7 +228,10 @@ class UsernameFragment : Fragment() {
         val date = sdf.format(cal.time).toString()
 
         val update = UpdateUserName(fullName,date,username)
-        val send = RetrofitBuilder.profileCompletion.setUsername(user_id!!,update)
+        val send = RetrofitBuilder.profileCompletion.setUsername(user_id!!,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),fullName),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),date),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username))
 
         send.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -229,7 +239,7 @@ class UsernameFragment : Fragment() {
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful){
-
+//
                     val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
 
                     editor = onboardingPrefs.edit()
@@ -262,6 +272,47 @@ class UsernameFragment : Fragment() {
                 progressDialog.dismiss()
             }
         })
+
+
+//        send.enqueue(object : Callback<UpdateResponse?> {
+//            override fun onResponse(
+//                call: Call<UpdateResponse?>,
+//                response: Response<UpdateResponse?>
+//            ) {
+//                if (response.isSuccessful){
+//
+//                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
+//
+//                    editor = onboardingPrefs.edit()
+//
+//                    editor.putBoolean("UsernameFragment", false)
+//                    Log.e("Onboarding", "UsernameFragment set to false")
+//                    editor.apply()
+//
+////                    DashBoardActivity.number.progress = "50"
+//                    saveProgress(requireContext(), "60")
+//
+//                    val prefValue = onboardingPrefs.getBoolean("UsernameFragment", false)
+//                    Log.e("PrefValue", "UsernameFragment preference value: $prefValue")
+//
+//                    val response = response.body()!!
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    progressDialog.dismiss()
+//                    val fragment = LocationFragment()
+//                    val transaction = activity?.supportFragmentManager?.beginTransaction()
+//                    transaction?.replace(R.id.fragment_username,fragment)
+//                    transaction?.commit()
+//                }else{
+//                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+//                    progressDialog.dismiss()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+//                Toast.makeText(requireContext(),t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
+//                progressDialog.dismiss()
+//            }
+//        })
 
 
 

@@ -19,7 +19,7 @@ interface JobsApis {
     @GET("getjob")
     fun getJobs(): Call<List<JobsData>>
 
-    @GET("getJob/{userId}")
+    @GET("job/{userId}")
     fun getIndividualJobs(
         @Path("userId") userId : String
     ): Call<List<JobsData>>
@@ -32,11 +32,14 @@ interface JobsApis {
     @POST("requestJob")
     fun requestJob(@Body post:RequestJobDataClass):Call<JobResponseDataClass>
 
+    @GET("getrequestedjob")
+    fun getRequestJob():Call<List<GetRequestedJobDara>>
+
     @POST("jobpost/{userId}")
     fun postJob(
         @Path("userId") userId:String,
         @Body post: PostJobDataCLass
-    ):Call<JobResponseDataClass>
+    ):Call<UpdateResponse>
 
     @Multipart
     @POST("applyjob")
@@ -58,6 +61,11 @@ interface JobsApis {
 
     @GET("getapplicant/{jId}")
     fun getApplicant(
+        @Path("jId") jId:String
+    ):Call<List<ApplicantDataClass>>
 
-    )
+    @GET("getcandidate/{appId}")
+    fun getCandidate(
+        @Path("appId") appId:String
+    ):Call<List<CandidateDataClass>>
 }

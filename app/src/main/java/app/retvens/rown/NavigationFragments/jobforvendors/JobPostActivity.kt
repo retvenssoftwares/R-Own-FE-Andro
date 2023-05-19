@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.JobResponseDataClass
 import app.retvens.rown.DataCollections.JobsCollection.PostJobDataCLass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetCTC
 import app.retvens.rown.bottomsheet.BottomSheetCompany
@@ -111,34 +112,35 @@ class JobPostActivity : AppCompatActivity(),
         val description = jobDescription.text.toString()
         val skill = jobsSkill.text.toString()
         val type = jobTypeEt.text.toString()
-        val expacted = postMinSalaryEt.text.toString()
+        val expected = postMinSalaryEt.text.toString()
         val location = postLocationEt.text.toString()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+
         val jobsData = PostJobDataCLass(user_id,"1","",title,company,"",type,"",
-        "",expacted,"max",location,description,skill)
+        "",expected,location,description,skill)
 
         val postJob = RetrofitBuilder.jobsApis.postJob(user_id,jobsData)
 
-        postJob.enqueue(object : Callback<JobResponseDataClass?> {
-            override fun onResponse(
-                call: Call<JobResponseDataClass?>,
-                response: Response<JobResponseDataClass?>
-            ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
-                }
-            }
+       postJob.enqueue(object : Callback<UpdateResponse?> {
+           override fun onResponse(
+               call: Call<UpdateResponse?>,
+               response: Response<UpdateResponse?>
+           ) {
+               if (response.isSuccessful){
+                   val response = response.body()!!
+                   Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+               }else{
+                   Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+               }
+           }
 
-            override fun onFailure(call: Call<JobResponseDataClass?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
+           override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+               Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+           }
+       })
 
     }
 

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,7 +56,10 @@ class JobPostedChildFragmnet : Fragment() {
 
     private fun getJobs() {
 
-        val getJob = RetrofitBuilder.jobsApis.getJobs()
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val getJob = RetrofitBuilder.jobsApis.getIndividualJobs(user_id)
 
         getJob.enqueue(object : Callback<List<JobsData>?> {
             override fun onResponse(

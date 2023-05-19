@@ -62,11 +62,11 @@
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.ReportProfileActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash" />
+            android:theme="@style/Theme.Rown_Splash"  />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.ShareQRActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash" />
+            android:theme="@style/Theme.Rown_Splash"  />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.AboutProfileActivity"
             android:exported="false"

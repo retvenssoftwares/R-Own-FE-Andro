@@ -25,24 +25,24 @@ class explore_employees_fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listSuggeJobs = mutableListOf<SuggestedJobData>()
-        listSuggeJobs.add(SuggestedJobData("Arjun Gupta"))
-        listSuggeJobs.add(SuggestedJobData("Rahul Bhalerao"))
-        listSuggeJobs.add(SuggestedJobData("Aman Sharma"))
-        listSuggeJobs.add(SuggestedJobData("Shivam Tiwari"))
-        listSuggeJobs.add(SuggestedJobData("Rahul Bhalerao"))
-        listSuggeJobs.add(SuggestedJobData("Aman Sharma"))
-        listSuggeJobs.add(SuggestedJobData("Arjun Gupta"))
-        listSuggeJobs.add(SuggestedJobData("Rahul Bhalerao"))
-        listSuggeJobs.add(SuggestedJobData("Aman Sharma"))
-        listSuggeJobs.add(SuggestedJobData("Shivam Tiwari"))
-
-        matchesRecycler = view.findViewById(R.id.matches_employees_recycler)
-        matchesRecycler.layoutManager = LinearLayoutManager(context)
-        matchesRecycler.setHasFixedSize(true)
-        val matchesJobAdapter = MatchesJobAdapter(listSuggeJobs, requireContext())
-        matchesRecycler.adapter = matchesJobAdapter
-        matchesJobAdapter.notifyDataSetChanged()
+//        val listSuggeJobs = mutableListOf<SuggestedJobData>()
+//        listSuggeJobs.add(SuggestedJobData("Arjun Gupta"))
+//        listSuggeJobs.add(SuggestedJobData("Rahul Bhalerao"))
+//        listSuggeJobs.add(SuggestedJobData("Aman Sharma"))
+//        listSuggeJobs.add(SuggestedJobData("Shivam Tiwari"))
+//        listSuggeJobs.add(SuggestedJobData("Rahul Bhalerao"))
+//        listSuggeJobs.add(SuggestedJobData("Aman Sharma"))
+//        listSuggeJobs.add(SuggestedJobData("Arjun Gupta"))
+//        listSuggeJobs.add(SuggestedJobData("Rahul Bhalerao"))
+//        listSuggeJobs.add(SuggestedJobData("Aman Sharma"))
+//        listSuggeJobs.add(SuggestedJobData("Shivam Tiwari"))
+//
+//        matchesRecycler = view.findViewById(R.id.matches_employees_recycler)
+//        matchesRecycler.layoutManager = LinearLayoutManager(context)
+//        matchesRecycler.setHasFixedSize(true)
+//        val matchesJobAdapter = MatchesJobAdapter(listSuggeJobs, requireContext())
+//        matchesRecycler.adapter = matchesJobAdapter
+//        matchesJobAdapter.notifyDataSetChanged()
 
     }
 }
