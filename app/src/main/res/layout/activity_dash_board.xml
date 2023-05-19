@@ -408,6 +408,7 @@
                           android:visibility="gone">
 
                           <androidx.cardview.widget.CardView
+                              android:id="@+id/tnc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="4dp"
@@ -441,6 +442,7 @@
                             </androidx.cardview.widget.CardView>
 
                           <androidx.cardview.widget.CardView
+                              android:id="@+id/pp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="4dp"

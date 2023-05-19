@@ -45,6 +45,8 @@ import app.retvens.rown.databinding.ActivityDashBoardBinding
 import app.retvens.rown.sideNavigation.BugSpottedActivity
 import app.retvens.rown.sideNavigation.ChatWithUsActivity
 import app.retvens.rown.sideNavigation.FAQ_Activity
+import app.retvens.rown.sideNavigation.PrivacyPolicyActivity
+import app.retvens.rown.sideNavigation.TermsAndCActivity
 import app.retvens.rown.utils.clearFullName
 import app.retvens.rown.utils.clearProfileImage
 import app.retvens.rown.utils.clearProgress
@@ -231,6 +233,14 @@ class DashBoardActivity : AppCompatActivity() {
                 binding.navHelpList.visibility = View.GONE
                 isHLVisible = false
             }
+        }
+
+        binding.tnc.setOnClickListener {
+            startActivity(Intent(this, TermsAndCActivity::class.java))
+        }
+
+        binding.pp.setOnClickListener {
+            startActivity(Intent(this, PrivacyPolicyActivity::class.java))
         }
 
         binding.dropMail.setOnClickListener {
