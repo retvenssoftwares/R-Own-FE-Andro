@@ -44,13 +44,129 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.profile.settingForViewers.SelectPostActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.settingForViewers.ReportProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"  />
+        <activity
+            android:name=".NavigationFragments.profile.settingForViewers.ShareQRActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"  />
+        <activity
+            android:name=".NavigationFragments.profile.settingForViewers.AboutProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.profileForViewers.VendorProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.profileForViewers.OwnerProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.profileForViewers.UserProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.viewAllBlogs.ViewAllCategoriesActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.viewAllBlogs.AllBlogsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.viewAllBlogs.ViewAllBlogsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.ApplyForVerificationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.LanguageSettingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.JobNotificationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.NotificationSettingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.AccountManagementActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.SyncContactsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.LastSeenActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.AccountSettingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.OwnerSettingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.saved.SavedActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.hotels.AddHotelActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.hotels.EditHotelDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.hotels.HotelDetailsProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.EditHotelOwnerProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.vendorsReview.ReviewsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.EditVendorsProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.viewConnections.ViewConnectionsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.polls.VotersActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
             android:name=".NavigationFragments.home.PostsViewActivity"
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".NavigationFragments.home.PostDetailsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash"/>
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".viewAll.viewAllCommunities.OpenCommunityDetailsActivity"
             android:exported="false"
@@ -114,7 +230,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".NavigationFragments.profile.ViewRequestsActivity"
+            android:name=".NavigationFragments.profile.viewRequests.ViewRequestsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
