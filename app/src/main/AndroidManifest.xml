@@ -44,17 +44,29 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.eventsForHoteliers.AddEventDeatailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"  />
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.AllEventsPostedActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"  />
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.AddEventActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
             android:name=".NavigationFragments.profile.settingForViewers.SelectPostActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.ReportProfileActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash"  />
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.ShareQRActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash"  />
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.AboutProfileActivity"
             android:exported="false"
