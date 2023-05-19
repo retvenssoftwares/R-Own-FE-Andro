@@ -19,10 +19,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.ApplyJobsResponse
 import app.retvens.rown.DataCollections.JobsCollection.PushApplicantIdData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.ActivitiesFragment
+import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.CompanyDetailsFragment
+import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.DescriptionFragment
+import app.retvens.rown.NavigationFragments.profile.setting.saved.SavedPostsFragment
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.databinding.ActivityJobDetailsBinding
@@ -56,6 +61,11 @@ class JobDetailsActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        val fragment: Fragment = DescriptionFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.details_fragments_container,fragment)
+        transaction.commit()
+
         binding.descriptionJobCardText.setOnClickListener {
             binding.descriptionJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             binding.descriptionJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
@@ -66,9 +76,10 @@ class JobDetailsActivity : AppCompatActivity() {
             binding.activityJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.activityJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-            binding.llDesc.visibility = View.VISIBLE
-            binding.llCompany.visibility = View.GONE
-            binding.llActivities.visibility = View.GONE
+            val fragment: Fragment = DescriptionFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.details_fragments_container,fragment)
+            transaction.commit()
         }
         binding.companyJobCardText.setOnClickListener {
 
@@ -81,9 +92,10 @@ class JobDetailsActivity : AppCompatActivity() {
             binding.activityJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.activityJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-            binding.llActivities.visibility = View.GONE
-            binding.llDesc.visibility = View.GONE
-            binding.llCompany.visibility = View.VISIBLE
+            val fragment: Fragment = CompanyDetailsFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.details_fragments_container,fragment)
+            transaction.commit()
         }
         binding.activityJobCardText.setOnClickListener {
 
@@ -96,9 +108,10 @@ class JobDetailsActivity : AppCompatActivity() {
             binding.descriptionJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.descriptionJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-            binding.llActivities.visibility = View.VISIBLE
-            binding.llDesc.visibility = View.GONE
-            binding.llCompany.visibility = View.GONE
+            val fragment: Fragment = ActivitiesFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.details_fragments_container,fragment)
+            transaction.commit()
         }
 
         binding.cardApplyJob.setOnClickListener {
@@ -141,11 +154,11 @@ class JobDetailsActivity : AppCompatActivity() {
         var description = findViewById<TextView>(R.id.description_job)
         var skill = findViewById<TextView>(R.id.skills_job)
 
-        jobTitle.text = intent.getStringExtra("title")
-        type.text = intent.getStringExtra("type")
+        jobTitle.text = intent?.getStringExtra("title")
+        type.text = intent?.getStringExtra("type")
         workType.text = "Onsite"
-        description.text = intent.getStringExtra("description")
-        skill.text = intent.getStringExtra("skill")
+//        description.text = intent?.getStringExtra("description")
+//        skill.text = intent?.getStringExtra("skill")
 
 
         val locat = intent.getStringExtra("location")

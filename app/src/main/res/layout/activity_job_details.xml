@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context=".NavigationFragments.job.JobDetailsActivity">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -233,230 +233,16 @@
 
     </LinearLayout>
 
-<!--____________________________________________ Description Section_________________________________________-->
-    <LinearLayout
-        android:id="@+id/ll_desc"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/ll_for_t"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/details_fragments_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Job Description"
-            android:textColor="@color/black"
-            android:fontFamily="@font/montserrat_bold"
-            android:layout_marginStart="18dp"/>
-        <TextView
-            android:id="@+id/description_job"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/ll_for_t"
-            android:text="Your role as the UI Designer is to use interactive components on various platforms (web, desktop and mobile). This will include producing high-fidelity mock-ups, iconography, UI illustrations/graphics, and other graphic elements. As the UI Designer, you will be supporting the wider design team with the internal Design System, tying together the visual language. You will with other UI and UX Designers, Product Managers, and Engineering teams in a highly customer-focused agile environment to help define the vision of the products."
-            android:textColor="@color/black"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_marginTop="3dp"
-            android:layout_marginStart="18dp"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-            android:id="@+id/sj"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Skill Required"
-            android:textColor="@color/black"
-            android:fontFamily="@font/montserrat_bold"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="18dp"
-            app:layout_constraintTop_toBottomOf="@id/description_job"
-            app:layout_constraintStart_toStartOf="parent"/>
-        <TextView
-            android:id="@+id/skills_job"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" high-fidelity mock-ups, iconography, UI illustrations/graphics, and other graphic elements. As the UI Designer, you will be supporting the wider design team with the internal Design System, tying together the visual language. You will with other UI and UX Designers, Product Managers, and Engineering teams in a highly customer-focused agile environment to help define the vision of the products."
-            android:textColor="@color/black"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_marginTop="3dp"
-            android:layout_marginStart="18dp"
-            app:layout_constraintTop_toBottomOf="@id/sj"
-            app:layout_constraintStart_toStartOf="parent"/>
-    </LinearLayout>
-<!--____________________________________________ Company Section_________________________________________-->
-    <LinearLayout
-        android:id="@+id/ll_company"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/ll_for_t"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Company Details"
-            android:textColor="@color/black"
-            android:fontFamily="@font/montserrat_bold"
-            android:layout_marginStart="18dp"/>
-        <TextView
-            android:id="@+id/companyD"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/ll_for_t"
-            android:text="Your role as the UI Designer is to use interactive components on various platforms (web, desktop and mobile). This will include producing high-fidelity mock-ups, iconography, UI illustrations/graphics, and other graphic elements. As the UI Designer, you will be supporting the wider design team with the internal Design System, tying together the visual language. You will with other UI and UX Designers, Product Managers, and Engineering teams in a highly customer-focused agile environment to help define the vision of the products."
-            android:textColor="@color/black"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_marginTop="3dp"
-            android:layout_marginStart="18dp"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-            android:id="@+id/cw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Company Websites"
-            android:textColor="@color/black"
-            android:fontFamily="@font/montserrat_bold"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="18dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="www.website.com"
-            android:textColor="@color/black"
-            android:fontFamily="@font/montserrat_regular"
-            android:layout_marginTop="3dp"
-            android:layout_marginStart="18dp"/>
-    </LinearLayout>
-<!--____________________________________________ Activities Section_________________________________________-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_activities"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/ll_for_t"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="12dp">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/employee_profile_explore"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:src="@drawable/profile"
-            app:shapeAppearance="@style/RoundedCornerImage"
-            android:scaleType="centerCrop"
-            android:layout_margin="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/employee_name_explore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Employer Name"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/black"
-            android:textAlignment="center"
-            android:textSize="14dp"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintVertical_bias="0.3"
-            app:layout_constraintEnd_toStartOf="@id/card_view_profile"
-            app:layout_constraintBottom_toBottomOf="@id/employee_profile_explore"
-            app:layout_constraintStart_toEndOf="@id/employee_profile_explore"
-            app:layout_constraintTop_toTopOf="@id/employee_profile_explore"/>
-
-        <TextView
-            android:id="@+id/employee_role"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CEO"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/grey_40"
-            android:textAlignment="center"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textSize="12dp"
-            app:layout_constraintEnd_toStartOf="@id/employee_experience"
-            app:layout_constraintTop_toBottomOf="@id/employee_name_explore"
-            app:layout_constraintStart_toStartOf="@id/employee_name_explore"/>
-
-        <TextView
-            android:id="@+id/employee_experience"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text=", Retvence Services"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/grey_40"
-            android:textAlignment="textStart"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textSize="12dp"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintEnd_toStartOf="@id/card_view_profile"
-            app:layout_constraintTop_toBottomOf="@id/employee_name_explore"
-            app:layout_constraintStart_toEndOf="@id/employee_role"/>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_view_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardElevation="8dp"
-            android:layout_gravity="center_horizontal"
-            app:cardCornerRadius="6dp"
-            android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/employee_profile_explore"
-            app:layout_constraintBottom_toBottomOf="@id/employee_profile_explore">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:text="View profile"
-                android:fontFamily="@font/montserrat_semibold"
-                android:textSize="16dp"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="10dp"
-                android:background="@color/suggested_job_yellow"
-                android:textColor="@color/black"/>
-
-        </androidx.cardview.widget.CardView>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey_60"
-            android:layout_marginHorizontal="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey_60"
-            android:layout_marginTop="30dp"
-            android:layout_marginHorizontal="35dp"
-            app:layout_constraintTop_toBottomOf="@id/card_view_profile"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/ll_for_t"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_apply_job"

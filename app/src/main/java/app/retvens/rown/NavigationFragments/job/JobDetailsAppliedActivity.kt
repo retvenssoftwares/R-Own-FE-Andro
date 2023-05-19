@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import app.retvens.rown.NavigationFragments.job.jobDetailsAppliedFrags.ActivitiesJobAppliedFragment
+import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.CompanyDetailsFragment
+import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.DescriptionFragment
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityJobDetailsAppliedBinding
 
@@ -19,6 +23,10 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
         binding.backJobsDetails.setOnClickListener {
             onBackPressed()
         }
+        val fragment: Fragment = DescriptionFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.details_applied_fragments_container,fragment)
+        transaction.commit()
 
         binding.descriptionJobCardTextApplied.setOnClickListener {
             binding.descriptionJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
@@ -30,9 +38,10 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
             binding.activitiesJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.activitiesJobCardTextApplied.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-            binding.llDescApplied.visibility = View.VISIBLE
-            binding.llCompanyApplied.visibility = View.GONE
-            binding.llActivitiesApplied.visibility = View.GONE
+            val fragment: Fragment = DescriptionFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.details_applied_fragments_container,fragment)
+            transaction.commit()
         }
         binding.companyJobCardTextApplied.setOnClickListener {
 
@@ -45,9 +54,10 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
             binding.activitiesJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.activitiesJobCardTextApplied.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-            binding.llDescApplied.visibility = View.GONE
-            binding.llCompanyApplied.visibility = View.VISIBLE
-            binding.llActivitiesApplied.visibility = View.GONE
+            val fragment: Fragment = CompanyDetailsFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.details_applied_fragments_container,fragment)
+            transaction.commit()
         }
         binding.activitiesJobCardTextApplied.setOnClickListener {
 
@@ -60,9 +70,10 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
             binding.descriptionJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.descriptionJobCardTextApplied.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-            binding.llActivitiesApplied.visibility = View.VISIBLE
-            binding.llDescApplied.visibility = View.GONE
-            binding.llCompanyApplied.visibility = View.GONE
+            val fragment: Fragment = ActivitiesJobAppliedFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.details_applied_fragments_container,fragment)
+            transaction.commit()
         }
     }
 }
