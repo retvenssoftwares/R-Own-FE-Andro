@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
 import app.retvens.rown.databinding.UsersPostsCardBinding
 import app.retvens.rown.viewAll.vendorsDetails.ViewAllVendorsActivity
+import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity
-import com.bumptech.glide.Glide
 
 //import com.karan.multipleviewrecyclerview.Banner
 
@@ -44,6 +45,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 //
 //            binding.postUserDominican.text = banner.banner.location
 //            binding.recentCommentByUser.text = banner.banner.caption
+
+            binding.postProfile.setOnClickListener {
+                context.startActivity(Intent(context, UserProfileActivity::class.java))
+            }
 
             binding.postPic.setOnClickListener {
                 context.startActivity(Intent(context, PostsViewActivity::class.java))
@@ -90,15 +95,16 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Connect with the like-minded individuals"
             binding.viewAllItem.setOnClickListener {
-                Toast.makeText(context, "Hotel Section", Toast.LENGTH_SHORT).show()
+//                context.startActivity(Intent(context, ViewAllBlogsActivity::class.java))
             }
         }
         fun bindBlogsRecyclerView(recyclerItemList : List<DataItem.BlogsRecyclerData>){
-            val adapter = BlogsChildAdapter(DataItemType.BLOGS, recyclerItemList)
+            val adapter = BlogsChildAdapter(context, DataItemType.BLOGS, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Popular blogs you must read."
+
             binding.viewAllItem.setOnClickListener {
-                Toast.makeText(context, "Blogs", Toast.LENGTH_SHORT).show()
+                context.startActivity(Intent(context, ViewAllBlogsActivity::class.java))
             }
         }
         fun bindHotelAwardsRecyclerView(recyclerItemList : List<DataItem.AwardsRecyclerData>){

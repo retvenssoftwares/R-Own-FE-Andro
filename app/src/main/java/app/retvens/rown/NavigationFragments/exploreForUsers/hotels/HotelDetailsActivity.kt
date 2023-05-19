@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.hotels
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityHotelDetailsBinding
 
