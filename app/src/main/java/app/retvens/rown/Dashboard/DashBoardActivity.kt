@@ -105,12 +105,6 @@ class DashBoardActivity : AppCompatActivity() {
 
 
 
-
-
-
-
-
-
         //setUp drawerLayout
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
