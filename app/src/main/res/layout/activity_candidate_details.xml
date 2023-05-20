@@ -51,7 +51,7 @@
         android:backgroundTint="#F4F4F5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
+        android:layout_marginHorizontal="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
@@ -99,6 +99,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:src="@drawable/dummy"
+                app:shapeAppearance="@style/RoundedCornerImage"
                 android:layout_below="@+id/userName_Candidate"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="25dp"
@@ -135,11 +136,11 @@
                 android:background="@color/grey" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/view2"
-                android:layout_marginStart="21dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/candidate_profile"
                 android:src="@drawable/locationvector" />
 
@@ -148,21 +149,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view2"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="2dp"
                 android:layout_toEndOf="@+id/candidate_profile"
                 android:text="Mumbai"
                 android:textColor="@color/black"
                 android:textSize="12dp" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/view2"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="91dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="156dp"
+                android:layout_marginStart="76dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="182dp"
                 android:layout_toEndOf="@+id/candidate_profile"
                 android:src="@drawable/macbook_pro" />
 
@@ -171,21 +172,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view2"
-                android:layout_marginStart="110dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="2dp"
                 android:layout_toEndOf="@+id/candidate_profile"
                 android:text="FullTime"
                 android:textColor="@color/black"
                 android:textSize="12dp" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="21dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/view2"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="161dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="89dp"
+                android:layout_marginStart="183dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="82dp"
                 android:layout_toEndOf="@+id/candidate_profile"
                 android:src="@drawable/clockvector" />
 
@@ -194,8 +195,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view2"
-                android:layout_marginStart="180dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginStart="202dp"
+                android:layout_marginTop="2dp"
                 android:layout_toEndOf="@+id/candidate_profile"
                 android:text="4 Year"
                 android:textColor="@color/black"
@@ -232,6 +233,79 @@ enhance user experience."
                 android:textColor="@color/black" />
 
         </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/checkResume"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:background="#272A3D"
+        app:cardCornerRadius="10dp"
+        android:backgroundTint="#272A3D"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Check Resume"
+            android:textAlignment="center"
+            android:textColor="@color/green_own"
+            android:textSize="12dp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/updateStatus"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/checkResume"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:background="#272A3D"
+        app:cardCornerRadius="10dp"
+        android:backgroundTint="@color/green_own"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:text="Update Status"
+            android:textSize="13dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="#272A3D"
+            android:textAlignment="center"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/message"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        app:layout_constraintStart_toEndOf="@+id/checkResume"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:background="#272A3D"
+        app:cardCornerRadius="10dp"
+        android:backgroundTint="#FFFFFF"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="14dp"
+            android:text="Message"
+            android:textColor="#272A3D"
+            android:textAlignment="center"
+            />
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.ApplyJobsResponse
 import app.retvens.rown.DataCollections.JobsCollection.PushApplicantIdData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.NavigationFragments.job.JobDetailsActivity.Companion.newInstance
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.ActivitiesFragment
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.CompanyDetailsFragment
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.DescriptionFragment
@@ -32,6 +33,8 @@ import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.databinding.ActivityJobDetailsBinding
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.mesibo.mediapicker.BaseFragment.newInstance
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -42,11 +45,26 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
+
+
 class JobDetailsActivity : AppCompatActivity() {
+
+    companion object {
+        private const val ARG_VALUE = "arg_value"
+
+        fun newInstance(value: String): DescriptionFragment {
+            val fragment = DescriptionFragment()
+            val args = Bundle()
+            args.putString(ARG_VALUE, value)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     lateinit var binding : ActivityJobDetailsBinding
     private  var pdfUri:Uri? = null
     var PICK_PDF_REQUEST_CODE : Int = 0
+
 
     private lateinit var name:TextInputEditText
     private lateinit var experience:TextInputEditText
@@ -61,7 +79,14 @@ class JobDetailsActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        val desc = intent.getStringExtra("description")
+        val skill = intent.getStringExtra("skill")
+
+        val bundle = Bundle()
+        bundle.putString("desc", desc)
+        bundle.putString("skill",skill)
         val fragment: Fragment = DescriptionFragment()
+        fragment.arguments = bundle
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.details_fragments_container,fragment)
         transaction.commit()
@@ -76,9 +101,18 @@ class JobDetailsActivity : AppCompatActivity() {
             binding.activityJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.activityJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-            val fragment: Fragment = DescriptionFragment()
+            val desc = intent.getStringExtra("description")
+            val skill = intent.getStringExtra("skill")
+
+            val bundle = Bundle()
+            bundle.putString("desc", desc)
+            bundle.putString("skill",skill)
+
+            val fragment = DescriptionFragment()
+            fragment.arguments = bundle
+
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.details_fragments_container,fragment)
+            transaction.replace(R.id.details_fragments_container, fragment)
             transaction.commit()
         }
         binding.companyJobCardText.setOnClickListener {
@@ -91,6 +125,8 @@ class JobDetailsActivity : AppCompatActivity() {
 
             binding.activityJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.activityJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+
+
 
             val fragment: Fragment = CompanyDetailsFragment()
             val transaction = supportFragmentManager.beginTransaction()
@@ -114,57 +150,81 @@ class JobDetailsActivity : AppCompatActivity() {
             transaction.commit()
         }
 
-        binding.cardApplyJob.setOnClickListener {
 
-            val dialogRole = Dialog(this)
-            dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialogRole.setContentView(R.layout.bottom_sheet_aply_for_job)
-            dialogRole.setCancelable(true)
+            binding.cardApplyJob.setOnClickListener {
 
-            dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-            dialogRole.window?.setGravity(Gravity.BOTTOM)
-            dialogRole.show()
+                val dialogRole = Dialog(this)
+                dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                dialogRole.setContentView(R.layout.bottom_sheet_aply_for_job)
+                dialogRole.setCancelable(true)
 
-            name = dialogRole.findViewById<TextInputEditText>(R.id.nameOfApplicant)
-            experience = dialogRole.findViewById<TextInputEditText>(R.id.experience)
-            resume = dialogRole.findViewById<TextInputEditText>(R.id.eType_et)
-            intro = dialogRole.findViewById<TextInputEditText>(R.id.intro)
+                dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
+                dialogRole.window?.setGravity(Gravity.BOTTOM)
+                dialogRole.show()
 
-            resume.setOnClickListener {
+                val nameLayout = dialogRole.findViewById<TextInputLayout>(R.id.nameOfApplicantLayout)
+                val experienceLayout = dialogRole.findViewById<TextInputLayout>(R.id.experienceLayout)
+                val introLayout = dialogRole.findViewById<TextInputLayout>(R.id.introLayout)
+                val resumeLayout = dialogRole.findViewById<TextInputLayout>(R.id.resumeLayout)
 
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "application/pdf"
-                startActivityForResult(intent,PICK_PDF_REQUEST_CODE)
+                name = dialogRole.findViewById<TextInputEditText>(R.id.nameOfApplicant)
+                experience = dialogRole.findViewById<TextInputEditText>(R.id.experience)
+                resume = dialogRole.findViewById<TextInputEditText>(R.id.eType_et)
+                intro = dialogRole.findViewById<TextInputEditText>(R.id.intro)
 
-            }
+                resume.setOnClickListener {
 
-            val apply = dialogRole.findViewById<CardView>(R.id.card_job_next)
-            apply.setOnClickListener {
-                applyforJob()
-            }
+                    val intent = Intent(Intent.ACTION_GET_CONTENT)
+                    intent.type = "application/pdf"
+                    startActivityForResult(intent,PICK_PDF_REQUEST_CODE)
+
+                }
+
+                val apply = dialogRole.findViewById<CardView>(R.id.card_job_next)
+                apply.setOnClickListener {
+                    if (name.length() < 3){
+                        nameLayout.error = "Enter Proper details"
+                    }else if(experience.length() < 1){
+                        experienceLayout.error = "Enter Proper details"
+                    }else if (pdfUri != null){
+                        resumeLayout.error = "Select resume"
+                    }else if (intro.length() < 3){
+                        introLayout.error = "Enter Proper details"
+                    }else{
+                        applyforJob()
+                    }
+
+                }
+
 
         }
+
+
+
+
 
         var jobTitle = findViewById<TextView>(R.id.job_name_details)
         var location = findViewById<TextView>(R.id.location_job_details)
         var type = findViewById<TextView>(R.id.jobtype)
         var workType = findViewById<TextView>(R.id.worktype)
-        var description = findViewById<TextView>(R.id.description_job)
-        var skill = findViewById<TextView>(R.id.skills_job)
+
 
         jobTitle.text = intent?.getStringExtra("title")
         type.text = intent?.getStringExtra("type")
         workType.text = "Onsite"
-//        description.text = intent?.getStringExtra("description")
-//        skill.text = intent?.getStringExtra("skill")
-
+//
+//        val data = intent.getStringExtra("description")
+//        description.text = data
 
         val locat = intent.getStringExtra("location")
         val company = intent.getStringExtra("company")
 
+
         location.text = "$company.$locat"
+
+
     }
 
     private fun applyforJob() {
@@ -182,6 +242,8 @@ class JobDetailsActivity : AppCompatActivity() {
         val experience = experience.text.toString()
         val intro = intro.text.toString()
         val jobId = intent.getStringExtra("jobId").toString()
+
+        Toast.makeText(applicationContext,jobId,Toast.LENGTH_SHORT).show()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -202,9 +264,7 @@ class JobDetailsActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
-                    Toast.makeText(applicationContext,response.job_id,Toast.LENGTH_SHORT).show()
-                    pushId(response.job_id)
+                    pushId(response.applicationId,response.job_id)
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -216,16 +276,16 @@ class JobDetailsActivity : AppCompatActivity() {
         })
     }
 
-    private fun pushId(jid:String) {
+    private fun pushId(ApplicationId:String,jid:String) {
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val jobUserID = intent.getStringExtra("userId")
+        val userID = intent.getStringExtra("userId")
 
-        val push = PushApplicantIdData(user_id,jid)
-        Toast.makeText(applicationContext,jobUserID.toString(),Toast.LENGTH_SHORT).show()
-        val send = RetrofitBuilder.jobsApis.pushId(jobUserID.toString(),push)
+        val push = PushApplicantIdData(user_id,ApplicationId)
+
+        val send = RetrofitBuilder.jobsApis.pushId(jid,push)
         send.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,

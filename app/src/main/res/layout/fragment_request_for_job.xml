@@ -40,7 +40,7 @@
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="Select One"
+                android:hint="Select One"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -67,7 +67,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:text="Select One"
+                android:hint="Select One"
                 android:clickable="true"
                 android:focusable="false"
                 android:editable="false"/>
@@ -98,7 +98,7 @@
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="Select One"
+                android:hint="Select One"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -127,7 +127,7 @@
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="Select One"
+                android:hint="Select One"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -156,7 +156,7 @@
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="Select One"
+                android:hint="Select One"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -185,7 +185,7 @@
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="Select One"
+                android:hint="Select One"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>

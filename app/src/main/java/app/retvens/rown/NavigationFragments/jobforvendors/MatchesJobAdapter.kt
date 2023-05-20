@@ -26,6 +26,7 @@ class MatchesJobAdapter(val context: Context, val requestJob:List<GetRequestedJo
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchesViewHolder {
+
         val inflater : LayoutInflater = LayoutInflater.from(context)
         val view : View = inflater.inflate(R.layout.item_explore_employes, parent, false)
         return MatchesViewHolder(view)

@@ -60,6 +60,7 @@
         app:layout_constraintBottom_toBottomOf="@id/applied_job_location">
 
         <TextView
+            android:id="@+id/application_status"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingVertical="6dp"

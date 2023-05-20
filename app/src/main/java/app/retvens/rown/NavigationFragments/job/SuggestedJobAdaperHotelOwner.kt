@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.job
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -9,9 +10,10 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
+import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
 import app.retvens.rown.R
 
-class SuggestedJobAdaperHotelOwner(val context: Context, val jobList:List<JobsData>) : RecyclerView.Adapter<SuggestedJobAdaperHotelOwner.SuggestedJobViewHolder>() {
+class SuggestedJobAdaperHotelOwner(val context: Context, var jobList:List<JobsData>) : RecyclerView.Adapter<SuggestedJobAdaperHotelOwner.SuggestedJobViewHolder>() {
 
     class SuggestedJobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val position = itemView.findViewById<TextView>(R.id.suggested_job_title)
@@ -42,11 +44,13 @@ class SuggestedJobAdaperHotelOwner(val context: Context, val jobList:List<JobsDa
         holder.type.text = jobs.jobType
         holder.title.text = "Remote"
 
-        val min = jobs.minSalary
-        val max = jobs.maxSalary
+        holder.salary.text = jobs.expectedCTC
 
-        holder.salary.text = max
+    }
 
-
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<JobsData>) {
+        jobList = newItems
+        notifyDataSetChanged()
     }
 }

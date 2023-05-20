@@ -1,20 +1,30 @@
 package app.retvens.rown.NavigationFragments.jobforvendors
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.CandidateDataClass
+import app.retvens.rown.DataCollections.JobsCollection.StatusDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetCTC
+import app.retvens.rown.bottomsheet.BottomshitStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CandidateDetailsActivity : AppCompatActivity() {
+class CandidateDetailsActivity : AppCompatActivity(),
+    BottomshitStatus.OnBottomCTCClickListener {
     @SuppressLint("MissingInflatedId")
 
     private lateinit  var username:TextView
@@ -35,7 +45,7 @@ class CandidateDetailsActivity : AppCompatActivity() {
 
         name.text = intent.getStringExtra("name")
         role.text = intent.getStringExtra("role")
-        location.text = intent.getStringExtra("city")
+        location.text = "Kanpur"
 
         val image = intent.getStringExtra("profile")
 
@@ -45,7 +55,52 @@ class CandidateDetailsActivity : AppCompatActivity() {
 
         getCandidate(id)
 
+        val checkResume = findViewById<CardView>(R.id.checkResume)
+
+        checkResume.setOnClickListener {
+            chechResume(id!!)
+        }
+
+        val updateStatus = findViewById<CardView>(R.id.updateStatus)
+
+        updateStatus.setOnClickListener {
+            val bottomSheet = BottomshitStatus()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCTC.CTC_TAG)}
+            bottomSheet.setOnCTCClickListener(this)
+        }
+
     }
+
+    private fun chechResume(id: String) {
+        val getResume = RetrofitBuilder.jobsApis.getCandidate(id)
+
+        getResume.enqueue(object : Callback<List<CandidateDataClass>?> {
+            override fun onResponse(
+                call: Call<List<CandidateDataClass>?>,
+                response: Response<List<CandidateDataClass>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setDataAndType(Uri.parse(response.get(0).resume), "application/pdf")
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<CandidateDataClass>?>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
 
     private fun getCandidate(id: String?) {
 
@@ -61,6 +116,8 @@ class CandidateDetailsActivity : AppCompatActivity() {
                     username.text = response.get(0).User_name
                     type.text = response.get(0).jobType.get(0)
                     intro.text = response.get(0).self_introduction
+
+
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -72,4 +129,35 @@ class CandidateDetailsActivity : AppCompatActivity() {
         })
 
     }
+
+    override fun bottomCTCClick(CTCFrBo: String) {
+        updateStatus(CTCFrBo)
+    }
+
+    private fun updateStatus(ctcFrBo: String) {
+
+        val id = intent.getStringExtra("applicationId")
+        val update = StatusDataClass(ctcFrBo)
+        val updateStatus = RetrofitBuilder.jobsApis.updateStatus(id!!,update)
+
+        updateStatus.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
 }

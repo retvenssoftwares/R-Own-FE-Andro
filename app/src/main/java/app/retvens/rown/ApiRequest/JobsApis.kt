@@ -24,10 +24,10 @@ interface JobsApis {
         @Path("userId") userId : String
     ): Call<List<JobsData>>
 
-    @GET("requestJob/{userId}")
+    @GET("appliedjob/{userId}")
     fun appliedJobs(
         @Path("userId") userId : String
-    ): Call<AppliedJobData>
+    ): Call<List<AppliedJobData>>
 
     @POST("requestJob")
     fun requestJob(@Body post:RequestJobDataClass):Call<JobResponseDataClass>
@@ -48,13 +48,13 @@ interface JobsApis {
         @Part("Experience")Experience:RequestBody,
         @Part("self_introduction")self_introduction:RequestBody,
         @Part("user_id")user_id:RequestBody,
-        @Part("jobId")jobId:RequestBody,
+        @Part("jid")jobId:RequestBody,
         @Part resume: MultipartBody.Part
     ):Call<ApplyJobsResponse>
 
-    @PATCH("pushid/{userId}")
+    @PATCH("pushid/{user_id}")
     fun pushId(
-        @Path("userId") userId:String,
+        @Path("user_id") user_id:String,
         @Body push:PushApplicantIdData
     ):Call<UpdateResponse>
 
@@ -68,4 +68,10 @@ interface JobsApis {
     fun getCandidate(
         @Path("appId") appId:String
     ):Call<List<CandidateDataClass>>
+
+    @PATCH("updatejob/{appId}")
+    fun updateStatus(
+        @Path("appId") appId:String,
+        @Body status:StatusDataClass
+    ):Call<UpdateResponse>
 }

@@ -2,12 +2,16 @@ package app.retvens.rown.NavigationFragments.jobforvendors
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +27,7 @@ class JobPostedChildFragmnet : Fragment() {
 
     lateinit var suggestedRecycler : RecyclerView
     lateinit var recentJobRecycler : RecyclerView
+    lateinit var searchBar:EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +41,7 @@ class JobPostedChildFragmnet : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewAll = view.findViewById<TextView>(R.id.view_all_recent)
+        searchBar = view.findViewById(R.id.jobs_search_hoteliers)
 
         viewAll.setOnClickListener {
             startActivity(Intent(requireContext(),JobsPostedByUser::class.java))
@@ -68,6 +74,7 @@ class JobPostedChildFragmnet : Fragment() {
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
+                    val originalData = response.toList()
                     val suggestedJobAdapter = SuggestedJobAdaperHotelOwner(requireContext(),response)
                     suggestedRecycler.adapter = suggestedJobAdapter
                     suggestedJobAdapter.notifyDataSetChanged()
@@ -75,6 +82,36 @@ class JobPostedChildFragmnet : Fragment() {
                     val recentJobAdapter = RecentJobAdapterOwner(requireContext(), response)
                     recentJobRecycler.adapter = recentJobAdapter
                     recentJobAdapter.notifyDataSetChanged()
+
+                    searchBar.addTextChangedListener(object :TextWatcher{
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val filterData = originalData.filter { item ->
+                                item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            suggestedJobAdapter.updateData(filterData)
+
+                            val filterData2 = originalData.filter { item ->
+                                item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            recentJobAdapter.updateData(filterData2)
+                        }
+
+                        override fun afterTextChanged(p0: Editable?) {
+
+                        }
+
+                    })
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import app.retvens.rown.R
 
 class DescriptionFragment : Fragment() {
@@ -20,6 +22,15 @@ class DescriptionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val desc = arguments?.getString("desc")
+        val skill = arguments?.getString("skill")
+
+        val description = view.findViewById<TextView>(R.id.description_job)
+        val skills = view.findViewById<TextView>(R.id.skills_job)
+
+        description.text = desc
+        skills.text = skill
 
     }
 }

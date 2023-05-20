@@ -1,10 +1,13 @@
 package app.retvens.rown.NavigationFragments.job
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -24,6 +27,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
     lateinit var suggestedRecycler : RecyclerView
     lateinit var recentJobRecycler : RecyclerView
     lateinit var filter : ImageView
+    lateinit var searchBar : EditText
 
 
     lateinit var shimmerLayout: LinearLayout
@@ -40,6 +44,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         super.onViewCreated(view, savedInstanceState)
 
         shimmerLayout = view.findViewById(R.id.shimmer_layout_tasks)
+        searchBar = view.findViewById(R.id.jobs_search)
 
         filter = requireView().findViewById(R.id.filter_user_jobs)
         filter.setOnClickListener {
@@ -58,13 +63,6 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         suggestedRecycler.setHasFixedSize(true)
 
-        val listSuggeJobs = mutableListOf<SuggestedJobData>()
-        listSuggeJobs.add(SuggestedJobData("Android Devloper"))
-        listSuggeJobs.add(SuggestedJobData("UI Devloper"))
-        listSuggeJobs.add(SuggestedJobData("Devloper"))
-        listSuggeJobs.add(SuggestedJobData("Android Devloper"))
-        listSuggeJobs.add(SuggestedJobData("UI Devloper"))
-        listSuggeJobs.add(SuggestedJobData("Devloper"))
 
         getJobs()
 
@@ -85,6 +83,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
+                    val originalData = response.toList()
                     val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
                     suggestedRecycler.adapter = suggestedJobAdapter
                     suggestedJobAdapter.notifyDataSetChanged()
@@ -94,6 +93,37 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                     shimmerLayout.visibility = View.GONE
                     recentJobRecycler.adapter = recentJobAdapter
                     recentJobAdapter.notifyDataSetChanged()
+
+                    searchBar.addTextChangedListener(object :TextWatcher{
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val filterData = originalData.filter { item ->
+                                item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            suggestedJobAdapter.updateData(filterData)
+
+                            val filterData1 = originalData.filter { item ->
+                                item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            suggestedJobAdapter.updateData(filterData1)
+
+                        }
+
+                        override fun afterTextChanged(p0: Editable?) {
+
+                        }
+
+                    })
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

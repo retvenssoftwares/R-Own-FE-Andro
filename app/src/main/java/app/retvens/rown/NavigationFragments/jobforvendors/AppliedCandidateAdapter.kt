@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.jobforvendors
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -10,12 +11,13 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.JobsCollection.ApplicantDataClass
+import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.job.JobsPostedAdapater
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class AppliedCandidateAdapter(val context:Context,val applicantData:List<ApplicantDataClass>):RecyclerView.Adapter<AppliedCandidateAdapter.AppliedCandidateAdapter>() {
+class AppliedCandidateAdapter(val context:Context, var applicantData:List<ApplicantDataClass>):RecyclerView.Adapter<AppliedCandidateAdapter.AppliedCandidateAdapter>() {
 
     class AppliedCandidateAdapter(itemview:View):ViewHolder(itemview) {
 
@@ -38,7 +40,7 @@ class AppliedCandidateAdapter(val context:Context,val applicantData:List<Applica
         val data = applicantData[position]
 
         holder.name.text = data.Full_name
-        holder.city.text = data.Location
+        holder.city.text = "Kanpur"
         holder.role.text = data.jobTitle
         Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
@@ -57,4 +59,5 @@ class AppliedCandidateAdapter(val context:Context,val applicantData:List<Applica
     override fun getItemCount(): Int {
         return applicantData.size
     }
+
 }

@@ -100,7 +100,24 @@ class JobPostActivity : AppCompatActivity(),
         val post = findViewById<CardView>(R.id.card_post_job)
 
         post.setOnClickListener {
-            postJob()
+
+            if (jobTitle.length() < 3){
+                binding.jobTitleLayout.error = "Enter Proper details"
+            }else if (jobTypeEt.length() < 3){
+                binding.typeLayout.error = "Enter Proper details"
+            }else if (postMinSalaryEt.length() <3){
+                binding.expectedLayout.error = "Enter Proper details"
+            }else if(jobDescription.length() < 3){
+                binding.descLayout.error = "Enter Proper details"
+            }else if (jobsSkill.length() < 3){
+                binding.skillLayout.error = "Enter Proper details"
+            }else{
+                postJob()
+            }
+
+
+
+
         }
 
     }
