@@ -14,6 +14,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobResponseDataClass
 import app.retvens.rown.DataCollections.JobsCollection.RequestJobDataClass
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetCTC
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetJobDepartment
 import app.retvens.rown.bottomsheet.BottomSheetJobDesignation
 import app.retvens.rown.bottomsheet.BottomSheetJobType
@@ -31,7 +32,7 @@ class RequestForJobFragment : Fragment(),
     BottomSheetJobType.OnBottomJobTypeClickListener,
     BottomSheetNoticePeriod.OnBottomNoticeClickListener,
     BottomSheetCTC.OnBottomCTCClickListener,
-    BottomSheetLocation.OnBottomLocationClickListener {
+    BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
 
     lateinit var selectDepartmentET : TextInputEditText
     lateinit var selectDesignationET : TextInputEditText
@@ -84,10 +85,10 @@ class RequestForJobFragment : Fragment(),
 
         selectJobLocationET = requireView().findViewById(R.id.select_job_location_et)
         selectJobLocationET.setOnClickListener {
-            val bottomSheet = BottomSheetLocation()
+            val bottomSheet = BottomSheetCountryStateCity()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
-            bottomSheet.setOnLocationClickListener(this)
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
 
         selectNoticeET = requireView().findViewById(R.id.select_notice_et)
@@ -164,7 +165,7 @@ class RequestForJobFragment : Fragment(),
     }
 
 
-    override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {
-        selectJobLocationET.setText(LocationFrBo)
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        selectJobLocationET.setText(CountryStateCityFrBo)
     }
 }
