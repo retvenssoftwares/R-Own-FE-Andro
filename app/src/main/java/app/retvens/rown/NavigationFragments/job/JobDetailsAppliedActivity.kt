@@ -20,10 +20,28 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
         binding = ActivityJobDetailsAppliedBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.jobNameDetails.text = intent.getStringExtra("title")
+
+        val locat = intent.getStringExtra("location")
+        val company = intent.getStringExtra("company")
+
+        binding.locationJobDetails.setText("$company.$locat")
+        binding.appliedType.text = intent?.getStringExtra("type")
+
+
+
         binding.backJobsDetails.setOnClickListener {
             onBackPressed()
         }
+
+        val desc = intent.getStringExtra("description")
+        val skill = intent.getStringExtra("skill")
+
+        val bundle = Bundle()
+        bundle.putString("desc", desc)
+        bundle.putString("skill",skill)
         val fragment: Fragment = DescriptionFragment()
+        fragment.arguments = bundle
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.details_applied_fragments_container,fragment)
         transaction.commit()
@@ -37,8 +55,15 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
 
             binding.activitiesJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.activitiesJobCardTextApplied.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            val desc = intent.getStringExtra("description")
+            val skill = intent.getStringExtra("skill")
 
-            val fragment: Fragment = DescriptionFragment()
+            val bundle = Bundle()
+            bundle.putString("desc", desc)
+            bundle.putString("skill",skill)
+
+            val fragment = DescriptionFragment()
+            fragment.arguments = bundle
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.details_applied_fragments_container,fragment)
             transaction.commit()
@@ -70,7 +95,12 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
             binding.descriptionJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.descriptionJobCardTextApplied.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
+            val ApplicationId = intent.getStringExtra("AppId")
+
+            val bundle = Bundle()
+            bundle.putString("AppID", ApplicationId)
             val fragment: Fragment = ActivitiesJobAppliedFragment()
+            fragment.arguments = bundle
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.details_applied_fragments_container,fragment)
             transaction.commit()

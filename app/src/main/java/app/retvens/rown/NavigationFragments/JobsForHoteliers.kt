@@ -94,12 +94,12 @@ class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListen
             startActivity(Intent(context, JobPostActivity::class.java) )
         }
 
-        view.findViewById<ImageView>(R.id.filter).setOnClickListener {
-            val bottomSheet = BottomSheetJobFilter()
-            val fragManager = (activity as FragmentActivity).supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetJobFilter.Job_TAG)}
-            bottomSheet.setOnJobClickListener(this)
-        }
+//        view.findViewById<ImageView>(R.id.filter).setOnClickListener {
+//            val bottomSheet = BottomSheetJobFilter()
+//            val fragManager = (activity as FragmentActivity).supportFragmentManager
+//            fragManager.let{bottomSheet.show(it, BottomSheetJobFilter.Job_TAG)}
+//            bottomSheet.setOnJobClickListener(this)
+//        }
 
 
         val childFragment: Fragment = JobPostedChildFragmnet()

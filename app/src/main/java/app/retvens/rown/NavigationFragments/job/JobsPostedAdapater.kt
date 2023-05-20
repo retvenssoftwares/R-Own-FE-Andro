@@ -42,11 +42,9 @@ class JobsPostedAdapater(val context: Context, val jobList:List<JobsData>):Recyc
         holder.location.text = jobs.jobLocation
         holder.type.text = jobs.jobType
         holder.title.text = "Remote"
+        holder.salary.text = jobs.expectedCTC
 
-        val min = jobs.minSalary
-        val max = jobs.maxSalary
 
-        holder.salary.text = max
 
         holder.button.setOnClickListener {
            val intent = Intent(context,JobsDetailsVendor::class.java)
@@ -57,7 +55,7 @@ class JobsPostedAdapater(val context: Context, val jobList:List<JobsData>):Recyc
             intent.putExtra("type",jobs.jobType)
             intent.putExtra("description",jobs.jobDescription)
             intent.putExtra("skills",jobs.skillsRecq)
-            intent.putExtra("salary",jobs.maxSalary)
+            intent.putExtra("salary",jobs.expectedCTC)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }

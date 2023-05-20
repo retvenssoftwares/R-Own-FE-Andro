@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.job
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -15,7 +16,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.JobData
 import app.retvens.rown.R
 
-class RecentJobAdapter(val context: Context, val jobsList:List<JobsData>) : RecyclerView.Adapter<RecentJobAdapter.RecentJobViewHolder>() {
+class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : RecyclerView.Adapter<RecentJobAdapter.RecentJobViewHolder>() {
 
     class RecentJobViewHolder(itemView: View) : ViewHolder(itemView){
         val designation = itemView.findViewById<TextView>(R.id.recent_job_designation)
@@ -44,11 +45,7 @@ class RecentJobAdapter(val context: Context, val jobsList:List<JobsData>) : Recy
         holder.location.text = data.jobLocation
         holder.type.text = data.jobType
         holder.title.text = "Remote"
-
-        val min = data.minSalary
-        val max = data.maxSalary
-
-        holder.salary.text = max
+        holder.salary.text = data.expectedCTC
 
 
         holder.itemView.setOnClickListener{
@@ -62,8 +59,15 @@ class RecentJobAdapter(val context: Context, val jobsList:List<JobsData>) : Recy
             intent.putExtra("skill",data.skillsRecq)
             intent.putExtra("jobId",data.jid)
             intent.putExtra("userId",data.user_id)
+            intent.putExtra("appliedStatus",data.display_status)
             context.startActivity(intent)
         }
 
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<JobsData>) {
+        jobsList = newItems
+        notifyDataSetChanged()
     }
 }

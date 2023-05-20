@@ -20,6 +20,7 @@ import app.retvens.rown.bottomsheet.BottomSheetJobType
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetNoticePeriod
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +41,13 @@ class RequestForJobFragment : Fragment(),
     lateinit var selectNoticeET : TextInputEditText
     lateinit var expectedCTCeET : TextInputEditText
 
+    lateinit var select_department:TextInputLayout
+    lateinit var select_designation :TextInputLayout
+    lateinit var select_Employment: TextInputLayout
+    lateinit var select_location :TextInputLayout
+    lateinit var select_ctc : TextInputLayout
+    lateinit var select_notice:TextInputLayout
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,10 +59,34 @@ class RequestForJobFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        select_department = view.findViewById(R.id.select_department)
+        select_designation = view.findViewById(R.id.select_designation)
+        select_Employment = view.findViewById(R.id.select_employment)
+        select_location = view.findViewById(R.id.select_job_location)
+        select_ctc = view.findViewById(R.id.select_ctc)
+        select_notice = view.findViewById(R.id.select_notice)
+
         requestAJob()
 
         view.findViewById<CardView>(R.id.card_post_job_request).setOnClickListener {
-            RequestJob()
+
+            if (selectDepartmentET.length() < 3){
+                select_department.error = "Please enter proper detail"
+            }else if (selectDesignationET.length() < 3){
+                select_designation.error = "Please enter proper detail"
+            }else if (selectJobEmploymentET.length() < 3){
+                select_Employment.error = "Please enter proper detail"
+            }else if (selectJobLocationET.length() < 3){
+                select_location.error =  "Please enter proper detail"
+            }else if (selectNoticeET.length() < 3){
+                select_location.error = "Please enter proper detail"
+            }else if (expectedCTCeET.length() < 3){
+                select_notice.error = "Please enter proper detail"
+            }else{
+                RequestJob()
+            }
+
+
         }
     }
     private fun requestAJob() {
