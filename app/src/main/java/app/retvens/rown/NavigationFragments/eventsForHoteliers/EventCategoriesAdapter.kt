@@ -36,7 +36,7 @@ class EventCategoriesAdapter(val listS : List<EventCategoriesData>, val context:
         holder.endPic.setImageResource(R.drawable.ic_right_arrow)
 
         holder.itemView.setOnClickListener {
-//            context.startActivity(Intent(context, AllBlogsActivity::class.java))
+//            context.startActivity(Intent(context, AE::class.java))
         }
 
         holder.blogsQuantity.text = "12 Events"
