@@ -18,6 +18,15 @@ class NotificationSettingActivity : AppCompatActivity() {
         binding.jobNotification.setOnClickListener {
             startActivity(Intent(this, JobNotificationActivity::class.java))
         }
+        binding.postNotification.setOnClickListener {
+            startActivity(Intent(this, JobNotificationActivity::class.java))
+        }
+        binding.chatNotification.setOnClickListener {
+            startActivity(Intent(this, JobNotificationActivity::class.java))
+        }
+        binding.communityNotification.setOnClickListener {
+            startActivity(Intent(this, JobNotificationActivity::class.java))
+        }
 
     }
 }
