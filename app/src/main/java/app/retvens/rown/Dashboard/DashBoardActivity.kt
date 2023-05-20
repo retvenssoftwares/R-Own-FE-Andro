@@ -178,18 +178,19 @@ class DashBoardActivity : AppCompatActivity() {
         bottom_Nav.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.home -> replaceFragment(HomeFragment())
-                R.id.jobs -> if (hotelOwner || hotelVendor || hotelOwnerChain){
+                R.id.jobs ->
+                    if (hotelOwner || hotelVendor || hotelOwnerChain){
                     replaceFragment(JobsForHoteliers())
                 }else{
                     replaceFragment(JobFragment())
                 }
                 R.id.explore -> replaceFragment(ExploreFragment())
-                R.id.events -> replaceFragment(EventFragmentForHoteliers())
-//                    if (hotelOwner || hotelVendor || hotelOwnerChain){
-//                    replaceFragment(EventFragmentForHoteliers())
-//                }else{
-//                    replaceFragment(EventFragment())
-//                }
+                R.id.events ->
+                    if (hotelOwner || hotelVendor || hotelOwnerChain){
+                    replaceFragment(EventFragmentForHoteliers())
+                }else{
+                    replaceFragment(EventFragment())
+                }
 //                R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.profile -> replaceFragment(ProfileFragmentForHotelOwner())
                 else -> null
