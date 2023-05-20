@@ -6,6 +6,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -18,6 +19,12 @@ import app.retvens.rown.R
 
 class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : RecyclerView.Adapter<SuggestedJobAdapter.SuggestedJobViewHolder>() {
 
+    interface JobSavedClickListener {
+        fun onJobSavedClick(job: JobsData)
+    }
+
+    private var jobSavedClickListener: JobSavedClickListener? = null
+
     class SuggestedJobViewHolder(itemView: View) : ViewHolder(itemView){
         val position = itemView.findViewById<TextView>(R.id.suggested_job_title)
         val location = itemView.findViewById<TextView>(R.id.suggested_job_location)
@@ -26,6 +33,8 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
         val salary = itemView.findViewById<TextView>(R.id.salary)
         val button = itemView.findViewById<CardView>(R.id.apply_btn)
         val text = itemView.findViewById<TextView>(R.id.buttontext)
+        val jobSaved = itemView.findViewById<ImageView>(R.id.save_suggested)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestedJobViewHolder {
@@ -45,10 +54,13 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
 
 
             holder.position.text = jobs.jobTitle
-            holder.location.text = jobs.jobLocation
+            holder.location.text = jobs.companyName
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
 
+        holder.jobSaved.setOnClickListener {
+            jobSavedClickListener?.onJobSavedClick(jobs)
+        }
 
         holder.salary.text = jobs.expectedCTC
 
@@ -75,5 +87,9 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
     fun updateData(newItems: List<JobsData>) {
         jobList = newItems
         notifyDataSetChanged()
+    }
+
+    fun setJobSavedClickListener(listener: JobSavedClickListener) {
+        jobSavedClickListener = listener
     }
 }

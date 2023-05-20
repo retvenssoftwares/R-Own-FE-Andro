@@ -137,6 +137,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
         search: EditText
     ) {
 
+        Toast.makeText(requireContext(),numericCode,Toast.LENGTH_SHORT).show()
         val getLocation = RetrofitBuilder.profileCompletion.getStates(numericCode)
 
         getLocation.enqueue(object : Callback<List<StateData>?>,
@@ -207,20 +208,20 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
 
         val getLocation = RetrofitBuilder.profileCompletion.getCities(numericCode,cCode)
 
-        getLocation.enqueue(object : Callback<CityData?>,
+        getLocation.enqueue(object : Callback<List<CityData>?>,
             CityAdapter.OnLocationClickListener {
             override fun onResponse(
-                call: Call<CityData?>,
-                response: Response<CityData?>
+                call: Call<List<CityData>?>,
+                response: Response<List<CityData>?>
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-                    locationCityAdapter = CityAdapter(requireContext(),response.cityNames)
+                    locationCityAdapter = CityAdapter(requireContext(),response)
                     locationCityAdapter.notifyDataSetChanged()
                     recyclerViewD.adapter = locationCityAdapter
                     locationCityAdapter.setOnLocationClickListener(this)
 
-                    /*search.addTextChangedListener(object : TextWatcher {
+                    search.addTextChangedListener(object : TextWatcher {
                         override fun beforeTextChanged(
                             s: CharSequence?,
                             start: Int,
@@ -238,7 +239,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
                         ) {
                             val original = response.toList()
                             val filter = original.filter { searchUser ->
-                                searchUser.cityNames.contains(s.toString(),ignoreCase = false)
+                                searchUser.cityNames.contains(s.toString())
                             }
                             locationCityAdapter.searchLocation(filter)
                         }
@@ -246,14 +247,14 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
                         override fun afterTextChanged(s: Editable?) {
 
                         }
-                    })*/
+                    })
                 }
                 else{
                     Toast.makeText(requireContext(), "Reload : ${ response.code().toString() }", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<CityData?>, t: Throwable) {
+            override fun onFailure(call: Call<List<CityData>?>, t: Throwable) {
                 Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
                 Log.e("error",t.message.toString())
             }
@@ -261,7 +262,9 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
             override fun onStateDataClick(cityData: String) {
                 locationCityET.setText(cityData)
             }
+
         })
+
     }
 
     override fun onDetach() {

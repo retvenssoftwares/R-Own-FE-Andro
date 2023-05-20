@@ -100,7 +100,7 @@ interface PriofileCompletionApis{
     fun getCities(
         @Path("numeric_code") numeric_code : String,
         @Path("state_code") state_code : String
-    ):Call<CityData>
+    ):Call<List<CityData>>
 
     @GET("getjobtitle")
     fun getJobTitle():Call<List<GetJobDataClass>>

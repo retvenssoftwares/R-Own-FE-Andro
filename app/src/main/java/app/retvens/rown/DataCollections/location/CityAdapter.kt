@@ -15,7 +15,7 @@ import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class CityAdapter(val context: Context, var cityList:List<String>): RecyclerView.Adapter<CityAdapter.MyViewHolderClass>() {
+class CityAdapter(val context: Context, var cityList:List<CityData>): RecyclerView.Adapter<CityAdapter.MyViewHolderClass>() {
 
     private var countryClickListener: OnLocationClickListener? = null
 
@@ -41,13 +41,13 @@ class CityAdapter(val context: Context, var cityList:List<String>): RecyclerView
     override fun onBindViewHolder(holder: MyViewHolderClass, position: Int) {
             val data = cityList[position]
 
-        holder.location.text = data
+        holder.location.text = data.cityNames.toString()
         holder.itemView.setOnClickListener {
-            countryClickListener?.onStateDataClick(data)
+            countryClickListener?.onStateDataClick(data.cityNames.toString())
         }
 
     }
-    fun searchLocation(searchText : List<String>){
+    fun searchLocation(searchText : List<CityData>){
         cityList = searchText
         notifyDataSetChanged()
     }

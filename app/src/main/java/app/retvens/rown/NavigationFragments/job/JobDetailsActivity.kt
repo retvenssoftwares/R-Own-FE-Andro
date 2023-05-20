@@ -188,7 +188,7 @@ class JobDetailsActivity : AppCompatActivity() {
                         nameLayout.error = "Enter Proper details"
                     }else if(experience.length() < 1){
                         experienceLayout.error = "Enter Proper details"
-                    }else if (pdfUri != null){
+                    }else if (resume.length() < 3){
                         resumeLayout.error = "Select resume"
                     }else if (intro.length() < 3){
                         introLayout.error = "Enter Proper details"

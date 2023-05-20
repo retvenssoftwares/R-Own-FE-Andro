@@ -76,7 +76,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
     private fun getJobs() {
         val getJob = RetrofitBuilder.jobsApis.getJobs()
 
-        getJob.enqueue(object : Callback<List<JobsData>?> {
+        getJob.enqueue(object : Callback<List<JobsData>?>,
+            SuggestedJobAdapter.JobSavedClickListener {
             override fun onResponse(
                 call: Call<List<JobsData>?>,
                 response: Response<List<JobsData>?>
@@ -87,6 +88,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                     val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
                     suggestedRecycler.adapter = suggestedJobAdapter
                     suggestedJobAdapter.notifyDataSetChanged()
+
+                    suggestedJobAdapter.setJobSavedClickListener(this)
 
                     val recentJobAdapter = RecentJobAdapter(requireContext(), response)
                     recentJobRecycler.visibility = View.VISIBLE
@@ -131,6 +134,10 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
             override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
                 Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onJobSavedClick(job: JobsData) {
+
             }
         })
     }

@@ -42,7 +42,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : Recy
 
 
         holder.designation.text = data.jobTitle
-        holder.location.text = data.jobLocation
+        holder.location.text = data.companyName
         holder.type.text = data.jobType
         holder.title.text = "Remote"
         holder.salary.text = data.expectedCTC
