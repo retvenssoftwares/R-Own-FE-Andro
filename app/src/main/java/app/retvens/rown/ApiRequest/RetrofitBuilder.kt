@@ -29,4 +29,6 @@ object RetrofitBuilder {
 
     val jobsApis = retrofitBuilder2.create(JobsApis::class.java)
 
+    val connectionApi = retrofitBuilder2.create(ConnectionApis::class.java)
+
 }

@@ -15,6 +15,7 @@ import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJo
 import app.retvens.rown.NavigationFragments.exploreForUsers.ExplorePostsFragment
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventFragment
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsFragment
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeopleFragment
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesFragment
 import app.retvens.rown.R
 
@@ -26,6 +27,7 @@ class ExploreFragment : Fragment() {
     private lateinit var exploreEvents : CardView
     private lateinit var exploreHotels : CardView
     private lateinit var exploreServices : CardView
+    private lateinit var explorePeople : CardView
 
 
     override fun onCreateView(
@@ -45,6 +47,7 @@ class ExploreFragment : Fragment() {
         exploreEvents = view.findViewById(R.id.exploreEvents)
         exploreHotels = view.findViewById(R.id.exploreHotels)
         exploreServices = view.findViewById(R.id.exploreServices)
+        explorePeople = view.findViewById(R.id.explorePeoples)
 
         val welcome = view.findViewById<TextView>(R.id.welcome_name)
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
@@ -60,6 +63,7 @@ class ExploreFragment : Fragment() {
         explorePosts.setOnClickListener {
             explorePosts.setCardBackgroundColor(Color.parseColor("#ADD134"))
             exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            explorePeople.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
@@ -75,6 +79,7 @@ class ExploreFragment : Fragment() {
         exploreJobs.setOnClickListener {
             explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreJobs.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            explorePeople.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
@@ -90,6 +95,7 @@ class ExploreFragment : Fragment() {
         exploreBlogs.setOnClickListener {
             explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            explorePeople.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreBlogs.setCardBackgroundColor(Color.parseColor("#ADD134"))
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
@@ -105,6 +111,7 @@ class ExploreFragment : Fragment() {
         exploreEvents.setOnClickListener {
             explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            explorePeople.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreEvents.setCardBackgroundColor(Color.parseColor("#ADD134"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
@@ -120,6 +127,7 @@ class ExploreFragment : Fragment() {
         exploreHotels.setOnClickListener {
             explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            explorePeople.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#ADD134"))
@@ -135,12 +143,27 @@ class ExploreFragment : Fragment() {
         exploreServices.setOnClickListener {
             explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            explorePeople.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#ADD134"))
 
             val childFragment: Fragment = ExploreServicesFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+        }
+
+        explorePeople.setOnClickListener {
+            explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            explorePeople.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            val childFragment: Fragment = ExplorePeopleFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
         }

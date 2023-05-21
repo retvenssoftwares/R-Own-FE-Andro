@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobData
 import app.retvens.rown.R
 

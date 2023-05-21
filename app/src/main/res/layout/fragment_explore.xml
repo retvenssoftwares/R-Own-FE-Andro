@@ -104,6 +104,8 @@
 
                 </androidx.cardview.widget.CardView>
 
+
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/exploreJobs"
                     android:layout_width="wrap_content"
@@ -142,6 +144,51 @@
                                 android:paddingStart="2dp"
                                 android:textSize="12dp"
                                 android:text="Jobs"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/explorePeoples"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp"
+                    android:layout_marginVertical="12dp"
+                    android:layout_marginStart="12dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:layout_marginTop="2dp"
+                        app:cardBackgroundColor="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@color/white"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:padding="6dp">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/peoplevector"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:paddingStart="2dp"
+                                android:textSize="12dp"
+                                android:text="People"/>
 
                         </LinearLayout>
 
