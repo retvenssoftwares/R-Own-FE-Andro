@@ -22,6 +22,8 @@ class CreateEventPostActivity : AppCompatActivity(),
         binding = ActivityCreateEventPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.createCommunityBackBtn.setOnClickListener { onBackPressed() }
+
         val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
 
