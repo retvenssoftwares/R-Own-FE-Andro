@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.MessageEntity
 import app.retvens.rown.R
@@ -19,7 +20,7 @@ import java.util.*
 
 class MesiboChatScreenAdapter(
     private val context: Context,
-    private var messages: List<MesiboMessage>,
+    private var messages: List<app.retvens.rown.MessagingModule.MessageData>,
     private val myAddress: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -42,14 +43,16 @@ class MesiboChatScreenAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val message = messages[position]
 
+
+
         when (holder.itemViewType) {
             VIEW_TYPE_MESSAGE_SENT -> {
                 val sentMessageViewHolder = holder as SentMessageViewHolder
-                sentMessageViewHolder.bind(message)
+                sentMessageViewHolder.bind(message.mesiboMessage)
             }
             VIEW_TYPE_MESSAGE_RECEIVED -> {
                 val receivedMessageViewHolder = holder as ReceivedMessageViewHolder
-                receivedMessageViewHolder.bind(message)
+                receivedMessageViewHolder.bind(message.mesiboMessage)
             }
         }
 
@@ -62,7 +65,7 @@ class MesiboChatScreenAdapter(
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
 
-        return if (message.profile.address == myAddress) {
+        return if (message.peer == myAddress) {
             VIEW_TYPE_MESSAGE_SENT
         } else {
             VIEW_TYPE_MESSAGE_RECEIVED
@@ -88,7 +91,6 @@ class MesiboChatScreenAdapter(
     inner class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val messageTextView: TextView = itemView.findViewById(R.id.receiver_message)
         private val timeTextView: TextView = itemView.findViewById(R.id.receiver_time)
-
 
         fun bind(message: MesiboMessage) {
             messageTextView.text = message.message

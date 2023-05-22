@@ -35,5 +35,6 @@
     <color name="card_background_color2">#272A3D</color>
     <color name="textcolor">#6B7280</color>
 
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert"/>
 
 </resources>

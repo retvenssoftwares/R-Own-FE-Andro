@@ -7,10 +7,8 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -26,6 +24,7 @@ import app.retvens.rown.DataCollections.MesiboDataClass
 import app.retvens.rown.DataCollections.MesiboResponseClass
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.onboarding.SearchUser
+import app.retvens.rown.MesiboApi
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
 import app.retvens.rown.utils.moveTo
@@ -38,6 +37,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.mesibo.api.Mesibo
+import com.mesibo.calls.api.MesiboCall
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -236,6 +237,11 @@ open class OtpVerification : AppCompatActivity() {
                     Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
                     Log.d("SaveM",response.toString())
                     SharedPreferenceManagerAdmin.getInstance(applicationContext).saveUser(response)
+
+                    MesiboApi.init(applicationContext)
+
+                    MesiboApi.startMesibo(true)
+
 
                     val key = intent.getStringExtra("key")
                     if (key == "1"){

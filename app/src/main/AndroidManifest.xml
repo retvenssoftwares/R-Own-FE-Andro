@@ -397,6 +397,15 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name=".MessagingModule.MesiboMessagingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/png_r_logo" />
@@ -420,6 +429,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+
         <activity
             android:name=".authentication.PersonalInformation"
             android:exported="true"

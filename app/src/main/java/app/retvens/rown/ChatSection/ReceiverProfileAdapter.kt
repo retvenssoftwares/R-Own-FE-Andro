@@ -13,6 +13,8 @@ import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.UsersList
+import app.retvens.rown.MessagingModule.MesiboMessagingActivity
+import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.mesibo.api.MesiboProfile
@@ -50,13 +52,11 @@ class ReceiverProfileAdapter(val context: Context, var userList:List<UserProfile
         holder.itemView.setOnClickListener {
 
 
-            val intent = Intent(context,ChatScreen::class.java)
+            val intent = Intent(context,MesiboMessagingActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("name",data.Full_name)
-            intent.putExtra("profile",data.Profile_pic)
             for (mesibo in data.Mesibo_account) {
-                intent.putExtra("address", mesibo.address)
-                intent.putExtra("userId",mesibo.uid)
+                intent.putExtra(MesiboUI.PEER, mesibo.address)
+                intent.putExtra(MesiboUI.GROUP_ID,mesibo.uid)
             }
 
             context.startActivity(intent)

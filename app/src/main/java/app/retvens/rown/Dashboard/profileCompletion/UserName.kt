@@ -30,6 +30,8 @@ class UserName : AppCompatActivity() {
         val onboardingPrefs = getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
         val editor = onboardingPrefs.edit()
 
+
+
         if (!onboardingPrefs.getBoolean("UsernameFragment", false)) {
             editor.putBoolean("UsernameFragment", false)
         }

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import app.retvens.rown.R
 
-class UserChatList : Fragment() {
+open class UserChatList : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

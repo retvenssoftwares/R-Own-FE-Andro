@@ -28,4 +28,23 @@
 
     <color name="suggested_job_black">#272A3D</color>
     <color name="suggested_job_yellow">#ACD037</color>
+
+
+    <color name="text_color13">#333333</color>
+    <color name="text_color14">#99333333</color>
+    <color name="text_color15">#B7B7B7</color>
+    <color name="text_color16">#000000</color>
+    <color name="text_color17">#272A3D</color>
+    <color name="text_color_orange">#F4B63F</color>
+    <color name="text_color_black_orange">#272A3D</color>
+    <color name="text_color_black_white">#171717</color>
+    <color name="text_color_black_white2">#272A3D</color>
+    <color name="text_color_subtitle">#828282</color>
+    <color name="text_color_button">#B7B7B7</color>
+    <color name="text_color_black">#272A3D</color>
+    <color name="text_color_chat_date">#828282</color>
+    <color name="text_color_success">#76CA66</color>
+    <color name="send_message_background">#FFF8EB</color>
+    <color name="read_message_color">#76CA66</color>
+    <color name="error">#FE5858</color>
 </resources>

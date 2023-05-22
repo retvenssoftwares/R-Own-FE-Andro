@@ -90,6 +90,7 @@ class ExplorePeopleFragment : Fragment() {
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+
         val sendRequest = RetrofitBuilder.connectionApi.sendRequest(userId, ConnectionDataClass(user_id))
 
         sendRequest.enqueue(object : Callback<UpdateResponse?> {
