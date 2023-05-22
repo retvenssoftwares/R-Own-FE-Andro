@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetGoingBack
@@ -29,6 +30,8 @@ import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
 import app.retvens.rown.databinding.ActivityCreatePostBinding
 import com.bumptech.glide.Glide
+import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity
+import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.File
@@ -44,11 +47,11 @@ class CreatePostActivity : AppCompatActivity(),
     private var croppedImageUri: Uri?= null
 
     private var imgUriP : Uri?= null
-    private var imgUri1 : Uri?= null
-    private var imgUri2 : Uri?= null
-    private var imgUri3 : Uri?= null
-    private var imgUri4 : Uri?= null
-    private var imgUri5 : Uri?= null
+    private var imgUri1 : Uri?= null   // Final uri for img1
+    private var imgUri2 : Uri?= null   // Final uri for img2
+    private var imgUri3 : Uri?= null   // Final uri for img3
+    private var imgUri4 : Uri?= null   // Final uri for img4
+    private var imgUri5 : Uri?= null   // Final uri for img5
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraImageUri: Uri
@@ -71,6 +74,7 @@ class CreatePostActivity : AppCompatActivity(),
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.createCommunityBackBtn.setOnClickListener { onBackPressed() }
 
         cameraImageUri = createImageUri()!!
 
@@ -196,8 +200,16 @@ class CreatePostActivity : AppCompatActivity(),
             }
         }
 
-        binding.imgPreview.setOnClickListener {
+        binding.editImage.setOnClickListener {
             if (imgUriP != null){
+
+                val dsPhotoEditorIntent = Intent(this, DsPhotoEditorActivity::class.java)
+
+                dsPhotoEditorIntent.data = imgUriP
+
+                dsPhotoEditorIntent.putExtra(DsPhotoEditorConstants.DS_PHOTO_EDITOR_OUTPUT_DIRECTORY, "Edited Image")
+
+                startActivityForResult(dsPhotoEditorIntent, 100)
 
             }
         }
@@ -208,27 +220,47 @@ class CreatePostActivity : AppCompatActivity(),
                 imgUri1 = null
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img1.setImageURI(imgUriP)
+                if (imgUri1 == null && imgUri2 == null && imgUri3 == null && imgUri4 == null && imgUri5 == null){
+                    binding.deletePost.visibility = View.GONE
+                    binding.editImage.visibility = View.GONE
+                }
             } else if(imgUriP == imgUri2){
                 imgUriP = null
                 imgUri2 = null
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img2.setImageURI(imgUriP)
+                if (imgUri1 == null && imgUri2 == null && imgUri3 == null && imgUri4 == null && imgUri5 == null){
+                    binding.deletePost.visibility = View.GONE
+                    binding.editImage.visibility = View.GONE
+                }
             } else if(imgUriP == imgUri3){
                 imgUriP = null
                 imgUri3 = null
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img3.setImageURI(imgUriP)
+                if (imgUri1 == null && imgUri2 == null && imgUri3 == null && imgUri4 == null && imgUri5 == null){
+                    binding.deletePost.visibility = View.GONE
+                    binding.editImage.visibility = View.GONE
+                }
             } else if(imgUriP == imgUri4){
                 imgUriP = null
                 imgUri4 = null
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img4.setImageURI(imgUriP)
+                if (imgUri1 == null && imgUri2 == null && imgUri3 == null && imgUri4 == null && imgUri5 == null){
+                    binding.deletePost.visibility = View.GONE
+                    binding.editImage.visibility = View.GONE
+                }
             } else if(imgUriP == imgUri5){
                 imgUriP = null
                 imgUri5 = null
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img5.setImageURI(imgUriP)
-            }else{
+                if (imgUri1 == null && imgUri2 == null && imgUri3 == null && imgUri4 == null && imgUri5 == null){
+                    binding.deletePost.visibility = View.GONE
+                    binding.editImage.visibility = View.GONE
+                }
+            }else {
                 Toast.makeText(this, "can't del", Toast.LENGTH_SHORT).show()
             }
         }
@@ -289,6 +321,7 @@ class CreatePostActivity : AppCompatActivity(),
                 when (selectedImg) {
                     1 -> {
                         binding.deletePost.visibility = View.VISIBLE
+                        binding.editImage.visibility = View.VISIBLE
 
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img1.setImageURI(croppedImage)
@@ -324,6 +357,38 @@ class CreatePostActivity : AppCompatActivity(),
                 Toast.makeText(this, "Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT)
                     .show()
             }
+        } else if (requestCode == 100){
+
+            val outputUri: Uri? = data!!.data
+            if (outputUri != null){
+
+            if (imgUriP == imgUri1) {
+                imgUriP = outputUri
+                imgUri1 = imgUriP
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img1.setImageURI(imgUri1)
+            } else if (imgUriP == imgUri2){
+                imgUriP = outputUri
+                imgUri2 = imgUriP
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img2.setImageURI(imgUri2)
+            } else if (imgUriP == imgUri3){
+                imgUriP = outputUri
+                imgUri3 = imgUriP
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img3.setImageURI(imgUri3)
+            } else if (imgUriP == imgUri4){
+                imgUriP = outputUri
+                imgUri4 = imgUriP
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img4.setImageURI(imgUri4)
+            } else if (imgUriP == imgUri5){
+                imgUriP = outputUri
+                imgUri5 = imgUriP
+                binding.imgPreview.setImageURI(imgUriP)
+                binding.img5.setImageURI(imgUri5)
+            }
+          }
         }
     }
     private fun createImageUri(): Uri? {
