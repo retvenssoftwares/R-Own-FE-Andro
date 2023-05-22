@@ -22,6 +22,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        renderscriptTargetApi 21
+
+        renderscriptSupportModeEnabled true
+
     }
 
     buildTypes {
@@ -162,5 +167,22 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     //Photo Editor
-    implementation 'com.github.iamutkarshtiwari:Ananas:1.2.6'
+//    implementation 'com.github.iamutkarshtiwari:Ananas:1.2.6'
+//    implementation 'com.burhanrashid52:photoeditor:3.0.1'
+
+    // DS Photo Editor SDK
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation files('libs/ds-photo-editor-sdk-v10.aar')
+
+    // SDK related dependencies
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 }

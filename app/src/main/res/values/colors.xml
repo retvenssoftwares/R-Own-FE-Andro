@@ -10,6 +10,10 @@
     <color name="green_own">#ADD134</color>
     <color name="light_grey">#808080</color>
 
+    <color name="ucrop_color_toolbar">@color/teal_200</color>
+    <color name="ucrop_color_statusbar">@color/teal_700</color>
+    <color name="ucrop_color_widget_active">@color/teal_200</color>
+
     <color name="overlay_dark_5">#0C000000</color>
     <color name="overlay_dark_10">#1A000000</color>
     <color name="overlay_dark_20">#33000000</color>
