@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -29,9 +28,7 @@ import app.retvens.rown.bottomsheet.BottomSheet
 //import com.karan.multipleviewrecyclerview.Banner
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
-import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity
 import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
-import app.retvens.rown.viewAll.communityDetails.ViewAllCommunitiesAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -127,12 +124,56 @@ class HomeFragment : Fragment() {
 
         mList = ArrayList()
         prepareData()
-//        getPost()
+
+
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+        getPost(user_id)
 
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
 
     }
+
+    private fun getPost(userId: String) {
+
+        val getData = RetrofitBuilder.feedsApi.getPost(userId)
+
+        getData.enqueue(object : Callback<List<DataItem.Banner>?> {
+            override fun onResponse(
+                call: Call<List<DataItem.Banner>?>,
+                response: Response<List<DataItem.Banner>?>
+            ) {
+
+                if (response.isSuccessful){
+                    val response = response.body()!!
+
+                    response.forEach { it ->
+
+                        val postList = ArrayList<DataItem.Banner>()
+                        postList.add(DataItem.Banner(PostsDataClass(it.posts._id,it.posts.user_id,it.posts.location,
+                        it.posts.post_type,it.posts.Event_location,it.posts.Event_name,it.posts.checkinLocation,it.posts.checkinVenue,
+                        it.posts.caption,it.posts.hashtags,Media(it.posts.media.post,it.posts.media.date_added,it.posts.media._id),
+                        it.posts.post_id,it.posts.display_status,it.posts.Profile_pic,it.posts.User_name,it.posts.saved_post,
+                        it.posts.pollQuestion,it.posts.likes
+                        )))
+
+                        mList.add(DataItem(DataItemType.BANNER, banner = postList))
+
+                    }
+
+
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<List<DataItem.Banner>?>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+
+    }
+
 
     private fun getCommunities() {
         val getCommunity = RetrofitBuilder.feedsApi.getCommunities()
@@ -171,32 +212,8 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun getPost() {
-
-        val getPost = RetrofitBuilder.feedsApi.getPost()
-
-       getPost.enqueue(object : Callback<List<DataItem.Banner>?> {
-           override fun onResponse(
-               call: Call<List<DataItem.Banner>?>,
-               response: Response<List<DataItem.Banner>?>
-           ) {
-               if (response.isSuccessful){
-                   val response = response.body()!!
-
-                   Log.e("error",response.toString())
-
-               }else{
-                   Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-               }
-           }
-
-           override fun onFailure(call: Call<List<DataItem.Banner>?>, t: Throwable) {
-               TODO("Not yet implemented")
-           }
-       })
 
 
-    }
 
 
     private fun openCommentShit(postId:String) {
@@ -306,7 +323,7 @@ class HomeFragment : Fragment() {
         mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
         mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
         mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
-        mList.add(DataItem(DataItemType.BANNER, banner = DataItem.Banner(R.drawable.png_post)))
+
         mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
         mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
     }

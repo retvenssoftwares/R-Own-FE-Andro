@@ -27,7 +27,7 @@
             android:src="@drawable/community_btn" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/next_cumm"
+            android:id="@+id/share_post"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardElevation="6dp"

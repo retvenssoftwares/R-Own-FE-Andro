@@ -10,8 +10,7 @@ import retrofit2.http.*
 
 interface FeedsApi {
 
-    @GET("getpost")
-    fun getPost():Call<List<DataItem.Banner>>
+
 
     @PATCH("like/{postId}")
     fun postLike(
@@ -42,4 +41,32 @@ interface FeedsApi {
 
     @GET("getgroup")
     fun getCommunities():Call<List<GetCommunitiesData>>
+
+    @Multipart
+    @POST("post/{user_id}")
+    fun createPost(
+        @Path("user_id") user_id:String,
+        @Part("user_id")userId:RequestBody,
+        @Part("post_type")post_type:RequestBody,
+        @Part("Can_See")Can_See:RequestBody,
+        @Part("Can_comment")Can_comment:RequestBody,
+        @Part("caption")caption:RequestBody,
+        @Part media: MultipartBody.Part
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @POST("post/{user_id}")
+    fun createPoll(
+        @Path("user_id") user_id:String,
+        @Part("user_id")userId:RequestBody,
+        @Part("post_type")post_type:RequestBody,
+        @Part("pollQuestion[0][Question]")question:RequestBody,
+        @Part("pollQuestion[0][Options][0][Option]")Option1:RequestBody,
+        @Part("pollQuestion[0][Options][1][Option]")Option2:RequestBody,
+    ):Call<UpdateResponse>
+
+    @GET("getconnpost/{user_Id}")
+    fun getPost(
+        @Path("user_Id")user_Id:String
+    ):Call<List<DataItem.Banner>>
 }

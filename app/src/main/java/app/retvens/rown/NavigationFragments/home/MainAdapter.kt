@@ -15,6 +15,8 @@ import app.retvens.rown.databinding.UsersPostsCardBinding
 import app.retvens.rown.viewAll.vendorsDetails.ViewAllVendorsActivity
 import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity
+import com.bumptech.glide.Glide
+import javax.microedition.khronos.opengles.GL
 
 //import com.karan.multipleviewrecyclerview.Banner
 
@@ -39,12 +41,12 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner : DataItem.Banner){
 
-//            for (x in banner.banner.media!!){
-//                Glide.with(context).load(x.post).into(binding.postPic)
-//            }
-//
-//            binding.postUserDominican.text = banner.banner.location
-//            binding.recentCommentByUser.text = banner.banner.caption
+            Glide.with(context).load(banner.posts.Profile_pic).into(binding.postProfile)
+            Glide.with(context).load(banner.posts.media.post).into(binding.postPic)
+            binding.userNamePost.text = banner.posts.User_name
+            binding.userIdOnComment.text = banner.posts.caption
+
+
 
             binding.postProfile.setOnClickListener {
                 context.startActivity(Intent(context, UserProfileActivity::class.java))
@@ -56,10 +58,6 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             binding.postCard.setOnClickListener {
                 context.startActivity(Intent(context, PostDetailsActivity::class.java))
             }
-//            binding.userNamePost.text = banner.profileName
-//
-//            Glide.with(context).load(banner.profile_pic).into(binding.postProfile)
-//            binding.userIdOnComment.text = banner.username
 
             binding.likePost.setOnClickListener {
                 onItemClickListener?.onItemClick(banner)
@@ -158,7 +156,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
             is BannerItemViewHolder -> {
-                dataItemList[position].banner?.let { holder.bindBannerView(it) }
+                dataItemList[position].banner?.let { holder.bindBannerView(it[position]) }
             }
             else -> {
                 when (dataItemList[position].viewType) {

@@ -112,6 +112,7 @@
             android:layout_marginTop="30dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/opinion1_Layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -121,6 +122,7 @@
             android:layout_marginTop="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/opinion1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
@@ -129,6 +131,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/opinion2_Layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -138,6 +141,7 @@
             android:layout_marginTop="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/opinion2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
