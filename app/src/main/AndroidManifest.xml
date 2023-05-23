@@ -38,13 +38,16 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rown"
         android:usesCleartextTraffic="true"
-        android:largeHeap="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Dashboard.createPosts.CreateClickAndSharePostActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity"
             android:screenOrientation="portrait"
@@ -66,7 +69,6 @@
             android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorDrawActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.NoActionBar" />
-
         <activity
             android:name=".NavigationFragments.eventForUsers.allEvents.SeeAllEventsActivity"
             android:exported="false"
@@ -420,7 +422,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".MessagingModule.MesiboMessagingActivity"
             android:exported="true"
@@ -453,8 +454,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
-
         <activity
             android:name=".authentication.PersonalInformation"
             android:exported="true"
