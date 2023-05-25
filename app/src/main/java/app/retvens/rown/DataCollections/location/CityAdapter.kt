@@ -41,9 +41,9 @@ class CityAdapter(val context: Context, var cityList:List<CityData>): RecyclerVi
     override fun onBindViewHolder(holder: MyViewHolderClass, position: Int) {
             val data = cityList[position]
 
-        holder.location.text = data.cityNames.toString()
+        holder.location.text = data.name.toString()
         holder.itemView.setOnClickListener {
-            countryClickListener?.onStateDataClick(data.cityNames.toString())
+            countryClickListener?.onStateDataClick(data.name.toString())
         }
 
     }

@@ -65,6 +65,8 @@ class BottomSheetWhatToPost : BottomSheetDialogFragment() {
             mListener?.bottomWhatToPostClick("Poll")
             dismiss()
         }
+
+
     }
 
     override fun onDetach() {

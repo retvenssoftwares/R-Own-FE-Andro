@@ -27,7 +27,7 @@ import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobFilter
 
 
-class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener {
+class JobsForHoteliers : Fragment() {
 
     lateinit var postAJob : CardView
 
@@ -165,8 +165,6 @@ class JobsForHoteliers : Fragment(), BottomSheetJobFilter.OnBottomJobClickListen
 
     }
 
-    override fun bottomJobClick(jobFrBo: String) {
 
-    }
 
 }

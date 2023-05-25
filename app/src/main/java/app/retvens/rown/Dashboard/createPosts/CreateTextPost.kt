@@ -101,7 +101,7 @@ class CreateTextPost : AppCompatActivity(),
     override fun bottomWhatToPostClick(WhatToPostFrBo: String) {
         when (WhatToPostFrBo) {
             "Click" -> {
-                startActivity(Intent(applicationContext, CreatePostActivity::class.java))
+                startActivity(Intent(applicationContext, CreateClickAndSharePostActivity::class.java))
             }
             "Share" -> {
                 startActivity(Intent(applicationContext, CreatePostActivity::class.java))

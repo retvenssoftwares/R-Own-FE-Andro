@@ -2,25 +2,26 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
+import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
+import app.retvens.rown.databinding.GetjoblistBinding
+import app.retvens.rown.databinding.ItemPollProfileBinding
 import app.retvens.rown.databinding.UsersPostsCardBinding
 import app.retvens.rown.viewAll.vendorsDetails.ViewAllVendorsActivity
 import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity
 import com.bumptech.glide.Glide
-import javax.microedition.khronos.opengles.GL
 
-//import com.karan.multipleviewrecyclerview.Banner
-
-//import com.karan.multipleviewrecyclerview.RecyclerItem
 
 class MainAdapter(val context: Context, private val dataItemList: List<DataItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -29,8 +30,9 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
 
     interface OnItemClickListener {
-        fun onItemClick(dataItem: DataItem.Banner)
-        fun onItemClickForComment(banner: DataItem.Banner)
+        fun onItemClick(dataItem: PostItem)
+        fun onItemClickForComment(banner: PostItem,position: Int)
+
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -39,14 +41,29 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
 
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bindBannerView(banner : DataItem.Banner){
+        fun bindBannerView(banner: PostItem, position: Int){
 
-            Glide.with(context).load(banner.posts.Profile_pic).into(binding.postProfile)
-            Glide.with(context).load(banner.posts.media.post).into(binding.postPic)
-            binding.userNamePost.text = banner.posts.User_name
-            binding.userIdOnComment.text = banner.posts.caption
+//
+//            if (data != null && position <= data.size) {
+//                banner.posts.forEach { it->
+
+                        val post = banner
+
+                    if (post.post_type == "share some media"){
+
+                        Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+                        binding.userIdOnComment.text = post.User_name
+                        Log.e("username",post.User_name)
+                        binding.recentCommentByUser.text = post.caption
+                        Log.e("caption",post.caption)
+                        binding.userNamePost.text = post.User_name
+
+                        post.media.forEach { item ->
+                            Glide.with(context).load(item.post).into(binding.postPic)
+                        }
 
 
+                    }
 
             binding.postProfile.setOnClickListener {
                 context.startActivity(Intent(context, UserProfileActivity::class.java))
@@ -64,8 +81,81 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
 
             binding.comment.setOnClickListener {
-                onItemClickListener?.onItemClickForComment(banner)
+                onItemClickListener?.onItemClickForComment(banner,position)
             }
+
+//                }
+//            }
+//        else{
+//                Toast.makeText(context,"No Post Yet",Toast.LENGTH_SHORT).show()
+//            }
+
+
+//
+//            val data = banner.posts
+//            if (data != null && position <= data.size) {
+//                val post = data[position]
+//                Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+//                binding.userIdOnComment.text = post.User_name
+//                binding.recentCommentByUser.text = post.caption
+//                binding.userNamePost.text = post.User_name
+//
+//               post.media.forEach { it ->
+//                   Glide.with(context).load(it.post).into(binding.postPic)
+//               }
+
+//
+//            } else {
+//                Toast.makeText(context,"No Post Yet",Toast.LENGTH_SHORT).show()
+//            }
+
+
+
+
+        }
+    }
+
+
+    inner class BannerItemViewHolderPoll(private val binding : ItemPollProfileBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bindBannerView(banner: PostItem, position: Int){
+
+
+            banner.pollQuestion.forEach { item ->
+                binding.titlePoll.text  = item.Question
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//            binding.postProfile.setOnClickListener {
+//                context.startActivity(Intent(context, UserProfileActivity::class.java))
+//            }
+//
+//            binding.postPic.setOnClickListener {
+//                context.startActivity(Intent(context, PostsViewActivity::class.java))
+//            }
+//            binding.postCard.setOnClickListener {
+//                context.startActivity(Intent(context, PostDetailsActivity::class.java))
+//            }
+//
+//            binding.likePost.setOnClickListener {
+//                onItemClickListener?.onItemClick(banner)
+//            }
+//
+//            binding.comment.setOnClickListener {
+//                onItemClickListener?.onItemClickForComment(banner)
+//            }
 
         }
     }
@@ -129,6 +219,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
         return when(dataItemList[position].viewType){
             DataItemType.BANNER ->
                 R.layout.users_posts_card
+
+            DataItemType.POLL ->
+                R.layout.item_poll_profile
+
             else ->
                 R.layout.each_item
         }
@@ -140,6 +234,11 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 val binding =
                     UsersPostsCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 BannerItemViewHolder(binding)
+            }
+
+            R.layout.item_poll_profile ->{
+                  val poll = ItemPollProfileBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+                BannerItemViewHolderPoll(poll)
             }
             else -> {
                 val binding =
@@ -155,8 +254,14 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
+
+
+
             is BannerItemViewHolder -> {
-                dataItemList[position].banner?.let { holder.bindBannerView(it[position]) }
+                dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
+            }
+            is BannerItemViewHolderPoll ->{
+                dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
             }
             else -> {
                 when (dataItemList[position].viewType) {
@@ -166,6 +271,8 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         }
 
                     }
+
+
                     DataItemType.BLOGS -> {
                         dataItemList[position].blogsRecyclerDataList?.let {
                             (holder as RecyclerItemViewHolder).bindBlogsRecyclerView(it)

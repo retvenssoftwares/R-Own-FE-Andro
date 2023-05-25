@@ -18,7 +18,7 @@ interface PriofileCompletionApis{
         @Path("user_id") user_id : String,
         @Part("Full_name")Full_name:RequestBody,
         @Part("DOB")DOB:RequestBody,
-        @Part("User_id")User_id:RequestBody
+        @Part("User_name")User_id:RequestBody
     ):Call<UpdateResponse>
 
     @Multipart
@@ -87,8 +87,7 @@ interface PriofileCompletionApis{
         @Part("hotelOwnerId") id: RequestBody,
     ): Call<UpdateResponse>
 
-    @GET("countries")
-    fun getLocation():Call<List<LocationDataClass>>
+
     @GET("countries")
     fun getCountries():Call<List<CountryData>>
     @GET("countries/{numeric_code}/states")

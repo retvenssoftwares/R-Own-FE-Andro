@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
 import app.retvens.rown.DataCollections.FeedCollection.CommentDataClass
@@ -15,7 +17,7 @@ import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class CommentAdapter(val context: Context, var commentList:List<GetComments>): RecyclerView.Adapter<CommentAdapter.MyViewHolderClass3>() {
+class CommentAdapter(val context: Context, var commentList:GetComments): RecyclerView.Adapter<CommentAdapter.MyViewHolderClass3>() {
 
 
 
@@ -23,6 +25,9 @@ class CommentAdapter(val context: Context, var commentList:List<GetComments>): R
         val name = itemview.findViewById<TextView>(R.id.commented_username)
         val profile = itemview.findViewById<ShapeableImageView>(R.id.comment_profile)
         val comment = itemview.findViewById<TextView>(R.id.commentOfUser)
+        val reply = itemview.findViewById<CardView>(R.id.replyComment)
+        val relies = itemview.findViewById<TextView>(R.id.replies_OnComment)
+        val time = itemview.findViewById<TextView>(R.id.times_OnComment)
 
     }
 
@@ -33,17 +38,21 @@ class CommentAdapter(val context: Context, var commentList:List<GetComments>): R
 
     override fun onBindViewHolder(holder: MyViewHolderClass3, position: Int) {
 
-        val data = commentList[position]
 
+
+        val data = commentList.post.comments[position]
+
+
+        holder.name.text = data.User_name
         holder.comment.text = data.comment
-        holder.name.text = data.name
+        Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
-        Glide.with(context).load(data.profile).into(holder.profile)
+
 
     }
 
     override fun getItemCount(): Int {
-        return commentList.size
+        return commentList.commentCount
     }
 
 

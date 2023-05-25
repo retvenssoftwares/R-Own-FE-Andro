@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -309,9 +310,8 @@ class CreatePostActivity : AppCompatActivity(),
             imgUri1!!,"r",null
         )?:return
 
-
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file =  File(cacheDir, "cropped_${contentResolver.getFileName(imgUri1!!)}.jpg")
+        val file =  File(cacheDir, "${getRandomString(6)}.jpg")
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
@@ -523,17 +523,27 @@ class CreatePostActivity : AppCompatActivity(),
     }
 
 
-    private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
+//    private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
+//        val random = getRandomString(6)
+//
+//        var name = ""
+//        val returnCursor = this.query(coverPhotoPart,null,null,null,null)
+//        if (returnCursor!=null){
+//            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+//            returnCursor.moveToFirst()
+//            name = returnCursor.getString(nameIndex)
+//            returnCursor.close()
+//        }
+//        name = name+random
+//        Log.e("String",name)
+//        return name
+//    }
 
-        var name = ""
-        val returnCursor = this.query(coverPhotoPart,null,null,null,null)
-        if (returnCursor!=null){
-            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            returnCursor.moveToFirst()
-            name = returnCursor.getString(nameIndex)
-            returnCursor.close()
-        }
-        return name
+    fun getRandomString(length: Int) : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 
 }

@@ -10,6 +10,7 @@ class DataItemType {
         const val HOTEL_AWARDS = 4
         const val VENDORS = 5
         const val CREATE_COMMUNITY = 6
+        const val POLL = 7
     }
 
 }

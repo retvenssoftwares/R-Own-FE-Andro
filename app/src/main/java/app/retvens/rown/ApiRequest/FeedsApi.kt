@@ -1,6 +1,7 @@
 package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.FeedCollection.*
+import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.home.DataItem
 import okhttp3.MultipartBody
@@ -21,7 +22,7 @@ interface FeedsApi {
     @GET("comment/{postId}")
     fun getComment(
         @Path("postId")postId : String
-    ):Call<List<GetComments>>
+    ):Call<GetComments>
 
     @Multipart
     @POST("usergroup")
@@ -68,5 +69,16 @@ interface FeedsApi {
     @GET("getconnpost/{user_Id}")
     fun getPost(
         @Path("user_Id")user_Id:String
-    ):Call<List<DataItem.Banner>>
+    ):Call<List<PostsDataClass>>
+
+    @PATCH("postcomment/{post_Id}")
+    fun postComment(
+        @Path("post_Id") post_Id:String,
+        @Body postComment:PostCommentClass
+    ):Call<UpdateResponse>
+
+    @GET("gethotelinpost")
+    fun fetchbyLocation(
+        location:String
+    ):Call<List<GetHotelDataClass>>
 }

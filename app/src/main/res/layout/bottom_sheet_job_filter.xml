@@ -58,6 +58,7 @@
         android:textColor="@color/black"/>
 
     <RelativeLayout
+        android:id="@+id/select_jobCategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -71,9 +72,11 @@
             android:layout_marginHorizontal="12dp"
             android:src="@drawable/rounded_image"/>
         <TextView
+            android:id="@+id/select_Job"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select one -"
+            android:hint="Select one -"
+            android:textColorHint="@color/black"
             android:textSize="15dp"
             android:textFontWeight="600"
             android:fontFamily="@font/montserrat_regular"
@@ -120,7 +123,8 @@
             android:id="@+id/jType_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Full-Time"
+            android:hint="Select one -"
+            android:textColorHint="@color/black"
             android:textSize="15dp"
             android:textFontWeight="600"
             android:fontFamily="@font/montserrat_regular"
@@ -167,7 +171,8 @@
             android:id="@+id/filter_location_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Your Location"
+            android:hint="Select Your Location"
+            android:textColorHint="@color/black"
             android:textSize="15dp"
             android:textFontWeight="600"
             android:fontFamily="@font/montserrat_regular"
@@ -217,9 +222,10 @@
             android:id="@+id/expacted_salary_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Select One"
+            android:hint="Select One"
             android:textSize="15dp"
             android:textFontWeight="600"
+            android:textColorHint="@color/black"
             android:fontFamily="@font/montserrat_regular"
             android:textColor="@color/black"
             android:drawableEnd="@drawable/ic_arrow_down_24"

@@ -43,6 +43,8 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:List<UserProfileR
 
         val data = peopleList[position]
 
+
+
         holder.name.text = data.Full_name
 
         if (data.Profile_pic.isNullOrEmpty()){

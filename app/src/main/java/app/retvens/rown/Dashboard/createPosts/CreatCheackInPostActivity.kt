@@ -4,15 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
-import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
+import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.databinding.ActivityCreatCheackInPostBinding
 import com.bumptech.glide.Glide
 
 class CreatCheackInPostActivity : AppCompatActivity(),
     BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener,
-    BottomSheetSelectAudience.OnBottomSelectAudienceClickListener  {
+    BottomSheetSelectAudience.OnBottomSelectAudienceClickListener,
+    BottomSheetHotelByLocation.OnBottomCountryStateCityClickListener {
     lateinit var binding: ActivityCreatCheackInPostBinding
     var canSee : Int ?= 0
 
@@ -50,6 +51,8 @@ class CreatCheackInPostActivity : AppCompatActivity(),
 
         checkIn()
 
+
+
     }
     private fun checkIn() {
         binding.etLocationPost.setOnClickListener {
@@ -59,7 +62,11 @@ class CreatCheackInPostActivity : AppCompatActivity(),
             bottomSheet.setOnCountryStateCityClickListener(this)
         }
         binding.etVenuePost.setOnClickListener {
-            Toast.makeText(applicationContext, "Will implement along with api", Toast.LENGTH_SHORT).show()
+            val bottomSheet = BottomSheetHotelByLocation()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetHotelByLocation.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
+
         }
 
         binding.nextCheckIn.setOnClickListener {
@@ -79,4 +86,8 @@ class CreatCheackInPostActivity : AppCompatActivity(),
             binding.canCommentText.text = audienceFrBo
         }
     }
+
+
+
+
 }

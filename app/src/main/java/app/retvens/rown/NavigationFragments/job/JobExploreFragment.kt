@@ -10,11 +10,15 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.JobsCollection.FilterDataClass
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobFilter
@@ -28,6 +32,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
     lateinit var recentJobRecycler : RecyclerView
     lateinit var filter : ImageView
     lateinit var searchBar : EditText
+    private lateinit var filterlist:FilterDataClass
 
 
     lateinit var shimmerLayout: LinearLayout
@@ -46,6 +51,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         shimmerLayout = view.findViewById(R.id.shimmer_layout_tasks)
         searchBar = view.findViewById(R.id.jobs_search)
 
+        filterlist = FilterDataClass("","","","")
+
         filter = requireView().findViewById(R.id.filter_user_jobs)
         filter.setOnClickListener {
             val bottomSheet = BottomSheetJobFilter()
@@ -55,6 +62,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         }
 
         exploreAJob()
+
+
 
     }
     private fun exploreAJob() {
@@ -84,49 +93,62 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    val originalData = response.toList()
-                    val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
-                    suggestedRecycler.adapter = suggestedJobAdapter
-                    suggestedJobAdapter.notifyDataSetChanged()
 
-                    suggestedJobAdapter.setJobSavedClickListener(this)
+                    response.forEach { it ->
 
-                    val recentJobAdapter = RecentJobAdapter(requireContext(), response)
-                    recentJobRecycler.visibility = View.VISIBLE
-                    shimmerLayout.visibility = View.GONE
-                    recentJobRecycler.adapter = recentJobAdapter
-                    recentJobAdapter.notifyDataSetChanged()
+                        if (it.jobTitle == filterlist.category || it.jobType == filterlist.type || it.expectedCTC == filterlist.salary || it.jobLocation == filterlist.location){
+                            val originalData = response.toList()
+                            val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
+                            suggestedRecycler.adapter = suggestedJobAdapter
+                            suggestedJobAdapter.notifyDataSetChanged()
 
-                    searchBar.addTextChangedListener(object :TextWatcher{
-                        override fun beforeTextChanged(
-                            p0: CharSequence?,
-                            p1: Int,
-                            p2: Int,
-                            p3: Int
-                        ) {
+                            suggestedJobAdapter.setJobSavedClickListener(this)
 
+
+                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+                            recentJobRecycler.visibility = View.VISIBLE
+                            shimmerLayout.visibility = View.GONE
+                            recentJobRecycler.adapter = recentJobAdapter
+                            recentJobAdapter.notifyDataSetChanged()
+
+
+
+
+                            searchBar.addTextChangedListener(object :TextWatcher{
+                                override fun beforeTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
+
+                                }
+
+                                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                                    val filterData = originalData.filter { item ->
+                                        item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                                    }
+
+                                    suggestedJobAdapter.updateData(filterData)
+
+                                    val filterData1 = originalData.filter { item ->
+                                        item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                                    }
+
+                                    suggestedJobAdapter.updateData(filterData1)
+
+                                }
+
+                                override fun afterTextChanged(p0: Editable?) {
+
+                                }
+
+                            })
                         }
 
-                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            val filterData = originalData.filter { item ->
-                                item.jobTitle.contains(p0.toString(),ignoreCase = true)
-                            }
+                    }
 
-                            suggestedJobAdapter.updateData(filterData)
 
-                            val filterData1 = originalData.filter { item ->
-                                item.jobTitle.contains(p0.toString(),ignoreCase = true)
-                            }
-
-                            suggestedJobAdapter.updateData(filterData1)
-
-                        }
-
-                        override fun afterTextChanged(p0: Editable?) {
-
-                        }
-
-                    })
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -142,7 +164,53 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         })
     }
 
-    override fun bottomJobClick(jobFrBo: String) {
+    override fun bottomJobClick(category: String, type: String, location: String, salary: String) {
+            filterlist?.category = category
+            filterlist?.type = type
+            filterlist?.salary = salary
+            filterlist?.location = location
+
+            filterData()
 
     }
+
+    private fun filterData() {
+
+        val card1 = view?.findViewById<CardView>(R.id.filter_card1)
+        val card2 =  view?.findViewById<CardView>(R.id.filter_card2)
+        val card3 =  view?.findViewById<CardView>(R.id.filter_card3)
+        val card4 =  view?.findViewById<CardView>(R.id.filter_card4)
+
+        val filterJob = view?.findViewById<TextView>(R.id.filter_job)
+        val type = view?.findViewById<TextView>(R.id.filter_type)
+        val location = view?.findViewById<TextView>(R.id.filter_location)
+        val salary = view?.findViewById<TextView>(R.id.filter_salary)
+
+        filterJob?.text = filterlist.category
+        type?.text = filterlist.type
+
+        location?.text = filterlist.location
+        salary?.text = filterlist.salary
+
+        getJobs()
+
+        try {
+            if (filterJob!!.text.isNotEmpty()){
+                card1?.visibility = View.VISIBLE
+            }else if (type!!.text.isNotEmpty()) {
+                card2?.visibility = View.VISIBLE
+            }else if (location!!.text.isNotEmpty()){
+                card3?.visibility = View.VISIBLE
+            }else if (salary!!.text.isNotEmpty()){
+                card4?.visibility = View.VISIBLE
+            }
+        }catch (e:java.lang.NullPointerException){
+
+        }
+
+
+
+    }
+
+
 }

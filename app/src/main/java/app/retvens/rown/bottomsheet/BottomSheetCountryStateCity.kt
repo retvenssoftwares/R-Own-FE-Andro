@@ -103,7 +103,9 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
             val country = locationCountryET.text.toString()
             val state = locationStateET.text.toString()
             val city = locationCityET.text.toString()
-            val location = "$city, $state, $country"
+            val location = "$city,$state,$country"
+
+
 
             mListener?.bottomCountryStateCityClick(location)
             dismiss()
@@ -137,7 +139,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
         search: EditText
     ) {
 
-        Toast.makeText(requireContext(),numericCode,Toast.LENGTH_SHORT).show()
+
         val getLocation = RetrofitBuilder.profileCompletion.getStates(numericCode)
 
         getLocation.enqueue(object : Callback<List<StateData>?>,
@@ -182,7 +184,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
                     })
                 }
                 else{
-                    Toast.makeText(requireContext(), "Reload : ${ response.code().toString() }", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "No States Found", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -239,7 +241,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
                         ) {
                             val original = response.toList()
                             val filter = original.filter { searchUser ->
-                                searchUser.cityNames.contains(s.toString())
+                                searchUser.name.contains(s.toString())
                             }
                             locationCityAdapter.searchLocation(filter)
                         }
@@ -261,6 +263,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
 
             override fun onStateDataClick(cityData: String) {
                 locationCityET.setText(cityData)
+                dialogLanguage.dismiss()
             }
 
         })

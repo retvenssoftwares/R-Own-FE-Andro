@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.home
 
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 
 
@@ -13,7 +14,7 @@ data class DataItem(
     var vendorsRecyclerDataList: List<VendorsRecyclerData>? = null,
     var communityRecyclerDataList: List<CommunityRecyclerData>? = null,
     var createCommunityRecyclerDataList: List<CreateCommunityRecyclerData>? = null,
-    var banner: List<Banner>? = null
+    var banner: PostItem? = null
 ){
 
     data class RecyclerItem(val image : Int, val title : String)
