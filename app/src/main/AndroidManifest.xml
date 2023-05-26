@@ -45,12 +45,25 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.job.ViewAllSuggestedJobsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.job.savedJobs.SavedJobsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"/>
+        <activity
             android:name=".Dashboard.createPosts.CreatePostEventActivityChild"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.EditEventActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".Dashboard.createPosts.CreateClickAndSharePostActivity"
             android:exported="false"

@@ -31,4 +31,9 @@ object RetrofitBuilder {
 
     val connectionApi = retrofitBuilder2.create(ConnectionApis::class.java)
 
+    val viewAllApi = retrofitBuilder2.create(ViewAll::class.java)
+
+    val EventsApi = retrofitBuilder2.create(EventApis::class.java)
+
+    val ProfileApis = retrofitBuilder2.create(ProfileApis::class.java)
 }

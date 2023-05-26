@@ -34,7 +34,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:orientation="horizontal"
         android:gravity="center"
         android:weightSum="7"
@@ -68,8 +68,19 @@
             app:layout_constraintBottom_toBottomOf="@id/eye"
             app:layout_constraintTop_toTopOf="@id/eye"/>
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/userProfile"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/png_post"
+            app:shapeAppearanceOverlay="@style/RoundedCornerImage"
+            android:layout_marginHorizontal="6dp"
+            app:layout_constraintEnd_toStartOf="@id/userName"
+            app:layout_constraintBottom_toBottomOf="@id/eye"
+            app:layout_constraintTop_toTopOf="@id/eye"/>
       <TextView
-            android:id="@+id/locale"
+            android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sebastian Morgan"
@@ -187,6 +198,7 @@ Overall, Belgrade offers a plethora of luxurious and unique stays for travelers 
             android:src="@drawable/svg_share_post"
             app:tint="@color/black"/>
         <ImageView
+            android:id="@+id/savePost"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_weight="1"
