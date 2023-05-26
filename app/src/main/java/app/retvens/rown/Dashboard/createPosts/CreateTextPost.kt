@@ -22,7 +22,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
@@ -32,7 +35,14 @@ import app.retvens.rown.databinding.ActivityCreateTextPostBinding
 import com.bumptech.glide.Glide
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -90,7 +100,58 @@ class CreateTextPost : AppCompatActivity(),
             fragManager.let{bottomSheet.show(it, BottomSheetWhatToPost.WTP_TAG)}
             bottomSheet.setOnWhatToPostClickListener(this)
         }
+
+        binding.ShareStatus.setOnClickListener {
+
+            val sharedPreferences =  getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+            val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+            if (binding.canSeeText.text == "Can See"){
+                Toast.makeText(applicationContext,"Select Post Seen Status",Toast.LENGTH_SHORT).show()
+            }else if (binding.canCommentText.text == "Can comment"){
+                Toast.makeText(applicationContext,"Select Comment Status",Toast.LENGTH_SHORT).show()
+            }else{
+                shareStatus(user_id)
+            }
+        }
     }
+
+    private fun shareStatus(userId:String) {
+
+        val canSee = binding.canSeeText.text.toString()
+        val canComment = binding.canCommentText.text.toString()
+        val caption = binding.whatDYEt.text.toString()
+
+
+        val sendPost  = RetrofitBuilder.feedsApi.createStatus(userId,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),userId),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"normal status"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canSee),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canComment),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption)
+        )
+
+        sendPost.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(applicationContext,CreateTextPost::class.java))
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
     override fun bottomSelectAudienceClick(audienceFrBo: String) {
         if (canSee == 1){
             binding.canSeeText.text = audienceFrBo

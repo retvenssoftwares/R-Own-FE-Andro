@@ -11,6 +11,7 @@ class DataItemType {
         const val VENDORS = 5
         const val CREATE_COMMUNITY = 6
         const val POLL = 7
+        const val Status = 8
     }
 
 }

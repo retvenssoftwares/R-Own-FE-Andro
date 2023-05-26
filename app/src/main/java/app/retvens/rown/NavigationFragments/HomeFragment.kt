@@ -168,6 +168,9 @@ class HomeFragment : Fragment() {
                                 if (item.post_type == "Polls"){
                                     mList.add(0,DataItem(DataItemType.POLL, banner = item))
                                 }
+                                if (item.post_type == "normal status"){
+                                    mList.add(0,DataItem(DataItemType.Status, banner = item))
+                                }
 
 
                             }

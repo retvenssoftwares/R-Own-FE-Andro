@@ -2,27 +2,22 @@ package app.retvens.rown.Dashboard.createPosts
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
-import app.retvens.rown.databinding.ActivityCreateEventPostBinding
+import app.retvens.rown.databinding.ActivityCreatePostEventChildBinding
+import app.retvens.rown.databinding.ActivityCreateTextPostBinding
 import com.bumptech.glide.Glide
 
-class CreateEventPostActivity : AppCompatActivity(),
-    BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener,
+class CreatePostEventActivityChild : AppCompatActivity(),
     BottomSheetSelectAudience.OnBottomSelectAudienceClickListener {
-    lateinit var binding: ActivityCreateEventPostBinding
-    var canSee : Int ?= 0
 
+    lateinit var binding : ActivityCreatePostEventChildBinding
+    var canSee : Int ?= 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCreateEventPostBinding.inflate(layoutInflater)
+        binding = ActivityCreatePostEventChildBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.createCommunityBackBtn.setOnClickListener { onBackPressed() }
 
         val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
@@ -32,7 +27,6 @@ class CreateEventPostActivity : AppCompatActivity(),
 
         Glide.with(applicationContext).load(profilePic).into(binding.userCompleteProfile)
         binding.userCompleteName.setText(profileName)
-
 
         binding.canSee.setOnClickListener {
             canSee = 1
@@ -48,35 +42,6 @@ class CreateEventPostActivity : AppCompatActivity(),
             fragManager.let{bottomSheet.show(it, BottomSheetSelectAudience.S_A_TAG)}
             bottomSheet.setOnSelectAudienceClickListener(this)
         }
-
-        postUpdateEvent()
-    }
-    private fun postUpdateEvent() {
-        binding.etLocationPostEvent.setOnClickListener {
-            val bottomSheet = BottomSheetCountryStateCity()
-            val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
-            bottomSheet.setOnCountryStateCityClickListener(this)
-        }
-
-        binding.etEventVenuePost.setOnClickListener {
-
-            val location = binding.etLocationPostEvent.text.toString()
-
-            if (location.isEmpty()){
-
-            }
-
-        }
-        binding.nextUpdateEvent.setOnClickListener {
-            binding.whatDY.visibility = View.VISIBLE
-            binding.updateEvent.visibility = View.GONE
-            binding.cardEventPost.visibility = View.VISIBLE
-        }
-    }
-
-    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
-        binding.etLocationPostEvent.setText(CountryStateCityFrBo)
     }
 
     override fun bottomSelectAudienceClick(audienceFrBo: String) {
@@ -86,5 +51,4 @@ class CreateEventPostActivity : AppCompatActivity(),
             binding.canCommentText.text = audienceFrBo
         }
     }
-
 }

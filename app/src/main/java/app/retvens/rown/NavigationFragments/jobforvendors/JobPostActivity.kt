@@ -150,7 +150,7 @@ class JobPostActivity : AppCompatActivity(),
                    val response = response.body()!!
                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                }else{
-                   Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                   Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
                }
            }
 

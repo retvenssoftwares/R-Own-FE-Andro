@@ -230,7 +230,7 @@
                 android:textColor="@color/black"
                 android:clickable="true"
                 android:focusable="false"
-                android:text="Select Your Location"
+                android:hint="Select Your Location"
                 android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>

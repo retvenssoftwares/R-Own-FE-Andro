@@ -19,6 +19,7 @@ data class PostItem(
     val User_name: String,
     val post_id: String,
     val saved_post: List<Any>,
+    val Full_name:String,
     val __v: Int
 )
 
@@ -34,8 +35,13 @@ data class Option(
     val Option: String,
     val _id: String,
     val option_id: String,
-    val votes: List<Any>,
+    val votes: List<Vote>,
     val date_added: String
+)
+
+data class Vote(
+    val user_id: String,
+    val _id: String
 )
 
 data class Media(
