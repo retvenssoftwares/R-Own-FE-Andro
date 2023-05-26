@@ -160,7 +160,7 @@ class BasicInformationFragment : Fragment(),
                     Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
                     progressDialog.show()
 
-                    setJobTitle()
+                    setJobTitle(myRoleInHosET.text.toString())
                 }
             } else {
                 if (myRecentJobET.text.toString() == "Most Recent Job Title"){
@@ -175,34 +175,35 @@ class BasicInformationFragment : Fragment(),
                     Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
                     progressDialog.show()
 
-                    setJobTitle()
+                    setJobTitle(myRecentJobET.text.toString())
                 }
             }
         }
     }
 
-    private fun setJobTitle() {
+    private fun setJobTitle(role : String) {
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val university = university.text.toString()
         val start = start.text.toString()
         val end = end.text.toString()
-        val role:String
 
-        val roleInHotel = myRoleInHosET.text.toString()
-        val roleInJob = myRecentJobET.text.toString()
-
-
-
-        if (myRoleInHosET.text.toString() == "My Role in hospitality"){
-            role = roleInHotel
-        }else if (myRecentJobET.text.toString() == "Most Recent Job Title"){
-            role = roleInJob
-        }
-        else{
-            role = ""
-        }
+//        val role:String
+//
+//        val roleInHotel = myRoleInHosET.text.toString()
+//        val roleInJob = myRecentJobET.text.toString()
+//
+//
+//
+//        if (myRoleInHosET.text.toString() == "My Role in hospitality"){
+//            role = roleInHotel
+//        }else if (myRecentJobET.text.toString() == "Most Recent Job Title"){
+//            role = roleInJob
+//        }
+//        else{
+//            role = ""
+//        }
 
 
 
