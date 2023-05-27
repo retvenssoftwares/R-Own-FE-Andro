@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.job
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -72,6 +74,9 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         suggestedRecycler.setHasFixedSize(true)
 
+        requireView().findViewById<TextView>(R.id.view_all_suggested).setOnClickListener {
+            startActivity(Intent(context, ViewAllSuggestedJobsActivity::class.java))
+        }
 
         getJobs()
 
@@ -83,7 +88,10 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
 
     private fun getJobs() {
-        val getJob = RetrofitBuilder.jobsApis.getJobs()
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 
         getJob.enqueue(object : Callback<List<JobsData>?>,
             SuggestedJobAdapter.JobSavedClickListener {

@@ -28,6 +28,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+        <ImageView
+            android:id="@+id/savedJobs"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/svg_jobs_explore"
+            app:tint="@color/black"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toTopOf="@id/welcome_name"
+            app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
         android:id="@+id/find_txt"
         android:layout_width="wrap_content"
@@ -63,7 +73,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp"
-                    android:layout_marginVertical="6dp"
+                    android:layout_marginVertical="9dp"
                     android:layout_marginStart="12dp"
                     app:cardBackgroundColor="@color/green_own">
 
@@ -108,7 +118,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp"
-                    android:layout_marginVertical="6dp"
+                    android:layout_marginVertical="9dp"
                     android:layout_marginStart="12dp"
                     app:cardBackgroundColor="@color/white">
 
@@ -154,8 +164,8 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp"
-                    android:layout_marginVertical="6dp"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginVertical="9dp"
+                    android:layout_marginHorizontal="12dp"
                     app:cardBackgroundColor="@color/white">
 
                     <androidx.cardview.widget.CardView

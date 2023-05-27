@@ -1,44 +1,35 @@
-package app.retvens.rown.NavigationFragments.jobforvendors
+package app.retvens.rown.NavigationFragments.job
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
-import app.retvens.rown.NavigationFragments.JobsForHoteliers
-import app.retvens.rown.NavigationFragments.job.JobsPostedAdapater
-import app.retvens.rown.NavigationFragments.job.RecentJobAdapter
-import app.retvens.rown.NavigationFragments.job.SuggestedJobAdapter
 import app.retvens.rown.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class JobsPostedByUser : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var jobsPostedAdapater: JobsPostedAdapater
+class ViewAllSuggestedJobsActivity : AppCompatActivity() {
+
+    lateinit var suggestedRecycler : RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_jobs_posted_by_user)
+        setContentView(R.layout.activity_view_all_suggested_jobs)
 
-        val back = findViewById<ImageView>(R.id.jobs_back)
-
-
-        recyclerView = findViewById(R.id.jobPosted_recycler)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
-
-        back.setOnClickListener {
-
-        }
+        suggestedRecycler = findViewById(R.id.suggested_job_recycler)
+        suggestedRecycler.layoutManager = LinearLayoutManager(this)
+        suggestedRecycler.setHasFixedSize(true)
 
         getJobs()
+
     }
 
     private fun getJobs() {
@@ -47,16 +38,19 @@ class JobsPostedByUser : AppCompatActivity() {
 
         val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 
-        getJob.enqueue(object : Callback<List<JobsData>?> {
+        getJob.enqueue(object : Callback<List<JobsData>?>,
+            SuggestedJobAdapter.JobSavedClickListener {
             override fun onResponse(
                 call: Call<List<JobsData>?>,
                 response: Response<List<JobsData>?>
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    jobsPostedAdapater = JobsPostedAdapater(applicationContext, response)
-                    recyclerView.adapter = jobsPostedAdapater
-                    jobsPostedAdapater.notifyDataSetChanged()
+
+                    val suggestedJobAdapter = SuggestedJobAdapter(this@ViewAllSuggestedJobsActivity,response)
+                    suggestedRecycler.adapter = suggestedJobAdapter
+                    suggestedJobAdapter.notifyDataSetChanged()
+
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -65,6 +59,11 @@ class JobsPostedByUser : AppCompatActivity() {
             override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
                 Toast.makeText(applicationContext,t.message.toString(), Toast.LENGTH_SHORT).show()
             }
+
+            override fun onJobSavedClick(job: JobsData) {
+
+            }
         })
     }
+
 }

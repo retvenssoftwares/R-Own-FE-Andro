@@ -2,7 +2,11 @@ package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.JobsCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.saveId.SaveEvent
 import app.retvens.rown.NavigationFragments.home.DataItem
+import app.retvens.rown.NavigationFragments.job.savedJobs.Job
+import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
+import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -16,8 +20,10 @@ import retrofit2.http.Path
 
 interface JobsApis {
 
-    @GET("getjob")
-    fun getJobs(): Call<List<JobsData>>
+    @GET("getjob/{userId}")
+    fun getJobs(
+        @Path("userId") userId : String
+    ): Call<List<JobsData>>
 
     @GET("job/{userId}")
     fun getIndividualJobs(
@@ -75,4 +81,16 @@ interface JobsApis {
         @Path("appId") appId:String,
         @Body status:StatusDataClass
     ):Call<UpdateResponse>
+
+    @GET("getbookmark/{userId}")
+    fun getSavedJobs(
+        @Path("userId") userId : String
+    ): Call<SavedJobsData>
+
+    @PATCH("saveid/{User_id}")
+    fun saveJobs(
+        @Path("User_id") User_id : String,
+        @Body saveJob: SaveJob
+    ) : Call<UpdateResponse>
+
 }
