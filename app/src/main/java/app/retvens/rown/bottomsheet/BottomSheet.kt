@@ -100,11 +100,11 @@ class BottomSheet : BottomSheetDialogFragment() {
                 call: Call<List<UserProfileRequestItem>?>,
                 response: Response<List<UserProfileRequestItem>?>
             ) {
-                Toast.makeText(context,response.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("Profile",response.toString())
-                Log.d("Profile",response.body().toString())
-
                 if(response.isSuccessful && isAdded){
+//                    Toast.makeText(context,response.toString(),Toast.LENGTH_SHORT).show()
+                    Log.d("Profile",response.toString())
+                    Log.d("Profile",response.body().toString())
+
                     val data = response.body()!!
                     usersProfileAdapter = UsersProfileAdapter(requireContext(), data)
                     usersProfileAdapter.notifyDataSetChanged()
@@ -128,7 +128,7 @@ class BottomSheet : BottomSheetDialogFragment() {
                          ) {
                              val original = data.toList()
                              val filter = original.filter { searchUser ->
-                                 searchUser.Full_name!!.contains(s.toString(),ignoreCase = false)
+                                 searchUser.Full_name!!.contains(s.toString(),ignoreCase = true)
                              }
                              usersProfileAdapter.searchConnection(filter)
                          }
@@ -143,8 +143,11 @@ class BottomSheet : BottomSheetDialogFragment() {
 //                Log.d("Profile",response.body()?.)
             }
             override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
-                Toast.makeText(context,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("Profile",t.localizedMessage?.toString(),t)
+                if (isAdded) {
+                    Toast.makeText(context, t.localizedMessage?.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                    Log.d("Profile", t.localizedMessage?.toString(), t)
+                }
             }
         })
     }

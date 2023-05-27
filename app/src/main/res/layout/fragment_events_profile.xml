@@ -17,4 +17,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_tasks_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/shimmer_layout_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white">
+            <include layout = "@layout/shimmer_profile_events_card"/>
+            <include layout = "@layout/shimmer_profile_events_card"/>
+            <include layout = "@layout/shimmer_profile_events_card"/>
+            <include layout = "@layout/shimmer_profile_events_card"/>
+            <include layout = "@layout/shimmer_profile_events_card"/>
+            <include layout = "@layout/shimmer_profile_events_card"/>
+            <include layout = "@layout/shimmer_profile_events_card"/>
+            <include layout = "@layout/shimmer_profile_events_card"/>
+            <include layout = "@layout/shimmer_profile_events_card"/>
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Empty Data"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

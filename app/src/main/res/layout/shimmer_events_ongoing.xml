@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@color/grey_10">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -25,7 +25,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:shapeAppearanceOverlay="@style/SquareCornerImageForCards"
-            android:src="@color/black"
+            android:src="@color/grey_20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -39,11 +39,12 @@
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/montserrat_regular"
             android:text="Workshop"
-            android:textColor="@color/black"
+            android:textColor="@color/grey_20"
+            android:background="@color/grey_20"
             android:maxLines="2"
             android:textSize="14dp"
             android:layout_marginTop="2dp"
-            app:layout_constraintEnd_toEndOf="@id/users"
+            app:layout_constraintEnd_toStartOf="@id/price"
             app:layout_constraintStart_toEndOf="@+id/personal_notification_profile"
             app:layout_constraintTop_toTopOf="@id/personal_notification_profile" />
 
@@ -55,11 +56,12 @@
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/montserrat_semibold"
             android:text="Framer Workshop"
-            android:textColor="@color/black"
+            android:textColor="@color/grey_20"
+            android:background="@color/grey_20"
             android:maxLines="2"
             android:textSize="14dp"
-            android:layout_marginTop="2dp"
-            app:layout_constraintEnd_toEndOf="@id/users"
+            android:layout_marginTop="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/personal_notification_profile"
             app:layout_constraintTop_toBottomOf="@id/personal_workshop" />
 
@@ -71,7 +73,8 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/montserrat_semibold"
             android:text="28"
-            android:textColor="@color/black"
+            android:textColor="@color/grey_20"
+            android:background="@color/grey_20"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@+id/personal_notification_profile"
             app:layout_constraintTop_toBottomOf="@+id/personal_notification_name" />
@@ -83,7 +86,8 @@
             android:layout_marginStart="4dp"
             android:fontFamily="@font/montserrat_regular"
             android:text="Participants"
-            android:textColor="@color/grey_60"
+            android:textColor="@color/grey_20"
+            android:background="@color/grey_20"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@+id/participants"
             app:layout_constraintTop_toTopOf="@id/participants" />
@@ -95,7 +99,8 @@
             android:layout_marginStart="4dp"
             android:fontFamily="@font/montserrat_regular"
             android:text="28 Oct, 2022"
-            android:textColor="@color/grey_60"
+            android:textColor="@color/grey_20"
+            android:background="@color/grey_20"
             android:textSize="12dp"
             app:layout_constraintStart_toEndOf="@+id/p"
             app:layout_constraintTop_toTopOf="@id/participants" />
@@ -109,7 +114,8 @@
             android:layout_marginEnd="10dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/blue"
+            android:textColor="@color/grey_20"
+            android:background="@color/grey_20"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
