@@ -41,22 +41,6 @@ class JobsOnProfileFragment : Fragment() {
         exploreJobsRecyclerView.layoutManager = LinearLayoutManager(context)
         exploreJobsRecyclerView.setHasFixedSize(true)
 
-        val blogs = listOf<ExploreJobData>(
-            ExploreJobData("Senior Inn"),
-            ExploreJobData("Junior Inn 2"),
-            ExploreJobData("Android"),
-            ExploreJobData("Paradise Inn 23"),
-            ExploreJobData("Paradise Inn"),
-            ExploreJobData("Paradise Inn 2"),
-            ExploreJobData("Senior Inn"),
-            ExploreJobData("Junior Inn 2"),
-            ExploreJobData("Android"),
-            ExploreJobData("Paradise Inn 23"),
-            ExploreJobData("Paradise Inn"),
-            ExploreJobData("Paradise Inn 2"),
-        )
-
-
         getJobs()
 
     }
@@ -73,20 +57,28 @@ class JobsOnProfileFragment : Fragment() {
                 call: Call<List<JobsData>?>,
                 response: Response<List<JobsData>?>
             ) {
-                if (response.isSuccessful && isAdded){
-                    val response = response.body()!!
-                    exploreJobAdapter = ProfileJobAdapter(requireContext(),response)
-                    exploreJobsRecyclerView.adapter = exploreJobAdapter
-                    exploreJobAdapter.notifyDataSetChanged()
-
-
-                }else{
-                    Toast.makeText(requireContext(),"No Job Posted Yet", Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        if (response.isNotEmpty()) {
+                            exploreJobAdapter = ProfileJobAdapter(requireContext(), response)
+                            exploreJobsRecyclerView.adapter = exploreJobAdapter
+                            exploreJobAdapter.notifyDataSetChanged()
+                        } else {
+                            Toast.makeText(requireContext(), "No Job Posted Yet", Toast.LENGTH_SHORT)
+                                .show()
+                         }
+                    } else {
+                        Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             }
-
             override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         })
     }

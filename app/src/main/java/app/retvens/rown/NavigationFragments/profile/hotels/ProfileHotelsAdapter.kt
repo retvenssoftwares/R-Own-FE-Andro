@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -16,7 +17,10 @@ class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context) :
 
     class ProfileHotelsViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.venue_name)
+        val locationHotel = itemView.findViewById<TextView>(R.id.location_hotel)
+
         val cover = itemView.findViewById<ImageView>(R.id.hotel_venue_cover)
+        val hotelRating = itemView.findViewById<RatingBar>(R.id.hotelRating)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileHotelsViewHolder {
@@ -31,14 +35,20 @@ class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context) :
 
     override fun onBindViewHolder(holder: ProfileHotelsViewHolder, position: Int) {
         holder.name.text = listS[position].hotelName
+        holder.locationHotel.text = listS[position].hotelAddress
 
-        Glide.with(context).load(listS[position].hotelLogoUrl).into(holder.cover)
+        Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)
+
+//        if (listS[position] != null) {
+//            holder.hotelRating.rating = listS[position].hotelRating.toFloat()
+//        }
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, HotelDetailsProfileActivity::class.java)
             intent.putExtra("name", listS[position].hotelName)
-            intent.putExtra("logo", listS[position].hotelLogoUrl)
+            intent.putExtra("logo", listS[position].hotelCoverpicUrl)
             intent.putExtra("hotelId", listS[position].hotel_id)
+            intent.putExtra("hotelAddress", listS[position].hotelAddress)
             context.startActivity(intent)
         }
     }

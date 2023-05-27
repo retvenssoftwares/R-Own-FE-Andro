@@ -23,6 +23,11 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
 
         val hotelName = intent.getStringExtra("name")
         val hotelLogo = intent.getStringExtra("logo")
+        val location = intent.getStringExtra("location")
+        val Hoteldescription = intent.getStringExtra("hotelDescription").toString()
+
+        binding.overviewEt.setText(Hoteldescription)
+        binding.locationText.text = location
 
         binding.etNameEdit.setText(hotelName)
         Glide.with(this).load(hotelLogo).into(binding.img1)

@@ -40,40 +40,48 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
+        findViewById<ImageView>(R.id.profile_backBtn).setOnClickListener {
+            onBackPressed()
+        }
+
         profile = findViewById(R.id.profile)
+
         name = findViewById(R.id.profile_name)
 
         polls = findViewById(R.id.polls)
         media = findViewById(R.id.media)
         status = findViewById(R.id.status)
 
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container,MediaFragment())
+        transaction.commit()
 
         polls.setOnClickListener {
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
-//            val childFragment: Fragment = PollsFragment()
-//            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
-//            transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,PollsFragment())
+            transaction.commit()
         }
         media.setOnClickListener {
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
-//            val childFragment: Fragment = MediaFragment()
-//            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
-//            transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,MediaFragment())
+            transaction.commit()
         }
         status.setOnClickListener {
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
-//            val childFragment: Fragment = StatusFragment()
-//            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
-//            transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container,StatusFragment())
+            transaction.commit()
         }
 
         setting = findViewById(R.id.profile_setting)
