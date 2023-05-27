@@ -20,15 +20,18 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
 
     lateinit var hotelName : String
     lateinit var hotelId : String
-    lateinit var logo : String
+    lateinit var hotelLogo : String
     lateinit var location : String
+    lateinit var Hoteldescription : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHotelDetailsProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        hotelLogo = intent.getStringExtra("logo").toString()
+        location = intent.getStringExtra("hotelAddress").toString()
+        hotelLogo = intent.getStringExtra("logo").toString()
+        Glide.with(this).load(hotelLogo).into(binding.vendorImage)
 
         getHotel()
 
@@ -46,8 +49,9 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                 binding.openEditReview.setOnClickListener {
                     val intent = Intent(this, EditHotelDetailsActivity::class.java)
                     intent.putExtra("name", hotelName)
-                    intent.putExtra("logo", logo)
+                    intent.putExtra("logo", hotelLogo)
                     intent.putExtra("location", location)
+                    intent.putExtra("hotelDescription", Hoteldescription)
                     startActivity(intent)
                 }
 
@@ -57,8 +61,11 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
             }
 
     private fun getHotel() {
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
         hotelName = intent.getStringExtra("name").toString()
-        hotelId = intent.getStringExtra("hotel_id").toString()
+        hotelId = intent.getStringExtra("hotelId").toString()
 
         val hotel = RetrofitBuilder.ProfileApis.getHotelInfo(hotelId)
         hotel.enqueue(object : Callback<HotelData?> {
@@ -67,10 +74,15 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                     val data = response.body()!!
                     binding.hotelName.text = data.hotelName
                     Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
+
+                    Hoteldescription = data.Hoteldescription
+
                     binding.descriptionHotel.text = data.Hoteldescription
                     binding.location.text = data.location
-                    logo = data.hotelLogoUrl
-                    location = data.location
+                    hotelLogo = data.hotelLogoUrl
+                    if (data.location!= null){
+                        location = data.location
+                    }
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

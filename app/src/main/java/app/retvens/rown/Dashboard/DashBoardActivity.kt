@@ -205,17 +205,27 @@ class DashBoardActivity : AppCompatActivity() {
                     toolbar.visibility = View.VISIBLE
                 }
                 R.id.events ->
-                    replaceFragment(EventFragmentForHoteliers())
-//                    if (hotelOwner || hotelVendor || hotelOwnerChain){
 //                    replaceFragment(EventFragmentForHoteliers())
-//                toolbar.visibility = View.VISIBLE
-//                }else{
-//                    replaceFragment(EventFragment())
-//                toolbar.visibility = View.VISIBLE
-//                }
+                    if (hotelOwner || hotelVendor || hotelOwnerChain){
+                    replaceFragment(EventFragmentForHoteliers())
+                toolbar.visibility = View.VISIBLE
+                }else{
+                    replaceFragment(EventFragment())
+                toolbar.visibility = View.VISIBLE
+                }
 //                R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.profile -> {
-                    replaceFragment(ProfileFragmentForVendors())
+                    if (hotelOwner || hotelOwnerChain){
+                        replaceFragment(ProfileFragmentForHotelOwner())
+                        toolbar.visibility = View.GONE
+                    }else if (hotelVendor){
+                        replaceFragment(ProfileFragmentForVendors())
+                        toolbar.visibility = View.GONE
+                    }else {
+                        replaceFragment(ProfileFragment())
+                        toolbar.visibility = View.GONE
+                    }
+//                    replaceFragment(ProfileFragmentForHotelOwner())
                     toolbar.visibility = View.GONE
                 }
                 else -> null
