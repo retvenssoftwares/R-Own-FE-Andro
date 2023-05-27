@@ -46,7 +46,7 @@
 
 
         <ImageView
-            android:id="@+id/community_detail_editBtn"
+            android:id="@+id/save"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginEnd="20dp"
@@ -174,6 +174,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/openMap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
@@ -199,6 +200,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/getCab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
@@ -224,6 +226,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/bookNow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"

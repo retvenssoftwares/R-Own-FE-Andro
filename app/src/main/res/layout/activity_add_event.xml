@@ -131,7 +131,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:clickable="true"
+                android:focusable="false"
+                android:text="Select Venue"
+                android:editable="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
