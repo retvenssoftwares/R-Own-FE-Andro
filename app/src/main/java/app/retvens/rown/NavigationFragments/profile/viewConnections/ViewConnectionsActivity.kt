@@ -24,6 +24,7 @@ class ViewConnectionsActivity : AppCompatActivity() {
         binding = ActivityViewConnectionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.reBackBtn.setOnClickListener { onBackPressed() }
 
         binding.connectionsRecycler.layoutManager = LinearLayoutManager(applicationContext)
         binding.connectionsRecycler.setHasFixedSize(true)
