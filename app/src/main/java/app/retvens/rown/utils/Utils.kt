@@ -35,6 +35,14 @@ fun saveFullName(context:Context,fullName : String){
     editor.apply()
 }
 
+fun saveConnectionNo(context:Context,connectionNo : String){
+    val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveConnectionNo",
+        AppCompatActivity.MODE_PRIVATE
+    ).edit()
+    editor.putString("connectionNo", connectionNo)
+    editor.apply()
+}
+
 fun saveProfileImage(context:Context,profile : String){
     val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveProfileImage",
         AppCompatActivity.MODE_PRIVATE

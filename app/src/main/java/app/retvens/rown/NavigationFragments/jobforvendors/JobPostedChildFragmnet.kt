@@ -8,22 +8,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.job.*
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetJobFilter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class JobPostedChildFragmnet : Fragment() {
+class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener {
 
     lateinit var suggestedRecycler : RecyclerView
     lateinit var recentJobRecycler : RecyclerView
@@ -51,7 +54,12 @@ class JobPostedChildFragmnet : Fragment() {
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         suggestedRecycler.setHasFixedSize(true)
 
-
+        view.findViewById<ImageView>(R.id.filter).setOnClickListener {
+            val bottomSheet = BottomSheetJobFilter()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobFilter.Job_TAG)}
+            bottomSheet.setOnJobClickListener(this)
+        }
 
         recentJobRecycler = view.findViewById(R.id.recent_job_recycler_hotelier)
         recentJobRecycler.layoutManager = LinearLayoutManager(context)
@@ -121,5 +129,13 @@ class JobPostedChildFragmnet : Fragment() {
                 Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+//    override fun bottomJobClick(jobFrBo: String) {
+//
+//    }
+
+    override fun bottomJobClick(category: String, type: String, location: String, salary: String) {
+        TODO("Not yet implemented")
     }
 }

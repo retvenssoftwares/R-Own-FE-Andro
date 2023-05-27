@@ -30,9 +30,7 @@ interface RownUrl {
         @Part("Mesibo_account[uid]") uid:Int,
         @Part("Mesibo_account[address]") address:RequestBody,
         @Part("Mesibo_account[token]") token:RequestBody,
-        @Part("Interest[id]") id:RequestBody,
-        @Part("Post_count") Post_count: Int,
-        @Part("connection_count") connection_count: Int,
+        @Part("Interest[id]") id:RequestBody
     ) : Call<UserProfileResponse>
 
     @Multipart

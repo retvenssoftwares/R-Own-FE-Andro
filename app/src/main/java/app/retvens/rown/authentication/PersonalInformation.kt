@@ -305,8 +305,7 @@ class PersonalInformation : AppCompatActivity() {
                 Mesibo_account.uid,
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.address),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Mesibo_account.token),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Interest.id),
-                0,0
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Interest.id)
             )
             respo.enqueue(object : Callback<UserProfileResponse?> {
                 override fun onResponse(

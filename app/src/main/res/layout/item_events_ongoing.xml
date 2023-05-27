@@ -89,6 +89,7 @@
             app:layout_constraintTop_toTopOf="@id/participants" />
 
         <TextView
+            android:id="@+id/date_added"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"

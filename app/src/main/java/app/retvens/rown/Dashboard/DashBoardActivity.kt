@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -39,6 +40,8 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
 import app.retvens.rown.NavigationFragments.*
+import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
+import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
 import app.retvens.rown.authentication.LoginActivity
 import app.retvens.rown.databinding.ActivityDashBoardBinding
@@ -53,8 +56,10 @@ import app.retvens.rown.utils.clearProgress
 import app.retvens.rown.utils.clearUserId
 import app.retvens.rown.utils.clearUserType
 import app.retvens.rown.utils.moveToClear
+import app.retvens.rown.utils.saveConnectionNo
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
+import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -91,6 +96,7 @@ class DashBoardActivity : AppCompatActivity() {
     private lateinit var name:TextView
     private lateinit var phone:TextView
 
+    var connectionNo = 0
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -154,6 +160,11 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
 
+        header.findViewById<CardView>(R.id.my_account).setOnClickListener {
+            drawerLayout.closeDrawer(GravityCompat.START)
+            replaceFragment(ProfileFragment())
+            toolbar.visibility = View.GONE
+        }
 
         profile = header.findViewById<ImageView>(R.id.nav_profile)
         name = header.findViewById<TextView>(R.id.user_name)
@@ -177,22 +188,36 @@ class DashBoardActivity : AppCompatActivity() {
 
         bottom_Nav.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.home -> replaceFragment(HomeFragment())
+                R.id.home -> {
+                    replaceFragment(HomeFragment())
+                    toolbar.visibility = View.VISIBLE
+                }
                 R.id.jobs ->
                     if (hotelOwner || hotelVendor || hotelOwnerChain){
                     replaceFragment(JobsForHoteliers())
+                        toolbar.visibility = View.VISIBLE
                 }else{
                     replaceFragment(JobFragment())
+                        toolbar.visibility = View.VISIBLE
                 }
-                R.id.explore -> replaceFragment(ExploreFragment())
+                R.id.explore -> {
+                    replaceFragment(ExploreFragment())
+                    toolbar.visibility = View.VISIBLE
+                }
                 R.id.events ->
-                    if (hotelOwner || hotelVendor || hotelOwnerChain){
                     replaceFragment(EventFragmentForHoteliers())
-                }else{
-                    replaceFragment(EventFragment())
-                }
+//                    if (hotelOwner || hotelVendor || hotelOwnerChain){
+//                    replaceFragment(EventFragmentForHoteliers())
+//                toolbar.visibility = View.VISIBLE
+//                }else{
+//                    replaceFragment(EventFragment())
+//                toolbar.visibility = View.VISIBLE
+//                }
 //                R.id.profile -> replaceFragment(ProfileFragment())
-                R.id.profile -> replaceFragment(ProfileFragmentForHotelOwner())
+                R.id.profile -> {
+                    replaceFragment(ProfileFragmentForVendors())
+                    toolbar.visibility = View.GONE
+                }
                 else -> null
             }
             true
@@ -216,13 +241,44 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
 
+        binding.notificationsSn.setOnClickListener {
+            startActivity(Intent(this, NotificationActivity::class.java))
+        }
+        binding.myConnectionsSn.setOnClickListener {
+            drawerLayout.closeDrawer(GravityCompat.START)
+            startActivity(Intent(this, ViewConnectionsActivity::class.java))
+        }
+        binding.appliedJobsSn.setOnClickListener {
+            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+//            startActivity(Intent(this, TermsAndCActivity::class.java))
+        }
+        binding.eventsSn.setOnClickListener {
+            startActivity(Intent(this, AllEventCategoryActivity::class.java))
+        }
+        binding.blogsSn.setOnClickListener {
+            startActivity(Intent(this, ViewAllBlogsActivity::class.java))
+        }
+        binding.becomeOur.setOnClickListener {
+            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+        }
+        binding.learnWith.setOnClickListener {
+            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.knowHosWithAI.setOnClickListener {
+            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+//            startActivity(Intent(this, TermsAndCActivity::class.java))
+        }
+
         binding.navSecurity.setOnClickListener {
             if (!isPLVisible!!){
                 binding.privacyList.visibility = View.VISIBLE
                 isPLVisible = true
+                binding.securetyArrow.rotation = -180f
             }else{
                 binding.privacyList.visibility = View.GONE
                 isPLVisible = false
+                binding.securetyArrow.rotation = 0f
             }
         }
 
@@ -230,9 +286,11 @@ class DashBoardActivity : AppCompatActivity() {
             if (!isHLVisible!!){
                 binding.navHelpList.visibility = View.VISIBLE
                 isHLVisible = true
+                binding.navArrow.rotation = -180f
             }else{
                 binding.navHelpList.visibility = View.GONE
                 isHLVisible = false
+                binding.navArrow.rotation = 0f
             }
         }
 
@@ -245,7 +303,7 @@ class DashBoardActivity : AppCompatActivity() {
         }
 
         binding.dropMail.setOnClickListener {
-
+            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
         }
 
         binding.chatWithUs.setOnClickListener {
@@ -298,6 +356,8 @@ class DashBoardActivity : AppCompatActivity() {
                     if (response.body() != null) {
                         val response = response.body()!!
                         phone.text = response.Phone
+                        connectionNo = response.connection_count
+                        saveConnectionNo(applicationContext,response.connection_count.toString())
                         saveFullName(applicationContext, "${response.Full_name}")
                         saveProfileImage(applicationContext, "${response.Profile_pic}")
                     }

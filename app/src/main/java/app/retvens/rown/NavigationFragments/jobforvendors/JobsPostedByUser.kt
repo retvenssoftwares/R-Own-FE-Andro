@@ -42,9 +42,8 @@ class JobsPostedByUser : AppCompatActivity() {
     }
 
     private fun getJobs() {
-
-        val sharedPreferences =  getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
 
         val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 

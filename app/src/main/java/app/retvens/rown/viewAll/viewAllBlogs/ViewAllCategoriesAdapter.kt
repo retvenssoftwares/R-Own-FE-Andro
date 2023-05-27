@@ -11,6 +11,7 @@ import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 
 class ViewAllCategoriesAdapter(val listS : List<ViewAllCategoriesData>, val context: Context) : RecyclerView.Adapter<ViewAllCategoriesAdapter.ViewAllVendorsViewHolder>() {
 
@@ -35,13 +36,17 @@ class ViewAllCategoriesAdapter(val listS : List<ViewAllCategoriesData>, val cont
         holder.endPic.setPadding(40)
         holder.endPic.setImageResource(R.drawable.ic_right_arrow)
 
-        holder.itemView.setOnClickListener {
-            context.startActivity(Intent(context, AllBlogsActivity::class.java))
-        }
+        holder.blogsQuantity.text =  "${listS[position].blog_count} blogs"
 
-        holder.blogsQuantity.text = "12 blogs"
-        holder.profile.setImageResource(R.drawable.png_profile)
-        holder.categoryName.text = listS[position].title
+        Glide.with(context).load(listS[position].Image).into(holder.profile)
+        holder.categoryName.text = listS[position].category_name
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, AllBlogsActivity::class.java)
+            intent.putExtra("id", listS[position].category_id)
+            intent.putExtra("name", listS[position].category_name)
+            context.startActivity(intent)
+        }
 
     }
 }

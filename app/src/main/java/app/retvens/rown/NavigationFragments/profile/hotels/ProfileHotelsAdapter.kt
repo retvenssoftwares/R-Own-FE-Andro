@@ -5,17 +5,18 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsData
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 
-class ProfileHotelsAdapter(val listS : List<ExploreHotelsData>, val context: Context) : RecyclerView.Adapter<ProfileHotelsAdapter.ProfileHotelsViewHolder>() {
+class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context) : RecyclerView.Adapter<ProfileHotelsAdapter.ProfileHotelsViewHolder>() {
 
     class ProfileHotelsViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.venue_name)
+        val cover = itemView.findViewById<ImageView>(R.id.hotel_venue_cover)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileHotelsViewHolder {
@@ -29,10 +30,15 @@ class ProfileHotelsAdapter(val listS : List<ExploreHotelsData>, val context: Con
     }
 
     override fun onBindViewHolder(holder: ProfileHotelsViewHolder, position: Int) {
-        holder.name.text = listS[position].title
+        holder.name.text = listS[position].hotelName
+
+        Glide.with(context).load(listS[position].hotelLogoUrl).into(holder.cover)
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, HotelDetailsProfileActivity::class.java)
+            intent.putExtra("name", listS[position].hotelName)
+            intent.putExtra("logo", listS[position].hotelLogoUrl)
+            intent.putExtra("hotelId", listS[position].hotel_id)
             context.startActivity(intent)
         }
     }

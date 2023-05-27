@@ -7,6 +7,7 @@ import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.databinding.ActivityEditHotelDetailsBinding
+import com.bumptech.glide.Glide
 
 class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
     lateinit var binding : ActivityEditHotelDetailsBinding
@@ -15,6 +16,16 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
         super.onCreate(savedInstanceState)
         binding = ActivityEditHotelDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.profileBackBtn.setOnClickListener {
+            onBackPressed()
+        }
+
+        val hotelName = intent.getStringExtra("name")
+        val hotelLogo = intent.getStringExtra("logo")
+
+        binding.etNameEdit.setText(hotelName)
+        Glide.with(this).load(hotelLogo).into(binding.img1)
 
         binding.hotelLocation.setOnClickListener {
             val bottomSheet = BottomSheetCountryStateCity()

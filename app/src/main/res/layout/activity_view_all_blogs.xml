@@ -145,6 +145,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/constRecycler" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerFrameLayoutBlog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/constRecycler"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/white">
+                <include layout = "@layout/shimmer_explore_blogs_card"/>
+                <include layout = "@layout/shimmer_explore_blogs_card"/>
+                <include layout = "@layout/shimmer_explore_blogs_card"/>
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <TextView
+            android:id="@+id/emptyBlog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Empty Data"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/montserrat_semibold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/constRecycler"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cal"
             android:layout_width="match_parent"
@@ -195,6 +231,51 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cal" />
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerFrameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cal"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:id="@+id/shimmer_layout_tasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white">
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+                <include layout = "@layout/shimmer_notification"/>
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Empty Data"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/montserrat_semibold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cal"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

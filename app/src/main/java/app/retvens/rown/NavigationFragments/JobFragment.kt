@@ -1,11 +1,13 @@
 package app.retvens.rown.NavigationFragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -13,6 +15,8 @@ import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.NavigationFragments.job.ApplyForJobFragment
 import app.retvens.rown.NavigationFragments.job.JobExploreFragment
 import app.retvens.rown.NavigationFragments.job.RequestForJobFragment
+import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsActivity
+import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsData
 import app.retvens.rown.R
 
 class JobFragment : Fragment(){
@@ -37,6 +41,9 @@ class JobFragment : Fragment(){
         requestJob = view.findViewById(R.id.card_request_job)
         appliedJob = view.findViewById(R.id.card_applied_job)
 
+        view.findViewById<ImageView>(R.id.savedJobs).setOnClickListener {
+            startActivity(Intent(context, SavedJobsActivity::class.java))
+        }
 
         val welcome = view.findViewById<TextView>(R.id.welcome_name)
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)

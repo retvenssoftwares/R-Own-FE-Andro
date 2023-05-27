@@ -265,7 +265,7 @@ open class OtpVerification : AppCompatActivity() {
 
     }
     private fun searchUser() {
-        val search = RetrofitBuilder.retrofitBuilder.searchUser(SearchUser(phoneNumber.toLong()))
+        val search = RetrofitBuilder.retrofitBuilder.searchUser(SearchUser(phone.toString()))
         search.enqueue(object : Callback<UserProfileResponse?> {
             override fun onResponse(
                 call: Call<UserProfileResponse?>,

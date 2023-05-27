@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.job
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -73,6 +74,9 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         suggestedRecycler.setHasFixedSize(true)
 
+        requireView().findViewById<TextView>(R.id.view_all_suggested).setOnClickListener {
+            startActivity(Intent(context, ViewAllSuggestedJobsActivity::class.java))
+        }
 
         getJobs()
 
@@ -84,8 +88,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
 
     private fun getJobs() {
-        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
 
         val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 
@@ -100,7 +104,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
                     response.forEach { it ->
 
-
+                        if (it.jobTitle == filterlist.category || it.jobType == filterlist.type || it.expectedCTC == filterlist.salary || it.jobLocation == filterlist.location){
                             val originalData = response.toList()
                             val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
                             suggestedRecycler.adapter = suggestedJobAdapter
@@ -148,7 +152,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                                 }
 
                             })
-
+                        }
 
                     }
 

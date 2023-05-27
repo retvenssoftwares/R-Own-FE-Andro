@@ -75,6 +75,7 @@
                     android:src="@drawable/svg_setting"/>
 
                 <TextView
+                    android:id="@+id/serviceName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
@@ -132,6 +133,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
+                android:id="@+id/servicePrice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingVertical="3dp"
@@ -187,6 +189,7 @@
         </LinearLayout>
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/del"
                 android:layout_width="23dp"
                 android:layout_height="23dp"
                 app:tint="@color/black"
