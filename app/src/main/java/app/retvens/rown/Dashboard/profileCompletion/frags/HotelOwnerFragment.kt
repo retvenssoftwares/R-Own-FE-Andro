@@ -319,9 +319,12 @@ class HotelOwnerFragment : Fragment(), BackHandler,
 
     private fun UploadData() {
 
+
+
         val type = hotelType.text.toString()
         val hotelName = ownerHotel.text.toString()
         val star = hotelOwnerStarET.text.toString()
+        val location = hotelOwnerLocationET.text.toString()
 
         val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(
             croppedOwnerCoverImageUri!!,"r",null
@@ -338,7 +341,8 @@ class HotelOwnerFragment : Fragment(), BackHandler,
             croppedOwnerProfileImageUri!!,"r",null
         )?:return
 
-
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val inputStream1 = FileInputStream(parcelFileDescriptor1.fileDescriptor)
         val file1 = File(requireContext().cacheDir, requireContext().contentResolver.getFileName(croppedOwnerProfileImageUri!!) + ".jpg")
@@ -347,13 +351,12 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         val body1 = UploadRequestBody(file1,"image")
 
         val send = RetrofitBuilder.profileCompletion.uploadHotelData(
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"indore"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),location),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),star),
+            MultipartBody.Part.createFormData("hotelLogo", file1.name, body1),
             MultipartBody.Part.createFormData("hotelCoverpic", file.name, body),
-            MultipartBody.Part.createFormData("hotelProfilepic", file1.name, body1),
-            MultipartBody.Part.createFormData("hotelLogo", file.name, body),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"rahul")
         )
 
         send.enqueue(object : Callback<UpdateResponse?> {

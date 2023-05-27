@@ -100,7 +100,7 @@ class BottomSheet : BottomSheetDialogFragment() {
                 call: Call<List<UserProfileRequestItem>?>,
                 response: Response<List<UserProfileRequestItem>?>
             ) {
-                Toast.makeText(context,response.toString(),Toast.LENGTH_SHORT).show()
+
                 Log.d("Profile",response.toString())
                 Log.d("Profile",response.body().toString())
 

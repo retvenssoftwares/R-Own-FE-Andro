@@ -216,7 +216,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainLocation),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainRating),
-            MultipartBody.Part.createFormData("hotelProfilepic", file.name, body),
+            MultipartBody.Part.createFormData("hotelLogo", file.name, body),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id)
         )
 

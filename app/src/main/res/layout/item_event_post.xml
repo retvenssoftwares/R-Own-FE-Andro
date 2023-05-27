@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="15dp"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="8dp"
+    android:id="@+id/postCard"
+    app:cardElevation="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/post_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:shapeAppearanceOverlay="@style/RoundedCornerImage"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="15dp"
+            android:src="@drawable/png_profile_post"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/user_name_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:text="Karsten Dobrev"
+            android:textSize="15dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/black"
+            app:layout_constraintVertical_bias="0.02"
+            app:layout_constraintTop_toTopOf="@id/post_profile"
+            app:layout_constraintBottom_toBottomOf="@id/post_profile"
+            app:layout_constraintStart_toEndOf="@id/post_profile"/>
+
+        <TextView
+            android:id="@+id/post_user_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Travel Influencer"
+            android:textSize="11dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/grey_60"
+            app:layout_constraintStart_toStartOf="@id/user_name_post"
+            app:layout_constraintTop_toBottomOf="@id/user_name_post"/>
+
+        <TextView
+            android:id="@+id/post_user_dominican"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dominican Republic"
+            android:textSize="10dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/grey_60"
+            app:layout_constraintStart_toStartOf="@id/user_name_post"
+            app:layout_constraintTop_toBottomOf="@id/post_user_type"/>
+
+        <TextView
+            android:id="@+id/post_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2W"
+            android:textSize="11dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/grey_60"
+            app:layout_constraintTop_toBottomOf="@id/post_user_type"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <View
+            android:id="@+id/vi"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/grey_40"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_time"/>
+
+        <TextView
+            android:id="@+id/title_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Hello all, I am going to Radiohead Concert on 22, Oct, 2022."
+            android:textSize="16dp"
+            android:textFontWeight="300"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/vi"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/event_image"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:src="@drawable/png_post"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="5dp"
+            app:shapeAppearance="@style/SquareCornerImage"
+            app:layout_constraintTop_toBottomOf="@id/title_status"
+            android:layout_marginHorizontal="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            />
+
+        <TextView
+            android:id="@+id/event_title"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/event_image"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:text="Radiohead Concert"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            app:layout_constraintTop_toBottomOf="@id/event_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15dp"
+            app:cardCornerRadius="15dp"
+            android:backgroundTint="#EFF0F9"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="999INR"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_own"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/book"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/event_title"
+            android:layout_marginTop="20dp"
+            android:background="#272A3D"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Book Now"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="500"
+            android:paddingLeft="20dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:weightSum="7"
+            android:background="@drawable/transparent_bg"
+            app:layout_constraintTop_toBottomOf="@id/book"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/like_post"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_like_post"/>
+            <ImageView
+                android:id="@+id/comment"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_post_comment"/>
+            <ImageView
+                android:id="@+id/share_post"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_share_post"/>
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_save_post"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/user_id_on_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dobrev_karsten"
+            android:textSize="11dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="6dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@id/post_profile"
+            app:layout_constraintTop_toBottomOf="@id/linear"/>
+
+        <TextView
+            android:id="@+id/recentCommentByUser"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Every stay gives you a reason to smile :)"
+            android:textSize="11dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@id/user_id_on_comment"
+            app:layout_constraintTop_toBottomOf="@id/linear"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

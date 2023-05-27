@@ -110,7 +110,7 @@ class DashBoardActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         mActivityTitle = title.toString()
 
-        Toast.makeText(applicationContext,number.progress,Toast.LENGTH_SHORT).show()
+
 
         toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)

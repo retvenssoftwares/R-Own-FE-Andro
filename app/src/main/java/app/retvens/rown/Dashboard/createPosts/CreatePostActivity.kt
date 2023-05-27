@@ -316,6 +316,7 @@ class CreatePostActivity : AppCompatActivity(),
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
 
+        Toast.makeText(applicationContext,userId,Toast.LENGTH_SHORT).show()
 
         val sendPost  = RetrofitBuilder.feedsApi.createPost(userId,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),userId),

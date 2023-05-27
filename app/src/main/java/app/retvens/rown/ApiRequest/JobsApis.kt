@@ -16,8 +16,10 @@ import retrofit2.http.Path
 
 interface JobsApis {
 
-    @GET("getjob")
-    fun getJobs(): Call<List<JobsData>>
+    @GET("getjob/{userId}")
+    fun getJobs(
+        @Path("userId") userId : String
+    ): Call<List<JobsData>>
 
     @GET("job/{userId}")
     fun getIndividualJobs(

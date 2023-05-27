@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -83,7 +84,10 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
 
     private fun getJobs() {
-        val getJob = RetrofitBuilder.jobsApis.getJobs()
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 
         getJob.enqueue(object : Callback<List<JobsData>?>,
             SuggestedJobAdapter.JobSavedClickListener {
@@ -96,7 +100,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
                     response.forEach { it ->
 
-                        if (it.jobTitle == filterlist.category || it.jobType == filterlist.type || it.expectedCTC == filterlist.salary || it.jobLocation == filterlist.location){
+
                             val originalData = response.toList()
                             val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
                             suggestedRecycler.adapter = suggestedJobAdapter
@@ -144,7 +148,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                                 }
 
                             })
-                        }
+
 
                     }
 

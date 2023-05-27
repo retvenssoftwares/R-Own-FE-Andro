@@ -68,13 +68,12 @@ interface PriofileCompletionApis{
     @Multipart
     @POST("hotelpost")
     fun uploadHotelData(
+        @Part("user_id")user_id:RequestBody,
         @Part("hotelName") Name: RequestBody,
         @Part("hotelAddress") address: RequestBody,
         @Part("hotelRating") hotel_rating: RequestBody,
         @Part hotelLogo: MultipartBody.Part,
-        @Part hotelProfilepic: MultipartBody.Part,
-        @Part hotelCoverpic: MultipartBody.Part,
-        @Part("hotelOwnerId") id: RequestBody,
+        @Part hotelCoverpic: MultipartBody.Part
     ): Call<UpdateResponse>
 
     @Multipart
@@ -83,8 +82,8 @@ interface PriofileCompletionApis{
         @Part("hotelName") Name: RequestBody,
         @Part("hotelAddress") address: RequestBody,
         @Part("hotelRating") hotel_rating: RequestBody,
-        @Part hotelProfilepic: MultipartBody.Part,
-        @Part("hotelOwnerId") id: RequestBody,
+        @Part hotelLogo: MultipartBody.Part,
+        @Part("user_id") id: RequestBody,
     ): Call<UpdateResponse>
 
 

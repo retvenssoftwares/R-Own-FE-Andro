@@ -149,7 +149,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
 
                     val response = response.body()!!
 
@@ -172,6 +172,10 @@ class HomeFragment : Fragment() {
                                     mList.add(0,DataItem(DataItemType.Status, banner = item))
                                 }
 
+                                if (item.post_type == "Update about an event"){
+                                    mList.add(0,DataItem(DataItemType.Event, banner = item))
+                                }
+
 
                             }
 
@@ -190,7 +194,7 @@ class HomeFragment : Fragment() {
                     mainRecyclerView.adapter = adapter
                     adapter.setOnItemClickListener(object : MainAdapter.OnItemClickListener{
                         override fun onItemClick(dataItem: PostItem) {
-
+                            postLike(dataItem.post_id)
                         }
 
                         override fun onItemClickForComment(banner: PostItem, position: Int) {
@@ -256,10 +260,6 @@ class HomeFragment : Fragment() {
 
 
 
-
-
-    private fun getComment(postId: String) {
-    }
 
 
     private fun postLike(postId:String) {

@@ -42,7 +42,11 @@ class JobsPostedByUser : AppCompatActivity() {
     }
 
     private fun getJobs() {
-        val getJob = RetrofitBuilder.jobsApis.getJobs()
+
+        val sharedPreferences =  getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 
         getJob.enqueue(object : Callback<List<JobsData>?> {
             override fun onResponse(

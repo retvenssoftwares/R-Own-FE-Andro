@@ -3,6 +3,7 @@ package app.retvens.rown.ApiRequest
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.location.UpcomingEventDataclass
 import app.retvens.rown.NavigationFragments.home.DataItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -68,6 +69,20 @@ interface FeedsApi {
 
     @Multipart
     @POST("post/{user_id}")
+    fun createPostEvent(
+        @Path("user_id") user_id:String,
+        @Part("user_id")userId:RequestBody,
+        @Part("post_type")post_type:RequestBody,
+        @Part("Can_See")Can_See:RequestBody,
+        @Part("Can_comment")Can_comment:RequestBody,
+        @Part("caption")caption:RequestBody,
+        @Part("event_thumbnail")event_thumbnail:RequestBody,
+        @Part("Event_name")Event_name:RequestBody,
+        @Part("Event_location")Event_location:RequestBody
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @POST("post/{user_id}")
     fun createPoll(
         @Path("user_id") user_id:String,
         @Part("user_id")userId:RequestBody,
@@ -92,4 +107,11 @@ interface FeedsApi {
     fun fetchbyLocation(
         location:String
     ):Call<List<GetHotelDataClass>>
+
+    @GET("geteventposting/{location}")
+    fun getEvent(
+        @Path("location")location: String
+    ):Call<List<UpcomingEventDataclass>>
+
+
 }

@@ -12,6 +12,7 @@ class DataItemType {
         const val CREATE_COMMUNITY = 6
         const val POLL = 7
         const val Status = 8
+        const val Event = 9
     }
 
 }

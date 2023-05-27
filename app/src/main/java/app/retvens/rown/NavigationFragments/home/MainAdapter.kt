@@ -17,6 +17,8 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfil
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
 import app.retvens.rown.databinding.GetjoblistBinding
+import app.retvens.rown.databinding.ItemEventBinding
+import app.retvens.rown.databinding.ItemEventPostBinding
 import app.retvens.rown.databinding.ItemPollProfileBinding
 import app.retvens.rown.databinding.ItemStatusBinding
 import app.retvens.rown.databinding.UsersPostsCardBinding
@@ -47,10 +49,6 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner: PostItem, position: Int){
 
-//
-//            if (data != null && position <= data.size) {
-//                banner.posts.forEach { it->
-
                         val post = banner
 
                     if (post.post_type == "share some media"){
@@ -62,10 +60,22 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         Log.e("caption",post.caption)
                         binding.userNamePost.text = post.User_name
 
+                        if (post.Like_count != ""){
+                            binding.likeCount.text = post.Like_count
+                        }
+                        if (post.Comment_count != ""){
+                            binding.commentCount.text = post.Comment_count
+                        }
+
                         post.media.forEach { item ->
                             Glide.with(context).load(item.post).into(binding.postPic)
                         }
 
+                        if (post.like == "Liked"){
+                            binding.likePost.setImageResource(R.drawable.liked_vectore)
+                        }else if (post.like == "Unliked"){
+                            binding.likePost.setImageResource(R.drawable.svg_like_post)
+                        }
 
                     }
 
@@ -78,6 +88,42 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
             binding.postCard.setOnClickListener {
                 context.startActivity(Intent(context, PostDetailsActivity::class.java))
+            }
+
+            binding.likePost.setOnClickListener {
+                onItemClickListener?.onItemClick(banner)
+            }
+
+            binding.comment.setOnClickListener {
+                onItemClickListener?.onItemClickForComment(banner,position)
+            }
+
+        }
+    }
+
+    inner class BannerItemViewHolderEvent(private val binding : ItemEventPostBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bindBannerView(banner: PostItem, position: Int){
+
+            val post = banner
+            Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+                binding.userIdOnComment.text = post.User_name
+                Log.e("username",post.User_name)
+                binding.recentCommentByUser.text = post.caption
+                Log.e("caption",post.caption)
+                binding.userNamePost.text = post.User_name
+
+                binding.eventTitle.text = post.Event_name
+
+                binding.titleStatus.text = "Hello all, I am going to ${post.Event_name} on ${post.event_start_date}"
+
+                Glide.with(context).load(post.event_thumbnail).into(binding.eventImage)
+
+
+
+
+
+            binding.postProfile.setOnClickListener {
+                context.startActivity(Intent(context, UserProfileActivity::class.java))
             }
 
             binding.likePost.setOnClickListener {
@@ -125,24 +171,36 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 val progressBarOption1: RoundedProgressBar = binding.progressBar
                 val progressBarOption2: RoundedProgressBar = binding.progressBar2
 
-                val vote1: List<String> = item.Options[0].votes.map { it.user_id }
-                val vote2: List<String> = item.Options[1].votes.map { it.user_id }
-
-                binding.Option1Votes.text = "${vote1.size} votes"
-                binding.Option2Votes.text = "${vote2.size} votes"
-
-                val totalVotes = vote1.size + vote2.size
 
 
-                val completedTasks = vote1.size
+
+
+
+
+                    val vote1: List<String> = item.Options[0].votes.map { it.user_id }
+                    val vote2: List<String> = item.Options[1].votes.map { it.user_id }
+
+                    binding.Option1Votes.text = "${vote1.size} votes"
+                    binding.Option2Votes.text = "${vote2.size} votes"
+
+                    val totalVotes = vote1.size + vote2.size
+                    val completedTasks = vote1.size
                 val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
-                progressBarOption1.setProgressPercentage(completedPercentage)
-                binding.option1Percentage.text = "${completedPercentage}%"
+                if (!completedPercentage.isNaN()) {
+                    progressBarOption1.setProgressPercentage(completedPercentage)
+                    binding.option1Percentage.text = "${completedPercentage}%"
+                }
+
 
                 val completedTasks2 = vote2.size
                 val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
-                progressBarOption2.setProgressPercentage(completedPercentage2)
-                binding.option2Percentage.text = "${completedPercentage2}%"
+                if (!completedPercentage2.isNaN()) {
+                    progressBarOption2.setProgressPercentage(completedPercentage2)
+                    binding.option2Percentage.text = "${completedPercentage2}%"
+                }
+
+
+
             }
 
         }
@@ -214,6 +272,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             DataItemType.Status ->
                 R.layout.item_status
 
+            DataItemType.Event ->{
+                R.layout.item_event_post
+            }
+
             else ->
                 R.layout.each_item
         }
@@ -235,6 +297,11 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             R.layout.item_status ->{
                 val status = ItemStatusBinding.inflate(LayoutInflater.from(parent.context),parent,false)
                 BannerItemViewHolderStatus(status)
+            }
+
+            R.layout.item_event_post ->{
+                val event = ItemEventPostBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+                BannerItemViewHolderEvent(event)
             }
 
             else -> {
@@ -263,6 +330,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             is BannerItemViewHolderStatus ->{
                 dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
             }
+            is BannerItemViewHolderEvent ->{
+                dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
+            }
+
 
             else -> {
                 when (dataItemList[position].viewType) {

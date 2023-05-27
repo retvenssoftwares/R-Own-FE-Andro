@@ -1,21 +1,28 @@
 package app.retvens.rown.Dashboard.createPosts
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
-import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
+import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.databinding.ActivityCreateEventPostBinding
 import com.bumptech.glide.Glide
 
 class CreateEventPostActivity : AppCompatActivity(),
     BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener,
-    BottomSheetSelectAudience.OnBottomSelectAudienceClickListener {
+    BottomSheetSelectAudience.OnBottomSelectAudienceClickListener,
+    BottomSheetUpcomingEvent.OnBottomJobTitleClickListener {
     lateinit var binding: ActivityCreateEventPostBinding
     var canSee : Int ?= 0
 
+    lateinit var title:String
+    lateinit var id:String
+    lateinit var eventdate:String
+    lateinit var eventimage:String
+    lateinit var eventlocation: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,14 +71,32 @@ class CreateEventPostActivity : AppCompatActivity(),
             val location = binding.etLocationPostEvent.text.toString()
 
             if (location.isEmpty()){
+                binding.etLocationPostEvent.error = "select location first!!"
+            }else{
+                val bottomSheet = BottomSheetUpcomingEvent(location)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetUpcomingEvent.Job_Title_TAG)}
+                bottomSheet.setOnJobTitleClickListener(this)
 
             }
 
         }
         binding.nextUpdateEvent.setOnClickListener {
-            binding.whatDY.visibility = View.VISIBLE
-            binding.updateEvent.visibility = View.GONE
-            binding.cardEventPost.visibility = View.VISIBLE
+
+            val venue = binding.etEventVenuePost.text.toString()
+
+            if (venue.isEmpty()){
+                binding.etEventVenuePost.error = "select event first!!"
+            }else{
+                val intent = Intent(this,CreatePostEventActivityChild::class.java)
+                intent.putExtra("name",title)
+                intent.putExtra("id",id)
+                intent.putExtra("date",eventdate)
+                intent.putExtra("image",eventimage)
+                intent.putExtra("location",eventlocation)
+                startActivity(intent)
+            }
+
         }
     }
 
@@ -86,5 +111,15 @@ class CreateEventPostActivity : AppCompatActivity(),
             binding.canCommentText.text = audienceFrBo
         }
     }
+
+    override fun bottomJobTitleClick(name: String, image: String, eventId: String, date: String,location:String) {
+        binding.etEventVenuePost.setText(name)
+        title = name
+        eventimage = image
+        id = eventId
+        eventdate = date
+        eventlocation = location
+    }
+
 
 }
