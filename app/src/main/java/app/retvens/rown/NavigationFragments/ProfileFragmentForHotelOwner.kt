@@ -107,6 +107,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             hotels.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
             val childFragment: Fragment = MediaFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -117,6 +118,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             hotels.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
             val childFragment: Fragment = PollsFragment()
@@ -129,6 +131,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             hotels.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
             val childFragment: Fragment = StatusFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -140,6 +143,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             hotels.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
             val childFragment: Fragment = HotelsFragmentProfile()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -150,6 +154,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             hotels.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+            jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
 
             val childFragment: Fragment = EventsProfileFragment()

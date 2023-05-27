@@ -6,13 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsAdapter
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsData
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class HotelsFragmentProfile : Fragment() {
@@ -21,6 +26,10 @@ class HotelsFragmentProfile : Fragment() {
 
     lateinit var profileHotelsAdapter: ProfileHotelsAdapter
 
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
+    lateinit var addHotel : CardView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,22 +45,66 @@ class HotelsFragmentProfile : Fragment() {
         recycler.layoutManager = LinearLayoutManager(context)
         recycler.setHasFixedSize(true)
 
-        view.findViewById<CardView>(R.id.addHotel).setOnClickListener {
+        empty = view.findViewById(R.id.empty)
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
+
+        addHotel = view.findViewById<CardView>(R.id.addHotel)
+        addHotel.setOnClickListener{
             startActivity(Intent(context, AddHotelActivity::class.java))
         }
 
+        getHotels()
+    }
+    private fun getHotels() {
 
-        val blogs = listOf<ExploreHotelsData>(
-            ExploreHotelsData("Paradise Inn"),
-            ExploreHotelsData("Paradise Inn 2"),
-            ExploreHotelsData("Neck Deep Paradise Inn"),
-            ExploreHotelsData("Paradise Inn 23"),
-            ExploreHotelsData("Paradise Inn 1"),
-        )
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        profileHotelsAdapter = ProfileHotelsAdapter(blogs, requireContext())
-        recycler.adapter = profileHotelsAdapter
-        profileHotelsAdapter.notifyDataSetChanged()
+        val hotels = RetrofitBuilder.ProfileApis.getProfileHotels("-GSomAJoY")
+        hotels.enqueue(object : Callback<List<HotelsName>?> {
+            override fun onResponse(
+                call: Call<List<HotelsName>?>,
+                response: Response<List<HotelsName>?>
+            ) {
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
 
+                        if (response.body()!!.isNotEmpty()) {
+                            profileHotelsAdapter = ProfileHotelsAdapter(response.body()!!, requireContext())
+                            recycler.adapter = profileHotelsAdapter
+                            profileHotelsAdapter.notifyDataSetChanged()
+                        } else {
+                            empty.text = "Please add hotel"
+                            empty.visibility = View.VISIBLE
+                        }
+                    } else {
+                        addHotel.visibility = View.GONE
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                        Toast.makeText(requireContext(), "$user_id -> ${response.code().toString()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<List<HotelsName>?>, t: Throwable) {
+                addHotel.visibility = View.GONE
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                empty.text = "Try Again"
+                empty.visibility = View.VISIBLE
+
+                if (isAdded) {
+                    Toast.makeText(
+                        requireContext(),
+                        t.localizedMessage.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
     }
 }

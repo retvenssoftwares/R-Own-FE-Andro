@@ -101,6 +101,7 @@
                android:orientation="vertical">
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/notificationsSn"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginVertical="4dp"
@@ -135,6 +136,7 @@
                </androidx.cardview.widget.CardView>
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/myConnectionsSn"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginVertical="4dp"
@@ -168,6 +170,7 @@
                </androidx.cardview.widget.CardView>
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/appliedJobsSn"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginVertical="4dp"
@@ -201,6 +204,7 @@
                </androidx.cardview.widget.CardView>
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/eventsSn"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginVertical="4dp"
@@ -234,6 +238,7 @@
                </androidx.cardview.widget.CardView>
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/blogsSn"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginVertical="4dp"
@@ -267,6 +272,7 @@
                </androidx.cardview.widget.CardView>
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/becomeOur"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginVertical="4dp"
@@ -300,6 +306,7 @@
                </androidx.cardview.widget.CardView>
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/learnWith"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginVertical="4dp"
@@ -333,6 +340,7 @@
                </androidx.cardview.widget.CardView>
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/knowHosWithAI"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_marginVertical="4dp"
@@ -394,6 +402,7 @@
                            android:fontFamily="@font/montserrat_semibold"/>
 
                        <ImageView
+                           android:id="@+id/securetyArrow"
                            android:layout_width="30dp"
                            android:layout_height="30dp"
                            android:layout_centerVertical="true"
@@ -544,6 +553,7 @@
                            android:fontFamily="@font/montserrat_semibold"/>
 
                        <ImageView
+                           android:id="@+id/navArrow"
                            android:layout_width="30dp"
                            android:layout_height="30dp"
                            android:layout_centerVertical="true"

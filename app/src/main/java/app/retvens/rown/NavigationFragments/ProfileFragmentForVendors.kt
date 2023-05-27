@@ -16,6 +16,7 @@ import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
+import app.retvens.rown.NavigationFragments.profile.services.ServicesFragment
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.ReviewsActivity
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
@@ -105,7 +106,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = StatusFragment()
+            val childFragment: Fragment = ServicesFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
