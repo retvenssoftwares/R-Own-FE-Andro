@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,14 +48,20 @@ class ViewAllBlogsActivity : AppCompatActivity() {
 
     }
     private fun getAllBlogs() {
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val allBlogs = RetrofitBuilder.viewAllApi.getAllBlogs()
+        val allBlogs = RetrofitBuilder.viewAllApi.getAllBlogs(user_id = user_id)
         allBlogs.enqueue(object : Callback<List<AllBlogsData>?> {
             override fun onResponse(
                 call: Call<List<AllBlogsData>?>,
                 response: Response<List<AllBlogsData>?>
             ) {
                 if(response.isSuccessful) {
+                    binding.shimmerFrameLayoutBlog.stopShimmer()
+                    binding.shimmerFrameLayoutBlog.visibility = View.GONE
+
+                    if (response.body()!!.isNotEmpty()) {
                     allBlogsAdapter = AllBlogsAdapter(response.body()!!, this@ViewAllBlogsActivity)
                     binding.blogsRecyclerView.adapter = allBlogsAdapter
                     allBlogsAdapter.notifyDataSetChanged()
@@ -78,8 +85,8 @@ class ViewAllBlogsActivity : AppCompatActivity() {
                             val original = response.body()!!.toList()
                             val filter = original.filter { searchUser ->
                                 searchUser.blog_title.contains(s.toString(), ignoreCase = true)
-                                searchUser.blog_content.contains(s.toString(),ignoreCase = true)
-                                searchUser.User_name.contains(s.toString(),ignoreCase = true)
+//                                searchUser.blog_content.contains(s.toString(),ignoreCase = true)
+//                                searchUser.User_name.contains(s.toString(),ignoreCase = true)
                             }
                             allBlogsAdapter.searchView(filter)
                         }
@@ -88,11 +95,26 @@ class ViewAllBlogsActivity : AppCompatActivity() {
 
                         }
                     })
+                    } else {
+                        binding.shimmerFrameLayoutBlog.stopShimmer()
+                        binding.shimmerFrameLayoutBlog.visibility = View.GONE
+                        binding.emptyBlog.text = "No event Posted"
+                        binding.emptyBlog.visibility = View.VISIBLE
+                    }
                 } else {
-                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    binding.shimmerFrameLayoutBlog.stopShimmer()
+                    binding.shimmerFrameLayoutBlog.visibility = View.GONE
+                    binding.emptyBlog.text = "${response.code()}  ${response.message()}"
+                    binding.emptyBlog.visibility = View.VISIBLE
+//                    Toast.makeText(applicationContext,"${response.code()}  ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<List<AllBlogsData>?>, t: Throwable) {
+                binding.shimmerFrameLayoutBlog.stopShimmer()
+                binding.shimmerFrameLayoutBlog.visibility = View.GONE
+
+                binding.emptyBlog.text = "Try Again - Check your Internet"
+                binding.emptyBlog.visibility = View.VISIBLE
                 Toast.makeText(applicationContext, "All Blogs ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -111,15 +133,33 @@ class ViewAllBlogsActivity : AppCompatActivity() {
             ) {
 
                 if (response.isSuccessful) {
+                    binding.shimmerFrameLayout.stopShimmer()
+                    binding.shimmerFrameLayout.visibility = View.GONE
+
+                    if (response.body()!!.isNotEmpty()) {
                     viewAllCategoriesAdapter = ViewAllCategoriesAdapter(response.body()!!, this@ViewAllBlogsActivity)
                     binding.categoryRecyclerView.adapter = viewAllCategoriesAdapter
                     viewAllCategoriesAdapter.notifyDataSetChanged()
-                } else{
-                    Toast.makeText(applicationContext, "isNotSuccessful Blogs category: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    } else {
+                        binding.shimmerFrameLayout.stopShimmer()
+                        binding.shimmerFrameLayout.visibility = View.GONE
+                        binding.empty.text = "No event Posted"
+                        binding.empty.visibility = View.VISIBLE
+                    }
+                } else {
+                    binding.shimmerFrameLayout.stopShimmer()
+                    binding.shimmerFrameLayout.visibility = View.GONE
+                    binding.empty.text = "${response.code()}  ${response.message()}"
+                    binding.empty.visibility = View.VISIBLE
+//                    Toast.makeText(applicationContext,"${response.code()}  ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onFailure(call: Call<List<ViewAllCategoriesData>?>, t: Throwable) {
+                binding.shimmerFrameLayout.stopShimmer()
+                binding.shimmerFrameLayout.visibility = View.GONE
+
+                binding.empty.text = "Try Again - Check your Internet"
+                binding.empty.visibility = View.VISIBLE
                 Toast.makeText(applicationContext, "onFailure Blogs category: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         })

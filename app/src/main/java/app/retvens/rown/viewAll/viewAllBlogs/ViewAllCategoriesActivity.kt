@@ -2,6 +2,7 @@ package app.retvens.rown.viewAll.viewAllBlogs
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,6 @@ import retrofit2.Response
 class ViewAllCategoriesActivity : AppCompatActivity() {
     lateinit var binding:ActivityViewAllCategoriesBinding
 
-    lateinit var categoriesRecyclerView: RecyclerView
     lateinit var viewAllCategoriesAdapter: ViewAllCategoriesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +28,8 @@ class ViewAllCategoriesActivity : AppCompatActivity() {
 
         binding.communityBackBtn.setOnClickListener { onBackPressed() }
 
-        categoriesRecyclerView = findViewById(R.id.categoriesRecyclerView)
-        categoriesRecyclerView.layoutManager = LinearLayoutManager(this)
-        categoriesRecyclerView.setHasFixedSize(true)
+        binding.categoriesRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.categoriesRecyclerView.setHasFixedSize(true)
 
         getAllCategory()
     }
@@ -44,16 +43,35 @@ class ViewAllCategoriesActivity : AppCompatActivity() {
             ) {
 
                 if (response.isSuccessful) {
+                    binding.shimmerFrameLayout.stopShimmer()
+                    binding.shimmerFrameLayout.visibility = View.GONE
+
+                    if (response.body()!!.isNotEmpty()) {
                     viewAllCategoriesAdapter =
                         ViewAllCategoriesAdapter(response.body()!!, this@ViewAllCategoriesActivity)
-                    categoriesRecyclerView.adapter = viewAllCategoriesAdapter
+                        binding.categoriesRecyclerView.adapter = viewAllCategoriesAdapter
                     viewAllCategoriesAdapter.notifyDataSetChanged()
-                } else{
-                    Toast.makeText(applicationContext, "isNotSuccessful Blogs category: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    } else {
+                        binding.shimmerFrameLayout.stopShimmer()
+                        binding.shimmerFrameLayout.visibility = View.GONE
+                        binding.empty.text = "No event Posted"
+                        binding.empty.visibility = View.VISIBLE
+                    }
+                } else {
+                    binding.shimmerFrameLayout.stopShimmer()
+                    binding.shimmerFrameLayout.visibility = View.GONE
+                    binding.empty.text = "${response.code()}  ${response.message()}"
+                    binding.empty.visibility = View.VISIBLE
+//                    Toast.makeText(applicationContext,"${response.code()}  ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<ViewAllCategoriesData>?>, t: Throwable) {
+                binding.shimmerFrameLayout.stopShimmer()
+                binding.shimmerFrameLayout.visibility = View.GONE
+
+                binding.empty.text = "Try Again - Check your Internet"
+                binding.empty.visibility = View.VISIBLE
                 Toast.makeText(applicationContext, "onFailure Blogs category: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         })

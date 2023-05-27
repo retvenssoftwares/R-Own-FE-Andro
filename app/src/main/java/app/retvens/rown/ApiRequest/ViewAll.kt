@@ -14,16 +14,18 @@ import retrofit2.http.Path
 
 interface ViewAll {
 
-    @GET("getblogpost")
-    fun getAllBlogs() : Call<List<AllBlogsData>>
+    @GET("getblogpost//{user_id}")
+    fun getAllBlogs(
+        @Path("user_id") user_id : String,
+    ) : Call<List<AllBlogsData>>
 
     @GET("getblog/{User_id}")
     fun getBlogsByUserId(
         @Path("category_id") User_id : String
     ) : Call<List<AllBlogsData>>
 
-        @PATCH("deleterequest/saveid/{user_id}")
-//    @PATCH("saveid/{user_id}")
+//        @PATCH("deleterequest/saveid/{user_id}")
+    @PATCH("saveid/{user_id}")
     fun saveBlog(
         @Path("user_id") user_id : String,
         @Body saveBlog: SaveBlog
