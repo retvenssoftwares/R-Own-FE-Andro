@@ -23,6 +23,7 @@ data class PostItem(
     val like:String,
     val Like_count:String,
     val Comment_count:String,
+    val Role:String,
     val post_id: String,
     val saved_post: List<Any>,
     val Full_name:String,
@@ -57,6 +58,6 @@ data class Media(
 )
 
 data class PostsDataClass(
-    val posts: List<PostItem>
+    val posts: List<PostItem>,
 )
 

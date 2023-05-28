@@ -5,30 +5,93 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 
-class StatusAdapter(val listS : List<StatusData>, val context: Context) : RecyclerView.Adapter<StatusAdapter.StatusViewHolder>() {
+class StatusAdapter(val listS : List<PostItem>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class StatusViewHolder(itemView: View) : ViewHolder(itemView){
+    private val VIEW_TYPE_LAYOUT_ONE = 1
+    private val VIEW_TYPE_LAYOUT_TWO = 2
+
+
+    class LayoutOneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title_poll = itemView.findViewById<TextView>(R.id.title_status)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatusViewHolder {
-        val inflater : LayoutInflater = LayoutInflater.from(context)
-        val view : View = inflater.inflate(R.layout.item_status, parent, false)
-        return StatusViewHolder(view)
+
+    class LayoutTwoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val event_Image = itemView.findViewById<ShapeableImageView>(R.id.event_image)
+        val name = itemView.findViewById<TextView>(R.id.user_name_post)
+        val profile = itemView.findViewById<ShapeableImageView>(R.id.post_profile)
+        val status = itemView.findViewById<TextView>(R.id.title_status)
+        val title = itemView.findViewById<TextView>(R.id.event_title)
+        val username = itemView.findViewById<TextView>(R.id.user_id_on_comment)
+        val caption = itemView.findViewById<TextView>(R.id.recentCommentByUser)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater: LayoutInflater = LayoutInflater.from(context)
+
+        return when (viewType) {
+            VIEW_TYPE_LAYOUT_ONE -> {
+                val status: View = inflater.inflate(R.layout.item_status, parent, false)
+                LayoutOneViewHolder(status)
+            }
+            VIEW_TYPE_LAYOUT_TWO -> {
+                val status: View = inflater.inflate(R.layout.item_event_post, parent, false)
+                LayoutTwoViewHolder(status)
+            }
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+
+        val data = listS[position]
+
+        return if (data.post_type == "normal status"){
+            VIEW_TYPE_LAYOUT_ONE
+        }else{
+            VIEW_TYPE_LAYOUT_TWO
+        }
+
+
     }
 
     override fun getItemCount(): Int {
         return listS.size
     }
 
-    override fun onBindViewHolder(holder: StatusViewHolder, position: Int) {
-        holder.title_poll.text = listS[position].title
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        val item = listS[position]
+
+        when (holder.itemViewType) {
+            VIEW_TYPE_LAYOUT_ONE -> {
+                val layoutOneViewHolder = holder as LayoutOneViewHolder
+
+            }
+            VIEW_TYPE_LAYOUT_TWO -> {
+                val layoutTwoViewHolder = holder as LayoutTwoViewHolder
+                layoutTwoViewHolder.name.text = item.Full_name
+                layoutTwoViewHolder.caption.text = item.caption
+                layoutTwoViewHolder.title.text = item.Event_name
+                layoutTwoViewHolder.username.text = item.User_name
+                layoutTwoViewHolder.status.text = "Hello all, I am going to ${item.Event_name} on ${item.event_start_date}"
+
+                Glide.with(context).load(item.Profile_pic).into(layoutTwoViewHolder.profile)
+                Glide.with(context).load(item.event_thumbnail).into(layoutTwoViewHolder.event_Image)
+
+            }
+        }
 
     }
 }

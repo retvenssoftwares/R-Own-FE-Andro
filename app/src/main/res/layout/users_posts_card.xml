@@ -149,11 +149,13 @@
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:gravity="center"
-            android:weightSum="7"
+            android:weightSum="6"
             android:background="@drawable/transparent_bg"
             app:layout_constraintBottom_toBottomOf="@id/post_pic"
             app:layout_constraintEnd_toEndOf="@id/post_pic"
             app:layout_constraintStart_toStartOf="@id/post_pic">
+
+
 
             <LinearLayout
                 android:layout_marginTop="7dp"
@@ -163,7 +165,6 @@
                 android:orientation="vertical"
                 android:layout_marginBottom="3dp"
                 android:gravity="center">
-
                 <ImageView
                     android:id="@+id/like_post"
                     android:layout_width="26dp"
@@ -218,14 +219,14 @@
                 android:layout_width="10dp"
                 android:layout_height="26dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="4dp"
                 android:src="@drawable/svg_share_post" />
 
             <ImageView
                 android:layout_width="10dp"
                 android:layout_height="26dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="4dp"
                 android:src="@drawable/svg_save_post"/>
 
         </LinearLayout>

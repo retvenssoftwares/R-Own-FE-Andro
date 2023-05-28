@@ -52,8 +52,10 @@ class UserProfileActivity : AppCompatActivity() {
         media = findViewById(R.id.media)
         status = findViewById(R.id.status)
 
+        val userID = intent.getStringExtra("userId").toString()
+
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container,MediaFragment())
+        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID))
         transaction.commit()
 
         polls.setOnClickListener {
@@ -62,7 +64,7 @@ class UserProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container,PollsFragment())
+            transaction.replace(R.id.child_profile_fragments_container,PollsFragment(userID))
             transaction.commit()
         }
         media.setOnClickListener {
@@ -71,7 +73,7 @@ class UserProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container,MediaFragment())
+            transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID))
             transaction.commit()
         }
         status.setOnClickListener {
@@ -80,7 +82,7 @@ class UserProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container,StatusFragment())
+            transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID))
             transaction.commit()
         }
 

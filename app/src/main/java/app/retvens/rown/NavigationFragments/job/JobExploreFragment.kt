@@ -104,7 +104,6 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
                     response.forEach { it ->
 
-                        if (it.jobTitle == filterlist.category || it.jobType == filterlist.type || it.expectedCTC == filterlist.salary || it.jobLocation == filterlist.location){
                             val originalData = response.toList()
                             val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
                             suggestedRecycler.adapter = suggestedJobAdapter
@@ -152,7 +151,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                                 }
 
                             })
-                        }
+
 
                     }
 

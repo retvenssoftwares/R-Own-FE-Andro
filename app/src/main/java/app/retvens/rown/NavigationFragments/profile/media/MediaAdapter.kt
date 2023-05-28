@@ -9,11 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.NavigationFragments.home.PostDetailsActivity
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 
-class MediaAdapter(val listS : List<MediaData>, val context: Context) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
+class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
 
     class MediaViewHolder(itemView: View) : ViewHolder(itemView){
         val post_img = itemView.findViewById<ImageView>(R.id.posts_img)
@@ -26,11 +28,19 @@ class MediaAdapter(val listS : List<MediaData>, val context: Context) : Recycler
     }
 
     override fun getItemCount(): Int {
-        return listS.size
+        return mediaList.size
     }
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
-        holder.post_img.setImageResource(listS[position].image)
+
+        val media = mediaList[position]
+
+        media.media.forEach { item ->
+
+            Glide.with(context).load(item.post).into(holder.post_img)
+
+        }
+
 
         holder.itemView.setOnClickListener {
             context.startActivity(Intent(context, PostDetailsActivity::class.java))

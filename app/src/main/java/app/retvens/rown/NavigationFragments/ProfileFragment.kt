@@ -53,6 +53,11 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         media = view.findViewById(R.id.media)
         status = view.findViewById(R.id.status)
 
+
+
+        val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferencesId?.getString("user_id", "").toString()
+
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
 
@@ -62,7 +67,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         Glide.with(requireContext()).load(profilePic).into(profile)
         name.text = profileName
 
-        val childFragment: Fragment = MediaFragment()
+        val childFragment: Fragment = MediaFragment(user_id)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -79,7 +84,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = PollsFragment()
+            val childFragment: Fragment = PollsFragment(user_id)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -88,7 +93,8 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = MediaFragment()
+
+            val childFragment: Fragment = MediaFragment(user_id)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -97,7 +103,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
 
-            val childFragment: Fragment = StatusFragment()
+            val childFragment: Fragment = StatusFragment(user_id)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

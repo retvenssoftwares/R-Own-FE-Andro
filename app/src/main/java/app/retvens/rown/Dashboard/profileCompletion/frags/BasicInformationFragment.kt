@@ -175,7 +175,7 @@ class BasicInformationFragment : Fragment(),
                     Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
                     progressDialog.show()
 
-                    setJobTitle(myRecentJobET.text.toString())
+                    setJobTitle("Normal User")
                 }
             }
         }
@@ -188,22 +188,6 @@ class BasicInformationFragment : Fragment(),
         val university = university.text.toString()
         val start = start.text.toString()
         val end = end.text.toString()
-
-//        val role:String
-//
-//        val roleInHotel = myRoleInHosET.text.toString()
-//        val roleInJob = myRecentJobET.text.toString()
-//
-//
-//
-//        if (myRoleInHosET.text.toString() == "My Role in hospitality"){
-//            role = roleInHotel
-//        }else if (myRecentJobET.text.toString() == "Most Recent Job Title"){
-//            role = roleInJob
-//        }
-//        else{
-//            role = ""
-//        }
 
 
 

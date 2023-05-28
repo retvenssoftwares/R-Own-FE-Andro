@@ -21,7 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ServicesFragment : Fragment(), BottomSheetServiceName.OnBottomSNClickListener {
+class ServicesFragment(val userId:String) : Fragment(), BottomSheetServiceName.OnBottomSNClickListener {
 
     lateinit var servicesRecycler : RecyclerView
     lateinit var profileServicesAdapter: ProfileServicesAdapter

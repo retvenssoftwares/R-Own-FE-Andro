@@ -45,9 +45,9 @@ class ExplorePostsFragment : Fragment() {
             MediaData(R.drawable.png_post),
         )
 
-        mediaAdapter = MediaAdapter(blogs, requireContext())
-        mediaRecyclerView.adapter = mediaAdapter
-        mediaAdapter.notifyDataSetChanged()
+//        mediaAdapter = MediaAdapter(blogs, requireContext())
+//        mediaRecyclerView.adapter = mediaAdapter
+//        mediaAdapter.notifyDataSetChanged()
 
     }
 }

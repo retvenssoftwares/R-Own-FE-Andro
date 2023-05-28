@@ -21,7 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class JobsOnProfileFragment : Fragment() {
+class JobsOnProfileFragment(val userId:String) : Fragment() {
 
     lateinit var exploreJobsRecyclerView: RecyclerView
     lateinit var exploreJobAdapter: ProfileJobAdapter
@@ -41,16 +41,15 @@ class JobsOnProfileFragment : Fragment() {
         exploreJobsRecyclerView.layoutManager = LinearLayoutManager(context)
         exploreJobsRecyclerView.setHasFixedSize(true)
 
-        getJobs()
+        getJobs(userId)
 
     }
 
-    private fun getJobs() {
+    private fun getJobs(userId: String) {
 
-        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getJob = RetrofitBuilder.jobsApis.getIndividualJobs(user_id)
+
+        val getJob = RetrofitBuilder.jobsApis.getIndividualJobs(userId)
 
         getJob.enqueue(object : Callback<List<JobsData>?> {
             override fun onResponse(

@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.FeedCollection.Vote
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
 import app.retvens.rown.databinding.GetjoblistBinding
@@ -80,14 +82,50 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                     }
 
             binding.postProfile.setOnClickListener {
-                context.startActivity(Intent(context, UserProfileActivity::class.java))
+
+                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
+
+                    val intent = Intent(context,UserProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+
+                }else if(banner.Role == "Business Vendor/Freelancer"){
+                    val intent = Intent(context,VendorProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                }else if (banner.Role == "Hotel Owner"){
+                    val intent = Intent(context,OwnerProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                }
+
+
             }
 
             binding.postPic.setOnClickListener {
-                context.startActivity(Intent(context, PostsViewActivity::class.java))
+                val intent = Intent(context,PostsViewActivity::class.java)
+                post.media.forEach { item ->
+                    intent.putExtra("postPic",item.post)
+                }
+                intent.putExtra("caption",banner.caption)
+                intent.putExtra("postId",banner.post_id)
+                context.startActivity(intent)
+
             }
             binding.postCard.setOnClickListener {
-                context.startActivity(Intent(context, PostDetailsActivity::class.java))
+                val intent = Intent(context,PostDetailsActivity::class.java)
+                intent.putExtra("profilePic",banner.Profile_pic)
+                intent.putExtra("profileName",banner.Full_name)
+                intent.putExtra("userName",banner.User_name)
+                intent.putExtra("caption",banner.caption)
+                post.media.forEach { item ->
+                    intent.putExtra("postPic",item.post)
+                }
+                intent.putExtra("likeCount",banner.Like_count)
+                intent.putExtra("commentCount",banner.Comment_count)
+                intent.putExtra("like",banner.like)
+                intent.putExtra("postId",banner.post_id)
+                context.startActivity(intent)
             }
 
             binding.likePost.setOnClickListener {

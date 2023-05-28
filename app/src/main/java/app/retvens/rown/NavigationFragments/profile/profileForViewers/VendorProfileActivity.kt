@@ -51,9 +51,12 @@ class VendorProfileActivity : AppCompatActivity() {
         polls = findViewById(R.id.polls)
         media = findViewById(R.id.media)
         status = findViewById(R.id.status)
+        services = findViewById(R.id.services)
+
+        val userId = intent.getStringExtra("userId").toString()
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container,MediaFragment())
+        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId))
         transaction.commit()
 
         polls.setOnClickListener {
@@ -62,7 +65,7 @@ class VendorProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, PollsFragment())
+            transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userId))
             transaction.commit()
         }
         media.setOnClickListener {
@@ -71,7 +74,7 @@ class VendorProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, MediaFragment())
+            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userId))
             transaction.commit()
         }
         services.setOnClickListener {
@@ -81,7 +84,7 @@ class VendorProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, ServicesFragment())
+            transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId))
             transaction.commit()
         }
 
@@ -91,7 +94,7 @@ class VendorProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, StatusFragment())
+            transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId))
             transaction.commit()
         }
 

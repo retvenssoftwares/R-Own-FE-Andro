@@ -314,7 +314,8 @@ class CreatePostActivity : AppCompatActivity(),
         val file =  File(cacheDir, "${getRandomString(6)}.jpg")
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
-        val body = UploadRequestBody(file,"image")
+        val body = UploadRequestBody(file,"" +
+                "")
 
         Toast.makeText(applicationContext,userId,Toast.LENGTH_SHORT).show()
 

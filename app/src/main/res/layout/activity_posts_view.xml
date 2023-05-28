@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
+    android:fitsSystemWindows="true"
     tools:context=".NavigationFragments.home.PostsViewActivity">
 
     <RelativeLayout
@@ -89,6 +90,7 @@
             android:layout_weight="1"
             android:src="@drawable/svg_share_post"/>
         <ImageView
+            android:id="@+id/savedPost"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_weight="1"

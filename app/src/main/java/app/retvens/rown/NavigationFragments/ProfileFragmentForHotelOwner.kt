@@ -34,7 +34,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
 
-class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfileSettingClickListener {
+class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfileSettingClickListener {
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
@@ -77,7 +77,10 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
         Glide.with(requireContext()).load(profilePic).into(profile)
         name.text = profileName
 
-        val childFragment: Fragment = JobsOnProfileFragment()
+        val sharedPreferencesID = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferencesID?.getString("user_id", "").toString()
+
+        val childFragment: Fragment = JobsOnProfileFragment(user_id)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -97,7 +100,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             hotels.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = JobsOnProfileFragment()
+            val childFragment: Fragment = JobsOnProfileFragment(user_id)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -109,7 +112,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = MediaFragment()
+            val childFragment: Fragment = MediaFragment(user_id)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -121,7 +124,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = PollsFragment()
+            val childFragment: Fragment = PollsFragment(user_id)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -133,7 +136,7 @@ class ProfileFragmentForHotelOwner : Fragment(), BottomSheetProfileSetting.OnBot
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = StatusFragment()
+            val childFragment: Fragment = StatusFragment(user_id)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

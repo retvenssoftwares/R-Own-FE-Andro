@@ -47,6 +47,8 @@ class OwnerProfileActivity : AppCompatActivity() {
         profile = findViewById(R.id.profile)
         name = findViewById(R.id.profile_name)
 
+        val userId = intent.getStringExtra("userId").toString()
+
         findViewById<ImageView>(R.id.profile_backBtn).setOnClickListener {
             onBackPressed()
         }
@@ -59,7 +61,7 @@ class OwnerProfileActivity : AppCompatActivity() {
         events = findViewById(R.id.events)
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container,MediaFragment())
+        transaction.replace(R.id.child_profile_fragments_container,JobsOnProfileFragment(userId))
         transaction.commit()
 
         jobs.setOnClickListener {
@@ -71,7 +73,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             events.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, JobsOnProfileFragment())
+            transaction.replace(R.id.child_profile_fragments_container, JobsOnProfileFragment(userId))
             transaction.commit()
         }
         media.setOnClickListener {
@@ -80,7 +82,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, MediaFragment())
+            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userId))
             transaction.commit()
         }
         polls.setOnClickListener {
@@ -89,7 +91,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, PollsFragment())
+            transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userId))
             transaction.commit()
         }
         status.setOnClickListener {
@@ -98,7 +100,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, StatusFragment())
+            transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId))
             transaction.commit()
         }
         hotels.setOnClickListener {
@@ -110,7 +112,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             jobs.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container,HotelsFragmentProfile())
+            transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile())
             transaction.commit()
         }
         events.setOnClickListener {
@@ -122,7 +124,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             events.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, EventsProfileFragment())
+            transaction.replace(R.id.child_profile_fragments_container, EventsProfileFragment())
             transaction.commit()
         }
 
