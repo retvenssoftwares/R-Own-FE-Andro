@@ -63,9 +63,15 @@ class PollsFragment(val userId: String) : Fragment() {
 
                     response.forEach { postsDataClass ->
 
-                        pollsAdapter = PollsAdapter(postsDataClass.posts, requireContext())
-                        pollsRecyclerView.adapter = pollsAdapter
-                        pollsAdapter.notifyDataSetChanged()
+                        try {
+
+                            pollsAdapter = PollsAdapter(postsDataClass.posts, requireContext())
+                            pollsRecyclerView.adapter = pollsAdapter
+                            pollsAdapter.notifyDataSetChanged()
+                        }catch (e:NullPointerException){
+
+                        }
+
 
                     }
 

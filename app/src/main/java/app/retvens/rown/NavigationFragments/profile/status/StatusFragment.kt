@@ -60,9 +60,15 @@ class StatusFragment(val userId: String) : Fragment() {
 
                     response.forEach { postsDataClass ->
 
-                        statusAdapter = StatusAdapter(postsDataClass.posts, requireContext())
-                        statusRecycler.adapter = statusAdapter
-                        statusAdapter.notifyDataSetChanged()
+                        try {
+                            statusAdapter = StatusAdapter(postsDataClass.posts, requireContext())
+                            statusRecycler.adapter = statusAdapter
+                            statusAdapter.notifyDataSetChanged()
+                        }catch (e:NullPointerException){
+
+                        }
+
+
 
                     }
 

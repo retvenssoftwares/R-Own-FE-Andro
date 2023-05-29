@@ -1,9 +1,6 @@
 package app.retvens.rown.ApiRequest
 
-import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
-import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
-import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
-import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -42,5 +39,10 @@ interface ConnectionApis {
     ):Call<OwnerProfileDataClass>
 
 
+    @GET("vendorinfo/{userId}/{connUserId}")
+    fun getVendorProfile(
+        @Path("userId")userId:String,
+        @Path("connUserId")connUserId:String
+    ):Call<VendorProfileDataClass>
 
 }

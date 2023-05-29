@@ -86,6 +86,7 @@ class VendorsFragment : Fragment(), BackHandler {
     private lateinit var recyclerView: RecyclerView
     private lateinit var vendorServicesAdapter: VendorServicesAdapter
     private  var selectedServices:ArrayList<String> = ArrayList()
+    private var setectedIds:ArrayList<String> = ArrayList()
     private var vendorId:String = ""
     private lateinit var searchBar:EditText
 
@@ -171,32 +172,6 @@ class VendorsFragment : Fragment(), BackHandler {
         getVendor()
     }
 
-    private fun createService() {
-
-        val data = CreateVendorDataClass(vendorId,"1")
-
-        val send = RetrofitBuilder.profileCompletion.createVendor(data)
-
-        send.enqueue(object : Callback<UpdateResponse?> {
-            override fun onResponse(
-                call: Call<UpdateResponse?>,
-                response: Response<UpdateResponse?>
-            ) {
-                if (response.isSuccessful){
-                    sendServices()
-                    val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
-
-    }
 
     private fun getVendor() {
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -226,11 +201,15 @@ class VendorsFragment : Fragment(), BackHandler {
 
     private fun sendServices() {
 
-        for (x in selectedServices){
+        for (x in setectedIds){
 //
 //            Toast.makeText(requireContext(),x.toString(),Toast.LENGTH_SHORT).show()
 
-            val data = PostVendorSerivces(x)
+
+            val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+            val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+            val data = PostVendorSerivces(user_id,x)
 
             val send = RetrofitBuilder.profileCompletion.setServices(vendorId,data)
 
@@ -244,6 +223,7 @@ class VendorsFragment : Fragment(), BackHandler {
                         Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     }else{
                         Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),"5",Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -296,13 +276,13 @@ class VendorsFragment : Fragment(), BackHandler {
 
                     val response = response.body()!!
                     progressDialog.dismiss()
-                    createService()
                     saveProgress(requireContext(), "100")
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                 }else{
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"6",Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -424,10 +404,13 @@ class VendorsFragment : Fragment(), BackHandler {
 
             override fun onJobClick(job: VendorServicesData) {
                 val index = selectedServices.indexOf(job.service_name)
+                val index1 = setectedIds.indexOf(job.serviceId)
                 if (index == -1) {
                     selectedServices.add(job.service_name)
+                    setectedIds.add(job.serviceId)
                 } else {
                     selectedServices.removeAt(index)
+                    setectedIds.removeAt(index1)
                 }
 
                 Log.e("serives",selectedServices.toString())

@@ -48,28 +48,29 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:List<Post>):Recyc
         }else{
             Glide.with(context).load(data.Profile_pic).into(holder.profile)
         }
-
-
-
-
         holder.name.text = data.Full_name
+
+        var status = data.connectionStatus
 
         if (data.connectionStatus == "Connected"){
             holder.connect.text = "Remove"
         }
 
-        holder.viewProfile.setOnClickListener {
-            Toast.makeText(context,"Working On It",Toast.LENGTH_SHORT).show()
+        if (data.connectionStatus == "Requested"){
+            holder.connect.text = "Requested"
         }
-
-
 
         holder.connect.setOnClickListener {
 
-            if (data.connectionStatus == "Not Connected"){
+            if (status == "Not Connected"){
+                connectClickListener?.onJobSavedClick(data)
+
                 holder.connect.text = "Requested"
             }
-            connectClickListener?.onJobSavedClick(data)
+
+
+            status = "Requested"
+
         }
 
 

@@ -58,9 +58,15 @@ class MediaFragment(val userId: String) : Fragment() {
 
                     response.forEach { postsDataClass ->
 
-                        mediaAdapter = MediaAdapter(requireContext(),postsDataClass.posts)
-                        mediaRecyclerView.adapter = mediaAdapter
-                        mediaAdapter.notifyDataSetChanged()
+                        try {
+                            mediaAdapter = MediaAdapter(requireContext(),postsDataClass.posts)
+                            mediaRecyclerView.adapter = mediaAdapter
+                            mediaAdapter.notifyDataSetChanged()
+                        }catch (e : NullPointerException){
+
+                        }
+
+
 
                     }
 

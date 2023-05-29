@@ -207,6 +207,7 @@
                 android:layout_marginTop="12dp">
 
                 <TextView
+                    android:id="@+id/connStatus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textColor="@color/green_own"

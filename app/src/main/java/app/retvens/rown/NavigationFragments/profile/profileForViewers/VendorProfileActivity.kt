@@ -15,6 +15,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.VendorProfileDataClass
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
 import app.retvens.rown.NavigationFragments.profile.services.ServicesFragment
@@ -24,6 +27,9 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRAct
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
 import com.google.android.material.imageview.ShapeableImageView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class VendorProfileActivity : AppCompatActivity() {
 
@@ -35,6 +41,8 @@ class VendorProfileActivity : AppCompatActivity() {
     lateinit var media : TextView
     lateinit var status : TextView
     lateinit var services : TextView
+    lateinit var postCount:TextView
+    lateinit var connCount:TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +56,11 @@ class VendorProfileActivity : AppCompatActivity() {
 
         name = findViewById(R.id.profile_name)
 
+        postCount = findViewById(R.id.posts_count)
+        connCount = findViewById(R.id.connections_count)
+
+        status = findViewById(R.id.connStatus)
+
         polls = findViewById(R.id.polls)
         media = findViewById(R.id.media)
         status = findViewById(R.id.status)
@@ -55,6 +68,7 @@ class VendorProfileActivity : AppCompatActivity() {
 
         val userId = intent.getStringExtra("userId").toString()
 
+        getVendorProfile(userId)
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId))
@@ -149,5 +163,30 @@ class VendorProfileActivity : AppCompatActivity() {
 //            bottomSheet.setOnBottomSheetProfileSettingClickListener(this)
         }
 
+    }
+
+    private fun getVendorProfile(userId: String) {
+
+        val getVendor = RetrofitBuilder.connectionApi.getVendorProfile(userId,userId)
+
+       getVendor.enqueue(object : Callback<VendorProfileDataClass?> {
+           override fun onResponse(
+               call: Call<VendorProfileDataClass?>,
+               response: Response<VendorProfileDataClass?>
+           ) {
+               if (response.isSuccessful){
+                   val response = response.body()!!
+                   connCount.text = response.connectioncount.toString()
+                   postCount.text = response.requestcount.toString()
+
+                   status.text = response.connectionStatus
+
+               }
+           }
+
+           override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {
+
+           }
+       })
     }
 }

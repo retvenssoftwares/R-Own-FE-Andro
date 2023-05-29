@@ -77,7 +77,7 @@
                 android:textAlignment="center"
                 android:paddingVertical="6dp"
                 android:background="@color/green_own"
-                android:text="CONNECT"/>
+                android:text="Accept"/>
 
         </androidx.cardview.widget.CardView>
 

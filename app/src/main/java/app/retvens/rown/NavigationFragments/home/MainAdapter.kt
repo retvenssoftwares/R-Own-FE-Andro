@@ -2,12 +2,14 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +38,12 @@ import com.mackhartley.roundedprogressbar.RoundedProgressBar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 class MainAdapter(val context: Context, private val dataItemList: List<DataItem>) :
@@ -76,8 +84,8 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                         post.media.forEach { item ->
                             Glide.with(context).load(item.post).into(binding.postPic)
+                            formatTimestamp(item.date_added)
                         }
-
 
                         if (post.like == "Liked"){
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
@@ -158,6 +166,34 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
 
         }
+
+        fun formatTimestamp(timestamp: String): String {
+            val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            val instant = Instant.parse(timestamp)
+            val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+            val now = LocalDateTime.now()
+            val duration = Duration.between(localDateTime, now)
+
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                when {
+                    duration.toSeconds() < 60 -> "${duration.toSeconds()} seconds ago"
+                    duration.toMinutes() < 60 -> "${duration.toMinutes()} minutes ago"
+                    duration.toHours() < 24 -> "${duration.toHours()} hours ago"
+                    duration.toDays() < 31 -> "${duration.toDays()} days ago"
+                    else -> "${duration.toDays() / 30} months ago"
+                }
+            } else {
+                TODO("VERSION.SDK_INT < S")
+            }
+
+            binding.postTime.text = duration.toString()
+        }
+
+
     }
 
     inner class BannerItemViewHolderEvent(private val binding : ItemEventPostBinding) : RecyclerView.ViewHolder(binding.root){
@@ -249,8 +285,34 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             }
 
+            if (banner.Like_count != ""){
+                binding.likeCount.text = banner.Like_count
+            }
+            if (banner.Comment_count != ""){
+                binding.commentCount.text = banner.Comment_count
+            }
+
+            if (banner.like == "Liked"){
+                binding.likePost.setImageResource(R.drawable.liked_vectore)
+            }else if (banner.like == "Unliked"){
+                binding.likePost.setImageResource(R.drawable.svg_like_post)
+            }
+
 
             binding.likePost.setOnClickListener {
+                banner.islike = !banner.islike
+
+                val count:Int
+                if(banner.islike){
+                    binding.likePost.setImageResource(R.drawable.liked_vectore)
+                    count = banner.Like_count.toInt()+1
+                    binding.likeCount.text = count.toString()
+                }else{
+                    binding.likePost.setImageResource(R.drawable.svg_like_post)
+                    count = banner.Like_count.toInt()
+                    binding.likeCount.text = count.toString()
+                }
+
                 onItemClickListener?.onItemClick(banner)
             }
 
@@ -547,4 +609,9 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
         }
     }
+
+
+
+
+
 }

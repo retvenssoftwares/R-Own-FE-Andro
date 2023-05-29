@@ -42,8 +42,22 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
         }
 
 
+
+
         holder.itemView.setOnClickListener {
-            context.startActivity(Intent(context, PostDetailsActivity::class.java))
+            val intent = Intent(context,PostDetailsActivity::class.java)
+            intent.putExtra("profilePic",media.Profile_pic)
+            intent.putExtra("profileName",media.Full_name)
+            intent.putExtra("userName",media.User_name)
+            intent.putExtra("caption",media.caption)
+            media.media.forEach { item ->
+                intent.putExtra("postPic",item.post)
+            }
+            intent.putExtra("likeCount",media.Like_count)
+            intent.putExtra("commentCount",media.Comment_count)
+            intent.putExtra("like",media.like)
+            intent.putExtra("postId",media.post_id)
+            context.startActivity(intent)
         }
     }
 }

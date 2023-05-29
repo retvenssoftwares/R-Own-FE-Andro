@@ -113,20 +113,15 @@ interface PriofileCompletionApis{
         @Part("vendorName") Name: RequestBody,
         @Part("vendorDescription") address: RequestBody,
         @Part Vendorimg: MultipartBody.Part
-//        @Part("websiteLink") website: RequestBody
     ): Call<UpdateResponse>
 
     @GET("getservicename")
     fun getServices():Call<List<VendorServicesData>>
 
-    @PATCH("vendorservice/{user_id}")
+    @PATCH("postservice/{user_id}")
     fun setServices(
         @Path("user_id") user_id : String,
         @Body details: PostVendorSerivces
     ):Call<UpdateResponse>
 
-    @POST("vendordata")
-    fun createVendor(
-        @Body vendor:CreateVendorDataClass
-    ):Call<UpdateResponse>
 }

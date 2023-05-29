@@ -30,7 +30,7 @@ class PostDetailsActivity : AppCompatActivity() {
         val likeButton = findViewById<ImageView>(R.id.like_post)
         val commentButtom = findViewById<ImageView>(R.id.comment)
 
-        name.text = intent.getStringExtra("profileName").toString()
+        name.text = intent.getStringExtra("userName").toString()
         username.text = intent.getStringExtra("userName").toString()
         caption.text = intent.getStringExtra("caption").toString()
 
