@@ -36,4 +36,6 @@ object RetrofitBuilder {
     val EventsApi = retrofitBuilder2.create(EventApis::class.java)
 
     val ProfileApis = retrofitBuilder2.create(ProfileApis::class.java)
+
+    val exploreApis = retrofitBuilder2.create(ExploreApis::class.java)
 }

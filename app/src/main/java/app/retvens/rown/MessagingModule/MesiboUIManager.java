@@ -24,6 +24,7 @@ import com.mesibo.messaging.MesiboUserListActivity;
 import java.lang.ref.WeakReference;
 
  import app.retvens.rown.ChatSection.ChatScreen;
+ import app.retvens.rown.CreateCommunity.CreateCommunity;
  import app.retvens.rown.Dashboard.DashBoardActivity;
 
 public class MesiboUIManager {
@@ -112,13 +113,13 @@ public class MesiboUIManager {
         context.startActivity(intent);
     }
 
-//    public static void launchGroupActivity(Context context, Bundle bundle) {
-//        Intent intent = new Intent(context, CreateNewGroupActivity.class);
-//        if (bundle != null) {
-//            intent.putExtra(MesiboUI.BUNDLE, bundle);
-//        }
-//        context.startActivity(intent);
-//    }
+    public static void launchGroupActivity(Context context, Bundle bundle) {
+        Intent intent = new Intent(context, CreateCommunity.class);
+        if (bundle != null) {
+            intent.putExtra(MesiboUI.BUNDLE, bundle);
+        }
+        context.startActivity(intent);
+    }
 
     public static void launchPictureActivity(Context context, String title, String filePath) {
         if (context != null) {
@@ -128,7 +129,8 @@ public class MesiboUIManager {
 
     public static void launchMessagingActivity(Context context, long forwardid, String peer, long groupid) {
         MesiboMessagingActivity oldActivity;
-        Intent intent = new Intent(context, MesiboMessagingActivity.class);
+        Intent intent = new Intent(context, app.retvens.rown.MessagingModule.MesiboMessagingActivity.class);
+
         intent.putExtra(MesiboUI.PEER, peer);
         intent.putExtra(MesiboUI.GROUP_ID, groupid);
         intent.putExtra("mid", forwardid);

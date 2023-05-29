@@ -31,25 +31,25 @@ class SavedJobsFragment : Fragment() {
         savedJobsRecyclerView = view.findViewById(R.id.savedJobsRecyclerView)
         savedJobsRecyclerView.layoutManager = LinearLayoutManager(context)
         savedJobsRecyclerView.setHasFixedSize(true)
+//
+//        val blogs = listOf<ExploreJobData>(
+//            ExploreJobData("Senior Inn"),
+//            ExploreJobData("Junior Inn 2"),
+//            ExploreJobData("Android"),
+//            ExploreJobData("Paradise Inn 23"),
+//            ExploreJobData("Paradise Inn"),
+//            ExploreJobData("Paradise Inn 2"),
+//            ExploreJobData("Senior Inn"),
+//            ExploreJobData("Junior Inn 2"),
+//            ExploreJobData("Android"),
+//            ExploreJobData("Paradise Inn 23"),
+//            ExploreJobData("Paradise Inn"),
+//            ExploreJobData("Paradise Inn 2"),
+//        )
 
-        val blogs = listOf<ExploreJobData>(
-            ExploreJobData("Senior Inn"),
-            ExploreJobData("Junior Inn 2"),
-            ExploreJobData("Android"),
-            ExploreJobData("Paradise Inn 23"),
-            ExploreJobData("Paradise Inn"),
-            ExploreJobData("Paradise Inn 2"),
-            ExploreJobData("Senior Inn"),
-            ExploreJobData("Junior Inn 2"),
-            ExploreJobData("Android"),
-            ExploreJobData("Paradise Inn 23"),
-            ExploreJobData("Paradise Inn"),
-            ExploreJobData("Paradise Inn 2"),
-        )
-
-        savedJobAdapter = SavedJobAdapter(blogs, requireContext())
-        savedJobsRecyclerView.adapter = savedJobAdapter
-        savedJobAdapter.notifyDataSetChanged()
+//        savedJobAdapter = SavedJobAdapter(blogs, requireContext())
+//        savedJobsRecyclerView.adapter = savedJobAdapter
+//        savedJobAdapter.notifyDataSetChanged()
 
 
     }

@@ -11,10 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
 
-class ExploreJobAdapter(val listS : List<ExploreJobData>, val context: Context) : RecyclerView.Adapter<ExploreJobAdapter.ExploreJobViewHolder>() {
+class ExploreJobAdapter(val listS : List<JobPost>, val context: Context) : RecyclerView.Adapter<ExploreJobAdapter.ExploreJobViewHolder>() {
 
     class ExploreJobViewHolder(itemView: View) : ViewHolder(itemView){
-        val name = itemView.findViewById<TextView>(R.id.recent_job_designation)
+        val designation = itemView.findViewById<TextView>(R.id.recent_job_designation)
+        val location = itemView.findViewById<TextView>(R.id.recent_job_location)
+        val title = itemView.findViewById<TextView>(R.id.jobs_title)
+        val type = itemView.findViewById<TextView>(R.id.jobs_type)
+        val salary = itemView.findViewById<TextView>(R.id.salary)
+
         val save_recent = itemView.findViewById<ImageView>(R.id.save_recent)
     }
 
@@ -29,7 +34,15 @@ class ExploreJobAdapter(val listS : List<ExploreJobData>, val context: Context) 
     }
 
     override fun onBindViewHolder(holder: ExploreJobViewHolder, position: Int) {
-        holder.name.text = listS[position].title
+
+        val data = listS[position]
+
+        holder.designation.text = data.jobTitle
+        holder.location.text = data.jobLocation
+        holder.title.text = data.jobType
+        holder.type.text = data.jobType
+
         holder.save_recent.visibility = View.GONE
+
     }
 }

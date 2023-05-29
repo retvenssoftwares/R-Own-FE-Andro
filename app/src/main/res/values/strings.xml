@@ -89,4 +89,45 @@
     <string name="today_text" translatable="false">Today</string>
     <string name="deletedMessageTitle" translatable="false">This message was deleted</string>
 
+
+
+    <string name="create_community" translatable="false">Create a Community</string>
+    <string name="community_name_text_description" translatable="false">What do you wish you call your Community?</string>
+    <string name="Channel_title" translatable="false">Name</string>
+    <string name="Channel_Description" translatable="false">Channel Description</string>
+    <string name="EmptychannelNameandDescription" translatable="false">Channel Name , Channel Discription or Channel Type can\'t be empty</string>
+    <string name="business_type" translatable="false">Enter-Channel Name</string>
+    <string name="whereLocatedText" translatable="false">Where are you located?</string>
+    <string name="pickedLocationText" translatable="false">We have picked your current location by default. You can also search for another locaiton</string>
+    <string name="part_of_community_text" translatable="false">Who can be a part of you community?</string>
+    <string name="share_invite_text" translatable="false">Share Invite</string>
+    <string name="notification_center" translatable="false">Notification Center</string>
+    <string name="edit_details" translatable="false">Edit Details</string>
+    <string name="channel_type" translatable="false">Channel Type</string>
+    <string name="community_location" translatable="false">Community Location</string>
+
+    <string name="Media_Text" translatable="false">Media</string>
+    <string name="Max_Media_Text" translatable="false">10</string>
+    <string name="EtoEEncryption" translatable="false">End-To-End Encryption</string>
+    <string name="blocking" translatable="false">Blocking</string>
+    <string name="Group_Messages" translatable="false">Group Messages</string>
+    <string name="calls" translatable="false">Calls</string>
+    <string name="video_calls" translatable="false">Video Calls</string>
+    <string name="profile_view" translatable="false">Profile View</string>
+    <string name="ok_text" translatable="false">OK</string>
+    <string name="cancel_text" translatable="false">Cancel</string>
+    <string name="custom_notifications" translatable="false">Custom Notifications</string>
+    <string name="favorite_messages" translatable="false">Favorite Messages</string>
+    <string name="status_and_phone" translatable="false">Status and Phone</string>
+    <string name="hi_today_is_nice_day" translatable="false">Hi today is nice day</string>
+    <string name="Example_Time" translatable="false">10 hours ago</string>
+    <string name="Mobile" translatable="false">Mobile</string>
+    <string name="group_members" translatable="false">Group Members</string>
+    <string name="_25" translatable="false">25</string>
+    <string name="Edit_Group_Destails" translatable="false">Edit Group Details</string>
+    <string name="add_group_members" translatable="false">Add Group members</string>
+    <string name="exit_group" translatable="false">Exit Group</string>
+    <string name="Sample_Time" translatable="false">11:15</string>
+    <string name="this_is_title" translatable="false">This is title</string>
+
 </resources>

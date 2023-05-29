@@ -66,6 +66,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
+import com.mesibo.messaging.UserListFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -430,7 +431,7 @@ class DashBoardActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_chats -> {
-                val myFragment = ChatFragment()
+                val myFragment = app.retvens.rown.MessagingModule.UserListFragment()
                 supportFragmentManager.beginTransaction().apply {
                     replace(R.id.fragment_container, myFragment)
                     addToBackStack(null)

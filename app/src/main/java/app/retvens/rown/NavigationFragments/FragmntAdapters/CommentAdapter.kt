@@ -29,6 +29,7 @@ class CommentAdapter(val context: Context, var commentList:GetComments): Recycle
         val relies = itemview.findViewById<TextView>(R.id.replies_OnComment)
         val time = itemview.findViewById<TextView>(R.id.times_OnComment)
 
+        val recycler = itemview.findViewById<RecyclerView>(R.id.nestedCommentRecycler)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolderClass3 {
@@ -47,8 +48,13 @@ class CommentAdapter(val context: Context, var commentList:GetComments): Recycle
         holder.comment.text = data.comment
         Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
+        holder.relies.setOnClickListener {
+            holder.recycler.visibility = View.VISIBLE
+        }
 
-
+        holder.recycler.layoutManager = LinearLayoutManager(context)
+        val nestedAdapter = NestedCommentAdapter(context,commentList)
+        holder.recycler.adapter = nestedAdapter
     }
 
     override fun getItemCount(): Int {

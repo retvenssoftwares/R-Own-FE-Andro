@@ -25,6 +25,7 @@ data class PostItem(
     val Comment_count:String,
     val Role:String,
     val post_id: String,
+    val voted:String,
     val saved_post: List<Any>,
     val Full_name:String,
     val __v: Int

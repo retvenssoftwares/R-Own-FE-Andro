@@ -8,11 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.FeedCollection.Vote
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
@@ -29,6 +33,9 @@ import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity
 import com.bumptech.glide.Glide
 import com.mackhartley.roundedprogressbar.RoundedProgressBar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainAdapter(val context: Context, private val dataItemList: List<DataItem>) :
@@ -210,13 +217,54 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 val progressBarOption2: RoundedProgressBar = binding.progressBar2
 
 
+                val vote1: List<String> = item.Options[0].votes.map { it.user_id }
+                val vote2: List<String> = item.Options[1].votes.map { it.user_id }
 
 
+                binding.voteOption1.setOnClickListener {
+
+                    if (banner.voted == "no"){
+                        voteOption(banner.post_id,item.Options[0].option_id)
+                    }
 
 
+                    vote1.size+1
 
-                    val vote1: List<String> = item.Options[0].votes.map { it.user_id }
-                    val vote2: List<String> = item.Options[1].votes.map { it.user_id }
+
+                    binding.Option1Votes.text = "${vote1.size} votes"
+                    binding.Option2Votes.text = "${vote2.size} votes"
+
+                    val totalVotes = vote1.size + vote2.size
+                    val completedTasks = vote1.size
+                    val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
+                    if (!completedPercentage.isNaN()) {
+                        progressBarOption1.setProgressPercentage(completedPercentage)
+                        binding.option1Percentage.text = "${completedPercentage}%"
+                    }
+
+                    Toast.makeText(context,vote1.toString(),Toast.LENGTH_SHORT).show()
+                }
+                binding.voteOption2.setOnClickListener {
+
+                    if (banner.voted == "no"){
+                        voteOption(banner.post_id,item.Options[1].option_id)
+                    }
+
+                    vote2.size+1
+
+                    binding.Option1Votes.text = "${vote1.size} votes"
+                    binding.Option2Votes.text = "${vote2.size} votes"
+
+
+                    val totalVotes = vote1.size + vote2.size
+                    val completedTasks2 = vote2.size
+                    val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
+                    if (!completedPercentage2.isNaN()) {
+                        progressBarOption2.setProgressPercentage(completedPercentage2)
+                        binding.option2Percentage.text = "${completedPercentage2}%"
+
+                    }
+                }
 
                     binding.Option1Votes.text = "${vote1.size} votes"
                     binding.Option2Votes.text = "${vote2.size} votes"
@@ -240,6 +288,34 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
 
             }
+
+        }
+
+        private fun voteOption(postId: String, optionId: String) {
+
+            val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+            val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+            val postVote = RetrofitBuilder.feedsApi.votePost(postId,optionId, LikesCollection(user_id))
+
+            postVote.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    if (response.isSuccessful){
+                        val response = response.body()!!
+                        Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    Toast.makeText(context,t.message.toString(),Toast.LENGTH_SHORT).show()
+                }
+            })
+
 
         }
     }

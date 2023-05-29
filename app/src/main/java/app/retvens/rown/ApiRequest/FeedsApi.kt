@@ -130,4 +130,11 @@ interface FeedsApi {
         @Path("user_id")user_id:String,
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
+
+    @PATCH("polls/{postId}/{optionId}")
+    fun votePost(
+        @Path("postId")postId:String,
+        @Path("optionId")optionId:String,
+        @Body user_id: LikesCollection
+    ):Call<UpdateResponse>
 }

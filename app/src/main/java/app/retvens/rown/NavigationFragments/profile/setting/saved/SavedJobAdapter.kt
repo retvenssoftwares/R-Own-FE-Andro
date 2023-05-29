@@ -29,7 +29,7 @@ class SavedJobAdapter(val listS : List<ExploreJobData>, val context: Context) : 
     }
 
     override fun onBindViewHolder(holder: ExploreJobViewHolder, position: Int) {
-        holder.name.text = listS[position].title
-        holder.save_recent.visibility = View.GONE
+//        holder.name.text = listS[position]
+//        holder.save_recent.visibility = View.GONE
     }
 }

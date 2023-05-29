@@ -99,10 +99,10 @@ public class MesiboConfiguration {
 
     //http://romannurik.github.io/AndroidAssetStudio/icons-generic.html
     //#7f7f7f, 1dp
-//    public static final int ATTACHMENT_ICON = R.drawable.ic_attachment_grey_18dp;
-//    public static final int VIDEO_ICON = R.drawable.ic_video_on_grey_18dp;
-//    public static final int IMAGE_ICON = R.drawable.ic_insert_photo_grey_500_18dp;
-//    public static final int LOCATION_ICON = R.drawable.ic_location_on_grey_18dp;
+    public static final int ATTACHMENT_ICON = com.mesibo.messaging.R.drawable.ic_attachment_grey_18dp;
+    public static final int VIDEO_ICON = R.drawable.ic_video_camera;
+    public static final int IMAGE_ICON = com.mesibo.messaging.R.drawable.ic_insert_photo_grey_500_18dp;
+    public static final int LOCATION_ICON = com.mesibo.messaging.R.drawable.ic_location_on_grey_18dp;
 //
 //    public static final String EMPTY_MESSAGE_LIST = "";
 

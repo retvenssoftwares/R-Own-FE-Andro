@@ -54,6 +54,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
+                android:id="@+id/voteOption1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -130,6 +131,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginHorizontal="25dp"
                     app:rpbCornerRadius="20dp"
+                    app:rpbProgress="0"
                     app:rpbProgressColor="@color/green_own"
                     app:rpbShowProgressText="false"
                    />
@@ -137,6 +139,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/voteOption2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -214,6 +217,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginHorizontal="25dp"
                     app:rpbCornerRadius="20dp"
+                    app:rpbProgress="0"
                     app:rpbProgressColor="@color/green_own"
                     app:rpbShowProgressText="false"
                     />

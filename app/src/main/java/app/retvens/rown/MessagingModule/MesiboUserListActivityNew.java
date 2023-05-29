@@ -44,22 +44,15 @@
 //import androidx.fragment.app.FragmentTransaction;
 //
 //import com.google.android.material.bottomnavigation.BottomNavigationView;
+//import com.google.android.material.imageview.ShapeableImageView;
 //import com.google.android.material.navigation.NavigationView;
 //import com.mesibo.api.Mesibo;
 //import com.mesibo.api.MesiboMessage;
 //import com.mesibo.api.MesiboProfile;
 //import com.mesibo.messaging.RoundImageDrawable;
-//import com.qamp.app.Activity.LoginQampActivity;
-//import com.qamp.app.Activity.NotificationCenterActivity;
-//import com.qamp.app.Fragments.DiscoverFragment;
-//import com.qamp.app.Fragments.FeedFragment;
-//import com.qamp.app.MesiboApiClasses.SampleAPI;
-//import com.qamp.app.R;
-//import com.qamp.app.Utils.AppConfig;
-//import com.qamp.app.Utils.QampUiHelper;
-//import com.qamp.app.Utils.Utilss;
 //
-//import de.hdodenhof.circleimageview.CircleImageView;
+//import app.retvens.rown.R;
+//
 //
 //public class MesiboUserListActivityNew extends AppCompatActivity implements MesiboProfile.Listener, MesiboUserListFragment.FragmentListener {
 //    public static final String TAG = "MesiboMainActivity";
@@ -85,7 +78,7 @@
 //    private ImageButton btn_close_filter;
 //    private TextView name_text, viewProfile_text;
 //    private LinearLayout shareViaWhatsapp;
-//    private CircleImageView circleProfileView;
+//    private ShapeableImageView circleProfileView;
 //    private ImageView search_image;
 //    private long pressedTime;
 //    private long mGroupId = 0;
