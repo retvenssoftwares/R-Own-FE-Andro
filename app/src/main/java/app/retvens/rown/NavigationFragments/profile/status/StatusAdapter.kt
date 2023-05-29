@@ -22,7 +22,12 @@ class StatusAdapter(val listS : List<PostItem>, val context: Context) : Recycler
 
 
     class LayoutOneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title_poll = itemView.findViewById<TextView>(R.id.title_status)
+        val name = itemView.findViewById<TextView>(R.id.user_name_post)
+        val postProfile = itemView.findViewById<ShapeableImageView>(R.id.post_profile)
+        val status = itemView.findViewById<TextView>(R.id.title_status)
+        val likeButton = itemView.findViewById<ImageView>(R.id.like_post)
+        val commentButton = itemView.findViewById<ImageView>(R.id.comment)
+
     }
 
 
@@ -70,14 +75,16 @@ class StatusAdapter(val listS : List<PostItem>, val context: Context) : Recycler
     }
 
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder , position: Int) {
 
         val item = listS[position]
 
         when (holder.itemViewType) {
             VIEW_TYPE_LAYOUT_ONE -> {
                 val layoutOneViewHolder = holder as LayoutOneViewHolder
-
+                layoutOneViewHolder.name.text = item.User_name
+                layoutOneViewHolder.status.text = item.caption
+                Glide.with(context).load(item.Profile_pic).into(layoutOneViewHolder.postProfile)
             }
             VIEW_TYPE_LAYOUT_TWO -> {
                 val layoutTwoViewHolder = holder as LayoutTwoViewHolder
