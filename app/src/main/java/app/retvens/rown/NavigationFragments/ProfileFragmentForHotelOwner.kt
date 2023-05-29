@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
 import app.retvens.rown.NavigationFragments.profile.EditHotelOwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
@@ -32,6 +35,9 @@ import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetVendorsProfileSetting
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfileSettingClickListener {
@@ -46,6 +52,9 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
     lateinit var status : TextView
     lateinit var hotels : TextView
     lateinit var events : TextView
+    lateinit var postCount:TextView
+    lateinit var connCont:TextView
+    lateinit var requestCont:TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,8 +77,17 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
         hotels = view.findViewById(R.id.hotels)
         events = view.findViewById(R.id.events)
 
+        postCount = view.findViewById(R.id.posts_count)
+        connCont = view.findViewById(R.id.connections_count)
+        requestCont = view.findViewById(R.id.requests_count)
+
+        val sharedPreferencesID = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferencesID?.getString("user_id", "").toString()
+
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
+
+        getOwnerProfile(user_id,user_id)
 
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferences?.getString("profile_image", "").toString()
@@ -77,8 +95,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
         Glide.with(requireContext()).load(profilePic).into(profile)
         name.text = profileName
 
-        val sharedPreferencesID = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferencesID?.getString("user_id", "").toString()
+
 
         val childFragment: Fragment = JobsOnProfileFragment(user_id)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -172,6 +189,34 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
             fragManager.let{bottomSheet.show(it, BottomSheetProfileSetting.WTP_TAG)}
             bottomSheet.setOnBottomSheetProfileSettingClickListener(this)
         }
+    }
+
+    private fun getOwnerProfile(userId: String, userId1: String) {
+
+
+        val getProfile = RetrofitBuilder.connectionApi.getconnOwnerProfile(userId,userId)
+
+        getProfile.enqueue(object : Callback<OwnerProfileDataClass?> {
+            override fun onResponse(
+                call: Call<OwnerProfileDataClass?>,
+                response: Response<OwnerProfileDataClass?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    connCont.text = response.connection_Count.toString()
+                    requestCont.text = response.requests_count.toString()
+                    postCount.text = response.post_count.toString()
+                }
+
+            }
+
+            override fun onFailure(call: Call<OwnerProfileDataClass?>, t: Throwable) {
+
+            }
+        })
+
+
+
     }
 
     override fun bottomSheetProfileSettingClick(bottomSheetProfileSettingFrBo: String) {

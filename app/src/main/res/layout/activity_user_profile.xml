@@ -170,6 +170,7 @@
                 android:layout_marginTop="12dp">
 
                 <TextView
+                    android:id="@+id/connStatus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textColor="@color/green_own"
@@ -178,8 +179,7 @@
                     android:textAlignment="center"
                     android:paddingVertical="8dp"
                     android:paddingHorizontal="10dp"
-                    android:background="@color/black"
-                    android:text="CONNECT"/>
+                    android:background="@color/black" />
 
             </androidx.cardview.widget.CardView>
 

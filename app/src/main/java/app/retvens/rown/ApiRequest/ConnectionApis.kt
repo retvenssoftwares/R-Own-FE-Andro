@@ -2,6 +2,8 @@ package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -26,5 +28,19 @@ interface ConnectionApis {
     fun getConnectionList(
         @Path("userId")userId:String
     ):Call<GetAllRequestDataClass>
+
+    @GET("normalprofile/{userId}/{connUserId}")
+    fun getconnProfile(
+        @Path("userId")userId:String,
+        @Path("connUserId")connUserId:String
+    ):Call<NormalUserDataClass>
+
+    @GET("hotelinfo/{userId}/{connUserId}")
+    fun getconnOwnerProfile(
+        @Path("userId")userId:String,
+        @Path("connUserId")connUserId:String
+    ):Call<OwnerProfileDataClass>
+
+
 
 }

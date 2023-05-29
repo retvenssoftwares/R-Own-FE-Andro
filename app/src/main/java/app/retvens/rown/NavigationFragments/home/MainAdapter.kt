@@ -60,8 +60,6 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                         val post = banner
 
-                    if (post.post_type == "share some media"){
-
                         Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
                         binding.userIdOnComment.text = post.User_name
                         Log.e("username",post.User_name)
@@ -80,13 +78,15 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                             Glide.with(context).load(item.post).into(binding.postPic)
                         }
 
+
                         if (post.like == "Liked"){
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
                         }else if (post.like == "Unliked"){
                             binding.likePost.setImageResource(R.drawable.svg_like_post)
                         }
 
-                    }
+
+
 
             binding.postProfile.setOnClickListener {
 
@@ -136,6 +136,20 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
 
             binding.likePost.setOnClickListener {
+
+                banner.islike = !banner.islike
+
+                val count:Int
+                if(banner.islike){
+                    binding.likePost.setImageResource(R.drawable.liked_vectore)
+                    count = post.Like_count.toInt()+1
+                    binding.likeCount.text = count.toString()
+                }else{
+                    binding.likePost.setImageResource(R.drawable.svg_like_post)
+                    count = post.Like_count.toInt()
+                    binding.likeCount.text = count.toString()
+                }
+
                 onItemClickListener?.onItemClick(banner)
             }
 
@@ -163,12 +177,35 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                 Glide.with(context).load(post.event_thumbnail).into(binding.eventImage)
 
+                if (post.Like_count != ""){
+                    binding.likeCount.text = post.Like_count
+                }
+                if (post.Comment_count != ""){
+                    binding.commentCount.text = post.Comment_count
+                }
 
 
 
 
             binding.postProfile.setOnClickListener {
-                context.startActivity(Intent(context, UserProfileActivity::class.java))
+
+                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
+
+                    val intent = Intent(context,UserProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+
+                }else if(banner.Role == "Business Vendor/Freelancer"){
+                    val intent = Intent(context,VendorProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                }else if (banner.Role == "Hotel Owner"){
+                    val intent = Intent(context,OwnerProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                }
+
+
             }
 
             binding.likePost.setOnClickListener {
@@ -189,6 +226,28 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             binding.userNamePost.text = banner.Full_name
             binding.titleStatus.text = banner.caption
             Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+
+
+            binding.postProfile.setOnClickListener {
+
+                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
+
+                    val intent = Intent(context,UserProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+
+                }else if(banner.Role == "Business Vendor / Freelancer"){
+                    val intent = Intent(context,VendorProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                }else if (banner.Role == "Hotel Owner"){
+                    val intent = Intent(context,OwnerProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                }
+
+
+            }
 
 
             binding.likePost.setOnClickListener {

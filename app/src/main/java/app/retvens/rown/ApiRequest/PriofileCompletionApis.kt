@@ -112,10 +112,8 @@ interface PriofileCompletionApis{
         @Path("user_id") user_id : String,
         @Part("vendorName") Name: RequestBody,
         @Part("vendorDescription") address: RequestBody,
-        @Part("portfolioLink") portfolio: RequestBody,
-        @Part vendorImage: MultipartBody.Part,
-        @Part("vendor_id") id: RequestBody,
-        @Part("websiteLink") website: RequestBody
+        @Part Vendorimg: MultipartBody.Part
+//        @Part("websiteLink") website: RequestBody
     ): Call<UpdateResponse>
 
     @GET("getservicename")

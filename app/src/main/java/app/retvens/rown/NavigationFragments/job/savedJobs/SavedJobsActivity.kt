@@ -33,7 +33,7 @@ class SavedJobsActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val saves = RetrofitBuilder.jobsApis.getSavedJobs("-GSomAJoY")
+        val saves = RetrofitBuilder.jobsApis.getSavedJobs(user_id)
         saves.enqueue(object : Callback<SavedJobsData?> {
             override fun onResponse(call: Call<SavedJobsData?>, response: Response<SavedJobsData?>) {
                 if (response.isSuccessful) {

@@ -194,6 +194,7 @@ class HomeFragment : Fragment() {
                     mainRecyclerView.adapter = adapter
                     adapter.setOnItemClickListener(object : MainAdapter.OnItemClickListener{
                         override fun onItemClick(dataItem: PostItem) {
+
                             postLike(dataItem.post_id)
                         }
 

@@ -55,6 +55,7 @@ class VendorProfileActivity : AppCompatActivity() {
 
         val userId = intent.getStringExtra("userId").toString()
 
+
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId))
         transaction.commit()

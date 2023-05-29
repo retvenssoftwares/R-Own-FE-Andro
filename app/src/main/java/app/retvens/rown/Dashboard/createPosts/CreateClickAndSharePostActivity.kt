@@ -15,7 +15,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
@@ -25,7 +28,14 @@ import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity
 import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -50,6 +60,11 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
         cropImage(cameraImageUri)
     }
+
+
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,6 +136,25 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
             binding.deletePost.visibility = View.GONE
             binding.editImage.visibility = View.GONE
         }
+
+
+        binding.sharePost.setOnClickListener {
+
+            val sharedPreferences =  getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+            val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+            if (binding.canSeeText.text == "Can See"){
+                Toast.makeText(applicationContext,"Select Post Seen Status",Toast.LENGTH_SHORT).show()
+            }else if (binding.canCommentText.text == "Can comment"){
+                Toast.makeText(applicationContext,"Select Comment Status",Toast.LENGTH_SHORT).show()
+            }else if (croppedImageUri == null){
+                Toast.makeText(applicationContext,"Select Image",Toast.LENGTH_SHORT).show()
+            }else{
+                createPost(user_id)
+            }
+
+
+        }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -155,6 +189,58 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
             image
         )
     }
+
+    private fun createPost(userId: String) {
+
+        val canSee = binding.canSeeText.text.toString()
+        val canComment = binding.canCommentText.text.toString()
+        val caption = binding.whatDYEt.text.toString()
+
+        val parcelFileDescriptor = contentResolver.openFileDescriptor(
+            croppedImageUri!!,"r",null
+        )?:return
+
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        val file =  File(cacheDir, "${getRandomString(6)}.jpg")
+        val outputStream = FileOutputStream(file)
+        inputStream.copyTo(outputStream)
+        val body = UploadRequestBody(file,"" +
+                "")
+
+        Toast.makeText(applicationContext,userId,Toast.LENGTH_SHORT).show()
+
+        val sendPost  = RetrofitBuilder.feedsApi.createPost(userId,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),userId),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"share some media"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canSee),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canComment),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption),
+            MultipartBody.Part.createFormData("media", file.name, body)
+        )
+
+        sendPost.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(applicationContext,CreateTextPost::class.java))
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
+
+    }
+
     private fun cropImage(imageUri: Uri) {
         val options = CropImage.activity(imageUri)
             .setGuidelines(CropImageView.Guidelines.ON)
@@ -195,5 +281,12 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
         }else{
             binding.canCommentText.text = audienceFrBo
         }
+    }
+
+    fun getRandomString(length: Int) : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 }

@@ -16,10 +16,10 @@ import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class ExplorePeopleAdapter(val context: Context,val peopleList:List<UserProfileRequestItem>):RecyclerView.Adapter<ExplorePeopleAdapter.ExplorePeopleViewholder>() {
+class ExplorePeopleAdapter(val context: Context,val peopleList:List<Post>):RecyclerView.Adapter<ExplorePeopleAdapter.ExplorePeopleViewholder>() {
 
     interface ConnectClickListener {
-        fun onJobSavedClick(connect: UserProfileRequestItem)
+        fun onJobSavedClick(connect: Post)
     }
 
     private var connectClickListener: ConnectClickListener? = null
@@ -28,7 +28,7 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:List<UserProfileR
 
         val name = itemview.findViewById<TextView>(R.id.explore_people_name)
         val profile = itemview.findViewById<ShapeableImageView>(R.id.explore_people_profile)
-        val connect = itemview.findViewById<CardView>(R.id.ca_connect)
+        val connect = itemview.findViewById<TextView>(R.id.suggetions_notification_connect)
         val viewProfile = itemview.findViewById<CardView>(R.id.ca_view_profile)
 
     }
@@ -43,10 +43,6 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:List<UserProfileR
 
         val data = peopleList[position]
 
-
-
-        holder.name.text = data.Full_name
-
         if (data.Profile_pic.isNullOrEmpty()){
             holder.profile.setImageResource(R.drawable.peoplevector)
         }else{
@@ -54,11 +50,25 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:List<UserProfileR
         }
 
 
+
+
+        holder.name.text = data.Full_name
+
+        if (data.connectionStatus == "Connected"){
+            holder.connect.text = "Remove"
+        }
+
         holder.viewProfile.setOnClickListener {
             Toast.makeText(context,"Working On It",Toast.LENGTH_SHORT).show()
         }
 
+
+
         holder.connect.setOnClickListener {
+
+            if (data.connectionStatus == "Not Connected"){
+                holder.connect.text = "Requested"
+            }
             connectClickListener?.onJobSavedClick(data)
         }
 
@@ -70,6 +80,7 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:List<UserProfileR
     }
 
     fun setJobSavedClickListener(listener: ConnectClickListener) {
+
         connectClickListener = listener
     }
 }

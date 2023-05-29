@@ -3,6 +3,7 @@ package app.retvens.rown.ApiRequest
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobData
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeopleDataClass
 
 import retrofit2.Call
 import retrofit2.http.GET
@@ -34,5 +35,11 @@ interface ExploreApis {
         @Path("text")text:String,
         @Query("page")page:String
     ):Call<List<ExploreJobData>>
+
+    @GET("getpeople/{user_id}")
+    fun getPeople(
+        @Path("user_id")user_id:String,
+        @Query("page")page:String
+    ):Call<List<ExplorePeopleDataClass>>
 
 }

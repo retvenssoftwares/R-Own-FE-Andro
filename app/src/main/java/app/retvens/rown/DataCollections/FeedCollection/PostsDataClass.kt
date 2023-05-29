@@ -21,6 +21,7 @@ data class PostItem(
     val event_start_date:String,
     val price:String,
     val like:String,
+    var islike:Boolean,
     val Like_count:String,
     val Comment_count:String,
     val Role:String,

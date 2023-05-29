@@ -1,0 +1,24 @@
+package app.retvens.rown.NavigationFragments.exploreForUsers.people
+
+data class ExplorePeopleDataClass(
+    val posts: List<Post>
+)
+
+data class Post(
+    val _id: String,
+    val Full_name: String,
+    val Mesibo_account: List<MesiboAccount>,
+    val User_name: String,
+    val Role: String,
+    val User_id: String,
+    val verificationStatus: String,
+    val Profile_pic: String,
+    val connectionStatus: String
+)
+
+data class MesiboAccount(
+    val uid: Int,
+    val address: String,
+    val token: String,
+    val _id: String
+)

@@ -278,10 +278,8 @@ class VendorsFragment : Fragment(), BackHandler {
         val send = RetrofitBuilder.profileCompletion.uploadVendorData(user_id,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),portfolio),
-            MultipartBody.Part.createFormData("vendorImage", file.name, body),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),website)
+            MultipartBody.Part.createFormData("Vendorimg", file.name, body)
+
         )
 
         send.enqueue(object : Callback<UpdateResponse?> {

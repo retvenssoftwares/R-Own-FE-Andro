@@ -52,19 +52,27 @@ class ExplorePeopleFragment : Fragment() {
 
     private fun getAllProfiles() {
 
-        val getProfiles = RetrofitBuilder.retrofitBuilder.getProfile()
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        getProfiles.enqueue(object : Callback<List<UserProfileRequestItem>?>,
+        val getProfiles = RetrofitBuilder.exploreApis.getPeople(user_id,"1")
+
+        getProfiles.enqueue(object : Callback<List<ExplorePeopleDataClass>?>,
             ExplorePeopleAdapter.ConnectClickListener {
             override fun onResponse(
-                call: Call<List<UserProfileRequestItem>?>,
-                response: Response<List<UserProfileRequestItem>?>
+                call: Call<List<ExplorePeopleDataClass>?>,
+                response: Response<List<ExplorePeopleDataClass>?>
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    explorePeopleAdapter = ExplorePeopleAdapter(requireContext(),response)
-                    recyclerView.adapter = explorePeopleAdapter
-                    explorePeopleAdapter.notifyDataSetChanged()
+
+                    response.forEach { explorePeopleDataClass ->
+                        explorePeopleAdapter = ExplorePeopleAdapter(requireContext(),explorePeopleDataClass.posts)
+                        recyclerView.adapter = explorePeopleAdapter
+                        explorePeopleAdapter.notifyDataSetChanged()
+                    }
+
+
 
                     explorePeopleAdapter.setJobSavedClickListener(this)
 
@@ -74,11 +82,11 @@ class ExplorePeopleFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<ExplorePeopleDataClass>?>, t: Throwable) {
                 Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
 
-            override fun onJobSavedClick(connect: UserProfileRequestItem) {
+            override fun onJobSavedClick(connect: Post) {
                 sendConnectionRequest(connect.User_id)
             }
         })
