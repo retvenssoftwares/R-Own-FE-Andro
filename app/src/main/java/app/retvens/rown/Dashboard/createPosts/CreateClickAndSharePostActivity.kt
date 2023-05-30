@@ -1,6 +1,8 @@
 package app.retvens.rown.Dashboard.createPosts
 
+import android.Manifest
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -9,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.telephony.TelephonyManager
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -62,6 +65,33 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
     }
 
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted, set the phone number to the EditText
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+
+                    contract.launch(cameraImageUri)
+
+                }else {
+                    // Permission has been denied, handle it accordingly
+                    // For example, show a message or disable functionality that requires the permission
+                    Toast.makeText(this,"permission denied", Toast.LENGTH_SHORT).show()
+                }
+            } else{
+                Toast.makeText(this,"grant permission", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Permission has been denied, handle it accordingly
+            // For example, show a message or disable functionality that requires the permission
+            Toast.makeText(this,"Something bad", Toast.LENGTH_SHORT).toString()
+        }
+    }
 
 
 
@@ -75,20 +105,27 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
 
         cameraImageUri = createImageUri()!!
 
-        contract.launch(cameraImageUri)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            contract.launch(cameraImageUri)
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+        }
 
-        binding.imgPreview.setOnClickListener {//Requesting Permission For CAMERA
+        binding.imgPreview.setOnClickListener {
+            //Requesting Permission For CAMERA
             if (ContextCompat.checkSelfPermission(
                     this,
                     android.Manifest.permission.CAMERA
-                ) != PackageManager.PERMISSION_GRANTED
+                ) == PackageManager.PERMISSION_GRANTED
             ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
+                contract.launch(cameraImageUri)
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
-            contract.launch(cameraImageUri)
         }
 
         val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)

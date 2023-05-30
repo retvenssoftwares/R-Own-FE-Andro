@@ -5,19 +5,26 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.databinding.VendorsCardHomeBinding
 import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
+import com.bumptech.glide.Glide
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 class VendorsChildAdapter(private val context: Context, private val viewType: Int,
-                          private val vendorsRecyclerData : List<DataItem.VendorsRecyclerData>,
+                          private val vendorsRecyclerData : List<ProfileServicesDataItem>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class VendorsViewHolder(private val binding : VendorsCardHomeBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bindVendorsView(recyclerItem: DataItem.VendorsRecyclerData){
-            binding.vendorCover.setImageResource(recyclerItem.VendorCover)
+        fun bindVendorsView(recyclerItem: ProfileServicesDataItem){
+            binding.vendorName.text = recyclerItem.vendorName
+            binding.vendorsId.text = recyclerItem.service_name
+            binding.avgPrice.text = recyclerItem.vendorServicePrice
+
+            Glide.with(context).load(recyclerItem.vendorImage).into(binding.vendorCover)
+            Glide.with(context).load(recyclerItem.Profile_pic).into(binding.vendorProfile)
             binding.vendorCover.setOnClickListener {
                 context.startActivity(Intent(context, VendorDetailsActivity::class.java))
             }

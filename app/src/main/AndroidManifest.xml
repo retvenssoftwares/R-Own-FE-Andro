@@ -45,13 +45,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".viewAll.AllHotelsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"/>
+        <activity
             android:name=".NavigationFragments.job.ViewAllSuggestedJobsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.job.savedJobs.SavedJobsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash"/>
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".Dashboard.createPosts.CreatePostEventActivityChild"
             android:exported="false"

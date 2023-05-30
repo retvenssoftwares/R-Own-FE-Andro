@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.blogs
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -76,8 +77,8 @@ class ExploreBlogsFragment : Fragment() {
                                 allBlogsAdapter = AllBlogsAdapter(it.blogs, requireContext())
                                 exploreBlogsRecyclerView.adapter = allBlogsAdapter
                                 allBlogsAdapter.notifyDataSetChanged()
-
-                                searchBar.addTextChangedListener(object : TextWatcher {
+                                Log.d("on", it.toString())
+                               /* searchBar.addTextChangedListener(object : TextWatcher {
                                     override fun beforeTextChanged(
                                         p0: CharSequence?,
                                         p1: Int,
@@ -99,7 +100,7 @@ class ExploreBlogsFragment : Fragment() {
                                     override fun afterTextChanged(p0: Editable?) {
 
                                     }
-                                })
+                                })*/
                             }
                         } else {
                             empty.visibility = View.VISIBLE

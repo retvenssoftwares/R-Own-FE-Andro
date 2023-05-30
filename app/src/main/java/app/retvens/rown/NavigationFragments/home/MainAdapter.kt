@@ -19,9 +19,12 @@ import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.FeedCollection.Vote
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.NavigationFragments.profile.hotels.AddHotelActivity
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
+import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
 import app.retvens.rown.databinding.GetjoblistBinding
@@ -30,7 +33,9 @@ import app.retvens.rown.databinding.ItemEventPostBinding
 import app.retvens.rown.databinding.ItemPollProfileBinding
 import app.retvens.rown.databinding.ItemStatusBinding
 import app.retvens.rown.databinding.UsersPostsCardBinding
+import app.retvens.rown.viewAll.AllHotelsActivity
 import app.retvens.rown.viewAll.vendorsDetails.ViewAllVendorsActivity
+import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity
 import com.bumptech.glide.Glide
@@ -459,15 +464,15 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 context.startActivity(Intent(context, ViewAllAvailableCommunitiesActivity::class.java))
             }
         }
-        fun bindHotelSectionRecyclerView(recyclerItemList : List<DataItem.HotelSectionRecyclerData>){
-            val adapter = HotelSectionChildAdapter(DataItemType.HOTEL_SECTION, recyclerItemList)
+        fun bindHotelSectionRecyclerView(recyclerItemList : List<HotelData>){
+            val adapter = HotelSectionChildAdapter(context, DataItemType.HOTEL_SECTION, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Connect with the like-minded individuals"
             binding.viewAllItem.setOnClickListener {
-//                context.startActivity(Intent(context, ViewAllBlogsActivity::class.java))
+                context.startActivity(Intent(context, AllHotelsActivity::class.java))
             }
         }
-        fun bindBlogsRecyclerView(recyclerItemList : List<DataItem.BlogsRecyclerData>){
+        fun bindBlogsRecyclerView(recyclerItemList : List<AllBlogsData>){
             val adapter = BlogsChildAdapter(context, DataItemType.BLOGS, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Popular blogs you must read."
@@ -484,7 +489,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 Toast.makeText(context, "Hotel Awards", Toast.LENGTH_SHORT).show()
             }
         }
-        fun bindVendorsRecyclerView(recyclerItemList : List<DataItem.VendorsRecyclerData>){
+        fun bindVendorsRecyclerView(recyclerItemList : List<ProfileServicesDataItem>){
             val adapter = VendorsChildAdapter(context, DataItemType.VENDORS, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Avail the Best-in-class service for yourself."

@@ -37,26 +37,29 @@
 
     <TextView
         android:id="@+id/vendor_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
         android:text="Karsten Dobrev"
         android:textSize="10dp"
         android:fontFamily="@font/montserrat_semibold"
         android:textColor="@color/black"
         app:layout_constraintVertical_bias="0.08"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/vendor_profile"
         app:layout_constraintBottom_toBottomOf="@id/vendor_profile"
         app:layout_constraintStart_toEndOf="@id/vendor_profile"/>
 
     <TextView
         android:id="@+id/vendors_id"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@grafixpixel"
         android:textSize="8dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/green_own"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/vendor_name"
         app:layout_constraintTop_toBottomOf="@id/vendor_name"/>
     <ImageView
@@ -64,6 +67,7 @@
         android:layout_height="15dp"
         android:src="@drawable/svg_users"
         android:layout_marginEnd="3dp"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="@id/vendor_name"
         app:layout_constraintBottom_toBottomOf="@id/vendor_name"
         app:layout_constraintEnd_toStartOf="@id/users"/>
@@ -74,6 +78,7 @@
         android:layout_height="wrap_content"
         android:text="20"
         android:textSize="14dp"
+        android:visibility="gone"
         android:layout_marginEnd="10dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/green_own"

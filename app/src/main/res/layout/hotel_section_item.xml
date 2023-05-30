@@ -38,9 +38,10 @@
 
     <TextView
         android:id="@+id/hotel_section_location"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:layout_marginEnd="14dp"
         android:elevation="10dp"
         android:text="Indore"
         android:textSize="12dp"
@@ -48,31 +49,32 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/img_nav"
         app:layout_constraintStart_toEndOf="@id/img_nav"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/img_nav"/>
 
     <TextView
         android:id="@+id/hotel_section_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:text="Paradise inn"
-        android:textSize="16dp"
+        android:textSize="13dp"
         android:fontFamily="@font/montserrat_semibold"
         android:textColor="@color/black"
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/card_like"
         app:layout_constraintTop_toBottomOf="@id/hotel_section_cover"/>
 
 
         <ImageView
-            android:id="@+id/hotel_section_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/svg_like"
+            android:id="@+id/card_like"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/svg_heart"
             android:elevation="10dp"
-            android:layout_marginBottom="-12dp"
+            android:layout_margin="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 

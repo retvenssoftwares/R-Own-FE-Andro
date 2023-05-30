@@ -1,5 +1,6 @@
 package app.retvens.rown.Dashboard.createPosts
 
+import android.Manifest
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Intent
@@ -82,6 +83,34 @@ class CreatePostActivity : AppCompatActivity(),
 
     var isEvent : Boolean = false
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted, set the phone number to the EditText
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+
+                    openGallery()
+
+                }else {
+                    // Permission has been denied, handle it accordingly
+                    // For example, show a message or disable functionality that requires the permission
+                    Toast.makeText(this,"permission denied", Toast.LENGTH_SHORT).show()
+                }
+            } else{
+                Toast.makeText(this,"grant permission", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Permission has been denied, handle it accordingly
+            // For example, show a message or disable functionality that requires the permission
+            Toast.makeText(this,"Something bad", Toast.LENGTH_SHORT).toString()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
@@ -124,14 +153,12 @@ class CreatePostActivity : AppCompatActivity(),
                 if (ContextCompat.checkSelfPermission(
                         this,
                         android.Manifest.permission.CAMERA
-                    ) != PackageManager.PERMISSION_GRANTED
+                    ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                    )
+                    openGallery()
+                } else {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
                 }
-                openGallery()
             } else {
                 imgUriP = imgUri1
                 binding.imgPreview.setImageURI(imgUri1)
@@ -144,14 +171,12 @@ class CreatePostActivity : AppCompatActivity(),
                 if (ContextCompat.checkSelfPermission(
                         this,
                         android.Manifest.permission.CAMERA
-                    ) != PackageManager.PERMISSION_GRANTED
+                    ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                    )
+                    openGallery()
+                } else {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
                 }
-                openGallery()
             } else {
                 imgUriP = imgUri2
                 binding.imgPreview.setImageURI(imgUri2)
@@ -164,14 +189,12 @@ class CreatePostActivity : AppCompatActivity(),
                 if (ContextCompat.checkSelfPermission(
                         this,
                         android.Manifest.permission.CAMERA
-                    ) != PackageManager.PERMISSION_GRANTED
+                    ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                    )
+                    openGallery()
+                } else {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
                 }
-                openGallery()
             } else {
                 imgUriP = imgUri3
                 binding.imgPreview.setImageURI(imgUri3)
@@ -181,13 +204,15 @@ class CreatePostActivity : AppCompatActivity(),
             selectedImg = 4
             if (imgUri4 == null){
                 //Requesting Permission For CAMERA
-                if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(
+                if (ContextCompat.checkSelfPermission(
                         this,
-                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                    )
+                        android.Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    openGallery()
+                } else {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
                 }
-                openGallery()
             }else{
                 imgUriP = imgUri4
                 binding.imgPreview.setImageURI(imgUri4)
@@ -200,14 +225,12 @@ class CreatePostActivity : AppCompatActivity(),
                 if (ContextCompat.checkSelfPermission(
                         this,
                         android.Manifest.permission.CAMERA
-                    ) != PackageManager.PERMISSION_GRANTED
+                    ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                    )
+                    openGallery()
+                } else {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
                 }
-                openGallery()
             }else{
                 imgUriP = imgUri5
                 binding.imgPreview.setImageURI(imgUri5)

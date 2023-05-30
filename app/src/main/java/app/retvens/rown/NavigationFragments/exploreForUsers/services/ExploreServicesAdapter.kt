@@ -36,7 +36,7 @@ class ExploreServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
 
     override fun onBindViewHolder(holder: ExploreServicesViewHolder, position: Int) {
         holder.name.text = listS[position].vendorName
-        holder.vendors_id.text = listS[position].serviceId
+        holder.vendors_id.text = listS[position].service_name
         holder.avg_price.text = listS[position].vendorServicePrice
 
         Glide.with(context).load(listS[position].vendorImage).into(holder.cover)

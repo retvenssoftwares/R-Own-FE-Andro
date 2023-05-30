@@ -1,5 +1,6 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentResolver
@@ -96,6 +97,33 @@ class VendorsFragment : Fragment(), BackHandler {
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
         cropImage(cameraImageUri!!)
     }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted, set the phone number to the EditText
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+
+                    contract.launch(cameraImageUri)
+
+                }else {
+                    // Permission has been denied, handle it accordingly
+                    // For example, show a message or disable functionality that requires the permission
+                    Toast.makeText(context,"permission denied", Toast.LENGTH_SHORT).show()
+                }
+            } else{
+                Toast.makeText(context,"grant permission", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Permission has been denied, handle it accordingly
+            // For example, show a message or disable functionality that requires the permission
+            Toast.makeText(context,"Something bad", Toast.LENGTH_SHORT).toString()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -119,13 +147,15 @@ class VendorsFragment : Fragment(), BackHandler {
         setLogo = view.findViewById(R.id.hotel_vendor_profile)
         selectLogo.setOnClickListener {
             //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(
-                    activity?.parent ?: requireActivity(),
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openBottomCameraSheet()
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
-            openBottomCameraSheet()
         }
 
         brandName = view.findViewById(R.id.brand_name)

@@ -1,42 +1,26 @@
 package app.retvens.rown.bottomsheet
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.EditText
-import android.widget.RelativeLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.VendorServicesAdapter
-import app.retvens.rown.DataCollections.ProfileCompletion.CreateVendorDataClass
-import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.PostVendorSerivces
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.VendorServicesData
-import app.retvens.rown.DataCollections.UserProfileRequestItem
-import app.retvens.rown.DataCollections.location.CountryData
-import app.retvens.rown.NavigationFragments.eventsForHoteliers.BottomEventCategoriesDataItem
-import app.retvens.rown.NavigationFragments.eventsForHoteliers.BottomEventsCategoriesAdapter
 import app.retvens.rown.NavigationFragments.profile.services.BottomServiceNameAdapter
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
-import app.retvens.rown.viewAll.viewAllBlogs.ViewAllCategoriesData
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -95,9 +79,31 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
 
         addService = view.findViewById(R.id.addService)
         addService.setOnClickListener {
-//            createService()
-            dismiss()
+            selectedServices.forEach {
+                setServices(it)
+            }
+//            dismiss()
         }
+    }
+
+    private fun setServices(s: String) {
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val setSErv = RetrofitBuilder.profileCompletion.postServices(PostVendorSerivces(user_id, s))
+        setSErv.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                if (isAdded){
+                    Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 
     private fun getUserLocation() {
@@ -210,9 +216,9 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
             }
 
             override fun onJobClick(job: VendorServicesData) {
-                val index = selectedServices.indexOf(job.service_name)
+                val index = selectedServices.indexOf(job.serviceId)
                 if (index == -1) {
-                    selectedServices.add(job.service_name)
+                    selectedServices.add(job.serviceId)
                 } else {
                     selectedServices.removeAt(index)
                 }

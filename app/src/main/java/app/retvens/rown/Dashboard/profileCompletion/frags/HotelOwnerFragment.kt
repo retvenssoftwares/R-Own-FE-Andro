@@ -165,27 +165,29 @@ class HotelOwnerFragment : Fragment(), BackHandler,
 
         hotelOwnerProfile = view.findViewById(R.id.hotel_owner_profile)
         hotelOwnerProfile.setOnClickListener {
-            cameraUser = "OwnerProfile"
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(
-                    activity?.parent ?: requireActivity(),
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
+            cameraUser = "OwnerProfile" //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openBottomCameraSheet("OwnerProfile")
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
-            openBottomCameraSheet("OwnerProfile")
         }
         hotelOwnerCover = view.findViewById(R.id.hotel_owner_cover)
         hotelOwnerCover.setOnClickListener {
             cameraUser = "OwnerCover"
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(
-                    activity?.parent ?: requireActivity(),
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openBottomCameraSheet("OwnerCover")
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
-            openBottomCameraSheet("OwnerCover")
         }
 
         /*-----------------------HOTEL CHAIN--------------------------------*/
@@ -196,14 +198,15 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         cameraHotelChain = view.findViewById(R.id.camera_hotelChain)
         cameraHotelChain.setOnClickListener {
             cameraUser = "ChainProfile"
-            //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(
-                    activity?.parent ?: requireActivity(),
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openBottomCameraSheet("ChainProfile")
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
-            openBottomCameraSheet("ChainProfile")
         }
 
         view.findViewById<CardView>(R.id.card_owner_next).setOnClickListener {

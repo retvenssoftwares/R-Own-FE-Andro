@@ -90,7 +90,6 @@
     <string name="deletedMessageTitle" translatable="false">This message was deleted</string>
 
 
-
     <string name="create_community" translatable="false">Create a Community</string>
     <string name="community_name_text_description" translatable="false">What do you wish you call your Community?</string>
     <string name="Channel_title" translatable="false">Name</string>

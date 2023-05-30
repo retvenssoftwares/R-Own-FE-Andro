@@ -124,4 +124,9 @@ interface PriofileCompletionApis{
         @Body details: PostVendorSerivces
     ):Call<UpdateResponse>
 
+    @PATCH("postservice")
+    fun postServices(
+        @Body details: PostVendorSerivces
+    ):Call<UpdateResponse>
+
 }

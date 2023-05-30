@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -24,6 +26,10 @@ import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataCl
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.FragmntAdapters.CommentAdapter
+import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelData
+import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsAdapter
+import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
+import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesAdapter
 import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.home.Community
 import app.retvens.rown.NavigationFragments.home.CommunityListAdapter
@@ -35,6 +41,8 @@ import app.retvens.rown.NavigationFragments.home.DataItemType
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
+import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsAdapter
+import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
@@ -134,6 +142,9 @@ class HomeFragment : Fragment() {
         mainRecyclerView.layoutManager = LinearLayoutManager(context)
 
         mList = ArrayList()
+        getAllBlogs()
+        getHotels()
+        getServices()
         prepareData()
 
 
@@ -354,7 +365,101 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun getAllBlogs() {
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+        val allBlogs = RetrofitBuilder.viewAllApi.getAllBlogs(user_id)
+        allBlogs.enqueue(object : Callback<List<AllBlogsData>?> {
+            override fun onResponse(
+                call: Call<List<AllBlogsData>?>,
+                response: Response<List<AllBlogsData>?>
+            ) {
+                if (isAdded) {
+                    if (response.isSuccessful) {
+
+                        if (response.body()!!.isNotEmpty()) {
+                            val blogsList = ArrayList<DataItem.BlogsRecyclerData>()
+                            mList.add(
+                                DataItem(
+                                    DataItemType.BLOGS,
+                                    blogsRecyclerDataList = response.body()
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<List<AllBlogsData>?>, t: Throwable) {
+                if (isAdded) {
+                    Toast.makeText(context, "All Blogs ${t.localizedMessage}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        })
+
+    }
+
+    private fun getHotels() {
+
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val getHotel = RetrofitBuilder.exploreApis.getExploreHotels(user_id,"1")
+        getHotel.enqueue(object : Callback<List<ExploreHotelData>?> {
+            override fun onResponse(
+                call: Call<List<ExploreHotelData>?>,
+                response: Response<List<ExploreHotelData>?>
+            ) {
+
+                if (isAdded){
+                    if (response.isSuccessful){
+                        if (response.body()!!.isNotEmpty()) {
+                            val data = response.body()!!
+                            data.forEach {
+                                mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  it.posts))
+                            }
+                        }
+                    } else {
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<ExploreHotelData>?>, t: Throwable) {
+                if (isAdded) {
+                    Toast.makeText(context, "All Blogs ${t.localizedMessage}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        })
+    }
+
+
+    private fun getServices() {
+        val serv = RetrofitBuilder.exploreApis.getExploreService("1")
+        serv.enqueue(object : Callback<List<ExploreServiceData>?> {
+            override fun onResponse(
+                call: Call<List<ExploreServiceData>?>,
+                response: Response<List<ExploreServiceData>?>
+            ) {
+                    if (response.isSuccessful){
+                            val data = response.body()!!
+                            data.forEach {
+
+                                mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = it.events))
+
+//                                exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
+//                                exploreBlogsRecyclerView.adapter = exploreServicesAdapter
+//                                exploreServicesAdapter.notifyDataSetChanged()
+                            }
+                        }
+            }
+
+            override fun onFailure(call: Call<List<ExploreServiceData>?>, t: Throwable) {
+
+            }
+        })
+    }
     private fun prepareData() {
         val communityList = ArrayList<DataItem.CommunityRecyclerData>()
         communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12", "Join"))
@@ -392,12 +497,12 @@ class HomeFragment : Fragment() {
         hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_awards))
 
 //        mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
-        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
+//        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
 //        mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
         mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
-        mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
+//        mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
 
-        mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
-        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
+//        mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
+//        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
     }
 }
