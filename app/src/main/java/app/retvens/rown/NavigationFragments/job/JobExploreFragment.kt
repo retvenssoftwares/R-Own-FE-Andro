@@ -99,7 +99,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                 call: Call<List<JobsData>?>,
                 response: Response<List<JobsData>?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
 
                     response.forEach { it ->
@@ -157,12 +157,21 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
 
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+                    if(isAdded) {
+                        Toast.makeText(
+                            requireContext(),
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
 
             override fun onJobSavedClick(job: JobsData) {

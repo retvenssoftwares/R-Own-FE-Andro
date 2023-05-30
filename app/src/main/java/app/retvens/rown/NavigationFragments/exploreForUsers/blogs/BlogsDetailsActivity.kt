@@ -18,8 +18,10 @@ import retrofit2.Response
 class BlogsDetailsActivity : AppCompatActivity() {
     lateinit var binding:ActivityBlogsDetailsBinding
 
-    var isLiked = false
-    var isSaved = false
+    var isLiked = true
+    var isSaved = true
+
+    var operatioin = "push"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityBlogsDetailsBinding.inflate(layoutInflater)
@@ -32,6 +34,29 @@ class BlogsDetailsActivity : AppCompatActivity() {
         val userName = intent.getStringExtra("userName")
         val userProfile = intent.getStringExtra("userProfile")
         val blogId = intent.getStringExtra("blogId")
+
+        val saved = intent.getStringExtra("saved")
+        val like = intent.getStringExtra("like")
+
+        Toast.makeText(applicationContext, like.toString(), Toast.LENGTH_SHORT).show()
+
+        if (saved == "saved"){
+            operatioin = "pop"
+            isSaved = false
+            binding.savePost.setImageResource(R.drawable.svg_saved_profile)
+        } else {
+            operatioin = "push"
+            isSaved = true
+            binding.savePost.setImageResource(R.drawable.svg_save_post)
+        }
+
+        if (like == "liked"){
+            isLiked = false
+            binding.likePost.setImageResource(R.drawable.likes)
+        } else {
+            isLiked = true
+            binding.likePost.setImageResource(R.drawable.svg_like_post)
+        }
 
         Glide.with(this).load(cover).into(binding.blogPic)
         binding.blogTitle.text = title
@@ -56,19 +81,19 @@ class BlogsDetailsActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val savePost = RetrofitBuilder.viewAllApi.saveBlog(user_id, SaveBlog(blogId!!))
+        val savePost = RetrofitBuilder.viewAllApi.saveBlog(user_id, SaveBlog(operatioin,blogId!!))
         savePost.enqueue(object : Callback<UserProfileResponse?> {
             override fun onResponse(
                 call: Call<UserProfileResponse?>,
                 response: Response<UserProfileResponse?>
             ) {
                 if (response.isSuccessful){
-                    if (!isSaved) {
+                    if (isSaved) {
                         isSaved = !isSaved
-                        binding.likePost.setImageResource(R.drawable.svg_saved_profile)
+                        binding.savePost.setImageResource(R.drawable.svg_saved_profile)
                     }else {
                         isSaved = !isSaved
-                        binding.likePost.setImageResource(R.drawable.svg_save_post)
+                        binding.savePost.setImageResource(R.drawable.svg_save_post)
                     }
                     Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
@@ -94,7 +119,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
                 response: Response<UserProfileResponse?>
             ) {
                 if (response.isSuccessful){
-                    if (!isLiked) {
+                    if (isLiked) {
                         isLiked = !isLiked
                         binding.likePost.setImageResource(R.drawable.likes)
                     }else {

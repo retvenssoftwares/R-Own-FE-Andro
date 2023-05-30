@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,8 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
     lateinit var recentJobRecycler : RecyclerView
     lateinit var searchBar:EditText
 
+    lateinit var shimmerLayout: LinearLayout
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +48,8 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 
         val viewAll = view.findViewById<TextView>(R.id.view_all_recent)
         searchBar = view.findViewById(R.id.jobs_search_hoteliers)
+
+        shimmerLayout = view.findViewById(R.id.shimmer_layout_tasks)
 
         viewAll.setOnClickListener {
             startActivity(Intent(requireContext(),JobsPostedByUser::class.java))
@@ -81,6 +86,7 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
                 response: Response<List<JobsData>?>
             ) {
                 if (response.isSuccessful && isAdded){
+                    shimmerLayout.visibility = View.GONE
                     val response = response.body()!!
                     val originalData = response.toList()
                     val suggestedJobAdapter = SuggestedJobAdaperHotelOwner(requireContext(),response)
@@ -121,12 +127,23 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 
                     })
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+                    if (isAdded) {
+                        shimmerLayout.visibility = View.GONE
+                        Toast.makeText(
+                            requireContext(),
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+                shimmerLayout.visibility = View.GONE
+                if (isAdded) {
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         })
     }

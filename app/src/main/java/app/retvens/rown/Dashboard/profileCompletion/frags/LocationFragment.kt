@@ -22,26 +22,21 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
-import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
-import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLocationClickListener {
+class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
 
     private lateinit var etLocationCountry : TextInputEditText
     lateinit var etLocationState : TextInputEditText
@@ -77,33 +72,27 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
         etLocationCity = view.findViewById(R.id.et_location_city)
 
         etLocationCountry.setOnClickListener {
-            val bottomSheet = BottomSheetLocation()
+            val bottomSheet = BottomSheetCountryStateCity()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
-            bottomSheet.setOnLocationClickListener(this)
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
         etLocationState.setOnClickListener {
-            openStateLocationSheet()
+//            openStateLocationSheet()
         }
 
         view.findViewById<CardView>(R.id.card_location_next).setOnClickListener {
-            if(etLocationCountry.text.toString() == "Select Your Country"){
-                userLocationCountry.error = "Select Your Country"
-            } else if (etLocationState.text.toString() == "Select Your State"){
-                userLocationCountry.isErrorEnabled = false
-                userLocationState.error = "Select Your State"
-            } else if (etLocationCity.text.toString() == "Select Your City"){
-                userLocationCountry.isErrorEnabled = false
-                userLocationState.isErrorEnabled = false
-                userLocationCity.error = "Select Your City"
-                setLocation(context)
+            if(etLocationCountry.text.toString() == "Select Your Location"){
+                userLocationCountry.error = "Select Your Location"
             } else {
+                userLocationCountry.isErrorEnabled = false
                 progressDialog = Dialog(requireContext())
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 progressDialog.setCancelable(false)
                 progressDialog.setContentView(R.layout.progress_dialoge)
                 progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
+                progressDialog.show()
+                setLocation(context)
             }
         }
         profile = view.findViewById(R.id.user_complete_profile1)
@@ -142,6 +131,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
                     editor.putBoolean("LocationFragment", false)
                     editor.apply()
 
+                    progressDialog.dismiss()
                     val response = response.body()!!
                     Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
                     saveProgress(requireContext(), "70")
@@ -151,12 +141,20 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
                     transaction?.commit()
 
                 }else{
-                    Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
+                    if (isAdded) {
+                        progressDialog.dismiss()
+                        Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(context,t.localizedMessage!!.toString(),Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    Toast.makeText(context, t.localizedMessage!!.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                    progressDialog.dismiss()
+                }
             }
         })
 
@@ -241,10 +239,8 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetLocation.OnBottomLo
         return true
     }
 
-
-    override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {
-        etLocationCountry.setText(LocationFrBo)
-        userLocationState.visibility  = View.VISIBLE
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        etLocationCountry.setText(CountryStateCityFrBo)
     }
 
 }

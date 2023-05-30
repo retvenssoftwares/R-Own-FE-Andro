@@ -5,12 +5,13 @@ data class HotelData(
     val __v: Int,
     val _id: String,
     val date_added: String,
-    val gallery: List<Any>,
+    val gallery: List<GalleryImages>,
     val hotelCoverpicUrl: String,
     val hotelLogoUrl: String,
     val hotelName: String,
     val hotelProfilepicUrl: String,
     val hotel_id: String,
     val location: String,
+    val saved: String,
     val user_id: String
 )

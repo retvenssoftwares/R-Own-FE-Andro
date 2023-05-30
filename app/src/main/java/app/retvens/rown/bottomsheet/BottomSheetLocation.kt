@@ -108,7 +108,7 @@ class BottomSheetLocation : BottomSheetDialogFragment() {
                         ) {
                             val original = response.toList()
                             val filter = original.filter { searchUser ->
-                                searchUser.name.contains(s.toString(),ignoreCase = false)
+                                searchUser.name.contains(s.toString(),ignoreCase = true)
                             }
                             locationFragmentAdapter.searchLocation(filter)
                         }

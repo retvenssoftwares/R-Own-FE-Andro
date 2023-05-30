@@ -82,7 +82,6 @@ class EventsProfileFragment : Fragment() {
                         empty.text = response.code().toString()
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
-                        Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -91,14 +90,6 @@ class EventsProfileFragment : Fragment() {
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
                 empty.visibility = View.VISIBLE
-
-                if (isAdded) {
-                    Toast.makeText(
-                        requireContext(),
-                        t.localizedMessage.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             }
         })
     }

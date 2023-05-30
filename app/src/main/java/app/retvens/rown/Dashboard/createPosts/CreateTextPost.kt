@@ -30,6 +30,7 @@ import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
+import app.retvens.rown.databinding.ActivityCreateClickAndSharePostBinding
 import app.retvens.rown.databinding.ActivityCreatePostBinding
 import app.retvens.rown.databinding.ActivityCreateTextPostBinding
 import com.bumptech.glide.Glide

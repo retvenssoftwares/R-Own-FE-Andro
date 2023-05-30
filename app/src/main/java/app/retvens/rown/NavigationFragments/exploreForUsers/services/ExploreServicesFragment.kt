@@ -5,11 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ExploreServicesFragment : Fragment() {
@@ -18,6 +24,9 @@ class ExploreServicesFragment : Fragment() {
     lateinit var exploreBlogsRecyclerView: RecyclerView
     lateinit var exploreServicesAdapter: ExploreServicesAdapter
 
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,24 +44,49 @@ class ExploreServicesFragment : Fragment() {
         exploreBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
         exploreBlogsRecyclerView.setHasFixedSize(true)
 
-        val blogs = listOf<ExploreServicesData>(
-            ExploreServicesData("Paradise Inn"),
-            ExploreServicesData("Paradise Inn 2"),
-            ExploreServicesData("Neck Deep Paradise Inn"),
-            ExploreServicesData("Paradise Inn 23"),
-            ExploreServicesData("Paradise Inn"),
-            ExploreServicesData("Paradise Inn 2"),
-            ExploreServicesData("Neck Deep Paradise Inn"),
-            ExploreServicesData("Paradise Inn 23"),
-            ExploreServicesData("Paradise Inn"),
-            ExploreServicesData("Paradise Inn 2"),
-            ExploreServicesData("Neck Deep Paradise Inn"),
-            ExploreServicesData("Paradise Inn 23"),
-        )
+        empty = view.findViewById(R.id.empty)
 
-        exploreServicesAdapter = ExploreServicesAdapter(blogs, requireContext())
-        exploreBlogsRecyclerView.adapter = exploreServicesAdapter
-        exploreServicesAdapter.notifyDataSetChanged()
+        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
 
+        getServices()
+    }
+
+    private fun getServices() {
+        val serv = RetrofitBuilder.exploreApis.getExploreService("1")
+        serv.enqueue(object : Callback<List<ExploreServiceData>?> {
+            override fun onResponse(
+                call: Call<List<ExploreServiceData>?>,
+                response: Response<List<ExploreServiceData>?>
+            ) {
+                if (isAdded){
+                    if (response.isSuccessful){
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                        if (response.body()!!.isNotEmpty()) {
+                            val data = response.body()!!
+                            data.forEach {
+                                exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
+                                exploreBlogsRecyclerView.adapter = exploreServicesAdapter
+                                exploreServicesAdapter.notifyDataSetChanged()
+                            }
+                        } else {
+                            empty.visibility = View.VISIBLE
+                        }
+                    } else {
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<ExploreServiceData>?>, t: Throwable) {
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                empty.text = "Try Again - ${t.localizedMessage}"
+                empty.visibility = View.VISIBLE
+            }
+        })
     }
 }

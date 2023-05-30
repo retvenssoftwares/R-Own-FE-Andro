@@ -72,17 +72,18 @@
 
                     <ImageView
                         android:id="@+id/card_like"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/svg_like"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/svg_heart"
                         android:elevation="10dp"
+                        android:layout_margin="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/igl"/>
 
 
                     <TextView
                         android:id="@+id/venue_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="5dp"
                         android:fontFamily="@font/montserrat_semibold"
@@ -91,11 +92,12 @@
                         android:textColor="@color/black"
                         android:textFontWeight="600"
                         android:textSize="12dp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/card_like"
                         app:layout_constraintTop_toBottomOf="@id/location_hotel"
                         app:layout_constraintStart_toStartOf="parent"/>
 
                     <RatingBar
+                        android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:rating="5"

@@ -173,7 +173,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
                         ) {
                             val original = response.toList()
                             val filter = original.filter { searchUser ->
-                                searchUser.name.contains(s.toString(),ignoreCase = false)
+                                searchUser.name.contains(s.toString(),ignoreCase = true)
                             }
                             locationFragmentAdapter.searchLocation(filter)
                         }
@@ -241,7 +241,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
                         ) {
                             val original = response.toList()
                             val filter = original.filter { searchUser ->
-                                searchUser.name.contains(s.toString())
+                                searchUser.name.contains(s.toString(), true)
                             }
                             locationCityAdapter.searchLocation(filter)
                         }

@@ -9,13 +9,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : RecyclerView.Adapter<SuggestedJobAdapter.SuggestedJobViewHolder>() {
 
@@ -52,17 +59,31 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
 
         val jobs = jobList[position]
 
+        var operation = "push"
+
 
             holder.position.text = jobs.jobTitle
             holder.location.text = jobs.companyName
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
 
-        holder.jobSaved.setOnClickListener {
-            jobSavedClickListener?.onJobSavedClick(jobs)
-        }
+//        holder.jobSaved.setOnClickListener {
+//            jobSavedClickListener?.onJobSavedClick(jobs)
+//        }
 
         holder.salary.text = jobs.expectedCTC
+
+        holder.jobSaved.setOnClickListener {
+            if (operation == "push"){
+                saveJob(jobs.jid, "push")
+                holder.jobSaved.setImageResource(R.drawable.svg_saved_profile)
+                operation = "pop"
+            } else {
+                saveJob(jobs.jid, "pop")
+                holder.jobSaved.setImageResource(R.drawable.svg_jobs_explore)
+                operation = "push"
+            }
+        }
 
 
             holder.button.setOnClickListener{
@@ -87,6 +108,29 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
     fun updateData(newItems: List<JobsData>) {
         jobList = newItems
         notifyDataSetChanged()
+    }
+
+    private fun saveJob(jid: String, operation: String) {
+        val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val save = RetrofitBuilder.jobsApis.saveJobs(user_id, SaveJob(operation, jid))
+        save.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     fun setJobSavedClickListener(listener: JobSavedClickListener) {

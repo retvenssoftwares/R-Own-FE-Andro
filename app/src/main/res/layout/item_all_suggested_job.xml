@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="6dp"
+    android:layout_marginHorizontal="8dp"
+    app:cardCornerRadius="12dp">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/suggested_job_black">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile_suggested_job"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:src="@drawable/png_blog"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="18dp"
+        app:shapeAppearance="@style/SquareCornerImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/suggested_job_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Senior UI Designer"
+        android:maxLines="1"
+        android:lines="1"
+        android:singleLine="true"
+        android:layout_marginHorizontal="12dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:textFontWeight="700"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toStartOf="@id/save_suggested"
+        app:layout_constraintTop_toTopOf="@id/profile_suggested_job"
+        app:layout_constraintStart_toEndOf="@id/profile_suggested_job"/>
+
+    <TextView
+        android:id="@+id/suggested_job_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Shahpura • Jakarta, Indonesia"
+        android:maxLines="1"
+        android:lines="1"
+        android:singleLine="true"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:textColor="@color/grey_10"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toStartOf="@id/save_suggested"
+        app:layout_constraintTop_toBottomOf="@id/suggested_job_title"
+        app:layout_constraintStart_toEndOf="@id/profile_suggested_job"/>
+
+    <ImageView
+        android:id="@+id/save_suggested"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/svg_jobs_explore"
+        app:tint="@color/white"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/suggested_job_location"/>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_suggested_jobs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="18dp"
+        app:layout_constraintEnd_toEndOf="@id/save_suggested"
+        app:layout_constraintTop_toBottomOf="@id/save_suggested"
+        app:layout_constraintStart_toStartOf="@id/profile_suggested_job">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="8dp"
+            android:layout_gravity="center_horizontal"
+            app:cardCornerRadius="10dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintTop_toBottomOf="@id/email_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/jobTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:text="Fulltime"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="10dp"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="14dp"
+                android:textColor="@color/white"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="8dp"
+            android:layout_gravity="center_horizontal"
+            app:cardCornerRadius="10dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintTop_toBottomOf="@id/email_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/workType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:text="Fulltime"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="10dp"
+                android:paddingVertical="7dp"
+                android:paddingHorizontal="14dp"
+                android:textColor="@color/white"/>
+
+        </androidx.cardview.widget.CardView>
+
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/salary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="2dp"
+        android:textAlignment="center"
+        android:text="10-12K"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/apply_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="8dp"
+        android:layout_gravity="center_horizontal"
+        app:cardCornerRadius="10dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_suggested_jobs"
+        app:layout_constraintEnd_toEndOf="@id/linear_layout_suggested_jobs"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/buttontext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="Apply Now"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="12dp"
+            android:paddingVertical="7dp"
+            android:paddingHorizontal="14dp"
+            android:background="@color/suggested_job_yellow"
+            android:textColor="@color/black"/>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -51,7 +51,7 @@ class BottomSheetVenueByLocation(val location : String) : BottomSheetDialogFragm
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.bottom_sheet_event_category, container, false)
+        return inflater.inflate(R.layout.bottom_sheet_venue_by_location, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

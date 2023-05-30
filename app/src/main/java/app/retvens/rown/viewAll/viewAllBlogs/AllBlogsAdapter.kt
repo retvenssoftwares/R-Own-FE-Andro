@@ -49,14 +49,37 @@ class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : Re
 
     override fun onBindViewHolder(holder: ExploreBlogsViewHolder, position: Int) {
 //        getUserInfo(holder, listS[position].User_id)
+        var like = true
+        var operatioin = "push"
+
         holder.blogCategory.text = listS[position].category_name
         holder.title.text = listS[position].blog_title
         if (listS[position].date_added != null) {
             holder.date.text = dateFormat(listS[position].date_added)
         }
 
+        if (listS[position].saved == "saved"){
+            operatioin = "pop"
+            like = false
+            holder.blogLike.setImageResource(R.drawable.svg_heart_liked)
+        } else {
+            operatioin = "push"
+            like = true
+            holder.blogLike.setImageResource(R.drawable.svg_heart)
+        }
+
         holder.blogLike.setOnClickListener {
-            savePosts(listS[position].blog_id, holder)
+            if (listS[position].blog_id != null) {
+                savePosts(listS[position].blog_id, holder, operatioin, like) {
+                    if (it == 0) {
+                        operatioin = "pop"
+                        like = !like
+                    } else {
+                        operatioin = "push"
+                        like = !like
+                    }
+                }
+            }
         }
 
         holder.bloggerName.text = listS[position].User_name
@@ -73,6 +96,8 @@ class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : Re
             intent.putExtra("userName", listS[position].User_name)
             intent.putExtra("userProfile", listS[position].Profile_pic)
             intent.putExtra("blogId", listS[position].blog_id)
+            intent.putExtra("saved", listS[position].saved)
+            intent.putExtra("like", listS[position].like)
             context.startActivity(intent)
         }
     }
@@ -106,24 +131,23 @@ class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : Re
         listS = searchText
         notifyDataSetChanged()
     }
-    private fun savePosts(blogId: String?, holder: ExploreBlogsViewHolder) {
-        var isSaved = false
+    private fun savePosts(blogId: String?, holder: ExploreBlogsViewHolder, operation: String, like: Boolean, onLiked : (Int) -> Unit) {
         val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val savePost = RetrofitBuilder.viewAllApi.saveBlog(user_id, SaveBlog(blogId!!))
+        val savePost = RetrofitBuilder.viewAllApi.saveBlog(user_id, SaveBlog(operation,blogId!!))
         savePost.enqueue(object : Callback<UserProfileResponse?> {
             override fun onResponse(
                 call: Call<UserProfileResponse?>,
                 response: Response<UserProfileResponse?>
             ) {
                 if (response.isSuccessful){
-                    if (!isSaved) {
-                        isSaved = !isSaved
+                    if (like){
                         holder.blogLike.setImageResource(R.drawable.svg_heart_liked)
-                    }else {
-                        isSaved = !isSaved
+                        onLiked.invoke(0)
+                    } else {
                         holder.blogLike.setImageResource(R.drawable.svg_heart)
+                        onLiked.invoke(1)
                     }
                     Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {

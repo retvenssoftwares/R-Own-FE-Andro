@@ -61,7 +61,7 @@ class HotelsFragmentProfile : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val hotels = RetrofitBuilder.ProfileApis.getProfileHotels("-GSomAJoY")
+        val hotels = RetrofitBuilder.ProfileApis.getProfileHotels(user_id)
         hotels.enqueue(object : Callback<List<HotelsName>?> {
             override fun onResponse(
                 call: Call<List<HotelsName>?>,

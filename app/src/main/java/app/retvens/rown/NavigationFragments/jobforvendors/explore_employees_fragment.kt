@@ -5,14 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.NavigationFragments.job.SuggestedJobData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
 
 class explore_employees_fragment : Fragment() {
 
     lateinit var matchesRecycler : RecyclerView
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

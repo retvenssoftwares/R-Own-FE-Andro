@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,6 +18,7 @@ import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
 import app.retvens.rown.NavigationFragments.profile.media.MediaData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +28,11 @@ class ExplorePostsFragment : Fragment() {
     lateinit var mediaRecyclerView: RecyclerView
     lateinit var mediaAdapter: MediaAdapter
     lateinit var searchBar:EditText
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +47,10 @@ class ExplorePostsFragment : Fragment() {
         mediaRecyclerView = view.findViewById(R.id.explore_posts_recycler)
         mediaRecyclerView.layoutManager = GridLayoutManager(context,3)
         mediaRecyclerView.setHasFixedSize(true)
+
+        empty = view.findViewById(R.id.empty)
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
         searchBar = view.findViewById(R.id.search_explore_posts)
 
@@ -59,9 +70,15 @@ class ExplorePostsFragment : Fragment() {
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    val originalData = response.toList()
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+
+                        if (response.body()!!.isNotEmpty()) {
+                            val response = response.body()!!
+
+                            val originalData = response.toList()
                     response.forEach { postsDataClass ->
                         mediaAdapter = MediaAdapter(requireContext(),postsDataClass.posts)
                         mediaRecyclerView.adapter = mediaAdapter
@@ -101,13 +118,24 @@ class ExplorePostsFragment : Fragment() {
                     }
 
 
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                } else {
+                            empty.text = "You did'nt post yet"
+                            empty.visibility = View.VISIBLE
+                        }
+                    } else {
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                empty.text = "Try Again"
+                empty.visibility = View.VISIBLE
             }
         })
 

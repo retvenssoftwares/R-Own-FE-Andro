@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
 import app.retvens.rown.NavigationFragments.profile.polls.PollsAdapter
 import app.retvens.rown.NavigationFragments.profile.polls.PollsData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,6 +26,9 @@ class StatusFragment(val userId: String) : Fragment() {
     lateinit var statusRecycler : RecyclerView
     lateinit var statusAdapter: StatusAdapter
 
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +45,9 @@ class StatusFragment(val userId: String) : Fragment() {
         statusRecycler.layoutManager = LinearLayoutManager(context)
         statusRecycler.setHasFixedSize(true)
 
+        empty = view.findViewById(R.id.empty)
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
 
 
@@ -55,32 +63,50 @@ class StatusFragment(val userId: String) : Fragment() {
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
             ) {
-                if (response.isSuccessful) {
-                    val response = response.body()!!
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
 
-                    response.forEach { postsDataClass ->
+                        val response = response.body()!!
+                        if (response.isNotEmpty()) {
+
+                            response.forEach { postsDataClass ->
 
                         try {
                             statusAdapter = StatusAdapter(postsDataClass.posts, requireContext())
                             statusRecycler.adapter = statusAdapter
                             statusAdapter.notifyDataSetChanged()
                         }catch (e:NullPointerException){
-
+                            empty.text = "You did'nt share your status yet"
+                            empty.visibility = View.VISIBLE
                         }
 
 
 
                     }
-
-                } else {
-                    Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT)
-                        .show()
-
+                        } else {
+                            empty.text = "You did'nt share your status yet"
+                            empty.visibility = View.VISIBLE
+                        }
+                    } else {
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-                Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    empty.visibility = View.VISIBLE
+                    empty.text = "${t.localizedMessage}"
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
+//                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+//                        .show()
+                }
             }
         })
     }

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import app.retvens.rown.DataCollections.JobsCollection.GetRequestedJobDara
 import app.retvens.rown.NavigationFragments.job.SuggestedJobAdapter
 import app.retvens.rown.NavigationFragments.job.SuggestedJobData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +24,10 @@ class ExploreRequestingChildFragmnet : Fragment() {
 
     lateinit var popularRecycler : RecyclerView
     lateinit var matchesRecycler : RecyclerView
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +44,8 @@ class ExploreRequestingChildFragmnet : Fragment() {
         popularRecycler.setHasFixedSize(true)
 
 
-
+        empty = view.findViewById(R.id.empty)
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
 
         matchesRecycler = view.findViewById(R.id.matches_recycler)
@@ -58,22 +65,37 @@ class ExploreRequestingChildFragmnet : Fragment() {
                 call: Call<List<GetRequestedJobDara>?>,
                 response: Response<List<GetRequestedJobDara>?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    val popularFieldsAdapter = PopularFieldsAdapter(requireContext(),response)
+                if (isAdded){
+                    if (response.isSuccessful){
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                        if (response.body()!!.isNotEmpty()) {
+
+                    val popularFieldsAdapter = PopularFieldsAdapter(requireContext(),response.body()!!)
                     popularRecycler.adapter = popularFieldsAdapter
                     popularFieldsAdapter.notifyDataSetChanged()
 
-                    val matchesJobAdapter = MatchesJobAdapter(requireContext(),response)
+                    val matchesJobAdapter = MatchesJobAdapter(requireContext(),response.body()!!)
                     matchesRecycler.adapter = matchesJobAdapter
                     matchesJobAdapter.notifyDataSetChanged()
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                } else {
+                        empty.visibility = View.VISIBLE
+                }
+                    } else {
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                        Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<GetRequestedJobDara>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                empty.text = "Try Again"
+                empty.visibility = View.VISIBLE
             }
         })
 

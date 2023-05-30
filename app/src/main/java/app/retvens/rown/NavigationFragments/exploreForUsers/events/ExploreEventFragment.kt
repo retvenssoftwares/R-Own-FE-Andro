@@ -5,17 +5,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsData
+import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsAdapter
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ExploreEventFragment : Fragment() {
 
     lateinit var exploreBlogsRecyclerView: RecyclerView
     lateinit var exploreEventAdapter : ExploreEventsAdapter
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,24 +44,57 @@ class ExploreEventFragment : Fragment() {
         exploreBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
         exploreBlogsRecyclerView.setHasFixedSize(true)
 
-        val blogs = listOf<ExploreEventsData>(
-            ExploreEventsData("Radiohead Concert"),
-            ExploreEventsData("Title 2"),
-            ExploreEventsData("Neck Deep Concert"),
-            ExploreEventsData("Title 23"),
-            ExploreEventsData("Title 1"),
-            ExploreEventsData("Title 2"),
-            ExploreEventsData("Title 3"),
-            ExploreEventsData("Title 23"),
-            ExploreEventsData("Title 1"),
-            ExploreEventsData("Title 2"),
-            ExploreEventsData("Title 3"),
-            ExploreEventsData("Title 23"),
-        )
 
-        exploreEventAdapter = ExploreEventsAdapter(blogs, requireContext())
-        exploreBlogsRecyclerView.adapter = exploreEventAdapter
-        exploreEventAdapter.notifyDataSetChanged()
+        empty = view.findViewById(R.id.empty)
 
+        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
+
+        getEvents()
+
+    }
+
+    private fun getEvents() {
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val getEvent = RetrofitBuilder.exploreApis.getExploreEvent(user_id, "1")
+        getEvent.enqueue(object : Callback<List<ExploreEventData>?> {
+            override fun onResponse(
+                call: Call<List<ExploreEventData>?>,
+                response: Response<List<ExploreEventData>?>
+            ) {
+
+                if (isAdded){
+                    if (response.isSuccessful){
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                        if (response.body()!!.isNotEmpty()) {
+                            val data = response.body()!!
+                            data.forEach {
+                                exploreEventAdapter = ExploreEventsAdapter(it.events, requireContext())
+                                exploreBlogsRecyclerView.adapter = exploreEventAdapter
+                                exploreEventAdapter.notifyDataSetChanged()
+
+                            }
+                        } else {
+                            empty.visibility = View.VISIBLE
+                        }
+                    } else {
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call<List<ExploreEventData>?>, t: Throwable) {
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                empty.text = "Try Again - ${t.localizedMessage}"
+                empty.visibility = View.VISIBLE
+            }
+        })
     }
 }

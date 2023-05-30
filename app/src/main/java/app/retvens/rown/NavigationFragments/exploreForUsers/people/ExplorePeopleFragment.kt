@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +25,10 @@ class ExplorePeopleFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var explorePeopleAdapter: ExplorePeopleAdapter
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +52,10 @@ class ExplorePeopleFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
+        empty = view.findViewById(R.id.empty)
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
+
         getAllProfiles()
 
     }
@@ -63,27 +73,41 @@ class ExplorePeopleFragment : Fragment() {
                 call: Call<List<ExplorePeopleDataClass>?>,
                 response: Response<List<ExplorePeopleDataClass>?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
 
-                    response.forEach { explorePeopleDataClass ->
-                        explorePeopleAdapter = ExplorePeopleAdapter(requireContext(),explorePeopleDataClass.posts)
-                        recyclerView.adapter = explorePeopleAdapter
-                        explorePeopleAdapter.notifyDataSetChanged()
+                        if (response.body()!!.isNotEmpty()) {
+                            val response = response.body()!!
+
+                            response.forEach { explorePeopleDataClass ->
+                                explorePeopleAdapter = ExplorePeopleAdapter(requireContext(),explorePeopleDataClass.posts)
+                                recyclerView.adapter = explorePeopleAdapter
+                                explorePeopleAdapter.notifyDataSetChanged()
+                            }
+
+                            explorePeopleAdapter.setJobSavedClickListener(this)
+
+
+                } else {
+                            empty.text = "You did'nt post yet"
+                            empty.visibility = View.VISIBLE
+                        }
+                    } else {
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
                     }
-
-
-
-                    explorePeopleAdapter.setJobSavedClickListener(this)
-
-
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<ExplorePeopleDataClass>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                empty.text = "Try Again"
+                empty.visibility = View.VISIBLE
             }
 
             override fun onJobSavedClick(connect: Post) {

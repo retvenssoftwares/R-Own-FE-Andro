@@ -47,7 +47,7 @@ class ViewAllSuggestedJobsActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val response = response.body()!!
 
-                    val suggestedJobAdapter = SuggestedJobAdapter(this@ViewAllSuggestedJobsActivity,response)
+                    val suggestedJobAdapter = SuggestedAllJobAdapter(this@ViewAllSuggestedJobsActivity,response)
                     suggestedRecycler.adapter = suggestedJobAdapter
                     suggestedJobAdapter.notifyDataSetChanged()
 

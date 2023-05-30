@@ -161,16 +161,26 @@ class RequestForJobFragment : Fragment(),
                 call: Call<JobResponseDataClass?>,
                 response: Response<JobResponseDataClass?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<JobResponseDataClass?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         })
 

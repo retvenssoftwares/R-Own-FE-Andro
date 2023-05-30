@@ -12,5 +12,7 @@ data class AllBlogsData(
     val category_name: String,
     val Profile_pic: String,
     val User_name: String,
+    val saved: String,
+    val like: String,
     val date_added: String
 )

@@ -97,13 +97,18 @@ class ApplyForJobFragment : Fragment() {
 
                    })
 
-               }else{
-                   Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+               }else {
+                   if (isAdded) {
+                       Toast.makeText(
+                           requireContext(),
+                           response.code().toString(),
+                           Toast.LENGTH_SHORT
+                       ).show()
+                   }
                }
            }
 
            override fun onFailure(call: Call<List<AppliedJobData>?>, t: Throwable) {
-               TODO("Not yet implemented")
            }
        })
     }

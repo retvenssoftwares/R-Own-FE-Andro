@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJo
 import app.retvens.rown.NavigationFragments.job.RecentJobAdapterOwner
 import app.retvens.rown.NavigationFragments.job.SuggestedJobAdaperHotelOwner
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +27,10 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
 
     lateinit var exploreJobsRecyclerView: RecyclerView
     lateinit var exploreJobAdapter: ProfileJobAdapter
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +46,10 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
         exploreJobsRecyclerView = view.findViewById(R.id.jobsExploreRecycler)
         exploreJobsRecyclerView.layoutManager = LinearLayoutManager(context)
         exploreJobsRecyclerView.setHasFixedSize(true)
+
+        empty = view.findViewById(R.id.empty)
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
         getJobs(userId)
 
@@ -58,25 +68,32 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
             ) {
                 if (isAdded) {
                     if (response.isSuccessful) {
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+
                         val response = response.body()!!
                         if (response.isNotEmpty()) {
                             exploreJobAdapter = ProfileJobAdapter(requireContext(), response)
                             exploreJobsRecyclerView.adapter = exploreJobAdapter
                             exploreJobAdapter.notifyDataSetChanged()
                         } else {
-                            Toast.makeText(requireContext(), "No Job Posted Yet", Toast.LENGTH_SHORT)
-                                .show()
+                            empty.text = "You did'nt post a job yet"
+                            empty.visibility = View.VISIBLE
                          }
                     } else {
-                        Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT)
-                            .show()
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
                     }
                 }
             }
             override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
                 if (isAdded) {
-                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                    empty.visibility = View.VISIBLE
+                    empty.text = "Try Again : Check your internet"
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
                 }
             }
         })

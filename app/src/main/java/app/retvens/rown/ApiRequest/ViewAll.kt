@@ -14,7 +14,7 @@ import retrofit2.http.Path
 
 interface ViewAll {
 
-    @GET("getblogpost//{user_id}")
+    @GET("getblogpost/{user_id}")
     fun getAllBlogs(
         @Path("user_id") user_id : String,
     ) : Call<List<AllBlogsData>>
@@ -40,8 +40,9 @@ interface ViewAll {
     @GET("getcategory")
     fun getBlogsCategory() : Call<List<ViewAllCategoriesData>>
 
-    @GET("getblogcategory/{category_id}")
+    @GET("getblogcategory/{user_id}/{category_id}")
     fun getBlogsByCategory(
+        @Path("user_id") user_id : String,
         @Path("category_id") category_id : String
     ) : Call<List<AllBlogsData>>
 

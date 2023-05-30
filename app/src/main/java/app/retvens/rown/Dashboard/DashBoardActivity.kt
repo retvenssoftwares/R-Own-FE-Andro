@@ -2,48 +2,42 @@ package app.retvens.rown.Dashboard
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.*
-import android.widget.Button
-import android.widget.FrameLayout
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import app.retvens.rown.ApiRequest.AppDatabase
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.ChatSection.MesiboUsers
-import app.retvens.rown.ChatSection.ReceiverProfileAdapter
-import app.retvens.rown.ChatSection.UserChatList
-import app.retvens.rown.CreateCommunity.CreateCommunity
 import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
-import app.retvens.rown.NavigationFragments.*
+import app.retvens.rown.NavigationFragments.EventFragment
+import app.retvens.rown.NavigationFragments.EventFragmentForHoteliers
+import app.retvens.rown.NavigationFragments.ExploreFragment
+import app.retvens.rown.NavigationFragments.HomeFragment
+import app.retvens.rown.NavigationFragments.JobFragment
+import app.retvens.rown.NavigationFragments.JobsForHoteliers
+import app.retvens.rown.NavigationFragments.ProfileFragment
+import app.retvens.rown.NavigationFragments.ProfileFragmentForHotelOwner
+import app.retvens.rown.NavigationFragments.ProfileFragmentForVendors
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
-import app.retvens.rown.authentication.LoginActivity
 import app.retvens.rown.databinding.ActivityDashBoardBinding
 import app.retvens.rown.sideNavigation.BugSpottedActivity
 import app.retvens.rown.sideNavigation.ChatWithUsActivity
@@ -66,11 +60,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
-import com.mesibo.messaging.UserListFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Math.abs
 
 
 class DashBoardActivity : AppCompatActivity() {
@@ -104,11 +96,14 @@ class DashBoardActivity : AppCompatActivity() {
         binding = ActivityDashBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getProfileInfo()
-        auth = FirebaseAuth.getInstance()
-
+        Thread {
+            // Run whatever background code you want here.
+            getProfileInfo()
 //        replaceFragment(HomeFragment())
             replaceFragment(HomeFragment())
+        }.start()
+
+        auth = FirebaseAuth.getInstance()
 
 
 
@@ -180,59 +175,9 @@ class DashBoardActivity : AppCompatActivity() {
         Glide.with(applicationContext).load(profilePic).into(profile)
         name.setText("Hi $profileName")
 
-        //setUp BottomNav
-        val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
-        val sp = getSharedPreferences("onboarding_prefs", AppCompatActivity.MODE_PRIVATE)
-        val hotelVendor = sp.getBoolean("VendorsFragment", false)
-        val hotelOwner = sp.getBoolean("HotelOwnerFragment", false)
-        val hotelOwnerChain = sp.getBoolean("HotelOwnerChainFragment", false)
-
-        bottom_Nav.setOnNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.home -> {
-                    replaceFragment(HomeFragment())
-                    toolbar.visibility = View.VISIBLE
-                }
-                R.id.jobs ->
-                    if (hotelOwner || hotelVendor || hotelOwnerChain){
-                    replaceFragment(JobsForHoteliers())
-                        toolbar.visibility = View.VISIBLE
-                }else{
-                    replaceFragment(JobFragment())
-                        toolbar.visibility = View.VISIBLE
-                }
-                R.id.explore -> {
-                    replaceFragment(ExploreFragment())
-                    toolbar.visibility = View.VISIBLE
-                }
-                R.id.events ->
-//                    replaceFragment(EventFragmentForHoteliers())
-                    if (hotelOwner || hotelVendor || hotelOwnerChain){
-                    replaceFragment(EventFragmentForHoteliers())
-                toolbar.visibility = View.VISIBLE
-                }else{
-                    replaceFragment(EventFragment())
-                toolbar.visibility = View.VISIBLE
-                }
-//                R.id.profile -> replaceFragment(ProfileFragment())
-                R.id.profile -> {
-                    if (hotelOwner || hotelOwnerChain){
-                        replaceFragment(ProfileFragmentForHotelOwner())
-                        toolbar.visibility = View.GONE
-                    }else if (hotelVendor){
-                        replaceFragment(ProfileFragmentForVendors())
-                        toolbar.visibility = View.GONE
-                    }else {
-                        replaceFragment(ProfileFragment())
-                        toolbar.visibility = View.GONE
-                    }
-//                    replaceFragment(ProfileFragmentForHotelOwner())
-                    toolbar.visibility = View.GONE
-                }
-                else -> null
-            }
-            true
-        }
+        Thread{
+            bottomNavSetUp(toolbar)
+        }.start()
 
         navView.setNavigationItemSelectedListener {
             when(it.itemId){
@@ -349,6 +294,63 @@ class DashBoardActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun bottomNavSetUp(toolbar: Toolbar) {
+
+        //setUp BottomNav
+        val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
+        val sp = getSharedPreferences("onboarding_prefs", AppCompatActivity.MODE_PRIVATE)
+        val hotelVendor = sp.getBoolean("VendorsFragment", false)
+        val hotelOwner = sp.getBoolean("HotelOwnerFragment", false)
+        val hotelOwnerChain = sp.getBoolean("HotelOwnerChainFragment", false)
+
+        bottom_Nav.setOnNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.home -> {
+                    replaceFragment(HomeFragment())
+                    toolbar.visibility = View.VISIBLE
+                }
+                R.id.jobs ->
+                    if (hotelOwner || hotelVendor || hotelOwnerChain){
+                        replaceFragment(JobsForHoteliers())
+                        toolbar.visibility = View.VISIBLE
+                    }else{
+                        replaceFragment(JobFragment())
+                        toolbar.visibility = View.VISIBLE
+                    }
+                R.id.explore -> {
+                    replaceFragment(ExploreFragment())
+                    toolbar.visibility = View.VISIBLE
+                }
+                R.id.events ->
+//                    replaceFragment(EventFragmentForHoteliers())
+                    if (hotelOwner || hotelVendor || hotelOwnerChain){
+                        replaceFragment(EventFragmentForHoteliers())
+                        toolbar.visibility = View.VISIBLE
+                    }else{
+                        replaceFragment(EventFragment())
+                        toolbar.visibility = View.VISIBLE
+                    }
+//                R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.profile -> {
+                    if (hotelOwner || hotelOwnerChain){
+                        replaceFragment(ProfileFragmentForHotelOwner())
+                        toolbar.visibility = View.GONE
+                    }else if (hotelVendor){
+                        replaceFragment(ProfileFragmentForVendors())
+                        toolbar.visibility = View.GONE
+                    }else {
+                        replaceFragment(ProfileFragment())
+                        toolbar.visibility = View.GONE
+                    }
+//                    replaceFragment(ProfileFragmentForVendors())
+                    toolbar.visibility = View.GONE
+                }
+                else -> null
+            }
+            true
+        }
     }
 
     private fun getProfileInfo() {

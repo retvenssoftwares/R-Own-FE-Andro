@@ -1,6 +1,7 @@
 package app.retvens.rown.DataCollections.saveId
 
 data class SaveBlog(
+    val operation : String,
     val blogid : String,
 
 //    "Postid": "your postid”,

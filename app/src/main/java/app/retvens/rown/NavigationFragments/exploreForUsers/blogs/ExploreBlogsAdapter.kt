@@ -28,7 +28,7 @@ class ExploreBlogsAdapter(val listS : List<ExploreBlogsData>, val context: Conte
     }
 
     override fun onBindViewHolder(holder: ExploreBlogsViewHolder, position: Int) {
-        holder.title.text = listS[position].title
+//        holder.title.text = listS[position].title
 
         holder.itemView.setOnClickListener {
             context.startActivity(Intent(context, BlogsDetailsActivity::class.java))

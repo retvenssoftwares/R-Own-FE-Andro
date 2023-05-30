@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
 import app.retvens.rown.Dashboard.createPosts.CreateTextPost
+import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.FragmntAdapters.CommentAdapter
@@ -34,6 +36,7 @@ import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,6 +71,10 @@ class HomeFragment : Fragment() {
 
     lateinit var viewAllCommunity : ImageView
 
+    lateinit var shimmerFrameLayout2: ShimmerFrameLayout
+
+    lateinit var empty : TextView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,14 +92,13 @@ class HomeFragment : Fragment() {
             startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
         }
 
-        val sharedPreferencesPro = context?.getSharedPreferences("SaveProgress", AppCompatActivity.MODE_PRIVATE)
-        val toPo = sharedPreferencesPro?.getString("progress", "50").toString()
-        val progress :Int = toPo.toInt()
-            if (progress < 100){
-                val bottomSheet = BottomSheet()
-                val fragManager = (activity as FragmentActivity).supportFragmentManager
-                fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
-            }
+        empty = view.findViewById(R.id.empty)
+
+        shimmerFrameLayout2 = view.findViewById(R.id.shimmer_tasks_view_container)
+
+//        val sharedPreferencesPro = context?.getSharedPreferences("SaveConnectionNo", AppCompatActivity.MODE_PRIVATE)
+//        val toPo = sharedPreferencesPro?.getString("connectionNo", "0")
+
 
         view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {
             startActivity(Intent(context, CreateTextPost::class.java))
@@ -113,9 +119,9 @@ class HomeFragment : Fragment() {
         cummunity = Community("","","")
 
 
-
-
-        getCommunities()
+        Thread{
+            getCommunities()
+        }.start()
 
 
         val btn = view.findViewById<ImageView>(R.id.community_btn)
@@ -133,9 +139,13 @@ class HomeFragment : Fragment() {
 
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
-        getPost(user_id)
 
+        Thread {
+            // Run whatever background code you want here.
+            getPost(user_id)
 
+            getAllConnections(user_id)
+        }.start()
 
     }
 
@@ -148,9 +158,12 @@ class HomeFragment : Fragment() {
             override fun onResponse(
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
-            ) {
-                if (response.isSuccessful && isAdded){
+            ) {                if (isAdded){
+                if (response.isSuccessful){
+                    shimmerFrameLayout2.stopShimmer()
+                    shimmerFrameLayout2.visibility = View.GONE
 
+                    if (response.body()!!.isNotEmpty()) {
                     val response = response.body()!!
 
                     Log.e("response",response.toString())
@@ -207,13 +220,24 @@ class HomeFragment : Fragment() {
                     })
 
 
-                }else{
-                    Toast.makeText(requireContext(),response.message().toString(),Toast.LENGTH_SHORT).show()
+                } else {
+                        empty.text = "No upcoming events"
+                        empty.visibility = View.VISIBLE
+                    }
+                } else {
+                    empty.visibility = View.VISIBLE
+                    empty.text = response.code().toString()
+                    shimmerFrameLayout2.stopShimmer()
+                    shimmerFrameLayout2.visibility = View.GONE
+                    Toast.makeText(requireContext(), " -> ${response.code().toString()}", Toast.LENGTH_SHORT).show()
                 }
+            }
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+
+                shimmerFrameLayout2.stopShimmer()
+                shimmerFrameLayout2.visibility = View.GONE
             }
         })
 
@@ -298,6 +322,33 @@ class HomeFragment : Fragment() {
                     Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
                         .show()
                 }
+            }
+        })
+
+    }
+
+
+    private fun getAllConnections(userId: String) {
+
+        val getConnections = RetrofitBuilder.connectionApi.getConnectionList(userId)
+
+        getConnections.enqueue(object : Callback<GetAllRequestDataClass?> {
+            override fun onResponse(
+                call: Call<GetAllRequestDataClass?>,
+                response: Response<GetAllRequestDataClass?>
+            ) {
+                if (response.isSuccessful) {
+                    val response = response.body()!!
+
+                    if (response == null){
+                        val bottomSheet = BottomSheet()
+                        val fragManager = (activity as FragmentActivity).supportFragmentManager
+                        fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<GetAllRequestDataClass?>, t: Throwable) {
             }
         })
 

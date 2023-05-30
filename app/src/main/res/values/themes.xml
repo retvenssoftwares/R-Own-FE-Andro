@@ -14,7 +14,7 @@
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:layoutDirection">ltr</item>
-
+        <item name="android:windowDisablePreview">true</item>
         <!-- Customize your theme here. -->
     </style>
 

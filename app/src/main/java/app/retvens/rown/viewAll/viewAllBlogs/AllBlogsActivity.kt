@@ -41,7 +41,11 @@ class AllBlogsActivity : AppCompatActivity() {
     }
 
     private fun getBlogsByCategory(idCategory: String) {
-        val blogsBy = RetrofitBuilder.viewAllApi.getBlogsByCategory(idCategory)
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val blogsBy = RetrofitBuilder.viewAllApi.getBlogsByCategory(user_id, idCategory)
         blogsBy.enqueue(object : Callback<List<AllBlogsData>?> {
             override fun onResponse(
                 call: Call<List<AllBlogsData>?>,
@@ -86,9 +90,7 @@ class AllBlogsActivity : AppCompatActivity() {
                         }
                     })
                 } else {
-                    binding.shimmerFrameLayoutBlog.stopShimmer()
-                    binding.shimmerFrameLayoutBlog.visibility = View.GONE
-                    binding.emptyBlog.text = "No event Posted"
+                    binding.emptyBlog.text = "No blogs Posted"
                     binding.emptyBlog.visibility = View.VISIBLE
                 }
             } else {
@@ -161,7 +163,7 @@ class AllBlogsActivity : AppCompatActivity() {
                     } else {
                         binding.shimmerFrameLayoutBlog.stopShimmer()
                         binding.shimmerFrameLayoutBlog.visibility = View.GONE
-                        binding.emptyBlog.text = "No event Posted"
+                        binding.emptyBlog.text = "No blogs Posted"
                         binding.emptyBlog.visibility = View.VISIBLE
                     }
                 } else {

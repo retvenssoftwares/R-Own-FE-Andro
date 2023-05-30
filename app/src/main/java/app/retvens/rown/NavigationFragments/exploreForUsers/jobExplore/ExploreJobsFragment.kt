@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,6 +20,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,6 +31,10 @@ class ExploreJobsFragment : Fragment() {
     lateinit var exploreJobsRecyclerView: RecyclerView
     lateinit var exploreJobAdapter: ExploreJobAdapter
     lateinit var searchBar:EditText
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +50,10 @@ class ExploreJobsFragment : Fragment() {
         exploreJobsRecyclerView = view.findViewById(R.id.explore_jobs_recycler)
         exploreJobsRecyclerView.layoutManager = LinearLayoutManager(context)
         exploreJobsRecyclerView.setHasFixedSize(true)
+
+        empty = view.findViewById(R.id.empty)
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
 
         searchBar = view.findViewById(R.id.search_explore_jobs)
@@ -65,51 +75,62 @@ class ExploreJobsFragment : Fragment() {
                 call: Call<List<ExploreJobData>?>,
                 response: Response<List<ExploreJobData>?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
 
-                    response.forEach { jobsData ->
-                        exploreJobAdapter = ExploreJobAdapter(jobsData.posts, requireContext())
-                        exploreJobsRecyclerView.adapter = exploreJobAdapter
-                        exploreJobAdapter.notifyDataSetChanged()
-                        
-                        searchBar.addTextChangedListener(object : TextWatcher{
-                            override fun beforeTextChanged(
-                                p0: CharSequence?,
-                                p1: Int,
-                                p2: Int,
-                                p3: Int
-                            ) {
-                                
-                            }
+                        val response = response.body()!!
 
-                            override fun onTextChanged(
-                                p0: CharSequence?,
-                                p1: Int,
-                                p2: Int,
-                                p3: Int
-                            ) {
-                                
-                                searchJob(p0.toString())
-                                
-                            }
+                        response.forEach { jobsData ->
+                            exploreJobAdapter = ExploreJobAdapter(jobsData.posts, requireContext())
+                            exploreJobsRecyclerView.adapter = exploreJobAdapter
+                            exploreJobAdapter.notifyDataSetChanged()
 
-                            override fun afterTextChanged(p0: Editable?) {
-                                
-                            }
+                            searchBar.addTextChangedListener(object : TextWatcher {
+                                override fun beforeTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
 
-                        })
+                                }
 
+                                override fun onTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
+
+                                    searchJob(p0.toString())
+
+                                }
+
+                                override fun afterTextChanged(p0: Editable?) {
+
+                                }
+                            })
+                        }
+                    } else {
+                        empty.text = "You did'nt post a job yet"
+                        empty.visibility = View.VISIBLE
                     }
-
-
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                } else {
+                    empty.visibility = View.VISIBLE
+                    empty.text = response.code().toString()
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
                 }
             }
-
             override fun onFailure(call: Call<List<ExploreJobData>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    empty.visibility = View.VISIBLE
+                    empty.text = "Try Again : Check your internet"
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
+                }
             }
         })
 

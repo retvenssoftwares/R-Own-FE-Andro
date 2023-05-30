@@ -118,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="22dp"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:layout_marginHorizontal="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_search"
@@ -134,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/ll"
+                app:layout_constraintTop_toBottomOf="@id/card_search"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -219,16 +220,22 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <LinearLayout
+                android:id="@+id/lll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cal">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/categoryRecyclerView"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 tools:listitem="@layout/item_personal_notification"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cal" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmer_category"
@@ -250,6 +257,8 @@
                 </LinearLayout>
 
             </com.facebook.shimmer.ShimmerFrameLayout>
+
+        </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

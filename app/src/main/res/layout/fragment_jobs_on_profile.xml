@@ -16,4 +16,43 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_tasks_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/shimmer_layout_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white">
+            <include layout = "@layout/item_recent_job_shimmer"/>
+            <include layout = "@layout/item_recent_job_shimmer"/>
+            <include layout = "@layout/item_recent_job_shimmer"/>
+            <include layout = "@layout/item_recent_job_shimmer"/>
+            <include layout = "@layout/item_recent_job_shimmer"/>
+            <include layout = "@layout/item_recent_job_shimmer"/>
+            <include layout = "@layout/item_recent_job_shimmer"/>
+            <include layout = "@layout/item_recent_job_shimmer"/>
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Empty Data"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textAlignment="center"
+        android:fontFamily="@font/montserrat_semibold"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

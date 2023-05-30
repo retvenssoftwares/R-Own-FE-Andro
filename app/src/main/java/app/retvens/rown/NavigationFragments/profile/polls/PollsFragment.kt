@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,6 +16,7 @@ import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
 import app.retvens.rown.NavigationFragments.profile.media.MediaData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,6 +26,10 @@ class PollsFragment(val userId: String) : Fragment() {
 
     lateinit var pollsRecyclerView: RecyclerView
     lateinit var pollsAdapter: PollsAdapter
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,10 +46,9 @@ class PollsFragment(val userId: String) : Fragment() {
         pollsRecyclerView.layoutManager = LinearLayoutManager(context)
         pollsRecyclerView.setHasFixedSize(true)
 
+        empty = view.findViewById(R.id.empty)
 
-
-
-
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
         getPolls(userId)
 
@@ -58,8 +63,13 @@ class PollsFragment(val userId: String) : Fragment() {
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+
+                        val response = response.body()!!
+                        if (response.isNotEmpty()) {
 
                     response.forEach { postsDataClass ->
 
@@ -70,19 +80,34 @@ class PollsFragment(val userId: String) : Fragment() {
                             pollsAdapter.notifyDataSetChanged()
                         }catch (e:NullPointerException){
 
+                            empty.text = "You did'nt create a poll yet!"
+                            empty.visibility = View.VISIBLE
                         }
 
 
                     }
-
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
-
+                        } else {
+                            empty.text = "You did'nt create a poll yet!"
+                            empty.visibility = View.VISIBLE
+                        }
+                    } else {
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                    }
                 }
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString() , Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    empty.visibility = View.VISIBLE
+                    empty.text = "${t.localizedMessage}"
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         })
     }

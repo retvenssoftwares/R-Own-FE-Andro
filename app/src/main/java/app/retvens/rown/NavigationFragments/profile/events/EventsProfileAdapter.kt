@@ -67,6 +67,7 @@ class EventsProfileAdapter(val listS : List<OnGoingEventsData>, val context: Con
             intent.putExtra("eventId", listS[position].event_id)
             intent.putExtra("cover", listS[position].event_thumbnail)
             intent.putExtra("location", listS[position].location)
+            intent.putExtra("saved", listS[position].saved)
             context.startActivity(intent)
         }
     }

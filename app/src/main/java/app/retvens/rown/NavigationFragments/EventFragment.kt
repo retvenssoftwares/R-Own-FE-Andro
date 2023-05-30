@@ -65,7 +65,7 @@ class EventFragment : Fragment() {
 
 
         allRecyclerView = view.findViewById(R.id.blogsRecyclerView)
-        allRecyclerView.layoutManager = LinearLayoutManager(context)
+        allRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         allRecyclerView.setHasFixedSize(true)
         getAllEvents()
 
@@ -133,7 +133,7 @@ class EventFragment : Fragment() {
                         onGoingRecyclerView.adapter = onGoingEventsAdapter
                         onGoingEventsAdapter.notifyDataSetChanged()
                         } else {
-                            empty.text = "Please add hotel"
+                            empty.text = "No upcoming events"
                             empty.visibility = View.VISIBLE
                         }
                     } else {
@@ -147,12 +147,8 @@ class EventFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<OnGoingEventsData>?>, t: Throwable) {
-                if (isAdded){
                     shimmerFrameLayout2.stopShimmer()
                     shimmerFrameLayout2.visibility = View.GONE
-
-                    Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
-                }
             }
         })
     }
