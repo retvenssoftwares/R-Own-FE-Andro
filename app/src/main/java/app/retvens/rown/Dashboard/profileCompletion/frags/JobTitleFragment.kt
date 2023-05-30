@@ -160,7 +160,7 @@ class JobTitleFragment : Fragment(), BackHandler,
                     saveProgress(requireContext(), "100")
                     val response = response.body()!!
                     progressDialog.dismiss()
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(context,DashBoardActivity::class.java))
                 }else{
                     progressDialog.dismiss()

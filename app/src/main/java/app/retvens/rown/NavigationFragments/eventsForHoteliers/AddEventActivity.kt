@@ -64,6 +64,7 @@ class AddEventActivity : AppCompatActivity(),
                 intent.putExtra("location", et_location_event.text.toString())
                 intent.putExtra("venue", et_event_venue.text.toString())
                 startActivity(intent)
+                finish()
             }
         }
         postUpdateEvent()

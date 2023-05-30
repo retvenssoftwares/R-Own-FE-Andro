@@ -43,6 +43,7 @@ class CreateEventActivity : AppCompatActivity(), BottomSheetEventCategory.OnBott
                 intent.putExtra("description", binding.eventDescriptionEdit.text.toString())
                 intent.putExtra("eventCategory", binding.eventCategory.text.toString())
                 startActivity(intent)
+                finish()
             }
         }
     }

@@ -109,7 +109,7 @@ class PersonalInformation : AppCompatActivity() {
         Log.d("shared",addresse)
         Log.d("shared",token)
 //        Log.d("shared",uid.toString())
-        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.address.toString(),Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.address.toString(),Toast.LENGTH_SHORT).show()
 
         binding.cardSavePerson.setOnClickListener {
 
@@ -149,7 +149,7 @@ class PersonalInformation : AppCompatActivity() {
                 call: Call<UserProfileRequestItem?>,
                 response: Response<UserProfileRequestItem?>
             ) {
-                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
                 Log.d("fetch",response.body().toString())
 
                 if (response.isSuccessful){
@@ -187,7 +187,7 @@ class PersonalInformation : AppCompatActivity() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             progressDialog.dismiss()
-                            Toast.makeText(applicationContext,"mail is verified",Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(applicationContext,"mail is verified",Toast.LENGTH_SHORT).show()
                             val intent = Intent(this,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
@@ -321,8 +321,8 @@ class PersonalInformation : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
                     Log.d("image file", file.toString())
                     Log.d("image", response.toString())
                     Log.d("image", response.body().toString())
@@ -339,7 +339,7 @@ class PersonalInformation : AppCompatActivity() {
                         }else{
                             moveTo(this@PersonalInformation,"MoveToD")
                             saveFullName(applicationContext, username)
-                            Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
@@ -373,8 +373,8 @@ class PersonalInformation : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
                     if (response.message().toString() != "Request Entity Too Large"){
                         if (message != "user already exist"){
                             moveTo(this@PersonalInformation,"MoveToI")
@@ -388,7 +388,7 @@ class PersonalInformation : AppCompatActivity() {
                         }else{
                             moveTo(this@PersonalInformation,"MoveToD")
                             saveFullName(applicationContext, username)
-                            Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(applicationContext,message, Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)

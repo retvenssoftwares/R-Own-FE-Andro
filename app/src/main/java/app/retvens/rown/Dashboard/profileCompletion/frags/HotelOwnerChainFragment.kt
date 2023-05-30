@@ -264,7 +264,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                     val response = response.body()!!
                     saveProgress(requireContext(), "100")
                     progressDialog.dismiss()
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                 }else{
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message().toString(),Toast.LENGTH_SHORT).show()

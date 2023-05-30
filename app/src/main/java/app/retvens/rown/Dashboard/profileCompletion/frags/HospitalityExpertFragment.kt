@@ -154,7 +154,7 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
                 if (response.isSuccessful &&isAdded){
                     val response = response.body()!!
                     saveProgress(requireContext(), "100")
-                    Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(context, DashBoardActivity::class.java))
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()

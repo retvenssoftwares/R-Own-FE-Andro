@@ -47,6 +47,7 @@ class AddEventDeatailsActivity : AppCompatActivity() {
                 intent.putExtra("booking", binding.etBooking.text.toString())
                 intent.putExtra("price", binding.price.text.toString())
                 startActivity(intent)
+                finish()
             }
         }
     }

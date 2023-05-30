@@ -65,6 +65,7 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
                     val response = response.body()!!
                     val adapter = CompanyAdapter(requireContext(),response)
                     recyclerView.adapter = adapter
+                    adapter.setOnLocationClickListener(this)
                 }
             }
 

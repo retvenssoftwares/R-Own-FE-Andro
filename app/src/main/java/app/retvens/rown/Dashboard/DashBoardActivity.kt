@@ -139,7 +139,7 @@ class DashBoardActivity : AppCompatActivity() {
         val progress :Int = toPo.toInt()
          header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
             if (progress == 100){
-                Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
             }else {
                 startActivity(Intent(this, UserName::class.java))
             }

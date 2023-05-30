@@ -40,6 +40,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.HotelOwnerInfoData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetRating
 import app.retvens.rown.utils.saveProgress
@@ -62,7 +63,7 @@ import java.io.IOException
 
 class HotelOwnerFragment : Fragment(), BackHandler,
     BottomSheetRating.OnBottomRatingClickListener,
-    BottomSheetLocation.OnBottomLocationClickListener{
+    BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener{
 
 
     lateinit var hotelType : TextInputEditText
@@ -150,10 +151,10 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         hotelOwnerLocationET = view.findViewById(R.id.et_location)
 
         hotelOwnerLocationET.setOnClickListener {
-            val bottomSheet = BottomSheetLocation()
+            val bottomSheet = BottomSheetCountryStateCity()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
-            bottomSheet.setOnLocationClickListener(this)
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
 
         hotelOwnerStarET.setOnClickListener {
@@ -290,7 +291,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     progressDialog.dismiss()
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     val fragment = HotelOwnerChainFragment()
 
                     val bundle = Bundle()
@@ -377,7 +378,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
                     val response = response.body()!!
                     saveProgress(requireContext(), "100")
                     progressDialog.dismiss()
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                     activity?.finish()
                 }else{
@@ -623,8 +624,8 @@ class HotelOwnerFragment : Fragment(), BackHandler,
     }
 
 
-    override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {
-        hotelOwnerLocationET.setText(LocationFrBo)
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        hotelOwnerLocationET.setText(CountryStateCityFrBo)
     }
 
 }

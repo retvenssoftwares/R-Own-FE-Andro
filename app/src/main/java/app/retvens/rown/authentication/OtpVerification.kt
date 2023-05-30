@@ -193,11 +193,11 @@ open class OtpVerification : AppCompatActivity() {
                     progressDialog.dismiss()
 
 
-                    Toast.makeText(
-                        applicationContext,
-                        "Otp Verified Successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    Toast.makeText(
+//                        applicationContext,
+//                        "Otp Verified Successfully",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
                     createUserMesibo()
 
 
@@ -234,7 +234,7 @@ open class OtpVerification : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.toString(),Toast.LENGTH_SHORT).show()
                     Log.d("SaveM",response.toString())
                     SharedPreferenceManagerAdmin.getInstance(applicationContext).saveUser(response)
 
@@ -274,7 +274,7 @@ open class OtpVerification : AppCompatActivity() {
                 val user_id = response.body()?.user_id.toString()
                 val message = response.body()?.message.toString()
                 saveUserId(applicationContext,user_id)
-                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
                 Log.d("search",response.body().toString())
                 moveTo(applicationContext,"MoveToPI")
                 val intent = Intent(applicationContext, PersonalInformation::class.java)

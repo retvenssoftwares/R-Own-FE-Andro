@@ -42,7 +42,7 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         user_id = sharedPreferences.getString("user_id", "").toString()
-        Toast.makeText(applicationContext,"User_id : $user_id",Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext,"User_id : $user_id",Toast.LENGTH_SHORT).show()
         Log.d("update_interest","User_id : $user_id")
 
         username = intent.getStringExtra("user").toString()
@@ -145,14 +145,14 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
                 call: Call<ContactResponse?>,
                 response: Response<ContactResponse?>
             ) {
-                Toast.makeText(applicationContext,"$id - ${response.body()?.message.toString()}",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext,"$id - ${response.body()?.message.toString()}",Toast.LENGTH_SHORT).show()
                 Log.d("update_interest",response.body()?.message.toString())
                 Log.d("update_interest",response.body().toString())
                 Log.d("update_interest",response.toString())
             }
 
             override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext, t.localizedMessage!!.toString(),Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext, t.localizedMessage!!.toString(),Toast.LENGTH_SHORT).show()
                 Log.d("update_interest",t.localizedMessage!!.toString(),t)
             }
         })

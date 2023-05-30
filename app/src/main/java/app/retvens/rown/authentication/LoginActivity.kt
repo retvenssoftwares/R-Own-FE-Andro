@@ -194,7 +194,7 @@ class LoginActivity : AppCompatActivity() {
                 storedVerificationId = verificationId
                 resendToken = token
                 phoneNum = binding.editPhone.text.toString()
-                Toast.makeText(applicationContext,"Otp will be send to Enter Mobile Number",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext,"Otp will be send to Enter Mobile Number",Toast.LENGTH_SHORT).show()
                 var intent = Intent(applicationContext,OtpVerification::class.java)
                 intent.putExtra("storedVerificationId",storedVerificationId)
                 intent.putExtra("phone",phone)
@@ -428,7 +428,7 @@ class LoginActivity : AppCompatActivity() {
             val image = progressDialog.findViewById<ImageView>(R.id.imageview)
             Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
-            Toast.makeText(this,"Sending..", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this,"Sending..", Toast.LENGTH_SHORT).show()
             sendVerificationcode(phoneNumber)
         }
         dialog.findViewById<CardView>(R.id.card_change_phone).setOnClickListener {
@@ -457,7 +457,7 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("SignIn", "signInWithCredential:success")
-                    Toast.makeText(applicationContext,"YOU ARE SUCCESSFULLY LOGIN",Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,"YOU ARE SUCCESSFULLY LOGIN",Toast.LENGTH_SHORT).show()
                     moveTo(this,"MoveToPIP")
                     progressDialog.dismiss()
                     val intent = Intent(this, PersonalInformationPhone::class.java)

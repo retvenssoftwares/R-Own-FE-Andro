@@ -90,7 +90,6 @@ class JobsForHoteliers : Fragment() {
 
         postAJob = view.findViewById(R.id.postAJob)
         postAJob.setOnClickListener {
-            Toast.makeText(context, "Posted", Toast.LENGTH_SHORT).show()
             startActivity(Intent(context, JobPostActivity::class.java) )
         }
 

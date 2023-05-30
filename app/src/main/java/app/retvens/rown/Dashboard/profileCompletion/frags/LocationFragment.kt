@@ -133,7 +133,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
 
                     progressDialog.dismiss()
                     val response = response.body()!!
-                    Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
                     saveProgress(requireContext(), "70")
                     val fragment = BasicInformationFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()

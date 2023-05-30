@@ -62,7 +62,7 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
             saveHotel(hotelId)
         }
                 binding.openEditReview.setOnClickListener {
-                    val intent = Intent(this, HotelDetailsProfileActivity::class.java)
+                    val intent = Intent(this, EditHotelDetailsActivity::class.java)
                     intent.putExtra("name", hotelName)
                     intent.putExtra("img1", img1)
                     intent.putExtra("img2", img2)

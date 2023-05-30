@@ -208,7 +208,7 @@ class BasicInformationFragment : Fragment(),
                     editor.apply()
 
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
 
                     progressDialog.dismiss()
 

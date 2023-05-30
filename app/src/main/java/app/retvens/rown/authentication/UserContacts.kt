@@ -221,7 +221,7 @@ class UserContacts : AppCompatActivity() {
                 call: Call<ContactResponse?>,
                 response: Response<ContactResponse?>
             ) {
-                Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                 Log.d("cont",response.body().toString())
                 if (response.isSuccessful){
                     progressDialog.dismiss()
@@ -237,7 +237,7 @@ class UserContacts : AppCompatActivity() {
             override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
                 progressDialog.dismiss()
                 Log.d("cont", "ContactsApi : ${ t.localizedMessage?.toString() }",t)
-                Toast.makeText(applicationContext,"Error - ${t.localizedMessage}",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext,"Error - ${t.localizedMessage}",Toast.LENGTH_SHORT).show()
             }
         })
     }
