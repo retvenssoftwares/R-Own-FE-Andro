@@ -314,23 +314,23 @@ class DashBoardActivity : AppCompatActivity() {
                 R.id.jobs ->
                     if (hotelOwner || hotelVendor || hotelOwnerChain){
                         replaceFragment(JobsForHoteliers())
-                        toolbar.visibility = View.VISIBLE
+                        toolbar.visibility = View.GONE
                     }else{
                         replaceFragment(JobFragment())
-                        toolbar.visibility = View.VISIBLE
+                        toolbar.visibility = View.GONE
                     }
                 R.id.explore -> {
                     replaceFragment(ExploreFragment())
-                    toolbar.visibility = View.VISIBLE
+                    toolbar.visibility = View.GONE
                 }
                 R.id.events ->
 //                    replaceFragment(EventFragmentForHoteliers())
                     if (hotelOwner || hotelVendor || hotelOwnerChain){
                         replaceFragment(EventFragmentForHoteliers())
-                        toolbar.visibility = View.VISIBLE
+                        toolbar.visibility = View.GONE
                     }else{
                         replaceFragment(EventFragment())
-                        toolbar.visibility = View.VISIBLE
+                        toolbar.visibility = View.GONE
                     }
 //                R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.profile -> {
