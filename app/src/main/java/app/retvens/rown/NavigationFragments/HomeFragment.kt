@@ -223,7 +223,7 @@ class HomeFragment : Fragment() {
                         }
 
                         override fun onItemClickForComment(banner: PostItem, position: Int) {
-                            val bottomSheet = BottomSheetComment(banner.post_id)
+                            val bottomSheet = BottomSheetComment(banner.post_id,banner.Profile_pic)
                             val fragManager = (activity as FragmentActivity).supportFragmentManager
                             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
                         }
@@ -247,8 +247,7 @@ class HomeFragment : Fragment() {
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
 
-                shimmerFrameLayout2.stopShimmer()
-                shimmerFrameLayout2.visibility = View.GONE
+
             }
         })
 

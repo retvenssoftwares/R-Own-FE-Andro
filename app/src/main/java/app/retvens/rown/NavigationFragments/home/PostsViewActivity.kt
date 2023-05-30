@@ -39,6 +39,7 @@ class PostsViewActivity : AppCompatActivity() {
 
         val image = intent.getStringExtra("postPic")
         val postId = intent.getStringExtra("postId")
+        val profilePic = intent.getStringExtra("profilePic")
 
         Glide.with(applicationContext).load(image).into(postImage)
 
@@ -49,7 +50,7 @@ class PostsViewActivity : AppCompatActivity() {
         }
 
         commentButton.setOnClickListener {
-            val bottomSheet = BottomSheetComment(postId!!)
+            val bottomSheet = BottomSheetComment(postId!!,profilePic!!)
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
         }

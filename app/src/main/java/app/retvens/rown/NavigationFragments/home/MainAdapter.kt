@@ -109,7 +109,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                     intent.putExtra("userId",banner.user_id)
                     context.startActivity(intent)
 
-                }else if(banner.Role == "Business Vendor/Freelancer"){
+                }else if(banner.Role == "Business Vendor / Freelancer"){
                     val intent = Intent(context,VendorProfileActivity::class.java)
                     intent.putExtra("userId",banner.user_id)
                     context.startActivity(intent)
@@ -129,6 +129,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 }
                 intent.putExtra("caption",banner.caption)
                 intent.putExtra("postId",banner.post_id)
+                intent.putExtra("profilePic",banner.Profile_pic)
                 context.startActivity(intent)
 
             }
@@ -351,45 +352,47 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                     if (banner.voted == "no"){
                         voteOption(banner.post_id,item.Options[0].option_id)
+
+                        binding.Option1Votes.text = "${vote} votes"
+
+                        val vote = vote1.size + 1
+
+
+                        val totalVotes = vote + vote2.size
+                        val completedTasks = vote
+                        val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
+                        if (!completedPercentage.isNaN()) {
+                            progressBarOption1.setProgressPercentage(completedPercentage)
+                            binding.option1Percentage.text = "${completedPercentage}%"
+                        }
                     }
 
 
-                    vote1.size+1
 
-
-                    binding.Option1Votes.text = "${vote1.size} votes"
-                    binding.Option2Votes.text = "${vote2.size} votes"
-
-                    val totalVotes = vote1.size + vote2.size
-                    val completedTasks = vote1.size
-                    val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
-                    if (!completedPercentage.isNaN()) {
-                        progressBarOption1.setProgressPercentage(completedPercentage)
-                        binding.option1Percentage.text = "${completedPercentage}%"
-                    }
-
-                    Toast.makeText(context,vote1.toString(),Toast.LENGTH_SHORT).show()
                 }
                 binding.voteOption2.setOnClickListener {
 
                     if (banner.voted == "no"){
                         voteOption(banner.post_id,item.Options[1].option_id)
+
+                        val vote = vote2.size + 1
+
+                        binding.Option1Votes.text = "${vote1.size} votes"
+                        binding.Option2Votes.text = "${vote2.size} votes"
+
+
+                        val totalVotes = vote1.size + vote
+                        val completedTasks2 = vote
+                        val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
+                        if (!completedPercentage2.isNaN()) {
+                            progressBarOption2.setProgressPercentage(completedPercentage2)
+                            binding.option2Percentage.text = "${completedPercentage2}%"
+
+                        }
                     }
 
-                    vote2.size+1
-
-                    binding.Option1Votes.text = "${vote1.size} votes"
-                    binding.Option2Votes.text = "${vote2.size} votes"
 
 
-                    val totalVotes = vote1.size + vote2.size
-                    val completedTasks2 = vote2.size
-                    val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
-                    if (!completedPercentage2.isNaN()) {
-                        progressBarOption2.setProgressPercentage(completedPercentage2)
-                        binding.option2Percentage.text = "${completedPercentage2}%"
-
-                    }
                 }
 
                     binding.Option1Votes.text = "${vote1.size} votes"

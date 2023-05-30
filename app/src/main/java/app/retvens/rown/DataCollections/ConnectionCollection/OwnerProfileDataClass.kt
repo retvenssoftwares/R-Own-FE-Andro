@@ -1,7 +1,7 @@
 package app.retvens.rown.DataCollections.ConnectionCollection
 
 data class OwnerProfileDataClass(
-    val profiledata: ProfileData,
+    val profiledata: ProfileOwnerData,
     val hotellogo: HotelLogo,
     val connection_Count: Int,
     val requests_count: Int,

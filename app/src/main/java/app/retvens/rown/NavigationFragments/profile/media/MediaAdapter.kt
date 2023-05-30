@@ -43,7 +43,6 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
 
 
 
-
         holder.itemView.setOnClickListener {
             val intent = Intent(context,PostDetailsActivity::class.java)
             intent.putExtra("profilePic",media.Profile_pic)
@@ -56,6 +55,7 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
             intent.putExtra("likeCount",media.Like_count)
             intent.putExtra("commentCount",media.Comment_count)
             intent.putExtra("like",media.like)
+            intent.putExtra("islike",media.islike)
             intent.putExtra("postId",media.post_id)
             context.startActivity(intent)
         }
