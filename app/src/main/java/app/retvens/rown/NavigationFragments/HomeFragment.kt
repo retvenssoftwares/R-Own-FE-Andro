@@ -147,6 +147,8 @@ class HomeFragment : Fragment() {
         getServices()
         prepareData()
 
+        adapter = MainAdapter(requireContext(),mList)
+        mainRecyclerView.adapter = adapter
 
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
@@ -157,6 +159,7 @@ class HomeFragment : Fragment() {
 
             getAllConnections(user_id)
         }.start()
+
 
     }
 
@@ -214,8 +217,7 @@ class HomeFragment : Fragment() {
 
 
 
-                    adapter = MainAdapter(requireContext(),mList)
-                    mainRecyclerView.adapter = adapter
+
                     adapter.setOnItemClickListener(object : MainAdapter.OnItemClickListener{
                         override fun onItemClick(dataItem: PostItem) {
 
@@ -446,6 +448,7 @@ class HomeFragment : Fragment() {
                             data.forEach {
 
                                 mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = it.events))
+                                Log.e("services",data.toString())
 
 //                                exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
 //                                exploreBlogsRecyclerView.adapter = exploreServicesAdapter

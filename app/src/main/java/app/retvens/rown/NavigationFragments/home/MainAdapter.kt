@@ -43,12 +43,15 @@ import com.mackhartley.roundedprogressbar.RoundedProgressBar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class MainAdapter(val context: Context, private val dataItemList: List<DataItem>) :
@@ -86,10 +89,36 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         if (post.Comment_count != ""){
                             binding.commentCount.text = post.Comment_count
                         }
-
+                        var timestamp: String
                         post.media.forEach { item ->
                             Glide.with(context).load(item.post).into(binding.postPic)
                             formatTimestamp(item.date_added)
+                            timestamp = item.date_added
+
+// Convert the timestamp to a Date object
+                            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                            val date: Date = dateFormat.parse(timestamp)
+
+// Calculate the time difference from the current time to the timestamp
+                            val currentTime = System.currentTimeMillis()
+                            val diffInMillis: Long = currentTime - date.time
+
+// Convert the time difference to the desired format
+                            val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(diffInMillis)
+                            val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+                            val hours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillis)
+                            val days: Long = TimeUnit.MILLISECONDS.toDays(diffInMillis)
+                            val months: Long = TimeUnit.MILLISECONDS.toDays(diffInMillis) / 30
+
+// Use the calculated values as needed
+                            println("Seconds: $seconds")
+                            println("Minutes: $minutes")
+                            println("Hours: $hours")
+                            println("Days: $days")
+                            println("Months: $months")
+
+                            binding.postTime.text = hours.toString()+"hr"
+
                         }
 
                         if (post.like == "Liked"){
@@ -97,6 +126,8 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         }else if (post.like == "Unliked"){
                             binding.likePost.setImageResource(R.drawable.svg_like_post)
                         }
+
+
 
 
 
@@ -335,6 +366,9 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             binding.checkVotes.visibility = View.GONE
 
+            Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+            binding.userNamePost.text = banner.Full_name
+
             banner.pollQuestion.forEach { item ->
                 binding.titlePoll.text = item.Question
                 binding.option1.text = item.Options[0].Option
@@ -355,6 +389,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                         val vote = vote1.size + 1
 
+                        val vote = vote1.size + 1
                         binding.Option1Votes.text = "${vote} votes"
 
 
@@ -368,6 +403,23 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                     }
 
 
+                binding.postProfile.setOnClickListener {
+                    if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
+
+                        val intent = Intent(context,UserProfileActivity::class.java)
+                        intent.putExtra("userId",banner.user_id)
+                        context.startActivity(intent)
+
+                    }else if(banner.Role == "Business Vendor/Freelancer"){
+                        val intent = Intent(context,VendorProfileActivity::class.java)
+                        intent.putExtra("userId",banner.user_id)
+                        context.startActivity(intent)
+                    }else if (banner.Role == "Hotel Owner"){
+                        val intent = Intent(context,OwnerProfileActivity::class.java)
+                        intent.putExtra("userId",banner.user_id)
+                        context.startActivity(intent)
+                    }
+                }
 
                 }
                 binding.voteOption2.setOnClickListener {
@@ -376,11 +428,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         voteOption(banner.post_id,item.Options[1].option_id)
 
                         val vote = vote2.size + 1
-
-                        binding.Option1Votes.text = "${vote1.size} votes"
-                        binding.Option2Votes.text = "${vote2.size} votes"
-
-
+                        binding.Option2Votes.text = "${vote} votes"
                         val totalVotes = vote1.size + vote
                         val completedTasks2 = vote
                         val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
@@ -390,8 +438,6 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                         }
                     }
-
-
 
                 }
 

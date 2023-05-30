@@ -5,9 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
+import app.retvens.rown.DataCollections.location.CompanyAdapter
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class BottomSheetCompany : BottomSheetDialogFragment() {
 
@@ -43,7 +49,26 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        recyclerView = view.findViewById(R.id.company_recycler)
 
+        val getCompany = RetrofitBuilder.profileCompletion.getCompany()
+
+        getCompany.enqueue(object : Callback<List<CompanyDatacClass>?> {
+            override fun onResponse(
+                call: Call<List<CompanyDatacClass>?>,
+                response: Response<List<CompanyDatacClass>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    val adapter = CompanyAdapter(requireContext(),response)
+                    recyclerView.adapter = adapter
+                }
+            }
+
+            override fun onFailure(call: Call<List<CompanyDatacClass>?>, t: Throwable) {
+
+            }
+        })
 
     }
 
