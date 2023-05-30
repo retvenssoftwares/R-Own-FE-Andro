@@ -63,14 +63,17 @@
             app:layout_constraintEnd_toEndOf="@id/blog_cover"/>
         <TextView
             android:id="@+id/blog_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginHorizontal="6dp"
             android:layout_marginTop="8dp"
             android:text="Thailand in budget"
-            android:textSize="16dp"
+            android:textSize="13dp"
+            android:maxLines="2"
             android:fontFamily="@font/montserrat_semibold"
             android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@id/read_more_blog"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/blog_cover"
             app:layout_constraintTop_toBottomOf="@id/blog_cover"/>
 
@@ -113,13 +116,14 @@
 
     <TextView
         android:id="@+id/blogger"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Adventures Paul"
-        android:textSize="12dp"
+        android:textSize="11dp"
         android:layout_marginStart="6dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@id/read_more_blog"
         app:layout_constraintStart_toEndOf="@id/blogger_profile"
         app:layout_constraintBottom_toBottomOf="@id/blogger_profile"
         app:layout_constraintTop_toTopOf="@id/blogger_profile"/>
