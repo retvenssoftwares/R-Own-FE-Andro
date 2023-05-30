@@ -103,6 +103,12 @@ interface FeedsApi {
         @Body postComment:PostCommentClass
     ):Call<UpdateResponse>
 
+    @PATCH("commentReply/{post_Id}")
+    fun replyComment(
+        @Path("post_Id") post_Id:String,
+        @Body postComment:PostCommentReplyClass
+    ):Call<UpdateResponse>
+
     @GET("gethotelinpost")
     fun fetchbyLocation(
         location:String

@@ -9,12 +9,13 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.FeedCollection.GetComments
+import app.retvens.rown.DataCollections.FeedCollection.Reply
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
 
-class NestedCommentAdapter(val context: Context,private val nestedComments: GetComments) : RecyclerView.Adapter<NestedCommentAdapter.MyViewHolder>() {
+class NestedCommentAdapter(val context: Context,private val nestedComments: List<Reply>) : RecyclerView.Adapter<NestedCommentAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val name = itemview.findViewById<TextView>(R.id.commented_username)
@@ -31,7 +32,7 @@ class NestedCommentAdapter(val context: Context,private val nestedComments: GetC
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val data = nestedComments.post.comments[position]
+        val data = nestedComments[position]
 
 
         holder.name.text = data.User_name
@@ -43,6 +44,6 @@ class NestedCommentAdapter(val context: Context,private val nestedComments: GetC
     }
 
     override fun getItemCount(): Int {
-        return nestedComments.commentCount
+        return nestedComments.size
     }
 }

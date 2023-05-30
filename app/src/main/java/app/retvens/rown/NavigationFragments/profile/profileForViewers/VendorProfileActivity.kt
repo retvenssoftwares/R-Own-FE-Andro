@@ -26,6 +26,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,7 +69,10 @@ class VendorProfileActivity : AppCompatActivity() {
 
         val userId = intent.getStringExtra("userId").toString()
 
-        getVendorProfile(userId)
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        getUserPofile(userId,user_id)
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId))
@@ -165,28 +169,34 @@ class VendorProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun getVendorProfile(userId: String) {
+    private fun getUserPofile(userID: String, userId: String) {
 
-        val getVendor = RetrofitBuilder.connectionApi.getVendorProfile(userId,userId)
+        val getProfile = RetrofitBuilder.connectionApi.getVendorProfile(userID,userId)
 
-       getVendor.enqueue(object : Callback<VendorProfileDataClass?> {
-           override fun onResponse(
-               call: Call<VendorProfileDataClass?>,
-               response: Response<VendorProfileDataClass?>
-           ) {
-               if (response.isSuccessful){
-                   val response = response.body()!!
-                   connCount.text = response.connectioncount.toString()
-                   postCount.text = response.requestcount.toString()
+        getProfile.enqueue(object : Callback<VendorProfileDataClass?> {
+            override fun onResponse(
+                call: Call<VendorProfileDataClass?>,
+                response: Response<VendorProfileDataClass?>
+            ) {
+//                if (response.isSuccessful){
+//                    val response = response.body()!!
+//                    Glide.with(applicationContext).load(response.vendorInfo.vendorImage).into(profile)
+//                    name.text = response.profiledata.User_name
+//                    connCount.text = response.connection_Count.toString()
+//                    postCount.text = response.post_count.toString()
+//
+//
+//                    if (response.connectionStatus == "Connected"){
+//                        connStatus.text = "Remove"
+//                    }
+//                }
+            }
 
-                   status.text = response.connectionStatus
-
-               }
-           }
-
-           override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {
-
-           }
-       })
+            override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
     }
+
+
 }

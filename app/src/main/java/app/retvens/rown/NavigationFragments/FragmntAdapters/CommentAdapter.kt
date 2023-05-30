@@ -12,14 +12,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
 import app.retvens.rown.DataCollections.FeedCollection.CommentDataClass
+import app.retvens.rown.DataCollections.FeedCollection.Comments
 import app.retvens.rown.DataCollections.FeedCollection.GetComments
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
 class CommentAdapter(val context: Context, var commentList:GetComments): RecyclerView.Adapter<CommentAdapter.MyViewHolderClass3>() {
 
+    private var onItemClickListener: OnItemClickListener? = null
 
+
+    interface OnItemClickListener {
+        fun onItemClick(dataItem: Comments)
+
+
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        onItemClickListener = listener
+    }
 
     class MyViewHolderClass3(itemview: View): RecyclerView.ViewHolder(itemview){
         val name = itemview.findViewById<TextView>(R.id.commented_username)
@@ -53,8 +66,13 @@ class CommentAdapter(val context: Context, var commentList:GetComments): Recycle
         }
 
         holder.recycler.layoutManager = LinearLayoutManager(context)
-        val nestedAdapter = NestedCommentAdapter(context,commentList)
+        val nestedAdapter = NestedCommentAdapter(context,data.replies)
         holder.recycler.adapter = nestedAdapter
+
+        holder.reply.setOnClickListener {
+            onItemClickListener?.onItemClick(data)
+        }
+
     }
 
     override fun getItemCount(): Int {

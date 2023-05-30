@@ -185,7 +185,7 @@ class UserProfileActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
-                TODO("Not yet implemented")
+
             }
         })
 

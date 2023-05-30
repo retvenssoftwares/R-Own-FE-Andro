@@ -1,5 +1,6 @@
 package app.retvens.rown.authentication
 
+import android.R.attr.bitmap
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Intent
@@ -7,6 +8,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -39,11 +41,11 @@ import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 import app.retvens.rown.utils.moveTo
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
-import app.retvens.rown.utils.saveUserId
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
+import com.mesibo.api.Mesibo
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -53,7 +55,9 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.*
 import kotlin.streams.asSequence
 
@@ -75,6 +79,7 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var progressDialog: Dialog
     lateinit var username : String
     lateinit var eMail : String
+    lateinit var path:String
 
     private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,6 +138,8 @@ class PersonalInformation : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+
+
     }
 
     private fun fetchUser(userId: String) {
@@ -147,6 +154,7 @@ class PersonalInformation : AppCompatActivity() {
 
                 if (response.isSuccessful){
                     val image = response.body()?.Profile_pic
+                    path = image!!
                     val name = response.body()?.Full_name
                     saveFullName(applicationContext, name.toString())
                     saveProfileImage(applicationContext, "$image")
@@ -325,6 +333,7 @@ class PersonalInformation : AppCompatActivity() {
                             val intent = Intent(applicationContext,UserInterest::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
+//                            setMesiboProfile(username)
                             startActivity(intent)
                             finish()
                         }else{
@@ -334,6 +343,7 @@ class PersonalInformation : AppCompatActivity() {
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
+//                            setMesiboProfile(username)
                             startActivity(intent)
                             finish()
                         }
@@ -370,6 +380,7 @@ class PersonalInformation : AppCompatActivity() {
                             moveTo(this@PersonalInformation,"MoveToI")
                             saveFullName(applicationContext, username)
                             val intent = Intent(applicationContext,UserInterest::class.java)
+//                            setMesiboProfile(username)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
                             startActivity(intent)
@@ -381,6 +392,7 @@ class PersonalInformation : AppCompatActivity() {
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
+//                            setMesiboProfile(username)
                             startActivity(intent)
                             finish()
                         }
@@ -395,6 +407,25 @@ class PersonalInformation : AppCompatActivity() {
 
        
     }
+
+    private fun setMesiboProfile(username: String) {
+
+        val imagePath = path
+
+
+        val bitmap: Bitmap = BitmapFactory.decodeFile(imagePath)
+
+        val selfProfile = Mesibo.getSelfProfile()
+
+        selfProfile.name = username
+        selfProfile.status = "Hey! I am using this app."
+        selfProfile.setImage(bitmap)
+        selfProfile.save() // publish
+
+        Toast.makeText(applicationContext,"mesibo profile set",Toast.LENGTH_SHORT).show()
+
+    }
+
     private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
 
         var name = ""
@@ -453,6 +484,7 @@ class PersonalInformation : AppCompatActivity() {
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
             val imageUri = data.data
+            path = imageUri?.path!!
             if (imageUri != null) {
 //                compressImage(imageUri)
                 cropImage(imageUri)

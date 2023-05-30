@@ -206,6 +206,7 @@
                 android:layout_marginTop="12dp">
 
                 <TextView
+                    android:id="@+id/connStatus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textColor="@color/green_own"
@@ -250,8 +251,9 @@
             android:id="@+id/lll2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/link"
+            app:layout_constraintTop_toBottomOf="@id/layout_rh"
             app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="5dp"
             app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout

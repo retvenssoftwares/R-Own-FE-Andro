@@ -41,16 +41,62 @@ class PostDetailsActivity : AppCompatActivity() {
         Glide.with(applicationContext).load(postImage).into(postPic)
 
         val postId = intent.getStringExtra("postId")
+        val like = intent.getStringExtra("like")
 
-        likeButton.setOnClickListener {
-            likePost(postId)
+        var isLike = intent.getStringExtra("islike").toBoolean()
+
+        if (like == "Liked"){
+            likeButton.setImageResource(R.drawable.liked_vectore)
+        }else if (like == "Unliked"){
+            likeButton.setImageResource(R.drawable.svg_like_post)
         }
 
+
+        likeButton.setOnClickListener {
+
+            likePost(postId)
+
+            if (like == "Liked"){
+                isLike = !isLike
+                if (isLike){
+                    likeButton.setImageResource(R.drawable.svg_like_post)
+                }else{
+                    likeButton.setImageResource(R.drawable.liked_vectore)
+                }
+            }
+            if (like == "Unliked"){
+                isLike = !isLike
+                if (isLike){
+                    likeButton.setImageResource(R.drawable.liked_vectore)
+                }else{
+                    likeButton.setImageResource(R.drawable.svg_like_post)
+                }
+            }
+
+        }
+
+
+
         commentButtom.setOnClickListener {
-            val bottomSheet = BottomSheetComment(postId!!)
+            val bottomSheet = BottomSheetComment(postId!!,profilePic!!)
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
         }
+
+
+
+
+//        val count:Int
+//        if(media.islike){
+//            media.likePost.setImageResource(R.drawable.liked_vectore)
+//            count = media.Like_count.toInt()+1
+//            media.likeCount.text = count.toString()
+//        }else{
+//            binding.likePost.setImageResource(R.drawable.svg_like_post)
+//            count = banner.Like_count.toInt()
+//            binding.likeCount.text = count.toString()
+//        }
+
     }
 
     private fun likePost(postId: String?) {
