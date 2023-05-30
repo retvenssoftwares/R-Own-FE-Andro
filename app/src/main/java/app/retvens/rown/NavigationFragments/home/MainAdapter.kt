@@ -353,9 +353,9 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                     if (banner.voted == "no"){
                         voteOption(banner.post_id,item.Options[0].option_id)
 
-                        binding.Option1Votes.text = "${vote} votes"
-
                         val vote = vote1.size + 1
+
+                        binding.Option1Votes.text = "${vote} votes"
 
 
                         val totalVotes = vote + vote2.size

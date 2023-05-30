@@ -52,6 +52,8 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
     lateinit var status : TextView
     lateinit var hotels : TextView
     lateinit var events : TextView
+    lateinit var username : TextView
+    lateinit var bio : TextView
     lateinit var postCount:TextView
     lateinit var connCont:TextView
     lateinit var requestCont:TextView
@@ -68,6 +70,8 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
         super.onViewCreated(view, savedInstanceState)
 
         profile = view.findViewById(R.id.profile)
+        username = view.findViewById(R.id.profile_username)
+        bio = view.findViewById(R.id.bio)
         name = view.findViewById(R.id.profile_name)
 
         polls = view.findViewById(R.id.polls)
@@ -206,6 +210,8 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
                     connCont.text = response.connection_Count.toString()
                     requestCont.text = response.requests_count.toString()
                     postCount.text = response.post_count.toString()
+                    username.text = response.profiledata.User_name.toString()
+                    bio.text = response.profiledata.userBio.toString()
                 }
 
             }

@@ -156,12 +156,6 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
 
-        header.findViewById<CardView>(R.id.my_account).setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-            replaceFragment(ProfileFragment())
-            toolbar.visibility = View.GONE
-        }
-
         profile = header.findViewById<ImageView>(R.id.nav_profile)
         name = header.findViewById<TextView>(R.id.user_name)
         phone = header.findViewById<TextView>(R.id.nav_phone)
@@ -176,7 +170,7 @@ class DashBoardActivity : AppCompatActivity() {
         name.setText("Hi $profileName")
 
         Thread{
-            bottomNavSetUp(toolbar)
+            bottomNavSetUp(toolbar, header)
         }.start()
 
         navView.setNavigationItemSelectedListener {
@@ -296,7 +290,7 @@ class DashBoardActivity : AppCompatActivity() {
 
     }
 
-    private fun bottomNavSetUp(toolbar: Toolbar) {
+    private fun bottomNavSetUp(toolbar: Toolbar, header: View) {
 
         //setUp BottomNav
         val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
@@ -304,6 +298,21 @@ class DashBoardActivity : AppCompatActivity() {
         val hotelVendor = sp.getBoolean("VendorsFragment", false)
         val hotelOwner = sp.getBoolean("HotelOwnerFragment", false)
         val hotelOwnerChain = sp.getBoolean("HotelOwnerChainFragment", false)
+
+        header.findViewById<CardView>(R.id.my_account).setOnClickListener {
+            drawerLayout.closeDrawer(GravityCompat.START)
+            if (hotelOwner || hotelOwnerChain){
+            replaceFragment(ProfileFragmentForHotelOwner())
+            toolbar.visibility = View.GONE
+        }else if (hotelVendor){
+            replaceFragment(ProfileFragmentForVendors())
+            toolbar.visibility = View.GONE
+        }else {
+            replaceFragment(ProfileFragment())
+            toolbar.visibility = View.GONE
+        }
+            toolbar.visibility = View.GONE
+        }
 
         bottom_Nav.setOnNavigationItemSelectedListener {
             when(it.itemId){
@@ -345,7 +354,6 @@ class DashBoardActivity : AppCompatActivity() {
                         toolbar.visibility = View.GONE
                     }
 //                    replaceFragment(ProfileFragmentForVendors())
-                    toolbar.visibility = View.GONE
                 }
                 else -> null
             }
