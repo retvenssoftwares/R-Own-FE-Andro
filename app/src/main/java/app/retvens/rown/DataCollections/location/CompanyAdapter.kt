@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
 import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
@@ -20,12 +21,12 @@ class CompanyAdapter(val context: Context, var cityList:List<CompanyDatacClass>)
 
     private var countryClickListener: OnLocationClickListener? = null
 
-    interface OnLocationClickListener {
-        fun onStateDataClick(companyDatacClass: CompanyDatacClass)
-    }
-
     fun setOnLocationClickListener(listener: OnLocationClickListener) {
         countryClickListener = listener
+    }
+
+    interface OnLocationClickListener {
+        fun onStateDataClick(companyDataClass: String)
     }
 
     class MyViewHolderClass(itemview: View): RecyclerView.ViewHolder(itemview){
@@ -44,7 +45,8 @@ class CompanyAdapter(val context: Context, var cityList:List<CompanyDatacClass>)
 
         holder.location.text = data.company_name
         holder.itemView.setOnClickListener {
-            countryClickListener?.onStateDataClick(data)
+            Toast.makeText(context , data.company_name, Toast.LENGTH_SHORT).show()
+            countryClickListener?.onStateDataClick(data.company_name)
         }
 
     }

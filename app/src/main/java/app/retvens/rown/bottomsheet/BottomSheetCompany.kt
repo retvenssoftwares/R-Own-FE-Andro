@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
@@ -50,10 +51,12 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = view.findViewById(R.id.company_recycler)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.setHasFixedSize(true)
 
         val getCompany = RetrofitBuilder.profileCompletion.getCompany()
 
-        getCompany.enqueue(object : Callback<List<CompanyDatacClass>?> {
+        getCompany.enqueue(object : Callback<List<CompanyDatacClass>?>, CompanyAdapter.OnLocationClickListener {
             override fun onResponse(
                 call: Call<List<CompanyDatacClass>?>,
                 response: Response<List<CompanyDatacClass>?>
@@ -67,6 +70,11 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
 
             override fun onFailure(call: Call<List<CompanyDatacClass>?>, t: Throwable) {
 
+            }
+
+            override fun onStateDataClick(companyDatacClass: String) {
+                dismiss()
+                mListener?.bottomLocationClick(companyDatacClass)
             }
         })
 
