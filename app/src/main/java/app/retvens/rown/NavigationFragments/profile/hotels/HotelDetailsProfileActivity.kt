@@ -39,9 +39,11 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
         location = intent.getStringExtra("hotelAddress").toString()
         hotelLogo = intent.getStringExtra("logo").toString()
 
-        Glide.with(this).load(hotelLogo).into(binding.vendorImage)
+//        Glide.with(this).load(hotelLogo).into(binding.vendorImage)
 
         val hotelId = intent.getStringExtra("hotelId")
+
+        binding.location.text = location
 
         val saved = intent.getStringExtra("saved")
         getHotel()
@@ -142,11 +144,7 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                     }
 
                     binding.descriptionHotel.text = data.Hoteldescription
-                    binding.location.text = data.location
                     hotelLogo = data.hotelLogoUrl
-                    if (data.location!= null){
-                        location = data.location
-                    }
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
@@ -21,6 +22,7 @@ class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context) :
 
         val cover = itemView.findViewById<ImageView>(R.id.hotel_venue_cover)
         val hotelRating = itemView.findViewById<RatingBar>(R.id.hotelRating)
+        val edit = itemView.findViewById<CardView>(R.id.read_more_blog)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileHotelsViewHolder {
@@ -41,6 +43,18 @@ class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context) :
 
 //        if (listS[position] != null) {
 //            holder.hotelRating.rating = listS[position].hotelRating.toFloat()
+//        }
+
+//        holder.edit.setOnClickListener {
+//            val intent = Intent(this, EditHotelDetailsActivity::class.java)
+//            intent.putExtra("name", listS[position].hotelName)
+//            intent.putExtra("img1", listS[position].)
+//            intent.putExtra("img2", img2)
+//            intent.putExtra("img3", img3)
+//            intent.putExtra("location", location)
+//            intent.putExtra("hotelDescription", Hoteldescription)
+//            intent.putExtra("hotelId", hotelId)
+//            context.startActivity(intent)
 //        }
 
         holder.itemView.setOnClickListener {

@@ -153,11 +153,11 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
 
-        val send = RetrofitBuilder.profileCompletion.uploadHotelChainData(
+        val send = RetrofitBuilder.profileCompletion.addHotelProfile(
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainLocation),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainRating),
-            MultipartBody.Part.createFormData("hotelLogo", file.name, body),
+            MultipartBody.Part.createFormData("hotelCoverpic", file.name, body),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id)
         )
 
@@ -170,6 +170,7 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
                     val response = response.body()!!
                     progressDialog.dismiss()
                     Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+                    onBackPressed()
                 }else{
                     progressDialog.dismiss()
                     Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
@@ -207,8 +208,8 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
         val options = CropImage.activity(imageUri)
             .setGuidelines(CropImageView.Guidelines.OFF).also {
 
-                it.setAspectRatio(1, 1)
-                    .setCropShape(CropImageView.CropShape.OVAL)
+                it.setAspectRatio(4, 3)
+                    .setCropShape(CropImageView.CropShape.RECTANGLE)
                     .setOutputCompressQuality(20)
                     .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
                     .start(this)

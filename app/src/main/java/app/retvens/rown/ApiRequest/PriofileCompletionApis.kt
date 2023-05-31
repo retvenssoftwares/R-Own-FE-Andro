@@ -86,6 +86,16 @@ interface PriofileCompletionApis{
         @Part("user_id") id: RequestBody,
     ): Call<UpdateResponse>
 
+    @Multipart
+    @POST("hotelpost")
+    fun addHotelProfile(
+        @Part("hotelName") Name: RequestBody,
+        @Part("hotelAddress") address: RequestBody,
+        @Part("hotelRating") hotel_rating: RequestBody,
+        @Part hotelCoverpic: MultipartBody.Part,
+        @Part("user_id") id: RequestBody,
+    ): Call<UpdateResponse>
+
 
     @GET("countries")
     fun getCountries():Call<List<CountryData>>

@@ -86,7 +86,6 @@ class HotelsFragmentProfile : Fragment() {
                         empty.text = response.code().toString()
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
-                        Toast.makeText(requireContext(), "$user_id -> ${response.code().toString()}", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -96,14 +95,6 @@ class HotelsFragmentProfile : Fragment() {
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
                 empty.visibility = View.VISIBLE
-
-                if (isAdded) {
-                    Toast.makeText(
-                        requireContext(),
-                        t.localizedMessage.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             }
         })
     }

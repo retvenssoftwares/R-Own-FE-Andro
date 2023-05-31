@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.hotels
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -46,10 +47,10 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
 
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     var REQUEST_CAMERA_PERMISSION : Int = 0
-    var selectedImg : Int = 0
+    private var selectedImg = 0
 
-    var fileList : ArrayList<MultipartBody.Part> = ArrayList()
-    var imagesList : ArrayList<Uri> = ArrayList()
+    private var fileList : ArrayList<MultipartBody.Part> = ArrayList()
+    private var imagesList : ArrayList<Uri> = ArrayList()
 
     lateinit var progressDialog: Dialog
 
@@ -77,7 +78,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
 
         binding.overviewEt.setText(Hoteldescription)
         binding.locationText.text = location
-
+        binding.profileUsername.text ="$hotelName Details"
         binding.etNameEdit.setText(hotelName)
         Glide.with(this).load(img1).into(binding.img1)
         Glide.with(this).load(img2).into(binding.img2)
@@ -294,8 +295,8 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                 when (selectedImg) {
                     1 -> {
                         binding.deleteImg1.visibility = View.VISIBLE
-                        binding.img1.setImageURI(croppedImage)
                         imgUri1 = compressImage(croppedImage)
+                        binding.img1.setImageURI(imgUri1)
                         imagesList.add(imgUri1!!)
                     }
                     2 -> {
