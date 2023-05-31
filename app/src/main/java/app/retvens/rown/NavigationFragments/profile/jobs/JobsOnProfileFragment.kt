@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,7 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     lateinit var empty : TextView
+    lateinit var notPosted : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +50,7 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
         exploreJobsRecyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
+        notPosted = view.findViewById(R.id.notPosted)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
@@ -77,8 +80,7 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
                             exploreJobsRecyclerView.adapter = exploreJobAdapter
                             exploreJobAdapter.notifyDataSetChanged()
                         } else {
-                            empty.text = "You did'nt post a job yet"
-                            empty.visibility = View.VISIBLE
+                            notPosted.visibility = View.VISIBLE
                          }
                     } else {
                         empty.visibility = View.VISIBLE

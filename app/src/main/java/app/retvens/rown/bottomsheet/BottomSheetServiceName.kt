@@ -1,5 +1,8 @@
 package app.retvens.rown.bottomsheet
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,7 +10,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -21,6 +26,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.VendorServicesData
 import app.retvens.rown.NavigationFragments.profile.services.BottomServiceNameAdapter
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -54,6 +60,8 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
 
     lateinit var addService: CardView
 
+    lateinit var progressDialog: Dialog
+
     override fun getTheme(): Int = R.style.Theme_AppBottomSheetDialogTheme
 
     override fun onCreateView(
@@ -74,15 +82,19 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         getBottomServices()
-//        getUserLocation()
-//        getVendor()
-
         addService = view.findViewById(R.id.addService)
         addService.setOnClickListener {
             selectedServices.forEach {
+                progressDialog = Dialog(requireContext())
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.setCancelable(false)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
                 setServices(it)
             }
-//            dismiss()
         }
     }
 
@@ -96,74 +108,17 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+                dismiss()
                 }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                progressDialog.dismiss()
                 if (isAdded){
                     Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         })
     }
-
-    private fun getUserLocation() {
-
-        val getLocation = RetrofitBuilder.ProfileApis.getProfileServiceName()
-        getLocation.enqueue(object : Callback<List<ProfileServicesDataItem>?>, BottomServiceNameAdapter.OnLocationClickListener {
-            override fun onResponse(
-                call: Call<List<ProfileServicesDataItem>?>,
-                response: Response<List<ProfileServicesDataItem>?>
-            ) {
-                if (response.isSuccessful && isAdded){
-                    val response = response.body()!!
-                    bottomServiceNameAdapter = BottomServiceNameAdapter(requireContext(),response)
-                    bottomServiceNameAdapter.notifyDataSetChanged()
-                    recyclerView.adapter = bottomServiceNameAdapter
-                    bottomServiceNameAdapter.setOnLocationClickListener(this)
-
-                    searchBar.addTextChangedListener(object : TextWatcher {
-                        override fun beforeTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            count: Int,
-                            after: Int
-                        ) {
-
-                        }
-                        override fun onTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            before: Int,
-                            count: Int
-                        ) {
-                            val original = response.toList()
-                            val filter = original.filter { searchUser ->
-                                searchUser.service_name.contains(s.toString(),ignoreCase = true)
-                            }
-                            bottomServiceNameAdapter.search(filter)
-                        }
-                        override fun afterTextChanged(s: Editable?) {
-
-                        }
-                    })
-                }
-                else{
-                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<ProfileServicesDataItem>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
-                Log.e("error",t.message.toString())
-            }
-
-            override fun onCountryClick(service: String, id: String) {
-                mListener?.bottomSNClick(service, id)
-                dismiss()
-            }
-        })
-    }
-
   private fun getBottomServices() {
         val data = RetrofitBuilder.profileCompletion.getServices()
 
@@ -222,9 +177,7 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
                 } else {
                     selectedServices.removeAt(index)
                 }
-
                 Log.e("services",selectedServices.toString())
-//                servicesET.setText(selectedServices.toString())
             }
         })
     }

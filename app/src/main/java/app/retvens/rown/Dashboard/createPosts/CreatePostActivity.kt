@@ -37,6 +37,7 @@ import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
 import app.retvens.rown.databinding.ActivityCreatePostBinding
+import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide
 import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity
 import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants
@@ -564,12 +565,4 @@ class CreatePostActivity : AppCompatActivity(),
 //        Log.e("String",name)
 //        return name
 //    }
-
-    fun getRandomString(length: Int) : String {
-        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-        return (1..length)
-            .map { allowedChars.random() }
-            .joinToString("")
-    }
-
 }

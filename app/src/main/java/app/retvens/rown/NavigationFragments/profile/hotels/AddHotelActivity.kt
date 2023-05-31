@@ -31,6 +31,7 @@ import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetRating
+import app.retvens.rown.utils.getRandomString
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -148,7 +149,7 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
         )?:return
 
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file =  File(applicationContext.cacheDir, "cropped_${applicationContext.contentResolver.getFileName(croppedHotelChainCoverImageUri!!)}.jpg")
+        val file =  File(applicationContext.cacheDir, "${getRandomString(6)}.jpg")
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")

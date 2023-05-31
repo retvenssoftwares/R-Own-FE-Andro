@@ -45,61 +45,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relative_n">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginHorizontal="15dp"
-            app:cardElevation="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="12dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="What is hotel revenue management?"
-                android:textColor="#000000"
-                android:textFontWeight="700"
-                android:textSize="15dp"/>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="10dp"
-            android:visibility="gone"
-            android:layout_marginVertical="4dp"
-            android:layout_marginHorizontal="30dp"
-            app:cardElevation="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="A tool to make your hotel more profitable! Hotel revenue management is all about selling the right room at the right price to the right guest. There are many factors that make hotel revenue management different than other traditional industries such as perishable inventory, fixed capacity, ability to segment the market, and the possibility to forecast demand"
-                android:textColor="@color/grey_40"
-                android:textSize="12dp"/>
-
-        </androidx.cardview.widget.CardView>
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@id/relative_n"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

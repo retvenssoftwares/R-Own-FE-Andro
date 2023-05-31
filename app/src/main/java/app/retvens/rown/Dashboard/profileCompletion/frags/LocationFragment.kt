@@ -111,10 +111,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
 
     private fun setLocation(context: Context?) {
 
-        val country = etLocationCountry.text.toString()
-        val state = etLocationState.text.toString()
-        val city = etLocationCity.text.toString()
-        val location = "$city, $state, $country"
+        val location = etLocationCountry.text.toString()
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()

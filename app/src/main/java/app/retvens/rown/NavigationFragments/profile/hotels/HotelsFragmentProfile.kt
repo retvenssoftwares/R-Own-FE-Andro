@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ class HotelsFragmentProfile : Fragment() {
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     lateinit var empty : TextView
+    lateinit var notPosted : ImageView
     lateinit var addHotel : CardView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +48,7 @@ class HotelsFragmentProfile : Fragment() {
         recycler.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
+        notPosted = view.findViewById(R.id.notPosted)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
@@ -73,12 +76,15 @@ class HotelsFragmentProfile : Fragment() {
                         shimmerFrameLayout.visibility = View.GONE
 
                         if (response.body()!!.isNotEmpty()) {
+                            try {
                             profileHotelsAdapter = ProfileHotelsAdapter(response.body()!!, requireContext())
                             recycler.adapter = profileHotelsAdapter
                             profileHotelsAdapter.notifyDataSetChanged()
+                               } catch ( e : NullPointerException){
+                                notPosted.visibility = View.VISIBLE
+                        }
                         } else {
-                            empty.text = "Please add hotel"
-                            empty.visibility = View.VISIBLE
+                            notPosted.visibility = View.VISIBLE
                         }
                     } else {
                         addHotel.visibility = View.GONE

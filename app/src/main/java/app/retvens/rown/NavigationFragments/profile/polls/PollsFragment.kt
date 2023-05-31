@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +31,7 @@ class PollsFragment(val userId: String) : Fragment() {
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     lateinit var empty : TextView
+    lateinit var notPosted : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +49,7 @@ class PollsFragment(val userId: String) : Fragment() {
         pollsRecyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
+        notPosted = view.findViewById(R.id.notPosted)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
@@ -80,15 +83,13 @@ class PollsFragment(val userId: String) : Fragment() {
                             pollsAdapter.notifyDataSetChanged()
                         }catch (e:NullPointerException){
 
-                            empty.text = "You did'nt create a poll yet!"
-                            empty.visibility = View.VISIBLE
+                            notPosted.visibility = View.VISIBLE
                         }
 
 
                     }
                         } else {
-                            empty.text = "You did'nt create a poll yet!"
-                            empty.visibility = View.VISIBLE
+                            notPosted.visibility = View.VISIBLE
                         }
                     } else {
                         empty.visibility = View.VISIBLE
@@ -105,8 +106,6 @@ class PollsFragment(val userId: String) : Fragment() {
                     empty.text = "${t.localizedMessage}"
                     shimmerFrameLayout.stopShimmer()
                     shimmerFrameLayout.visibility = View.GONE
-                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
                 }
             }
         })

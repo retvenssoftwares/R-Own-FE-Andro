@@ -45,18 +45,18 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
 
         binding.location.text = location
 
-        val saved = intent.getStringExtra("saved")
+//        val saved = intent.getStringExtra("saved")
         getHotel()
 
-        if (saved != "no"){
-            operatioin = "pop"
-            liked = false
-            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
-        } else {
-            operatioin = "push"
-            liked = true
-            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
-        }
+//        if (saved != "no"){
+//            operatioin = "pop"
+//            liked = false
+//            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
+//        } else {
+//            operatioin = "push"
+//            liked = true
+//            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
+//        }
 
         binding.hotelName.text = hotelName
 

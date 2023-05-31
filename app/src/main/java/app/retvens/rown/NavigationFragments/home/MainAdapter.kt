@@ -388,11 +388,11 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         voteOption(banner.post_id,item.Options[0].option_id)
 
 
-                        binding.Option1Votes.text = "${vote} votes"
+                        binding.Option1Votes.text = "${vote1.size} votes"
 
 
-                        val totalVotes = vote + vote2.size
-                        val completedTasks = vote
+                        val totalVotes = vote1.size + vote2.size
+                        val completedTasks = totalVotes
                         val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
                         if (!completedPercentage.isNaN()) {
                             progressBarOption1.setProgressPercentage(completedPercentage)

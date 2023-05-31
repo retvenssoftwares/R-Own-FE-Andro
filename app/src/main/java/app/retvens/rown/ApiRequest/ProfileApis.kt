@@ -6,9 +6,13 @@ import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelDetailsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsName
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
+import app.retvens.rown.NavigationFragments.profile.services.UpdatePrice
+import app.retvens.rown.sideNavigation.faqData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -61,4 +65,17 @@ interface ProfileApis {
         @Part("hotelAddress") hotelAddress: RequestBody
     ):Call<UpdateResponse>
 
+    @GET("getfaq")
+    fun getFAQ() : Call<List<faqData>>
+
+    @DELETE("deleteservice/{vendorServiceId}")
+    fun deleteService(
+        @Path("vendorServiceId") vendorServiceId : String
+    ) : Call<UpdateResponse>
+
+    @PATCH("updateprice/{vendorServiceId}")
+    fun updatePrice(
+        @Path("vendorServiceId") vendorServiceId : String,
+        @Body updatePrice: UpdatePrice
+    ) : Call<UpdateResponse>
 }

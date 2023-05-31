@@ -51,6 +51,15 @@
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintTop_toTopOf="parent"/>
 
+   <ImageView
+       android:id="@+id/notPosted"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="40dp"
+       android:visibility="gone"
+       android:layout_gravity="center"
+       android:src="@drawable/svg_not_posted"/>
+
    <androidx.cardview.widget.CardView
        android:id="@+id/addService"
        android:layout_width="match_parent"
@@ -80,5 +89,6 @@
           android:text="ADD SERVICES"/>
 
    </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>

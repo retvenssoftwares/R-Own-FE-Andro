@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +41,7 @@ class ServicesFragment(val userId:String) : Fragment(), BottomSheetServiceName.O
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     lateinit var empty : TextView
+    lateinit var notPosted : ImageView
 
     lateinit var addService: CardView
     override fun onCreateView(
@@ -58,6 +60,7 @@ class ServicesFragment(val userId:String) : Fragment(), BottomSheetServiceName.O
         servicesRecycler.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
+        notPosted = view.findViewById(R.id.notPosted)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
@@ -94,13 +97,12 @@ class ServicesFragment(val userId:String) : Fragment(), BottomSheetServiceName.O
                                 ProfileServicesAdapter(response, requireContext())
                             servicesRecycler.adapter = profileServicesAdapter
                             profileServicesAdapter.notifyDataSetChanged()
-                            Toast.makeText(context, response.toString(), Toast.LENGTH_SHORT).show()
                             Log.d("res", response.toString())
                         } else {
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
-                            empty.text = "You did'nt add any service yet"
-                            empty.visibility = View.VISIBLE
+//                            empty.text = "You did'nt add any service yet"
+                            notPosted.visibility = View.VISIBLE
                         }
                         } else {
                         addService.visibility = View.GONE
