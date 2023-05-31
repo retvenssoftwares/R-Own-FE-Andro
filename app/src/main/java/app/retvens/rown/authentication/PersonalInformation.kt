@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -46,8 +45,10 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.mesibo.api.Mesibo
+import com.mesibo.api.MesiboProfile
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import id.zelory.compressor.decodeSampledBitmapFromFile
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -80,6 +81,7 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var username : String
     lateinit var eMail : String
     lateinit var path:String
+    private var mGroupId: Long = 0
 
     private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -138,7 +140,7 @@ class PersonalInformation : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-
+        mGroupId = 0
 
     }
 
@@ -154,7 +156,6 @@ class PersonalInformation : AppCompatActivity() {
 
                 if (response.isSuccessful){
                     val image = response.body()?.Profile_pic
-                    path = image!!
                     val name = response.body()?.Full_name
                     saveFullName(applicationContext, name.toString())
                     saveProfileImage(applicationContext, "$image")
@@ -302,6 +303,20 @@ class PersonalInformation : AppCompatActivity() {
             val outputStream = FileOutputStream(file)
             inputStream!!.copyTo(outputStream)
 
+            val profile = getProfile()
+            profile.image = decodeSampledBitmapFromFile(file,200,150)
+            profile.save()
+
+            Toast.makeText(applicationContext,"saved",Toast.LENGTH_SHORT).show()
+
+            val selfProfile = Mesibo.getSelfProfile()
+
+//            selfProfile.name = "John Doe"
+//            selfProfile.status = "Hey! I am using this app."
+//            selfProfile.setImage()
+//            selfProfile.save() // publish
+
+
             val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
 
             val respo  = RetrofitBuilder.retrofitBuilder.uploadUserProfile(
@@ -333,7 +348,7 @@ class PersonalInformation : AppCompatActivity() {
                             val intent = Intent(applicationContext,UserInterest::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
-//                            setMesiboProfile(username)
+                            setMesiboProfile(username)
                             startActivity(intent)
                             finish()
                         }else{
@@ -343,7 +358,7 @@ class PersonalInformation : AppCompatActivity() {
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
-//                            setMesiboProfile(username)
+                            setMesiboProfile(username)
                             startActivity(intent)
                             finish()
                         }
@@ -380,7 +395,7 @@ class PersonalInformation : AppCompatActivity() {
                             moveTo(this@PersonalInformation,"MoveToI")
                             saveFullName(applicationContext, username)
                             val intent = Intent(applicationContext,UserInterest::class.java)
-//                            setMesiboProfile(username)
+                            setMesiboProfile(username)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
                             startActivity(intent)
@@ -392,7 +407,7 @@ class PersonalInformation : AppCompatActivity() {
                             val intent = Intent(applicationContext,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             intent.putExtra("user",username)
-//                            setMesiboProfile(username)
+                            setMesiboProfile(username)
                             startActivity(intent)
                             finish()
                         }
@@ -410,19 +425,15 @@ class PersonalInformation : AppCompatActivity() {
 
     private fun setMesiboProfile(username: String) {
 
-        val imagePath = path
-
-
-        val bitmap: Bitmap = BitmapFactory.decodeFile(imagePath)
 
         val selfProfile = Mesibo.getSelfProfile()
 
         selfProfile.name = username
         selfProfile.status = "Hey! I am using this app."
-        selfProfile.setImage(bitmap)
+//        selfProfile.setImage(bitmap)
         selfProfile.save() // publish
 
-        Toast.makeText(applicationContext,"mesibo profile set",Toast.LENGTH_SHORT).show()
+
 
     }
 
@@ -486,9 +497,9 @@ class PersonalInformation : AppCompatActivity() {
             val imageUri = data.data
             path = imageUri?.path!!
             if (imageUri != null) {
+
 //                compressImage(imageUri)
                 cropImage(imageUri)
-
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val resultingImage = CropImage.getActivityResult(data)
@@ -503,6 +514,11 @@ class PersonalInformation : AppCompatActivity() {
             }
 
         }
+    }
+
+    fun getProfile(): MesiboProfile {
+        if (mGroupId > 0) return Mesibo.getProfile(mGroupId)
+        return Mesibo.getSelfProfile()
     }
 
     private fun createImageUri(): Uri? {

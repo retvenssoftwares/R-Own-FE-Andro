@@ -8,9 +8,11 @@
 
 package app.retvens.rown.MessagingModule;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -22,11 +24,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboMessage;
@@ -38,9 +44,11 @@ import app.retvens.rown.R;
 
 public class MesiboMessagingActivity extends AppCompatActivity implements MesiboMessagingFragment.FragmentListener, Mesibo.ConnectionListener {
 
+    private static final int REQUEST_CAMERA_PERMISSION = 0;
     static int FROM_MESSAGING_ACTIVITY = 1;
     /* access modifiers changed from: private */
     public ActionMode mActionMode = null;
+    private static final int PERMISSION_REQUEST_CODE = 123;
     /* access modifiers changed from: private */
     public MesiboUI.Listener mMesiboUIHelperlistener = null;
     /* access modifiers changed from: private */
@@ -59,6 +67,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
     private Toolbar mToolbar = null;
     private TextView mUserStatus = null;
     private ImageView isOnlineDot;
+
 
     /* access modifiers changed from: protected */
     @SuppressLint("MissingInflatedId")
@@ -266,22 +275,14 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         MesiboMessagingActivity.super.onDestroy();
     }
 
+    @Override
     public void onBackPressed() {
         MessagingFragment f = this.mFragment;
 
         if (f == null || !f.Mesibo_onBackPressed()) {
-            MesiboMessagingActivity.super.onBackPressed();
-            Intent mainActivity = new Intent(MesiboMessagingActivity.this, DashBoardActivity.class);
-            startActivity(mainActivity);
+            super.onBackPressed();
             finish();
         }
-//        else {
-//            Intent mainActivity = new Intent(MesiboMessagingActivity.this, MesiboUserListActivityNew.class);
-//            startActivity(mainActivity);
-//            finish();
-//            Toast.makeText(this, "that", Toast.LENGTH_SHORT).show();
-//
-//        }
     }
 
 
@@ -354,9 +355,12 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         Utils.showAlert(this, title, message);
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         this.mFragment.Mesibo_onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.e("code", String.valueOf(requestCode));
     }
 
     /* access modifiers changed from: protected */

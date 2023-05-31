@@ -55,7 +55,7 @@ class MediaFragment(val userId: String) : Fragment() {
 
     private fun getMedia(userId: String) {
 
-        val getMedia = RetrofitBuilder.feedsApi.getUserProfileMedia(userId,"1")
+        val getMedia = RetrofitBuilder.feedsApi.getUserProfileMedia(userId,userId,"1")
 
         getMedia.enqueue(object : Callback<List<PostsDataClass>?> {
             override fun onResponse(

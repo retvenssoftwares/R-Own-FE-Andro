@@ -748,7 +748,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     status = profile.getName() + " is ";
                 }
 
-                status = status + getContext().getResources().getString(R.string.typing_text);
+                status = status + "Typing..." ;
             } else if (profile.isChatting() && 0L == groupid) {
                 status = this.mMesiboUIOptions.joinedIndicationTitle;
             } else if (profile.isOnline() && 0L == groupid) {
@@ -1346,14 +1346,15 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     public void onMapReady(GoogleMap googleMap) {
     }
 
+
     public void Mesibo_onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (101 == requestCode) {
-            for (int i = 0; i < grantResults.length; ++i) {
-                if (grantResults[i] == -1) {
-                    this.getListener().Mesibo_onError(1, "Permission Denied", "One or more required permission was denied by you! Change the permission from settings and try again");
-                    return;
-                }
-            }
+//            for (int i = 0; i < grantResults.length; ++i) {
+//                if (grantResults[i] == -1) {
+//                    this.getListener().Mesibo_onError(1, "Permission Denied", "One or more required permission was denied by you! Change the permission from settings and try again");
+//                    return;
+//                }
+//            }
 
             this.onMediaButtonClicked(this.mMediaButtonClicked);
             this.mMediaButtonClicked = -1;

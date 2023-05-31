@@ -80,55 +80,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <LinearLayout
-                        android:id="@+id/liked_by_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/liked_by_profile"
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:layout_marginStart="30dp"
-                            android:src="@drawable/png_profile"
-                            app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
-
-                        <TextView
-                            android:id="@+id/liked_by_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="13dp"
-                            android:fontFamily="@font/montserrat_semibold"
-                            android:text="Karsten Dobrev"
-                            android:textColor="@color/black"
-                            android:textSize="12dp"
-                            app:layout_constraintBottom_toBottomOf="@id/post_liked_profile"
-                            app:layout_constraintStart_toEndOf="@id/post_liked_profile"
-                            app:layout_constraintTop_toTopOf="@id/post_liked_profile" />
-
-                        <TextView
-                            android:id="@+id/post_liked"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:text="liked this post"
-                            android:textColor="@color/grey_60"
-                            android:textSize="12dp" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginHorizontal="30dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@color/grey_20" />
-
                 </LinearLayout>
+
+
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/post_profile"
@@ -270,72 +224,72 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/lb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:text="Liked By"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/postLayout" />
+<!--            <TextView-->
+<!--                android:id="@+id/lb"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="12dp"-->
+<!--                android:text="Liked By"-->
+<!--                android:textColor="@color/black"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/postLayout" />-->
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profileOnLikes"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:elevation="6dp"
-                app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-                android:src="@drawable/png_profile"
-                app:layout_constraintStart_toStartOf="@id/lb"
-                app:layout_constraintTop_toBottomOf="@id/lb"/>
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:id="@+id/profileOnLikes"-->
+<!--                android:layout_width="26dp"-->
+<!--                android:layout_height="26dp"-->
+<!--                android:elevation="6dp"-->
+<!--                app:shapeAppearanceOverlay="@style/RoundedCornerImage"-->
+<!--                android:src="@drawable/png_profile"-->
+<!--                app:layout_constraintStart_toStartOf="@id/lb"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/lb"/>-->
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profileOnLikes1"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:elevation="6dp"
-                app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-                android:src="@drawable/png_profile"
-                android:layout_marginStart="-10dp"
-                app:layout_constraintStart_toEndOf="@id/profileOnLikes"
-                app:layout_constraintTop_toTopOf="@id/profileOnLikes"
-                app:layout_constraintBottom_toBottomOf="@id/profileOnLikes"/>
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:id="@+id/profileOnLikes1"-->
+<!--                android:layout_width="26dp"-->
+<!--                android:layout_height="26dp"-->
+<!--                android:elevation="6dp"-->
+<!--                app:shapeAppearanceOverlay="@style/RoundedCornerImage"-->
+<!--                android:src="@drawable/png_profile"-->
+<!--                android:layout_marginStart="-10dp"-->
+<!--                app:layout_constraintStart_toEndOf="@id/profileOnLikes"-->
+<!--                app:layout_constraintTop_toTopOf="@id/profileOnLikes"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/profileOnLikes"/>-->
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profileOnLikes2"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:elevation="6dp"
-                app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-                android:src="@drawable/png_profile"
-                android:layout_marginStart="-10dp"
-                app:layout_constraintStart_toEndOf="@id/profileOnLikes1"
-                app:layout_constraintTop_toTopOf="@id/profileOnLikes1"
-                app:layout_constraintBottom_toBottomOf="@id/profileOnLikes1"/>
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:id="@+id/profileOnLikes2"-->
+<!--                android:layout_width="26dp"-->
+<!--                android:layout_height="26dp"-->
+<!--                android:elevation="6dp"-->
+<!--                app:shapeAppearanceOverlay="@style/RoundedCornerImage"-->
+<!--                android:src="@drawable/png_profile"-->
+<!--                android:layout_marginStart="-10dp"-->
+<!--                app:layout_constraintStart_toEndOf="@id/profileOnLikes1"-->
+<!--                app:layout_constraintTop_toTopOf="@id/profileOnLikes1"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/profileOnLikes1"/>-->
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profileOnLikes3"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:elevation="6dp"
-                app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-                android:src="@drawable/png_profile"
-                android:layout_marginStart="-10dp"
-                app:layout_constraintStart_toEndOf="@id/profileOnLikes2"
-                app:layout_constraintTop_toTopOf="@id/profileOnLikes2"
-                app:layout_constraintBottom_toBottomOf="@id/profileOnLikes2"/>
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:id="@+id/profileOnLikes3"-->
+<!--                android:layout_width="26dp"-->
+<!--                android:layout_height="26dp"-->
+<!--                android:elevation="6dp"-->
+<!--                app:shapeAppearanceOverlay="@style/RoundedCornerImage"-->
+<!--                android:src="@drawable/png_profile"-->
+<!--                android:layout_marginStart="-10dp"-->
+<!--                app:layout_constraintStart_toEndOf="@id/profileOnLikes2"-->
+<!--                app:layout_constraintTop_toTopOf="@id/profileOnLikes2"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/profileOnLikes2"/>-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="and 250 others"
-                android:textColor="@color/black"
-                android:layout_marginStart="6dp"
-                android:fontFamily="@font/montserrat_regular"
-                app:layout_constraintStart_toEndOf="@id/profileOnLikes3"
-                app:layout_constraintTop_toTopOf="@id/profileOnLikes3"
-                app:layout_constraintBottom_toBottomOf="@id/profileOnLikes3"/>
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="and 250 others"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:layout_marginStart="6dp"-->
+<!--                android:fontFamily="@font/montserrat_regular"-->
+<!--                app:layout_constraintStart_toEndOf="@id/profileOnLikes3"-->
+<!--                app:layout_constraintTop_toTopOf="@id/profileOnLikes3"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/profileOnLikes3"/>-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

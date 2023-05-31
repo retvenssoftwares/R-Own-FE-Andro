@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
@@ -106,7 +107,7 @@ class CreatePostEventActivityChild : AppCompatActivity(),
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(applicationContext,CreateTextPost::class.java))
+                    startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }

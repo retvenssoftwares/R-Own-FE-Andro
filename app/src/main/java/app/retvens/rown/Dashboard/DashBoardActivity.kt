@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -38,6 +39,7 @@ import app.retvens.rown.NavigationFragments.ProfileFragmentForVendors
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheet.Companion.TAG
 import app.retvens.rown.databinding.ActivityDashBoardBinding
 import app.retvens.rown.sideNavigation.BugSpottedActivity
 import app.retvens.rown.sideNavigation.ChatWithUsActivity
@@ -56,10 +58,12 @@ import app.retvens.rown.utils.saveProfileImage
 import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -105,7 +109,7 @@ class DashBoardActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-
+        devicetoken()
 
         //setUp drawerLayout
         drawerLayout = findViewById(R.id.drawerLayout)
@@ -456,5 +460,23 @@ class DashBoardActivity : AppCompatActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
     }
+
+    fun devicetoken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+
+            Log.e("token",token.toString())
+
+        })
+    }
+
 }
 

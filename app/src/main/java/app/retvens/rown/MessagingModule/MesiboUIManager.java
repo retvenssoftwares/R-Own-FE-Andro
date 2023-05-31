@@ -18,8 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.mesibo.api.Mesibo;
 import com.mesibo.mediapicker.MediaPicker;
 import com.mesibo.messaging.MesiboEndToEndEncryptionActivity;
-import com.mesibo.messaging.MesiboMessagingActivity;
-import com.mesibo.messaging.MesiboUserListActivity;
+ import com.mesibo.messaging.MesiboUserListActivity;
 
 import java.lang.ref.WeakReference;
 
@@ -128,14 +127,14 @@ public class MesiboUIManager {
     }
 
     public static void launchMessagingActivity(Context context, long forwardid, String peer, long groupid) {
-        MesiboMessagingActivity oldActivity;
+        app.retvens.rown.MessagingModule.MesiboMessagingActivity oldActivity;
         Intent intent = new Intent(context, app.retvens.rown.MessagingModule.MesiboMessagingActivity.class);
 
         intent.putExtra(MesiboUI.PEER, peer);
         intent.putExtra(MesiboUI.GROUP_ID, groupid);
         intent.putExtra("mid", forwardid);
         context.startActivity(intent);
-        if (mMessagingActivityNew != null && (oldActivity = (MesiboMessagingActivity) mMessagingActivityNew.get()) != null) {
+        if (mMessagingActivityNew != null && (oldActivity = mMessagingActivityNew.get()) != null) {
             oldActivity.finish();
         }
     }

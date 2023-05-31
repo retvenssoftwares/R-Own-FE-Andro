@@ -119,9 +119,10 @@ interface FeedsApi {
         @Path("location")location: String
     ):Call<List<UpcomingEventDataclass>>
 
-    @GET("getpostmedia/{user_id}")
+    @GET("getpostmedia/{user_id}/{User_id}")
     fun getUserProfileMedia(
         @Path("user_id")user_id:String,
+        @Path("User_id")User_id:String,
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
 
