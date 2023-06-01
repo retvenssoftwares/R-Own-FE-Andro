@@ -42,20 +42,18 @@ fun saveConnectionNo(context:Context,connectionNo : String){
     editor.putString("connectionNo", connectionNo)
     editor.apply()
 }
+fun clearConnectionNo(context: Context){
+    val settings = context.getSharedPreferences("SaveConnectionNo", Context.MODE_PRIVATE)
+    val editor = settings.edit()
+    editor.clear()
+    editor.apply()
+}
 
 fun saveProfileImage(context:Context,profile : String){
     val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveProfileImage",
         AppCompatActivity.MODE_PRIVATE
     ).edit()
     editor.putString("profile_image", profile)
-    editor.apply()
-}
-
-fun saveProgress(context:Context,progress : String){
-    val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveProgress",
-        AppCompatActivity.MODE_PRIVATE
-    ).edit()
-    editor.putString("progress", progress)
     editor.apply()
 }
 fun clearUserId(context: Context){
@@ -73,19 +71,6 @@ fun clearFullName(context: Context){
 
 fun clearProfileImage(context: Context){
     val settings = context.getSharedPreferences("SaveProfileImage", Context.MODE_PRIVATE)
-    val editor = settings.edit()
-    editor.clear()
-    editor.apply()
-}
-
-fun clearProgress(context: Context){
-    val settings = context.getSharedPreferences("SaveProgress", Context.MODE_PRIVATE)
-    val editor = settings.edit()
-    editor.clear()
-    editor.apply()
-}
-fun clearUserType(context: Context){
-    val settings = context.getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
     val editor = settings.edit()
     editor.clear()
     editor.apply()

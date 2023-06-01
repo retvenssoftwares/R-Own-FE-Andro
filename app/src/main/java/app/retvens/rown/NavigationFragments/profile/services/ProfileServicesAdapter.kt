@@ -93,7 +93,7 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                Toast.makeText(context, response.body()!!.message.toString(), Toast.LENGTH_SHORT).show()
+
             }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                 Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
@@ -128,7 +128,7 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                Toast.makeText(context,response.body()!!.message.toString(), Toast.LENGTH_SHORT).show()
+
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {

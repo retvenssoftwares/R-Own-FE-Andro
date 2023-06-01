@@ -204,6 +204,41 @@
                </androidx.cardview.widget.CardView>
 
                <androidx.cardview.widget.CardView
+                   android:id="@+id/postedJobsSn"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginVertical="4dp"
+                   android:layout_marginHorizontal="8dp"
+                   app:cardCornerRadius="12dp"
+                   android:visibility="gone"
+                   app:cardBackgroundColor="@color/white"
+                   app:cardElevation="6dp">
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="center_vertical"
+                       android:orientation="horizontal">
+
+                       <TextView
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:text="Jobs posted"
+                           android:textSize="16dp"
+                           android:layout_marginStart="12dp"
+                           android:layout_weight="1"
+                           android:paddingVertical="12dp"
+                           android:paddingStart="10dp"
+                           android:drawableStart="@drawable/svg_job_posted_side_nav"
+                           android:drawablePadding="10dp"
+                           android:textColor="@color/black"
+                           android:fontFamily="@font/montserrat_semibold"/>
+
+                   </LinearLayout>
+
+               </androidx.cardview.widget.CardView>
+
+               <androidx.cardview.widget.CardView
                    android:id="@+id/eventsSn"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
@@ -278,6 +313,7 @@
                    android:layout_marginVertical="4dp"
                    android:layout_marginHorizontal="8dp"
                    app:cardCornerRadius="12dp"
+                   android:visibility="gone"
                    app:cardBackgroundColor="@color/white"
                    app:cardElevation="6dp">
 
@@ -312,6 +348,7 @@
                    android:layout_marginVertical="4dp"
                    android:layout_marginHorizontal="8dp"
                    app:cardCornerRadius="12dp"
+                   android:visibility="gone"
                    app:cardBackgroundColor="@color/white"
                    app:cardElevation="6dp">
 
@@ -346,6 +383,7 @@
                    android:layout_marginVertical="4dp"
                    android:layout_marginHorizontal="8dp"
                    app:cardCornerRadius="12dp"
+                   android:visibility="gone"
                    app:cardBackgroundColor="@color/white"
                    app:cardElevation="6dp">
 

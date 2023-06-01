@@ -43,6 +43,9 @@ import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetRating
+import app.retvens.rown.utils.getRandomString
+import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -299,11 +302,6 @@ class HotelOwnerFragment : Fragment(), BackHandler,
 
                     fragment.arguments = bundle
 
-                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-                    val editor = onboardingPrefs.edit()
-                    editor.putBoolean("HotelOwnerFragment", false)
-                    editor.apply()
-
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
@@ -336,7 +334,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
 
 
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file =  File(requireContext().cacheDir, "cropped_${requireContext().contentResolver.getFileName(croppedOwnerCoverImageUri!!)}.jpg")
+        val file =  File(requireContext().cacheDir, "${getRandomString(6)}.jpg")
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
@@ -349,7 +347,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val inputStream1 = FileInputStream(parcelFileDescriptor1.fileDescriptor)
-        val file1 = File(requireContext().cacheDir, requireContext().contentResolver.getFileName(croppedOwnerProfileImageUri!!) + ".jpg")
+        val file1 = File(requireContext().cacheDir, "${getRandomString(6)}.jpg")
         val outputStream1 = FileOutputStream(file1)
         inputStream1.copyTo(outputStream1)
         val body1 = UploadRequestBody(file1,"image")
@@ -370,15 +368,10 @@ class HotelOwnerFragment : Fragment(), BackHandler,
             ) {
                 if (response.isSuccessful && isAdded){
 
-                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-                    val editor = onboardingPrefs.edit()
-                    editor.putBoolean("HotelOwnerFragment", true)
-                    editor.apply()
+                    profileComStatus(context!!, "100")
+                    profileCompletionStatus = "100"
 
-                    val response = response.body()!!
-                    saveProgress(requireContext(), "100")
                     progressDialog.dismiss()
-//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                     activity?.finish()
                 }else{

@@ -2,42 +2,33 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.BasicInfoClass
 import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
-import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobTitle
-import app.retvens.rown.utils.saveProgress
+import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -56,7 +47,6 @@ class BasicInformationFragment : Fragment(),
     private var nextFrag : Int = 0
 
     private lateinit var myRoleInHos : TextInputLayout
-    lateinit var myRoleInJob : TextInputLayout
     lateinit var myRoleInHosET : TextInputEditText
     lateinit var myRecentJobET : TextInputEditText
 
@@ -82,7 +72,6 @@ class BasicInformationFragment : Fragment(),
         val switchHotelier = view.findViewById<ImageView>(R.id.switch_hotel)
         val switchHotelText = view.findViewById<TextView>(R.id.switch_hotel_text)
         myRoleInHos = view.findViewById(R.id.my_role_hospitality)
-        myRoleInJob = view.findViewById(R.id.recentJobLayout)
         myRoleInHosET = view.findViewById(R.id.myRoleInHosET)
         myRecentJobET = view.findViewById(R.id.my_recent_job)
 
@@ -164,7 +153,7 @@ class BasicInformationFragment : Fragment(),
                 }
             } else {
                 if (myRecentJobET.text.toString() == "Most Recent Job Title"){
-                    myRoleInJob.error = "Select your Recent Job Title"
+                    recentJob.error = "Select your Recent Job Title"
                 } else  {
                     progressDialog = Dialog(requireContext())
                     progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -202,29 +191,21 @@ class BasicInformationFragment : Fragment(),
             ) {
                 if (response.isSuccessful && isAdded){
 
-                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-                    val editor = onboardingPrefs.edit()
-                    editor.putBoolean("BasicInformationFragment", false)
-                    editor.apply()
-
-                    val response = response.body()!!
-//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
-
                     progressDialog.dismiss()
-
-                    editor.putInt("nextFrag", nextFrag)
-                    editor.apply()
 
                     when (nextFrag) {
                         0 -> {
-                            saveProgress(requireContext(), "80")
+                            profileComStatus(context!!, "80")
+                            profileCompletionStatus = "80"
                             val fragment = JobTitleFragment()
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
                             transaction?.commit()
                         }
                         1 -> {
-                            saveProgress(requireContext(), "80")
+                            profileComStatus(context!!, "75")
+                            profileCompletionStatus = "75"
+                            app.retvens.rown.utils.role = "Hotel Owner"
                             val fragment = HotelOwnerFragment()
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
@@ -232,7 +213,8 @@ class BasicInformationFragment : Fragment(),
 
                         }
                         2 -> {
-                            saveProgress(requireContext(), "80")
+                            profileComStatus(context!!, "85")
+                            profileCompletionStatus = "85"
                             val fragment = HospitalityExpertFragment()
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
@@ -240,7 +222,9 @@ class BasicInformationFragment : Fragment(),
 
                         }
                         3 -> {
-                            saveProgress(requireContext(), "80")
+                            profileComStatus(context!!, "90")
+                            profileCompletionStatus = "90"
+                            app.retvens.rown.utils.role = "Business Vendor / Freelancer"
                             val fragment = VendorsFragment()
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)

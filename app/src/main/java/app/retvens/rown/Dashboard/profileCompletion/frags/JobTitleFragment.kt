@@ -2,7 +2,6 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -17,8 +16,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -35,7 +32,8 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.bottomsheet.BottomSheetJobType
-import app.retvens.rown.utils.saveProgress
+import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -152,16 +150,13 @@ class JobTitleFragment : Fragment(), BackHandler,
             ) {
                 if (response.isSuccessful && isAdded){
 
-                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-                    val editor = onboardingPrefs.edit()
-                    editor.putBoolean("JobTitleFragment", false)
-                    editor.apply()
+                    profileComStatus(context!!, "100")
+                    profileCompletionStatus = "100"
 
-                    saveProgress(requireContext(), "100")
-                    val response = response.body()!!
                     progressDialog.dismiss()
-//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+
                     startActivity(Intent(context,DashBoardActivity::class.java))
+                    activity?.finish()
                 }else{
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()

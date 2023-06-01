@@ -21,16 +21,20 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
 import app.retvens.rown.DataCollections.ProfileCompletion.VerifyUsername
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.saveProgress
 import app.retvens.rown.utils.saveUserId
 import com.bumptech.glide.Glide
@@ -69,7 +73,7 @@ class UsernameFragment : Fragment() {
 
     var user_id : String ?= ""
 
-    var isUsernameVerified : Boolean ?= false
+    var isUsernameVerified = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -123,9 +127,14 @@ class UsernameFragment : Fragment() {
         userNameLayout.setEndIconOnClickListener {
             if(userName.length() < 4) {
                 Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
-            } else {
+            } else if (!isUsernameVerified) {
                 verifyUserName()
             }
+        }
+        userName.doAfterTextChanged {
+            isUsernameVerified = false
+            userNameLayout.setEndIconDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.svg_verify))
+            usernameVerified.text = ""
         }
 
         val complete = view.findViewById<CardView>(R.id.card_complete_continue)
@@ -144,14 +153,16 @@ class UsernameFragment : Fragment() {
                 lastNameLayout.isErrorEnabled = false
                 firstNameLayout.isErrorEnabled = false
                 dobEtLayout.isErrorEnabled = false
-                Toast.makeText(context, "Please enter a valid username", Toast.LENGTH_SHORT).show()
+                usernameVerified.setTextColor(ContextCompat.getColor(requireContext(), R.color.error))
+                usernameVerified.text ="Please enter a valid username"
             }
-//            else if(!isUsernameVerified!!){
-//                lastNameLayout.isErrorEnabled = false
-//                firstNameLayout.isErrorEnabled = false
-//                dobEtLayout.isErrorEnabled = false
-//                usernameVerified.text = "Please verify your username"
-//            }
+            else if(!isUsernameVerified){
+                lastNameLayout.isErrorEnabled = false
+                firstNameLayout.isErrorEnabled = false
+                dobEtLayout.isErrorEnabled = false
+                usernameVerified.setTextColor(ContextCompat.getColor(requireContext(), R.color.error))
+                usernameVerified.text = "Please verify your username"
+            }
             else {
                 lastNameLayout.isErrorEnabled = false
                 firstNameLayout.isErrorEnabled = false
@@ -198,11 +209,13 @@ class UsernameFragment : Fragment() {
                 if (response.isSuccessful){
                     if (response.body()?.message == "user_name already exist"){
                         isUsernameVerified = false
+                        usernameVerified.setTextColor(ContextCompat.getColor(requireContext(), R.color.error))
                         usernameVerified.text = "Username already exist, Please enter another username"
                     } else {
                         isUsernameVerified = true
                         userNameLayout.setEndIconDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.png_check))
                         usernameVerified.text = "Congratulations! $username username is available"
+                        usernameVerified.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_own))
                     }
                 } else {
                     usernameVerified.text = "Retry - ${response.code()}"
@@ -239,24 +252,9 @@ class UsernameFragment : Fragment() {
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful){
-//
-                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-
-                    editor = onboardingPrefs.edit()
-
-                    editor.putBoolean("UsernameFragment", false)
-                    Log.e("Onboarding", "UsernameFragment set to false")
-                    editor.apply()
-
-//                    DashBoardActivity.number.progress = "50"
-                    saveProgress(requireContext(), "60")
-
-                    val prefValue = onboardingPrefs.getBoolean("UsernameFragment", false)
-                    Log.e("PrefValue", "UsernameFragment preference value: $prefValue")
-
-                    val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
+                    profileComStatus(context!!, "60")
+                    profileCompletionStatus = "60"
                     val fragment = LocationFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)

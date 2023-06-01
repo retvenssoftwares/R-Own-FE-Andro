@@ -12,6 +12,8 @@ data class UserProfileRequestItem(
     val Post_count: Int,
     val Profile_pic: String?,
     val User_id: String,
+    val Role: String,
+    val profileCompletionStatus: String,
     val __v: Int,
     val _id: String,
     val connection_count: Int,

@@ -5,9 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.authentication.*
+import app.retvens.rown.utils.phone
+import app.retvens.rown.utils.profileCompletionStatus
+import app.retvens.rown.utils.role
+import app.retvens.rown.utils.saveConnectionNo
+import app.retvens.rown.utils.saveFullName
+import app.retvens.rown.utils.saveProfileImage
 import com.google.firebase.auth.FirebaseAuth
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        getProfileInfo()
 
         auth = FirebaseAuth.getInstance()
 
@@ -58,5 +71,50 @@ class MainActivity : AppCompatActivity() {
 
 
         },2000)
+    }
+
+    private fun getProfileInfo() {
+
+        val sharedPreferences =
+            applicationContext?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        if (user_id != "") {
+            val send = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
+
+            send.enqueue(object : Callback<UserProfileRequestItem?> {
+                override fun onResponse(
+                    call: Call<UserProfileRequestItem?>,
+                    response: Response<UserProfileRequestItem?>
+                ) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null) {
+                            val response = response.body()!!
+                            phone = response.Phone
+                            role = response.Role
+                            profileCompletionStatus = response.profileCompletionStatus
+                            saveConnectionNo(
+                                applicationContext,
+                                response.connection_count.toString()
+                            )
+                            saveFullName(applicationContext, "${response.Full_name}")
+                            saveProfileImage(applicationContext, "${response.Profile_pic}")
+                        }
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+
+        }
     }
 }

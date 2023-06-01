@@ -45,7 +45,11 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheet
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetRating
+import app.retvens.rown.utils.getRandomString
+import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -64,7 +68,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRatingClickListener{
+class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBottomRatingClickListener, BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener{
 
     lateinit var dialog: Dialog
     var PICK_IMAGE_REQUEST_CODE : Int = 0
@@ -161,7 +165,10 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
             }
         }
         location.setOnClickListener {
-            openLocationSheet()
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
 
         rating.setOnClickListener {
@@ -183,8 +190,14 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                 Toast.makeText(context, "Please select an Cover", Toast.LENGTH_SHORT).show()
             } else if(nameET.length() < 2){
                 nameTIL.error = "Please enter Chain name"
+            } else if(location.text.toString() == "Select Your Location"){
+                locationTIL.error = "Please Select Your Location"
+            } else if(rating.text.toString() == "Select Rating"){
+                ratingTIL.error = "Please Select Rating"
             } else {
                 nameTIL.isErrorEnabled = false
+                locationTIL.isErrorEnabled = false
+                ratingTIL.isErrorEnabled = false
                 progressDialog = Dialog(requireContext())
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 progressDialog.setCancelable(false)
@@ -201,9 +214,11 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
     private fun setUpChainAdapter() {
         chainHotelList = mutableListOf()
 
-        if (counter < n){
+        if (counter <= n){
 
-            counter++
+            if (counter < n) {
+                counter++
+            }
             uploadData()
 
             counterText.text = "$counter/$n"
@@ -212,9 +227,14 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
             locationTIL.setHint("Hotel $counter Location")
             ratingTIL.setHint("Hotel $counter Star rating")
 
+            nameET.setText("")
+            location.setText("Select Your Location")
+            rating.setText("Select Rating")
+
         }else {
             Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
-            saveProgress(requireContext(), "100")
+            profileCompletionStatus = "100"
+
             progressDialog.dismiss()
             startActivity(Intent(requireContext(),DashBoardActivity::class.java))
             activity?.finish()
@@ -236,7 +256,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
 
 
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file =  File(requireContext().cacheDir, "cropped_${requireContext().contentResolver.getFileName(croppedHotelChainCoverImageUri!!)}.jpg")
+        val file =  File(requireContext().cacheDir, "${getRandomString(6)}.jpg")
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
@@ -245,7 +265,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainLocation),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainRating),
-            MultipartBody.Part.createFormData("hotelLogo", file.name, body),
+            MultipartBody.Part.createFormData("hotelCoverpic", file.name, body),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id)
         )
 
@@ -255,16 +275,10 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+                    profileComStatus(context!!, "100")
+                    profileCompletionStatus = "100"
 
-                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-                    val editor = onboardingPrefs.edit()
-                    editor.putBoolean("HotelOwnerChainFragment", true)
-                    editor.apply()
-
-                    val response = response.body()!!
-                    saveProgress(requireContext(), "100")
                     progressDialog.dismiss()
-//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                 }else{
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message().toString(),Toast.LENGTH_SHORT).show()
@@ -378,8 +392,8 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
         val options = CropImage.activity(imageUri)
             .setGuidelines(CropImageView.Guidelines.OFF).also {
 
-                it.setAspectRatio(1, 1)
-                    .setCropShape(CropImageView.CropShape.OVAL)
+                it.setAspectRatio(4, 3)
+                    .setCropShape(CropImageView.CropShape.RECTANGLE)
                     .setOutputCompressQuality(20)
                     .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
                     .start(requireContext(), this)
@@ -425,5 +439,8 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
             returnCursor.close()
         }
         return name
+    }
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        location.setText(CountryStateCityFrBo)
     }
 }

@@ -124,7 +124,7 @@ class ServicesFragment(val userId:String) : Fragment(), BottomSheetServiceName.O
             }
         })
     }
-    override fun bottomSNClick(serviceName: String, id: String) {
+    override fun bottomSNClick(serviceName: String) {
 
     }
 }

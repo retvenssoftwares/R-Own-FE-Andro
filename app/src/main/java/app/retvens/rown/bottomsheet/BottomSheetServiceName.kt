@@ -43,7 +43,7 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
         return BottomSheetServiceName()
     }
     interface OnBottomSNClickListener{
-        fun bottomSNClick(serviceName : String, id : String)
+        fun bottomSNClick(serviceName : String)
     }
 
     companion object {
@@ -55,6 +55,7 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
 
     private lateinit var vendorServicesAdapter: VendorServicesAdapter
     private  var selectedServices:ArrayList<String> = ArrayList()
+    private  var selectedServicesName:ArrayList<String> = ArrayList()
     private var vendorId:String = ""
     private lateinit var searchBar: EditText
 
@@ -84,15 +85,16 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
         getBottomServices()
         addService = view.findViewById(R.id.addService)
         addService.setOnClickListener {
+            progressDialog = Dialog(requireContext())
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.setCancelable(false)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
+
             selectedServices.forEach {
-                progressDialog = Dialog(requireContext())
-                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                progressDialog.setContentView(R.layout.progress_dialoge)
-                progressDialog.setCancelable(false)
-                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-                Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
-                progressDialog.show()
                 setServices(it)
             }
         }
@@ -112,8 +114,8 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
                 dismiss()
                 }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                progressDialog.dismiss()
                 if (isAdded){
+                    progressDialog.dismiss()
                     Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -172,12 +174,16 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
 
             override fun onJobClick(job: VendorServicesData) {
                 val index = selectedServices.indexOf(job.serviceId)
+                val index1 = selectedServices.indexOf(job.service_name)
                 if (index == -1) {
                     selectedServices.add(job.serviceId)
+                    selectedServicesName.add(job.service_name)
                 } else {
                     selectedServices.removeAt(index)
+                    selectedServicesName.removeAt(index1)
                 }
                 Log.e("services",selectedServices.toString())
+                mListener?.bottomSNClick(selectedServicesName.toString())
             }
         })
     }

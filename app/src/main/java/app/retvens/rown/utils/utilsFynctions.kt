@@ -4,12 +4,24 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.widget.TimePicker
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
+var role = ""
+var profileCompletionStatus = "50"
+var phone = ""
 
 fun dateFormat(date : String) : String {
     // Note, MM is months, not mm
@@ -64,4 +76,23 @@ fun getRandomString(length: Int) : String {
     return (1..length)
         .map { allowedChars.random() }
         .joinToString("")
+}
+
+ fun profileComStatus(context: Context, progress : String) {
+    val sharedPreferencesU = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferencesU?.getString("user_id", "").toString()
+
+    val pcs = RetrofitBuilder.profileCompletion.profileCompletionStatus(user_id, ProfileCompletionStatus(progress))
+    pcs.enqueue(object : Callback<UpdateResponse?> {
+        override fun onResponse(
+            call: Call<UpdateResponse?>,
+            response: Response<UpdateResponse?>
+        ) {
+
+        }
+
+        override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+
+        }
+    })
 }

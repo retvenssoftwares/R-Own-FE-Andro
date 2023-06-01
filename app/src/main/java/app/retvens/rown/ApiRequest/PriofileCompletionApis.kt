@@ -1,6 +1,7 @@
 package app.retvens.rown.ApiRequest
 
 import androidx.room.SkipQueryVerification
+import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
 import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.DataCollections.location.CityData
 import app.retvens.rown.DataCollections.location.CountryData
@@ -54,6 +55,12 @@ interface PriofileCompletionApis{
     ):Call<UpdateResponse>
 
     @PATCH("/update/{user_id}")
+    fun profileCompletionStatus(
+        @Path("user_id") user_id : String,
+        @Body profileCompletionStatus : ProfileCompletionStatus
+    ):Call<UpdateResponse>
+
+    @PATCH("/update/{user_id}")
     fun setHospitalityExpertDetails(
         @Path("user_id") user_id : String,
         @Body details: HospitalityexpertData
@@ -82,7 +89,7 @@ interface PriofileCompletionApis{
         @Part("hotelName") Name: RequestBody,
         @Part("hotelAddress") address: RequestBody,
         @Part("hotelRating") hotel_rating: RequestBody,
-        @Part hotelLogo: MultipartBody.Part,
+        @Part hotelCoverpic: MultipartBody.Part,
         @Part("user_id") id: RequestBody,
     ): Call<UpdateResponse>
 

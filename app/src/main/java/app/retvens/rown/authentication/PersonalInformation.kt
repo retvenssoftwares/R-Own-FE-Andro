@@ -38,6 +38,9 @@ import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
 import app.retvens.rown.utils.moveTo
+import app.retvens.rown.utils.phone
+import app.retvens.rown.utils.profileCompletionStatus
+import app.retvens.rown.utils.role
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
@@ -157,6 +160,9 @@ class PersonalInformation : AppCompatActivity() {
                 if (response.isSuccessful){
                     val image = response.body()?.Profile_pic
                     val name = response.body()?.Full_name
+                    phone = response.body()!!.Phone
+                    role = response.body()!!.Role
+                    profileCompletionStatus = response.body()!!.profileCompletionStatus
                     saveFullName(applicationContext, name.toString())
                     saveProfileImage(applicationContext, "$image")
                     val mail = response.body()?.Email

@@ -26,6 +26,8 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
+import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -123,15 +125,9 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
-                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-                    val editor = onboardingPrefs.edit()
-                    editor.putBoolean("LocationFragment", false)
-                    editor.apply()
-
                     progressDialog.dismiss()
-                    val response = response.body()!!
-//                    Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
-                    saveProgress(requireContext(), "70")
+                    profileComStatus(context!!, "70")
+                    profileCompletionStatus = "70"
                     val fragment = BasicInformationFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)

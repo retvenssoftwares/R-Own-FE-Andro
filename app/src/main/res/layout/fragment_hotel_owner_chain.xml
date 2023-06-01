@@ -126,7 +126,7 @@
                         android:textColor="@color/black"
                         android:clickable="true"
                         android:focusable="false"
-                        android:text="5 Star"
+                        android:text="Select Rating"
                         android:editable="false"/>
 
                 </com.google.android.material.textfield.TextInputLayout>

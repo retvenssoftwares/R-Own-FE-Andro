@@ -24,7 +24,6 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
-import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
 import app.retvens.rown.NavigationFragments.EventFragment
@@ -46,15 +45,14 @@ import app.retvens.rown.sideNavigation.ChatWithUsActivity
 import app.retvens.rown.sideNavigation.FAQ_Activity
 import app.retvens.rown.sideNavigation.PrivacyPolicyActivity
 import app.retvens.rown.sideNavigation.TermsAndCActivity
+import app.retvens.rown.utils.clearConnectionNo
 import app.retvens.rown.utils.clearFullName
 import app.retvens.rown.utils.clearProfileImage
-import app.retvens.rown.utils.clearProgress
 import app.retvens.rown.utils.clearUserId
-import app.retvens.rown.utils.clearUserType
 import app.retvens.rown.utils.moveToClear
-import app.retvens.rown.utils.saveConnectionNo
-import app.retvens.rown.utils.saveFullName
-import app.retvens.rown.utils.saveProfileImage
+import app.retvens.rown.utils.phone
+import app.retvens.rown.utils.profileCompletionStatus
+import app.retvens.rown.utils.role
 import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
@@ -91,7 +89,6 @@ class DashBoardActivity : AppCompatActivity() {
     private  var userList: List<MesiboUsersData> = emptyList()
     private lateinit var profile:ImageView
     private lateinit var name:TextView
-    private lateinit var phone:TextView
 
     var connectionNo = 0
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
@@ -102,8 +99,6 @@ class DashBoardActivity : AppCompatActivity() {
 
         Thread {
             // Run whatever background code you want here.
-            getProfileInfo()
-//        replaceFragment(HomeFragment())
             replaceFragment(HomeFragment())
         }.start()
 
@@ -140,29 +135,30 @@ class DashBoardActivity : AppCompatActivity() {
         navView.addHeaderView(header)
         val sharedPreferences = getSharedPreferences("SaveProgress", AppCompatActivity.MODE_PRIVATE)
         val toPo = sharedPreferences.getString("progress", "50").toString()
-        val progress :Int = toPo.toInt()
+
+        val progressBar = header.findViewById<LinearProgressIndicator>(R.id.progress_Bar)
+
+        progressBar.progress = profileCompletionStatus.toInt()
+
+        header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $profileCompletionStatus% Complete"
+
          header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
-            if (progress == 100){
-//                Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
+            if (profileCompletionStatus == "100"){
+                Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
             }else {
                 startActivity(Intent(this, UserName::class.java))
             }
         }
-        val progressBar = header.findViewById<LinearProgressIndicator>(R.id.progress_Bar)
 
-        if (progress != null) {
-            if (progress >= 50){
-                header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $progress% Complete"
-                progressBar.progress = progress
-                if (progress == 100){
-                    header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
-                }
+            if (profileCompletionStatus == "100"){
+                header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
             }
-        }
 
         profile = header.findViewById<ImageView>(R.id.nav_profile)
         name = header.findViewById<TextView>(R.id.user_name)
-        phone = header.findViewById<TextView>(R.id.nav_phone)
+        val phoneH = header.findViewById<TextView>(R.id.nav_phone)
+
+        phoneH.text = phone
 
         val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
@@ -194,7 +190,13 @@ class DashBoardActivity : AppCompatActivity() {
                 drawerLayout.openDrawer(GravityCompat.START)
             }
         }
-
+        if (role =="Hotel Owner"){
+            binding.postedJobsSn.visibility = View.VISIBLE
+            binding.appliedJobsSn.visibility = View.GONE
+        } else {
+            binding.postedJobsSn.visibility = View.GONE
+            binding.appliedJobsSn.visibility = View.VISIBLE
+        }
         binding.notificationsSn.setOnClickListener {
             startActivity(Intent(this, NotificationActivity::class.java))
         }
@@ -206,22 +208,14 @@ class DashBoardActivity : AppCompatActivity() {
             Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
 //            startActivity(Intent(this, TermsAndCActivity::class.java))
         }
+        binding.postedJobsSn.setOnClickListener {
+
+        }
         binding.eventsSn.setOnClickListener {
             startActivity(Intent(this, AllEventCategoryActivity::class.java))
         }
         binding.blogsSn.setOnClickListener {
             startActivity(Intent(this, ViewAllBlogsActivity::class.java))
-        }
-        binding.becomeOur.setOnClickListener {
-            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
-        }
-        binding.learnWith.setOnClickListener {
-            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.knowHosWithAI.setOnClickListener {
-            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
-//            startActivity(Intent(this, TermsAndCActivity::class.java))
         }
 
         binding.navSecurity.setOnClickListener {
@@ -285,8 +279,7 @@ class DashBoardActivity : AppCompatActivity() {
             clearUserId(applicationContext)
             clearFullName(applicationContext)
             clearProfileImage(applicationContext)
-            clearProgress(applicationContext)
-            clearUserType(applicationContext)
+            clearConnectionNo(applicationContext)
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
@@ -298,17 +291,13 @@ class DashBoardActivity : AppCompatActivity() {
 
         //setUp BottomNav
         val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
-        val sp = getSharedPreferences("onboarding_prefs", AppCompatActivity.MODE_PRIVATE)
-        val hotelVendor = sp.getBoolean("VendorsFragment", false)
-        val hotelOwner = sp.getBoolean("HotelOwnerFragment", false)
-        val hotelOwnerChain = sp.getBoolean("HotelOwnerChainFragment", false)
 
         header.findViewById<CardView>(R.id.my_account).setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
-            if (hotelOwner || hotelOwnerChain){
+            if (role =="Hotel Owner"){
             replaceFragment(ProfileFragmentForHotelOwner())
             toolbar.visibility = View.GONE
-        }else if (hotelVendor){
+        }else if (role == "Business Vendor / Freelancer"){
             replaceFragment(ProfileFragmentForVendors())
             toolbar.visibility = View.GONE
         }else {
@@ -325,7 +314,7 @@ class DashBoardActivity : AppCompatActivity() {
                     toolbar.visibility = View.VISIBLE
                 }
                 R.id.jobs ->
-                    if (hotelOwner || hotelVendor || hotelOwnerChain){
+                    if (role =="Hotel Owner" || role == "Business Vendor / Freelancer"){
                         replaceFragment(JobsForHoteliers())
                         toolbar.visibility = View.GONE
                     }else{
@@ -338,19 +327,18 @@ class DashBoardActivity : AppCompatActivity() {
                 }
                 R.id.events ->
 //                    replaceFragment(EventFragmentForHoteliers())
-                    if (hotelOwner || hotelVendor || hotelOwnerChain){
+                    if (role =="Hotel Owner"){
                         replaceFragment(EventFragmentForHoteliers())
                         toolbar.visibility = View.GONE
                     }else{
                         replaceFragment(EventFragment())
                         toolbar.visibility = View.GONE
                     }
-//                R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.profile -> {
-                    if (hotelOwner || hotelOwnerChain){
+                    if (role =="Hotel Owner"){
                         replaceFragment(ProfileFragmentForHotelOwner())
                         toolbar.visibility = View.GONE
-                    }else if (hotelVendor){
+                    }else if (role == "Business Vendor / Freelancer"){
                         replaceFragment(ProfileFragmentForVendors())
                         toolbar.visibility = View.GONE
                     }else {
@@ -363,39 +351,6 @@ class DashBoardActivity : AppCompatActivity() {
             }
             true
         }
-    }
-
-    private fun getProfileInfo() {
-
-        val sharedPreferences = applicationContext?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        val send = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
-
-        send.enqueue(object : Callback<UserProfileRequestItem?> {
-            override fun onResponse(
-                call: Call<UserProfileRequestItem?>,
-                response: Response<UserProfileRequestItem?>
-            ) {
-                if (response.isSuccessful){
-                    if (response.body() != null) {
-                        val response = response.body()!!
-                        phone.text = response.Phone
-                        connectionNo = response.connection_count
-                        saveConnectionNo(applicationContext,response.connection_count.toString())
-                        saveFullName(applicationContext, "${response.Full_name}")
-                        saveProfileImage(applicationContext, "${response.Profile_pic}")
-                    }
-                }else{
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
-
     }
 
     private fun getMesiboUsers() {

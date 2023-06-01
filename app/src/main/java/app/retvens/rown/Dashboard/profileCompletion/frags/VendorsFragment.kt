@@ -35,6 +35,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -49,6 +50,9 @@ import app.retvens.rown.DataCollections.ProfileCompletion.VendorServicesData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import app.retvens.rown.bottomsheet.BottomSheetServiceName
+import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.saveProgress
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -67,7 +71,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
-class VendorsFragment : Fragment(), BackHandler {
+class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottomSNClickListener {
 
     lateinit var servicesET : TextInputEditText
     private lateinit var selectLogo:ImageView
@@ -140,7 +144,10 @@ class VendorsFragment : Fragment(), BackHandler {
 
         servicesET = view.findViewById(R.id.vendor_services_et)
         servicesET.setOnClickListener {
-            openVendorService()
+            val bottomSheet = BottomSheetServiceName()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetServiceName.SN_TAG)}
+            bottomSheet.setOnSNclickListener(this)
         }
 
         selectLogo = view.findViewById(R.id.camera_vendor)
@@ -253,7 +260,6 @@ class VendorsFragment : Fragment(), BackHandler {
                         Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     }else{
                         Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-                        Toast.makeText(requireContext(),"5",Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -298,21 +304,15 @@ class VendorsFragment : Fragment(), BackHandler {
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+                    profileComStatus(context!!, "100")
+                    profileCompletionStatus = "100"
 
-                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-                    val editor = onboardingPrefs.edit()
-                    editor.putBoolean("VendorsFragment", true)
-                    editor.apply()
-
-                    val response = response.body()!!
                     progressDialog.dismiss()
-                    saveProgress(requireContext(), "100")
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
+                    activity?.finish()
                 }else{
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-                    Toast.makeText(requireContext(),"6",Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -551,6 +551,10 @@ class VendorsFragment : Fragment(), BackHandler {
             returnCursor.close()
         }
         return name
+    }
+
+    override fun bottomSNClick(serviceName: String) {
+        servicesET.setText(serviceName)
     }
 
 }

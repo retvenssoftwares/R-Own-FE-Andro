@@ -19,6 +19,7 @@ import app.retvens.rown.DataCollections.onboarding.GetInterests
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserInterestBinding
 import app.retvens.rown.utils.moveTo
+import app.retvens.rown.utils.profileComStatus
 import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,6 +45,8 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
         user_id = sharedPreferences.getString("user_id", "").toString()
 //        Toast.makeText(applicationContext,"User_id : $user_id",Toast.LENGTH_SHORT).show()
         Log.d("update_interest","User_id : $user_id")
+
+        profileComStatus(this, "50")
 
         username = intent.getStringExtra("user").toString()
         binding.userName.text = "Hello, $username!"

@@ -15,8 +15,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -26,13 +24,13 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.bottomsheet.BottomSheetJobType
-import app.retvens.rown.utils.saveProgress
+import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -152,10 +150,11 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful &&isAdded){
-                    val response = response.body()!!
-                    saveProgress(requireContext(), "100")
-//                    Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
+                    profileComStatus(context!!, "100")
+                    profileCompletionStatus = "100"
+
                     startActivity(Intent(context, DashBoardActivity::class.java))
+                    activity?.finish()
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
