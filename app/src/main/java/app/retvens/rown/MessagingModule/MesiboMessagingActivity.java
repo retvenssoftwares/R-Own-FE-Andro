@@ -40,6 +40,8 @@ import com.mesibo.api.MesiboProfile;
 
 import app.retvens.rown.Dashboard.DashBoardActivity;
 import app.retvens.rown.R;
+import app.retvens.rown.api.MesiboCall;
+import app.retvens.rown.api.p000ui.MesiboDefaultCallActivity;
 
 
 public class MesiboMessagingActivity extends AppCompatActivity implements MesiboMessagingFragment.FragmentListener, Mesibo.ConnectionListener {
@@ -86,7 +88,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
 
 //     Initializing call
 
-//        MesiboCall.getInstance().init(this);
+        MesiboCall.getInstance().init(this);
 
 
         /* set profile so that it is visible in call screen */
@@ -190,12 +192,12 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
  intent.putExtra("incoming", false);
  startActivity(intent);*/
 //                Log.e("Aditya", "reached");
-//                if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)) {
-//
-//                    Log.e("Arr", String.valueOf(MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)));
-//                    MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
-//                }
-                //launchCustomCallActivity(destination, true, false);
+                if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)) {
+
+                    Log.e("Arr", String.valueOf(MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)));
+                    MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
+                }
+                launchCustomCallActivity(destination, true, false);
 
             }
 
@@ -217,9 +219,9 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
 
                  }*/
 
-//                if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, true))
-//                    //MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
-//                    launchCustomCallActivity(destination, true, false);
+                if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, true))
+                    //MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
+                    launchCustomCallActivity(destination, true, false);
             }
         });
     }
@@ -228,14 +230,14 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
     }
 
 
-//    protected void launchCustomCallActivity(String destination, boolean video, boolean incoming) {
-//        Intent intent = new Intent(this, MesiboDefaultCallActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//        intent.putExtra("video", video);
-//        intent.putExtra("address", destination);
-//        intent.putExtra("incoming", incoming);
-//        startActivity(intent);
-//    }
+    protected void launchCustomCallActivity(String destination, boolean video, boolean incoming) {
+        Intent intent = new Intent(this, MesiboDefaultCallActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra("video", video);
+        intent.putExtra("address", destination);
+        intent.putExtra("incoming", incoming);
+        startActivity(intent);
+    }
 
 
     private void startFragment(Bundle savedInstanceState) {

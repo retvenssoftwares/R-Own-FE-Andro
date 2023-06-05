@@ -12,8 +12,6 @@ import retrofit2.http.*
 
 interface FeedsApi {
 
-
-
     @PATCH("like/{postId}")
     fun postLike(
         @Path("postId") postId : String,

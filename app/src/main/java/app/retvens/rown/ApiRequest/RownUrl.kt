@@ -1,10 +1,8 @@
 package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.*
-import app.retvens.rown.DataCollections.onboarding.ContactResponse
-import app.retvens.rown.DataCollections.onboarding.ContactsData
-import app.retvens.rown.DataCollections.onboarding.GetInterests
-import app.retvens.rown.DataCollections.onboarding.SearchUser
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.onboarding.*
 import app.retvens.rown.authentication.UpdateInterestClass
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -87,5 +85,10 @@ interface RownUrl {
         @Path("User_id") User_id : String,
         @Body updateInterestClass: UpdateInterestClass
     ) : Call<ContactResponse>
+
+    @POST("profile")
+    fun deviceToken(
+        @Body devicetoken:DeviceTokenClass
+    ):Call<UpdateResponse>
 }
 

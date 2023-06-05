@@ -9,6 +9,7 @@
 package app.retvens.rown.MessagingModule;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
@@ -22,8 +23,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
@@ -37,6 +41,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -50,6 +55,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,10 +95,13 @@ import com.mesibo.mediapicker.MediaPicker;
 import com.mesibo.mediapicker.MediaPicker.ImageEditorListener;
 
 
-
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -120,11 +130,14 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     private static int FATEST_INTERVAL = 5000;
     private static int DISPLACEMENT = 10;
     private static int PLACE_PICKER_REQUEST = 199;
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private String voiceNoteFilePath;
     boolean hidden = true;
     ImageButton ib_gallery = null;
     ImageButton ib_contacts = null;
     ImageButton ib_location = null;
     ImageButton ib_video = null;
+    ImageButton ib_voice = null;
     ImageButton ib_audio = null;
     ImageButton ib_upload = null;
     ImageButton ib_send = null;
@@ -155,6 +168,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     private int mLastMessageStatus = -1;
     private ImageView mEmojiButton = null;
     private Map<String, String> mEmojiMap;
+    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
     private Toolbar toolbar = null;
     private MessageFilter mMessageFilter = Mesibo.getMessageFilter();
     private boolean mMediaHandled = true;
@@ -165,10 +179,16 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     private View mBottomLayout;
     private TextView mReplyName;
     private EmojiconTextView mReplyText;
+    private static String fileName = null;
     private ImageView mReplyImage;
     private ImageView mReplyCancel;
     private RelativeLayout mReplyLayout;
     private EmojiconEditText mEmojiEditText;
+//    private RecordButton recordButton = null;
+//    private MediaRecorder recorder = null;
+//
+//    private PlayButton   playButton = null;
+    private MediaPlayer player = null;
     private MessageData mReplyMessage = null;
     private Boolean mReplyEnabled = false;
     private MesiboUI.Listener mMesiboUIHelperlistener = null;
@@ -270,6 +290,8 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     this.mRecyclerView.setAdapter(this.mAdapter);
                     this.ib_cam = (ImageButton) view.findViewById(R.id.cameraButton);
                     this.ib_cam.setOnClickListener(this);
+                    this.ib_voice = (ImageButton) view.findViewById(R.id.voicenotes);
+                    this.ib_voice.setOnClickListener(this);
                     this.showMessage = (LinearLayout) view.findViewById(R.id.messageLayout);
                     if (this.mAdapter.getItemCount() != 0 && this.mLayoutManager.findLastCompletelyVisibleItemPosition() == this.mAdapter.getItemCount() - 1) {
                         this.showMessgeVisible();
@@ -334,6 +356,8 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                         this.ib_send.setVisibility(View.VISIBLE);
                         this.ib_showattach.setClickable(false);
                         this.ib_showattach.setVisibility(View.GONE);
+                        this.ib_voice.setClickable(false);
+                        this.ib_voice.setVisibility(View.GONE);
                     }
 
                     MesiboImages.init(this.getActivity());
@@ -439,7 +463,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     });
                     this.Mesibo_onConnectionStatus(Mesibo.getConnectionStatus());
                     String packageName = this.myActivity().getPackageName();
-                    if (packageName.equalsIgnoreCase("com.qamp.app") && Mesibo.getAppId() != 1L) {
+                    if (packageName.equalsIgnoreCase("app.retvens.rown") && Mesibo.getAppId() != 1L) {
                         this.mMesiboUIOptions.mGoogleApiKey = "";
                     }
 
@@ -479,17 +503,17 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 
     }
 
-    public void onStop() {
-        if (null != this.mGoogleApiClient && this.mGoogleApiClient.isConnected()) {
-            this.mGoogleApiClient.disconnect();
-        }
-
-        if (null != this.mUserData && null != this.mReadSession) {
-            this.mReadSession.enableReadReceipt(false);
-        }
-
-        super.onStop();
-    }
+//    public void onStop() {
+//        if (null != this.mGoogleApiClient && this.mGoogleApiClient.isConnected()) {
+//            this.mGoogleApiClient.disconnect();
+//        }
+//
+//        if (null != this.mUserData && null != this.mReadSession) {
+//            this.mReadSession.enableReadReceipt(false);
+//        }
+//
+//        super.onStop();
+//    }
 
     public void onDestroy() {
         if (null != this.mReadSession) {
@@ -625,8 +649,193 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
             builder.show();
         } else if (buttonId == R.id.gallery) {
             MediaPicker.launchPicker(this.myActivity(), MediaPicker.TYPE_FILEIMAGE);
+        }else if (buttonId == R.id.voicenotes){
+            CharSequence[] options = new CharSequence[]{MesiboUI.getConfig().voiceNoteFromRecorderTitle, MesiboUI.getConfig().voiceNoteFromGalleryTitle};
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.mActivity);
+            builder.setTitle(MesiboUI.getConfig().voiceNoteSelectTitle);
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == 0) {
+                        launchVoiceNoteRecorder();
+                    } else if (which == 1) {
+                        // Launch voice note selection from gallery
+
+                    }
+                }
+            });
+
+            builder.show();
         }
 
+    }
+
+    private void launchVoiceNoteRecorder() {
+        if (ContextCompat.checkSelfPermission(this.myActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // Request the audio recording permission if not granted
+            ActivityCompat.requestPermissions(this.myActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
+        } else {
+            // Start voice note recording
+            startRecording();
+        }
+    }
+
+    private void startRecording() {
+        File voiceNoteFile = createVoiceNoteFile();
+
+        if (voiceNoteFile != null) {
+            voiceNoteFilePath = voiceNoteFile.getAbsolutePath();
+
+            MediaRecorder mediaRecorder = new MediaRecorder();
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mediaRecorder.setOutputFile(voiceNoteFilePath);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+
+            try {
+                mediaRecorder.prepare();
+                mediaRecorder.start();
+                // TODO: Update UI to indicate that voice note recording is in progress
+
+                Toast.makeText(mActivity,"recording",Toast.LENGTH_LONG).show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                // TODO: Handle recording preparation error
+            }
+        } else {
+            // TODO: Handle voice note file creation error
+        }
+    }
+
+    private void onRecord(boolean start) {
+        if (start) {
+            startRecording();
+        } else {
+            stopRecording();
+        }
+    }
+
+    private void stopRecording() {
+    }
+
+    private void onPlay(boolean start) {
+        if (start) {
+            startPlaying();
+        } else {
+            stopPlaying();
+        }
+    }
+
+    private void stopPlaying() {
+    }
+
+    private void startPlaying() {
+    }
+
+//    class RecordButton extends Button {
+//        boolean mStartRecording = true;
+//
+//        OnClickListener clicker = new OnClickListener() {
+//            public void onClick(View v) {
+//                onRecord(mStartRecording);
+//                if (mStartRecording) {
+//                    setText("Stop recording");
+//                } else {
+//                    setText("Start recording");
+//                }
+//                mStartRecording = !mStartRecording;
+//            }
+//        };
+//
+//        public RecordButton(Context ctx) {
+//            super(ctx);
+//            setText("Start recording");
+//            setOnClickListener(clicker);
+//        }
+//    }
+
+//    class PlayButton extends Button {
+//        boolean mStartPlaying = true;
+//
+//        OnClickListener clicker = new OnClickListener() {
+//            public void onClick(View v) {
+//                onPlay(mStartPlaying);
+//                if (mStartPlaying) {
+//                    setText("Stop playing");
+//                } else {
+//                    setText("Start playing");
+//                }
+//                mStartPlaying = !mStartPlaying;
+//            }
+//        };
+//
+//        public PlayButton(Context ctx) {
+//            super(ctx);
+//            setText("Start playing");
+//            setOnClickListener(clicker);
+//        }
+//    }
+//
+//    @Override
+//    public void onCreate(Bundle icicle) {
+//        super.onCreate(icicle);
+//
+//        // Record to the external cache directory for visibility
+//        fileName = myActivity().getExternalCacheDir().getAbsolutePath();
+//        fileName += "/audiorecordtest.3gp";
+//
+//        ActivityCompat.requestPermissions(this.myActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION);
+//
+//        LinearLayout ll = new LinearLayout(this.myActivity());
+//        recordButton = new RecordButton(this.myActivity());
+//        ll.addView(recordButton,
+//                new LinearLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        0));
+//        playButton = new PlayButton(this.myActivity());
+//        ll.addView(playButton,
+//                new LinearLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        0));
+//        mActivity.setContentView(ll);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (recorder != null) {
+//            recorder.release();
+//            recorder = null;
+//        }
+//
+//        if (player != null) {
+//            player.release();
+//            player = null;
+//        }
+//    }
+
+    private File createVoiceNoteFile() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String voiceNoteFileName = "VOICE_NOTE_" + timeStamp + ".mp4";
+
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        if (storageDir != null && !storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        File voiceNoteFile = null;
+        try {
+            voiceNoteFile = new File(storageDir, voiceNoteFileName);
+            voiceNoteFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return voiceNoteFile;
     }
 
     public void onClick(View v) {
@@ -1417,7 +1626,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     } else if (MediaPicker.TYPE_FILE == requestCode) {
                         drawableid = MesiboImages.getFileDrawable(filePath);
                     }
-
+                    Log.e("error",filePath.toString());
                     MesiboUIManager.launchImageEditor(this.myActivity(), requestCode, drawableid, (String) null, filePath, true, true, false, false, 1280, this);
                     return true;
                 }

@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +94,7 @@ public class MessageView extends RelativeLayout {
         if (this.mPictureThumbnail == null) {
             this.mPictureThumbnail = (ThumbnailProgressView) this.mInflater.inflate(R.layout.thumbnail_progress_view_layout, this.mPicLayout, true).findViewById(R.id.m_picture);
             this.mAudioVideoLayer = (ImageView) this.mPictureThumbnail.findViewById(R.id.audio_video_layer);
-            this.mAudioVideoLayer.setVisibility(8);
+//            this.mAudioVideoLayer.setVisibility(8);
             if (this.mThumbnailParams == null) {
                 this.mThumbnailParams = (FrameLayout.LayoutParams) this.mPictureThumbnail.getLayoutParams();
             }
@@ -197,6 +198,7 @@ public class MessageView extends RelativeLayout {
             this.mPictureThumbnail.setLayoutParams(thumbnailParams);
             this.mPictureThumbnail.requestLayout();
             this.mPictureThumbnail.setData(this.mData);
+            Log.e("error",mPictureThumbnail.toString());
             this.mPicLayout.setVisibility(0);
             this.mPictureThumbnail.setVisibility(0);
             this.mMessageTextView.setTextColor(MesiboConfiguration.TOPIC_TEXT_COLOR_WITH_PICTURE);

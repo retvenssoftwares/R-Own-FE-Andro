@@ -331,6 +331,15 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/four_dot" />
 
+                <ImageButton
+                    android:id="@+id/voicenotes"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="0dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/mikeicon" />
+
 
             </LinearLayout>
 

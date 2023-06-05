@@ -93,12 +93,19 @@
             android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorDrawActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.NoActionBar" />
+
+
+
         <activity
             android:name=".NavigationFragments.eventForUsers.allEvents.SeeAllEventsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.eventForUsers.AllEventCategoryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".api.p000ui.MesiboDefaultCallActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
@@ -383,6 +390,7 @@
             android:name=".NavigationFragments.job.JobDetailsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
+
         <activity
             android:name=".Dashboard.profileCompletion.UserName"
             android:exported="true"
@@ -487,9 +495,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
+ 
         <activity
             android:name=".authentication.OtpVerification"
             android:exported="true"

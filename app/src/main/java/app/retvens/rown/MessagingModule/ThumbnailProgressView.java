@@ -42,36 +42,36 @@ public class ThumbnailProgressView extends FrameLayout {
     public ThumbnailProgressView(Context context) {
         super(context);
         this.mInflater = LayoutInflater.from(context);
-//        init();
+        init();
     }
 
     public ThumbnailProgressView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.mInflater = LayoutInflater.from(context);
-//        init();
+        init();
     }
 
     public ThumbnailProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mInflater = LayoutInflater.from(context);
-//        init();
+        init();
     }
 
-//    public void init() {
-//        MyTrace.start("TPV-Inflate");
-//        this.mFrameLayout = (FrameLayout) this.mInflater.inflate(R.layout.thumbnail_progress_view, this, true);
-//        this.mPictureView = (ImageView) this.mFrameLayout.findViewById(R.id.imageView);
-//        this.mProgressBar = (ProgressBar) this.mFrameLayout.findViewById(R.id.progressBar);
-//        if (Build.VERSION.SDK_INT > 21) {
-//            this.mProgressBar.setProgressTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.colorPrimary)));
-//        }
-//        MyTrace.stop();
-//        MyTrace.start("TPV-ProgressBarFilter");
-//        this.mProgressBar.getIndeterminateDrawable().setColorFilter(MesiboUI.getConfig().mToolbarColor, PorterDuff.Mode.MULTIPLY);
-//        MyTrace.stop();
-//        this.mTransferButton = (Button) this.mFrameLayout.findViewById(R.id.transferButton);
-//        setState(0);
-//    }
+    public void init() {
+        MyTrace.start("TPV-Inflate");
+        this.mFrameLayout = (FrameLayout) this.mInflater.inflate(R.layout.thumbnail_progress_view, this, true);
+        this.mPictureView = (ImageView) this.mFrameLayout.findViewById(R.id.imageView);
+        this.mProgressBar = (ProgressBar) this.mFrameLayout.findViewById(R.id.progressBar);
+        if (Build.VERSION.SDK_INT > 21) {
+            this.mProgressBar.setProgressTintList(ColorStateList.valueOf(getContext().getResources().getColor(R.color.black)));
+        }
+        MyTrace.stop();
+        MyTrace.start("TPV-ProgressBarFilter");
+        this.mProgressBar.getIndeterminateDrawable().setColorFilter(MesiboUI.getConfig().mToolbarColor, PorterDuff.Mode.MULTIPLY);
+        MyTrace.stop();
+        this.mTransferButton = (Button) this.mFrameLayout.findViewById(R.id.transferButton);
+        setState(0);
+    }
 
     public void setData(MessageData data) {
         boolean changed;
@@ -105,11 +105,11 @@ public class ThumbnailProgressView extends FrameLayout {
                     this.mFileSize += " (Retry)";
                 }
                 Drawable img = null;
-//                if (m.isDownloadRequired()) {
-//                    img = getContext().getResources().getDrawable(MesiboConfiguration.PROGRESSVIEW_DOWNLOAD_SYMBOL);
-//                } else if (m.isUploadRequired()) {
-//                    img = getContext().getResources().getDrawable(MesiboConfiguration.PROGRESSVIEW_UPLOAD_SYMBOL);
-//                }
+                if (m.isDownloadRequired()) {
+                    img = getContext().getResources().getDrawable(MesiboConfiguration.PROGRESSVIEW_DOWNLOAD_SYMBOL);
+                } else if (m.isUploadRequired()) {
+                    img = getContext().getResources().getDrawable(MesiboConfiguration.PROGRESSVIEW_UPLOAD_SYMBOL);
+                }
                 this.mTransferButton.setCompoundDrawablesWithIntrinsicBounds(img, (Drawable) null, (Drawable) null, (Drawable) null);
                 this.mTransferButton.setText(this.mFileSize);
                 setState(2);

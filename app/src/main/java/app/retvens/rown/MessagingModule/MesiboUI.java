@@ -119,8 +119,11 @@ public class MesiboUI {
 
         //public String userOnlineIndicationTitle = "online";
         public String videoFromGalleryTitle = "Gallery";
+        public String voiceNoteFromGalleryTitle = "Gallery";
         public String videoFromRecorderTitle = "Video Recorder";
+        public String voiceNoteFromRecorderTitle = "Voice Recorder";
         public String videoSelectTitle = "Send your video from?";
+        public String voiceNoteSelectTitle = "Send your voice from?";
         public String yesterday = "Yesterday";
     }
 

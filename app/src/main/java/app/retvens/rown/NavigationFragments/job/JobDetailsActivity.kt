@@ -34,7 +34,6 @@ import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.databinding.ActivityJobDetailsBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.mesibo.mediapicker.BaseFragment.newInstance
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

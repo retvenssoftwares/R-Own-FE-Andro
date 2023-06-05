@@ -180,12 +180,14 @@ class HomeFragment : Fragment() {
                     if (response.body()!!.isNotEmpty()) {
                     val response = response.body()!!
 
+                    try {
+
                     Log.e("response",response.toString())
 
                     val postList = ArrayList<DataItem.Banner>()
 
                     response.forEach { it ->
-                        try {
+
 
                             it.posts.forEach { item ->
 
@@ -210,9 +212,7 @@ class HomeFragment : Fragment() {
 
 
 
-                        }catch (e: NullPointerException){
-                            Log.e("Exception", "NullPointerException occurred: ${e.message}")
-                        }
+
                     }
 
 
@@ -232,6 +232,9 @@ class HomeFragment : Fragment() {
 
                     })
 
+                    }catch (e: NullPointerException){
+                        Log.e("Exception", "NullPointerException occurred: ${e.message}")
+                    }
 
                 } else {
                         empty.text = "No upcoming events"

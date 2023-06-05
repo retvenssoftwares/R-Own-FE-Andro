@@ -22,10 +22,13 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.MesiboDataClass
 import app.retvens.rown.DataCollections.MesiboResponseClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileResponse
+import app.retvens.rown.DataCollections.onboarding.DeviceTokenClass
 import app.retvens.rown.DataCollections.onboarding.SearchUser
 import app.retvens.rown.MesiboApi
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
 import app.retvens.rown.utils.moveTo
 import app.retvens.rown.utils.saveUserId
@@ -33,10 +36,12 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.messaging.FirebaseMessaging
 import com.mesibo.api.Mesibo
 import com.mesibo.calls.api.MesiboCall
 import retrofit2.Call
@@ -121,6 +126,8 @@ open class OtpVerification : AppCompatActivity() {
             }
         }
 
+        generateDeviceToken(phone)
+
 
         binding.textResendOtp.setOnClickListener {
             binding.textResendOtp.visibility = View.GONE
@@ -183,6 +190,49 @@ open class OtpVerification : AppCompatActivity() {
                 Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun generateDeviceToken(phone: String) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(BottomSheet.TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+
+            Log.e("token",token.toString())
+            sendDeviceToken(phone,token)
+        })
+
+
+    }
+
+    private fun sendDeviceToken(phone: String, token: String?) {
+
+        val sendToken = RetrofitBuilder.retrofitBuilder.deviceToken(DeviceTokenClass(phone,token.toString()))
+
+        sendToken.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,"Device Token Generated",Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
 
 

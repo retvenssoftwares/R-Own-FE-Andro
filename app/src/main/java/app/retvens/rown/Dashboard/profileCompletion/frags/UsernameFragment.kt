@@ -35,7 +35,6 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
-import app.retvens.rown.utils.saveProgress
 import app.retvens.rown.utils.saveUserId
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
