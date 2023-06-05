@@ -10,11 +10,15 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
+import app.retvens.rown.utils.dateFormat
 
-class VendorsReviewAdapter(val listS : List<VendorReviewsData>, val context: Context) : RecyclerView.Adapter<VendorsReviewAdapter.VendorsReviewViewHolder>() {
+class VendorsReviewAdapter(val listS : List<UserReview>, val context: Context) : RecyclerView.Adapter<VendorsReviewAdapter.VendorsReviewViewHolder>() {
 
     class VendorsReviewViewHolder(itemView: View) : ViewHolder(itemView){
+        val ratingNo = itemView.findViewById<TextView>(R.id.ratingNo)
         val review = itemView.findViewById<TextView>(R.id.review)
+        val fullName = itemView.findViewById<TextView>(R.id.fullName)
+        val date = itemView.findViewById<TextView>(R.id.date)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VendorsReviewViewHolder {
@@ -28,7 +32,9 @@ class VendorsReviewAdapter(val listS : List<VendorReviewsData>, val context: Con
     }
 
     override fun onBindViewHolder(holder: VendorsReviewViewHolder, position: Int) {
-        holder.review.text = listS[position].review
-
+        holder.ratingNo.text = listS[position].Rating_number
+        holder.review.text = listS[position].Description
+        holder.fullName.text = listS[position].Full_name
+        holder.date.text = dateFormat(listS[position].date_added)
     }
 }

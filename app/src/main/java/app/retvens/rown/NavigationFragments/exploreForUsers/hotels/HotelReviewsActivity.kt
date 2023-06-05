@@ -2,9 +2,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.hotels
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetAddReview
-import app.retvens.rown.bottomsheet.BottomSheetJobType
 import app.retvens.rown.databinding.ActivityHotelReviewsBinding
 
 class HotelReviewsActivity : AppCompatActivity(), BottomSheetAddReview.OnBottomSheetAddReviewClickListener{
@@ -17,8 +15,8 @@ class HotelReviewsActivity : AppCompatActivity(), BottomSheetAddReview.OnBottomS
         setContentView(binding.root)
 
         binding.addReview.setOnClickListener {
-
-            val bottomSheet = BottomSheetAddReview()
+            val title = "How was your stay experience Paradise Inn?"
+            val bottomSheet = BottomSheetAddReview(title, "")
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetAddReview.Review_TAG)}
             bottomSheet.setOnReviewClickListener(this)

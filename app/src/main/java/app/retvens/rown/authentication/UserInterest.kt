@@ -20,6 +20,7 @@ import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserInterestBinding
 import app.retvens.rown.utils.moveTo
 import app.retvens.rown.utils.profileComStatus
+import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,7 +30,7 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
     lateinit var binding: ActivityUserInterestBinding
 
     lateinit var progressDialog : Dialog
-    lateinit var addedIntersts : MutableList<GetInterests>
+    var addedIntersts : MutableList<GetInterests> = mutableListOf()
 
     lateinit var username: String
     lateinit var userInterestAdapter: UserInterestAdapter
@@ -47,6 +48,7 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
         Log.d("update_interest","User_id : $user_id")
 
         profileComStatus(this, "50")
+        profileCompletionStatus = "50"
 
         username = intent.getStringExtra("user").toString()
         binding.userName.text = "Hello, $username!"
@@ -55,7 +57,10 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
         binding.interestGrid.setHasFixedSize(true)
 
         binding.cardContinueInterest.setOnClickListener {
-            progressDialog = Dialog(this)
+            
+            if (addedIntersts.isNotEmpty()) {
+
+                progressDialog = Dialog(this)
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             progressDialog.setCancelable(true)
             progressDialog.setContentView(R.layout.progress_dialoge)
@@ -66,13 +71,11 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
             Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
 
-
-            addedIntersts.forEach {
-                Log.d("Interest", it.id.toString())
-                uploadInterest(it.id)
+                addedIntersts.forEach {
+                    Log.d("Interest", it.id.toString())
+                    uploadInterest(it.id)
 //                Toast.makeText(this, it.Name.toString(), Toast.LENGTH_SHORT).show()
-            }
-
+                }
             progressDialog.dismiss()
 
             moveTo(this,"MoveToUC")
@@ -80,7 +83,10 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             intent.putExtra("name",username)
             startActivity(intent)
-        }
+        } else {
+                Toast.makeText(this, "Please select your interests", Toast.LENGTH_SHORT).show()
+            }
+    }
         getInterests()
     }
 

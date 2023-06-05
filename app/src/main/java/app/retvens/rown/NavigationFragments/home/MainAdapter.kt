@@ -134,18 +134,19 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             binding.postProfile.setOnClickListener {
 
-                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
-
-                    val intent = Intent(context,UserProfileActivity::class.java)
-                    intent.putExtra("userId",banner.user_id)
-                    context.startActivity(intent)
-
-                }else if(banner.Role == "Business Vendor / Freelancer"){
+//                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
+//
+//                }else
+                if(banner.Role == "Business Vendor / Freelancer"){
                     val intent = Intent(context,VendorProfileActivity::class.java)
                     intent.putExtra("userId",banner.user_id)
                     context.startActivity(intent)
                 }else if (banner.Role == "Hotel Owner"){
                     val intent = Intent(context,OwnerProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                } else {
+                    val intent = Intent(context,UserProfileActivity::class.java)
                     intent.putExtra("userId",banner.user_id)
                     context.startActivity(intent)
                 }

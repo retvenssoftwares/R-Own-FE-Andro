@@ -85,6 +85,7 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
         getBottomServices()
         addService = view.findViewById(R.id.addService)
         addService.setOnClickListener {
+            mListener?.bottomSNClick(selectedServicesName.toString())
             progressDialog = Dialog(requireContext())
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
             progressDialog.setContentView(R.layout.progress_dialoge)
@@ -173,17 +174,14 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
             }
 
             override fun onJobClick(job: VendorServicesData) {
-                val index = selectedServices.indexOf(job.serviceId)
-                val index1 = selectedServices.indexOf(job.service_name)
-                if (index == -1) {
+                if (selectedServices.contains(job.serviceId)){
+                    selectedServicesName.remove(job.service_name)
+                    selectedServices.remove(job.serviceId)
+                } else {
                     selectedServices.add(job.serviceId)
                     selectedServicesName.add(job.service_name)
-                } else {
-                    selectedServices.removeAt(index)
-                    selectedServicesName.removeAt(index1)
                 }
                 Log.e("services",selectedServices.toString())
-                mListener?.bottomSNClick(selectedServicesName.toString())
             }
         })
     }

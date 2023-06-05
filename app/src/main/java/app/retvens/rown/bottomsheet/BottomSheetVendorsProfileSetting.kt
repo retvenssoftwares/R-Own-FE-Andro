@@ -1,5 +1,6 @@
 package app.retvens.rown.bottomsheet
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import app.retvens.rown.NavigationFragments.profile.EditVendorInfoActivity
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -44,6 +46,15 @@ class BottomSheetVendorsProfileSetting : BottomSheetDialogFragment() {
         val reviews= view.findViewById<LinearLayout>(R.id.reviews)
         reviews.setOnClickListener {
             mListener?.bottomSheetVendorsProfileSettingClick("reviews")
+            dismiss()
+        }
+
+        val vendorView = view.findViewById<View>(R.id.vendorView)
+        vendorView.visibility = View.VISIBLE
+        val editVendor = view.findViewById<LinearLayout>(R.id.editVendor)
+        editVendor.visibility = View.VISIBLE
+        editVendor.setOnClickListener {
+            startActivity(Intent(requireContext(), EditVendorInfoActivity::class.java))
             dismiss()
         }
 

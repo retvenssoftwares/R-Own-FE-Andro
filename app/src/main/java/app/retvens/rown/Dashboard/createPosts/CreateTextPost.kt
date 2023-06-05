@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -143,6 +144,7 @@ class CreateTextPost : AppCompatActivity(),
                     Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                 }else{
+                    Log.d("text", "${response.message().toString()} ${response.toString()} ")
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }

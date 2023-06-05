@@ -62,6 +62,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.RuntimeException
 import java.util.*
 import kotlin.streams.asSequence
 
@@ -158,17 +159,21 @@ class PersonalInformation : AppCompatActivity() {
                 Log.d("fetch",response.body().toString())
 
                 if (response.isSuccessful){
-                    val image = response.body()?.Profile_pic
-                    val name = response.body()?.Full_name
-                    phone = response.body()!!.Phone
-                    role = response.body()!!.Role
-                    profileCompletionStatus = response.body()!!.profileCompletionStatus
-                    saveFullName(applicationContext, name.toString())
-                    saveProfileImage(applicationContext, "$image")
-                    val mail = response.body()?.Email
-                    Glide.with(applicationContext).load(image).into(binding.profile)
-                    binding.etName.setText(name)
-                    binding.etEmail.setText(mail)
+                    try {
+                        val image = response.body()?.Profile_pic
+                        val name = response.body()?.Full_name
+                        phone = response.body()!!.Phone
+                        role = response.body()!!.Role
+                        profileCompletionStatus = response.body()!!.profileCompletionStatus
+                        saveFullName(applicationContext, name.toString())
+                        saveProfileImage(applicationContext, "$image")
+                        val mail = response.body()?.Email
+                        Glide.with(applicationContext).load(image).into(binding.profile)
+                        binding.etName.setText(name)
+                        binding.etEmail.setText(mail)
+                    } catch (e:NullPointerException){
+                        Log.d("fetchUserOnPersonal", e.toString())
+                    }
                 }
             }
 
@@ -277,6 +282,7 @@ class PersonalInformation : AppCompatActivity() {
 //        val phone : Long = 7905845936
 
         val message = intent.getStringExtra("message")
+        Log.d("image", message.toString())
 
         val _id = SharedPreferenceManagerAdmin.getInstance(this).user.__v.toString()
         val addresse = SharedPreferenceManagerAdmin.getInstance(this).user.address.toString()
@@ -345,10 +351,10 @@ class PersonalInformation : AppCompatActivity() {
 //                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
 //                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
                     Log.d("image file", file.toString())
-                    Log.d("image", response.toString())
+                    Log.d("image", message.toString())
                     Log.d("image", response.body().toString())
                     if (response.message().toString() != "Request Entity Too Large"){
-                        if (message != "user already exist"){
+                        if (message.toString() != "User already exists"){
                             moveTo(this@PersonalInformation,"MoveToI")
                             saveFullName(applicationContext, username)
                             val intent = Intent(applicationContext,UserInterest::class.java)
@@ -396,8 +402,10 @@ class PersonalInformation : AppCompatActivity() {
                     progressDialog.dismiss()
 //                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
 //                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
+                    Log.d("image", response.toString())
+                    Log.d("image", response.body().toString())
                     if (response.message().toString() != "Request Entity Too Large"){
-                        if (message != "user already exist"){
+                        if (message.toString() != "User already exists"){
                             moveTo(this@PersonalInformation,"MoveToI")
                             saveFullName(applicationContext, username)
                             val intent = Intent(applicationContext,UserInterest::class.java)
@@ -505,7 +513,13 @@ class PersonalInformation : AppCompatActivity() {
             if (imageUri != null) {
 
 //                compressImage(imageUri)
-                cropImage(imageUri)
+                try {
+                    cropImage(imageUri)
+                }catch(e:RuntimeException){
+                    Log.d("cropperOnPersonal", e.toString())
+                }catch(e:ClassCastException){
+                    Log.d("cropperOnPersonal", e.toString())
+                }
             }
         }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val resultingImage = CropImage.getActivityResult(data)
@@ -543,7 +557,7 @@ class PersonalInformation : AppCompatActivity() {
             .setCropShape(CropImageView.CropShape.OVAL)
             .setOutputCompressQuality(20)
             .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-            .start(this)
+            .start(this@PersonalInformation)
     }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri

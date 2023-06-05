@@ -26,7 +26,11 @@ class VendorsChildAdapter(private val context: Context, private val viewType: In
             Glide.with(context).load(recyclerItem.vendorImage).into(binding.vendorCover)
             Glide.with(context).load(recyclerItem.Profile_pic).into(binding.vendorProfile)
             binding.vendorCover.setOnClickListener {
-                context.startActivity(Intent(context, VendorDetailsActivity::class.java))
+                val intent = Intent(context, VendorDetailsActivity::class.java)
+                intent.putExtra("user_id", recyclerItem.user_id)
+                intent.putExtra("vendorImage", recyclerItem.vendorImage)
+                intent.putExtra("vendorName", recyclerItem.vendorName)
+                context.startActivity(intent)
             }
         }
     }

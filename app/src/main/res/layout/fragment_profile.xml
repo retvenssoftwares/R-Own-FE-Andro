@@ -30,6 +30,7 @@
             android:layout_marginStart="20dp"
             android:src="@drawable/community_btn"
             app:tint="@color/black"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/profile_setting"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -40,11 +41,11 @@
             android:text="username"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="16dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="18dp"
             android:textColor="@color/black"
-            app:layout_constraintTop_toTopOf="@id/profile_backBtn"
-            app:layout_constraintBottom_toBottomOf="@id/profile_backBtn"
-            app:layout_constraintStart_toEndOf="@id/profile_backBtn"/>
+            app:layout_constraintTop_toTopOf="@id/profile_setting"
+            app:layout_constraintBottom_toBottomOf="@id/profile_setting"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageView
             android:id="@+id/profile_setting"

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
+import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
 
 class ExploreServicesAdapter(val listS : List<ProfileServicesDataItem>, val context: Context) : RecyclerView.Adapter<ExploreServicesAdapter.ExploreServicesViewHolder>() {
@@ -35,11 +36,19 @@ class ExploreServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
     }
 
     override fun onBindViewHolder(holder: ExploreServicesViewHolder, position: Int) {
+        val recyclerItem = listS[position]
         holder.name.text = listS[position].vendorName
         holder.vendors_id.text = listS[position].service_name
         holder.avg_price.text = listS[position].vendorServicePrice
 
         Glide.with(context).load(listS[position].vendorImage).into(holder.cover)
         Glide.with(context).load(listS[position].Profile_pic).into(holder.profile)
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, VendorDetailsActivity::class.java)
+            intent.putExtra("user_id", recyclerItem.user_id)
+            intent.putExtra("vendorImage", recyclerItem.vendorImage)
+            intent.putExtra("vendorName", recyclerItem.vendorName)
+            context.startActivity(intent)
+        }
     }
 }

@@ -90,52 +90,46 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
             bottomSheet.setOnCountryStateCityClickListener(this)
         }
+
         binding.img1.setOnClickListener {
             selectedImg = 1
-                //Requesting Permission For CAMERA
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.CAMERA
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                    )
-                }
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 openGallery()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
-
+         }
         binding.img2.setOnClickListener {
             selectedImg = 2
-                //Requesting Permission For CAMERA
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.CAMERA
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                    )
-                }
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 openGallery()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
+        }
         binding.img3.setOnClickListener {
             selectedImg = 3
-                //Requesting Permission For CAMERA
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.CAMERA
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                    )
-                }
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 openGallery()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
+         }
 
         binding.deleteImg1.setOnClickListener {
             imagesList.remove(imgUri1)
@@ -144,7 +138,6 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             binding.deleteImg1.visibility = View.GONE
             selectedImg = 1
         }
-
         binding.deleteImg2.setOnClickListener {
             imagesList.remove(imgUri2)
             imgUri2 = null

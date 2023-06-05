@@ -144,6 +144,7 @@ for your properties and other services too."
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/serviceLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -164,6 +165,7 @@ for your properties and other services too."
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
+                android:text="Select Services"
                 android:clickable="true"
                 android:focusable="false"
                 android:editable="false"/>
@@ -180,6 +182,7 @@ for your properties and other services too."
             app:hintTextColor="@color/black"
             app:boxStrokeColor="@color/black"
             android:layout_marginTop="8dp"
+            android:visibility="gone"
             android:layout_marginHorizontal="20dp"
             app:boxStrokeWidthFocused="2dp"
             app:endIconMode="clear_text"
@@ -223,6 +226,94 @@ for your properties and other services too."
                 android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="22dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Portfolio Images :"
+            android:textColor="@color/black"
+            android:textSize="14dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/li"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="20dp">
+
+
+            <ImageView
+                android:id="@+id/delete_img1"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/svg_cross"
+                android:visibility="gone"
+                android:elevation="5dp"
+                android:layout_marginEnd="-5dp"
+                android:layout_marginBottom="-15dp"
+                app:layout_constraintEnd_toEndOf="@id/img_1"
+                app:layout_constraintBottom_toTopOf="@id/img_1"/>
+            <ImageView
+                android:id="@+id/img_1"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/gallery_svg"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:id="@+id/delete_img2"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/svg_cross"
+                android:visibility="gone"
+                android:elevation="5dp"
+                android:layout_marginEnd="-5dp"
+                android:layout_marginBottom="-15dp"
+                app:layout_constraintEnd_toEndOf="@id/img_2"
+                app:layout_constraintBottom_toTopOf="@id/img_2"/>
+            <ImageView
+                android:id="@+id/img_2"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/gallery_svg"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toEndOf="@id/img_1"
+                app:layout_constraintTop_toTopOf="@id/img_1"
+                app:layout_constraintBottom_toBottomOf="@id/img_1"/>
+
+
+            <ImageView
+                android:id="@+id/delete_img3"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/svg_cross"
+                android:visibility="gone"
+                android:elevation="5dp"
+                android:layout_marginEnd="-5dp"
+                android:layout_marginBottom="-15dp"
+                app:layout_constraintEnd_toEndOf="@id/img_3"
+                app:layout_constraintBottom_toTopOf="@id/img_3"/>
+            <ImageView
+                android:id="@+id/img_3"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/gallery_svg"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toEndOf="@id/img_2"
+                app:layout_constraintTop_toTopOf="@id/img_2"
+                app:layout_constraintBottom_toBottomOf="@id/img_1"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

@@ -164,35 +164,16 @@
 
     </HorizontalScrollView>
 
-    <LinearLayout
-        android:id="@+id/layout_personal"
+    <FrameLayout
+        android:id="@+id/notification_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/ll_for_n"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <include layout = "@layout/item_personal_notification"/>
-        <include layout = "@layout/item_personal_notification"/>
-        <include layout = "@layout/item_personal_notification"/>
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/ll_for_n"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <LinearLayout
-        android:id="@+id/layout_connection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/ll_for_n"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <include layout = "@layout/item_connections_notification"/>
-        <include layout = "@layout/item_connections_notification"/>
-        <include layout = "@layout/item_connections_notification"/>
-    </LinearLayout>
-   <LinearLayout
         android:id="@+id/layout_suggetion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

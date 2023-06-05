@@ -45,6 +45,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
     lateinit var name : TextView
+    lateinit var linkText : TextView
 
     lateinit var polls : TextView
     lateinit var jobs : TextView
@@ -73,6 +74,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
         username = view.findViewById(R.id.profile_username)
         bio = view.findViewById(R.id.bio)
         name = view.findViewById(R.id.profile_name)
+        linkText = view.findViewById(R.id.linkText)
 
         polls = view.findViewById(R.id.polls)
         jobs = view.findViewById(R.id.jobs)
@@ -212,6 +214,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
                     postCount.text = response.post_count.toString()
                     username.text = response.profiledata.User_name.toString()
                     bio.text = response.profiledata.userBio.toString()
+//                    linkText.text = response.profiledata.
                 }
 
             }

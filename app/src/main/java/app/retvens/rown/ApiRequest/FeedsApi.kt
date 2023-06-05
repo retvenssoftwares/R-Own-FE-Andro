@@ -51,7 +51,21 @@ interface FeedsApi {
         @Part("Can_See")Can_See:RequestBody,
         @Part("Can_comment")Can_comment:RequestBody,
         @Part("caption")caption:RequestBody,
+        @Part("location") location:RequestBody,
         @Part media: MultipartBody.Part
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @POST("post/{user_id}")
+    fun createMultiPost(
+        @Path("user_id") user_id:String,
+        @Part("user_id")userId:RequestBody,
+        @Part("post_type")post_type:RequestBody,
+        @Part("Can_See")Can_See:RequestBody,
+        @Part("Can_comment")Can_comment:RequestBody,
+        @Part("caption")caption:RequestBody,
+        @Part("location") location:RequestBody,
+        @Part media: List<MultipartBody.Part>
     ):Call<UpdateResponse>
 
     @Multipart

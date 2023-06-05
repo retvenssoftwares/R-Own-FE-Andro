@@ -19,7 +19,8 @@
             android:scaleType="centerCrop"
             android:elevation="10dp"
             app:shapeAppearanceOverlay="@style/SquareCornerImageForCards"
-            android:src="@drawable/png_vendor"
+            android:src="@color/white"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>

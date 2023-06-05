@@ -38,4 +38,6 @@ object RetrofitBuilder {
     val ProfileApis = retrofitBuilder2.create(ProfileApis::class.java)
 
     val exploreApis = retrofitBuilder2.create(ExploreApis::class.java)
+
+    val Notification = retrofitBuilder2.create(Notification::class.java)
 }

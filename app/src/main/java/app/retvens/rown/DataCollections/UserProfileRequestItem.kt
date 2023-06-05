@@ -1,11 +1,14 @@
 package app.retvens.rown.DataCollections
 
 import android.telecom.Call.Details
+import app.retvens.rown.NavigationFragments.PortfolioImages
+import app.retvens.rown.NavigationFragments.profile.hotels.GalleryImages
 
 data class UserProfileRequestItem(
 
     val Email: String,
     val Full_name: String?,
+    val hotelOwnerInfo: HotelOwnerInfo,
     val Interest: List<Interest>,
     val Mesibo_account: List<MesiboAccount>,
     val Phone: String,
@@ -13,6 +16,8 @@ data class UserProfileRequestItem(
     val Profile_pic: String?,
     val User_id: String,
     val Role: String,
+    val userBio: String,
+    val Gender: String,
     val profileCompletionStatus: String,
     val __v: Int,
     val _id: String,
@@ -22,6 +27,14 @@ data class UserProfileRequestItem(
     var isSelected:Boolean
 ){
     data class Details(
-        val vendor_id:String
+        val vendorImage:String,
+        val vendorDescription:String,
+        val websiteLink:String,
+        val portfolioLink:List<PortfolioImages>,
+    )
+    data class HotelOwnerInfo(
+        val hotelType:String,
+        val websiteLink:String,
+        val bookingEngineLink:String
     )
 }

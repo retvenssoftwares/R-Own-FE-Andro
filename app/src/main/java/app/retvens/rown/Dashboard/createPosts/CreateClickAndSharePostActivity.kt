@@ -23,6 +23,7 @@ import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
@@ -44,7 +45,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 class CreateClickAndSharePostActivity : AppCompatActivity(),
-    BottomSheetSelectAudience.OnBottomSelectAudienceClickListener {
+    BottomSheetSelectAudience.OnBottomSelectAudienceClickListener, BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
     lateinit var binding:ActivityCreateClickAndSharePostBinding
 
     lateinit var dialog: Dialog
@@ -175,6 +176,12 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
             binding.editImage.visibility = View.GONE
         }
 
+        binding.etLocationPostEvent.setOnClickListener {
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
+        }
 
         binding.sharePost.setOnClickListener {
 
@@ -187,6 +194,8 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
                 Toast.makeText(applicationContext,"Select Comment Status",Toast.LENGTH_SHORT).show()
             }else if (croppedImageUri == null){
                 Toast.makeText(applicationContext,"Select Image",Toast.LENGTH_SHORT).show()
+            }else if (binding.etLocationPostEvent.text.toString().isEmpty()){
+                binding.etLocationPostEvent.error = "select location first!!"
             }else{
                 createPost(user_id)
             }
@@ -245,7 +254,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
         val body = UploadRequestBody(file,"" +
                 "")
 
-        Toast.makeText(applicationContext,userId,Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext,userId,Toast.LENGTH_SHORT).show()
 
         val sendPost  = RetrofitBuilder.feedsApi.createPost(userId,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),userId),
@@ -253,6 +262,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canSee),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canComment),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.etLocationPostEvent.text.toString()),
             MultipartBody.Part.createFormData("media", file.name, body)
         )
 
@@ -264,7 +274,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(applicationContext,DashBoardActivity::class.java))
+                    onBackPressed()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -326,5 +336,9 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
         return (1..length)
             .map { allowedChars.random() }
             .joinToString("")
+    }
+
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        binding.etLocationPostEvent.setText(CountryStateCityFrBo)
     }
 }

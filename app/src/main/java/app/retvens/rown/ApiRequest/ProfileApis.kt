@@ -1,6 +1,7 @@
 package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.NavigationFragments.eventForUsers.onGoingEvents.OnGoingEventsData
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelDetailsProfileActivity
@@ -78,4 +79,77 @@ interface ProfileApis {
         @Path("vendorServiceId") vendorServiceId : String,
         @Body updatePrice: UpdatePrice
     ) : Call<UpdateResponse>
+
+    @Multipart
+    @POST("postbug")
+    fun postBug(
+        @Part bugimg : List<MultipartBody.Part>,
+        @Part("description_bug") description_bug: RequestBody
+    ) : Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("update/{user_id}")
+    fun updateUserProfileWithoutPDF(
+        @Path("user_id") user_id : String,
+        @Part("Full_name") Name: RequestBody,
+        @Part("userBio") userBio: RequestBody,
+        @Part("Gender") Gender: RequestBody,
+        @Part Profile_pic: MultipartBody.Part,
+    ) : Call<UserProfileResponse>
+
+    @Multipart
+    @PATCH("update/{user_id}")
+    fun updateUserProfileWithPDFImg(
+        @Path("user_id") user_id : String,
+        @Part("Full_name") Name: RequestBody,
+        @Part("userBio") userBio: RequestBody,
+        @Part("Gender") Gender: RequestBody,
+        @Part Profile_pic: MultipartBody.Part,
+        @Part resume: MultipartBody.Part,
+    ) : Call<UserProfileResponse>
+
+    @Multipart
+    @PATCH("update/{user_id}")
+    fun updateUserProfileWithPDF(
+        @Path("user_id") user_id : String,
+        @Part("Full_name") Name: RequestBody,
+        @Part("userBio") userBio: RequestBody,
+        @Part("Gender") Gender: RequestBody,
+        @Part resume: MultipartBody.Part,
+    ) : Call<UserProfileResponse>
+
+    @Multipart
+    @PATCH("update/{user_id}")
+    fun updateUserProfileWithoutImgPDF(
+        @Path("user_id") user_id : String,
+        @Part("Full_name") Name: RequestBody,
+        @Part("userBio") userBio: RequestBody,
+        @Part("Gender") Gender: RequestBody,
+    ) : Call<UserProfileResponse>
+
+    @Multipart
+    @PATCH("update/{user_id}")
+    fun updateVendorProfile(
+        @Path("user_id") user_id : String,
+        @Part("Full_name") Name: RequestBody,
+        @Part("userBio") userBio: RequestBody,
+        @Part Profile_pic: MultipartBody.Part,
+    ) : Call<UserProfileResponse>
+
+    @Multipart
+    @PATCH("update/{user_id}")
+    fun updateVendorProfileWithoutImg(
+        @Path("user_id") user_id : String,
+        @Part("Full_name") Name: RequestBody,
+        @Part("userBio") userBio: RequestBody,
+    ) : Call<UserProfileResponse>
+
+    @Multipart
+    @PATCH("hotelowner/{user_id}")
+    fun updateHotel(
+        @Path("user_id") user_id : String,
+        @Part("hotelType") hotelType: RequestBody,
+        @Part("bookingEngineLink") bookingEngineLink: RequestBody,
+        @Part("websiteLink") websiteLink: RequestBody,
+    ) : Call<UserProfileResponse>
 }

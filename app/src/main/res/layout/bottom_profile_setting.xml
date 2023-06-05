@@ -99,6 +99,39 @@
         android:background="@color/grey_40" />
 
     <LinearLayout
+        android:id="@+id/editVendor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_margin="20dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/svg_edit_pen"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Vendor Profile"
+            android:layout_marginStart="13dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="14dp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+    <View
+        android:id="@+id/vendorView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        android:background="@color/grey_40" />
+
+    <LinearLayout
         android:id="@+id/saved"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

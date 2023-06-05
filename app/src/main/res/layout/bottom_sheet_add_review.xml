@@ -25,7 +25,7 @@
             android:background="@drawable/png_blog"/>
 
         <TextView
-            android:id="@+id/profile_username"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -37,12 +37,12 @@
             android:textColor="@color/black"/>
 
         <RatingBar
-            android:id="@+id/rating_barHotel"
+            android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:rating="5"
-            android:stepSize="3"
-            android:numStars="5"
+            android:stepSize="1"
+            android:progressTint="@color/green_own"
+            android:progressBackgroundTint="@color/grey_40"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="5dp"/>
 
@@ -61,11 +61,11 @@
             android:layout_marginHorizontal="20dp"
             app:cardBackgroundColor="@color/white">
             <EditText
-                android:id="@+id/search_country"
+                android:id="@+id/tellUs"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:gravity="top"
-                android:hint="Search for country"
+                android:hint="Tell us more"
                 android:textColorHint="@color/grey_40"
                 android:textColor="@color/black"
                 style="@style/TextAppearance.AppCompat.Body1"

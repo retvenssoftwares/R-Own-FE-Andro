@@ -21,18 +21,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/profile_backBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:src="@drawable/community_btn"
-                app:tint="@color/black"
-                app:layout_constraintBottom_toBottomOf="@id/profile_setting"
-                app:layout_constraintStart_toStartOf="parent"/>
-
             <TextView
                 android:id="@+id/profile_username"
                 android:layout_width="wrap_content"
@@ -40,11 +28,11 @@
                 android:text="username"
                 android:fontFamily="@font/montserrat_semibold"
                 android:textSize="16dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="18dp"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toTopOf="@id/profile_backBtn"
-                app:layout_constraintBottom_toBottomOf="@id/profile_backBtn"
-                app:layout_constraintStart_toEndOf="@id/profile_backBtn"/>
+                app:layout_constraintTop_toTopOf="@id/profile_setting"
+                app:layout_constraintBottom_toBottomOf="@id/profile_setting"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <ImageView
                 android:id="@+id/profile_setting"
@@ -89,6 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User Name"
+            android:visibility="gone"
             android:fontFamily="@font/montserrat_regular"
             android:textSize="12dp"
             android:textColor="@color/black"
@@ -201,7 +190,7 @@
             app:layout_constraintStart_toStartOf="@id/profile"/>
 
         <TextView
-            android:id="@+id/linkText"
+            android:id="@+id/websiteLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="www.example.com"

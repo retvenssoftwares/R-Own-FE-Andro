@@ -18,6 +18,8 @@ class ReviewsActivity : AppCompatActivity() {
         binding = ActivityReviewsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.reviewsBackBtn.setOnClickListener { onBackPressed() }
+
         setUpReviewAdapter()
 
     }
@@ -27,14 +29,13 @@ class ReviewsActivity : AppCompatActivity() {
         binding.whatPeopleRecycler.setHasFixedSize(true)
 
         val blogs = listOf<VendorReviewsData>(
-            VendorReviewsData("title 81"),
-            VendorReviewsData("title 8311"),
-            VendorReviewsData("title 381"),
+            VendorReviewsData("8", "title 81","A"),
+            VendorReviewsData("8", "title 81","A")
         )
 
-        vendorsReviewAdapter = VendorsReviewAdapter(blogs, applicationContext)
-        binding.whatPeopleRecycler.adapter = vendorsReviewAdapter
-        vendorsReviewAdapter.notifyDataSetChanged()
+//        vendorsReviewAdapter = VendorsReviewAdapter(blogs, applicationContext)
+//        binding.whatPeopleRecycler.adapter = vendorsReviewAdapter
+//        vendorsReviewAdapter.notifyDataSetChanged()
 
     }
 }

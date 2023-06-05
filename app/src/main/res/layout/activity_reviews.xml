@@ -118,18 +118,20 @@
 
                 <TextView
                     android:id="@+id/trip"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="Trip Advisor Rating"
                     android:fontFamily="@font/montserrat_regular"
                     android:textSize="13dp"
                     android:textColor="@color/black"
                     android:layout_marginVertical="12dp"
+                    app:layout_constraintEnd_toStartOf="@id/lls"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/devider"
                     app:layout_constraintStart_toStartOf="@id/im"/>
 
                 <LinearLayout
+                    android:id="@+id/lls"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -152,7 +154,11 @@
                             android:textColor="@color/black"
                             android:text="4.3"
                             android:paddingHorizontal="5dp"
-                            android:textSize="12dp"/>
+                            android:textSize="13dp"
+                            android:textAlignment="center"
+                            android:drawablePadding="2dp"
+                            android:drawableTint="@color/suggested_job_yellow"
+                            app:drawableStartCompat="@drawable/ic_star_black_18dp" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -170,7 +176,11 @@
                             android:textColor="@color/black"
                             android:text="4.3"
                             android:paddingHorizontal="5dp"
-                            android:textSize="12dp"/>
+                            android:textSize="13dp"
+                            android:textAlignment="center"
+                            android:drawablePadding="2dp"
+                            android:drawableTint="@color/suggested_job_yellow"
+                            app:drawableStartCompat="@drawable/ic_star_black_18dp" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -188,7 +198,11 @@
                             android:textColor="@color/black"
                             android:text="4.3"
                             android:paddingHorizontal="5dp"
-                            android:textSize="12dp"/>
+                            android:textSize="13dp"
+                            android:textAlignment="center"
+                            android:drawablePadding="2dp"
+                            android:drawableTint="@color/suggested_job_yellow"
+                            app:drawableStartCompat="@drawable/ic_star_black_18dp" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -206,7 +220,11 @@
                             android:textColor="@color/black"
                             android:text="4.3"
                             android:paddingHorizontal="5dp"
-                            android:textSize="12dp"/>
+                            android:textSize="13dp"
+                            android:textAlignment="center"
+                            android:drawablePadding="2dp"
+                            android:drawableTint="@color/suggested_job_yellow"
+                            app:drawableStartCompat="@drawable/ic_star_black_18dp" />
 
                     </androidx.cardview.widget.CardView>
 

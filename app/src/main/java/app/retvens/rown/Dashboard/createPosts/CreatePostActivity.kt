@@ -38,6 +38,7 @@ import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
 import app.retvens.rown.databinding.ActivityCreatePostBinding
 import app.retvens.rown.utils.getRandomString
+import app.retvens.rown.utils.prepareFilePart
 import com.bumptech.glide.Glide
 import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity
 import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants
@@ -55,8 +56,11 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 class CreatePostActivity : AppCompatActivity(),
-    BottomSheetSelectAudience.OnBottomSelectAudienceClickListener {
+    BottomSheetSelectAudience.OnBottomSelectAudienceClickListener,BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
     lateinit var binding: ActivityCreatePostBinding
+
+    private var fileList : ArrayList<MultipartBody.Part> = ArrayList()
+    private var imagesList : ArrayList<Uri> = ArrayList()
 
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
@@ -255,6 +259,7 @@ class CreatePostActivity : AppCompatActivity(),
 
         binding.deletePost.setOnClickListener {
             if (imgUriP == imgUri1){
+                imagesList.remove(imgUri1)
                 imgUriP = null
                 imgUri1 = null
                 binding.imgPreview.setImageURI(imgUriP)
@@ -264,6 +269,7 @@ class CreatePostActivity : AppCompatActivity(),
                     binding.editImage.visibility = View.GONE
                 }
             } else if(imgUriP == imgUri2){
+                imagesList.remove(imgUri2)
                 imgUriP = null
                 imgUri2 = null
                 binding.imgPreview.setImageURI(imgUriP)
@@ -273,6 +279,7 @@ class CreatePostActivity : AppCompatActivity(),
                     binding.editImage.visibility = View.GONE
                 }
             } else if(imgUriP == imgUri3){
+                imagesList.remove(imgUri3)
                 imgUriP = null
                 imgUri3 = null
                 binding.imgPreview.setImageURI(imgUriP)
@@ -282,6 +289,7 @@ class CreatePostActivity : AppCompatActivity(),
                     binding.editImage.visibility = View.GONE
                 }
             } else if(imgUriP == imgUri4){
+                imagesList.remove(imgUri4)
                 imgUriP = null
                 imgUri4 = null
                 binding.imgPreview.setImageURI(imgUriP)
@@ -291,6 +299,7 @@ class CreatePostActivity : AppCompatActivity(),
                     binding.editImage.visibility = View.GONE
                 }
             } else if(imgUriP == imgUri5){
+                imagesList.remove(imgUri5)
                 imgUriP = null
                 imgUri5 = null
                 binding.imgPreview.setImageURI(imgUriP)
@@ -314,13 +323,20 @@ class CreatePostActivity : AppCompatActivity(),
                 Toast.makeText(applicationContext,"Select Post Seen Status",Toast.LENGTH_SHORT).show()
             }else if (binding.canCommentText.text == "Can comment"){
                 Toast.makeText(applicationContext,"Select Comment Status",Toast.LENGTH_SHORT).show()
-            }else if (imgUri1 == null){
+            }else if (imagesList.isEmpty()){
                 Toast.makeText(applicationContext,"Select Image",Toast.LENGTH_SHORT).show()
+            }else if (binding.etLocationPostEvent.text.toString().isEmpty()){
+                binding.etLocationPostEvent.error = "select location first!!"
             }else{
                 createPost(user_id)
             }
+        }
 
-
+        binding.etLocationPostEvent.setOnClickListener {
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
 
     }
@@ -331,26 +347,18 @@ class CreatePostActivity : AppCompatActivity(),
         val canComment = binding.canCommentText.text.toString()
         val caption = binding.whatDYEt.text.toString()
 
-        val parcelFileDescriptor = contentResolver.openFileDescriptor(
-            imgUri1!!,"r",null
-        )?:return
+        imagesList.forEach {
+            fileList.add(prepareFilePart(it, "media", applicationContext)!!)
+        }
 
-        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file =  File(cacheDir, "${getRandomString(6)}.jpg")
-        val outputStream = FileOutputStream(file)
-        inputStream.copyTo(outputStream)
-        val body = UploadRequestBody(file,"" +
-                "")
-
-        Toast.makeText(applicationContext,userId,Toast.LENGTH_SHORT).show()
-
-        val sendPost  = RetrofitBuilder.feedsApi.createPost(userId,
+        val sendPost  = RetrofitBuilder.feedsApi.createMultiPost(userId,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),userId),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"share some media"),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canSee),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canComment),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption),
-            MultipartBody.Part.createFormData("media", file.name, body)
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"caption"),
+            fileList
             )
 
         sendPost.enqueue(object : Callback<UpdateResponse?> {
@@ -436,30 +444,35 @@ class CreatePostActivity : AppCompatActivity(),
                         binding.img1.setImageURI(croppedImage)
                         imgUri1 = compressImage(croppedImage)
                         imgUriP = imgUri1
+                        imagesList.add(imgUri1!!)
                     }
                     2 -> {
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img2.setImageURI(croppedImage)
                         imgUri2 = compressImage(croppedImage)
                         imgUriP = imgUri2
+                        imagesList.add(imgUri2!!)
                     }
                     3 -> {
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img3.setImageURI(croppedImage)
                         imgUri3 = compressImage(croppedImage)
                         imgUriP = imgUri3
+                        imagesList.add(imgUri3!!)
                     }
                     4 -> {
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img4.setImageURI(croppedImage)
                         imgUri4 = compressImage(croppedImage)
                         imgUriP = imgUri4
+                        imagesList.add(imgUri4!!)
                     }
                     5 -> {
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img5.setImageURI(croppedImage)
                         imgUri5 = compressImage(croppedImage)
                         imgUriP = imgUri5
+                        imagesList.add(imgUri5!!)
                     }
                 }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -472,28 +485,38 @@ class CreatePostActivity : AppCompatActivity(),
             if (outputUri != null){
 
             if (imgUriP == imgUri1) {
+                imagesList.remove(imgUri1)
                 imgUriP = outputUri
                 imgUri1 = imgUriP
+                imagesList.add(imgUri1!!)
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img1.setImageURI(imgUri1)
             } else if (imgUriP == imgUri2){
+                imagesList.remove(imgUri2)
                 imgUriP = outputUri
                 imgUri2 = imgUriP
+                imagesList.add(imgUri2!!)
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img2.setImageURI(imgUri2)
             } else if (imgUriP == imgUri3){
+                imagesList.remove(imgUri3)
                 imgUriP = outputUri
                 imgUri3 = imgUriP
+                imagesList.add(imgUri3!!)
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img3.setImageURI(imgUri3)
             } else if (imgUriP == imgUri4){
+                imagesList.remove(imgUri4)
                 imgUriP = outputUri
                 imgUri4 = imgUriP
+                imagesList.add(imgUri4!!)
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img4.setImageURI(imgUri4)
             } else if (imgUriP == imgUri5){
+                imagesList.remove(imgUri5)
                 imgUriP = outputUri
                 imgUri5 = imgUriP
+                imagesList.add(imgUri5!!)
                 binding.imgPreview.setImageURI(imgUriP)
                 binding.img5.setImageURI(imgUri5)
             }
@@ -547,6 +570,9 @@ class CreatePostActivity : AppCompatActivity(),
         }else{
             binding.canCommentText.text = audienceFrBo
         }
+    }
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        binding.etLocationPostEvent.setText(CountryStateCityFrBo)
     }
 
 

@@ -3,6 +3,7 @@ package app.retvens.rown.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.net.Uri
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,17 +11,25 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.io.FileOutputStream
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.Random
+import kotlin.streams.asSequence
 
 var role = ""
 var profileCompletionStatus = "50"
+var websiteLinkV = ""
 var phone = ""
 
 fun dateFormat(date : String) : String {
@@ -95,4 +104,18 @@ fun getRandomString(length: Int) : String {
 
         }
     })
+}
+
+fun prepareFilePart(fileUri: Uri, schema : String, context: Context): MultipartBody.Part? {
+
+    val filesDir = context.filesDir
+    val file = File(filesDir,"${getRandomString(6)}.png")
+
+    val inputStream = context.contentResolver.openInputStream(fileUri)
+    val outputStream = FileOutputStream(file)
+    inputStream!!.copyTo(outputStream)
+
+    val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+    return MultipartBody.Part.createFormData(schema, file.name, requestBody)
 }

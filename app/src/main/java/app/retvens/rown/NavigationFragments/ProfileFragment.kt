@@ -37,6 +37,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
     lateinit var name : TextView
+    lateinit var bio : TextView
     lateinit var userName:TextView
 
     lateinit var polls : TextView
@@ -59,11 +60,12 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
         profile = view.findViewById(R.id.profile)
         name = view.findViewById(R.id.profile_name)
+        userName = view.findViewById(R.id.profile_username)
+        bio = view.findViewById(R.id.bio)
 
         polls = view.findViewById(R.id.polls)
         media = view.findViewById(R.id.media)
         status = view.findViewById(R.id.status)
-        userName = view.findViewById(R.id.userName)
         postCount = view.findViewById(R.id.posts_count)
         connCont = view.findViewById(R.id.connections_count)
         requestCont = view.findViewById(R.id.requests_count)
@@ -149,6 +151,12 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                     postCount.text = response.data.postCountLength.toString()
                     connCont.text = response.data.connCountLength.toString()
                     requestCont.text = response.data.reqsCountLength.toString()
+                    bio.text = response.data.profile.userBio
+                    if (response.data.profile.User_name == ""){
+                        userName.text = "Complete Your Profile"
+                    } else {
+                        userName.text = response.data.profile.User_name
+                    }
                 }else{
                     Toast.makeText(requireContext(),response.code(),Toast.LENGTH_SHORT).show()
                 }

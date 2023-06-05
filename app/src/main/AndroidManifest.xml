@@ -45,9 +45,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.profile.EditVendorInfoActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.vendorsDetails.VendorsImageViewActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
             android:name=".viewAll.AllHotelsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash"/>
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.job.ViewAllSuggestedJobsActivity"
             android:exported="false"
@@ -495,7 +503,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
- 
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+
         <activity
             android:name=".authentication.OtpVerification"
             android:exported="true"

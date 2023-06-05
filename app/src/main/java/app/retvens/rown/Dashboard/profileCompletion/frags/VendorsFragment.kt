@@ -15,9 +15,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,21 +33,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.VendorServicesAdapter
-import app.retvens.rown.DataCollections.ProfileCompletion.CreateVendorDataClass
-import app.retvens.rown.DataCollections.ProfileCompletion.PostVendorSerivces
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.DataCollections.ProfileCompletion.VendorServicesData
-import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetServiceName
+import app.retvens.rown.utils.getRandomString
+import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
@@ -72,13 +65,11 @@ import java.io.IOException
 
 class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottomSNClickListener {
 
+    lateinit var servicesLayout : TextInputLayout
     lateinit var servicesET : TextInputEditText
     private lateinit var selectLogo:ImageView
     private lateinit var setLogo:ShapeableImageView
     lateinit var dialog: Dialog
-    var REQUEST_CAMERA_PERMISSION : Int = 0
-    var PICK_IMAGE_REQUEST_CODE : Int = 0
-    private var logoOfImageUri: Uri? = null //finalUri
     private lateinit var brandName:TextInputEditText
     private lateinit var brandNameLayout: TextInputLayout
     private lateinit var brandDescriptionLayout: TextInputLayout
@@ -87,13 +78,6 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
     private lateinit var brandDesc:TextInputEditText
     private lateinit var portfolio:TextInputEditText
     private lateinit var website:TextInputEditText
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var vendorServicesAdapter: VendorServicesAdapter
-    private  var selectedServices:ArrayList<String> = ArrayList()
-    private var setectedIds:ArrayList<String> = ArrayList()
-    private var vendorId:String = ""
-    private lateinit var searchBar:EditText
-
     lateinit var progressDialog : Dialog
 
     private var cameraImageUri: Uri? = null
@@ -128,6 +112,30 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         }
     }
 
+    var REQUEST_CAMERA_PERMISSION : Int = 0
+    var PICK_IMAGE_REQUEST_CODE : Int = 0
+    private var logoOfImageUri: Uri? = null //finalUri
+
+    //Cropped image uri
+    private var croppedImageUri: Uri?= null
+
+    private var imgUri1 : Uri?= null   // Final uri for img1
+    private var imgUri2 : Uri?= null   // Final uri for img2
+    private var imgUri3 : Uri?= null   // Final uri for img3
+
+    private var selectedImg = 0
+
+    private var fileList : ArrayList<MultipartBody.Part> = ArrayList()
+    private var imagesList : ArrayList<Uri> = ArrayList()
+
+    private lateinit var img1 : ImageView
+    private lateinit var img2 : ImageView
+    private lateinit var img3 : ImageView
+
+    private lateinit var deleteImg1 : ImageView
+    private lateinit var deleteImg2 : ImageView
+    private lateinit var deleteImg3 : ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -141,6 +149,15 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
 
         cameraImageUri = createImageUri()!!
 
+        img1 = view.findViewById(R.id.img_1)
+        img2 = view.findViewById(R.id.img_2)
+        img3 = view.findViewById(R.id.img_3)
+
+        deleteImg1 = view.findViewById(R.id.delete_img1)
+        deleteImg2 = view.findViewById(R.id.delete_img2)
+        deleteImg3 = view.findViewById(R.id.delete_img3)
+
+        servicesLayout = view.findViewById(R.id.serviceLayout)
         servicesET = view.findViewById(R.id.vendor_services_et)
         servicesET.setOnClickListener {
             val bottomSheet = BottomSheetServiceName()
@@ -152,6 +169,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         selectLogo = view.findViewById(R.id.camera_vendor)
         setLogo = view.findViewById(R.id.hotel_vendor_profile)
         selectLogo.setOnClickListener {
+            selectedImg = 4
             //Requesting Permission For CAMERA
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
@@ -173,6 +191,78 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         website = view.findViewById(R.id.website_link)
         websiteLayout = view.findViewById(R.id.website_link_layout)
 
+        img1.setOnClickListener {
+            selectedImg = 1
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openGallery()
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+            }
+        }
+        img2.setOnClickListener {
+            selectedImg = 2
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openGallery()
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+            }
+        }
+        img3.setOnClickListener {
+            selectedImg = 3
+            //Requesting Permission For CAMERA
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openGallery()
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+            }
+        }
+
+        deleteImg1.setOnClickListener {
+            imagesList.remove(imgUri1)
+            imgUri1 = null
+            img1.setImageURI(imgUri1)
+            deleteImg1.visibility = View.GONE
+            selectedImg = 1
+        }
+        deleteImg2.setOnClickListener {
+            imagesList.remove(imgUri2)
+            imgUri2 = null
+            img2.setImageURI(imgUri2)
+            deleteImg2.visibility = View.GONE
+            selectedImg = if (imgUri1 == null){
+                1
+            } else {
+                2
+            }
+        }
+        deleteImg3.setOnClickListener {
+            imagesList.remove(imgUri3)
+            imgUri3 = null
+            img3.setImageURI(imgUri3)
+            deleteImg3.visibility = View.GONE
+            selectedImg = if (imgUri1 == null){
+                1
+            } else if (imgUri2 == null){
+                2
+            } else{
+                3
+            }
+        }
+
         val submit = view.findViewById<CardView>(R.id.card_job_next)
         submit.setOnClickListener {
             if (logoOfImageUri == null){
@@ -182,16 +272,25 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
             } else if(brandDesc.length() < 3){
                 brandNameLayout.isErrorEnabled = false
                 brandDescriptionLayout.error = "Please enter Description"
-            } else if(portfolio.length() < 3){
-                brandNameLayout.isErrorEnabled = false
-                brandDescriptionLayout.isErrorEnabled = false
-                portfolioLayout.error = "Please enter your Portfolio Link"
-            } else if(website.length() < 3){
+            } else if(servicesET.length() < 6){
                 brandNameLayout.isErrorEnabled = false
                 brandDescriptionLayout.isErrorEnabled = false
                 portfolioLayout.isErrorEnabled = false
-                websiteLayout.error = "Please enter your website link"
+                servicesLayout.error = "Please enter an valid website link"
+            } else if(website.length() < 6){
+                brandNameLayout.isErrorEnabled = false
+                brandDescriptionLayout.isErrorEnabled = false
+                portfolioLayout.isErrorEnabled = false
+                servicesLayout.isErrorEnabled = false
+                websiteLayout.error = "Please enter an valid website link"
+            } else if(imagesList.isEmpty()){
+                Toast.makeText(context, "Please select at least one portfolio image", Toast.LENGTH_SHORT).show()
             } else {
+                brandNameLayout.isErrorEnabled = false
+                brandDescriptionLayout.isErrorEnabled = false
+                portfolioLayout.isErrorEnabled = false
+                servicesLayout.isErrorEnabled = false
+                websiteLayout.isErrorEnabled = false
                 progressDialog = Dialog(requireContext())
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 progressDialog.setCancelable(false)
@@ -204,73 +303,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                 uploadData()
             }
         }
-
-        getVendor()
     }
-
-
-    private fun getVendor() {
-        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        val data = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
-
-        data.enqueue(object : Callback<UserProfileRequestItem?> {
-            override fun onResponse(
-                call: Call<UserProfileRequestItem?>,
-                response: Response<UserProfileRequestItem?>
-            ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    vendorId = response.vendorInfo.vendor_id
-                }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
-
-    }
-
-    private fun sendServices() {
-
-        for (x in setectedIds){
-//
-//            Toast.makeText(requireContext(),x.toString(),Toast.LENGTH_SHORT).show()
-
-
-            val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-            val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-            val data = PostVendorSerivces(user_id,x)
-
-            val send = RetrofitBuilder.profileCompletion.setServices(vendorId,data)
-
-            send.enqueue(object : Callback<UpdateResponse?> {
-                override fun onResponse(
-                    call: Call<UpdateResponse?>,
-                    response: Response<UpdateResponse?>
-                ) {
-                    if (response.isSuccessful){
-                        val response = response.body()!!
-                        Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                    Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-                }
-            })
-
-        }
-
-    }
-
     private fun uploadData() {
         val name = brandName.text.toString()
         val description = brandDesc.text.toString()
@@ -285,16 +318,21 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file =  File(requireContext().cacheDir, "cropped_${requireContext().contentResolver.getFileName(logoOfImageUri!!)}.jpg")
+        val file =  File(requireContext().cacheDir, "cropped_${getRandomString(6)}.jpg")
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
 
+        imagesList.forEach {
+            fileList.add(prepareFilePart(it, "portfolioLinkdata", requireContext())!!)
+        }
+
         val send = RetrofitBuilder.profileCompletion.uploadVendorData(user_id,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
-            MultipartBody.Part.createFormData("Vendorimg", file.name, body)
-
+            MultipartBody.Part.createFormData("Vendorimg", file.name, body),
+            fileList,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),website)
         )
 
         send.enqueue(object : Callback<UpdateResponse?> {
@@ -341,9 +379,30 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = resultingImage.uri
 
-                    logoOfImageUri = croppedImage
-                compressImage(logoOfImageUri!!)
-//                setLogo.setImageURI(logoOfImageUri)
+                when (selectedImg) {
+                    1 -> {
+                        deleteImg1.visibility = View.VISIBLE
+                        imgUri1 = compressImage(croppedImage)
+                        img1.setImageURI(imgUri1)
+                        imagesList.add(imgUri1!!)
+                    }
+                    2 -> {
+                        deleteImg2.visibility = View.VISIBLE
+                        img2.setImageURI(croppedImage)
+                        imgUri2 = compressImage(croppedImage)
+                        imagesList.add(imgUri2!!)
+                    }
+                    3 -> {
+                        deleteImg3.visibility = View.VISIBLE
+                        imgUri3 = compressImage(croppedImage)
+                        img3.setImageURI(imgUri3)
+                        imagesList.add(imgUri3!!)
+                    }
+                    4 -> {
+                        logoOfImageUri = compressImage( croppedImage!!)
+                        setLogo.setImageURI(logoOfImageUri)
+                    }
+                }
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(context,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
@@ -351,104 +410,6 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         }
 
     }
-
-    private fun openVendorService() {
-
-        val dialogRole = Dialog(requireContext())
-        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogRole.setContentView(R.layout.bottom_sheet_vendor_services)
-        dialogRole.setCancelable(true)
-
-        dialogRole.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogRole.window?.setGravity(Gravity.BOTTOM)
-        dialogRole.show()
-
-        recyclerView = dialogRole.findViewById(R.id.brand_services)
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        searchBar = dialogRole.findViewById(R.id.searchServices)
-
-        getServices()
-
-
-
-    }
-
-    private fun getServices() {
-        val data = RetrofitBuilder.profileCompletion.getServices()
-
-        data.enqueue(object : Callback<List<VendorServicesData>?>,
-            VendorServicesAdapter.OnJobClickListener {
-            override fun onResponse(
-                call: Call<List<VendorServicesData>?>,
-                response: Response<List<VendorServicesData>?>
-            ) {
-                if (response.isSuccessful && isAdded){
-                    val response = response.body()!!
-                    val originalData = response.toList()
-                    vendorServicesAdapter = VendorServicesAdapter(requireContext(),response)
-                    vendorServicesAdapter.notifyDataSetChanged()
-                    recyclerView.adapter = vendorServicesAdapter
-
-                    vendorServicesAdapter.setOnJobClickListener(this)
-
-                    searchBar.addTextChangedListener(object : TextWatcher {
-                        override fun beforeTextChanged(
-                            p0: CharSequence?,
-                            p1: Int,
-                            p2: Int,
-                            p3: Int
-                        ) {
-
-                        }
-
-                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            val filterData = originalData.filter { item ->
-                                item.service_name.contains(p0.toString(),ignoreCase = true)
-                            }
-
-                            vendorServicesAdapter.updateData(filterData)
-                        }
-
-                        override fun afterTextChanged(p0: Editable?) {
-
-                        }
-
-                    })
-                }
-                else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<VendorServicesData>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onJobClick(job: VendorServicesData) {
-                val index = selectedServices.indexOf(job.service_name)
-                val index1 = setectedIds.indexOf(job.serviceId)
-                if (index == -1) {
-                    selectedServices.add(job.service_name)
-                    setectedIds.add(job.serviceId)
-                } else {
-                    selectedServices.removeAt(index)
-                    setectedIds.removeAt(index1)
-                }
-
-                Log.e("serives",selectedServices.toString())
-
-                servicesET.setText(selectedServices.toString())
-            }
-        })
-    }
-
     override fun handleBackPressed(): Boolean {
         val fragment = BasicInformationFragment()
         val transaction = activity?.supportFragmentManager?.beginTransaction()
@@ -528,8 +489,6 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
 
             compressed = Uri.fromFile(finalFile)
 
-            logoOfImageUri = compressed
-            setLogo.setImageURI(logoOfImageUri)
             val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             intent.setData(compressed)
             context?.sendBroadcast(intent)

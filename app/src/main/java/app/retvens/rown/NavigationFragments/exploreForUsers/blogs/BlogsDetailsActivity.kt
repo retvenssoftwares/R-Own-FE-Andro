@@ -3,10 +3,14 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.blogs
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.saveId.SaveBlog
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetBlogComment
+import app.retvens.rown.bottomsheet.BottomSheetComment
+import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.databinding.ActivityBlogsDetailsBinding
 import app.retvens.rown.utils.dateFormat
 import app.retvens.rown.viewAll.viewAllBlogs.LikeBlog
@@ -38,12 +42,12 @@ class BlogsDetailsActivity : AppCompatActivity() {
         val saved = intent.getStringExtra("saved")
         val like = intent.getStringExtra("like")
 
-        Toast.makeText(applicationContext, like.toString(), Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext, like.toString(), Toast.LENGTH_SHORT).show()
 
         if (saved == "saved"){
             operatioin = "pop"
             isSaved = false
-            binding.savePost.setImageResource(R.drawable.svg_saved_profile)
+            binding.savePost.setImageResource(R.drawable.svg_saved)
         } else {
             operatioin = "push"
             isSaved = true
@@ -71,7 +75,12 @@ class BlogsDetailsActivity : AppCompatActivity() {
         binding.likePost.setOnClickListener {
             likePost(blogId)
         }
-
+        Toast.makeText(applicationContext, blogId.toString(), Toast.LENGTH_SHORT).show()
+        binding.comment.setOnClickListener {
+            val bottomSheet = BottomSheetBlogComment(blogId!!,cover!!)
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
+        }
         binding.savePost.setOnClickListener {
             savePosts(blogId)
         }
@@ -90,7 +99,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     if (isSaved) {
                         isSaved = !isSaved
-                        binding.savePost.setImageResource(R.drawable.svg_saved_profile)
+                        binding.savePost.setImageResource(R.drawable.svg_saved)
                     }else {
                         isSaved = !isSaved
                         binding.savePost.setImageResource(R.drawable.svg_save_post)

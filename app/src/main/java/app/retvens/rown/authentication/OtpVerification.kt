@@ -315,7 +315,8 @@ open class OtpVerification : AppCompatActivity() {
 
     }
     private fun searchUser() {
-        val search = RetrofitBuilder.retrofitBuilder.searchUser(SearchUser(phone.toString()))
+        val p = "+91" +phoneNumber.toString()
+        val search = RetrofitBuilder.retrofitBuilder.searchUser(SearchUser(p))
         search.enqueue(object : Callback<UserProfileResponse?> {
             override fun onResponse(
                 call: Call<UserProfileResponse?>,
@@ -328,7 +329,7 @@ open class OtpVerification : AppCompatActivity() {
                 Log.d("search",response.body().toString())
                 moveTo(applicationContext,"MoveToPI")
                 val intent = Intent(applicationContext, PersonalInformation::class.java)
-                intent.putExtra("phone",phoneNumber)
+                intent.putExtra("phone",p)
                 intent.putExtra("user_id",user_id)
                 intent.putExtra("message",message)
                 startActivity(intent)

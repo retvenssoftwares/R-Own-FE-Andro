@@ -16,6 +16,7 @@ import app.retvens.rown.utils.role
 import app.retvens.rown.utils.saveConnectionNo
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
+import app.retvens.rown.utils.websiteLinkV
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
@@ -93,6 +94,9 @@ class MainActivity : AppCompatActivity() {
                             phone = response.Phone
                             role = response.Role
                             profileCompletionStatus = response.profileCompletionStatus
+
+                            websiteLinkV = response.vendorInfo.websiteLink
+
                             saveConnectionNo(
                                 applicationContext,
                                 response.connection_count.toString()

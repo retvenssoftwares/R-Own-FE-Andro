@@ -264,6 +264,7 @@ class DashBoardActivity : AppCompatActivity() {
         }
 
         binding.cardBug.setOnClickListener {
+            drawerLayout.closeDrawer(GravityCompat.START)
             startActivity(Intent(applicationContext, BugSpottedActivity::class.java))
         }
 

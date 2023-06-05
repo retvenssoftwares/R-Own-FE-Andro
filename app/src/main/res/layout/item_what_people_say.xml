@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/ratingNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4.3"
@@ -37,6 +38,7 @@
             android:layout_marginHorizontal="10dp"/>
 
         <TextView
+            android:id="@+id/fullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Arjun Gupta"
@@ -47,6 +49,7 @@
             android:layout_marginHorizontal="10dp"/>
 
         <TextView
+            android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ordered on 18 May 2023"
