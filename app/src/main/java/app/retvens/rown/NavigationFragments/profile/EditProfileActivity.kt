@@ -287,7 +287,7 @@ class EditProfileActivity : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     if (response.isSuccessful){
                         Toast.makeText(applicationContext, Gender, Toast.LENGTH_SHORT).show()
                         saveFullName(applicationContext, binding.etNameEdit.text.toString())

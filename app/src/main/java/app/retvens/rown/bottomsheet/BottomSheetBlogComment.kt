@@ -21,6 +21,7 @@ import app.retvens.rown.NavigationFragments.FragmntAdapters.CommentAdapter
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.viewAllBlogs.BlogAllComments
 import app.retvens.rown.viewAll.viewAllBlogs.BlogsCommentAdapter
+import app.retvens.rown.viewAll.viewAllBlogs.Comment
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.imageview.ShapeableImageView
@@ -171,7 +172,7 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
                     }
 
 
-//                    blogsCommentAdapter.setOnItemClickListener(this)
+                    blogsCommentAdapter.setOnItemClickListener(this)
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -181,7 +182,7 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
                 Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
             }
 
-            override fun onItemClick(dataItem: Comments) {
+            override fun onItemClick(dataItem: Comment) {
                 Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
                 child = "1"
                 parentCommentId = dataItem.comment_id

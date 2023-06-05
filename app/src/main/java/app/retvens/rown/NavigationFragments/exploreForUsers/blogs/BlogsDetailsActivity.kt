@@ -75,7 +75,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
         binding.likePost.setOnClickListener {
             likePost(blogId)
         }
-        Toast.makeText(applicationContext, blogId.toString(), Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext, blogId.toString(), Toast.LENGTH_SHORT).show()
         binding.comment.setOnClickListener {
             val bottomSheet = BottomSheetBlogComment(blogId!!,cover!!)
             val fragManager = supportFragmentManager

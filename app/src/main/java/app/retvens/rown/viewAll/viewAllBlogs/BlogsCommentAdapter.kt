@@ -22,7 +22,7 @@ class BlogsCommentAdapter(val context: Context, var commentList: List<Comment>):
 
 
     interface OnItemClickListener {
-        fun onItemClick(dataItem: Comments)
+        fun onItemClick(dataItem: Comment)
 
 
     }
@@ -63,11 +63,11 @@ class BlogsCommentAdapter(val context: Context, var commentList: List<Comment>):
         }
 
         holder.recycler.layoutManager = LinearLayoutManager(context)
-//        val nestedAdapter = NestedCommentAdapter(context,data.replies[position])
-//        holder.recycler.adapter = nestedAdapter
+        val nestedAdapter = NestedCommentAdapter(context,data.replies)
+        holder.recycler.adapter = nestedAdapter
 
         holder.reply.setOnClickListener {
-//            onItemClickListener?.onItemClick(data)
+            onItemClickListener?.onItemClick(data)
         }
 
     }
