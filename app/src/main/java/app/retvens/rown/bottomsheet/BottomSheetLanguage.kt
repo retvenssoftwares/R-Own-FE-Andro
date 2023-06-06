@@ -1,50 +1,76 @@
-package app.retvens.rown.NavigationFragments.profile.setting.profileSetting
+package app.retvens.rown.bottomsheet
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
+import android.widget.RelativeLayout
+import androidx.appcompat.app.AppCompatActivity
 import app.retvens.rown.R
-import app.retvens.rown.databinding.ActivityLanguageSettingBinding
-import app.retvens.rown.utils.loadLocale
 import app.retvens.rown.utils.setLocale
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class LanguageSettingActivity : AppCompatActivity() {
-    lateinit var binding : ActivityLanguageSettingBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loadLocale(this)
-        binding = ActivityLanguageSettingBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        binding.reBackBtn.setOnClickListener { onBackPressed() }
+class BottomSheetLanguage : BottomSheetDialogFragment() {
 
-        val language_arabic = findViewById<ImageView>(R.id.language_arabic)
-        val language_english = findViewById<ImageView>(R.id.language_english)
-        val language_hindi = findViewById<ImageView>(R.id.language_hindi)
-        val language_spanish = findViewById<ImageView>(R.id.language_spanish)
-        val language_german = findViewById<ImageView>(R.id.language_german)
-        val language_japanese = findViewById<ImageView>(R.id.language_japanese)
-        val language_portuguese = findViewById<ImageView>(R.id.language_portuguese)
-        val language_italian = findViewById<ImageView>(R.id.language_italian)
-        val language_french = findViewById<ImageView>(R.id.language_french)
-        val language_russian = findViewById<ImageView>(R.id.language_russian)
-        val language_chinese = findViewById<ImageView>(R.id.language_chinese)
+    var mListener: OnBottomSheetLanguagelickListener ? = null
+    fun setOnLangClickListener(listener: OnBottomSheetLanguagelickListener?){
+        mListener = listener
+    }
+    fun newInstance(): BottomSheetLanguage? {
+        return BottomSheetLanguage()
+    }
+    interface OnBottomSheetLanguagelickListener{
+        fun bottomLangClick(language : String)
+    }
 
-        val r1 = findViewById<RadioButton>(R.id.radio_1)
-        val r2 = findViewById<RadioButton>(R.id.radio_2)
-        val r3 = findViewById<RadioButton>(R.id.radio_3)
-        val r4 = findViewById<RadioButton>(R.id.radio_4)
-        val r5 = findViewById<RadioButton>(R.id.radio_5)
-        val r6 = findViewById<RadioButton>(R.id.radio_6)
-        val r7 = findViewById<RadioButton>(R.id.radio_7)
-        val r8  = findViewById<RadioButton>(R.id.radio_8)
-        val r9 = findViewById<RadioButton>(R.id.radio_9)
-        val r10 = findViewById<RadioButton>(R.id.radio_10)
-        val r11 = findViewById<RadioButton>(R.id.radio_11)
+    companion object {
+        const val CTC_TAG = "BottomSheetDailog"
+    }
 
-        val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
-        when (sharedPreferences.getString("MY_LANG", "")) {
+    override fun getTheme(): Int = R.style.Theme_AppBottomSheetDialogTheme
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.bottom_sheet_language, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        view.findViewById<ImageView>(R.id.bt_close).setOnClickListener { dismiss() }
+
+        val language_arabic = view.findViewById<ImageView>(R.id.language_arabic)
+        val language_english = view.findViewById<ImageView>(R.id.language_english)
+        val language_hindi = view.findViewById<ImageView>(R.id.language_hindi)
+        val language_spanish = view.findViewById<ImageView>(R.id.language_spanish)
+        val language_german = view.findViewById<ImageView>(R.id.language_german)
+        val language_japanese = view.findViewById<ImageView>(R.id.language_japanese)
+        val language_portuguese = view.findViewById<ImageView>(R.id.language_portuguese)
+        val language_italian = view.findViewById<ImageView>(R.id.language_italian)
+        val language_french = view.findViewById<ImageView>(R.id.language_french)
+        val language_russian = view.findViewById<ImageView>(R.id.language_russian)
+        val language_chinese = view.findViewById<ImageView>(R.id.language_chinese)
+
+        val r1 = view.findViewById<RadioButton>(R.id.radio_1)
+        val r2 =view.findViewById<RadioButton>(R.id.radio_2)
+        val r3 = view.findViewById<RadioButton>(R.id.radio_3)
+        val r4 = view.findViewById<RadioButton>(R.id.radio_4)
+        val r5 = view.findViewById<RadioButton>(R.id.radio_5)
+        val r6 = view.findViewById<RadioButton>(R.id.radio_6)
+        val r7 = view.findViewById<RadioButton>(R.id.radio_7)
+        val r8  = view.findViewById<RadioButton>(R.id.radio_8)
+        val r9 = view.findViewById<RadioButton>(R.id.radio_9)
+        val r10 = view.findViewById<RadioButton>(R.id.radio_10)
+        val r11 = view.findViewById<RadioButton>(R.id.radio_11)
+
+        val sharedPreferences = context?.getSharedPreferences("Settings", AppCompatActivity.MODE_PRIVATE)
+        when (sharedPreferences?.getString("MY_LANG", "")) {
             "ar" -> {
                 r1.isChecked = true
                 r2.isChecked = false
@@ -213,8 +239,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("ar",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("ar")
+            dismiss()
         }
         r2.setOnClickListener {
             r1.isChecked = false
@@ -228,8 +254,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("")
+            dismiss()
         }
         r3.setOnClickListener {
             r1.isChecked = false
@@ -243,8 +269,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("hi",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("hi")
+            dismiss()
         }
         r4.setOnClickListener {
             r1.isChecked = false
@@ -258,8 +284,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("es",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("es")
+            dismiss()
         }
         r5.setOnClickListener {
             r1.isChecked = false
@@ -273,8 +299,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("de",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("de")
+            dismiss()
         }
         r6.setOnClickListener {
             r1.isChecked = false
@@ -288,8 +314,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("ja",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("ja")
+            dismiss()
         }
         r7.setOnClickListener {
             r1.isChecked = false
@@ -303,8 +329,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("pt",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("pt")
+            dismiss()
         }
         r8.setOnClickListener {
             r1.isChecked = false
@@ -318,8 +344,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("it",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("it")
+            dismiss()
         }
         r9.setOnClickListener {
             r1.isChecked = false
@@ -333,8 +359,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = true
             r10.isChecked = false
             r11.isChecked = false
-            setLocale("fr",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("fr")
+            dismiss()
         }
         r10.setOnClickListener {
             r1.isChecked = false
@@ -348,8 +374,8 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = true
             r11.isChecked = false
-            setLocale("ru",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("ru")
+            dismiss()
         }
         r11.setOnClickListener {
             r1.isChecked = false
@@ -363,8 +389,13 @@ class LanguageSettingActivity : AppCompatActivity() {
             r9.isChecked = false
             r10.isChecked = false
             r11.isChecked = true
-            setLocale("zh",applicationContext)
-            recreate()
+            mListener?.bottomLangClick("zh")
+            dismiss()
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
     }
 }

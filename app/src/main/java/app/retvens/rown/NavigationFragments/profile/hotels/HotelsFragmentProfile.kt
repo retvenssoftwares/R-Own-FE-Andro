@@ -21,7 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class HotelsFragmentProfile : Fragment() {
+class HotelsFragmentProfile(val userId:String, val isOwner : Boolean) : Fragment() {
 
     lateinit var recycler : RecyclerView
 
@@ -53,6 +53,9 @@ class HotelsFragmentProfile : Fragment() {
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
         addHotel = view.findViewById<CardView>(R.id.addHotel)
+        if (!isOwner){
+            addHotel.visibility = View.GONE
+        }
         addHotel.setOnClickListener{
             startActivity(Intent(context, AddHotelActivity::class.java))
         }
@@ -61,10 +64,10 @@ class HotelsFragmentProfile : Fragment() {
     }
     private fun getHotels() {
 
-        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences.getString("user_id", "").toString()
+//        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+//        val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val hotels = RetrofitBuilder.ProfileApis.getProfileHotels(user_id)
+        val hotels = RetrofitBuilder.ProfileApis.getProfileHotels(userId)
         hotels.enqueue(object : Callback<List<HotelsName>?> {
             override fun onResponse(
                 call: Call<List<HotelsName>?>,
@@ -77,7 +80,7 @@ class HotelsFragmentProfile : Fragment() {
 
                         if (response.body()!!.isNotEmpty()) {
                             try {
-                            profileHotelsAdapter = ProfileHotelsAdapter(response.body()!!, requireContext())
+                            profileHotelsAdapter = ProfileHotelsAdapter(response.body()!!, requireContext(), isOwner)
                             recycler.adapter = profileHotelsAdapter
                             profileHotelsAdapter.notifyDataSetChanged()
                                } catch ( e : NullPointerException){

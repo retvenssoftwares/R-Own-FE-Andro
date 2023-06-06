@@ -171,7 +171,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = HotelsFragmentProfile()
+            val childFragment: Fragment = HotelsFragmentProfile(user_id, true)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -183,7 +183,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
 
-            val childFragment: Fragment = EventsProfileFragment()
+            val childFragment: Fragment = EventsProfileFragment(user_id, true)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

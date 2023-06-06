@@ -135,7 +135,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             jobs.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile())
+            transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false))
             transaction.commit()
         }
         events.setOnClickListener {
@@ -147,7 +147,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             events.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, EventsProfileFragment())
+            transaction.replace(R.id.child_profile_fragments_container, EventsProfileFragment(userID, false))
             transaction.commit()
         }
 

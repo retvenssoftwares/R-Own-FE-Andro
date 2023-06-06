@@ -29,9 +29,12 @@ import app.retvens.rown.DataCollections.onboarding.SearchUser
 import app.retvens.rown.MesiboApi
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
+import app.retvens.rown.bottomsheet.BottomSheetLanguage
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
+import app.retvens.rown.utils.loadLocale
 import app.retvens.rown.utils.moveTo
 import app.retvens.rown.utils.saveUserId
+import app.retvens.rown.utils.setLocale
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
@@ -50,7 +53,7 @@ import retrofit2.Response
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-open class OtpVerification : AppCompatActivity() {
+open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSheetLanguagelickListener {
     lateinit var binding: ActivityOtpVerifificationBinding
     lateinit var progressDialog : Dialog
 
@@ -78,7 +81,7 @@ open class OtpVerification : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadLocale()
+        loadLocale(this)
         binding = ActivityOtpVerifificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -152,7 +155,10 @@ open class OtpVerification : AppCompatActivity() {
                 return@setOnClickListener;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            openBottomLanguageSheet()
+            val bottomSheet = BottomSheetLanguage()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetLanguage.CTC_TAG)}
+            bottomSheet.setOnLangClickListener(this)
         }
         auth = FirebaseAuth.getInstance()
 
@@ -343,171 +349,6 @@ open class OtpVerification : AppCompatActivity() {
         })
     }
 
-    private fun openBottomLanguageSheet() {
-        val dialogLanguage = Dialog(this)
-        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogLanguage.setContentView(R.layout.bottom_sheet_language)
-        dialogLanguage.setCancelable(true)
-
-        dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogLanguage.window?.setGravity(Gravity.BOTTOM)
-        dialogLanguage.show()
-
-        val language_arabic = dialogLanguage.findViewById<ImageView>(R.id.language_arabic)
-        val language_english = dialogLanguage.findViewById<ImageView>(R.id.language_english)
-        val language_hindi = dialogLanguage.findViewById<ImageView>(R.id.language_hindi)
-        val language_spanish = dialogLanguage.findViewById<ImageView>(R.id.language_spanish)
-        val language_german = dialogLanguage.findViewById<ImageView>(R.id.language_german)
-        val language_japanese = dialogLanguage.findViewById<ImageView>(R.id.language_japanese)
-        val language_portuguese = dialogLanguage.findViewById<ImageView>(R.id.language_portuguese)
-        val language_italian = dialogLanguage.findViewById<ImageView>(R.id.language_italian)
-        val language_french = dialogLanguage.findViewById<ImageView>(R.id.language_french)
-        val language_russian = dialogLanguage.findViewById<ImageView>(R.id.language_russian)
-        val language_chinese = dialogLanguage.findViewById<ImageView>(R.id.language_chinese)
-
-        val r1 = dialogLanguage.findViewById<RadioButton>(R.id.radio_1)
-        val r2 =dialogLanguage.findViewById<RadioButton>(R.id.radio_2)
-        val r3 = dialogLanguage.findViewById<RadioButton>(R.id.radio_3)
-        val r4 = dialogLanguage.findViewById<RadioButton>(R.id.radio_4)
-        val r5 = dialogLanguage.findViewById<RadioButton>(R.id.radio_5)
-        val r6 = dialogLanguage.findViewById<RadioButton>(R.id.radio_6)
-        val r7 = dialogLanguage.findViewById<RadioButton>(R.id.radio_7)
-        val r8  = dialogLanguage.findViewById<RadioButton>(R.id.radio_8)
-        val r9 = dialogLanguage.findViewById<RadioButton>(R.id.radio_9)
-        val r10 = dialogLanguage.findViewById<RadioButton>(R.id.radio_10)
-        val r11 = dialogLanguage.findViewById<RadioButton>(R.id.radio_11)
-
-        dialogLanguage.findViewById<ImageView>(R.id.bt_close).setOnClickListener {
-            dialogLanguage.dismiss()
-        }
-
-        val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
-        val language = sharedPreferences.getString("MY_LANG", "")
-
-        /* when{
-             language == "ar" -> r1.isChecked = true
-             language == "" -> r2.isChecked = true
-             language == "hi" -> r3.isChecked = true
-             language == "es" -> r4.isChecked = true
-             language == "de" -> r5.isChecked = true
-             language == "ja" -> r6.isChecked = true
-             language == "pt" -> r7.isChecked = true
-             language == "it" -> r8.isChecked = true
-             language == "fr" -> r9.isChecked = true
-             language == "ru" -> r10.isChecked = true
-             language == "zh" -> r11.isChecked = true
-         }*/
-
-        if (language == "ar"){
-            r1.isChecked = true
-            language_arabic.setImageResource(R.drawable.arabic_language_selected)
-        } else if (language == ""){
-            r2.isChecked = true
-            language_english.setImageResource(R.drawable.english_language_selected)
-        } else if (language == "hi"){
-            r3.isChecked = true
-            language_hindi.setImageResource(R.drawable.hindi_language_selected)
-        } else if (language == "es"){
-            r4.isChecked = true
-            language_spanish.setImageResource(R.drawable.spanish_language_selected)
-        } else if (language == "de"){
-            r5.isChecked = true
-            language_german.setImageResource(R.drawable.german_language_selected)
-        } else if (language == "ja"){
-            r6.isChecked = true
-            language_japanese.setImageResource(R.drawable.japanese_language_selected)
-        } else if (language == "pt"){
-            r7.isChecked = true
-            language_portuguese.setImageResource(R.drawable.portuguese_language_selected)
-        } else if (language == "it"){
-            r8.isChecked = true
-            language_italian.setImageResource(R.drawable.italian_language_selected)
-        } else if (language == "fr"){
-            r9.isChecked = true
-            language_french.setImageResource(R.drawable.french_language_selected)
-        } else if (language == "ru"){
-            r10.isChecked = true
-            language_russian.setImageResource(R.drawable.russian_language_selected)
-        } else if (language == "zh"){
-            r11.isChecked = true
-            language_chinese.setImageResource(R.drawable.chinese_language_selected)
-        }
-
-        r1.setOnClickListener {
-            setLocale("ar")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r2.setOnClickListener {
-            setLocale("")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r3.setOnClickListener {
-            setLocale("hi")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r4.setOnClickListener {
-            setLocale("es")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r5.setOnClickListener {
-            setLocale("de")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r6.setOnClickListener {
-            setLocale("ja")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r7.setOnClickListener {
-            setLocale("pt")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r8.setOnClickListener {
-            setLocale("it")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r9.setOnClickListener {
-            setLocale("fr")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r10.setOnClickListener {
-            setLocale("ru")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-        r11.setOnClickListener {
-            setLocale("zh")
-            dialogLanguage.dismiss()
-            recreate()
-        }
-    }
-
-    private fun setLocale(language: String) {
-        val locale  = Locale(language)
-        Locale.setDefault(locale)
-        val configuration = Configuration()
-        configuration.locale = locale
-        baseContext.resources.updateConfiguration(configuration, baseContext.resources.displayMetrics)
-
-        val editor : SharedPreferences.Editor = getSharedPreferences("Settings", MODE_PRIVATE).edit()
-        editor.putString("MY_LANG", language)
-        editor.apply()
-    }
-    private fun loadLocale(){
-        val sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE)
-        val language = sharedPreferences.getString("MY_LANG", "")
-        setLocale(language!!)
-    }
     val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -572,29 +413,6 @@ open class OtpVerification : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-//        registerBroadCastReceiver()
-        loadLocale()
-    }
-    override fun onStop() {
-        super.onStop()
-//        unregisterReceiver(otpBroadcastReciever)
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        loadLocale()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        loadLocale()
-    }
-    override fun onPause() {
-        super.onPause()
-        loadLocale()
-    }
     private fun sendVerificationcode(number: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(number) // Phone number to verify
@@ -603,5 +421,53 @@ open class OtpVerification : AppCompatActivity() {
             .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+    override fun bottomLangClick(language: String) {
+        when (language) {
+            "ar" -> {
+                setLocale("ar", applicationContext)
+                recreate()
+            }
+            "" -> {
+                setLocale("", applicationContext)
+                recreate()
+            }
+            "hi" -> {
+                setLocale("hi",applicationContext)
+                recreate()
+            }
+            "es" -> {
+                setLocale("es",applicationContext)
+                recreate()
+            }
+            "de" -> {
+                setLocale("de",applicationContext)
+                recreate()
+            }
+            "ja" -> {
+                setLocale("ja",applicationContext)
+                recreate()
+            }
+            "pt" -> {
+                setLocale("pt",applicationContext)
+                recreate()
+            }
+            "it" -> {
+                setLocale("it",applicationContext)
+                recreate()
+            }
+            "fr" -> {
+                setLocale("fr",applicationContext)
+                recreate()
+            }
+            "ru" -> {
+                setLocale("ru",applicationContext)
+                recreate()
+            }
+            "zh" -> {
+                setLocale("zh",applicationContext)
+                recreate()
+            }
+        }
     }
 }

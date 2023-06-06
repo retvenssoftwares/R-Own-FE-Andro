@@ -11,10 +11,11 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context) : RecyclerView.Adapter<ProfileHotelsAdapter.ProfileHotelsViewHolder>() {
+class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context, val isOwner : Boolean) : RecyclerView.Adapter<ProfileHotelsAdapter.ProfileHotelsViewHolder>() {
 
     class ProfileHotelsViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.venue_name)
@@ -36,6 +37,9 @@ class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context) :
     }
 
     override fun onBindViewHolder(holder: ProfileHotelsViewHolder, position: Int) {
+        if (!isOwner){
+            holder.edit.visibility = View.GONE
+        }
         holder.name.text = listS[position].hotelName
         holder.locationHotel.text = listS[position].hotelAddress
 
@@ -58,12 +62,21 @@ class ProfileHotelsAdapter(val listS : List<HotelsName>, val context: Context) :
 //        }
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, HotelDetailsProfileActivity::class.java)
-            intent.putExtra("name", listS[position].hotelName)
-            intent.putExtra("logo", listS[position].hotelCoverpicUrl)
-            intent.putExtra("hotelId", listS[position].hotel_id)
-            intent.putExtra("hotelAddress", listS[position].hotelAddress)
-            context.startActivity(intent)
+            if (isOwner) {
+                val intent = Intent(context, HotelDetailsProfileActivity::class.java)
+                intent.putExtra("name", listS[position].hotelName)
+                intent.putExtra("logo", listS[position].hotelCoverpicUrl)
+                intent.putExtra("hotelId", listS[position].hotel_id)
+                intent.putExtra("hotelAddress", listS[position].hotelAddress)
+                context.startActivity(intent)
+            } else {
+                val intent = Intent(context, HotelDetailsActivity::class.java)
+                intent.putExtra("name", listS[position].hotelName)
+                intent.putExtra("logo", listS[position].hotelCoverpicUrl)
+                intent.putExtra("hotelId", listS[position].hotel_id)
+                intent.putExtra("hotelAddress", listS[position].hotelAddress)
+                context.startActivity(intent)
+            }
         }
     }
 }

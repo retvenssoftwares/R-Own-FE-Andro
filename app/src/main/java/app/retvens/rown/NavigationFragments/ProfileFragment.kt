@@ -19,6 +19,8 @@ import app.retvens.rown.NavigationFragments.profile.EditProfileActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
+import app.retvens.rown.NavigationFragments.profile.setting.profileSetting.OwnerSettingActivity
+import app.retvens.rown.NavigationFragments.profile.setting.saved.SavedActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.NavigationFragments.profile.viewRequests.ViewRequestsActivity
@@ -175,13 +177,13 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
             }
             "settings" -> {
-
+                startActivity(Intent(context, OwnerSettingActivity::class.java))
             }
             "edit" -> {
                 startActivity(Intent(context, EditProfileActivity::class.java))
             }
             "saved" -> {
-
+                startActivity(Intent(context, SavedActivity::class.java))
             }
             "discover" -> {
                 startActivity(Intent(context, DiscoverPeopleActivity::class.java))

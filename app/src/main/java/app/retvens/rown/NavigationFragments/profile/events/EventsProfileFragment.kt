@@ -23,7 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class EventsProfileFragment : Fragment() {
+class EventsProfileFragment(val userId:String, val isOwner : Boolean) : Fragment() {
 
     lateinit var eventRecyclerView: RecyclerView
 
@@ -59,10 +59,10 @@ class EventsProfileFragment : Fragment() {
     }
     private fun getEvents() {
 
-        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences.getString("user_id", "").toString()
+//        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+//        val user_id = sharedPreferences.getString("user_id", "").toString()
 // "-GSomAJoY"
-        val events = RetrofitBuilder.ProfileApis.getProfileEvents(user_id = user_id)
+        val events = RetrofitBuilder.ProfileApis.getProfileEvents(user_id = userId)
         events.enqueue(object : Callback<List<OnGoingEventsData>?> {
             override fun onResponse(
                 call: Call<List<OnGoingEventsData>?>,
