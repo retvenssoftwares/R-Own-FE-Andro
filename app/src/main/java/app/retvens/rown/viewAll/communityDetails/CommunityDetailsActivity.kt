@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityCommunityDetailsBinding
 import com.bumptech.glide.Glide
@@ -42,6 +43,18 @@ class CommunityDetailsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        replaceFragment(CommunityUsersFragment())
+
+        binding.usersText.setOnClickListener {
+            binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+            replaceFragment(CommunityUsersFragment())
+        }
+        binding.mediaText.setOnClickListener {
+            binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+            replaceFragment(CommunityMediaFragment())
+        }
         binding.switchToCommunity.setOnClickListener {
 
             val dialogL = Dialog(this)
@@ -81,76 +94,13 @@ class CommunityDetailsActivity : AppCompatActivity() {
                 }
             }
         }
-
-        binding.usersText.setOnClickListener {
-            binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
-            binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
-            binding.llu.visibility = View.VISIBLE
-        }
-        binding.mediaText.setOnClickListener {
-            binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
-            binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
-            binding.llu.visibility = View.GONE
-        }
-
-        binding.business.setOnClickListener {
-            if (isBusinessVisible){
-                binding.staticCard.visibility = View.VISIBLE
-                isBusinessVisible = false
-            } else {
-                binding.staticCard.visibility = View.GONE
-                isBusinessVisible = true
-            }
-        }
-        binding.staticCard.setOnClickListener {
-            openBottomSelectionCommunity()
-        }
-
     }
 
-    private fun openBottomSelectionCommunity() {
-        val dialogLanguage = Dialog(this)
-        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogLanguage.setContentView(R.layout.bottom_remove_from_community)
-        dialogLanguage.setCancelable(true)
-
-        dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogLanguage.window?.setGravity(Gravity.BOTTOM)
-        dialogLanguage.show()
-
-
-
-        dialogLanguage.findViewById<TextView>(R.id.remove).setOnClickListener {
-            openBottomSelectionCommunityRemove(dialogLanguage)
-        }
-        dialogLanguage.findViewById<TextView>(R.id.message).setOnClickListener {
-            dialogLanguage.dismiss()
-        }
-        dialogLanguage.findViewById<TextView>(R.id.view_profile).setOnClickListener {
-            dialogLanguage.dismiss()
-        }
-    }
-
-    private fun openBottomSelectionCommunityRemove(dialogL: Dialog) {
-        val dialogLanguage = Dialog(this)
-        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogLanguage.setContentView(R.layout.bottom_remove_from_community_confermation)
-        dialogLanguage.setCancelable(true)
-
-        dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogLanguage.window?.setGravity(Gravity.BOTTOM)
-        dialogLanguage.show()
-
-        dialogLanguage.findViewById<TextView>(R.id.yes).setOnClickListener {
-            dialogL.dismiss()
-            dialogLanguage.dismiss()
-        }
-        dialogLanguage.findViewById<TextView>(R.id.not).setOnClickListener {
-            dialogLanguage.dismiss()
+    private fun replaceFragment(fragment: Fragment) {
+        if (fragment !=null){
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.community_fragment_container,fragment)
+            transaction.commit()
         }
     }
 }

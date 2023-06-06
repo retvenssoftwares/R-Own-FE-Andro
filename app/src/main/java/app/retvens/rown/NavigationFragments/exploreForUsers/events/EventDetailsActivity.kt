@@ -64,7 +64,7 @@ class EventDetailsActivity : AppCompatActivity() {
         binding.concert.text = title
         binding.about.text = about
         Glide.with(this).load(cover).into(binding.concertCover)
-        binding.concertPrice.text = price
+        binding.concertPrice.text = "$price ₹"
 
         binding.openMap.setOnClickListener {
             Toast.makeText(this, location, Toast.LENGTH_SHORT).show()

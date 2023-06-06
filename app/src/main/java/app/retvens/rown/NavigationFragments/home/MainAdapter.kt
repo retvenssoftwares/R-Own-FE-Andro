@@ -507,7 +507,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
         fun bindCommunityRecyclerView(recyclerItemList : List<DataItem.CommunityRecyclerData>){
             val adapter = CommunityChildAdapter(context, DataItemType.COMMUNITY, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
-            binding.recyclerHeading.text = "Check into the most comfortable stays."
+            binding.recyclerHeading.text = "Connect with the like-minded individuals"
             binding.viewAllItem.setOnClickListener {
                 context.startActivity(Intent(context, ViewAllAvailableCommunitiesActivity::class.java))
             }
@@ -515,7 +515,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
         fun bindHotelSectionRecyclerView(recyclerItemList : List<HotelData>){
             val adapter = HotelSectionChildAdapter(context, DataItemType.HOTEL_SECTION, recyclerItemList)
             binding.childRecyclerView.adapter = adapter
-            binding.recyclerHeading.text = "Connect with the like-minded individuals"
+            binding.recyclerHeading.text = "Check into the most comfortable stays"
             binding.viewAllItem.setOnClickListener {
                 context.startActivity(Intent(context, AllHotelsActivity::class.java))
             }

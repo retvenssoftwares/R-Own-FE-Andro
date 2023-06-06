@@ -52,7 +52,7 @@
         android:id="@+id/vendors_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@grafixpixel"
+        android:text="grafixpixel"
         android:textSize="10dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/green_own"

@@ -7,10 +7,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.util.query
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.AllReviewAdapter
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.AllReviewsData
+import app.retvens.rown.NavigationFragments.profile.vendorsReview.QuickReviewAdapter
+import app.retvens.rown.NavigationFragments.profile.vendorsReview.VendorReviewsData
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.VendorsReviewAdapter
 import app.retvens.rown.bottomsheet.BottomSheetAddReview
 import app.retvens.rown.databinding.ActivityVendorDetailsBinding
@@ -41,19 +44,44 @@ class VendorDetailsActivity : AppCompatActivity() {
         Glide.with(this).load(vendorImage).into(binding.vendorProfile)
 
         topReview(user_id)
+        allReview(user_id)
 
         binding.img1.setOnClickListener { startActivity(Intent(this, VendorsImageViewActivity::class.java)) }
         binding.img2.setOnClickListener { startActivity(Intent(this, VendorsImageViewActivity::class.java)) }
 
         binding.addReview.setOnClickListener {
-            val title = "How was your experience with $vendorName?"
-            val bottomSheet = BottomSheetAddReview(title, user_id)
+            val title = "How was your experience with"
+            val bottomSheet = BottomSheetAddReview(title, vendorName, user_id)
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetAddReview.Review_TAG)}
         }
     }
 
     private fun topReview(user_id: String) {
+        binding.topReviewRecycler.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+        binding.topReviewRecycler.setHasFixedSize(true)
+
+        val allR = RetrofitBuilder.viewAllApi.topReviews(user_id)
+        allR.enqueue(object : Callback<List<VendorReviewsData>?> {
+            override fun onResponse(
+                call: Call<List<VendorReviewsData>?>,
+                response: Response<List<VendorReviewsData>?>
+            ) {
+                if (response.isSuccessful){
+                    val quickReviewAdapter = QuickReviewAdapter(response.body()!! ,applicationContext)
+                    binding.topReviewRecycler.adapter = quickReviewAdapter
+                    quickReviewAdapter.notifyDataSetChanged()
+                }
+                Toast.makeText(applicationContext, response.toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(call: Call<List<VendorReviewsData>?>, t: Throwable) {
+                Toast.makeText(applicationContext, t.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun allReview(user_id: String) {
         binding.whatPeopleRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.whatPeopleRecycler.setHasFixedSize(true)
 

@@ -22,14 +22,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BottomSheetAddReview(val title: String, val userId : String) : BottomSheetDialogFragment() {
+class BottomSheetAddReview(val title: String, val name: String, val userId : String) : BottomSheetDialogFragment() {
 
     var mListener: OnBottomSheetAddReviewClickListener ? = null
     fun setOnReviewClickListener(listener: OnBottomSheetAddReviewClickListener?){
         mListener = listener
     }
     fun newInstance(): BottomSheetAddReview? {
-        return BottomSheetAddReview("", "")
+        return BottomSheetAddReview("", "","")
     }
     interface OnBottomSheetAddReviewClickListener{
         fun bottomReviewClick(reviewFrBo : String)
@@ -65,16 +65,41 @@ class BottomSheetAddReview(val title: String, val userId : String) : BottomSheet
         ratingBar = view.findViewById(R.id.ratingBar)
 
         titleT = view.findViewById(R.id.title)
-        titleT.text = title
+        titleT.text = "$title $name?"
 
         view.findViewById<CardView>(R.id.addReview).setOnClickListener {
-            uploadReview(tellUs.text.toString(), ratingBar.rating.toString())
+            if (title == "How was your experience with") {
+                uploadReview(tellUs.text.toString(), ratingBar.rating.toString())
+            } else {
+                uploadHotelReview(tellUs.text.toString(), ratingBar.rating.toString())
+            }
         }
 
         recyclerView = view.findViewById(R.id.recycler_review)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),3)
         recyclerView.setHasFixedSize(true)
 
+    }
+
+    private fun uploadHotelReview(tellUs: String, rating: String) {
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val addR = RetrofitBuilder.exploreApis.addHotelReview(userId, ReviewData(user_id, rating, tellUs))
+        addR.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
+                Log.d("reviewPost", response.toString())
+                dismiss()
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(), t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun uploadReview(tellUs: String, rating: String) {
@@ -89,6 +114,7 @@ class BottomSheetAddReview(val title: String, val userId : String) : BottomSheet
             ) {
                 Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
                 Log.d("reviewPost", response.toString())
+                dismiss()
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {

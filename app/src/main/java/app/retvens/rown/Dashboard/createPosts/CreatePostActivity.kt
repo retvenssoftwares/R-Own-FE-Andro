@@ -534,7 +534,7 @@ class CreatePostActivity : AppCompatActivity(),
         val options = CropImage.activity(imageUri)
             .setGuidelines(CropImageView.Guidelines.ON)
 
-        options.setAspectRatio(4, 3)
+        options.setAspectRatio(3, 4)
             .setCropShape(CropImageView.CropShape.RECTANGLE)
             .setOutputCompressQuality(20)
             .setOutputCompressFormat(Bitmap.CompressFormat.PNG)

@@ -1,17 +1,17 @@
 package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
-import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.DataCollections.saveId.SaveEvent
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
-import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsData
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventData
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelData
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.SaveHotel
 import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobData
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeopleDataClass
+import app.retvens.rown.NavigationFragments.profile.vendorsReview.AllReviewsData
+import app.retvens.rown.NavigationFragments.profile.vendorsReview.VendorReviewsData
+import app.retvens.rown.viewAll.vendorsDetails.ReviewData
 
 import retrofit2.Call
 import retrofit2.http.Body
@@ -80,5 +80,21 @@ interface ExploreApis {
         @Path("User_id") User_id : String,
         @Body saveHotel: SaveHotel
     ) : Call<UpdateResponse>
+
+    @PATCH("addreviewshotel/{hotel_id}")
+    fun addHotelReview(
+        @Path("hotel_id") hotel_id : String,
+        @Body reviewData : ReviewData
+    ) : Call<UpdateResponse>
+
+    @GET("tophotelreviews/{hotel_id}")
+    fun topHotelReviews(
+        @Path("hotel_id") hotel_id : String
+    ) : Call<List<VendorReviewsData>>
+
+    @GET("gethotelreview/{hotel_id}")
+    fun allHotelReviews(
+        @Path("hotel_id") hotel_id : String
+    ) : Call<List<AllReviewsData>>
 
 }

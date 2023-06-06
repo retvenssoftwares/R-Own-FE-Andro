@@ -28,10 +28,6 @@ class ReviewsActivity : AppCompatActivity() {
         binding.whatPeopleRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.whatPeopleRecycler.setHasFixedSize(true)
 
-        val blogs = listOf<VendorReviewsData>(
-            VendorReviewsData("8", "title 81","A"),
-            VendorReviewsData("8", "title 81","A")
-        )
 
 //        vendorsReviewAdapter = VendorsReviewAdapter(blogs, applicationContext)
 //        binding.whatPeopleRecycler.adapter = vendorsReviewAdapter

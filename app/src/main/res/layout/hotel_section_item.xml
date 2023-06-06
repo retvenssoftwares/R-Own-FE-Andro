@@ -17,10 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:scaleType="centerCrop"
-            android:elevation="10dp"
+            android:elevation="6dp"
             android:layout_margin="10dp"
             app:shapeAppearanceOverlay="@style/SquareCornerImage"
-            android:src="@drawable/png_blog"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>

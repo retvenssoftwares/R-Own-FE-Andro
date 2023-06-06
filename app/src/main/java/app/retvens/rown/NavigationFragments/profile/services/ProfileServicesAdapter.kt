@@ -52,7 +52,7 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
     override fun onBindViewHolder(holder: PollsViewHolder, position: Int) {
         val data = listS[position]
         holder.vendor_name.text = data.vendorName
-        holder.vendors_id.text = data.User_name
+        holder.vendors_id.text = "@${data.User_name}"
         holder.serviceName.text = data.service_name
         holder.location.text = data.location
         holder.servicePrice.text = data.vendorServicePrice

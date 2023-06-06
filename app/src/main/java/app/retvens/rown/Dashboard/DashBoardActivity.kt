@@ -205,11 +205,12 @@ class DashBoardActivity : AppCompatActivity() {
             startActivity(Intent(this, ViewConnectionsActivity::class.java))
         }
         binding.appliedJobsSn.setOnClickListener {
-            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
-//            startActivity(Intent(this, TermsAndCActivity::class.java))
+            drawerLayout.closeDrawer(GravityCompat.START)
+            replaceFragment(JobFragment())
         }
         binding.postedJobsSn.setOnClickListener {
-
+            drawerLayout.closeDrawer(GravityCompat.START)
+            replaceFragment(JobsForHoteliers())
         }
         binding.eventsSn.setOnClickListener {
             startActivity(Intent(this, AllEventCategoryActivity::class.java))

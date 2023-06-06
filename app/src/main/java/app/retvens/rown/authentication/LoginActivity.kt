@@ -62,7 +62,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     lateinit var storedVerificationId:String
     lateinit var phone:String
-    lateinit var phoneNumber:String
+
     lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     override fun onRequestPermissionsResult(
@@ -211,8 +211,8 @@ class LoginActivity : AppCompatActivity() {
 //                getProfil()
                 val countryCode = binding.countryCode.selectedCountryCode
                 val phoneNo = binding.editPhone.text.toString()
-                phone = "+$countryCode $phoneNo"
-                phoneNumber = "+$countryCode$phoneNo"
+                phone = "+$countryCode$phoneNo"
+//                phoneNumber = "+$countryCode$phoneNo"
                 showBottomDialog(phone)
             }
         }
@@ -429,7 +429,7 @@ class LoginActivity : AppCompatActivity() {
             Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
 //            Toast.makeText(this,"Sending..", Toast.LENGTH_SHORT).show()
-            sendVerificationcode(phoneNumber)
+            sendVerificationcode(phone)
         }
         dialog.findViewById<CardView>(R.id.card_change_phone).setOnClickListener {
             dialog.dismiss()

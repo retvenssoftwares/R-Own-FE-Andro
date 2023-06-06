@@ -37,6 +37,7 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityPersonalInformationBinding
+import app.retvens.rown.utils.getRandomString
 import app.retvens.rown.utils.moveTo
 import app.retvens.rown.utils.phone
 import app.retvens.rown.utils.profileCompletionStatus
@@ -303,13 +304,8 @@ class PersonalInformation : AppCompatActivity() {
 
         if (croppedImageUri != null){
 
-            val randomString = Random().ints(username.length.toLong(), 0, username.length)
-                .asSequence()
-                .map(eMail::get)
-                .joinToString("")
-
             val filesDir = applicationContext.filesDir
-            val file = File(filesDir,"$randomString.png")
+            val file = File(filesDir,"${getRandomString(6)}.png")
 
             val inputStream = contentResolver.openInputStream(croppedImageUri!!)
             val outputStream = FileOutputStream(file)

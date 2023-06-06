@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.profile.hotels
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -39,7 +40,15 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
         location = intent.getStringExtra("hotelAddress").toString()
         hotelLogo = intent.getStringExtra("logo").toString()
 
-//        Glide.with(this).load(hotelLogo).into(binding.vendorImage)
+        binding.img1.setOnClickListener {
+            Glide.with(this).load(img1).into(binding.vendorImage)
+        }
+        binding.img2.setOnClickListener {
+            Glide.with(this).load(img2).into(binding.vendorImage)
+        }
+        binding.img3.setOnClickListener {
+            Glide.with(this).load(img3).into(binding.vendorImage)
+        }
 
         val hotelId = intent.getStringExtra("hotelId")
 
@@ -123,24 +132,34 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val data = response.body()!!
                     binding.hotelName.text = data.hotelName
-                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
+//                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
 
                     Hoteldescription = data.Hoteldescription
                     if(data.gallery.size >= 3) {
                         img1 = data.gallery.get(0).Images
                         img2 = data.gallery.get(1).Images
                         img3 = data.gallery.get(2).Images
+                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
                         Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
                         Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
                         Glide.with(applicationContext).load(data.gallery.get(2).Images).into(binding.img3)
                     } else if (data.gallery.size >= 2) {
                         img1 = data.gallery.get(0).Images
                         img2 = data.gallery.get(1).Images
+                        binding.img3.visibility = View.GONE
+                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
                         Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
                         Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
                     } else if (data.gallery.size > 0) {
+                        binding.img2.visibility = View.GONE
+                        binding.img3.visibility = View.GONE
                         img1 = data.gallery.get(0).Images
                             Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
+                    } else {
+                        binding.img1.visibility = View.GONE
+                        binding.img2.visibility = View.GONE
+                        binding.img3.visibility = View.GONE
                     }
 
                     binding.descriptionHotel.text = data.Hoteldescription

@@ -24,6 +24,7 @@ class HotelDetailsActivity : AppCompatActivity() {
     private lateinit var hotelName : String
     private lateinit var hotelId : String
     private lateinit var hotelLogo : String
+    private lateinit var hotelCoverpicUrl : String
     private lateinit var location : String
     private lateinit var Hoteldescription : String
 
@@ -41,7 +42,7 @@ class HotelDetailsActivity : AppCompatActivity() {
 
         Glide.with(this).load(hotelLogo).into(binding.vendorImage)
 
-        val hotelId = intent.getStringExtra("hotelId")
+        val hotelId = intent.getStringExtra("hotelId").toString()
 
         val saved = intent.getStringExtra("saved")
         getHotel()
@@ -58,11 +59,26 @@ class HotelDetailsActivity : AppCompatActivity() {
 
         binding.hotelName.text = hotelName
 
+        binding.img1.setOnClickListener {
+            Glide.with(this).load(img1).into(binding.vendorImage)
+        }
+        binding.img2.setOnClickListener {
+            Glide.with(this).load(img2).into(binding.vendorImage)
+        }
+        binding.img3.setOnClickListener {
+            Glide.with(this).load(img3).into(binding.vendorImage)
+        }
+
         binding.hotelCardLike.setOnClickListener {
             saveHotel(hotelId)
         }
         binding.openReview.setOnClickListener {
-            startActivity(Intent(applicationContext, HotelReviewsActivity::class.java))
+            val intent = Intent(applicationContext, HotelReviewsActivity::class.java)
+            intent.putExtra("hotelId",hotelId)
+            intent.putExtra("hotelName",hotelName)
+            intent.putExtra("hotelCoverpicUrl",hotelCoverpicUrl)
+            intent.putExtra("Hoteldescription",Hoteldescription)
+            startActivity(intent)
         }
     }
 
@@ -109,32 +125,42 @@ class HotelDetailsActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val data = response.body()!!
                     binding.hotelName.text = data.hotelName
-                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
+                    hotelCoverpicUrl = data.hotelCoverpicUrl
+//                    Glide.with(applicationContext).load().into(binding.vendorImage)
+                    hotelLogo = data.hotelLogoUrl
 
                     Hoteldescription = data.Hoteldescription
+                    binding.descriptionHotel.text = data.Hoteldescription
+                    binding.location.text = data.location
+                    if (data.location!= null || data.location!= ""){
+                        location = data.location
+                    } else {
+                        location = "Not Found"
+                    }
+
                     if(data.gallery.size >= 3) {
                         img1 = data.gallery.get(0).Images
                         img2 = data.gallery.get(1).Images
                         img3 = data.gallery.get(2).Images
+                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
                         Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
                         Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
                         Glide.with(applicationContext).load(data.gallery.get(2).Images).into(binding.img3)
                     } else if (data.gallery.size >= 2) {
                         img1 = data.gallery.get(0).Images
                         img2 = data.gallery.get(1).Images
+                        binding.img3.visibility = View.GONE
+                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
                         Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
                         Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
                     } else if (data.gallery.size > 0) {
                         img1 = data.gallery.get(0).Images
+                        binding.img2.visibility = View.GONE
+                        binding.img3.visibility = View.GONE
+                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
                         Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
                     }
 
-                    binding.descriptionHotel.text = data.Hoteldescription
-                    binding.location.text = data.location
-                    hotelLogo = data.hotelLogoUrl
-                    if (data.location!= null){
-                        location = data.location
-                    }
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

@@ -101,7 +101,7 @@ open class OtpVerification : AppCompatActivity() {
 
         phoneNumber =  intent.getStringExtra("phoneNum").toString() //without CountryCode
         phone =  intent.getStringExtra("phone").toString() // with CountryCode and +
-        binding.textPhoneOtp.text = intent.getStringExtra("phone").toString()
+        binding.textPhoneOtp.text = phone
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
@@ -315,8 +315,8 @@ open class OtpVerification : AppCompatActivity() {
 
     }
     private fun searchUser() {
-        val p = "+91" +phoneNumber.toString()
-        val search = RetrofitBuilder.retrofitBuilder.searchUser(SearchUser(p))
+//        val p = "+91" +phoneNumber.toString()
+        val search = RetrofitBuilder.retrofitBuilder.searchUser(SearchUser(phone))
         search.enqueue(object : Callback<UserProfileResponse?> {
             override fun onResponse(
                 call: Call<UserProfileResponse?>,
@@ -329,7 +329,7 @@ open class OtpVerification : AppCompatActivity() {
                 Log.d("search",response.body().toString())
                 moveTo(applicationContext,"MoveToPI")
                 val intent = Intent(applicationContext, PersonalInformation::class.java)
-                intent.putExtra("phone",p)
+                intent.putExtra("phone",phone)
                 intent.putExtra("user_id",user_id)
                 intent.putExtra("message",message)
                 startActivity(intent)

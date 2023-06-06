@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -35,6 +36,7 @@ class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : Re
         val profile = itemView.findViewById<ImageView>(R.id.blogger_profile)
 
         val blogLike = itemView.findViewById<ImageView>(R.id.blogs_card_like)
+        val read_more_blog = itemView.findViewById<CardView>(R.id.read_more_blog)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExploreBlogsViewHolder {
@@ -56,6 +58,8 @@ class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : Re
         holder.title.text = listS[position].blog_title
         if (listS[position].date_added != null) {
             holder.date.text = dateFormat(listS[position].date_added)
+        } else {
+            holder.date.text = "fetching"
         }
 
         if (listS[position].saved == "saved"){
@@ -87,7 +91,7 @@ class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : Re
 
         Glide.with(context).load(listS[position].blog_image).into(holder.cover)
 
-        holder.itemView.setOnClickListener {
+        holder.read_more_blog.setOnClickListener {
             val intent = Intent(context, BlogsDetailsActivity::class.java)
             intent.putExtra("cover", listS[position].blog_image)
             intent.putExtra("title", listS[position].blog_title)

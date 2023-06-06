@@ -41,6 +41,8 @@ class BlogsChildAdapter(
             binding.blogCategory.text = recyclerItem.category_name
             if( recyclerItem.date_added != null) {
                 binding.date.text = dateFormat(recyclerItem.date_added)
+            } else{
+                binding.date.text = "fetching"
             }
 
             if (recyclerItem.saved == "saved"){
@@ -69,7 +71,7 @@ class BlogsChildAdapter(
 
             binding.blogger.text = recyclerItem.User_name
 
-            binding.blogCover.setOnClickListener {
+            binding.readMoreBlog.setOnClickListener {
                 val intent = Intent(context, BlogsDetailsActivity::class.java)
                 intent.putExtra("cover", recyclerItem.blog_image)
                 intent.putExtra("title", recyclerItem.blog_title)

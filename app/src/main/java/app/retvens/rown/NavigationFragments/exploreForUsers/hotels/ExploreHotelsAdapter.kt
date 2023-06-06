@@ -54,7 +54,7 @@ class ExploreHotelsAdapter(val listS : List<HotelData>, val context: Context) : 
         holder.name.text = listS[position].hotelName
         holder.location.text = listS[position].location
 
-        Glide.with(context).load(listS[position].hotelLogoUrl).into(holder.cover)
+        Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)
 
         if (listS[position].saved != "no"){
             operatioin = "pop"

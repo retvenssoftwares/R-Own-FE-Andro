@@ -38,9 +38,12 @@ class ExploreServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
     override fun onBindViewHolder(holder: ExploreServicesViewHolder, position: Int) {
         val recyclerItem = listS[position]
         holder.name.text = listS[position].vendorName
-        holder.vendors_id.text = listS[position].service_name
-        holder.avg_price.text = listS[position].vendorServicePrice
-
+        holder.vendors_id.text = "@${listS[position].User_name}"
+        if (listS[position].vendorServicePrice == ""){
+            holder.avg_price.text = "000 INR"
+        } else {
+            holder.avg_price.text = "${listS[position].vendorServicePrice}"
+        }
         Glide.with(context).load(listS[position].vendorImage).into(holder.cover)
         Glide.with(context).load(listS[position].Profile_pic).into(holder.profile)
         holder.itemView.setOnClickListener {
