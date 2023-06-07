@@ -82,6 +82,8 @@ class HotelOwnerFragment : Fragment(), BackHandler,
     /*-----------------------SINGLE HOTEL--------------------------------*/
     lateinit var noOfHotels : TextInputEditText
     lateinit var hotelOwnerStarET : TextInputEditText
+    lateinit var chainHotelDescriptionLayout : TextInputLayout
+    lateinit var chainHotelDescriptionET : TextInputEditText
     lateinit var hotelOwnerLocationET : TextInputEditText
     lateinit var hotelOwnerProfile  : ShapeableImageView
     lateinit var hotelOwnerCover  : ShapeableImageView
@@ -129,6 +131,9 @@ class HotelOwnerFragment : Fragment(), BackHandler,
 
         ownerHotel = view.findViewById(R.id.owner_Hotel)
         ownerHotelLayout = view.findViewById(R.id.owner_Hotel_layout)
+
+        chainHotelDescriptionLayout = view.findViewById<TextInputLayout>(R.id.chainHotelDescriptionLayout)
+        chainHotelDescriptionET = view.findViewById<TextInputEditText>(R.id.chainHotelDescriptionET)
 
         chainName = view.findViewById(R.id.hotelchain_Name)
         chainNameLayout = view.findViewById(R.id.hotelchain_Name_layout)
@@ -246,6 +251,8 @@ class HotelOwnerFragment : Fragment(), BackHandler,
                         .show()
                 } else if (ownerHotel.length() < 2) {
                     ownerHotelLayout.error = "Please enter owner name"
+                } else if (chainHotelDescriptionET.length() < 2) {
+                    chainHotelDescriptionLayout.error = "Please enter owner name"
                 } else if (hotelOwnerStarET.text.toString() == "Select Your Hotel Rating") {
                     ownerHotelLayout.isErrorEnabled = false
                     hotelOwnerStarLayout.error = "Select Your Hotel Rating"
@@ -324,6 +331,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
 
         val type = hotelType.text.toString()
         val hotelName = ownerHotel.text.toString()
+        val hotelDescription = chainHotelDescriptionET.text.toString()
         val star = hotelOwnerStarET.text.toString()
         val location = hotelOwnerLocationET.text.toString()
 
@@ -354,6 +362,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         val send = RetrofitBuilder.profileCompletion.uploadHotelData(
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelDescription),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),location),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),star),
             MultipartBody.Part.createFormData("hotelLogo", file1.name, body1),

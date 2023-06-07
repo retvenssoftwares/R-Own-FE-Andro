@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.NavigationFragments.profile.vendorsReview.GetQuickReviewsAdapter
+import app.retvens.rown.NavigationFragments.profile.vendorsReview.GetQuickReviewsData
+import app.retvens.rown.NavigationFragments.profile.vendorsReview.UploadReviewsIdData
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.vendorsDetails.ReviewData
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -41,7 +44,9 @@ class BottomSheetAddReview(val title: String, val name: String, val userId : Str
 
 
     lateinit var recyclerView : RecyclerView
+    lateinit var getQuickReviewsAdapter: GetQuickReviewsAdapter
 
+    var addedReviews : MutableList<UploadReviewsIdData> ? = mutableListOf()
 
     override fun getTheme(): Int = R.style.Theme_AppBottomSheetDialogTheme
 
@@ -78,14 +83,40 @@ class BottomSheetAddReview(val title: String, val name: String, val userId : Str
         recyclerView = view.findViewById(R.id.recycler_review)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),3)
         recyclerView.setHasFixedSize(true)
+        getQuickReview()
 
+    }
+    private fun getQuickReview() {
+        val qR = RetrofitBuilder.exploreApis.getQuickReviews()
+        qR.enqueue(object : Callback<List<GetQuickReviewsData>?>, GetQuickReviewsAdapter.onItemClickListener {
+            override fun onResponse(
+                call: Call<List<GetQuickReviewsData>?>,
+                response: Response<List<GetQuickReviewsData>?>
+            ) {
+                if (response.isSuccessful){
+                    getQuickReviewsAdapter = GetQuickReviewsAdapter(requireContext(),response.body()!!)
+                    recyclerView.adapter = getQuickReviewsAdapter
+                    getQuickReviewsAdapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onFailure(call: Call<List<GetQuickReviewsData>?>, t: Throwable) {
+                Toast.makeText(requireContext(), t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onItemClickInterest(addedItems: MutableList<GetQuickReviewsData>) {
+                addedItems.forEach {
+                    addedReviews?.add(UploadReviewsIdData(it.reviews_id))
+                }
+            }
+        })
     }
 
     private fun uploadHotelReview(tellUs: String, rating: String) {
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val addR = RetrofitBuilder.exploreApis.addHotelReview(userId, ReviewData(user_id, rating, tellUs))
+        val addR = RetrofitBuilder.exploreApis.addHotelReview(userId, ReviewData(user_id, addedReviews, rating, tellUs))
         addR.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
@@ -106,7 +137,7 @@ class BottomSheetAddReview(val title: String, val name: String, val userId : Str
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val addR = RetrofitBuilder.viewAllApi.addVendorReview(userId, ReviewData(user_id, rating, tellUs))
+        val addR = RetrofitBuilder.viewAllApi.addVendorReview(userId, ReviewData(user_id, addedReviews, rating, tellUs))
         addR.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,

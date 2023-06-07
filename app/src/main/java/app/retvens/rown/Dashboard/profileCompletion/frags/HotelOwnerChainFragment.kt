@@ -82,12 +82,14 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
     }
 
     lateinit var nameET : TextInputEditText
+    lateinit var chainHotelDescriptionET : TextInputEditText
     lateinit var location : TextInputEditText
     lateinit var rating : TextInputEditText
 
     lateinit var progressDialog : Dialog
 
     lateinit var nameTIL : TextInputLayout
+    lateinit var chainHotelDescriptionLayout : TextInputLayout
     lateinit var locationTIL : TextInputLayout
     lateinit var ratingTIL : TextInputLayout
 
@@ -142,10 +144,12 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
         next = view.findViewById(R.id.card_chain_next)
 
         nameET = view.findViewById<TextInputEditText>(R.id.chainHotelNameET)
+        chainHotelDescriptionET = view.findViewById<TextInputEditText>(R.id.chainHotelDescriptionET)
         location = view.findViewById<TextInputEditText>(R.id.chainHotelLocationET)
         rating = view.findViewById<TextInputEditText>(R.id.chainHotelRatingET)
 
         nameTIL = view.findViewById<TextInputLayout>(R.id.chainHotelNameLayout)
+        chainHotelDescriptionLayout = view.findViewById<TextInputLayout>(R.id.chainHotelDescriptionLayout)
         locationTIL = view.findViewById<TextInputLayout>(R.id.chainHotelLocationLayout)
         ratingTIL = view.findViewById<TextInputLayout>(R.id.chainHotelRatingLayout)
 
@@ -187,6 +191,8 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
         next.setOnClickListener {
             if (croppedHotelChainCoverImageUri == null){
                 Toast.makeText(context, "Please select an Cover", Toast.LENGTH_SHORT).show()
+            } else if(chainHotelDescriptionET.length() < 2){
+                chainHotelDescriptionLayout.error = "Please enter Chain name"
             } else if(nameET.length() < 2){
                 nameTIL.error = "Please enter Chain name"
             } else if(location.text.toString() == "Select Your Location"){
@@ -195,6 +201,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                 ratingTIL.error = "Please Select Rating"
             } else {
                 nameTIL.isErrorEnabled = false
+                chainHotelDescriptionLayout.isErrorEnabled = false
                 locationTIL.isErrorEnabled = false
                 ratingTIL.isErrorEnabled = false
                 progressDialog = Dialog(requireContext())
@@ -215,18 +222,18 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
 
         if (counter <= n){
 
-            if (counter < n) {
                 counter++
-            }
-            uploadData()
+                uploadData()
 
             counterText.text = "$counter/$n"
 
             nameTIL.setHint("Hotel $counter Name")
+            chainHotelDescriptionLayout.setHint("Hotel $counter Description")
             locationTIL.setHint("Hotel $counter Location")
             ratingTIL.setHint("Hotel $counter Star rating")
 
             nameET.setText("")
+            chainHotelDescriptionET.setText("")
             location.setText("Select Your Location")
             rating.setText("Select Rating")
 
@@ -242,6 +249,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
 
     private fun uploadData() {
         val hotelName = nameET.text.toString()
+        val hotelDescription = chainHotelDescriptionET.text.toString()
         val chainLocation = location.text.toString()
         val chainRating = rating.text.toString()
 
@@ -262,6 +270,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
 
         val send = RetrofitBuilder.profileCompletion.uploadHotelChainData(
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelName),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelDescription),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainLocation),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),chainRating),
             MultipartBody.Part.createFormData("hotelCoverpic", file.name, body),

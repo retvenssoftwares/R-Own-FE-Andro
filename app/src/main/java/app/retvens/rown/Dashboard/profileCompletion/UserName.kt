@@ -1,22 +1,15 @@
 package app.retvens.rown.Dashboard.profileCompletion
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.frags.*
+import app.retvens.rown.Dashboard.profileCompletion.frags.BioGenderFragment
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityUserNameBinding
 import app.retvens.rown.utils.profileCompletionStatus
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class UserName : AppCompatActivity() {
 
@@ -29,6 +22,11 @@ class UserName : AppCompatActivity() {
         setContentView(binding.root)
 
        if (profileCompletionStatus == "60") {
+            val fragment = BioGenderFragment()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_username, fragment)
+            transaction.commit()
+        } else if (profileCompletionStatus == "65") {
             val fragment = LocationFragment()
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_username, fragment)

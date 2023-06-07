@@ -10,6 +10,7 @@ import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJo
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeopleDataClass
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.AllReviewsData
+import app.retvens.rown.NavigationFragments.profile.vendorsReview.GetQuickReviewsData
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.VendorReviewsData
 import app.retvens.rown.viewAll.vendorsDetails.ReviewData
 
@@ -96,5 +97,8 @@ interface ExploreApis {
     fun allHotelReviews(
         @Path("hotel_id") hotel_id : String
     ) : Call<List<AllReviewsData>>
+
+    @GET("getquickreview")
+    fun getQuickReviews() : Call<List<GetQuickReviewsData>>
 
 }

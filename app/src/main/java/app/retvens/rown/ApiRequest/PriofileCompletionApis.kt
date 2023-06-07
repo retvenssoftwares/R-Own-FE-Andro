@@ -24,6 +24,14 @@ interface PriofileCompletionApis{
 
     @Multipart
     @PATCH("/update/{user_id}")
+    fun setBio(
+        @Path("user_id") user_id : String,
+        @Part("userBio") userBio: RequestBody,
+        @Part("Gender") Gender: RequestBody
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("/update/{user_id}")
     fun setLocation(
         @Path("user_id") user_id : String,
         @Part("location")location:String
@@ -77,6 +85,7 @@ interface PriofileCompletionApis{
     fun uploadHotelData(
         @Part("user_id")user_id:RequestBody,
         @Part("hotelName") Name: RequestBody,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
         @Part("hotelAddress") address: RequestBody,
         @Part("hotelRating") hotel_rating: RequestBody,
         @Part hotelLogo: MultipartBody.Part,
@@ -87,6 +96,7 @@ interface PriofileCompletionApis{
     @POST("hotelpost")
     fun uploadHotelChainData(
         @Part("hotelName") Name: RequestBody,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
         @Part("hotelAddress") address: RequestBody,
         @Part("hotelRating") hotel_rating: RequestBody,
         @Part hotelCoverpic: MultipartBody.Part,

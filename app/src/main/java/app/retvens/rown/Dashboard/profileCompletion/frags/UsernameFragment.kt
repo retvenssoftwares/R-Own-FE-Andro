@@ -2,13 +2,10 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,30 +14,20 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.Dashboard.DashBoardActivity
-import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
-import app.retvens.rown.DataCollections.ProfileCompletion.VerifyUsername
-import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
-import app.retvens.rown.utils.saveUserId
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.mesibo.calls.api.Utils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -254,7 +241,7 @@ class UsernameFragment : Fragment() {
                     progressDialog.dismiss()
                     profileComStatus(context!!, "60")
                     profileCompletionStatus = "60"
-                    val fragment = LocationFragment()
+                    val fragment = BioGenderFragment()
                     val transaction = activity?.supportFragmentManager?.beginTransaction()
                     transaction?.replace(R.id.fragment_username,fragment)
                     transaction?.commit()
@@ -265,7 +252,13 @@ class UsernameFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    Toast.makeText(
+                        requireContext(),
+                        t.localizedMessage?.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 progressDialog.dismiss()
             }
         })

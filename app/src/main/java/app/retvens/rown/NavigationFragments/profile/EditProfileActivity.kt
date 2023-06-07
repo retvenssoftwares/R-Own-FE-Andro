@@ -95,35 +95,36 @@ class EditProfileActivity : AppCompatActivity() {
         }
         binding.male.setOnClickListener {
             Gender = "Male"
-            binding.maleImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.femaleImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.nonBinaryImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.preferNotSayImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
+            binding.female.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.nonBinary.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.preferNotSay.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         }
 
         binding.female.setOnClickListener {
             Gender = "Female"
-            binding.maleImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.femaleImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.nonBinaryImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.preferNotSayImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.female.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
+            binding.nonBinary.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.preferNotSay.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         }
 
         binding.nonBinary.setOnClickListener {
             Gender = "Non Binary"
-            binding.maleImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.femaleImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.nonBinaryImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.preferNotSayImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.female.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.nonBinary.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
+            binding.preferNotSay.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
         }
 
         binding.preferNotSay.setOnClickListener {
             Gender = "Prefer not to say"
-            binding.maleImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.femaleImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.nonBinaryImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.green_own))
-            binding.preferNotSayImg.setColorFilter(ContextCompat.getColor(applicationContext, R.color.black))
+            binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.female.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.nonBinary.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            binding.preferNotSay.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
         }
+
 
         binding.save.setOnClickListener {
 
@@ -321,43 +322,23 @@ class EditProfileActivity : AppCompatActivity() {
                     binding.bioEt.setText(response.body()!!.userBio)
                     response.body()!!.vendorInfo
                     try {
-                        Toast.makeText(applicationContext, response.body()?.Gender.toString(), Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(applicationContext, response.body()?.Gender.toString(), Toast.LENGTH_SHORT).show()
                         when (response.body()!!.Gender) {
                             "Male" -> {
                                 Gender = "Male"
-                                binding.maleImg.setColorFilter(
-                                    ContextCompat.getColor(
-                                        applicationContext,
-                                        R.color.black
-                                    )
-                                )
+                                binding.male.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
                             }
                             "Female" -> {
                                 Gender = "Female"
-                                binding.femaleImg.setColorFilter(
-                                    ContextCompat.getColor(
-                                        applicationContext,
-                                        R.color.black
-                                    )
-                                )
+                                binding.female.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
                             }
                             "Non Binary" -> {
                                 Gender = "Non Binary"
-                                binding.nonBinaryImg.setColorFilter(
-                                    ContextCompat.getColor(
-                                        applicationContext,
-                                        R.color.black
-                                    )
-                                )
+                                binding.nonBinary.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
                             }
                             "Prefer not to say" -> {
                                 Gender = "Prefer not to say"
-                                binding.preferNotSayImg.setColorFilter(
-                                    ContextCompat.getColor(
-                                        applicationContext,
-                                        R.color.black
-                                    )
-                                )
+                                binding.preferNotSay.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
                             }
                         }
                     } catch (e : NullPointerException){
