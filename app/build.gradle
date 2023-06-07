@@ -109,7 +109,7 @@ dependencies {
     implementation "com.mesibo.api:ui:${project.MesiboVersion_Ui}"
     implementation "com.mesibo.api:calls:${project.MesiboVersion_Calls}"
 
-    api "com.theartofdev.edmodo:android-image-cropper:2.8.0"
+    implementation "com.theartofdev.edmodo:android-image-cropper:2.8.0"
     //Custom ProgressBar
     implementation 'com.github.emreesen27:Android-Nested-Progress:v1.0.2'
 
@@ -188,6 +188,11 @@ dependencies {
     //ProgressBar
     implementation 'com.github.MackHartley:RoundedProgressBar:3.0.0'
 
+    //Viewpager Implementation
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+    //CircleIndicator
+    implementation 'me.relex:circleindicator:2.1.6'
 
     implementation 'com.github.dhaval2404:imagepicker:2.1'
 }

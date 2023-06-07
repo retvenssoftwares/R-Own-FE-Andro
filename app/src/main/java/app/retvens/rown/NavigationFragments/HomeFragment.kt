@@ -251,7 +251,8 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-
+                shimmerFrameLayout2.stopShimmer()
+                shimmerFrameLayout2.visibility = View.GONE
 
             }
         })
@@ -324,11 +325,7 @@ class HomeFragment : Fragment() {
                             .show()
 
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            response.code().toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(requireContext(), response.message().toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

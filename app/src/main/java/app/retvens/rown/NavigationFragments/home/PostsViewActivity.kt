@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
@@ -18,31 +19,43 @@ import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PostsViewActivity : AppCompatActivity() {
+
+    lateinit var viewPagerAdapter: ImageSlideActivityAdapter
+    lateinit var indicator: CircleIndicator
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posts_view)
 
-        val postImage = findViewById<ShapeableImageView>(R.id.post_pic)
+//        val postImage = findViewById<ShapeableImageView>(R.id.post_pic)
         val caption = findViewById<TextView>(R.id.caption)
 
         val likeButton = findViewById<ImageView>(R.id.like_post)
         val commentButton = findViewById<ImageView>(R.id.comment)
         val savedImage = findViewById<ImageView>(R.id.savedPost)
+        val viewPager = findViewById<ViewPager>(R.id.post_pic)
+        indicator = findViewById<CircleIndicator>(R.id.indicator)
 
         caption.text = intent.getStringExtra("caption")
 
-        val image = intent.getStringExtra("postPic")
+        val image = intent.getStringArrayListExtra("postPic")
         val postId = intent.getStringExtra("postId")
         val profilePic = intent.getStringExtra("profilePic")
 
-        Glide.with(applicationContext).load(image).into(postImage)
+//        Glide.with(applicationContext).load(image).into(postImage)
 
+        viewPagerAdapter = ImageSlideActivityAdapter(baseContext,image!!)
+        viewPager.adapter = viewPagerAdapter
+
+
+        indicator.setViewPager(viewPager)
 
         likeButton.setOnClickListener {
 

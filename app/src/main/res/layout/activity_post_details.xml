@@ -140,21 +140,31 @@
                     android:text="2W"
                     android:textColor="@color/grey_60"
                     android:textSize="11dp"
-                    app:layout_constraintEnd_toEndOf="@id/post_pic"
+                    app:layout_constraintEnd_toEndOf="@id/viewPager"
                     app:layout_constraintTop_toBottomOf="@id/post_user_type" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/post_pic"
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_marginHorizontal="15dp"
-                    android:layout_marginTop="13dp"
                     android:scaleType="centerCrop"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginHorizontal="15dp"
                     android:src="@drawable/png_post"
+                    app:shapeAppearanceOverlay="@style/SquareCornerImage"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/post_profile"
-                    app:shapeAppearanceOverlay="@style/SquareCornerImage" />
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <me.relex.circleindicator.CircleIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="55dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:elevation="4dp"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -163,9 +173,9 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:weightSum="7"
-                    app:layout_constraintBottom_toBottomOf="@id/post_pic"
-                    app:layout_constraintEnd_toEndOf="@id/post_pic"
-                    app:layout_constraintStart_toStartOf="@id/post_pic">
+                    app:layout_constraintBottom_toBottomOf="@id/viewPager"
+                    app:layout_constraintEnd_toEndOf="@id/viewPager"
+                    app:layout_constraintStart_toStartOf="@id/viewPager">
 
                     <ImageView
                         android:id="@+id/like_post"
@@ -207,7 +217,7 @@
                     android:textColor="@color/black"
                     android:textSize="11dp"
                     app:layout_constraintStart_toStartOf="@id/post_profile"
-                    app:layout_constraintTop_toBottomOf="@id/post_pic" />
+                    app:layout_constraintTop_toBottomOf="@id/viewPager" />
 
                 <TextView
                     android:id="@+id/caption"

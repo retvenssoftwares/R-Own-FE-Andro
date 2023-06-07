@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.job
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
+import com.mackhartley.roundedprogressbar.ext.setDrawableTint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -85,19 +87,29 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
             }
         }
 
+        if (jobs.applyStatus == "Applied"){
+            holder.text.setBackgroundColor(Color.parseColor("#AFAFAF"))
+            holder.text.text = "Applied"
+        }
+
 
             holder.button.setOnClickListener{
-                val intent = Intent(context,JobDetailsActivity::class.java)
-                intent.putExtra("title",jobs.jobTitle)
-                intent.putExtra("company",jobs.companyName)
-                intent.putExtra("location",jobs.jobLocation)
-                intent.putExtra("type",jobs.jobType)
-                intent.putExtra("worktype",jobs.workplaceType)
-                intent.putExtra("description",jobs.jobDescription)
-                intent.putExtra("skill",jobs.skillsRecq)
-                intent.putExtra("jobId",jobs.jid)
-                intent.putExtra("userId",jobs.user_id)
-                context.startActivity(intent)
+
+                if (jobs.applyStatus == "Not Applied"){
+                    val intent = Intent(context,JobDetailsActivity::class.java)
+                    intent.putExtra("title",jobs.jobTitle)
+                    intent.putExtra("company",jobs.companyName)
+                    intent.putExtra("location",jobs.jobLocation)
+                    intent.putExtra("type",jobs.jobType)
+                    intent.putExtra("worktype",jobs.workplaceType)
+                    intent.putExtra("description",jobs.jobDescription)
+                    intent.putExtra("skill",jobs.skillsRecq)
+                    intent.putExtra("jobId",jobs.jid)
+                    intent.putExtra("userId",jobs.user_id)
+                    context.startActivity(intent)
+                }
+
+
             }
 
 

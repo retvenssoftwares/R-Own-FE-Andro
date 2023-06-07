@@ -39,7 +39,6 @@ interface JobsApis {
     fun requestJob(@Body post:RequestJobDataClass):Call<JobResponseDataClass>
 
     @GET("getrequestedjob")
-
     fun getRequestJob():Call<List<GetRequestedJobDara>>
 
     @POST("jobpost/{userId}")

@@ -19,7 +19,6 @@
             android:id="@+id/jobs_search"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:hint="Hotels"
             android:drawableEnd="@drawable/svg_search"
             android:padding="10dp"
             android:layout_marginTop="12dp"

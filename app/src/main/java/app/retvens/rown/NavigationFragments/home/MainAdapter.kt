@@ -7,19 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
-import app.retvens.rown.DataCollections.FeedCollection.PostItem
-import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
-import app.retvens.rown.DataCollections.FeedCollection.Vote
+import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.NavigationFragments.profile.hotels.AddHotelActivity
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
@@ -27,8 +21,6 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProf
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
 import app.retvens.rown.databinding.EachItemBinding
-import app.retvens.rown.databinding.GetjoblistBinding
-import app.retvens.rown.databinding.ItemEventBinding
 import app.retvens.rown.databinding.ItemEventPostBinding
 import app.retvens.rown.databinding.ItemPollProfileBinding
 import app.retvens.rown.databinding.ItemStatusBinding
@@ -40,25 +32,26 @@ import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity
 import com.bumptech.glide.Glide
 import com.mackhartley.roundedprogressbar.RoundedProgressBar
+import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 
 class MainAdapter(val context: Context, private val dataItemList: List<DataItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
-
+    lateinit var viewPagerAdapter: ImageSlideAdapter
+    lateinit var indicator: CircleIndicator
 
     interface OnItemClickListener {
         fun onItemClick(dataItem: PostItem)
@@ -78,7 +71,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                         Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
                         binding.userIdOnComment.text = post.User_name
-                        Log.e("username",post.User_name)
+                        Log.e("username",post.toString())
                         binding.recentCommentByUser.text = post.caption
                         Log.e("caption",post.caption)
                         binding.userNamePost.text = post.User_name
@@ -89,37 +82,48 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         if (post.Comment_count != ""){
                             binding.commentCount.text = post.Comment_count
                         }
-                        var timestamp: String
-                        post.media.forEach { item ->
-                            Glide.with(context).load(item.post).into(binding.postPic)
-                            formatTimestamp(item.date_added)
-                            timestamp = item.date_added
 
-// Convert the timestamp to a Date object
-                            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-                            val date: Date = dateFormat.parse(timestamp)
+                        post.media.forEach {  item ->
+                            // Set up the ImageSlideAdapter and ViewPager
+                            viewPagerAdapter = ImageSlideAdapter(context, post.media)
+                            binding.viewPager.adapter = viewPagerAdapter
 
-// Calculate the time difference from the current time to the timestamp
-                            val currentTime = System.currentTimeMillis()
-                            val diffInMillis: Long = currentTime - date.time
 
-// Convert the time difference to the desired format
-                            val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(diffInMillis)
-                            val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
-                            val hours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillis)
-                            val days: Long = TimeUnit.MILLISECONDS.toDays(diffInMillis)
-                            val months: Long = TimeUnit.MILLISECONDS.toDays(diffInMillis) / 30
-
-// Use the calculated values as needed
-                            println("Seconds: $seconds")
-                            println("Minutes: $minutes")
-                            println("Hours: $hours")
-                            println("Days: $days")
-                            println("Months: $months")
-
-                            binding.postTime.text = hours.toString()+"hr"
-
+                            indicator = binding.indicator as CircleIndicator
+                            indicator.setViewPager(binding.viewPager)
                         }
+
+//                        var timestamp: String
+//                        post.media.forEach { item ->
+//                            Glide.with(context).load(item.post).into(binding.postPic)
+//                            formatTimestamp(item.date_added)
+//                            timestamp = item.date_added
+//
+//// Convert the timestamp to a Date object
+//                            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+//                            val date: Date = dateFormat.parse(timestamp)
+//
+//// Calculate the time difference from the current time to the timestamp
+//                            val currentTime = System.currentTimeMillis()
+//                            val diffInMillis: Long = currentTime - date.time
+//
+//// Convert the time difference to the desired format
+//                            val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(diffInMillis)
+//                            val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+//                            val hours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillis)
+//                            val days: Long = TimeUnit.MILLISECONDS.toDays(diffInMillis)
+//                            val months: Long = TimeUnit.MILLISECONDS.toDays(diffInMillis) / 30
+//
+//// Use the calculated values as needed
+//                            println("Seconds: $seconds")
+//                            println("Minutes: $minutes")
+//                            println("Hours: $hours")
+//                            println("Days: $days")
+//                            println("Months: $months")
+//
+//                            binding.postTime.text = hours.toString()+"hr"
+//
+//                        }
 
                         if (post.like == "Liked"){
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
@@ -154,7 +158,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             }
 
-            binding.postPic.setOnClickListener {
+            binding.viewPager.setOnClickListener {
                 val intent = Intent(context,PostsViewActivity::class.java)
                 post.media.forEach { item ->
                     intent.putExtra("postPic",item.post)
@@ -166,14 +170,19 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             }
             binding.postCard.setOnClickListener {
+
+                Log.e("media",post.media.toString())
+
                 val intent = Intent(context,PostDetailsActivity::class.java)
                 intent.putExtra("profilePic",banner.Profile_pic)
                 intent.putExtra("profileName",banner.Full_name)
                 intent.putExtra("userName",banner.User_name)
                 intent.putExtra("caption",banner.caption)
+                val images:ArrayList<String> = ArrayList()
                 post.media.forEach { item ->
-                    intent.putExtra("postPic",item.post)
+                    images.add(item.post)
                 }
+                intent.putStringArrayListExtra("postPic",images)
                 intent.putExtra("likeCount",banner.Like_count)
                 intent.putExtra("commentCount",banner.Comment_count)
                 intent.putExtra("like",banner.like)

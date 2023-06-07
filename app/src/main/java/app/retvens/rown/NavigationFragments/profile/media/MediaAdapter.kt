@@ -49,9 +49,11 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
             intent.putExtra("profileName",media.Full_name)
             intent.putExtra("userName",media.User_name)
             intent.putExtra("caption",media.caption)
+            val images:ArrayList<String> = ArrayList()
             media.media.forEach { item ->
-                intent.putExtra("postPic",item.post)
+                images.add(item.post)
             }
+            intent.putStringArrayListExtra("postPic",images)
             intent.putExtra("likeCount",media.Like_count)
             intent.putExtra("commentCount",media.Comment_count)
             intent.putExtra("like",media.like)

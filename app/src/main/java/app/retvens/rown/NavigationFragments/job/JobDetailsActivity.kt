@@ -79,7 +79,17 @@ class JobDetailsActivity : AppCompatActivity() {
         }
 
         val desc = intent.getStringExtra("description")
+        val status = intent.getStringExtra("applyStatus")
         val skill = intent.getStringExtra("skill")
+
+        val text = findViewById<TextView>(R.id.appliedText)
+
+        if (status == "Applied"){
+            text.setBackgroundColor(Color.parseColor("#AFAFAF"))
+            text.text = "Applied"
+        }
+
+
 
         val bundle = Bundle()
         bundle.putString("desc", desc)
@@ -266,6 +276,7 @@ class JobDetailsActivity : AppCompatActivity() {
                     pushId(response.applicationId,response.job_id)
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+
                 }
             }
 

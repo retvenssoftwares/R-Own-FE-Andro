@@ -80,6 +80,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : Recy
             intent.putExtra("skill",data.skillsRecq)
             intent.putExtra("jobId",data.jid)
             intent.putExtra("userId",data.user_id)
+            intent.putExtra("applyStatus",data.applyStatus)
             intent.putExtra("appliedStatus",data.display_status)
             context.startActivity(intent)
         }

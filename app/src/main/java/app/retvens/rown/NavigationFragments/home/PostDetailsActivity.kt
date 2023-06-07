@@ -2,43 +2,62 @@ package app.retvens.rown.NavigationFragments.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
+import app.retvens.rown.DataCollections.FeedCollection.Media
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Indicator
 import com.google.android.material.imageview.ShapeableImageView
+import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class PostDetailsActivity : AppCompatActivity() {
+
+    lateinit var viewPagerAdapter: ImageSlideActivityAdapter
+    lateinit var indicator: CircleIndicator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_details)
 
         val name = findViewById<TextView>(R.id.user_name_post)
         val profile = findViewById<ShapeableImageView>(R.id.post_profile)
-        val postPic = findViewById<ShapeableImageView>(R.id.post_pic)
+
         val username = findViewById<TextView>(R.id.user_name)
         val caption = findViewById<TextView>(R.id.caption)
         val likeButton = findViewById<ImageView>(R.id.like_post)
         val commentButtom = findViewById<ImageView>(R.id.comment)
+        val viewPager = findViewById<ViewPager>(R.id.viewPager)
+        indicator = findViewById<CircleIndicator>(R.id.indicator)
 
         name.text = intent.getStringExtra("userName").toString()
         username.text = intent.getStringExtra("userName").toString()
         caption.text = intent.getStringExtra("caption").toString()
 
-        val postImage = intent.getStringExtra("postPic")
         val profilePic = intent.getStringExtra("profilePic")
 
         Glide.with(applicationContext).load(profilePic).into(profile)
-        Glide.with(applicationContext).load(postImage).into(postPic)
+
+        val postPic = intent.getStringArrayListExtra("postPic")
+
+        Log.e("pic",postPic.toString())
+
+        viewPagerAdapter = ImageSlideActivityAdapter(baseContext,postPic!!)
+        viewPager.adapter = viewPagerAdapter
+
+
+        indicator.setViewPager(viewPager)
 
         val postId = intent.getStringExtra("postId")
         val like = intent.getStringExtra("like")

@@ -30,7 +30,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_arrow_left" />
+                android:src="@drawable/chevron_left" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -106,21 +106,7 @@
                 android:gravity="right"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/action_call"
-                    android:layout_width="30dp"
-                    android:layout_height="28dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@android:color/transparent"
-                    android:foregroundGravity="right"
-                    android:src="@drawable/ic_phone"
-                    android:title="Call"
-                    android:visible="true"
-                    app:showAsAction="always"
 
-                    />
 
                 <ImageButton
                     android:id="@+id/action_videocall"
@@ -131,26 +117,28 @@
                     android:layout_marginRight="15dp"
                     android:background="@android:color/transparent"
                     android:foregroundGravity="right"
-                    android:src="@drawable/ic_video_camera"
+                    android:src="@drawable/video"
                     android:title="Video Call"
 
                     android:visible="true"
                     app:showAsAction="always" />
 
                 <ImageButton
-                    android:id="@+id/options"
+                    android:id="@+id/action_call"
                     android:layout_width="30dp"
-                    android:layout_height="25dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="0dp"
                     android:layout_marginRight="15dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/ic_more_option_verical"
+                    android:foregroundGravity="right"
+                    android:src="@drawable/call"
                     android:title="Call"
                     android:visible="true"
                     app:showAsAction="always"
 
                     />
+
             </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>

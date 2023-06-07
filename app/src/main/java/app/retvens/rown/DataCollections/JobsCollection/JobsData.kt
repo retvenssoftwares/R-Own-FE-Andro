@@ -15,6 +15,7 @@ data class JobsData(
     val jobDescription: String,
     val skillsRecq: String,
     val display_status: String,
+    val applyStatus:String,
     val jobApplicants: List<Any>,
     val jid: String,
     val __v: Int

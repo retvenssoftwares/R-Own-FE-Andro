@@ -71,10 +71,10 @@
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/grey_60"
         app:layout_constraintTop_toBottomOf="@id/post_user_type"
-        app:layout_constraintEnd_toEndOf="@id/post_pic"/>
+        app:layout_constraintEnd_toEndOf="@id/viewPager"/>
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/post_pic"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="centerCrop"
@@ -86,6 +86,16 @@
         app:layout_constraintTop_toBottomOf="@id/post_profile"
         app:layout_constraintStart_toStartOf="parent"/>
 
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:elevation="4dp"/>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="50dp"
@@ -93,9 +103,9 @@
             android:gravity="center"
             android:weightSum="6"
             android:background="@drawable/transparent_bg"
-            app:layout_constraintBottom_toBottomOf="@id/post_pic"
-            app:layout_constraintEnd_toEndOf="@id/post_pic"
-            app:layout_constraintStart_toStartOf="@id/post_pic">
+            app:layout_constraintBottom_toBottomOf="@id/viewPager"
+            app:layout_constraintEnd_toEndOf="@id/viewPager"
+            app:layout_constraintStart_toStartOf="@id/viewPager">
 
 
 
@@ -156,13 +166,13 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/share_post"
-                android:layout_width="10dp"
-                android:layout_height="26dp"
-                android:layout_weight="1"
-                android:layout_marginBottom="4dp"
-                android:src="@drawable/svg_share_post" />
+<!--            <ImageView-->
+<!--                android:id="@+id/share_post"-->
+<!--                android:layout_width="10dp"-->
+<!--                android:layout_height="26dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_marginBottom="4dp"-->
+<!--                android:src="@drawable/svg_share_post" />-->
 
             <ImageView
                 android:layout_width="10dp"
@@ -184,7 +194,7 @@
                 android:fontFamily="@font/montserrat_semibold"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@id/post_profile"
-                app:layout_constraintTop_toBottomOf="@id/post_pic"/>
+                app:layout_constraintTop_toBottomOf="@id/viewPager"/>
 
             <TextView
                 android:id="@+id/recentCommentByUser"
@@ -198,7 +208,7 @@
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@id/user_id_on_comment"
-                app:layout_constraintTop_toBottomOf="@id/post_pic"
+                app:layout_constraintTop_toBottomOf="@id/viewPager"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

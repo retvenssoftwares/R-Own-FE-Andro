@@ -40,7 +40,7 @@ class MatchesJobAdapter(val context: Context, val requestJob:List<GetRequestedJo
 
         val data = requestJob[position]
         holder.name.text = data.Full_name
-        holder.role.text = data.jobTitle.get(0)
+//        holder.role.text = data.jobTitle.get(0)
         holder.location.text = data.Location
         Glide.with(context).load(data.profile_pic).into(holder.profile)
 
