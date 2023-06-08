@@ -1,14 +1,20 @@
 package app.retvens.rown.Dashboard.createPosts
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
+import android.widget.ImageView
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityCreatePollBinding
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -20,6 +26,7 @@ class CreatePollActivity : AppCompatActivity() {
     lateinit var binding:ActivityCreatePollBinding
 
 
+    lateinit var progressDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +46,14 @@ class CreatePollActivity : AppCompatActivity() {
             }else if (binding.opinion2.text!!.isEmpty()){
                 binding.opinion2Layout.error = "Add Opinion"
             }else{
+                progressDialog = Dialog(this)
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
                 createPoll(user_id)
             }
 
@@ -70,17 +85,23 @@ class CreatePollActivity : AppCompatActivity() {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                    val intent = Intent(applicationContext,DashBoardActivity::class.java)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
                 }else{
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                    onBackPressed()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+//                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                onBackPressed()
             }
         })
 

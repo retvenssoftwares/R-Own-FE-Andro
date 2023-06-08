@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.HorizontalScrollView
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,8 @@ class SelectMembers : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_members)
 
+        findViewById<ImageButton>(R.id.createCommunity_backBtn_members).setOnClickListener { onBackPressed() }
+
         recycler = findViewById<RecyclerView>(R.id.listOfaddmembers)
         recycler.layoutManager = LinearLayoutManager(this)
 
@@ -56,6 +59,7 @@ class SelectMembers : AppCompatActivity() {
 
         val name = intent.getStringExtra("name")
         val description = intent.getStringExtra("desc")
+        val location = intent.getStringExtra("location")
         val type = intent.getStringExtra("type")
 
 
@@ -66,6 +70,7 @@ class SelectMembers : AppCompatActivity() {
                 intent.putStringArrayListExtra("pic", profile)
                 intent.putExtra("name",name)
                 intent.putExtra("desc",description)
+                intent.putExtra("location",location)
                 intent.putExtra("type",type)
                 startActivity(intent)
         }

@@ -5,10 +5,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,7 +20,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
@@ -54,7 +60,9 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
     lateinit var cameraImageUri: Uri
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        app.retvens.rown.utils.cropImage(cameraImageUri, this)
+        if (it == true) {
+            app.retvens.rown.utils.cropImage(cameraImageUri, this)
+        }
     }
 
     private val uCropContract = object : ActivityResultContract<List<Uri>, Uri>(){
@@ -205,6 +213,14 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
             }else if (binding.etLocationPostEvent.text.toString().isEmpty()){
                 binding.etLocationPostEvent.error = "select location first!!"
             }else{
+                progressDialog = Dialog(this)
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
                 createPost(user_id)
             }
 
@@ -274,17 +290,23 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
-                    onBackPressed()
+                    val intent = Intent(applicationContext, DashBoardActivity::class.java)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    finish()
                 }else{
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                    onBackPressed()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+//                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                onBackPressed()
             }
         })
 

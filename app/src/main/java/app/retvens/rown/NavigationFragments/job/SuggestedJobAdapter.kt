@@ -78,7 +78,7 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
         holder.jobSaved.setOnClickListener {
             if (operation == "push"){
                 saveJob(jobs.jid, "push")
-                holder.jobSaved.setImageResource(R.drawable.svg_saved_profile)
+                holder.jobSaved.setImageResource(R.drawable.svg_saved)
                 operation = "pop"
             } else {
                 saveJob(jobs.jid, "pop")

@@ -178,6 +178,10 @@ class UsernameFragment : Fragment() {
         Glide.with(requireContext()).load(profilePic).into(profile)
         name.setText("Hi $profileName")
 
+        val firstN = profileName.split(" ")[0]
+        val lastN = profileName.split(" ")[1]
+        firstName.setText(firstN)
+        lastName.setText(lastN)
     }
     private fun verifyUserName() {
 

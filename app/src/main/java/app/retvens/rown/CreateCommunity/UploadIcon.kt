@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -36,6 +37,7 @@ import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.cropProfileImage
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -67,11 +69,16 @@ class UploadIcon : AppCompatActivity() {
         cropImage(cameraImageUri!!, this)
     }
 
+    lateinit var progressDialog: Dialog
+
     lateinit var name: String
+    lateinit var location: String
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_icon)
+
+        findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener { onBackPressed() }
 
         cameraImageUri = createImageUri()!!
 
@@ -90,6 +97,7 @@ class UploadIcon : AppCompatActivity() {
 
         name = intent.getStringExtra("name").toString()
         description = intent.getStringExtra("desc")!!
+        val location = intent.getStringArrayListExtra("location")
         type = intent.getStringExtra("type")!!
 
         val setName = findViewById<TextView>(R.id.Community_Name)
@@ -111,6 +119,14 @@ class UploadIcon : AppCompatActivity() {
         val next = findViewById<ImageView>(R.id.nextUpload)
 
         next.setOnClickListener {
+            progressDialog = Dialog(this)
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setCancelable(false)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
             val name = intent.getStringExtra("name")
             CreateGroup(name.toString())
 
@@ -192,6 +208,7 @@ class UploadIcon : AppCompatActivity() {
                 call: Call<ResponseGroup?>,
                 response: Response<ResponseGroup?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     groupId = response.group.gid.toString()
@@ -203,6 +220,7 @@ class UploadIcon : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseGroup?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
@@ -260,7 +278,7 @@ class UploadIcon : AppCompatActivity() {
         val send = RetrofitBuilder.feedsApi.createCommunities(
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),groupId),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"indore"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),location),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),type),
             MultipartBody.Part.createFormData("Profile_pic", file.name, body)
             )
@@ -270,6 +288,7 @@ class UploadIcon : AppCompatActivity() {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
