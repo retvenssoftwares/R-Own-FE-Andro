@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -21,6 +22,8 @@ class ConnectionNotificationAdapter(val listS : List<PersonalNotificationDataIte
         val categoryName = itemView.findViewById<TextView>(R.id.connection_notification_name)
         val date = itemView.findViewById<TextView>(R.id.connection_notification_time)
         val profile = itemView.findViewById<ImageView>(R.id.connection_notification_profile)
+        val ca_accept = itemView.findViewById<CardView>(R.id.ca_accept)
+        val ca_decline = itemView.findViewById<CardView>(R.id.ca_decline)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewAllVendorsViewHolder {
@@ -39,6 +42,8 @@ class ConnectionNotificationAdapter(val listS : List<PersonalNotificationDataIte
         holder.categoryName.text = listS[position].body
         holder.date.text =  dateFormat(listS[position].date_added)
 
+        holder.ca_accept.visibility = View.GONE
+        holder.ca_decline.visibility = View.GONE
 
         holder.itemView.setOnClickListener {
 //            val intent = Intent(context, AllBlogsActivity::class.java)

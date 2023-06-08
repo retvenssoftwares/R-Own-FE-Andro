@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,7 @@ class PersonalNotificationFragment : Fragment() {
 
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
     lateinit var empty : TextView
+    lateinit var nothing : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +43,7 @@ class PersonalNotificationFragment : Fragment() {
         recyclerPersonal.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.emptyBlog)
+        nothing = view.findViewById(R.id.nothing)
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayoutBlog)
 
         getNotifications()
@@ -58,7 +61,6 @@ class PersonalNotificationFragment : Fragment() {
                 response: Response<List<PersonalNotificationDataItem>?>
             ) {
                 if (isAdded){
-                    Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
                     if (response.isSuccessful){
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
@@ -69,8 +71,7 @@ class PersonalNotificationFragment : Fragment() {
                                 personalNotificationAdapter.notifyDataSetChanged()
                                 Log.d("on", data.toString())
                         } else {
-                            empty.visibility = View.VISIBLE
-                            empty.text = "No Notifications"
+                            nothing.visibility = View.VISIBLE
                         }
                     } else {
                         empty.visibility = View.VISIBLE

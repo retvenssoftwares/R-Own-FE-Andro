@@ -1,23 +1,22 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.people
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import app.retvens.rown.CreateCommunity.UploadIconAdapter
-import app.retvens.rown.DataCollections.UserProfileRequestItem
-import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobAdapter
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class ExplorePeopleAdapter(val context: Context,val peopleList:List<Post>):RecyclerView.Adapter<ExplorePeopleAdapter.ExplorePeopleViewholder>() {
+class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):RecyclerView.Adapter<ExplorePeopleAdapter.ExplorePeopleViewholder>() {
 
+    var userId = ""
     interface ConnectClickListener {
         fun onJobSavedClick(connect: Post)
     }
@@ -50,6 +49,8 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:List<Post>):Recyc
         }
         holder.name.text = data.Full_name
 
+        userId = data.User_id
+
         var status = data.connectionStatus
 
         if (data.connectionStatus == "Connected"){
@@ -80,6 +81,21 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:List<Post>):Recyc
        return peopleList.size
     }
 
+    fun removeUser(data: List<Post>){
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        try {
+
+            data.forEach {
+                if (user_id == it.User_id){
+                    peopleList.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
     fun setJobSavedClickListener(listener: ConnectClickListener) {
 
         connectClickListener = listener

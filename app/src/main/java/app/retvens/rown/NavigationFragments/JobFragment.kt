@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +20,19 @@ import app.retvens.rown.NavigationFragments.job.RequestForJobFragment
 import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsActivity
 import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsData
 import app.retvens.rown.R
+import app.retvens.rown.utils.profileCompletionStatus
 
 class JobFragment : Fragment(){
 
     lateinit var exploreJob :CardView
     lateinit var requestJob :CardView
     lateinit var appliedJob :CardView
+
+    lateinit var ll_menu :HorizontalScrollView
+    lateinit var child_j_fragments_container :FrameLayout
+
+    lateinit var savedJobs :ImageView
+    lateinit var nothing :ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +50,25 @@ class JobFragment : Fragment(){
         requestJob = view.findViewById(R.id.card_request_job)
         appliedJob = view.findViewById(R.id.card_applied_job)
 
-        view.findViewById<ImageView>(R.id.savedJobs).setOnClickListener {
+        ll_menu = view.findViewById(R.id.ll_menu)
+        child_j_fragments_container = view.findViewById(R.id.child_j_fragments_container)
+
+        nothing = view.findViewById<ImageView>(R.id.nothing)
+        savedJobs = view.findViewById<ImageView>(R.id.savedJobs)
+
+        if (profileCompletionStatus == "100"){
+            nothing.visibility = View.GONE
+            savedJobs.visibility = View.VISIBLE
+            child_j_fragments_container.visibility = View.VISIBLE
+            ll_menu.visibility = View.VISIBLE
+        } else {
+            nothing.visibility = View.VISIBLE
+            savedJobs.visibility = View.GONE
+            child_j_fragments_container.visibility = View.GONE
+            ll_menu.visibility = View.GONE
+        }
+
+        savedJobs.setOnClickListener {
             startActivity(Intent(context, SavedJobsActivity::class.java))
         }
 

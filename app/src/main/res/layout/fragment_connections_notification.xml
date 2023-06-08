@@ -50,4 +50,12 @@
         android:layout_marginHorizontal="20dp"
         android:fontFamily="@font/montserrat_semibold"/>
 
+    <ImageView
+        android:id="@+id/nothing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:src="@drawable/svg_nothing"
+        android:layout_marginHorizontal="20dp"/>
+
 </LinearLayout>
