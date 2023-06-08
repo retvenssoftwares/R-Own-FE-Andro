@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ class ConnectionsNotificationFragment : Fragment() {
 
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
     lateinit var empty : TextView
+    lateinit var nothing : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +44,7 @@ class ConnectionsNotificationFragment : Fragment() {
         recyclerConnection.layoutManager = LinearLayoutManager(context)
         recyclerConnection.setHasFixedSize(true)
 
+        nothing = view.findViewById(R.id.nothing)
         empty = view.findViewById(R.id.emptyBlog)
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayoutBlog)
 
@@ -59,7 +62,6 @@ class ConnectionsNotificationFragment : Fragment() {
                 response: Response<List<PersonalNotificationDataItem>?>
             ) {
                 if (isAdded){
-                    Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
                     if (response.isSuccessful){
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
@@ -70,8 +72,7 @@ class ConnectionsNotificationFragment : Fragment() {
                             connectionNotificationAdapter.notifyDataSetChanged()
                             Log.d("on", data.toString())
                         } else {
-                            empty.visibility = View.VISIBLE
-                            empty.text = "No Notifications"
+                            nothing.visibility = View.VISIBLE
                         }
                     } else {
                         empty.visibility = View.VISIBLE

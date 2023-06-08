@@ -38,8 +38,10 @@ class PersonalNotificationAdapter(val listS : List<PersonalNotificationDataItem>
         holder.endPic.setPadding(40)
         if (listS[position].callType == "Audio"){
             holder.endPic.setImageResource(com.mesibo.messaging.R.drawable.baseline_call_missed_black_24)
-        } else {
+        } else if (listS[position].callType == "Video"){
             holder.endPic.setImageResource(com.mesibo.messaging.R.drawable.baseline_missed_video_call_black_24)
+        } else {
+            holder.endPic.setImageResource(R.drawable.svg_notification)
         }
 
         holder.date.text =  dateFormat(listS[position].date_added)

@@ -51,6 +51,19 @@
         app:layout_constraintStart_toStartOf="@id/welcome_name"
         app:layout_constraintTop_toBottomOf="@id/welcome_name" />
 
+        <ImageView
+            android:id="@+id/nothing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/svg_complete_y_p"
+            android:layout_marginStart="20dp"
+            android:visibility="gone"
+            app:layout_constraintVertical_bias="0.3"
+            app:layout_constraintTop_toBottomOf="@id/find_txt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/find_txt"/>
+
         <HorizontalScrollView
             android:id="@+id/ll_menu"
             android:layout_width="match_parent"

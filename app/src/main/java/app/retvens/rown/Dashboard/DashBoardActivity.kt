@@ -190,7 +190,7 @@ class DashBoardActivity : AppCompatActivity() {
                 drawerLayout.openDrawer(GravityCompat.START)
             }
         }
-        if (role =="Hotel Owner"){
+        if (role =="Hotel Owner" && profileCompletionStatus == "100"){
             binding.postedJobsSn.visibility = View.VISIBLE
             binding.appliedJobsSn.visibility = View.GONE
         } else {
@@ -296,10 +296,10 @@ class DashBoardActivity : AppCompatActivity() {
 
         header.findViewById<CardView>(R.id.my_account).setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
-            if (role =="Hotel Owner"){
+            if (role =="Hotel Owner" && profileCompletionStatus == "100"){
             replaceFragment(ProfileFragmentForHotelOwner())
             toolbar.visibility = View.GONE
-        }else if (role == "Business Vendor / Freelancer"){
+        }else if (role == "Business Vendor / Freelancer" && profileCompletionStatus == "100"){
             replaceFragment(ProfileFragmentForVendors())
             toolbar.visibility = View.GONE
         }else {
@@ -316,7 +316,7 @@ class DashBoardActivity : AppCompatActivity() {
                     toolbar.visibility = View.VISIBLE
                 }
                 R.id.jobs ->
-                    if (role =="Hotel Owner" || role == "Business Vendor / Freelancer"){
+                    if ((role =="Hotel Owner" || role == "Business Vendor / Freelancer") && profileCompletionStatus == "100"){
                         replaceFragment(JobsForHoteliers())
                         toolbar.visibility = View.GONE
                     }else{
@@ -329,7 +329,7 @@ class DashBoardActivity : AppCompatActivity() {
                 }
                 R.id.events ->
 //                    replaceFragment(EventFragmentForHoteliers())
-                    if (role =="Hotel Owner"){
+                    if (role =="Hotel Owner" && profileCompletionStatus == "100"){
                         replaceFragment(EventFragmentForHoteliers())
                         toolbar.visibility = View.GONE
                     }else{
@@ -337,10 +337,10 @@ class DashBoardActivity : AppCompatActivity() {
                         toolbar.visibility = View.GONE
                     }
                 R.id.profile -> {
-                    if (role =="Hotel Owner"){
+                    if (role =="Hotel Owner" && profileCompletionStatus == "100"){
                         replaceFragment(ProfileFragmentForHotelOwner())
                         toolbar.visibility = View.GONE
-                    }else if (role == "Business Vendor / Freelancer"){
+                    }else if (role == "Business Vendor / Freelancer" && profileCompletionStatus == "100"){
                         replaceFragment(ProfileFragmentForVendors())
                         toolbar.visibility = View.GONE
                     }else {
