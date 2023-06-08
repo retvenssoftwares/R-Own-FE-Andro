@@ -8,8 +8,6 @@ apply from: "https://api.mesibo.com/mesibo.gradle"
 apply plugin: 'kotlin-kapt'
 
 
-
-
 android {
     namespace 'app.retvens.rown'
     compileSdk 33

@@ -16,7 +16,7 @@
         android:layout_marginBottom="2dp"
         android:paddingRight="11dp"
         android:paddingBottom="1dp"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="14dp"
         app:cardElevation="2dp">
 
 

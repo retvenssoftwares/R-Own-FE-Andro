@@ -237,7 +237,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 TODO("VERSION.SDK_INT < S")
             }
 
-            binding.postTime.text = duration.toString()
+//            binding.postTime.text = duration.toString()
         }
 
 

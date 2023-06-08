@@ -29,7 +29,7 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var commentAdapter: CommentAdapter
-    private lateinit var comment:EditText
+    private lateinit var comments:EditText
     private lateinit var profile:ShapeableImageView
     lateinit var child :String
     lateinit var parentCommentId:String
@@ -65,7 +65,7 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
         recyclerView = view.findViewById(R.id.comment_recyclerview)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        comment = view.findViewById(R.id.addThoughts)
+        comments = view.findViewById(R.id.addThoughts)
 
         profile = view.findViewById(R.id.profileOnComment)
 
@@ -92,7 +92,7 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
 
     private fun replyComment(userId: String, parentCommentId: String, postID: String) {
 
-        val comment = comment.text.toString()
+        val comment = comments.text.toString()
 
         val replyCommnt = RetrofitBuilder.feedsApi.replyComment(postID, PostCommentReplyClass(userId,comment,parentCommentId))
 
@@ -105,6 +105,7 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     getCommentList(postID)
+                    comments.text.clear()
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -123,7 +124,7 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val comment = comment.text.toString()
+        val comment = comments.text.toString()
 
         val sendComment = RetrofitBuilder.feedsApi.postComment(postID, PostCommentClass(user_id,comment))
 
@@ -136,6 +137,7 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     getCommentList(postID)
+                    comments.text.clear()
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
