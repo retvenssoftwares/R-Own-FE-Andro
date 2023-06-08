@@ -88,6 +88,7 @@ class UploadIcon : AppCompatActivity() {
         val profile = intent.getStringArrayListExtra("pic")
 
 
+
         name = intent.getStringExtra("name").toString()
         description = intent.getStringExtra("desc")!!
         type = intent.getStringExtra("type")!!
@@ -213,13 +214,15 @@ class UploadIcon : AppCompatActivity() {
         val members = intent.getStringArrayListExtra("number")
 
 // Remove any non-digit characters from each phone number
-        val cleanedNumbers = members!!.map { it.replace(Regex("[^\\d]"), "") }
+        val cleanedNumbers = members!!.map { it.replace(Regex("[^\\d]"), "+") }
 
 // Join the cleaned phone numbers into a comma-separated string
         val formattedMembers = cleanedNumbers.joinToString(",")
 
+        Toast.makeText(applicationContext,formattedMembers.toString(),Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext,groupId.toString(),Toast.LENGTH_SHORT).show()
 
-        Toast.makeText(applicationContext,"$formattedMembers",Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext,members.toString(),Toast.LENGTH_SHORT).show()
 
         val data = AddMemberData(groupId, formattedMembers)
 
@@ -239,7 +242,7 @@ class UploadIcon : AppCompatActivity() {
                 }
             }
             override fun onFailure(call: Call<ResponseGroup?>, t: Throwable) {
-                Toast.makeText(applicationContext,"error",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
     }

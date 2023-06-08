@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.profile.viewConnections
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
@@ -56,7 +57,7 @@ class ViewConnectionsActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<GetAllRequestDataClass?>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
