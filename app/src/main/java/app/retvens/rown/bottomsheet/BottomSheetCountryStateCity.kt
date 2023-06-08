@@ -57,6 +57,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
     lateinit var numericCode : String
     lateinit var cCode : String
 
+    lateinit var locationCountryLayout : TextInputLayout
     lateinit var locationStateLayout : TextInputLayout
     lateinit var locationCityLayout : TextInputLayout
 
@@ -77,6 +78,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        locationCountryLayout = view.findViewById(R.id.bottom_location_country)
         locationStateLayout = view.findViewById(R.id.bottom_location_state)
         locationCityLayout = view.findViewById(R.id.bottom_location_city)
 
@@ -103,12 +105,21 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
             val country = locationCountryET.text.toString()
             val state = locationStateET.text.toString()
             val city = locationCityET.text.toString()
-            val location = "$city,$state,$country"
 
-
-
-            mListener?.bottomCountryStateCityClick(location)
-            dismiss()
+            if (country == "Select Your Country"){
+                locationCountryLayout.error = "Select Your country"
+            } else if (state == "Select Your State"){
+                locationCountryLayout.isErrorEnabled = false
+                locationStateLayout.error = "Select Your State"
+            } else if (city == "Select Your City"){
+                locationCountryLayout.isErrorEnabled = false
+                locationStateLayout.isErrorEnabled = false
+                locationCityLayout.error = "Select Your City"
+            } else {
+                val location = "$city,$state,$country"
+                mListener?.bottomCountryStateCityClick(location)
+                dismiss()
+            }
         }
     }
 

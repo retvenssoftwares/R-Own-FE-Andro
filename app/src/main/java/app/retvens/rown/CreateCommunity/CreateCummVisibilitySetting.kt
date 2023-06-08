@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.databinding.ActivityCreateCommunityBinding
 import app.retvens.rown.databinding.ActivityCreateCummVisibilitySettingBinding
 
-class CreateCummVisibilitySetting : AppCompatActivity() {
+class CreateCummVisibilitySetting : AppCompatActivity(), BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
 
     lateinit var binding : ActivityCreateCummVisibilitySettingBinding
 
@@ -20,6 +22,8 @@ class CreateCummVisibilitySetting : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateCummVisibilitySettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.createCommunityBackBtn.setOnClickListener { onBackPressed() }
 
         val name = intent.getStringExtra("name")
         val description = intent.getStringExtra("desc")
@@ -49,13 +53,27 @@ class CreateCummVisibilitySetting : AppCompatActivity() {
             binding.closedCummLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
         }
 
-        binding.nextCumm.setOnClickListener {
-           val intent = Intent(this,SelectMembers::class.java)
-            intent.putExtra("type",type)
-            intent.putExtra("name",name)
-            intent.putExtra("desc",description)
-            startActivity(intent)
-
+        binding.etLocation.setOnClickListener {
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
+
+        binding.nextCumm.setOnClickListener {
+            if (binding.etLocation.text.toString() == "Select Your Location"){
+                binding.userLocationCountry.error = "Select Your Location"
+            } else {
+                val intent = Intent(this, SelectMembers::class.java)
+                intent.putExtra("type", type)
+                intent.putExtra("name", name)
+                intent.putExtra("desc", description)
+                intent.putExtra("location", binding.etLocation.text.toString())
+                startActivity(intent)
+            }
+        }
+    }
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        binding.etLocation.setText(CountryStateCityFrBo)
     }
 }

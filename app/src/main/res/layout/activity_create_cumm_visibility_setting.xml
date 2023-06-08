@@ -47,6 +47,7 @@
             android:id="@+id/createCommunity_cut"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:visibility="gone"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
@@ -217,24 +218,29 @@
                 android:textSize="16dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/user_location_country"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Location"
-                android:textColorHint="@color/grey_40"
-                app:boxStrokeColor="@color/grey_20"
-                app:endIconMode="clear_text"
+                android:hint="Country"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/black"
+                app:endIconDrawable="@drawable/png_location"
+                app:endIconMode="custom"
                 app:endIconTint="@color/black"
-                android:layout_marginTop="8dp"
-                android:layout_marginHorizontal="25dp">
+                android:layout_marginTop="30dp"
+                android:layout_marginHorizontal="40dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/cumunity_location_et"
+                    android:id="@+id/et_location"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
-                    android:textColorHint="@color/grey_40"/>
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:text="Select Your Location"
+                    android:editable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

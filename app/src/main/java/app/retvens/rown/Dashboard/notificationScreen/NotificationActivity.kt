@@ -22,6 +22,7 @@ class NotificationActivity : AppCompatActivity() {
 
         binding.notificationsBackBtn.setOnClickListener{ onBackPressed() }
 
+        replaceFragment(PersonalNotificationFragment())
         binding.personalNotification.setOnClickListener {
             binding.personalNotification.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
             binding.communityNotification.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))

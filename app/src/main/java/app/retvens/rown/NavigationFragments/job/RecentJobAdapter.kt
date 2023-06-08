@@ -62,6 +62,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : Recy
         holder.save_recent.setOnClickListener {
             if (operation == "push"){
                 saveJob(data.jid, "push")
+                holder.save_recent.setImageResource(R.drawable.svg_saved)
                 operation = "pop"
                 holder.save_recent.setImageResource(R.drawable.vector_saved)
             } else {
