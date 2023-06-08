@@ -36,8 +36,6 @@ import app.retvens.rown.databinding.ActivityCreateClickAndSharePostBinding
 import app.retvens.rown.databinding.ActivityCreatePostBinding
 import app.retvens.rown.databinding.ActivityCreateTextPostBinding
 import com.bumptech.glide.Glide
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

@@ -2,19 +2,14 @@ package app.retvens.rown.Dashboard.createPosts
 
 import android.Manifest
 import android.app.Dialog
-import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
-import android.provider.OpenableColumns
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -26,24 +21,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
-import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
-import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
-import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
 import app.retvens.rown.databinding.ActivityCreatePostBinding
-import app.retvens.rown.utils.getRandomString
+import app.retvens.rown.utils.compressImage
+import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.prepareFilePart
 import com.bumptech.glide.Glide
 import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity
 import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -51,9 +42,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
 
 class CreatePostActivity : AppCompatActivity(),
     BottomSheetSelectAudience.OnBottomSelectAudienceClickListener,BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
@@ -80,7 +68,7 @@ class CreatePostActivity : AppCompatActivity(),
     lateinit var progressDialog: Dialog
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraImageUri)
+        cropImage(cameraImageUri, this)
     }
 
     var canSee : Int ?= 0
@@ -428,12 +416,11 @@ class CreatePostActivity : AppCompatActivity(),
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropImage(imageUri)
+                cropImage(imageUri, this)
             }
-        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val resultingImage = CropImage.getActivityResult(data)
+        }  else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == RESULT_OK) {
-                val croppedImage = resultingImage.uri
+                val croppedImage = UCrop.getOutput(data!!)!!
 
                 when (selectedImg) {
                     1 -> {
@@ -442,42 +429,41 @@ class CreatePostActivity : AppCompatActivity(),
 
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img1.setImageURI(croppedImage)
-                        imgUri1 = compressImage(croppedImage)
+                        imgUri1 = compressImage(croppedImage, this)
                         imgUriP = imgUri1
                         imagesList.add(imgUri1!!)
                     }
                     2 -> {
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img2.setImageURI(croppedImage)
-                        imgUri2 = compressImage(croppedImage)
+                        imgUri2 = compressImage(croppedImage, this)
                         imgUriP = imgUri2
                         imagesList.add(imgUri2!!)
                     }
                     3 -> {
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img3.setImageURI(croppedImage)
-                        imgUri3 = compressImage(croppedImage)
+                        imgUri3 = compressImage(croppedImage, this)
                         imgUriP = imgUri3
                         imagesList.add(imgUri3!!)
                     }
                     4 -> {
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img4.setImageURI(croppedImage)
-                        imgUri4 = compressImage(croppedImage)
+                        imgUri4 = compressImage(croppedImage, this)
                         imgUriP = imgUri4
                         imagesList.add(imgUri4!!)
                     }
                     5 -> {
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img5.setImageURI(croppedImage)
-                        imgUri5 = compressImage(croppedImage)
+                        imgUri5 = compressImage(croppedImage, this)
                         imgUriP = imgUri5
                         imagesList.add(imgUri5!!)
                     }
                 }
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(this, "Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT)
-                    .show()
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show()
             }
         } else if (requestCode == 100){
 
@@ -523,6 +509,7 @@ class CreatePostActivity : AppCompatActivity(),
           }
         }
     }
+
     private fun createImageUri(): Uri? {
         val image = File(applicationContext.filesDir,"camera_photo.png")
         return FileProvider.getUriForFile(applicationContext,
@@ -530,40 +517,6 @@ class CreatePostActivity : AppCompatActivity(),
             image
         )
     }
-    private fun cropImage(imageUri: Uri) {
-        val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.ON)
-
-        options.setAspectRatio(3, 4)
-            .setCropShape(CropImageView.CropShape.RECTANGLE)
-            .setOutputCompressQuality(20)
-            .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-            .start(this)
-    }
-    fun compressImage(imageUri: Uri): Uri {
-        lateinit var compressed : Uri
-        try {
-            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
-            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            val fileName = String.format("%d.jpg",System.currentTimeMillis())
-            val finalFile = File(path,fileName)
-            val fileOutputStream = FileOutputStream(finalFile)
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
-            fileOutputStream.flush()
-            fileOutputStream.close()
-
-            compressed = Uri.fromFile(finalFile)
-
-            croppedImageUri = compressed
-            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            intent.setData(compressed)
-            sendBroadcast(intent)
-        }catch (e: IOException){
-            e.printStackTrace()
-        }
-        return compressed
-    }
-
     override fun bottomSelectAudienceClick(audienceFrBo: String) {
         if (canSee == 1){
             binding.canSeeText.text = audienceFrBo
@@ -575,20 +528,4 @@ class CreatePostActivity : AppCompatActivity(),
         binding.etLocationPostEvent.setText(CountryStateCityFrBo)
     }
 
-
-//    private fun ContentResolver.getFileName(coverPhotoPart: Uri): String {
-//        val random = getRandomString(6)
-//
-//        var name = ""
-//        val returnCursor = this.query(coverPhotoPart,null,null,null,null)
-//        if (returnCursor!=null){
-//            val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-//            returnCursor.moveToFirst()
-//            name = returnCursor.getString(nameIndex)
-//            returnCursor.close()
-//        }
-//        name = name+random
-//        Log.e("String",name)
-//        return name
-//    }
 }

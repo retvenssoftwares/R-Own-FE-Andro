@@ -5,34 +5,26 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.telephony.TelephonyManager
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
-import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
-import app.retvens.rown.bottomsheet.BottomSheetWhatToPost
 import app.retvens.rown.databinding.ActivityCreateClickAndSharePostBinding
 import com.bumptech.glide.Glide
 import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity
 import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -42,7 +34,6 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.IOException
 
 class CreateClickAndSharePostActivity : AppCompatActivity(),
     BottomSheetSelectAudience.OnBottomSelectAudienceClickListener, BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
@@ -63,9 +54,26 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
     lateinit var cameraImageUri: Uri
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraImageUri)
+        app.retvens.rown.utils.cropImage(cameraImageUri, this)
     }
 
+    private val uCropContract = object : ActivityResultContract<List<Uri>, Uri>(){
+        override fun createIntent(context: Context, input: List<Uri>): Intent {
+            val inputUri = input[0]
+            val outputUri = input[1]
+
+            val uCrop = UCrop.of(inputUri, outputUri)
+                .withAspectRatio(3F, 4F)
+                .withMaxResultSize(800, 800)
+
+            return uCrop.getIntent(context)
+        }
+
+        override fun parseResult(resultCode: Int, intent: Intent?): Uri {
+            return UCrop.getOutput(intent!!)!!
+        }
+
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -206,27 +214,22 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                val resultingImage = CropImage.getActivityResult(data)
-                if (resultCode == RESULT_OK) {
-                    val croppedImage = resultingImage.uri
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            val croppedImage = UCrop.getOutput(data!!)
+            binding.deletePost.visibility = View.VISIBLE
+            binding.editImage.visibility = View.VISIBLE
 
-                    binding.deletePost.visibility = View.VISIBLE
-                    binding.editImage.visibility = View.VISIBLE
-
-                    croppedImageUri = compressImage(croppedImage)
+            croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage!!, this)
+            binding.imgPreview.setImageURI(croppedImageUri)
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+//                final Throwable cropError = UCrop.getError(data);
+        } else if (requestCode == 100) {
+                val outputUri: Uri? = data!!.data
+                if (outputUri != null) {
+                    croppedImageUri = outputUri
                     binding.imgPreview.setImageURI(croppedImageUri)
                 }
-        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-//                Toast.makeText(this, "Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT).show()
-
-            } else if (requestCode == 100){
-                    val outputUri: Uri? = data!!.data
-                    if (outputUri != null){
-                        croppedImageUri = outputUri
-                        binding.imgPreview.setImageURI(croppedImageUri)
             }
-        }
     }
 
     private fun createImageUri(): Uri? {
@@ -287,40 +290,6 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
 
 
 
-    }
-
-    private fun cropImage(imageUri: Uri) {
-        val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.ON)
-
-        options.setAspectRatio(3, 4)
-            .setCropShape(CropImageView.CropShape.RECTANGLE)
-            .setOutputCompressQuality(20)
-            .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-            .start(this)
-    }
-    fun compressImage(imageUri: Uri): Uri {
-        lateinit var compressed : Uri
-        try {
-            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
-            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            val fileName = String.format("%d.jpg",System.currentTimeMillis())
-            val finalFile = File(path,fileName)
-            val fileOutputStream = FileOutputStream(finalFile)
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
-            fileOutputStream.flush()
-            fileOutputStream.close()
-
-            compressed = Uri.fromFile(finalFile)
-
-            croppedImageUri = compressed
-            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            intent.setData(compressed)
-            sendBroadcast(intent)
-        }catch (e: IOException){
-            e.printStackTrace()
-        }
-        return compressed
     }
 
     override fun bottomSelectAudienceClick(audienceFrBo: String) {

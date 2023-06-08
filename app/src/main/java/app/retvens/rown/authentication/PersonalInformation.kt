@@ -50,8 +50,7 @@ import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.mesibo.api.Mesibo
 import com.mesibo.api.MesiboProfile
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
 import id.zelory.compressor.decodeSampledBitmapFromFile
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -79,7 +78,7 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
 //        compressImage(cameraImageUri)
-        cropImage(cameraImageUri)
+        app.retvens.rown.utils.cropProfileImage(cameraImageUri, this)
     }
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
@@ -507,26 +506,24 @@ class PersonalInformation : AppCompatActivity() {
             val imageUri = data.data
             path = imageUri?.path!!
             if (imageUri != null) {
-
 //                compressImage(imageUri)
                 try {
-                    cropImage(imageUri)
+                    app.retvens.rown.utils.cropProfileImage(imageUri, this)
                 }catch(e:RuntimeException){
                     Log.d("cropperOnPersonal", e.toString())
                 }catch(e:ClassCastException){
                     Log.d("cropperOnPersonal", e.toString())
                 }
             }
-        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val resultingImage = CropImage.getActivityResult(data)
+        }   else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == RESULT_OK) {
-                val croppedImage = resultingImage.uri
+                val croppedImage = UCrop.getOutput(data!!)!!
 
-               compressImage(croppedImage)
+                croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage, this)
+                binding.profile.setImageURI(croppedImageUri)
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(this, "Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT)
-                    .show()
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -545,16 +542,6 @@ class PersonalInformation : AppCompatActivity() {
         )
     }
 
-    private fun cropImage(imageUri: Uri) {
-        val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.ON)
-
-        options.setAspectRatio(1, 1)
-            .setCropShape(CropImageView.CropShape.OVAL)
-            .setOutputCompressQuality(20)
-            .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-            .start(this@PersonalInformation)
-    }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri
       try {
@@ -569,8 +556,6 @@ class PersonalInformation : AppCompatActivity() {
 
           compressed = Uri.fromFile(finalFile)
 
-          croppedImageUri = compressed
-          binding.profile.setImageURI(croppedImageUri)
           val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
           intent.setData(compressed)
           sendBroadcast(intent)

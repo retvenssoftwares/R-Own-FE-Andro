@@ -27,8 +27,7 @@ import app.retvens.rown.databinding.ActivityEditEventBinding
 import app.retvens.rown.utils.setTime
 import app.retvens.rown.utils.showCalendar
 import com.bumptech.glide.Glide
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -472,31 +471,19 @@ class EditEventActivity : AppCompatActivity(),
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropImage(imageUri)
+                app.retvens.rown.utils.cropImage(imageUri, this)
 
             }
-        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val resultingImage = CropImage.getActivityResult(data)
-            if (resultCode == RESULT_OK) {
-                val croppedImage = resultingImage.uri
+        }  else if (requestCode == UCrop.REQUEST_CROP) {
+            if (resultCode == AppCompatActivity.RESULT_OK) {
+                val croppedImage = UCrop.getOutput(data!!)!!
 
                 compressImage(croppedImage)
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(this, "Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT)
-                    .show()
+            }else if (resultCode == UCrop.RESULT_ERROR) {
+                Toast.makeText(applicationContext,"Try Again",Toast.LENGTH_SHORT).show()
             }
         }
-    }
-    private fun cropImage(imageUri: Uri) {
-        val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.ON)
-
-        options.setAspectRatio(4, 3)
-            .setCropShape(CropImageView.CropShape.RECTANGLE)
-            .setOutputCompressQuality(20)
-            .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-            .start(this)
     }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri

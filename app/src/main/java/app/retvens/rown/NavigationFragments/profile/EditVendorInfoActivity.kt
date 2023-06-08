@@ -33,6 +33,7 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.databinding.ActivityEditVendorInfoBinding
+import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.getRandomString
 import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.profileComStatus
@@ -40,8 +41,7 @@ import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
 import com.bumptech.glide.Glide
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -62,7 +62,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 
     private var cameraImageUri: Uri? = null
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraImageUri!!)
+        cropImage(cameraImageUri!!, this)
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -315,13 +315,12 @@ class EditVendorInfoActivity : AppCompatActivity() {
             val imageUri = data.data
             if (imageUri != null) {
 
-                cropImage(imageUri)
+                cropImage(imageUri, this)
 
             }
-        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val resultingImage = CropImage.getActivityResult(data)
+        }  else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
-                val croppedImage = resultingImage.uri
+                val croppedImage = UCrop.getOutput(data!!)!!
 
                 when (selectedImg) {
                     1 -> {
@@ -348,8 +347,8 @@ class EditVendorInfoActivity : AppCompatActivity() {
                     }
                 }
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(applicationContext,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
+            }else if (resultCode == UCrop.RESULT_ERROR) {
+                Toast.makeText(applicationContext,"Try Again",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -399,17 +398,6 @@ class EditVendorInfoActivity : AppCompatActivity() {
             "app.retvens.rown.fileProvider",
             image
         )
-    }
-    private fun cropImage(imageUri: Uri) {
-        val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.OFF).also {
-
-                it.setAspectRatio(1, 1)
-                    .setCropShape(CropImageView.CropShape.OVAL)
-                    .setOutputCompressQuality(20)
-                    .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-                    .start(this)
-            }
     }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri

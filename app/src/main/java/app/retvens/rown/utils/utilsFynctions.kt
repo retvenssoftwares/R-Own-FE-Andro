@@ -1,16 +1,22 @@
 package app.retvens.rown.utils
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
 import android.widget.TimePicker
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
+import app.retvens.rown.Dashboard.profileCompletion.frags.VendorsFragment
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.R
+import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -19,13 +25,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.Random
-import kotlin.streams.asSequence
 
 var role = ""
 var profileCompletionStatus = "50"
@@ -118,4 +123,43 @@ fun prepareFilePart(fileUri: Uri, schema : String, context: Context): MultipartB
     val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
 
     return MultipartBody.Part.createFormData(schema, file.name, requestBody)
+}
+
+fun cropImage(imageUri: Uri, context: Context) {
+    val inputUri = imageUri
+    val outputUri = File(context.filesDir, "croppedImage.jpg").toUri()
+
+    UCrop.of(inputUri, outputUri)
+        .withAspectRatio(4F, 3F)
+        .start(context as Activity)
+}
+fun cropProfileImage(imageUri: Uri, context: Context) {
+    val inputUri = imageUri
+    val outputUri = File(context.filesDir, "croppedImage.jpg").toUri()
+
+    UCrop.of(inputUri, outputUri)
+        .withAspectRatio(1F, 1F)
+        .start(context as Activity)
+}
+fun compressImage(imageUri: Uri, context: Context): Uri {
+    lateinit var compressed : Uri
+    try {
+        val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver,imageUri)
+        val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        val fileName = String.format("%d.jpg",System.currentTimeMillis())
+        val finalFile = File(path,fileName)
+        val fileOutputStream = FileOutputStream(finalFile)
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+        fileOutputStream.flush()
+        fileOutputStream.close()
+
+        compressed = Uri.fromFile(finalFile)
+
+        val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+        intent.setData(compressed)
+        context.sendBroadcast(intent)
+    }catch (e: IOException){
+        e.printStackTrace()
+    }
+    return compressed
 }

@@ -32,6 +32,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
@@ -50,8 +51,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -444,28 +444,24 @@ class HotelOwnerFragment : Fragment(), BackHandler,
                 cropImage(imageUri)
 
             }
-        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val resultingImage = CropImage.getActivityResult(data)
+        }  else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
-                val croppedImage = resultingImage.uri
+                val croppedImage = UCrop.getOutput(data!!)!!
 
                 compressImage(croppedImage)
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(context,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                Toast.makeText(context,"Try Again",Toast.LENGTH_SHORT).show()
             }
         }
     }
     private fun cropImage(imageUri: Uri) {
-        val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.OFF).also {
+        val inputUri = imageUri
+        val outputUri = File(requireContext().filesDir, "croppedImage.jpg").toUri()
 
-                it.setAspectRatio(1, 1)
-                    .setCropShape(CropImageView.CropShape.OVAL)
-                    .setOutputCompressQuality(20)
-                    .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-                    .start(requireContext(), this)
-            }
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(1F, 1F)
+            .start(requireContext(), this)
     }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri

@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -21,10 +20,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -32,12 +29,11 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.VendorServicesAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
@@ -50,8 +46,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -374,10 +369,9 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
 
 
             }
-        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val resultingImage = CropImage.getActivityResult(data)
+        } else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
-                val croppedImage = resultingImage.uri
+                val croppedImage = UCrop.getOutput(data!!)!!
 
                 when (selectedImg) {
                     1 -> {
@@ -404,8 +398,8 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                     }
                 }
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(context,"Try Again : ${resultingImage.error}",Toast.LENGTH_SHORT).show()
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                Toast.makeText(context,"Try Again",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -465,15 +459,12 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         )
     }
     private fun cropImage(imageUri: Uri) {
-        val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.OFF).also {
+        val inputUri = imageUri
+        val outputUri = File(requireContext().filesDir, "croppedImage.jpg").toUri()
 
-                it.setAspectRatio(1, 1)
-                    .setCropShape(CropImageView.CropShape.OVAL)
-                    .setOutputCompressQuality(20)
-                    .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-                    .start(requireContext(), this)
-            }
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(1F, 1F)
+            .start(requireContext(), this)
     }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri

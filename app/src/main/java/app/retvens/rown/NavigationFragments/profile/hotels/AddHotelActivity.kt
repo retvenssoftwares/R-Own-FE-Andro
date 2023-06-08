@@ -31,13 +31,13 @@ import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetRating
+import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
+import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -190,31 +190,20 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val imageUri = data.data
             if (imageUri != null) {
-                cropImage(imageUri)
+                cropImage(imageUri, this)
             }
-        }  else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val resultingImage = CropImage.getActivityResult(data)
+        }   else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
-                val croppedImage = resultingImage.uri
+                val croppedImage = UCrop.getOutput(data!!)!!
 
                 compressImage(croppedImage)
 
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(applicationContext,"Try Again : ${resultingImage.error}", Toast.LENGTH_SHORT).show()
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                Toast.makeText(applicationContext,"Try Again",Toast.LENGTH_SHORT).show()
             }
         }
     }
-    private fun cropImage(imageUri: Uri) {
-        val options = CropImage.activity(imageUri)
-            .setGuidelines(CropImageView.Guidelines.OFF).also {
 
-                it.setAspectRatio(4, 3)
-                    .setCropShape(CropImageView.CropShape.RECTANGLE)
-                    .setOutputCompressQuality(20)
-                    .setOutputCompressFormat(Bitmap.CompressFormat.PNG)
-                    .start(this)
-            }
-    }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri
         try {
