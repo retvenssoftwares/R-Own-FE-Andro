@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
@@ -82,7 +81,10 @@ class ExplorePeopleFragment : Fragment() {
                             val response = response.body()!!
 
                             response.forEach { explorePeopleDataClass ->
-                                explorePeopleAdapter = ExplorePeopleAdapter(requireContext(),explorePeopleDataClass.posts)
+                                explorePeopleAdapter = ExplorePeopleAdapter(requireContext(),
+                                    explorePeopleDataClass.posts as ArrayList<Post>
+                                )
+                                explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)
                                 recyclerView.adapter = explorePeopleAdapter
                                 explorePeopleAdapter.notifyDataSetChanged()
                             }
