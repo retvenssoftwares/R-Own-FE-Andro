@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
     tools:context=".NavigationFragments.exploreForUsers.blogs.BlogsDetailsActivity">
 
     <ScrollView
@@ -196,6 +197,7 @@ Overall, Belgrade offers a plethora of luxurious and unique stays for travelers 
             android:id="@+id/share_post"
             android:layout_width="26dp"
             android:layout_height="26dp"
+            android:visibility="gone"
             android:layout_weight="1"
             android:src="@drawable/svg_share_post"
             app:tint="@color/black"/>

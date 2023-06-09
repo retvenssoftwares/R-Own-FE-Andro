@@ -23,12 +23,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.authentication.UserInterest
+import app.retvens.rown.bottomsheet.BottomSheetJobDesignation
 import app.retvens.rown.databinding.ActivityEditProfileBinding
 import app.retvens.rown.utils.cropProfileImage
 import app.retvens.rown.utils.getRandomString
@@ -51,7 +53,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.NullPointerException
 
-class EditProfileActivity : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity(), BottomSheetJobDesignation.OnBottomJobDesignationClickListener {
     lateinit var binding:ActivityEditProfileBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
@@ -93,6 +95,14 @@ class EditProfileActivity : AppCompatActivity() {
             }
             openBottomSheet()
         }
+
+        binding.Designation.setOnClickListener {
+            val bottomSheet = BottomSheetJobDesignation()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetJobDesignation.Job_Designation_TAG)}
+            bottomSheet.setOnJobDesignationClickListener(this)
+        }
+
         binding.male.setOnClickListener {
             Gender = "Male"
             binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
@@ -452,5 +462,9 @@ class EditProfileActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         return compressed
+    }
+
+    override fun bottomJobDesignationClick(jobDesignationFrBo: String) {
+        binding.dText.text = jobDesignationFrBo
     }
 }

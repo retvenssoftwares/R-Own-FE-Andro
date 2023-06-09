@@ -235,6 +235,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
+                    android:visibility="gone"
                     android:layout_weight="1"
                     android:layout_marginVertical="3dp"
                     android:layout_marginEnd="5dp"
@@ -262,7 +263,8 @@
                     app:cardCornerRadius="8dp"
                     android:layout_weight="1"
                     android:layout_marginVertical="3dp"
-                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="10dp"
                     app:cardBackgroundColor="@color/green_own">
 
                     <TextView
@@ -275,7 +277,7 @@
                         android:textAlignment="center"
                         android:paddingVertical="6dp"
                         android:paddingHorizontal="20dp"
-                        android:background="@color/grey_5"
+                        android:background="@color/white"
                         android:text="Media"/>
 
                 </androidx.cardview.widget.CardView>

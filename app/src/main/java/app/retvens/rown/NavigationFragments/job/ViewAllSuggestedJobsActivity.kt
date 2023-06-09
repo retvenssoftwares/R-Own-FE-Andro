@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,10 +25,15 @@ class ViewAllSuggestedJobsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_all_suggested_jobs)
 
+        findViewById<ImageButton>(R.id.notifications_backBtn).setOnClickListener { onBackPressed() }
+
         suggestedRecycler = findViewById(R.id.suggested_job_recycler)
         suggestedRecycler.layoutManager = LinearLayoutManager(this)
         suggestedRecycler.setHasFixedSize(true)
 
+        if (intent.getStringExtra("recent") == "Recent Jobs"){
+            findViewById<TextView>(R.id.title).text = "Recent Jobs"
+        }
         getJobs()
 
     }
@@ -47,10 +53,16 @@ class ViewAllSuggestedJobsActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val response = response.body()!!
 
-                    val suggestedJobAdapter = SuggestedAllJobAdapter(this@ViewAllSuggestedJobsActivity,response)
-                    suggestedRecycler.adapter = suggestedJobAdapter
-                    suggestedJobAdapter.notifyDataSetChanged()
-
+                    if (intent.getStringExtra("recent") == "Recent Jobs"){
+                        val recentJobAdapter = RecentJobAdapter(this@ViewAllSuggestedJobsActivity, response)
+                        suggestedRecycler.adapter = recentJobAdapter
+                        recentJobAdapter.notifyDataSetChanged()
+                    } else {
+                        val suggestedJobAdapter =
+                            SuggestedAllJobAdapter(this@ViewAllSuggestedJobsActivity, response)
+                        suggestedRecycler.adapter = suggestedJobAdapter
+                        suggestedJobAdapter.notifyDataSetChanged()
+                    }
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

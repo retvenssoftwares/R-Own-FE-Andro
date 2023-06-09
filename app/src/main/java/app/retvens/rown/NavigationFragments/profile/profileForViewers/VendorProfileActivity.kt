@@ -37,6 +37,7 @@ class VendorProfileActivity : AppCompatActivity() {
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
     lateinit var name : TextView
+    lateinit var profile_username : TextView
 
     lateinit var polls : TextView
     lateinit var media : TextView
@@ -44,6 +45,10 @@ class VendorProfileActivity : AppCompatActivity() {
     lateinit var services : TextView
     lateinit var postCount:TextView
     lateinit var connCount:TextView
+
+    var created = ""
+    var location = ""
+    var verification = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +60,7 @@ class VendorProfileActivity : AppCompatActivity() {
 
         profile = findViewById(R.id.profile)
 
+        profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
 
         postCount = findViewById(R.id.posts_count)
@@ -132,7 +138,11 @@ class VendorProfileActivity : AppCompatActivity() {
             dialogLanguage.show()
 
             dialogLanguage.findViewById<LinearLayout>(R.id.about).setOnClickListener {
-                startActivity(Intent(this, AboutProfileActivity::class.java))
+                val intent = Intent(this, AboutProfileActivity::class.java)
+                intent.putExtra("created", created)
+                intent.putExtra("location", location)
+                intent.putExtra("verification", verification)
+                startActivity(intent)
                 dialogLanguage.dismiss()
             }
 

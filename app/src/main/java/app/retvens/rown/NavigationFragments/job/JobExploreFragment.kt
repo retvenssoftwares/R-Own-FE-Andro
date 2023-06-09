@@ -78,6 +78,12 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
             startActivity(Intent(context, ViewAllSuggestedJobsActivity::class.java))
         }
 
+        requireView().findViewById<TextView>(R.id.view_all_recent).setOnClickListener {
+            val intent = Intent(context, ViewAllSuggestedJobsActivity::class.java)
+            intent.putExtra("recent", "Recent Jobs")
+            startActivity(intent)
+        }
+
         getJobs()
 
         recentJobRecycler = requireView().findViewById(R.id.recent_job_recycler)

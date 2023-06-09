@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.people
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -26,6 +30,7 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
     class ExplorePeopleViewholder(itemview:View): ViewHolder(itemview) {
 
         val name = itemview.findViewById<TextView>(R.id.explore_people_name)
+        val role = itemview.findViewById<TextView>(R.id.suggetions_notification_role)
         val profile = itemview.findViewById<ShapeableImageView>(R.id.explore_people_profile)
         val connect = itemview.findViewById<TextView>(R.id.suggetions_notification_connect)
         val viewProfile = itemview.findViewById<CardView>(R.id.ca_view_profile)
@@ -43,11 +48,28 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         val data = peopleList[position]
 
         if (data.Profile_pic.isNullOrEmpty()){
-            holder.profile.setImageResource(R.drawable.peoplevector)
+            holder.profile.setImageResource(R.drawable.svg_person_account)
         }else{
             Glide.with(context).load(data.Profile_pic).into(holder.profile)
         }
         holder.name.text = data.Full_name
+        holder.role.text = data.Role
+
+        holder.viewProfile.setOnClickListener {
+            if(data.Role == "Business Vendor / Freelancer"){
+                val intent = Intent(context, VendorProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
+            }else if (data.Role == "Hotel Owner"){
+                val intent = Intent(context, OwnerProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
+            } else {
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
+            }
+        }
 
         userId = data.User_id
 

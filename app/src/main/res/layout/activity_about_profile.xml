@@ -69,12 +69,10 @@
             app:boxStrokeColor="@color/black"
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="20dp"
-            app:boxStrokeWidthFocused="2dp"
-            app:endIconDrawable="@drawable/ic_arrow_down_24"
-            app:endIconMode="custom"
-            app:endIconTint="@color/black">
+            app:boxStrokeWidthFocused="2dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/created"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
@@ -96,12 +94,10 @@
             app:boxStrokeColor="@color/black"
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="20dp"
-            app:boxStrokeWidthFocused="2dp"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/ic_arrow_down_24"
-            app:endIconTint="@color/black">
+            app:boxStrokeWidthFocused="2dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/location"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
@@ -123,12 +119,10 @@
             app:boxStrokeColor="@color/black"
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="20dp"
-            app:boxStrokeWidthFocused="2dp"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/ic_arrow_down_24"
-            app:endIconTint="@color/black">
+            app:boxStrokeWidthFocused="2dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/verification"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
