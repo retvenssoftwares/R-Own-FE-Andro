@@ -36,6 +36,8 @@ import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -74,7 +76,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         Log.e("username",post.toString())
                         binding.recentCommentByUser.text = post.caption
                         Log.e("caption",post.caption)
-                        binding.userNamePost.text = post.User_name
+                        binding.userNamePost.text = post.Full_name
+
+                        binding.location.text = post.location
+
 
                         if (post.Like_count != ""){
                             binding.likeCount.text = post.Like_count
@@ -93,37 +98,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                             indicator.setViewPager(binding.viewPager)
                         }
 
-//                        var timestamp: String
-//                        post.media.forEach { item ->
-//                            Glide.with(context).load(item.post).into(binding.postPic)
-//                            formatTimestamp(item.date_added)
-//                            timestamp = item.date_added
 //
-//// Convert the timestamp to a Date object
-//                            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-//                            val date: Date = dateFormat.parse(timestamp)
-//
-//// Calculate the time difference from the current time to the timestamp
-//                            val currentTime = System.currentTimeMillis()
-//                            val diffInMillis: Long = currentTime - date.time
-//
-//// Convert the time difference to the desired format
-//                            val seconds: Long = TimeUnit.MILLISECONDS.toSeconds(diffInMillis)
-//                            val minutes: Long = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
-//                            val hours: Long = TimeUnit.MILLISECONDS.toHours(diffInMillis)
-//                            val days: Long = TimeUnit.MILLISECONDS.toDays(diffInMillis)
-//                            val months: Long = TimeUnit.MILLISECONDS.toDays(diffInMillis) / 30
-//
-//// Use the calculated values as needed
-//                            println("Seconds: $seconds")
-//                            println("Minutes: $minutes")
-//                            println("Hours: $hours")
-//                            println("Days: $days")
-//                            println("Months: $months")
-//
-//                            binding.postTime.text = hours.toString()+"hr"
-//
-//                        }
 
                         if (post.like == "Liked"){
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
@@ -132,8 +107,11 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         }
 
 
+            banner.media.forEach { media ->
+                val timestamp = convertTimeToText(media.date_added)
 
-
+                binding.postTime.text = timestamp
+            }
 
 
             binding.postProfile.setOnClickListener {
@@ -192,20 +170,41 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             binding.likePost.setOnClickListener {
 
-                banner.islike = !banner.islike
+                if (post.like == "Unliked"){
+                    banner.islike = !banner.islike
 
-                val count:Int
-                if(banner.islike){
-                    binding.likePost.setImageResource(R.drawable.liked_vectore)
-                    count = post.Like_count.toInt()+1
-                    binding.likeCount.text = count.toString()
-                }else{
-                    binding.likePost.setImageResource(R.drawable.svg_like_post)
-                    count = post.Like_count.toInt()
-                    binding.likeCount.text = count.toString()
+                    val count:Int
+                    if(banner.islike){
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+                        count = post.Like_count.toInt()+1
+                        binding.likeCount.text = count.toString()
+                    }else{
+                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+                        count = post.Like_count.toInt()
+                        binding.likeCount.text = count.toString()
+                    }
+
+                    onItemClickListener?.onItemClick(banner)
+                }
+                if (post.like == "Liked"){
+                    banner.islike = !banner.islike
+
+                    val count:Int
+                    if(banner.islike){
+                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+                        count = post.Like_count.toInt()-1
+                        binding.likeCount.text = count.toString()
+                    }else{
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+                        count = post.Like_count.toInt()
+                        binding.likeCount.text = count.toString()
+                    }
+
+                    onItemClickListener?.onItemClick(banner)
                 }
 
-                onItemClickListener?.onItemClick(banner)
+
+
             }
 
             binding.comment.setOnClickListener {
@@ -214,31 +213,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
         }
 
-        fun formatTimestamp(timestamp: String): String {
-            val formatter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-            } else {
-                TODO("VERSION.SDK_INT < O")
-            }
-            val instant = Instant.parse(timestamp)
-            val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-            val now = LocalDateTime.now()
-            val duration = Duration.between(localDateTime, now)
 
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                when {
-                    duration.toSeconds() < 60 -> "${duration.toSeconds()} seconds ago"
-                    duration.toMinutes() < 60 -> "${duration.toMinutes()} minutes ago"
-                    duration.toHours() < 24 -> "${duration.toHours()} hours ago"
-                    duration.toDays() < 31 -> "${duration.toDays()} days ago"
-                    else -> "${duration.toDays() / 30} months ago"
-                }
-            } else {
-                TODO("VERSION.SDK_INT < S")
-            }
-
-//            binding.postTime.text = duration.toString()
-        }
 
 
     }
@@ -309,6 +284,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             binding.userNamePost.text = banner.Full_name
             binding.titleStatus.text = banner.caption
             Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+            binding.location.text = banner.location
 
 
             binding.postProfile.setOnClickListener {
@@ -390,6 +366,9 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                 val vote1: List<String> = item.Options[0].votes.map { it.user_id }
                 val vote2: List<String> = item.Options[1].votes.map { it.user_id }
+
+                val timestamp = convertTimeToText(item.date_added)
+                binding.postTime.text = timestamp
 
 
                 binding.voteOption1.setOnClickListener {
@@ -672,7 +651,44 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
         }
     }
 
+    fun convertTimeToText(dataDate: String): String? {
+        var convTime: String? = null
+        val prefix = ""
+        val suffix = "Ago"
 
+        try {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val pasTime: Date = dateFormat.parse(dataDate)
+            val nowTime = Date()
+            val dateDiff = nowTime.time - pasTime.time
+            val second = TimeUnit.MILLISECONDS.toSeconds(dateDiff)
+            val minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff)
+            val hour = TimeUnit.MILLISECONDS.toHours(dateDiff)
+            val day = TimeUnit.MILLISECONDS.toDays(dateDiff)
+
+            if (second < 60) {
+                convTime = "$second Sec $suffix"
+            } else if (minute < 60) {
+                convTime = "$minute Min $suffix"
+            } else if (hour < 24) {
+                convTime = "$hour Hrs $suffix"
+            } else if (day >= 7) {
+                if (day > 360) {
+                    convTime = "${day / 360} Yr $suffix"
+                } else if (day > 30) {
+                    convTime = "${day / 30} Months $suffix"
+                } else {
+                    convTime = "${day / 7} Week $suffix"
+                }
+            } else if (day < 7) {
+                convTime = "$day D $suffix"
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            Log.e("ConvTimeE", e.message!!)
+        }
+        return convTime
+    }
 
 
 

@@ -24,7 +24,7 @@ interface ConnectionApis {
     @GET("connectionlist/{userId}")
     fun getConnectionList(
         @Path("userId")userId:String
-    ):Call<GetAllRequestDataClass>
+    ):Call<List<ConnectionListDataClass>>
 
     @GET("normalprofile/{userId}/{connUserId}")
     fun getconnProfile(

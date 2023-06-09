@@ -2,11 +2,13 @@ package app.retvens.rown.NavigationFragments.profile.media
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
@@ -44,6 +46,9 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
 
 
         holder.itemView.setOnClickListener {
+
+
+
             val intent = Intent(context,PostDetailsActivity::class.java)
             intent.putExtra("profilePic",media.Profile_pic)
             intent.putExtra("profileName",media.Full_name)
@@ -54,9 +59,9 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
                 images.add(item.post)
             }
             intent.putStringArrayListExtra("postPic",images)
-            intent.putExtra("likeCount",media.Like_count)
-            intent.putExtra("commentCount",media.Comment_count)
-            intent.putExtra("like",media.like)
+            intent.putExtra("likeCount",media.likeCount)
+            intent.putExtra("commentCount",media.commentCount)
+            intent.putExtra("like",media.liked)
             intent.putExtra("islike",media.islike)
             intent.putExtra("postId",media.post_id)
             context.startActivity(intent)

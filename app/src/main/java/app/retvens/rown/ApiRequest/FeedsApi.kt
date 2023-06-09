@@ -77,6 +77,7 @@ interface FeedsApi {
         @Part("Can_See")Can_See:RequestBody,
         @Part("Can_comment")Can_comment:RequestBody,
         @Part("caption")caption:RequestBody,
+        @Part("location") location:RequestBody
     ):Call<UpdateResponse>
 
     @Multipart

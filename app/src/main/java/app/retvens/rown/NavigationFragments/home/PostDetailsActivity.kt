@@ -21,6 +21,10 @@ import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class PostDetailsActivity : AppCompatActivity() {
 
@@ -40,8 +44,10 @@ class PostDetailsActivity : AppCompatActivity() {
         val commentButtom = findViewById<ImageView>(R.id.comment)
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
         indicator = findViewById<CircleIndicator>(R.id.indicator)
+        val likeC = findViewById<TextView>(R.id.like_count)
+        val commentC = findViewById<TextView>(R.id.comment_count)
 
-        name.text = intent.getStringExtra("userName").toString()
+        name.text = intent.getStringExtra("profileName").toString()
         username.text = intent.getStringExtra("userName").toString()
         caption.text = intent.getStringExtra("caption").toString()
 
@@ -50,6 +56,13 @@ class PostDetailsActivity : AppCompatActivity() {
         Glide.with(applicationContext).load(profilePic).into(profile)
 
         val postPic = intent.getStringArrayListExtra("postPic")
+        val likeCount = intent.getStringExtra("likeCount")?.toInt()
+        val commentCount = intent.getStringExtra("commentCount")
+
+        likeC.text = likeCount.toString()
+        commentC.text = commentCount.toString()
+
+
 
         Log.e("pic",postPic.toString())
 
@@ -64,9 +77,9 @@ class PostDetailsActivity : AppCompatActivity() {
 
         var isLike = intent.getStringExtra("islike").toBoolean()
 
-        if (like == "Liked"){
+        if (like == "Liked" || like == "liked"){
             likeButton.setImageResource(R.drawable.liked_vectore)
-        }else if (like == "Unliked"){
+        }else if (like == "Unliked" || like == "not liked"){
             likeButton.setImageResource(R.drawable.svg_like_post)
         }
 
@@ -74,21 +87,29 @@ class PostDetailsActivity : AppCompatActivity() {
         likeButton.setOnClickListener {
 
             likePost(postId)
-
-            if (like == "Liked"){
+            var count:Int
+            if (like == "Liked" || like == "liked"){
                 isLike = !isLike
                 if (isLike){
                     likeButton.setImageResource(R.drawable.svg_like_post)
+                    count = likeCount!!.toInt()-1
+                    likeC.text = count.toString()
                 }else{
                     likeButton.setImageResource(R.drawable.liked_vectore)
+                    count = likeCount!!.toInt()
+                    likeC.text = count.toString()
                 }
             }
-            if (like == "Unliked"){
+            if (like == "Unliked" || like == "not liked"){
                 isLike = !isLike
                 if (isLike){
                     likeButton.setImageResource(R.drawable.liked_vectore)
+                    count = likeCount!!.toInt()+1
+                    likeC.text = count.toString()
                 }else{
                     likeButton.setImageResource(R.drawable.svg_like_post)
+                    count = likeCount!!.toInt()
+                    likeC.text = count.toString()
                 }
             }
 
@@ -151,5 +172,44 @@ class PostDetailsActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    fun convertTimeToText(dataDate: String): String? {
+        var convTime: String? = null
+        val prefix = ""
+        val suffix = "Ago"
+
+        try {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val pasTime: Date = dateFormat.parse(dataDate)
+            val nowTime = Date()
+            val dateDiff = nowTime.time - pasTime.time
+            val second = TimeUnit.MILLISECONDS.toSeconds(dateDiff)
+            val minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff)
+            val hour = TimeUnit.MILLISECONDS.toHours(dateDiff)
+            val day = TimeUnit.MILLISECONDS.toDays(dateDiff)
+
+            if (second < 60) {
+                convTime = "$second Sec $suffix"
+            } else if (minute < 60) {
+                convTime = "$minute Min $suffix"
+            } else if (hour < 24) {
+                convTime = "$hour Hrs $suffix"
+            } else if (day >= 7) {
+                if (day > 360) {
+                    convTime = "${day / 360} Yr $suffix"
+                } else if (day > 30) {
+                    convTime = "${day / 30} Months $suffix"
+                } else {
+                    convTime = "${day / 7} Week $suffix"
+                }
+            } else if (day < 7) {
+                convTime = "$day D $suffix"
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            Log.e("ConvTimeE", e.message!!)
+        }
+        return convTime
     }
 }

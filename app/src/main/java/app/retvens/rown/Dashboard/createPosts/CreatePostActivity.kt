@@ -342,6 +342,7 @@ class CreatePostActivity : AppCompatActivity(),
         val canSee = binding.canSeeText.text.toString()
         val canComment = binding.canCommentText.text.toString()
         val caption = binding.whatDYEt.text.toString()
+        val location = binding.etLocationPostEvent.text.toString()
 
         imagesList.forEach {
             fileList.add(prepareFilePart(it, "media", applicationContext)!!)
@@ -353,7 +354,7 @@ class CreatePostActivity : AppCompatActivity(),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canSee),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canComment),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"caption"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),location),
             fileList
             )
 

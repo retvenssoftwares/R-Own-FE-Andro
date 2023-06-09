@@ -22,7 +22,6 @@ import com.mesibo.messaging.MesiboEndToEndEncryptionActivity;
 
 import java.lang.ref.WeakReference;
 
- import app.retvens.rown.ChatSection.ChatScreen;
  import app.retvens.rown.CreateCommunity.CreateCommunity;
  import app.retvens.rown.Dashboard.DashBoardActivity;
 
@@ -54,7 +53,7 @@ public class MesiboUIManager {
 
             context.startActivity(intent);
         } else if (task.equals("")) {
-            Intent intent = new Intent(context, ChatScreen.class);
+            Intent intent = new Intent(context, DashBoardActivity.class);
             intent.putExtra(MesiboUserListFragment.MESSAGE_LIST_MODE, selectionMode)
                     .putExtra("mid", forwardid).putExtra(MesiboUI.START_IN_BACKGROUND, startInBackground)
                     .putExtra(MesiboUI.KEEP_RUNNING, keepRunning);

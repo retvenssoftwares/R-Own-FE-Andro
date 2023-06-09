@@ -11,9 +11,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
+import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.NavigationFragments.home.PostDetailsActivity
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 
 class PollsAdapter(val pollList:List<PostItem>, val context: Context) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
 
@@ -22,6 +25,10 @@ class PollsAdapter(val pollList:List<PostItem>, val context: Context) : Recycler
         val checkVotes = itemView.findViewById<CardView>(R.id.checkVotes)
         val option1 = itemView.findViewById<TextView>(R.id.option1)
         val option2 = itemView.findViewById<TextView>(R.id.option2)
+        val name = itemView.findViewById<TextView>(R.id.user_name_post)
+        val profile = itemView.findViewById<ShapeableImageView>(R.id.post_profile)
+        val location = itemView.findViewById<TextView>(R.id.location)
+        val time = itemView.findViewById<TextView>(R.id.post_time)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PollsViewHolder {
@@ -44,6 +51,13 @@ class PollsAdapter(val pollList:List<PostItem>, val context: Context) : Recycler
 
         holder.option1.text = question.Options[0].Option
         holder.option2.text = question.Options[1].Option
+
+        holder.name.text = poll.Full_name
+        Glide.with(context).load(poll.Profile_pic).into(holder.profile)
+        holder.location.text = poll.location
+
+        val timeStamp = TimesStamp.convertTimeToText(question.date_added)
+        holder.time.text = timeStamp.toString()
 
 
 

@@ -39,7 +39,7 @@
         app:layout_constraintStart_toEndOf="@id/post_profile"/>
 
     <TextView
-        android:id="@+id/post_user_type"
+        android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Travel Influencer"
@@ -49,16 +49,16 @@
         app:layout_constraintStart_toStartOf="@id/user_name_post"
         app:layout_constraintTop_toBottomOf="@id/user_name_post"/>
 
-    <TextView
-        android:id="@+id/post_user_dominican"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dominican Republic"
-        android:textSize="10dp"
-        android:fontFamily="@font/montserrat_regular"
-        android:textColor="@color/grey_60"
-        app:layout_constraintStart_toStartOf="@id/user_name_post"
-        app:layout_constraintTop_toBottomOf="@id/post_user_type"/>
+<!--    <TextView-->
+<!--        android:id="@+id/post_user_dominican"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Dominican Republic"-->
+<!--        android:textSize="10dp"-->
+<!--        android:fontFamily="@font/montserrat_regular"-->
+<!--        android:textColor="@color/grey_60"-->
+<!--        app:layout_constraintStart_toStartOf="@id/user_name_post"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/post_user_type"/>-->
 
     <TextView
         android:id="@+id/post_time"
@@ -69,7 +69,7 @@
         android:layout_marginEnd="12dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/grey_60"
-        app:layout_constraintTop_toBottomOf="@id/post_user_type"
+        app:layout_constraintTop_toBottomOf="@id/location"
         app:layout_constraintEnd_toEndOf="parent"/>
 
         <View
@@ -142,7 +142,7 @@
                 android:layout_width="0dp"
                 android:layout_marginTop="7dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:orientation="vertical"
                 android:layout_marginBottom="3dp"
                 android:gravity="center">
@@ -167,13 +167,13 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/share_post"
-                android:layout_width="10dp"
-                android:layout_height="26dp"
-                android:layout_weight="1"
-                android:layout_marginBottom="4dp"
-                android:src="@drawable/svg_share_post" />
+<!--            <ImageView-->
+<!--                android:id="@+id/share_post"-->
+<!--                android:layout_width="10dp"-->
+<!--                android:layout_height="26dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_marginBottom="4dp"-->
+<!--                android:src="@drawable/svg_share_post" />-->
 
             <ImageView
                 android:layout_width="10dp"

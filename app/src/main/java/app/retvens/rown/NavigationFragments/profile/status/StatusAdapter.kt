@@ -27,7 +27,9 @@ class StatusAdapter(val listS : List<PostItem>, val context: Context) : Recycler
         val status = itemView.findViewById<TextView>(R.id.title_status)
         val likeButton = itemView.findViewById<ImageView>(R.id.like_post)
         val commentButton = itemView.findViewById<ImageView>(R.id.comment)
-
+        val location = itemView.findViewById<TextView>(R.id.post_time)
+        val likeCount = itemView.findViewById<TextView>(R.id.like_count)
+        val commentCount = itemView.findViewById<TextView>(R.id.comment_count)
     }
 
 
@@ -85,7 +87,45 @@ class StatusAdapter(val listS : List<PostItem>, val context: Context) : Recycler
                 layoutOneViewHolder.name.text = item.User_name
                 layoutOneViewHolder.status.text = item.caption
                 Glide.with(context).load(item.Profile_pic).into(layoutOneViewHolder.postProfile)
+
+                if (item.Like_count != ""){
+                    holder.likeCount.text = item.Like_count
+                }
+                if (item.Comment_count != ""){
+                    holder.commentCount.text = item.Comment_count
+                }
+
+                if (item.like == "Liked"){
+                    holder.likeButton.setImageResource(R.drawable.liked_vectore)
+                }else if (item.like == "Unliked"){
+                    holder.likeButton.setImageResource(R.drawable.svg_like_post)
+                }
+
+
+                holder.likeButton.setOnClickListener {
+                    item.islike = !item.islike
+
+                    val count:Int
+                    if(item.islike){
+                        holder.likeButton.setImageResource(R.drawable.liked_vectore)
+                        count = item.Like_count.toInt()+1
+                        holder.likeCount.text = count.toString()
+                    }else{
+                        holder.likeButton.setImageResource(R.drawable.svg_like_post)
+                        count = item.Like_count.toInt()
+                        holder.likeCount.text = count.toString()
+                    }
+
+//                    onItemClickListener?.onItemClick(banner)
+                }
+
+//                binding.comment.setOnClickListener {
+//                    onItemClickListener?.onItemClickForComment(banner,position)
+//                }
+
             }
+
+
             VIEW_TYPE_LAYOUT_TWO -> {
                 val layoutTwoViewHolder = holder as LayoutTwoViewHolder
                 layoutTwoViewHolder.name.text = item.Full_name

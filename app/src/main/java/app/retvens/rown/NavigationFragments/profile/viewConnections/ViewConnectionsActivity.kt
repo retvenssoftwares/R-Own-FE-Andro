@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.NavigationFragments.profile.viewRequests.RequestsAdapter
 import app.retvens.rown.NavigationFragments.profile.viewRequests.RequestsData
@@ -43,10 +44,10 @@ class ViewConnectionsActivity : AppCompatActivity() {
 
         val getConnections = RetrofitBuilder.connectionApi.getConnectionList(userId)
 
-        getConnections.enqueue(object : Callback<GetAllRequestDataClass?> {
+        getConnections.enqueue(object : Callback<List<ConnectionListDataClass>?> {
             override fun onResponse(
-                call: Call<GetAllRequestDataClass?>,
-                response: Response<GetAllRequestDataClass?>
+                call: Call<List<ConnectionListDataClass>?>,
+                response: Response<List<ConnectionListDataClass>?>
             ) {
                 if (response.isSuccessful) {
                     val response = response.body()!!
@@ -56,8 +57,8 @@ class ViewConnectionsActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<GetAllRequestDataClass?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<List<ConnectionListDataClass>?>, t: Throwable) {
+                TODO("Not yet implemented")
             }
         })
 

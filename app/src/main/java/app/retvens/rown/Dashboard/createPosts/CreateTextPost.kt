@@ -51,7 +51,8 @@ import java.io.IOException
 class CreateTextPost : AppCompatActivity(),
     BottomSheetSelectAudience.OnBottomSelectAudienceClickListener,
     BottomSheetGoingBack.OnBottomGoingBackClickListener,
-    BottomSheetWhatToPost.OnBottomWhatToPostClickListener {
+    BottomSheetWhatToPost.OnBottomWhatToPostClickListener,
+    BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
     lateinit var binding : ActivityCreateTextPostBinding
 
     lateinit var dialog: Dialog
@@ -123,6 +124,12 @@ class CreateTextPost : AppCompatActivity(),
                 shareStatus(user_id)
             }
         }
+        binding.etLocationPostEvent.setOnClickListener {
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
+        }
     }
 
     private fun shareStatus(userId:String) {
@@ -130,6 +137,7 @@ class CreateTextPost : AppCompatActivity(),
         val canSee = binding.canSeeText.text.toString()
         val canComment = binding.canCommentText.text.toString()
         val caption = binding.whatDYEt.text.toString()
+        val location = binding.etLocationPostEvent.text.toString()
 
 
         val sendPost  = RetrofitBuilder.feedsApi.createStatus(userId,
@@ -137,7 +145,9 @@ class CreateTextPost : AppCompatActivity(),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"normal status"),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canSee),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canComment),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption)
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),location)
+
         )
 
         sendPost.enqueue(object : Callback<UpdateResponse?> {
@@ -205,5 +215,9 @@ class CreateTextPost : AppCompatActivity(),
         if (GoingBackFrBo == "Discard"){
             super.onBackPressed()
         }
+    }
+
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        binding.etLocationPostEvent.setText(CountryStateCityFrBo)
     }
 }

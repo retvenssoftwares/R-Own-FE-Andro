@@ -1,17 +1,12 @@
 package app.retvens.rown.CreateCommunity
 
 import android.content.Context
-import android.content.Intent
-import android.text.format.DateUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import app.retvens.rown.ChatSection.ChatScreen
-import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide

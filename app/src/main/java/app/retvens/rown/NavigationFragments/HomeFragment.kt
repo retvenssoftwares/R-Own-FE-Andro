@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
 import app.retvens.rown.Dashboard.createPosts.CreateTextPost
+import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -344,25 +345,26 @@ class HomeFragment : Fragment() {
 
         val getConnections = RetrofitBuilder.connectionApi.getConnectionList(userId)
 
-        getConnections.enqueue(object : Callback<GetAllRequestDataClass?> {
-            override fun onResponse(
-                call: Call<GetAllRequestDataClass?>,
-                response: Response<GetAllRequestDataClass?>
-            ) {
-                if (response.isSuccessful) {
-                    val response = response.body()!!
+      getConnections.enqueue(object : Callback<List<ConnectionListDataClass>?> {
+          override fun onResponse(
+              call: Call<List<ConnectionListDataClass>?>,
+              response: Response<List<ConnectionListDataClass>?>
+          ) {
+              if (response.isSuccessful) {
+                  val response = response.body()!!
 
-                    if (response == null){
-                        val bottomSheet = BottomSheet()
-                        val fragManager = (activity as FragmentActivity).supportFragmentManager
-                        fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
-                    }
-                }
-            }
+                  if (response == null){
+                      val bottomSheet = BottomSheet()
+                      val fragManager = (activity as FragmentActivity).supportFragmentManager
+                      fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
+                  }
+              }
+          }
 
-            override fun onFailure(call: Call<GetAllRequestDataClass?>, t: Throwable) {
-            }
-        })
+          override fun onFailure(call: Call<List<ConnectionListDataClass>?>, t: Throwable) {
+
+          }
+      })
 
     }
 
