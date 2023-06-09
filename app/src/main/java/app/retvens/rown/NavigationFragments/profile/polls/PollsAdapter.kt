@@ -17,6 +17,7 @@ import app.retvens.rown.NavigationFragments.home.PostDetailsActivity
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import java.lang.IndexOutOfBoundsException
 
 class PollsAdapter(val pollList:List<PostItem>, val context: Context) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
 
@@ -45,19 +46,22 @@ class PollsAdapter(val pollList:List<PostItem>, val context: Context) : Recycler
 
         val poll = pollList[position]
 
-        val question = poll.pollQuestion[position]
+        try {
+            val question = poll.pollQuestion[position]
 
-        holder.title_poll.text = question.Question
+            holder.title_poll.text = question.Question
 
-        holder.option1.text = question.Options[0].Option
-        holder.option2.text = question.Options[1].Option
+            holder.option1.text = question.Options[0].Option
+            holder.option2.text = question.Options[1].Option
 
+
+            val timeStamp = TimesStamp.convertTimeToText(question.date_added)
+            holder.time.text = timeStamp.toString()
+
+        } catch (e : IndexOutOfBoundsException){}
         holder.name.text = poll.Full_name
         Glide.with(context).load(poll.Profile_pic).into(holder.profile)
         holder.location.text = poll.location
-
-        val timeStamp = TimesStamp.convertTimeToText(question.date_added)
-        holder.time.text = timeStamp.toString()
 
 
 
