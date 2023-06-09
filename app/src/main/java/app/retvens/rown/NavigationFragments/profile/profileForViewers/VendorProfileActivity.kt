@@ -31,12 +31,14 @@ import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.NullPointerException
 
 class VendorProfileActivity : AppCompatActivity() {
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
     lateinit var name : TextView
+    lateinit var bio : TextView
     lateinit var profile_username : TextView
 
     lateinit var polls : TextView
@@ -45,6 +47,8 @@ class VendorProfileActivity : AppCompatActivity() {
     lateinit var services : TextView
     lateinit var postCount:TextView
     lateinit var connCount:TextView
+
+    lateinit var connStatus:TextView
 
     var created = ""
     var location = ""
@@ -62,11 +66,12 @@ class VendorProfileActivity : AppCompatActivity() {
 
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
+        bio = findViewById(R.id.bio)
 
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
 
-        status = findViewById(R.id.connStatus)
+        connStatus = findViewById(R.id.connStatus)
 
         polls = findViewById(R.id.polls)
         media = findViewById(R.id.media)
@@ -188,18 +193,29 @@ class VendorProfileActivity : AppCompatActivity() {
                 call: Call<VendorProfileDataClass?>,
                 response: Response<VendorProfileDataClass?>
             ) {
-//                if (response.isSuccessful){
-//                    val response = response.body()!!
-//                    Glide.with(applicationContext).load(response.vendorInfo.vendorImage).into(profile)
-//                    name.text = response.profiledata.User_name
-//                    connCount.text = response.connection_Count.toString()
-//                    postCount.text = response.post_count.toString()
-//
-//
-//                    if (response.connectionStatus == "Connected"){
-//                        connStatus.text = "Remove"
-//                    }
-//                }
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    try{
+                        Glide.with(applicationContext).load(response.vendorInfo.vendorImage)
+                            .into(profile)
+                        name.text = response.vendorInfo.vendorName
+                        profile_username.text = response.vendorInfo.vendorName
+                        bio.text = response.vendorInfo.vendorDescription
+
+                        connCount.text = response.connectioncount.toString()
+                        postCount.text = response.post_count.toString()
+
+                        created = response.Created_On
+                        location = response.location
+                        verification = response.verificationStatus
+
+                        if (response.connectionStatus == "Connected"){
+                            connStatus.text = "Remove"
+                        }
+                    } catch (e : NullPointerException){
+
+                    }
+                }
             }
 
             override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {

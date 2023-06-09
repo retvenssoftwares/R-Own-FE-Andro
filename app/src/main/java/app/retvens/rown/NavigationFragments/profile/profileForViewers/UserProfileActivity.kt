@@ -39,6 +39,7 @@ class UserProfileActivity : AppCompatActivity() {
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
     lateinit var name : TextView
+    lateinit var bio : TextView
     lateinit var profile_username : TextView
 
     lateinit var polls : TextView
@@ -65,6 +66,7 @@ class UserProfileActivity : AppCompatActivity() {
 
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
+        bio = findViewById(R.id.bio)
 
         polls = findViewById(R.id.polls)
         media = findViewById(R.id.media)
@@ -184,13 +186,15 @@ class UserProfileActivity : AppCompatActivity() {
                     Glide.with(applicationContext).load(response.data.profile.Profile_pic).into(profile)
                     profile_username.text = response.data.profile.User_name
                     name.text = response.data.profile.Full_name
+                    bio.text = response.data.profile.userBio
+
                     connCount.text = response.data.connCountLength.toString()
                     postCount.text = response.data.postCountLength.toString()
 
                     created = response.data.profile.Created_On
                     location = response.data.profile.location
                     verification = response.data.profile.verificationStatus
-                    Toast.makeText(applicationContext,response.data.connectionStatus,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.data.connectionStatus,Toast.LENGTH_SHORT).show()
 
                     if (response.data.connectionStatus == "Connected"){
                         connStatus.text = "Remove"

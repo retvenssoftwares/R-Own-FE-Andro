@@ -39,6 +39,7 @@ class OwnerProfileActivity : AppCompatActivity() {
     lateinit var profile : ShapeableImageView
     lateinit var name : TextView
     lateinit var profile_username : TextView
+    lateinit var bio : TextView
 
     lateinit var polls : TextView
     lateinit var jobs : TextView
@@ -61,6 +62,7 @@ class OwnerProfileActivity : AppCompatActivity() {
         profile = findViewById(R.id.profile)
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
+        bio = findViewById(R.id.bio)
 
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
@@ -88,7 +90,7 @@ class OwnerProfileActivity : AppCompatActivity() {
         events = findViewById(R.id.events)
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.child_profile_fragments_container,JobsOnProfileFragment(userID))
+        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID))
         transaction.commit()
 
         jobs.setOnClickListener {
@@ -225,9 +227,14 @@ class OwnerProfileActivity : AppCompatActivity() {
                     Glide.with(applicationContext).load(response.profiledata.Profile_pic).into(profile)
                     profile_username.text = response.profiledata.User_name
                     name.text = response.profiledata.User_name
+                    bio.text = response.profiledata.userBio
+
                     connCount.text = response.connection_Count.toString()
                     postCount.text = response.post_count.toString()
 
+                    created = response.profile.Created_On
+                    location = response.profile.location
+                    verification = response.profile.verificationStatus
 
                     if (response.connectionStatus == "Connected"){
                         connStatus.text = "Remove"

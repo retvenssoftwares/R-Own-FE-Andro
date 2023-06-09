@@ -103,7 +103,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
 
 
 
-        val childFragment: Fragment = JobsOnProfileFragment(user_id)
+        val childFragment: Fragment = MediaFragment(user_id)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
