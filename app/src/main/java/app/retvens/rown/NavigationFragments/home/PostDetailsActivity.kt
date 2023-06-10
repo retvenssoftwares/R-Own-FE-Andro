@@ -46,6 +46,8 @@ class PostDetailsActivity : AppCompatActivity() {
         indicator = findViewById<CircleIndicator>(R.id.indicator)
         val likeC = findViewById<TextView>(R.id.like_count)
         val commentC = findViewById<TextView>(R.id.comment_count)
+        val time = findViewById<TextView>(R.id.post_time)
+        val postLocation = findViewById<TextView>(R.id.location)
 
         name.text = intent.getStringExtra("profileName").toString()
         username.text = intent.getStringExtra("userName").toString()
@@ -58,11 +60,18 @@ class PostDetailsActivity : AppCompatActivity() {
         val postPic = intent.getStringArrayListExtra("postPic")
         val likeCount = intent.getStringExtra("likeCount")?.toInt()
         val commentCount = intent.getStringExtra("commentCount")
+        val location = intent.getStringExtra("location")
+
+        postLocation.text = location
 
         likeC.text = likeCount.toString()
         commentC.text = commentCount.toString()
 
+        val timeStamp = intent.getStringExtra("time")
 
+        val exactTime = convertTimeToText(timeStamp!!)
+
+        time.text = exactTime
 
         Log.e("pic",postPic.toString())
 

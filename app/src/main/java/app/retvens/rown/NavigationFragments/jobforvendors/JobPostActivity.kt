@@ -10,11 +10,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobResponseDataClass
 import app.retvens.rown.DataCollections.JobsCollection.PostJobDataCLass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheetCTC
-import app.retvens.rown.bottomsheet.BottomSheetCompany
-import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
-import app.retvens.rown.bottomsheet.BottomSheetJobTitle
-import app.retvens.rown.bottomsheet.BottomSheetJobType
+import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.databinding.ActivityJobPostBinding
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
@@ -26,7 +22,7 @@ class JobPostActivity : AppCompatActivity(),
     BottomSheetCTC.OnBottomCTCClickListener,
     BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener,
     BottomSheetJobTitle.OnBottomJobTitleClickListener,
-    BottomSheetCompany.OnBottomCompanyClickListener {
+    BottomSheetHotels.OnBottomCompanyClickListener {
 
     lateinit var binding:ActivityJobPostBinding
 
@@ -37,6 +33,8 @@ class JobPostActivity : AppCompatActivity(),
     private lateinit var company:TextInputEditText
     private lateinit var jobDescription:TextInputEditText
     private lateinit var jobsSkill:TextInputEditText
+    private lateinit var designation:TextInputEditText
+    private  var hotelsId:String? = null
 
     var etType : Int ? = 1
 
@@ -50,6 +48,7 @@ class JobPostActivity : AppCompatActivity(),
         company = findViewById(R.id.postCompaET)
         jobDescription = findViewById(R.id.post_job_description_et)
         jobsSkill = findViewById(R.id.post_job_skills_et)
+        designation = findViewById(R.id.post_Designation_title)
 
         jobTypeEt = findViewById(R.id.et_post_job_type)
         postMinSalaryEt = findViewById(R.id.et_post_min_salary)
@@ -75,7 +74,7 @@ class JobPostActivity : AppCompatActivity(),
             bottomSheet.setOnCTCClickListener(this)
         }
 
-        jobTitle.setOnClickListener {
+        designation.setOnClickListener {
             val bottomSheet = BottomSheetJobTitle()
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetJobTitle.Job_Title_TAG)}
@@ -83,9 +82,9 @@ class JobPostActivity : AppCompatActivity(),
         }
 
         company.setOnClickListener {
-            val bottomSheet = BottomSheetCompany()
+            val bottomSheet = BottomSheetHotels()
             val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetCompany.Company_TAG)}
+            fragManager.let{bottomSheet.show(it, BottomSheetHotels.Company_TAG)}
             bottomSheet.setOnCompanyClickListener(this)
         }
 
@@ -101,7 +100,9 @@ class JobPostActivity : AppCompatActivity(),
 
         post.setOnClickListener {
 
-            if (jobTitle.length() < 3){
+            if (designation.length() < 3){
+                binding.postDesignationTitle.error = "Enter Proper details"
+            }else if (jobTitle.length() < 3){
                 binding.jobTitleLayout.error = "Enter Proper details"
             }else if (jobTypeEt.length() < 3){
                 binding.typeLayout.error = "Enter Proper details"
@@ -114,9 +115,6 @@ class JobPostActivity : AppCompatActivity(),
             }else{
                 postJob()
             }
-
-
-
 
         }
 
@@ -131,12 +129,13 @@ class JobPostActivity : AppCompatActivity(),
         val type = jobTypeEt.text.toString()
         val expected = postMinSalaryEt.text.toString()
         val location = postLocationEt.text.toString()
+        val designation = designation.text.toString()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
 
-        val jobsData = PostJobDataCLass(user_id,"1","",title,company,"",type,"",
+        val jobsData = PostJobDataCLass(user_id,hotelsId!!,"1","",title,company,"",type,designation,
         "",expected,location,description,skill)
 
         val postJob = RetrofitBuilder.jobsApis.postJob(user_id,jobsData)
@@ -173,9 +172,13 @@ class JobPostActivity : AppCompatActivity(),
         postLocationEt.setText(CountryStateCityFrBo)
     }
     override fun bottomJobTitleClick(jobTitleFrBo: String) {
-        jobTitle.setText(jobTitleFrBo)
+        designation.setText(jobTitleFrBo)
     }
-    override fun bottomLocationClick(CompanyFrBo: String) {
-        company.setText(CompanyFrBo)
+
+    override fun bottomLocationClick(hotelName: String, hotelId: String) {
+        company.setText(hotelName)
+        hotelsId = hotelId
     }
+
+
 }

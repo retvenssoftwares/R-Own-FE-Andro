@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -58,27 +59,33 @@ class ExploreServicesFragment : Fragment() {
                 call: Call<List<ExploreServiceData>?>,
                 response: Response<List<ExploreServiceData>?>
             ) {
-                if (isAdded){
-                    if (response.isSuccessful){
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
-                        if (response.body()!!.isNotEmpty()) {
-                            val data = response.body()!!
-                            data.forEach {
-                                exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
-                                exploreBlogsRecyclerView.adapter = exploreServicesAdapter
-                                exploreServicesAdapter.notifyDataSetChanged()
+                try {
+                    if (isAdded){
+                        if (response.isSuccessful){
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                            if (response.body()!!.isNotEmpty()) {
+                                val data = response.body()!!
+                                data.forEach {
+                                    exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
+                                    exploreBlogsRecyclerView.adapter = exploreServicesAdapter
+                                    exploreServicesAdapter.notifyDataSetChanged()
+                                }
+                            } else {
+                                empty.visibility = View.VISIBLE
                             }
                         } else {
                             empty.visibility = View.VISIBLE
+                            empty.text = response.code().toString()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
                         }
-                    } else {
-                        empty.visibility = View.VISIBLE
-                        empty.text = response.code().toString()
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
                     }
+                }catch (e:NullPointerException){
+                    Toast.makeText(requireContext(),"No Services Yet",Toast.LENGTH_SHORT).show()
                 }
+
+
             }
 
             override fun onFailure(call: Call<List<ExploreServiceData>?>, t: Throwable) {

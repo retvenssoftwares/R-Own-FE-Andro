@@ -35,11 +35,11 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/jobTitleLayout"
+                android:id="@+id/jobDesignationLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Job title*"
+                android:hint="Designation*"
                 android:textColorHint="@color/black"
                 app:hintTextColor="@color/black"
                 app:boxStrokeColor="@color/black"
@@ -51,7 +51,7 @@
                 app:endIconTint="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/post_job_title"
+                    android:id="@+id/post_Designation_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
@@ -60,6 +60,31 @@
                     android:editable="false"
                     android:focusable="false"
                     android:clickable="true"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/jobTitleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Job title*"
+                android:textColorHint="@color/black"
+                app:hintTextColor="@color/black"
+                app:boxStrokeColor="@color/black"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="20dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:endIconTint="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/post_job_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/black"
+                    android:inputType="text"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 

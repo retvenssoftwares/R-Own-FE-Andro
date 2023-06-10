@@ -90,6 +90,7 @@ class ExplorePeopleFragment : Fragment() {
                             }
 
                             explorePeopleAdapter.setJobSavedClickListener(this)
+                            explorePeopleAdapter.cancelConnRequest(this)
 
 
                 } else {
@@ -114,6 +115,38 @@ class ExplorePeopleFragment : Fragment() {
 
             override fun onJobSavedClick(connect: Post) {
                 sendConnectionRequest(connect.User_id)
+            }
+
+            override fun onCancelRequest(connect: Post) {
+                removeConnRequest(connect.User_id)
+            }
+        })
+
+    }
+
+    private fun removeConnRequest(userId: String) {
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val removeRequest = RetrofitBuilder.connectionApi.removeRequest(userId,
+            ConnectionDataClass(user_id)
+        )
+
+        removeRequest.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 

@@ -16,6 +16,12 @@ interface ConnectionApis {
         @Body user_id: ConnectionDataClass
     ):Call<UpdateResponse>
 
+    @PATCH("deleterequest/{user_id}")
+    fun removeRequest(
+        @Path("user_id")userId:String,
+        @Body user_id: ConnectionDataClass
+    ):Call<UpdateResponse>
+
     @GET("allrequests/{userId}")
     fun getRequestList(
         @Path("userId")userId:String

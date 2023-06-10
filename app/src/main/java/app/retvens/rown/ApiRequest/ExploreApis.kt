@@ -101,4 +101,5 @@ interface ExploreApis {
     @GET("getquickreview")
     fun getQuickReviews() : Call<List<GetQuickReviewsData>>
 
+
 }

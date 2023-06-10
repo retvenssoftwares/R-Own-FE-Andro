@@ -159,6 +159,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 val images:ArrayList<String> = ArrayList()
                 post.media.forEach { item ->
                     images.add(item.post)
+                    intent.putExtra("time",item.date_added)
                 }
                 intent.putStringArrayListExtra("postPic",images)
                 intent.putExtra("likeCount",banner.Like_count)

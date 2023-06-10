@@ -23,6 +23,8 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
     var userId = ""
     interface ConnectClickListener {
         fun onJobSavedClick(connect: Post)
+
+        fun onCancelRequest(connect: Post)
     }
 
     private var connectClickListener: ConnectClickListener? = null
@@ -91,11 +93,35 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
                 holder.connect.text = "Requested"
             }
 
+            if (status == "Requested" || data.connectionStatus == "Requested"){
+                connectClickListener?.onCancelRequest(data)
+
+                holder.connect.text = "CONNECT"
+            }
+
 
             status = "Requested"
 
         }
 
+        holder.viewProfile.setOnClickListener {
+
+            if(data.Role == "Business Vendor / Freelancer"){
+                val intent = Intent(context, VendorProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
+            }else if (data.Role == "Hotel Owner"){
+                val intent = Intent(context, OwnerProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
+            } else {
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
+            }
+
+
+        }
 
     }
 
@@ -119,7 +145,10 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         }
     }
     fun setJobSavedClickListener(listener: ConnectClickListener) {
+        connectClickListener = listener
+    }
 
+    fun cancelConnRequest(listener: ConnectClickListener){
         connectClickListener = listener
     }
 }

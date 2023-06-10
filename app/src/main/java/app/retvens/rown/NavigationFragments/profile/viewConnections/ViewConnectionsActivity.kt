@@ -49,16 +49,22 @@ class ViewConnectionsActivity : AppCompatActivity() {
                 call: Call<List<ConnectionListDataClass>?>,
                 response: Response<List<ConnectionListDataClass>?>
             ) {
-                if (response.isSuccessful) {
-                    val response = response.body()!!
-                    connectionsAdapter = ConnectionsAdapter(response, applicationContext)
-                    binding.connectionsRecycler.adapter = connectionsAdapter
-                    connectionsAdapter.notifyDataSetChanged()
+                try {
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        connectionsAdapter = ConnectionsAdapter(response, applicationContext)
+                        binding.connectionsRecycler.adapter = connectionsAdapter
+                        connectionsAdapter.notifyDataSetChanged()
+                    }
+                }catch (e:NullPointerException){
+                    Toast.makeText(applicationContext,"No Connections Yet",Toast.LENGTH_SHORT).show()
                 }
+
+
             }
 
             override fun onFailure(call: Call<List<ConnectionListDataClass>?>, t: Throwable) {
-                TODO("Not yet implemented")
+               Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 

@@ -67,28 +67,33 @@ class ExploreHotelsFragment : Fragment() {
                 call: Call<List<ExploreHotelData>?>,
                 response: Response<List<ExploreHotelData>?>
             ) {
-
-                if (isAdded){
-                    if (response.isSuccessful){
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
-                        if (response.body()!!.isNotEmpty()) {
-                            val data = response.body()!!
-                            data.forEach {
-                                exploreHotelAdapter = ExploreHotelsAdapter(it.posts, requireContext())
-                                exploreBlogsRecyclerView.adapter = exploreHotelAdapter
-                                exploreHotelAdapter.notifyDataSetChanged()
+                try {
+                    if (isAdded){
+                        if (response.isSuccessful){
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                            if (response.body()!!.isNotEmpty()) {
+                                val data = response.body()!!
+                                data.forEach {
+                                    exploreHotelAdapter = ExploreHotelsAdapter(it.posts, requireContext())
+                                    exploreBlogsRecyclerView.adapter = exploreHotelAdapter
+                                    exploreHotelAdapter.notifyDataSetChanged()
+                                }
+                            } else {
+                                empty.visibility = View.VISIBLE
                             }
                         } else {
                             empty.visibility = View.VISIBLE
+                            empty.text = response.code().toString()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
                         }
-                    } else {
-                        empty.visibility = View.VISIBLE
-                        empty.text = response.code().toString()
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
                     }
+                }catch (e:NullPointerException){
+                    Toast.makeText(requireContext(),"No Hotels Yet",Toast.LENGTH_SHORT).show()
                 }
+
+
             }
 
             override fun onFailure(call: Call<List<ExploreHotelData>?>, t: Throwable) {

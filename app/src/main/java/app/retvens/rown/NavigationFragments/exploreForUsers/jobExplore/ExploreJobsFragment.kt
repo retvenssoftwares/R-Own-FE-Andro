@@ -75,54 +75,61 @@ class ExploreJobsFragment : Fragment() {
                 call: Call<List<ExploreJobData>?>,
                 response: Response<List<ExploreJobData>?>
             ) {
-                if (isAdded) {
-                    if (response.isSuccessful) {
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
 
-                        val response = response.body()!!
+                try {
+                    if (isAdded) {
+                        if (response.isSuccessful) {
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
 
-                        response.forEach { jobsData ->
-                            exploreJobAdapter = ExploreJobAdapter(jobsData.posts, requireContext())
-                            exploreJobsRecyclerView.adapter = exploreJobAdapter
-                            exploreJobAdapter.notifyDataSetChanged()
+                            val response = response.body()!!
 
-                            searchBar.addTextChangedListener(object : TextWatcher {
-                                override fun beforeTextChanged(
-                                    p0: CharSequence?,
-                                    p1: Int,
-                                    p2: Int,
-                                    p3: Int
-                                ) {
+                            response.forEach { jobsData ->
+                                exploreJobAdapter = ExploreJobAdapter(jobsData.posts, requireContext())
+                                exploreJobsRecyclerView.adapter = exploreJobAdapter
+                                exploreJobAdapter.notifyDataSetChanged()
 
-                                }
+                                searchBar.addTextChangedListener(object : TextWatcher {
+                                    override fun beforeTextChanged(
+                                        p0: CharSequence?,
+                                        p1: Int,
+                                        p2: Int,
+                                        p3: Int
+                                    ) {
 
-                                override fun onTextChanged(
-                                    p0: CharSequence?,
-                                    p1: Int,
-                                    p2: Int,
-                                    p3: Int
-                                ) {
+                                    }
 
-                                    searchJob(p0.toString())
+                                    override fun onTextChanged(
+                                        p0: CharSequence?,
+                                        p1: Int,
+                                        p2: Int,
+                                        p3: Int
+                                    ) {
 
-                                }
+                                        searchJob(p0.toString())
 
-                                override fun afterTextChanged(p0: Editable?) {
+                                    }
 
-                                }
-                            })
+                                    override fun afterTextChanged(p0: Editable?) {
+
+                                    }
+                                })
+                            }
+                        } else {
+                            empty.text = "You did'nt post a job yet"
+                            empty.visibility = View.VISIBLE
                         }
                     } else {
-                        empty.text = "You did'nt post a job yet"
                         empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
                     }
-                } else {
-                    empty.visibility = View.VISIBLE
-                    empty.text = response.code().toString()
-                    shimmerFrameLayout.stopShimmer()
-                    shimmerFrameLayout.visibility = View.GONE
+                }catch (e:NullPointerException){
+                    Toast.makeText(requireContext(),"No Jobs Yet",Toast.LENGTH_SHORT).show()
                 }
+
+
             }
             override fun onFailure(call: Call<List<ExploreJobData>?>, t: Throwable) {
                 if (isAdded) {

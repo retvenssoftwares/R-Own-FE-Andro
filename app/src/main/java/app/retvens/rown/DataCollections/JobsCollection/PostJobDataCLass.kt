@@ -2,6 +2,7 @@ package app.retvens.rown.DataCollections.JobsCollection
 
 data class PostJobDataCLass(
     val user_id:String,
+    val hotel_id:String,
     val display_status: String,
     val jobCategory: String,
     val jobTitle: String,
