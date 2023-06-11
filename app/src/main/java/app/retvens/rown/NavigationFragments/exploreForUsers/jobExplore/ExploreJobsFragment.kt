@@ -63,6 +63,8 @@ class ExploreJobsFragment : Fragment() {
 
     }
 
+//    https://chat.openai.com/share/a7eb8b8b-a185-4d7a-82be-ce935d68354d
+
     private fun getExploreJob() {
 
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)

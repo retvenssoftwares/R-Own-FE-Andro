@@ -371,26 +371,6 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                 val timestamp = convertTimeToText(item.date_added)
                 binding.postTime.text = timestamp
 
-
-                binding.voteOption1.setOnClickListener {
-
-                    if (banner.voted == "no"){
-                        voteOption(banner.post_id,item.Options[0].option_id)
-
-
-                        binding.Option1Votes.text = "${vote1.size} votes"
-
-
-                        val totalVotes = vote1.size + vote2.size
-                        val completedTasks = totalVotes
-                        val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
-                        if (!completedPercentage.isNaN()) {
-                            progressBarOption1.setProgressPercentage(completedPercentage)
-                            binding.option1Percentage.text = "${completedPercentage}%"
-                        }
-                    }
-
-
                 binding.postProfile.setOnClickListener {
                     if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
 
@@ -409,7 +389,26 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                     }
                 }
 
+
+                binding.voteOption1.setOnClickListener {
+
+                    if (banner.voted == "no") {
+                        voteOption(banner.post_id, item.Options[0].option_id)
+                        val vote = vote1.size+1
+                        binding.Option1Votes.text = "${vote} votes"
+                        val totalVotes = vote + vote2.size
+                        val completedTasks = totalVotes
+                        val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
+                        if (!completedPercentage.isNaN()) {
+                            progressBarOption1.setProgressPercentage(completedPercentage)
+                            binding.option1Percentage.text = "${completedPercentage}%"
+                        }
+                    }
                 }
+
+
+
+
                 binding.voteOption2.setOnClickListener {
 
                     if (banner.voted == "no"){
@@ -418,7 +417,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         val vote = vote2.size + 1
                         binding.Option2Votes.text = "${vote} votes"
                         val totalVotes = vote1.size + vote
-                        val completedTasks2 = vote
+                        val completedTasks2 = totalVotes
                         val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
                         if (!completedPercentage2.isNaN()) {
                             progressBarOption2.setProgressPercentage(completedPercentage2)

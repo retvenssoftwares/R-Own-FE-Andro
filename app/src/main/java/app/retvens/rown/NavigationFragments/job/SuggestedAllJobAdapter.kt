@@ -62,7 +62,7 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<JobsData>) :
         var operation = "push"
 
 
-            holder.position.text = jobs.jobTitle
+            holder.position.text = jobs.designationType
             holder.location.text = jobs.companyName
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"

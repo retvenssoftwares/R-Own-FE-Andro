@@ -6,6 +6,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
@@ -20,6 +21,7 @@ class RecentJobAdapterOwner(val context: Context, var jobsList:List<JobsData>) :
         val title = itemView.findViewById<TextView>(R.id.jobs_title)
         val type = itemView.findViewById<TextView>(R.id.jobs_type)
         val salary = itemView.findViewById<TextView>(R.id.salary)
+        val saved = itemView.findViewById<ImageView>(R.id.save_recent)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentJobViewHolder {
@@ -37,12 +39,14 @@ class RecentJobAdapterOwner(val context: Context, var jobsList:List<JobsData>) :
         val data = jobsList[position]
 
 
-        holder.designation.text = data.jobTitle
+        holder.designation.text = data.designationType
         holder.location.text = data.jobLocation
         holder.type.text = data.jobType
         holder.title.text = "Remote"
 
         holder.salary.text = data.expectedCTC
+
+        holder.saved.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")

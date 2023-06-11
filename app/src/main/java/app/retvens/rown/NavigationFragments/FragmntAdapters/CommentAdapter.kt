@@ -15,6 +15,7 @@ import app.retvens.rown.DataCollections.FeedCollection.CommentDataClass
 import app.retvens.rown.DataCollections.FeedCollection.Comments
 import app.retvens.rown.DataCollections.FeedCollection.GetComments
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
+import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -72,6 +73,9 @@ class CommentAdapter(val context: Context, var commentList:GetComments): Recycle
         holder.reply.setOnClickListener {
             onItemClickListener?.onItemClick(data)
         }
+
+        val timestamp = TimesStamp.convertTimeToText(data.date_added)
+        holder.time.text = timestamp
 
     }
 

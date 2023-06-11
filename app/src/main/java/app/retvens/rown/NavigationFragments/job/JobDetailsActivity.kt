@@ -162,6 +162,8 @@ class JobDetailsActivity : AppCompatActivity() {
 
             binding.cardApplyJob.setOnClickListener {
 
+                if (status != "Applied"){
+
                 val dialogRole = Dialog(this)
                 dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 dialogRole.setContentView(R.layout.bottom_sheet_aply_for_job)
@@ -206,7 +208,9 @@ class JobDetailsActivity : AppCompatActivity() {
                     }
 
                 }
-
+                }else{
+                    Toast.makeText(applicationContext,"You already Applied For this Position",Toast.LENGTH_SHORT).show()
+                }
 
         }
 

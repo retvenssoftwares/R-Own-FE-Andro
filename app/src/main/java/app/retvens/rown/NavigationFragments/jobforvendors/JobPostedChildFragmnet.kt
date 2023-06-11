@@ -96,8 +96,7 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
                     val response = response.body()!!
                     val originalData = response.toList()
                     if (response.isNotEmpty()) {
-                        val suggestedJobAdapter =
-                            SuggestedJobAdaperHotelOwner(requireContext(), response)
+                        val suggestedJobAdapter = SuggestedJobAdaperHotelOwner(requireContext(), response)
                         suggestedRecycler.adapter = suggestedJobAdapter
                         suggestedJobAdapter.notifyDataSetChanged()
 

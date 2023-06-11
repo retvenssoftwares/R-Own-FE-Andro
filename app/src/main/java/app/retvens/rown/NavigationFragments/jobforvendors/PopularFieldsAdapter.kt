@@ -48,12 +48,21 @@ class PopularFieldsAdapter(val context: Context, val requestData:List<GetRequest
         holder.name.text = data.Full_name
         holder.department.text = data.department
         holder.designation.text = data.designationType
-        holder.preffredLocation.text = data.preferredLocation
+
         holder.noticePeriod.text = data.noticePeriod
         holder.ctc.text = data.expectedCTC
-//        holder.title.text = data.jobTitle.get(0)
-//        holder.type.text = data.jobType.get(0)
-        holder.location.text = data.Location
+        holder.title.text = data.jobTitle.get(0)
+        holder.type.text = data.jobType.get(0)
+
+        val preflocation = data.preferredLocation
+        val prefcity = preflocation.split(",")[0]
+
+        holder.preffredLocation.text = prefcity
+
+        val location = data.Location
+        val city = location.split(",")[0]
+
+        holder.location.text = city
 
         Glide.with(context).load(data.profile_pic).into(holder.profile)
     }

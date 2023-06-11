@@ -65,6 +65,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/svg_jobs_explore"
         app:tint="@color/white"
+        android:visibility="gone"
         android:layout_marginEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/suggested_job_location"/>
@@ -90,7 +91,7 @@
             app:layout_constraintTop_toBottomOf="@id/email_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+           >
 
             <TextView
                 android:id="@+id/jobTitle"
@@ -113,11 +114,12 @@
             android:layout_gravity="center_horizontal"
             app:cardCornerRadius="10dp"
             android:layout_weight="1"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintTop_toBottomOf="@id/email_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+
+           >
 
             <TextView
                 android:id="@+id/workType"
@@ -147,44 +149,15 @@
         android:fontFamily="@font/montserrat_semibold"
         android:textSize="18dp"
         android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout_suggested_jobs"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="10dp"
         />
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/apply_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardElevation="8dp"
-        android:layout_gravity="center_horizontal"
-        app:cardCornerRadius="10dp"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/linear_layout_suggested_jobs"
-        app:layout_constraintEnd_toEndOf="@id/linear_layout_suggested_jobs"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/buttontext"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAlignment="center"
-            android:text="Apply Now"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textSize="12dp"
-            android:paddingVertical="7dp"
-            android:paddingHorizontal="14dp"
-
-
-            android:background="@color/suggested_job_yellow"
-            android:textColor="@color/black"/>
-
-    </androidx.cardview.widget.CardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

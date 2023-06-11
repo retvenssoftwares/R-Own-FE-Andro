@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
 
-class ExploreJobAdapter(val listS : List<JobPost>, val context: Context) : RecyclerView.Adapter<ExploreJobAdapter.ExploreJobViewHolder>() {
+class ExploreJobAdapter(val listS : List<Job>, val context: Context) : RecyclerView.Adapter<ExploreJobAdapter.ExploreJobViewHolder>() {
 
     class ExploreJobViewHolder(itemView: View) : ViewHolder(itemView){
         val designation = itemView.findViewById<TextView>(R.id.recent_job_designation)
@@ -37,11 +37,11 @@ class ExploreJobAdapter(val listS : List<JobPost>, val context: Context) : Recyc
 
         val data = listS[position]
 
-        holder.designation.text = data.jobTitle
+        holder.designation.text = data.designationType
         holder.location.text = data.jobLocation
         holder.title.text = data.jobType
         holder.type.text = data.jobType
-
+        holder.salary.text = data.expectedCTC
         holder.save_recent.visibility = View.GONE
 
     }

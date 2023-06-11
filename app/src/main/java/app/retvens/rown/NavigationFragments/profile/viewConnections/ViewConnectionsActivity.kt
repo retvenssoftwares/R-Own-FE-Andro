@@ -52,9 +52,12 @@ class ViewConnectionsActivity : AppCompatActivity() {
                 try {
                     if (response.isSuccessful) {
                         val response = response.body()!!
-                        connectionsAdapter = ConnectionsAdapter(response, applicationContext)
-                        binding.connectionsRecycler.adapter = connectionsAdapter
-                        connectionsAdapter.notifyDataSetChanged()
+                        response.forEach {
+                            connectionsAdapter = ConnectionsAdapter(it.conns, applicationContext)
+                            binding.connectionsRecycler.adapter = connectionsAdapter
+                            connectionsAdapter.notifyDataSetChanged()
+                        }
+
                     }
                 }catch (e:NullPointerException){
                     Toast.makeText(applicationContext,"No Connections Yet",Toast.LENGTH_SHORT).show()

@@ -53,7 +53,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : Recy
 
         var operation = "push"
 
-        holder.designation.text = data.jobTitle
+        holder.designation.text = data.designationType
         holder.location.text = data.companyName
         holder.type.text = data.jobType
         holder.title.text = "Remote"

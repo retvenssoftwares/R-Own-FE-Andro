@@ -214,7 +214,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
                     postCount.text = response.post_count.toString()
                     username.text = response.profiledata.User_name.toString()
                     bio.text = response.profiledata.userBio.toString()
-//                    linkText.text = response.profiledata.
+                    linkText.text = response.profile.hotelOwnerInfo.websiteLink
                 }
 
             }
