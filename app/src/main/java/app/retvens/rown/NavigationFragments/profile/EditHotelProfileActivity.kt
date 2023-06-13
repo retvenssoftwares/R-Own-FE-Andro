@@ -24,11 +24,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityEditHotelProfileBinding
 import app.retvens.rown.utils.cropProfileImage
+import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
 import com.bumptech.glide.Glide
@@ -112,12 +114,34 @@ class EditHotelProfileActivity : AppCompatActivity() {
                     .into(image)
                 progressDialog.show()
 
-                updateHotel(user_id)
+                if (croppedImageUri == null) {
+                    updateHotel(user_id)
+                } else {
+                    updateHotel(user_id)
+                    updateLogo()
+                }
             }
         }
 
 
     }
+
+    private fun updateLogo() {
+        val logo  = prepareFilePart(croppedImageUri!!, "hotelLogo", applicationContext)
+        val uL = RetrofitBuilder.ProfileApis.updateHotelLogo("", logo!!)
+        uL.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+            }
+        })
+    }
+
     private fun updateHotel(userId: String) {
         val hotel = RetrofitBuilder.ProfileApis.updateHotel(
             userId,

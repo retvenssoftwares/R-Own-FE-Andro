@@ -161,4 +161,12 @@ interface ProfileApis {
         @Part("websiteLink") websiteLink: RequestBody,
         @Part("bookingEngineLink") bookingEngineLink: RequestBody,
     ) : Call<UserProfileResponse>
+
+    @Multipart
+    @PATCH("updatehoteldata/{hotel_id}")
+    fun updateHotelLogo(
+        @Path("hotel_id") hotel_id:String,
+        @Part hotelLogo: MultipartBody.Part
+    ):Call<UpdateResponse>
+
 }

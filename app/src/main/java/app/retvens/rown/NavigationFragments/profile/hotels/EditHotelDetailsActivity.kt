@@ -175,7 +175,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             updateData()
         }
 
-        getHotel()
+//        getHotel()
     }
     private fun getHotel() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -232,7 +232,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
         val name = binding.etNameEdit.text.toString()
         val description = binding.overviewEt.text.toString()
         val location = binding.locationText.text.toString()
-
+        Toast.makeText(applicationContext, imagesList.toString(), Toast.LENGTH_SHORT).show()
         if (imagesList.isEmpty()){
             val respo = RetrofitBuilder.ProfileApis.updateHotelWithoutImg(
                 hotelId!!,
