@@ -66,7 +66,9 @@ class UploadIcon : AppCompatActivity() {
 
     private  var cameraImageUri:Uri? = null
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraImageUri!!, this)
+        if (it == true) {
+            cropImage(cameraImageUri!!, this)
+        }
     }
 
     lateinit var progressDialog: Dialog

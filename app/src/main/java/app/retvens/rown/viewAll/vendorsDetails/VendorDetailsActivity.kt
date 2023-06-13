@@ -29,6 +29,10 @@ class VendorDetailsActivity : AppCompatActivity() {
     lateinit var vendorsReviewAdapter: VendorsReviewAdapter
     lateinit var allReviewsAdapter: AllReviewAdapter
 
+    var image1 = ""
+    var image2 = ""
+    var image3 = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVendorDetailsBinding.inflate(layoutInflater)
@@ -46,8 +50,27 @@ class VendorDetailsActivity : AppCompatActivity() {
         topReview(user_id)
         allReview(user_id)
 
-        binding.img1.setOnClickListener { startActivity(Intent(this, VendorsImageViewActivity::class.java)) }
-        binding.img2.setOnClickListener { startActivity(Intent(this, VendorsImageViewActivity::class.java)) }
+        binding.img1.setOnClickListener {
+            val intent = Intent(this, VendorsImageViewActivity::class.java)
+            intent.putExtra("img1", image1)
+            intent.putExtra("img2", image2)
+            intent.putExtra("img3", image3)
+            startActivity(intent)
+        }
+        binding.img2.setOnClickListener {
+            val intent = Intent(this, VendorsImageViewActivity::class.java)
+            intent.putExtra("img1", image1)
+            intent.putExtra("img2", image2)
+            intent.putExtra("img3", image3)
+            startActivity(intent)
+        }
+        binding.img3.setOnClickListener {
+            val intent = Intent(this, VendorsImageViewActivity::class.java)
+            intent.putExtra("img1", image1)
+            intent.putExtra("img2", image2)
+            intent.putExtra("img3", image3)
+            startActivity(intent)
+        }
 
         binding.addReview.setOnClickListener {
             val title = "How was your experience with"
@@ -147,6 +170,10 @@ class VendorDetailsActivity : AppCompatActivity() {
                     }
                     try {
                         if (response.body()!!.vendorInfo.portfolioLink.size >= 3) {
+                            image1 = response.body()!!.vendorInfo.portfolioLink.get(0).images
+                            image2 = response.body()!!.vendorInfo.portfolioLink.get(1).images
+                            image3 = response.body()!!.vendorInfo.portfolioLink.get(2).images
+                            
                             Glide.with(applicationContext)
                                 .load(response.body()!!.vendorInfo.portfolioLink.get(0).images)
                                 .into(binding.img1)
@@ -158,15 +185,21 @@ class VendorDetailsActivity : AppCompatActivity() {
                                 .into(binding.img3)
                         } else if (response.body()!!.vendorInfo.portfolioLink.size >= 2) {
                             binding.img3.visibility = View.GONE
+                            image1 = response.body()!!.vendorInfo.portfolioLink.get(0).images
+                            image2 = response.body()!!.vendorInfo.portfolioLink.get(1).images
+
                             Glide.with(applicationContext)
                                 .load(response.body()!!.vendorInfo.portfolioLink.get(0).images)
                                 .into(binding.img1)
                             Glide.with(applicationContext)
                                 .load(response.body()!!.vendorInfo.portfolioLink.get(1).images)
                                 .into(binding.img2)
+
                         } else if (response.body()!!.vendorInfo.portfolioLink.size > 0) {
                             binding.img3.visibility = View.GONE
                             binding.img2.visibility = View.GONE
+                            image1 = response.body()!!.vendorInfo.portfolioLink.get(0).images
+
                             Glide.with(applicationContext)
                                 .load(response.body()!!.vendorInfo.portfolioLink.get(0).images)
                                 .into(binding.img1)

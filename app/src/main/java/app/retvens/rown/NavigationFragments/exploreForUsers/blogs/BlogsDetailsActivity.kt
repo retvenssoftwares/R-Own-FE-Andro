@@ -13,6 +13,7 @@ import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.databinding.ActivityBlogsDetailsBinding
 import app.retvens.rown.utils.dateFormat
+import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import app.retvens.rown.viewAll.viewAllBlogs.LikeBlog
 import com.bumptech.glide.Glide
 import retrofit2.Call
@@ -84,6 +85,35 @@ class BlogsDetailsActivity : AppCompatActivity() {
         binding.savePost.setOnClickListener {
             savePosts(blogId)
         }
+
+        getBlog(blogId)
+    }
+
+    private fun getBlog(blogId: String?) {
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val blog = RetrofitBuilder.viewAllApi.getBlogsByBlogId(blogId!!, user_id)
+        blog.enqueue(object : Callback<List<AllBlogsData>?> {
+            override fun onResponse(
+                call: Call<List<AllBlogsData>?>,
+                response: Response<List<AllBlogsData>?>
+            ) {
+                if (response.isSuccessful){
+                    val res = response.body()!!
+
+                    binding.userName.text = res.get(0).User_name
+                    binding.blogTitle.text = res.get(0).blog_title
+                    binding.blogContent.text = res.get(0).blog_content
+
+                    Glide.with(applicationContext).load(res.get(0).blog_image).into(binding.blogPic)
+                    Glide.with(applicationContext).load(res.get(0).Profile_pic).into(binding.userProfile)
+                }
+            }
+
+            override fun onFailure(call: Call<List<AllBlogsData>?>, t: Throwable) {
+            }
+        })
     }
 
     private fun savePosts(blogId: String?) {

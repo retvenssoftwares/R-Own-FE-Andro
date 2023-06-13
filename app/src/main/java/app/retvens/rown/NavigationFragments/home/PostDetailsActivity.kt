@@ -3,19 +3,20 @@ package app.retvens.rown.NavigationFragments.home
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
-import app.retvens.rown.DataCollections.FeedCollection.Media
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileResponse
+import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import com.bumptech.glide.Glide
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Indicator
 import com.google.android.material.imageview.ShapeableImageView
 import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
@@ -31,9 +32,17 @@ class PostDetailsActivity : AppCompatActivity() {
     lateinit var viewPagerAdapter: ImageSlideActivityAdapter
     lateinit var indicator: CircleIndicator
 
+    lateinit var savedPost : ImageView
+    var save = true
+    var operatioin = "push"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_details)
+
+        findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener { onBackPressed() }
+
+        savedPost = findViewById(R.id.savedPost)
 
         val name = findViewById<TextView>(R.id.user_name_post)
         val profile = findViewById<ShapeableImageView>(R.id.post_profile)
@@ -41,6 +50,7 @@ class PostDetailsActivity : AppCompatActivity() {
         val username = findViewById<TextView>(R.id.user_name)
         val caption = findViewById<TextView>(R.id.caption)
         val likeButton = findViewById<ImageView>(R.id.like_post)
+        val likedAnimation = findViewById<ImageView>(R.id.likedAnimation)
         val commentButtom = findViewById<ImageView>(R.id.comment)
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
         indicator = findViewById<CircleIndicator>(R.id.indicator)
@@ -75,14 +85,14 @@ class PostDetailsActivity : AppCompatActivity() {
 
         Log.e("pic",postPic.toString())
 
-        viewPagerAdapter = ImageSlideActivityAdapter(baseContext,postPic!!)
+        val postId = intent.getStringExtra("postId").toString()
+        val like = intent.getStringExtra("like").toString()
+
+        viewPagerAdapter = ImageSlideActivityAdapter(baseContext, postPic!!, like, postId, likeButton, likedAnimation)
         viewPager.adapter = viewPagerAdapter
 
 
         indicator.setViewPager(viewPager)
-
-        val postId = intent.getStringExtra("postId")
-        val like = intent.getStringExtra("like")
 
         var isLike = intent.getStringExtra("islike").toBoolean()
 
@@ -132,6 +142,21 @@ class PostDetailsActivity : AppCompatActivity() {
             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
         }
 
+        val saved = intent.getStringExtra("saved")
+
+        if (saved == "saved"){
+            operatioin = "pop"
+            save = false
+            savedPost.setImageResource(R.drawable.svg_saved)
+        } else {
+            operatioin = "push"
+            save = true
+            savedPost.setImageResource(R.drawable.svg_save_post)
+        }
+
+        savedPost.setOnClickListener {
+            savePosts(postId!!)
+        }
 
 
 
@@ -146,6 +171,38 @@ class PostDetailsActivity : AppCompatActivity() {
 //            binding.likeCount.text = count.toString()
 //        }
 
+    }
+    private fun savePosts(blogId: String) {
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val savePost = RetrofitBuilder.feedsApi.savePost(user_id, SavePost(operatioin,blogId!!))
+        savePost.enqueue(object : Callback<UserProfileResponse?> {
+            override fun onResponse(
+                call: Call<UserProfileResponse?>,
+                response: Response<UserProfileResponse?>
+            ) {
+                if (response.isSuccessful){
+                    if (save){
+                        savedPost.setImageResource(R.drawable.svg_saved)
+                        operatioin = "pop"
+                        save = !save
+                    } else {
+                        savedPost.setImageResource(R.drawable.svg_save_post)
+                        operatioin = "push"
+                        save = !save
+                    }
+                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                    Log.d("savePost", "${response.toString()} ${response.body().toString()}")
+                } else {
+                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun likePost(postId: String?) {

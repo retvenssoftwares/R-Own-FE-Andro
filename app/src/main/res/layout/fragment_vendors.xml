@@ -108,8 +108,6 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:hint="Egniter"
-                android:textColorHint="@drawable/hint_selector"
                 android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -135,10 +133,6 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:hint="Hi,  We are photography based digital brand
-providing you vast variety of photo shoots
-for your properties and other services too."
-                android:textColorHint="@drawable/hint_selector"
                 android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>

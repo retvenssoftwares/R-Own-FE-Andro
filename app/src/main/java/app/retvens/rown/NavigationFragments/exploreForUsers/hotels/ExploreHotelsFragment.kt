@@ -14,6 +14,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsData
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsAdapter
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -61,7 +62,7 @@ class ExploreHotelsFragment : Fragment() {
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getHotel = RetrofitBuilder.exploreApis.getExploreHotels(user_id,"3")
+        val getHotel = RetrofitBuilder.exploreApis.getExploreHotels(user_id,"1")
         getHotel.enqueue(object : Callback<List<ExploreHotelData>?> {
             override fun onResponse(
                 call: Call<List<ExploreHotelData>?>,
@@ -75,8 +76,9 @@ class ExploreHotelsFragment : Fragment() {
                             if (response.body()!!.isNotEmpty()) {
                                 val data = response.body()!!
                                 data.forEach {
-                                    exploreHotelAdapter = ExploreHotelsAdapter(it.posts, requireContext())
+                                    exploreHotelAdapter = ExploreHotelsAdapter(it.posts as ArrayList<HotelData>, requireContext())
                                     exploreBlogsRecyclerView.adapter = exploreHotelAdapter
+                                    exploreHotelAdapter.removeHotelFromList(it.posts)
                                     exploreHotelAdapter.notifyDataSetChanged()
                                 }
                             } else {

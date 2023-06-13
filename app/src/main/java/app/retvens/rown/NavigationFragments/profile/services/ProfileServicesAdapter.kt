@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.profile.services
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
@@ -19,13 +20,14 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val context: Context) : RecyclerView.Adapter<ProfileServicesAdapter.PollsViewHolder>() {
+class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val context: Context, val isOwner : Boolean) : RecyclerView.Adapter<ProfileServicesAdapter.PollsViewHolder>() {
 
     class PollsViewHolder(itemView: View) : ViewHolder(itemView){
         val vendor_name = itemView.findViewById<TextView>(R.id.vendor_name)
@@ -51,6 +53,11 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
 
     override fun onBindViewHolder(holder: PollsViewHolder, position: Int) {
         val data = listS[position]
+
+        if (!isOwner){
+            holder.del.visibility = View.GONE
+            holder.edit.visibility = View.GONE
+        }
         holder.vendor_name.text = data.vendorName
         holder.vendors_id.text = "@${data.User_name}"
         holder.serviceName.text = data.service_name
@@ -64,7 +71,13 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
         holder.edit.setOnClickListener {
             openBottomEdit(listS[position].vendorServiceId)
         }
-
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, VendorDetailsActivity::class.java)
+            intent.putExtra("user_id", data.user_id)
+            intent.putExtra("vendorImage", data.vendorImage)
+            intent.putExtra("vendorName", data.vendorName)
+            context.startActivity(intent)
+        }
 
     }
     private fun openBottomForDel(vendorServiceId: String) {

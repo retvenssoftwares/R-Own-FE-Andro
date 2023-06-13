@@ -33,6 +33,8 @@ data class UserProfileRequestItem(
         val portfolioLink:List<PortfolioImages>,
     )
     data class HotelOwnerInfo(
+        val hotelownerName:String,
+        val hotelDescription:String,
         val hotelType:String,
         val websiteLink:String,
         val bookingEngineLink:String

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelData
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsAdapter
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.R
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
@@ -61,7 +62,7 @@ class AllHotelsActivity : AppCompatActivity() {
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
                             data.forEach {
-                                exploreHotelAdapter = ExploreHotelsAdapter(it.posts, this@AllHotelsActivity)
+                                exploreHotelAdapter = ExploreHotelsAdapter(it.posts as ArrayList<HotelData>, this@AllHotelsActivity)
                                 exploreBlogsRecyclerView.adapter = exploreHotelAdapter
                                 exploreHotelAdapter.notifyDataSetChanged()
                             }

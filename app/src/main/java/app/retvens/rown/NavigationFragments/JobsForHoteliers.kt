@@ -19,6 +19,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.NavigationFragments.jobforvendors.ExploreRequestingChildFragmnet
 import app.retvens.rown.NavigationFragments.jobforvendors.JobPostActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobPostedChildFragmnet
@@ -35,6 +36,7 @@ class JobsForHoteliers : Fragment() {
     lateinit var cardExploreRequestedJob : CardView
     lateinit var cardExploreEmployees: CardView
 
+    var selectedFrag = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,6 +63,8 @@ class JobsForHoteliers : Fragment() {
             cardExploreEmployees.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             postAJob.visibility = View.VISIBLE
 
+            selectedFrag = 0
+
             val childFragment: Fragment = JobPostedChildFragmnet()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_jobs_fragments_container, childFragment).commit()
@@ -72,6 +76,8 @@ class JobsForHoteliers : Fragment() {
             cardExploreEmployees.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             postAJob.visibility = View.GONE
 
+            selectedFrag = 1
+
             val childFragment: Fragment = ExploreRequestingChildFragmnet()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_jobs_fragments_container, childFragment).commit()
@@ -82,6 +88,8 @@ class JobsForHoteliers : Fragment() {
             cardExploreRequestedJob.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             cardExploreEmployees.setCardBackgroundColor(Color.parseColor("#ADD134"))
             postAJob.visibility = View.GONE
+
+            selectedFrag = 2
 
             val childFragment: Fragment = explore_employees_fragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -99,6 +107,25 @@ class JobsForHoteliers : Fragment() {
 //            fragManager.let{bottomSheet.show(it, BottomSheetJobFilter.Job_TAG)}
 //            bottomSheet.setOnJobClickListener(this)
 //        }
+
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        refresh.setOnRefreshListener {
+            if (selectedFrag == 0) {
+                val childFragment: Fragment = JobPostedChildFragmnet()
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_jobs_fragments_container, childFragment).commit()
+            } else if (selectedFrag == 1) {
+                val childFragment: Fragment = ExploreRequestingChildFragmnet()
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_jobs_fragments_container, childFragment).commit()
+            } else if (selectedFrag == 2) {
+                val childFragment: Fragment = explore_employees_fragment()
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_jobs_fragments_container, childFragment).commit()
+            }
+            refresh.isRefreshing = false
+        }
 
 
         val childFragment: Fragment = JobPostedChildFragmnet()

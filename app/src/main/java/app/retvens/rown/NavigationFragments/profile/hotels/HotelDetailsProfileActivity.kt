@@ -160,6 +160,7 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                         binding.img1.visibility = View.GONE
                         binding.img2.visibility = View.GONE
                         binding.img3.visibility = View.GONE
+                        Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
                     }
 
                     binding.descriptionHotel.text = data.Hoteldescription

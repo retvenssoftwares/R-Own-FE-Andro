@@ -79,15 +79,15 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
         child = "0"
 
         post.setOnClickListener {
-
-            if (child == "1"){
-                replyComment(user_id,parentCommentId,blog_id)
-            }else{
-                postComment(blog_id)
+            if (comment.text.isNotEmpty()) {
+                if (child == "1") {
+                    replyComment(user_id, parentCommentId, blog_id)
+                } else {
+                    postComment(blog_id)
+                }
+            } else {
+                Toast.makeText(context, "Field can not be empty", Toast.LENGTH_SHORT).show()
             }
-
-
-
         }
 
         Glide.with(requireContext()).load(blogProfile).into(profile)

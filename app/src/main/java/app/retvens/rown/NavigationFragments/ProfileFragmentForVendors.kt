@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
@@ -94,6 +95,13 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
 
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        refresh.setOnRefreshListener {
+            getSelfUserProfile(user_id,user_id)
+            refresh.isRefreshing = false
+        }
+
         getSelfUserProfile(user_id,user_id)
 
         val childFragment: Fragment = MediaFragment(user_id)
@@ -134,7 +142,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = ServicesFragment(user_id)
+            val childFragment: Fragment = ServicesFragment(user_id, true)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

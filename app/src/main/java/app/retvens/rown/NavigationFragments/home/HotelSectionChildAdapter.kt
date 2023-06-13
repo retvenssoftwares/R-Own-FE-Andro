@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -22,7 +23,7 @@ import retrofit2.Response
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
-                               private val hotelSectionRecyclerData : List<HotelData>,
+                               private val hotelSectionRecyclerData : ArrayList<HotelData>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -122,6 +123,19 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
                 Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    fun removeHotelFromList(data: List<HotelData>){
+
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    hotelSectionRecyclerData.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
     }
 
 }

@@ -30,6 +30,18 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/likedAnimation"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:elevation="8dp"
+        android:visibility="gone"
+        android:src="@drawable/liked_vectore"
+        app:layout_constraintTop_toTopOf="@id/post_pic"
+        app:layout_constraintBottom_toBottomOf="@id/post_pic"
+        app:layout_constraintEnd_toEndOf="@id/post_pic"
+        app:layout_constraintStart_toStartOf="@id/post_pic"/>
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/post_pic"
         android:layout_width="match_parent"
@@ -97,6 +109,7 @@
             android:id="@+id/share_post"
             android:layout_width="26dp"
             android:layout_height="26dp"
+            android:visibility="gone"
             android:layout_weight="1"
             android:src="@drawable/svg_share_post"/>
         <ImageView

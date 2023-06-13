@@ -6,12 +6,14 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -114,7 +116,7 @@ class VendorProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId))
+            transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId, false))
             transaction.commit()
         }
 
@@ -213,13 +215,16 @@ class VendorProfileActivity : AppCompatActivity() {
                             connStatus.text = "Remove"
                         }
                     } catch (e : NullPointerException){
-
+                        Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
+                        Log.d("new", e.toString())
                     }
+                } else{
+                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {
-                TODO("Not yet implemented")
+                Toast.makeText(applicationContext, t.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         })
     }

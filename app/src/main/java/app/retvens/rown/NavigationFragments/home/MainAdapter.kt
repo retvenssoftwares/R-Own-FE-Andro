@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileResponse
+import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
@@ -38,13 +40,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
+import android.os.Handler
+import androidx.annotation.RequiresApi
 import kotlin.collections.ArrayList
 
 
@@ -68,6 +67,8 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner: PostItem, position: Int){
+            var save = true
+            var operatioin = "push"
 
                         val post = banner
 
@@ -80,6 +81,28 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                         binding.location.text = post.location
 
+            if (post.isSaved == "saved"){
+                operatioin = "pop"
+                save = false
+                binding.savePost.setImageResource(R.drawable.svg_saved)
+            } else {
+                operatioin = "push"
+                save = true
+                binding.savePost.setImageResource(R.drawable.svg_save_post)
+            }
+           binding.savePost.setOnClickListener {
+               if (post.post_id != null) {
+                   savePosts(post.post_id, binding, operatioin, save) {
+                       if (it == 0) {
+                           operatioin = "pop"
+                           save = !save
+                       } else {
+                           operatioin = "push"
+                           save = !save
+                       }
+                   }
+               }
+            }
 
                         if (post.Like_count != ""){
                             binding.likeCount.text = post.Like_count
@@ -90,7 +113,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                         post.media.forEach {  item ->
                             // Set up the ImageSlideAdapter and ViewPager
-                            viewPagerAdapter = ImageSlideAdapter(context, post.media)
+                            viewPagerAdapter = ImageSlideAdapter(context, post.media, banner, binding)
                             binding.viewPager.adapter = viewPagerAdapter
 
 
@@ -136,17 +159,6 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             }
 
-            binding.viewPager.setOnClickListener {
-                val intent = Intent(context,PostsViewActivity::class.java)
-                post.media.forEach { item ->
-                    intent.putExtra("postPic",item.post)
-                }
-                intent.putExtra("caption",banner.caption)
-                intent.putExtra("postId",banner.post_id)
-                intent.putExtra("profilePic",banner.Profile_pic)
-                context.startActivity(intent)
-
-            }
             binding.postCard.setOnClickListener {
 
                 Log.e("media",post.media.toString())
@@ -176,12 +188,16 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                     val count:Int
                     if(banner.islike){
+                        post.like = "Liked"
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
                         count = post.Like_count.toInt()+1
+                        post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }else{
+                        post.like = "Unliked"
                         binding.likePost.setImageResource(R.drawable.svg_like_post)
                         count = post.Like_count.toInt()
+                        post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }
 
@@ -192,12 +208,16 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
                     val count:Int
                     if(banner.islike){
+                        post.like = "Unliked"
                         binding.likePost.setImageResource(R.drawable.svg_like_post)
                         count = post.Like_count.toInt()-1
+                        post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }else{
+                        post.like = "Liked"
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
                         count = post.Like_count.toInt()
+                        post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }
 
@@ -222,6 +242,9 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
     inner class BannerItemViewHolderEvent(private val binding : ItemEventPostBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner: PostItem, position: Int){
 
+            var save = true
+            var operatioin = "push"
+
             val post = banner
             Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
                 binding.userIdOnComment.text = post.User_name
@@ -243,18 +266,35 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                     binding.commentCount.text = post.Comment_count
                 }
 
+            if (post.isSaved == "saved"){
+                operatioin = "pop"
+                save = false
+                binding.savePost.setImageResource(R.drawable.svg_saved)
+            } else {
+                operatioin = "push"
+                save = true
+                binding.savePost.setImageResource(R.drawable.svg_save_post)
+            }
+
+            binding.savePost.setOnClickListener {
+                if (post.post_id != null) {
+                    saveEvent(post.post_id, binding, operatioin, save) {
+                        if (it == 0) {
+                            operatioin = "pop"
+                            save = !save
+                        } else {
+                            operatioin = "push"
+                            save = !save
+                        }
+                    }
+                }
+            }
 
 
 
             binding.postProfile.setOnClickListener {
 
-                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
-
-                    val intent = Intent(context,UserProfileActivity::class.java)
-                    intent.putExtra("userId",banner.user_id)
-                    context.startActivity(intent)
-
-                }else if(banner.Role == "Business Vendor/Freelancer"){
+                if(banner.Role == "Business Vendor/Freelancer"){
                     val intent = Intent(context,VendorProfileActivity::class.java)
                     intent.putExtra("userId",banner.user_id)
                     context.startActivity(intent)
@@ -262,10 +302,15 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                     val intent = Intent(context,OwnerProfileActivity::class.java)
                     intent.putExtra("userId",banner.user_id)
                     context.startActivity(intent)
+                } else {
+                    val intent = Intent(context,UserProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+
                 }
-
-
             }
+
+            binding.eventImage
 
             binding.likePost.setOnClickListener {
                 onItemClickListener?.onItemClick(banner)
@@ -282,11 +327,37 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
     inner class BannerItemViewHolderStatus(private val binding : ItemStatusBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner: PostItem, position: Int){
 
+            var save = true
+            var operatioin = "push"
+
             binding.userNamePost.text = banner.Full_name
             binding.titleStatus.text = banner.caption
             Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
             binding.location.text = banner.location
 
+            if (banner.isSaved == "saved"){
+                operatioin = "pop"
+                save = false
+                binding.savePost.setImageResource(R.drawable.svg_saved)
+            } else {
+                operatioin = "push"
+                save = true
+                binding.savePost.setImageResource(R.drawable.svg_save_post)
+            }
+
+            binding.savePost.setOnClickListener {
+                if (banner.post_id != null) {
+                    saveStatus(banner.post_id, binding, operatioin, save) {
+                        if (it == 0) {
+                            operatioin = "pop"
+                            save = !save
+                        } else {
+                            operatioin = "push"
+                            save = !save
+                        }
+                    }
+                }
+            }
 
             binding.postProfile.setOnClickListener {
 
@@ -501,8 +572,9 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
         }
         fun bindHotelSectionRecyclerView(recyclerItemList : List<HotelData>){
-            val adapter = HotelSectionChildAdapter(context, DataItemType.HOTEL_SECTION, recyclerItemList)
+            val adapter = HotelSectionChildAdapter(context, DataItemType.HOTEL_SECTION, recyclerItemList as ArrayList<HotelData>)
             binding.childRecyclerView.adapter = adapter
+            adapter.removeHotelFromList(recyclerItemList)
             binding.recyclerHeading.text = "Check into the most comfortable stays"
             binding.viewAllItem.setOnClickListener {
                 context.startActivity(Intent(context, AllHotelsActivity::class.java))
@@ -690,6 +762,98 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
         return convTime
     }
 
+    private fun saveStatus(blogId: String?, binding : ItemStatusBinding, operation: String, like: Boolean, onLiked : (Int) -> Unit) {
+        val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val savePost = RetrofitBuilder.feedsApi.savePost(user_id, SavePost(operation,blogId!!))
+        savePost.enqueue(object : Callback<UserProfileResponse?> {
+            override fun onResponse(
+                call: Call<UserProfileResponse?>,
+                response: Response<UserProfileResponse?>
+            ) {
+                if (response.isSuccessful){
+                    if (like){
+                        binding.savePost.setImageResource(R.drawable.svg_saved)
+                        onLiked.invoke(0)
+                    } else {
+                        binding.savePost.setImageResource(R.drawable.svg_save_post)
+                        onLiked.invoke(1)
+                    }
+                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                    Log.d("savePost", "${response.toString()} ${response.body().toString()}")
+                } else {
+                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun saveEvent(blogId: String?, binding : ItemEventPostBinding, operation: String, like: Boolean, onLiked : (Int) -> Unit) {
+        val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val savePost = RetrofitBuilder.feedsApi.savePost(user_id, SavePost(operation,blogId!!))
+        savePost.enqueue(object : Callback<UserProfileResponse?> {
+            override fun onResponse(
+                call: Call<UserProfileResponse?>,
+                response: Response<UserProfileResponse?>
+            ) {
+                if (response.isSuccessful){
+                    if (like){
+                        binding.savePost.setImageResource(R.drawable.svg_saved)
+                        onLiked.invoke(0)
+                    } else {
+                        binding.savePost.setImageResource(R.drawable.svg_save_post)
+                        onLiked.invoke(1)
+                    }
+                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                    Log.d("savePost", "${response.toString()} ${response.body().toString()}")
+                } else {
+                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun savePosts(blogId: String?, binding : UsersPostsCardBinding, operation: String, like: Boolean, onLiked : (Int) -> Unit) {
+        val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val savePost = RetrofitBuilder.feedsApi.savePost(user_id, SavePost(operation,blogId!!))
+        savePost.enqueue(object : Callback<UserProfileResponse?> {
+            override fun onResponse(
+                call: Call<UserProfileResponse?>,
+                response: Response<UserProfileResponse?>
+            ) {
+                if (response.isSuccessful){
+                    if (like){
+                        binding.savePost.setImageResource(R.drawable.svg_saved)
+                        onLiked.invoke(0)
+                    } else {
+                        binding.savePost.setImageResource(R.drawable.svg_save_post)
+                        onLiked.invoke(1)
+                    }
+                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                    Log.d("savePost", "${response.toString()} ${response.body().toString()}")
+                } else {
+                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 
 
 }

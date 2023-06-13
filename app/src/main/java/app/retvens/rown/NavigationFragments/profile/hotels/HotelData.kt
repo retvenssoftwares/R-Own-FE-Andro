@@ -4,6 +4,7 @@ data class HotelData(
     val Hoteldescription: String,
     val __v: Int,
     val _id: String,
+    val display_status: String,
     val date_added: String,
     val gallery: List<GalleryImages>,
     val hotelCoverpicUrl: String,

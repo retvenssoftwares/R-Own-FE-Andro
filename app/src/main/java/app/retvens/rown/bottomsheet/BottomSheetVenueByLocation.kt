@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -67,8 +68,10 @@ class BottomSheetVenueByLocation(val location : String) : BottomSheetDialogFragm
     }
 
     private fun getUserVenueLocation() {
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getLocation = RetrofitBuilder.EventsApi.getBottomSheetVenueByLocation(location)
+        val getLocation = RetrofitBuilder.ProfileApis.getProfileHotels(user_id)
         getLocation.enqueue(object : Callback<List<HotelsName>?>, BottomVenueByLocationAdapter.OnLocationClickListener {
             override fun onResponse(
                 call: Call<List<HotelsName>?>,
@@ -77,9 +80,12 @@ class BottomSheetVenueByLocation(val location : String) : BottomSheetDialogFragm
 
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-                    becA = BottomVenueByLocationAdapter(requireContext(),response)
+                    becA = BottomVenueByLocationAdapter(requireContext(),
+                        response as ArrayList<HotelsName>
+                    )
                     becA.notifyDataSetChanged()
                     recyclerView.adapter = becA
+                    becA.removeHotelFromList(response)
                     becA.setOnLocationClickListener(this)
 
                     ssearchLocation.addTextChangedListener(object : TextWatcher {
@@ -101,7 +107,7 @@ class BottomSheetVenueByLocation(val location : String) : BottomSheetDialogFragm
                             val filter = original.filter { searchUser ->
                                 searchUser.hotelName.contains(s.toString(),ignoreCase = true)
                             }
-                            becA.search(filter)
+                            becA.search(filter as ArrayList<HotelsName>)
                         }
 
                         override fun afterTextChanged(s: Editable?) {

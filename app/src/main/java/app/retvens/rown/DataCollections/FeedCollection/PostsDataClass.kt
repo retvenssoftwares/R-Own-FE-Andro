@@ -20,10 +20,10 @@ data class PostItem(
     val event_thumbnail:String,
     val event_start_date:String,
     val price:String,
-    val like:String,
-    val liked:String,
+    var like:String,
+    var liked:String,
     var islike:Boolean,
-    val Like_count:String,
+    var Like_count:String,
     val Comment_count:String,
     val likeCount:String,
     val commentCount:String,
@@ -32,6 +32,7 @@ data class PostItem(
     val voted:String,
     val saved_post: List<Any>,
     val Full_name:String,
+    val isSaved:String,
     val __v: Int
 )
 

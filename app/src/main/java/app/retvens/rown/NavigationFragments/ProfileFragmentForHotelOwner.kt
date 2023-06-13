@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,10 +13,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
+import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.profile.EditHotelOwnerProfileActivity
+import app.retvens.rown.NavigationFragments.profile.EditHotelProfileActivity
 import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.events.EventsProfileFragment
@@ -31,6 +35,7 @@ import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnecti
 import app.retvens.rown.NavigationFragments.profile.viewRequests.ViewRequestsActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
+import app.retvens.rown.bottomsheet.BottomSheetHotelierProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetVendorsProfileSetting
 import com.bumptech.glide.Glide
@@ -38,9 +43,10 @@ import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.URI
 
 
-class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfileSettingClickListener {
+class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSetting.OnBottomSheetHotelierProfileSettingClickListener {
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
@@ -93,12 +99,27 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
 
+        linkText.setOnClickListener{
+            val uri = Uri.parse("https://" + linkText.text.toString())
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
+
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        refresh.setOnRefreshListener {
+            getOwnerProfile(user_id,user_id)
+            refresh.isRefreshing = false
+        }
+
         getOwnerProfile(user_id,user_id)
 
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
-        val profilePic = sharedPreferences?.getString("profile_image", "").toString()
+        val profilePic = sharedPreferences?.getString("profile_image", "")
 
-        Glide.with(requireContext()).load(profilePic).into(profile)
+        if (!profilePic.isNullOrEmpty()) {
+            Glide.with(requireContext()).load(profilePic).into(profile)
+        }
         name.text = profileName
 
 
@@ -190,9 +211,9 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
 
         setting = view.findViewById(R.id.profile_setting)
         setting.setOnClickListener {
-            val bottomSheet = BottomSheetProfileSetting()
+            val bottomSheet = BottomSheetHotelierProfileSetting()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetProfileSetting.WTP_TAG)}
+            fragManager.let{bottomSheet.show(it, BottomSheetHotelierProfileSetting.Hotelier_TAG)}
             bottomSheet.setOnBottomSheetProfileSettingClickListener(this)
         }
     }
@@ -228,7 +249,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
 
     }
 
-    override fun bottomSheetProfileSettingClick(bottomSheetProfileSettingFrBo: String) {
+    override fun bottomSheetHotelierProfileSettingClick(bottomSheetProfileSettingFrBo: String) {
         when (bottomSheetProfileSettingFrBo) {
 
             "settings" -> {
@@ -236,6 +257,9 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetProfileSetting.OnB
             }
             "edit" -> {
                 startActivity(Intent(context, EditHotelOwnerProfileActivity::class.java))
+            }
+            "editHotelier" -> {
+                startActivity(Intent(context, EditHotelProfileActivity::class.java))
             }
             "saved" -> {
                 startActivity(Intent(context, SavedActivity::class.java))

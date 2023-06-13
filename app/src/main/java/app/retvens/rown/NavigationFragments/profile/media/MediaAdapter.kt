@@ -66,6 +66,7 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
             intent.putExtra("like",media.liked)
             intent.putExtra("islike",media.islike)
             intent.putExtra("postId",media.post_id)
+            intent.putExtra("saved",media.isSaved)
             context.startActivity(intent)
         }
     }

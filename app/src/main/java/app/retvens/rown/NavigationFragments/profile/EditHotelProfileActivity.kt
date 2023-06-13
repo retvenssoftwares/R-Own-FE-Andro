@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -26,9 +27,8 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
-import app.retvens.rown.databinding.ActivityEditHotelOwnerProfileBinding
+import app.retvens.rown.databinding.ActivityEditHotelProfileBinding
 import app.retvens.rown.utils.cropProfileImage
-import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
 import com.bumptech.glide.Glide
@@ -42,8 +42,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class EditHotelOwnerProfileActivity : AppCompatActivity() {
-    lateinit var binding : ActivityEditHotelOwnerProfileBinding
+class EditHotelProfileActivity : AppCompatActivity() {
+    lateinit var binding : ActivityEditHotelProfileBinding
 
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
@@ -60,11 +60,15 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
     lateinit var progressDialog: Dialog
 
     var user_id = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEditHotelOwnerProfileBinding.inflate(layoutInflater)
+        binding = ActivityEditHotelProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.Designation.setOnClickListener {
+            openHotelTypeBottom()
+        }
 
         binding.profileBackBtn.setOnClickListener { onBackPressed() }
 
@@ -78,6 +82,7 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
             binding.refreshLayout.isRefreshing = false
         }
         fetchUser(user_id)
+
         binding.cameraEdit.setOnClickListener {
             //Requesting Permission For CAMERA
             if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
@@ -91,7 +96,10 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
         binding.save.setOnClickListener {
 
             if (binding.etNameEdit.length() < 3) {
-                Toast.makeText(applicationContext, "Please enter your name", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "Please enter your hotel name", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (binding.hotelType.text.toString() == "Hotel Type") {
+                Toast.makeText(applicationContext, "Please select Hotel Type", Toast.LENGTH_SHORT)
                     .show()
             } else {
                 progressDialog = Dialog(this)
@@ -104,75 +112,33 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
                     .into(image)
                 progressDialog.show()
 
-                uploadData(user_id)
+                updateHotel(user_id)
             }
         }
+
+
     }
+    private fun updateHotel(userId: String) {
+        val hotel = RetrofitBuilder.ProfileApis.updateHotel(
+            userId,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.etNameEdit.text.toString()),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.bioEt.text.toString()),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.hotelType.text.toString()),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.website.text.toString()),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.bookingText.text.toString())
+        )
+        hotel.enqueue(object : Callback<UserProfileResponse?> {
+            override fun onResponse(
+                call: Call<UserProfileResponse?>,
+                response: Response<UserProfileResponse?>
+            ) {
+                onBackPressed()
+            }
 
-    private fun uploadData(userId: String) {
-
-        if (croppedImageUri != null){
-
-            val image = prepareFilePart(croppedImageUri!!, "Profile_pic", applicationContext)
-
-            val respo  = RetrofitBuilder.ProfileApis.updateVendorProfile(
-                user_id,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.etNameEdit.text.toString()),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.bioEt.text.toString()),
-                image!!
-            )
-            respo.enqueue(object : Callback<UserProfileResponse?> {
-                override fun onResponse(
-                    call: Call<UserProfileResponse?>,
-                    response: Response<UserProfileResponse?>
-                ) {
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                    Log.d("image", response.toString())
-                    Log.d("image", response.body().toString())
-
-                    if (response.isSuccessful){
-                        saveFullName(applicationContext, binding.etNameEdit.text.toString())
-//                        saveProfileImage(applicationContext, )
-                    }
-
-                }
-                override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
-
-            val respo  = RetrofitBuilder.ProfileApis.updateVendorProfileWithoutImg(
-                user_id,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.etNameEdit.text.toString()),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.bioEt.text.toString())
-            )
-            respo.enqueue(object : Callback<UserProfileResponse?> {
-                override fun onResponse(
-                    call: Call<UserProfileResponse?>,
-                    response: Response<UserProfileResponse?>
-                ) {
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                    Log.d("image", response.toString())
-                    Log.d("image", response.body().toString())
-
-                    if (response.isSuccessful){
-                        saveFullName(applicationContext, binding.etNameEdit.text.toString())
-//                        saveProfileImage(applicationContext, )
-                        onBackPressed()
-                    }
-
-                }
-                override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
-                }
-            })
-
-        }
+            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun fetchUser(userId: String) {
@@ -185,14 +151,17 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
                 Log.d("fetch",response.body().toString())
 
                 if (response.isSuccessful) {
-                    val image = response.body()?.Profile_pic
-                    val name = response.body()?.Full_name
-                    saveFullName(applicationContext, name.toString())
-                    saveProfileImage(applicationContext, "$image")
+//                    val image = response.body()?
+                    val name = response.body()?.hotelOwnerInfo?.hotelownerName
 
-                    Glide.with(applicationContext).load(image).into(binding.profileEdit)
+//                    Glide.with(applicationContext).load(image).into(binding.profileEdit)
                     binding.etNameEdit.setText(name)
-                    binding.bioEt.setText(response.body()!!.userBio)
+                    binding.bioEt.setText(response.body()!!.hotelOwnerInfo.hotelDescription)
+                    if(response.body()!!.hotelOwnerInfo.hotelType.isNotEmpty()) {
+                        binding.hotelType.text = (response.body()!!.hotelOwnerInfo.hotelType)
+                    }
+                    binding.website.setText(response.body()!!.hotelOwnerInfo.websiteLink)
+                    binding.bookingText.setText(response.body()!!.hotelOwnerInfo.bookingEngineLink)
                 }
             }
 
@@ -297,4 +266,27 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
         }
         return compressed
     }
+    private fun openHotelTypeBottom() {
+
+        val dialogRole = Dialog(this)
+        dialogRole.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogRole.setContentView(R.layout.bottom_sheet_hotel_type)
+        dialogRole.setCancelable(true)
+
+        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialogRole.window?.setGravity(Gravity.BOTTOM)
+        dialogRole.show()
+
+        dialogRole.findViewById<RelativeLayout>(R.id.singleHotelRL).setOnClickListener {
+            binding.hotelType.text = "Single Hotel"
+            dialogRole.dismiss()
+        }
+        dialogRole.findViewById<RelativeLayout>(R.id.hotelChainRL).setOnClickListener {
+            binding.hotelType.text = "Hotel Chain"
+            dialogRole.dismiss()
+        }
+    }
+
 }

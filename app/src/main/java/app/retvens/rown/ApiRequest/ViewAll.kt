@@ -41,9 +41,10 @@ interface ViewAll {
         @Body postComment: PostCommentReplyClass
     ):Call<UpdateResponse>
 
-    @GET("getblog/{User_id}")
-    fun getBlogsByUserId(
-        @Path("category_id") User_id : String
+    @GET("getblog/{blog_id}/{User_id}")
+    fun getBlogsByBlogId(
+        @Path("blog_id") blog_id:String,
+        @Path("User_id") User_id : String
     ) : Call<List<AllBlogsData>>
 
 //        @PATCH("deleterequest/saveid/{user_id}")

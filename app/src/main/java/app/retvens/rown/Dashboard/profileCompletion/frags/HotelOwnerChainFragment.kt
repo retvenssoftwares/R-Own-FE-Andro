@@ -78,7 +78,9 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraHotelChainImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraHotelChainImageUri)
+        if (it == true) {
+            cropImage(cameraHotelChainImageUri)
+        }
     }
 
     lateinit var nameET : TextInputEditText

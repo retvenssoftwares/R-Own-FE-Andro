@@ -159,8 +159,13 @@ class HotelDetailsActivity : AppCompatActivity() {
                         binding.img3.visibility = View.GONE
                         Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
                         Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
+                    } else {
+                        binding.img1.visibility = View.GONE
+                        binding.img2.visibility = View.GONE
+                        binding.img3.visibility = View.GONE
+                        Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
                     }
-
+                    binding.descriptionHotel.text = data.Hoteldescription
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

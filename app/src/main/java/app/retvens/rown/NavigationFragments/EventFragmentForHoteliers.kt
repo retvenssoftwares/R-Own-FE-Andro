@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventsAdapter
@@ -105,6 +106,15 @@ class EventFragmentForHoteliers : Fragment() {
             }
         }
         getCategories()
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        refresh.setOnRefreshListener {
+            getAllEvents()
+            getCategories()
+
+            refresh.isRefreshing = false
+        }
+
     }
 
     private fun getAllEvents() {

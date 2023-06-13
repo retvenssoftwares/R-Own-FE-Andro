@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventsAdapter
@@ -67,17 +68,24 @@ class EventFragment : Fragment() {
         allRecyclerView = view.findViewById(R.id.blogsRecyclerView)
         allRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         allRecyclerView.setHasFixedSize(true)
-        getAllEvents()
 
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView)
         categoryRecyclerView.layoutManager = LinearLayoutManager(context)
         categoryRecyclerView.setHasFixedSize(true)
-        getCategories()
 
         onGoingRecyclerView = view.findViewById(R.id.onGoingRecyclerView)
         onGoingRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         onGoingRecyclerView.setHasFixedSize(true)
-        onGoingEvents()
+
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        refresh.setOnRefreshListener {
+            getAllEvents()
+            getCategories()
+            onGoingEvents()
+
+            refresh.isRefreshing = false
+        }
 
         view.findViewById<TextView>(R.id.viewAllItem).setOnClickListener {
             startActivity(Intent(context, SeeAllEventsActivity::class.java))

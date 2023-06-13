@@ -80,8 +80,9 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean) : Fragment
 
                         if (response.body()!!.isNotEmpty()) {
                             try {
-                            profileHotelsAdapter = ProfileHotelsAdapter(response.body()!!, requireContext(), isOwner)
+                            profileHotelsAdapter = ProfileHotelsAdapter(response.body()!! as ArrayList<HotelsName>, requireContext(), isOwner)
                             recycler.adapter = profileHotelsAdapter
+                            profileHotelsAdapter.removeHotelFromList(response.body()!!)
                             profileHotelsAdapter.notifyDataSetChanged()
                                } catch ( e : NullPointerException){
                                 notPosted.visibility = View.VISIBLE

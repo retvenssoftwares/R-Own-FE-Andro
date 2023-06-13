@@ -166,7 +166,9 @@ class DashBoardActivity : AppCompatActivity() {
         val sharedPreferencesPic = getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferencesPic?.getString("profile_image", "").toString()
 
-        Glide.with(applicationContext).load(profilePic).into(profile)
+        if (profilePic.isNotEmpty()) {
+            Glide.with(applicationContext).load(profilePic).into(profile)
+        }
         name.setText("Hi $profileName")
 
         Thread{

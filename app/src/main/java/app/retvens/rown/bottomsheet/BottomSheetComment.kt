@@ -75,14 +75,15 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
 
         post.setOnClickListener {
 
-            if (child == "1"){
-                replyComment(user_id,parentCommentId,postID)
-            }else{
-                postComment(postID)
+            if (comments.text.isNotEmpty()) {
+                if (child == "1") {
+                    replyComment(user_id, parentCommentId, postID)
+                } else {
+                    postComment(postID)
+                }
+            }else {
+                Toast.makeText(context, "Field can not be empty", Toast.LENGTH_SHORT).show()
             }
-
-
-
         }
 
         Glide.with(requireContext()).load(postprofile).into(profile)

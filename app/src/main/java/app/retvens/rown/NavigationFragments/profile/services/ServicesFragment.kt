@@ -34,7 +34,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ServicesFragment(val userId:String) : Fragment(), BottomSheetServiceName.OnBottomSNClickListener {
+class ServicesFragment(val userId:String, val isOwner : Boolean) : Fragment(), BottomSheetServiceName.OnBottomSNClickListener {
 
     lateinit var servicesRecycler : RecyclerView
     lateinit var profileServicesAdapter: ProfileServicesAdapter
@@ -64,9 +64,12 @@ class ServicesFragment(val userId:String) : Fragment(), BottomSheetServiceName.O
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
+        addService = view.findViewById(R.id.addService)
+        if (!isOwner){
+            addService.visibility = View.GONE
+        }
         getServices()
 
-        addService = view.findViewById(R.id.addService)
         addService.setOnClickListener {
             val bottomSheet = BottomSheetServiceName()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
@@ -94,7 +97,7 @@ class ServicesFragment(val userId:String) : Fragment(), BottomSheetServiceName.O
                         val response = response.body()!!
                         if (response.isNotEmpty()) {
                             profileServicesAdapter =
-                                ProfileServicesAdapter(response, requireContext())
+                                ProfileServicesAdapter(response, requireContext(), isOwner)
                             servicesRecycler.adapter = profileServicesAdapter
                             profileServicesAdapter.notifyDataSetChanged()
                             Log.d("res", response.toString())

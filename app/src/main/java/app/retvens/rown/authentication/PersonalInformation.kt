@@ -78,7 +78,9 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
 //        compressImage(cameraImageUri)
-        app.retvens.rown.utils.cropProfileImage(cameraImageUri, this)
+        if (it == true) {
+            app.retvens.rown.utils.cropProfileImage(cameraImageUri, this)
+        }
     }
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog

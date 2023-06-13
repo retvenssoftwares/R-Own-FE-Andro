@@ -53,7 +53,7 @@ class ExploreServicesFragment : Fragment() {
     }
 
     private fun getServices() {
-        val serv = RetrofitBuilder.exploreApis.getExploreService("2")
+        val serv = RetrofitBuilder.exploreApis.getExploreService("1")
         serv.enqueue(object : Callback<List<ExploreServiceData>?> {
             override fun onResponse(
                 call: Call<List<ExploreServiceData>?>,

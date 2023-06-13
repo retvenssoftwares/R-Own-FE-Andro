@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.NavigationFragments.profile.EditProfileActivity
@@ -77,6 +78,13 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
 
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        refresh.setOnRefreshListener {
+            getSelfUserProfile(user_id,user_id)
+            refresh.isRefreshing = false
+        }
+
         getSelfUserProfile(user_id,user_id)
 
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
@@ -85,7 +93,9 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferences?.getString("profile_image", "").toString()
 
-        Glide.with(requireContext()).load(profilePic).into(profile)
+        if (profilePic.isNotEmpty()) {
+            Glide.with(requireContext()).load(profilePic).into(profile)
+        }
         name.text = profileName
 
         val childFragment: Fragment = MediaFragment(user_id)

@@ -44,11 +44,14 @@
         android:theme="@style/Theme.Rown"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".NavigationFragments.profile.EditHotelProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".NavigationFragments.profile.EditVendorInfoActivity"
             android:exported="false"
@@ -106,9 +109,6 @@
             android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorDrawActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.NoActionBar" />
-
-
-
         <activity
             android:name=".NavigationFragments.eventForUsers.allEvents.SeeAllEventsActivity"
             android:exported="false"
@@ -403,7 +403,6 @@
             android:name=".NavigationFragments.job.JobDetailsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
-
         <activity
             android:name=".Dashboard.profileCompletion.UserName"
             android:exported="true"
@@ -451,8 +450,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
-
         <activity
             android:name=".MessagingModule.MesiboMessagingActivity"
             android:exported="true"
@@ -494,7 +491,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".authentication.OtpVerification"
             android:exported="true"
@@ -549,14 +545,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-<!--        <service-->
-<!--            android:name=".MyFirebaseMessagingService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
     </application>
 
 </manifest>

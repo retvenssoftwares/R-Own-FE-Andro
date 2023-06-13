@@ -174,6 +174,57 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             progressDialog.show()
             updateData()
         }
+
+        getHotel()
+    }
+    private fun getHotel() {
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val hotelId = intent.getStringExtra("hotelId").toString()
+
+        val hotel = RetrofitBuilder.ProfileApis.getHotelInfo(hotelId)
+        hotel.enqueue(object : Callback<HotelData?> {
+            override fun onResponse(call: Call<HotelData?>, response: Response<HotelData?>) {
+                if (response.isSuccessful){
+                    val data = response.body()!!
+                    binding.etNameEdit.setText(data.hotelName)
+//                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
+
+                    if(data.gallery.size >= 3) {
+//                        img1 = data.gallery.get(0).Images
+//                        img2 = data.gallery.get(1).Images
+//                        img3 = data.gallery.get(2).Images
+//                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
+                        Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
+                        Glide.with(applicationContext).load(data.gallery.get(2).Images).into(binding.img3)
+                    } else if (data.gallery.size >= 2) {
+//                        img1 = data.gallery.get(0).Images
+//                        img2 = data.gallery.get(1).Images
+//                        binding.img3.visibility = View.GONE
+//                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
+                        Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
+                    } else if (data.gallery.size > 0) {
+//                        binding.img2.visibility = View.GONE
+//                        binding.img3.visibility = View.GONE
+//                        img1 = data.gallery.get(0).Images
+                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
+//                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
+                    }
+
+                    binding.overviewEt.setText(data.Hoteldescription)
+//                    hotelLogo = data.hotelLogoUrl
+                } else {
+                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<HotelData?>, t: Throwable) {
+                Toast.makeText(applicationContext, t.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun updateData() {

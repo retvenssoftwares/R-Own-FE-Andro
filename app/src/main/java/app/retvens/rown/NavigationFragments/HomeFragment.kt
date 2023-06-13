@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
 import app.retvens.rown.Dashboard.createPosts.CreateTextPost
@@ -105,6 +106,8 @@ class HomeFragment : Fragment() {
 
         shimmerFrameLayout2 = view.findViewById(R.id.shimmer_tasks_view_container)
 
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
 //        val sharedPreferencesPro = context?.getSharedPreferences("SaveConnectionNo", AppCompatActivity.MODE_PRIVATE)
 //        val toPo = sharedPreferencesPro?.getString("connectionNo", "0")
 
@@ -116,7 +119,9 @@ class HomeFragment : Fragment() {
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferences?.getString("profile_image", "").toString()
         val homeProfile = view.findViewById<ShapeableImageView>(R.id.home_profile)
-        Glide.with(requireContext()).load(profilePic).into(homeProfile)
+        if (profilePic.isNotEmpty()) {
+            Glide.with(requireContext()).load(profilePic).into(homeProfile)
+        }
 
         recyclerCommunity = view.findViewById(R.id.recyclerCommunity)
         recyclerCommunity.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
@@ -127,10 +132,34 @@ class HomeFragment : Fragment() {
 
         cummunity = Community("","","")
 
+        val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
 
-        Thread{
-            getCommunities()
-        }.start()
+        mList = ArrayList()
+
+        refresh.setOnRefreshListener {
+
+            Thread{
+                getCommunities()
+            }.start()
+
+            getAllBlogs()
+            getHotels()
+            getServices()
+            prepareData()
+
+            Thread {
+                // Run whatever background code you want here.
+                getPost(user_id)
+
+                getAllConnections(user_id)
+            }.start()
+
+            adapter = MainAdapter(requireContext(),mList)
+            mainRecyclerView.adapter = adapter
+
+            refresh.isRefreshing = false
+        }
 
 
         val btn = view.findViewById<ImageView>(R.id.community_btn)
@@ -142,7 +171,10 @@ class HomeFragment : Fragment() {
         mainRecyclerView.setHasFixedSize(true)
         mainRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        mList = ArrayList()
+        Thread{
+            getCommunities()
+        }.start()
+
         getAllBlogs()
         getHotels()
         getServices()
@@ -150,9 +182,6 @@ class HomeFragment : Fragment() {
 
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
-
-        val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences1?.getString("user_id", "").toString()
 
         Thread {
             // Run whatever background code you want here.
@@ -193,17 +222,37 @@ class HomeFragment : Fragment() {
                             it.posts.forEach { item ->
 
                                 if (item.post_type == "share some media"){
-                                    mList.add(0,DataItem(DataItemType.BANNER, banner = item))
+                                    if (mList.contains(DataItem(DataItemType.BANNER, banner = item))){
+                                        mList.shuffle()
+                                        adapter.notifyDataSetChanged()
+                                    } else {
+                                        mList.add(0, DataItem(DataItemType.BANNER, banner = item))
+                                    }
                                 }
                                 if (item.post_type == "Polls"){
-                                    mList.add(0,DataItem(DataItemType.POLL, banner = item))
+                                    if (mList.contains(DataItem(DataItemType.POLL, banner = item))){
+                                        mList.shuffle()
+                                        adapter.notifyDataSetChanged()
+                                    } else {
+                                        mList.add(0, DataItem(DataItemType.POLL, banner = item))
+                                    }
                                 }
                                 if (item.post_type == "normal status"){
-                                    mList.add(0,DataItem(DataItemType.Status, banner = item))
+                                    if (mList.contains(DataItem(DataItemType.Status, banner = item))){
+                                        mList.shuffle()
+                                        adapter.notifyDataSetChanged()
+                                    } else {
+                                        mList.add(0, DataItem(DataItemType.Status, banner = item))
+                                    }
                                 }
 
                                 if (item.post_type == "Update about an event"){
-                                    mList.add(0,DataItem(DataItemType.Event, banner = item))
+                                    if (mList.contains(DataItem(DataItemType.Event, banner = item))){
+                                        mList.shuffle()
+                                        adapter.notifyDataSetChanged()
+                                    } else {
+                                        mList.add(0, DataItem(DataItemType.Event, banner = item))
+                                    }
                                 }
 
 
@@ -274,9 +323,13 @@ class HomeFragment : Fragment() {
                     response.forEach{ it ->
 
                         cummunity = Community(it.Profile_pic,it.group_name,"${response.size} members")
-                        communityArrayList.add(cummunity)
-                        recyclerCommunity.adapter = CommunityListAdapter(requireContext(),communityArrayList)
+                        if (communityArrayList.contains(cummunity)){
 
+                        }else {
+                            communityArrayList.add(cummunity)
+                            recyclerCommunity.adapter =
+                                CommunityListAdapter(requireContext(), communityArrayList)
+                        }
                     }
                 }else{
                     if (isAdded) {
@@ -383,12 +436,20 @@ class HomeFragment : Fragment() {
 
                         if (response.body()!!.isNotEmpty()) {
                             val blogsList = ArrayList<DataItem.BlogsRecyclerData>()
-                            mList.add(
-                                DataItem(
+                            if (mList.contains(DataItem(
                                     DataItemType.BLOGS,
                                     blogsRecyclerDataList = response.body()
+                                ))){
+                                mList.shuffle()
+                                adapter.notifyDataSetChanged()
+                            } else {
+                                mList.add(
+                                    DataItem(
+                                        DataItemType.BLOGS,
+                                        blogsRecyclerDataList = response.body()
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
@@ -408,7 +469,7 @@ class HomeFragment : Fragment() {
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getHotel = RetrofitBuilder.exploreApis.getExploreHotels(user_id,"3")
+        val getHotel = RetrofitBuilder.exploreApis.getExploreHotels(user_id,"1")
         getHotel.enqueue(object : Callback<List<ExploreHotelData>?> {
             override fun onResponse(
                 call: Call<List<ExploreHotelData>?>,
@@ -420,7 +481,17 @@ class HomeFragment : Fragment() {
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
                             data.forEach {
-                                mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  it.posts))
+                                if (mList.contains(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  it.posts))){
+                                    mList.shuffle()
+                                    adapter.notifyDataSetChanged()
+                                } else {
+                                    mList.add(
+                                        DataItem(
+                                            DataItemType.HOTEL_SECTION,
+                                            hotelSectionList = it.posts
+                                        )
+                                    )
+                                }
                             }
                         }
                     } else {
@@ -439,24 +510,34 @@ class HomeFragment : Fragment() {
 
 
     private fun getServices() {
-        val serv = RetrofitBuilder.exploreApis.getExploreService("3")
+        val serv = RetrofitBuilder.exploreApis.getExploreService("1")
         serv.enqueue(object : Callback<List<ExploreServiceData>?> {
             override fun onResponse(
                 call: Call<List<ExploreServiceData>?>,
                 response: Response<List<ExploreServiceData>?>
             ) {
-                    if (response.isSuccessful){
-                            val data = response.body()!!
+                    if (response.isSuccessful) {
+                        val data = response.body()!!
+                        if (data.isNotEmpty()) {
                             data.forEach {
-
-                                mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = it.events))
-                                Log.e("services",data.toString())
-
-//                                exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
-//                                exploreBlogsRecyclerView.adapter = exploreServicesAdapter
-//                                exploreServicesAdapter.notifyDataSetChanged()
+                                if (mList.contains(DataItem(
+                                        DataItemType.VENDORS,
+                                        vendorsRecyclerDataList = it.events
+                                    ))){
+                                    mList.shuffle()
+                                    adapter.notifyDataSetChanged()
+                                } else {
+                                    mList.add(
+                                        DataItem(
+                                            DataItemType.VENDORS,
+                                            vendorsRecyclerDataList = it.events
+                                        )
+                                    )
+                                    Log.e("services", data.toString())
+                                }
                             }
                         }
+                    }
             }
 
             override fun onFailure(call: Call<List<ExploreServiceData>?>, t: Throwable) {

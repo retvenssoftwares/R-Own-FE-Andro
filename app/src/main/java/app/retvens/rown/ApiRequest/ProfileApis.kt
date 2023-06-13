@@ -66,6 +66,13 @@ interface ProfileApis {
         @Part("hotelAddress") hotelAddress: RequestBody
     ):Call<UpdateResponse>
 
+    @Multipart
+    @PATCH("updatehoteldata/{hotel_id}")
+    fun removeHotel(
+        @Path("hotel_id") hotel_id:String,
+        @Part("display_status") display_status: RequestBody
+    ):Call<UpdateResponse>
+
     @GET("getfaq")
     fun getFAQ() : Call<List<faqData>>
 
@@ -148,8 +155,10 @@ interface ProfileApis {
     @PATCH("hotelowner/{user_id}")
     fun updateHotel(
         @Path("user_id") user_id : String,
+        @Part("hotelownerName") hotelownerName: RequestBody,
+        @Part("hotelDescription") hotelDescription: RequestBody,
         @Part("hotelType") hotelType: RequestBody,
-        @Part("bookingEngineLink") bookingEngineLink: RequestBody,
         @Part("websiteLink") websiteLink: RequestBody,
+        @Part("bookingEngineLink") bookingEngineLink: RequestBody,
     ) : Call<UserProfileResponse>
 }

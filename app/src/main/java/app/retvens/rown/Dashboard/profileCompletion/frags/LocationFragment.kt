@@ -105,7 +105,9 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferences?.getString("profile_image", "").toString()
 
-        Glide.with(requireContext()).load(profilePic).into(profile)
+        if (profilePic.isNotEmpty()) {
+            Glide.with(requireContext()).load(profilePic).into(profile)
+        }
         name.setText("Hi $profileName")
     }
 

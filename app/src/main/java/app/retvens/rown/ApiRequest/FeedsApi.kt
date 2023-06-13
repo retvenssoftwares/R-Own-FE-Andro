@@ -3,7 +3,10 @@ package app.retvens.rown.ApiRequest
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.location.UpcomingEventDataclass
+import app.retvens.rown.DataCollections.saveId.SaveBlog
+import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.NavigationFragments.home.DataItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -109,6 +112,11 @@ interface FeedsApi {
     fun getPost(
         @Path("user_Id")user_Id:String
     ):Call<List<PostsDataClass>>
+    @PATCH("saveid/{user_id}")
+    fun savePost(
+        @Path("user_id") user_id : String,
+        @Body savePost: SavePost
+    ) : Call<UserProfileResponse>
 
     @PATCH("postcomment/{post_Id}")
     fun postComment(

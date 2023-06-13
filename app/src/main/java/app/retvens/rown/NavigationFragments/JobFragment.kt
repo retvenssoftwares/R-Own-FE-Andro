@@ -14,11 +14,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentTransaction
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.NavigationFragments.job.ApplyForJobFragment
 import app.retvens.rown.NavigationFragments.job.JobExploreFragment
 import app.retvens.rown.NavigationFragments.job.RequestForJobFragment
 import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsActivity
 import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsData
+import app.retvens.rown.NavigationFragments.jobforvendors.ExploreRequestingChildFragmnet
+import app.retvens.rown.NavigationFragments.jobforvendors.JobPostedChildFragmnet
+import app.retvens.rown.NavigationFragments.jobforvendors.explore_employees_fragment
 import app.retvens.rown.R
 import app.retvens.rown.utils.profileCompletionStatus
 
@@ -33,6 +37,8 @@ class JobFragment : Fragment(){
 
     lateinit var savedJobs :ImageView
     lateinit var nothing :ImageView
+
+    var selectedFrag = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,6 +95,8 @@ class JobFragment : Fragment(){
             requestJob.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             appliedJob.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
+            selectedFrag = 0
+
             val childFragment: Fragment = JobExploreFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_j_fragments_container, childFragment).commit()
@@ -101,6 +109,7 @@ class JobFragment : Fragment(){
             requestJob.setCardBackgroundColor(Color.parseColor("#ADD134"))
             appliedJob.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
+            selectedFrag = 1
 
             val childFragment: Fragment = RequestForJobFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -114,10 +123,32 @@ class JobFragment : Fragment(){
             requestJob.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             appliedJob.setCardBackgroundColor(Color.parseColor("#ADD134"))
 
+            selectedFrag = 2
 
             val childFragment: Fragment = ApplyForJobFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_j_fragments_container, childFragment).commit()
         }
+
+        val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        refresh.setOnRefreshListener {
+            if (selectedFrag == 0) {
+                val childFragment: Fragment = JobExploreFragment()
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_j_fragments_container, childFragment).commit()
+            } else if (selectedFrag == 1) {
+                val childFragment: Fragment = RequestForJobFragment()
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_j_fragments_container, childFragment).commit()
+            } else if (selectedFrag == 2) {
+                val childFragment: Fragment = ApplyForJobFragment()
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_j_fragments_container, childFragment).commit()
+            }
+            refresh.isRefreshing = false
+        }
+
+
     }
 }

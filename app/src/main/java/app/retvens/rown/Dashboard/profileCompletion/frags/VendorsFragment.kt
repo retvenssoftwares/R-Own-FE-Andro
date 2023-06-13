@@ -77,7 +77,9 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
 
     private var cameraImageUri: Uri? = null
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraImageUri!!)
+        if (it == true) {
+            cropImage(cameraImageUri!!)
+        }
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,

@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.hotels
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,13 +19,14 @@ import app.retvens.rown.DataCollections.saveId.SaveEvent
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsAdapter
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelDetailsProfileActivity
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelsName
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ExploreHotelsAdapter(val listS : List<HotelData>, val context: Context) : RecyclerView.Adapter<ExploreHotelsAdapter.ExploreHotelsViewHolder>() {
+class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Context) : RecyclerView.Adapter<ExploreHotelsAdapter.ExploreHotelsViewHolder>() {
 
     class ExploreHotelsViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.venue_name)
@@ -119,6 +121,20 @@ class ExploreHotelsAdapter(val listS : List<HotelData>, val context: Context) : 
                 Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    fun removeHotelFromList(data: List<HotelData>){
+
+        try {
+
+            data.forEach {
+                if (it.display_status == "0"){
+                    listS.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
     }
 
 }

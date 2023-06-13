@@ -16,7 +16,6 @@
             android:id="@+id/recycler_heading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="This is Heading"
             android:textAlignment="textStart"
             android:textSize="13dp"
             android:fontFamily="@font/montserrat_semibold"

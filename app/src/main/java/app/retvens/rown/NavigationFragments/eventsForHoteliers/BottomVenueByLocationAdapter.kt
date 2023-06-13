@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments.eventsForHoteliers
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsName
 import app.retvens.rown.R
 
-class BottomVenueByLocationAdapter(val context: Context, var cityList:List<HotelsName>): RecyclerView.Adapter<BottomVenueByLocationAdapter.MyViewHolderClass>() {
+class BottomVenueByLocationAdapter(val context: Context, var cityList:ArrayList<HotelsName>): RecyclerView.Adapter<BottomVenueByLocationAdapter.MyViewHolderClass>() {
 
     private var countryClickListener: OnLocationClickListener? = null
 
@@ -41,9 +42,23 @@ class BottomVenueByLocationAdapter(val context: Context, var cityList:List<Hotel
         }
 
     }
-    fun search(searchText : List<HotelsName>){
+    fun search(searchText : ArrayList<HotelsName>){
         cityList = searchText
         notifyDataSetChanged()
+    }
+
+    fun removeHotelFromList(data: List<HotelsName>){
+
+        try {
+
+            data.forEach {
+                if (it.display_status == "0"){
+                    cityList.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
     }
 
     override fun getItemCount(): Int {

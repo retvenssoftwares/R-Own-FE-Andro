@@ -38,15 +38,16 @@ class MainActivity : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("Move", MODE_PRIVATE)
             val move = sharedPreferences.getString("MoveTo", "")
 
-            if (move == "MoveToPI"){
-                val intent = Intent(this, PersonalInformation::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            } else if (move == "MoveToPIP"){
-                val intent = Intent(this, PersonalInformationPhone::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-            } else if (move == "MoveToI"){
+//            if (move == "MoveToPI"){
+//                val intent = Intent(this, PersonalInformation::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                startActivity(intent)
+//            } else if (move == "MoveToPIP"){
+//                val intent = Intent(this, PersonalInformationPhone::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                startActivity(intent)
+//            } else
+                if (move == "MoveToI"){
                 val intent = Intent(this, UserInterest::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
