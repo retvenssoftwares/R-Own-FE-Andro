@@ -38,7 +38,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
         val blogDate = intent.getStringExtra("date")
         val userName = intent.getStringExtra("userName")
         val userProfile = intent.getStringExtra("userProfile")
-        val blogId = intent.getStringExtra("blogId")
+        val blogId = intent.getStringExtra("blogId").toString()
 
         val saved = intent.getStringExtra("saved")
         val like = intent.getStringExtra("like")

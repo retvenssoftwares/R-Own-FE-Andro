@@ -1,20 +1,36 @@
 package app.retvens.rown.NavigationFragments.profile.setting.saved
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
 import app.retvens.rown.NavigationFragments.profile.media.MediaData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SavedPostsFragment : Fragment() {
 
     lateinit var mediaRecyclerView: RecyclerView
     lateinit var savedPostsAdapter: SavedPostsAdapter
+
+    lateinit var mediaAdapter: MediaAdapter
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +48,10 @@ class SavedPostsFragment : Fragment() {
         mediaRecyclerView.layoutManager = GridLayoutManager(context,3)
         mediaRecyclerView.setHasFixedSize(true)
 
+
+        empty = view.findViewById(R.id.empty)
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
+
         val blogs = listOf<MediaData>(
             MediaData(R.drawable.png_post),
             MediaData(R.drawable.png_blog),
@@ -47,10 +67,61 @@ class SavedPostsFragment : Fragment() {
             MediaData(R.drawable.png_post),
         )
 
-        savedPostsAdapter = SavedPostsAdapter(blogs, requireContext())
-        mediaRecyclerView.adapter = savedPostsAdapter
-        savedPostsAdapter.notifyDataSetChanged()
+//        savedPostsAdapter = SavedPostsAdapter(blogs, requireContext())
+//        mediaRecyclerView.adapter = savedPostsAdapter
+//        savedPostsAdapter.notifyDataSetChanged()
 
+        getExplorePost()
+    }
+
+    private fun getExplorePost() {
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val getExplorePost = RetrofitBuilder.ProfileApis.getSavedPost(user_id,"1")
+
+        getExplorePost.enqueue(object : Callback<List<PostsDataClass>?> {
+            override fun onResponse(
+                call: Call<List<PostsDataClass>?>,
+                response: Response<List<PostsDataClass>?>
+            ) {
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+
+                        if (response.body()!!.isNotEmpty()) {
+                            val response = response.body()!!
+
+                            val originalData = response.toList()
+                            response.forEach { postsDataClass ->
+                                mediaAdapter = MediaAdapter(requireContext(),postsDataClass.posts)
+                                mediaRecyclerView.adapter = mediaAdapter
+                                mediaAdapter.notifyDataSetChanged()
+
+                            }
+
+                        } else {
+                            empty.text = "You did'nt save post yet"
+                            empty.visibility = View.VISIBLE
+                        }
+                    } else {
+                        empty.visibility = View.VISIBLE
+                        empty.text = response.code().toString()
+                        shimmerFrameLayout.stopShimmer()
+                        shimmerFrameLayout.visibility = View.GONE
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                empty.text = "Try Again"
+                empty.visibility = View.VISIBLE
+            }
+        })
 
     }
+
 }

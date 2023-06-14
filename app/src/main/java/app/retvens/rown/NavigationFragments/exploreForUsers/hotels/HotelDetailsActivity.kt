@@ -131,9 +131,9 @@ class HotelDetailsActivity : AppCompatActivity() {
 
                     Hoteldescription = data.Hoteldescription
                     binding.descriptionHotel.text = data.Hoteldescription
-                    binding.location.text = data.location
-                    if (data.location!= null || data.location!= ""){
-                        location = data.location
+                    binding.location.text = data.hotelAddress
+                    if (data.hotelAddress!= null || data.hotelAddress!= ""){
+                        location = data.hotelAddress
                     } else {
                         location = "Not Found"
                     }

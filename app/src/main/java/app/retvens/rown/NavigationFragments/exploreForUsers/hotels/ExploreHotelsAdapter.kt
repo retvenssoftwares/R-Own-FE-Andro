@@ -54,7 +54,7 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
         var operatioin = "push"
 
         holder.name.text = listS[position].hotelName
-        holder.location.text = listS[position].location
+        holder.location.text = listS[position].hotelAddress
 
         Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)
 
@@ -85,7 +85,7 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
             intent.putExtra("name", listS[position].hotelName)
             intent.putExtra("logo", listS[position].hotelCoverpicUrl)
             intent.putExtra("hotelId", listS[position].hotel_id)
-            intent.putExtra("hotelAddress", listS[position].location)
+            intent.putExtra("hotelAddress", listS[position].hotelAddress)
             intent.putExtra("saved", listS[position].saved)
             context.startActivity(intent)
         }

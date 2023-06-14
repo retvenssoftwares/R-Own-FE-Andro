@@ -36,7 +36,7 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
             Glide.with(context).load(recyclerItem.hotelCoverpicUrl).into(binding.hotelSectionCover)
 
             binding.hotelSectionName.text= recyclerItem.hotelName
-            binding.hotelSectionLocation.text= recyclerItem.location
+            binding.hotelSectionLocation.text= recyclerItem.hotelAddress
 
             if (recyclerItem.saved != "no"){
                 operatioin = "pop"
@@ -65,7 +65,7 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
                 intent.putExtra("name", recyclerItem.hotelName)
                 intent.putExtra("logo", recyclerItem.hotelCoverpicUrl)
                 intent.putExtra("hotelId", recyclerItem.hotel_id)
-                intent.putExtra("hotelAddress", recyclerItem.location)
+                intent.putExtra("hotelAddress", recyclerItem.hotelAddress)
                 intent.putExtra("saved", recyclerItem.saved)
                 context.startActivity(intent)
             }

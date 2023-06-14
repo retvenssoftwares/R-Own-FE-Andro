@@ -12,7 +12,7 @@ data class HotelData(
     val hotelName: String,
     val hotelProfilepicUrl: String,
     val hotel_id: String,
-    val location: String,
+    val hotelAddress: String,
     val saved: String,
     val user_id: String
 )

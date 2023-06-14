@@ -5,16 +5,30 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesData
 import app.retvens.rown.R
+import com.facebook.shimmer.ShimmerFrameLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SavedServicesFragment : Fragment() {
 
     private lateinit var savedServicesRecyclerView: RecyclerView
     lateinit var savedServicesAdapter: SavedServicesAdapter
+
+    lateinit var exploreServicesAdapter: ExploreServicesAdapter
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+
+    lateinit var empty : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,9 +60,60 @@ class SavedServicesFragment : Fragment() {
             ExploreServicesData("Paradise Inn 23"),
         )
 
-        savedServicesAdapter = SavedServicesAdapter(blogs, requireContext())
-        savedServicesRecyclerView.adapter = savedServicesAdapter
-        savedServicesAdapter.notifyDataSetChanged()
+//        savedServicesAdapter = SavedServicesAdapter(blogs, requireContext())
+//        savedServicesRecyclerView.adapter = savedServicesAdapter
+//        savedServicesAdapter.notifyDataSetChanged()
 
+        empty = view.findViewById(R.id.empty)
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
+
+        getServices()
     }
+
+    private fun getServices() {
+        val serv = RetrofitBuilder.exploreApis.getExploreService("1")
+        serv.enqueue(object : Callback<List<ExploreServiceData>?> {
+            override fun onResponse(
+                call: Call<List<ExploreServiceData>?>,
+                response: Response<List<ExploreServiceData>?>
+            ) {
+                try {
+                    if (isAdded){
+                        if (response.isSuccessful){
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                            if (response.body()!!.isNotEmpty()) {
+                                val data = response.body()!!
+                                data.forEach {
+                                    exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
+                                    savedServicesRecyclerView.adapter = exploreServicesAdapter
+                                    exploreServicesAdapter.notifyDataSetChanged()
+                                }
+                            } else {
+                                empty.visibility = View.VISIBLE
+                            }
+                        } else {
+                            empty.visibility = View.VISIBLE
+                            empty.text = response.code().toString()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                        }
+                    }
+                }catch (e:NullPointerException){
+                    Toast.makeText(requireContext(),"No Services Yet", Toast.LENGTH_SHORT).show()
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<List<ExploreServiceData>?>, t: Throwable) {
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                empty.text = "Try Again - ${t.localizedMessage}"
+                empty.visibility = View.VISIBLE
+            }
+        })
+    }
+
 }

@@ -1,8 +1,13 @@
 package app.retvens.rown.ApiRequest
 
+import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.NavigationFragments.eventForUsers.onGoingEvents.OnGoingEventsData
+import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
+import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventData
+import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelData
+import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelDetailsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsName
@@ -20,6 +25,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ProfileApis {
 
@@ -168,5 +174,35 @@ interface ProfileApis {
         @Path("hotel_id") hotel_id:String,
         @Part hotelLogo: MultipartBody.Part
     ):Call<UpdateResponse>
+
+    @GET("getsavehotel/{user_id}")
+    fun getSaveHotel(
+        @Path("user_id") user_id : String,
+        @Query("page")page:String
+    ):Call<List<ExploreHotelData>>
+
+    @GET("getsavedBlogs/{user_id}")
+    fun getSavedBlog(
+        @Path("user_id") user_id : String,
+        @Query("page")page:String
+    ):Call<List<ExploreBlogData>>
+
+    @GET("getsaveevent/{user_id}")
+    fun getSavedEvent(
+        @Path("user_id") user_id : String,
+        @Query("page")page:String
+    ):Call<List<ExploreEventData>>
+
+    @GET("savepost/{user_id}")
+    fun getSavedPost(
+        @Path("user_id")user_id:String,
+        @Query("page")page:String
+    ):Call<List<PostsDataClass>>
+
+    @GET("getsaveservice")
+    fun getSaveService(
+        @Path("user_id")user_id:String,
+        @Query("page")page:String
+    ):Call<List<ExploreServiceData>>
 
 }
