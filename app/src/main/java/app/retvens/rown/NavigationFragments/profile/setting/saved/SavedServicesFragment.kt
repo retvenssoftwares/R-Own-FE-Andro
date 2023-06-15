@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -18,6 +19,7 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 class SavedServicesFragment : Fragment() {
 
@@ -72,24 +74,31 @@ class SavedServicesFragment : Fragment() {
     }
 
     private fun getServices() {
-        val serv = RetrofitBuilder.exploreApis.getExploreService("1")
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val serv = RetrofitBuilder.ProfileApis.getSaveService(user_id,"1")
         serv.enqueue(object : Callback<List<ExploreServiceData>?> {
             override fun onResponse(
                 call: Call<List<ExploreServiceData>?>,
                 response: Response<List<ExploreServiceData>?>
             ) {
-                try {
                     if (isAdded){
                         if (response.isSuccessful){
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
                             if (response.body()!!.isNotEmpty()) {
+                                try {
                                 val data = response.body()!!
                                 data.forEach {
                                     exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
                                     savedServicesRecyclerView.adapter = exploreServicesAdapter
                                     exploreServicesAdapter.notifyDataSetChanged()
+
                                 }
+                                }catch (e:Exception){
+                                Toast.makeText(requireContext(),"No Services Yet", Toast.LENGTH_SHORT).show()
+                            }
                             } else {
                                 empty.visibility = View.VISIBLE
                             }
@@ -100,9 +109,6 @@ class SavedServicesFragment : Fragment() {
                             shimmerFrameLayout.visibility = View.GONE
                         }
                     }
-                }catch (e:NullPointerException){
-                    Toast.makeText(requireContext(),"No Services Yet", Toast.LENGTH_SHORT).show()
-                }
 
 
             }
