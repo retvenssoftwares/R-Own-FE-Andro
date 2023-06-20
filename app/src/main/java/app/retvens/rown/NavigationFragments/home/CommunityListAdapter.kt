@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.MessagingModule.MesiboMessagingActivity
+import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity
 import com.bumptech.glide.Glide
@@ -38,9 +41,15 @@ class CommunityListAdapter(val context : Context, val list: ArrayList<Community>
         holder.member.text = currentItem.members
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, CommunityDetailsActivity::class.java)
-            intent.putExtra("image", currentItem.image)
-            intent.putExtra("title", currentItem.title)
+//            val intent = Intent(context, CommunityDetailsActivity::class.java)
+//            intent.putExtra("image", currentItem.image)
+//            intent.putExtra("title", currentItem.title)
+//            context.startActivity(intent)
+
+            Log.e("click",currentItem.group_id)
+
+            val intent = Intent(context, MesiboMessagingActivity::class.java)
+            intent.putExtra(MesiboUI.GROUP_ID, currentItem.group_id.toLong())
             context.startActivity(intent)
         }
     }

@@ -65,5 +65,7 @@ data class Media(
 
 data class PostsDataClass(
     val posts: List<PostItem>,
+    val page:Int,
+    val pageSize:Int
 )
 

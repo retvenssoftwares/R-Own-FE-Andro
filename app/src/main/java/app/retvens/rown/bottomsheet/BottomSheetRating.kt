@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.cardview.widget.CardView
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -77,6 +78,8 @@ class BottomSheetRating : BottomSheetDialogFragment() {
             mListener?.bottomRatingClick(">11 Star")
             dismiss()
         }
+
+
     }
 
     override fun onDetach() {

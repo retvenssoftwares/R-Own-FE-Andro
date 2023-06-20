@@ -80,17 +80,33 @@ class SelectMembers : AppCompatActivity() {
             override fun onItemClick(member: UserProfileRequestItem) {
                 next.visibility = View.VISIBLE
 
-                val index = selectedMembe.indexOf(member)
+                val index = selectedMembe.indexOfFirst { it.Full_name == member.Full_name }
                 if (index == -1) {
-                    number.add(member.Phone)
-                    names.add(member.Full_name!!)
-                    profile.add(member.Profile_pic!!)
+
+
+                    member.isClick = !member.isClick
+
+                    if (member.isClick){
+                        number.add(member.Phone)
+                        names.add(member.Full_name!!)
+                        profile.add(member.Profile_pic!!)
+                    }else{
+                        number.remove(member.Phone)
+                        names.remove(member.Full_name)
+                        profile.remove(member.Profile_pic)
+                    }
+
                 } else {
                     selectedMembe.removeAt(index)
+
                 }
+
+
 
                 selectedMembersAdapter.addSelectedMember(member)
                 selectedMembersAdapter.notifyDataSetChanged()
+
+                Toast.makeText(applicationContext,number.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -122,7 +138,7 @@ class SelectMembers : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
-                TODO("Not yet implemented")
+
             }
         })
 

@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.hotels
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -137,6 +138,7 @@ class HotelDetailsActivity : AppCompatActivity() {
                     } else {
                         location = "Not Found"
                     }
+
 
                     if(data.gallery.size >= 3) {
                         img1 = data.gallery.get(0).Images

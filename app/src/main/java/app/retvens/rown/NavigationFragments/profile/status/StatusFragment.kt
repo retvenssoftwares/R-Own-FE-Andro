@@ -9,14 +9,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
 import app.retvens.rown.NavigationFragments.profile.polls.PollsAdapter
 import app.retvens.rown.NavigationFragments.profile.polls.PollsData
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetComment
+import app.retvens.rown.bottomsheet.BottomSheetLocation
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,9 +65,10 @@ class StatusFragment(val userId: String) : Fragment() {
 
     private fun getMedia(userId: String) {
 
-        val getMedia = RetrofitBuilder.feedsApi.getNormalUserStatus(userId, "1")
+        val getMedia = RetrofitBuilder.feedsApi.getNormalUserStatus(userId,userId, "1")
 
-        getMedia.enqueue(object : Callback<List<PostsDataClass>?> {
+        getMedia.enqueue(object : Callback<List<PostsDataClass>?>,
+            StatusAdapter.OnItemClickListener {
             override fun onResponse(
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
@@ -80,6 +87,8 @@ class StatusFragment(val userId: String) : Fragment() {
                             statusAdapter = StatusAdapter(postsDataClass.posts, requireContext())
                             statusRecycler.adapter = statusAdapter
                             statusAdapter.notifyDataSetChanged()
+
+                            statusAdapter.setOnItemClickListener(this)
                         }catch (e:NullPointerException){
                             notPosted.visibility = View.VISIBLE
                         }
@@ -109,6 +118,52 @@ class StatusFragment(val userId: String) : Fragment() {
 //                        .show()
                 }
             }
+
+            override fun onItemClick(dataItem: PostItem) {
+                postLike(dataItem.post_id)
+            }
+
+            override fun onItemClickForComment(banner: PostItem, position: Int) {
+                val bottomSheet = BottomSheetComment(banner.post_id,banner.Profile_pic)
+                val fragManager = (activity as FragmentActivity).supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
+            }
         })
+    }
+
+    private fun postLike(postId:String) {
+
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+
+        val data = LikesCollection(user_id)
+
+        val like = RetrofitBuilder.feedsApi.postLike(postId,data)
+
+        like.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT)
+                            .show()
+
+                    } else {
+                        Toast.makeText(requireContext(), response.message().toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                if (isAdded) {
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        })
+
     }
 }

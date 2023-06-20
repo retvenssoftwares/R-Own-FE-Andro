@@ -13,7 +13,8 @@ data class Post(
     val User_id: String,
     val verificationStatus: String,
     val Profile_pic: String,
-    val connectionStatus: String
+    val connectionStatus: String,
+    val userID:String
 )
 
 data class MesiboAccount(

@@ -1,15 +1,14 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,9 +30,11 @@ class ExploreJobsFragment : Fragment() {
     lateinit var exploreJobsRecyclerView: RecyclerView
     lateinit var exploreJobAdapter: ExploreJobAdapter
     lateinit var searchBar:EditText
-
+    private var isLoading:Boolean = false
+    private var currentPage = 1
+    private lateinit var progress: ProgressBar
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
-
+    private var jobList:ArrayList<Job> = ArrayList()
     lateinit var empty : TextView
 
     override fun onCreateView(
@@ -52,25 +53,72 @@ class ExploreJobsFragment : Fragment() {
         exploreJobsRecyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
+        progress = view.findViewById(R.id.progress)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
 
         searchBar = view.findViewById(R.id.search_explore_jobs)
 
+        exploreJobAdapter = ExploreJobAdapter(jobList, requireContext())
+        exploreJobsRecyclerView.adapter = exploreJobAdapter
+
+        exploreJobsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+
+                        isLoading = false
+                        currentPage++
+                        getData()
+
+
+                    }
+                }
+
+
+            }
+        })
+
 
         getExploreJob()
 
     }
 
-//    https://chat.openai.com/share/a7eb8b8b-a185-4d7a-82be-ce935d68354d
+    private fun getData() {
+        val handler = Handler()
+
+        progress.setVisibility(View.VISIBLE);
+
+        handler.postDelayed({
+            getExploreJob()
+            progress.setVisibility(View.GONE);
+        },
+            3000)
+    }
+
 
     private fun getExploreJob() {
 
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getJob = RetrofitBuilder.exploreApis.getExploreJob("1")
+        val getJob = RetrofitBuilder.exploreApis.getExploreJob(currentPage.toString())
 
         getJob.enqueue(object : Callback<List<ExploreJobData>?> {
             override fun onResponse(
@@ -87,8 +135,8 @@ class ExploreJobsFragment : Fragment() {
                             val response = response.body()!!
 
                             response.forEach { jobsData ->
-                                exploreJobAdapter = ExploreJobAdapter(jobsData.posts, requireContext())
-                                exploreJobsRecyclerView.adapter = exploreJobAdapter
+
+                                jobList.addAll(jobsData.posts)
                                 exploreJobAdapter.notifyDataSetChanged()
 
                                 searchBar.addTextChangedListener(object : TextWatcher {
@@ -128,7 +176,7 @@ class ExploreJobsFragment : Fragment() {
                         shimmerFrameLayout.visibility = View.GONE
                     }
                 }catch (e:NullPointerException){
-                    Toast.makeText(requireContext(),"No Jobs Yet",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"No More Jobs",Toast.LENGTH_SHORT).show()
                 }
 
 

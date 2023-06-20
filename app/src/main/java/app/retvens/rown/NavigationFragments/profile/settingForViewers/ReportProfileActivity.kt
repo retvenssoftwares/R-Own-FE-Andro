@@ -10,11 +10,15 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetEditYourPost
+import app.retvens.rown.bottomsheet.BottomSheetReport
 import app.retvens.rown.databinding.ActivityReportProfileBinding
 
 class ReportProfileActivity : AppCompatActivity() {
     lateinit var binding : ActivityReportProfileBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,24 +29,17 @@ class ReportProfileActivity : AppCompatActivity() {
             startActivity(Intent(this, SelectPostActivity::class.java))
         }
 
+        val userId = intent.getStringExtra("user_id")
+
         binding.wrongWith.setOnClickListener {
 
-            val dialogLanguage = Dialog(this)
-            dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            dialogLanguage.setContentView(R.layout.bottom_sheet_reason_for_report)
-            dialogLanguage.setCancelable(true)
+            val bottomSheet = BottomSheetReport(userId!!)
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetEditYourPost.Hotelier_TAG)}
 
-            dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
-            dialogLanguage.window?.setGravity(Gravity.BOTTOM)
-            dialogLanguage.show()
-
-            dialogLanguage.findViewById<CardView>(R.id.card_report_next).setOnClickListener {
-                startActivity(Intent(this, SelectPostActivity::class.java))
-            }
 
         }
 
     }
+
 }

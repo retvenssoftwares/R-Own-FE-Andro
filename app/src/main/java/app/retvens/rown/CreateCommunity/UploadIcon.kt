@@ -33,6 +33,8 @@ import app.retvens.rown.DataCollections.FeedCollection.AddUserDataClass
 import app.retvens.rown.DataCollections.GroupCreate
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ResponseGroup
+import app.retvens.rown.MessagingModule.MesiboMessagingActivity
+import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.utils.cropImage
@@ -100,7 +102,7 @@ class UploadIcon : AppCompatActivity() {
 
         name = intent.getStringExtra("name").toString()
         description = intent.getStringExtra("desc")!!
-        val location = intent.getStringArrayListExtra("location")
+        location = intent.getStringArrayListExtra("location").toString()
         type = intent.getStringExtra("type")!!
 
         val setName = findViewById<TextView>(R.id.Community_Name)
@@ -327,7 +329,10 @@ class UploadIcon : AppCompatActivity() {
                     if (response.isSuccessful){
                         val response = response.body()!!
                         Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(applicationContext,DashBoardActivity::class.java))
+                        val intent = Intent(applicationContext,MesiboMessagingActivity::class.java)
+                        intent.putExtra(groupId,MesiboUI.PEER)
+                        startActivity(intent)
+
                         finish()
                     }else{
                         Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()

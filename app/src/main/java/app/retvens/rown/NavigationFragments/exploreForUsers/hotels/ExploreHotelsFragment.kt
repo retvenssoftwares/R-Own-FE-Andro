@@ -1,14 +1,18 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.hotels
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
@@ -28,9 +32,11 @@ class ExploreHotelsFragment : Fragment() {
 
     lateinit var exploreBlogsRecyclerView: RecyclerView
     lateinit var exploreHotelAdapter : ExploreHotelsAdapter
-
+    private var isLoading:Boolean = false
+    private var currentPage = 1
+    private lateinit var progress: ProgressBar
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
-
+    private var hotelList:ArrayList<HotelData> = ArrayList()
     lateinit var empty : TextView
 
 
@@ -51,10 +57,55 @@ class ExploreHotelsFragment : Fragment() {
 
 
         empty = view.findViewById(R.id.empty)
+        progress = view.findViewById(R.id.progress)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
 
+        exploreBlogsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+
+                        isLoading = false
+                        currentPage++
+                        getData()
+
+
+                    }
+                }
+
+
+            }
+        })
+
         getBlogs()
+    }
+
+    private fun getData() {
+        val handler = Handler()
+
+        progress.setVisibility(View.VISIBLE);
+
+        handler.postDelayed({
+            getBlogs()
+            progress.setVisibility(View.GONE);
+        },
+            3000)
     }
 
     private fun getBlogs() {
@@ -62,7 +113,7 @@ class ExploreHotelsFragment : Fragment() {
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getHotel = RetrofitBuilder.exploreApis.getExploreHotels(user_id,"1")
+        val getHotel = RetrofitBuilder.exploreApis.getExploreHotels(user_id,currentPage.toString())
         getHotel.enqueue(object : Callback<List<ExploreHotelData>?> {
             override fun onResponse(
                 call: Call<List<ExploreHotelData>?>,
@@ -76,7 +127,10 @@ class ExploreHotelsFragment : Fragment() {
                             if (response.body()!!.isNotEmpty()) {
                                 val data = response.body()!!
                                 data.forEach {
-                                    exploreHotelAdapter = ExploreHotelsAdapter(it.posts as ArrayList<HotelData>, requireContext())
+
+                                    hotelList.addAll(it.posts)
+
+                                    exploreHotelAdapter = ExploreHotelsAdapter(hotelList, requireContext())
                                     exploreBlogsRecyclerView.adapter = exploreHotelAdapter
                                     exploreHotelAdapter.removeHotelFromList(it.posts)
                                     exploreHotelAdapter.notifyDataSetChanged()

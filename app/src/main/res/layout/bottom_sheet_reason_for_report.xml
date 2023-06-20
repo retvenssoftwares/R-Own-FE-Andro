@@ -80,6 +80,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/one"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -115,6 +116,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/two"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -151,6 +153,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/three"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -187,6 +190,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/four"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -223,6 +227,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/five"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -258,6 +263,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/six"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -294,6 +300,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/seven"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -308,6 +315,7 @@ We take all reports seriously and will do our best to address them promptly."
         android:layout_marginHorizontal="30dp"/>
 
     <RelativeLayout
+        android:id="@+id/report_8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -328,6 +336,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/eight"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -342,6 +351,7 @@ We take all reports seriously and will do our best to address them promptly."
         android:layout_marginHorizontal="30dp"/>
 
     <RelativeLayout
+        android:id="@+id/report_9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -362,6 +372,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/nine"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -376,6 +387,7 @@ We take all reports seriously and will do our best to address them promptly."
         android:layout_marginHorizontal="30dp"/>
 
     <RelativeLayout
+        android:id="@+id/report_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -396,6 +408,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/ten"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"
@@ -410,6 +423,7 @@ We take all reports seriously and will do our best to address them promptly."
         android:layout_marginHorizontal="30dp"/>
 
     <RelativeLayout
+        android:id="@+id/report_11"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -430,6 +444,7 @@ We take all reports seriously and will do our best to address them promptly."
             android:textColor="@color/black"/>
 
         <ImageView
+            android:id="@+id/eleven"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginHorizontal="12dp"

@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
+import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -19,6 +20,17 @@ class StatusAdapter(val listS : List<PostItem>, val context: Context) : Recycler
 
     private val VIEW_TYPE_LAYOUT_ONE = 1
     private val VIEW_TYPE_LAYOUT_TWO = 2
+    private var onItemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(dataItem: PostItem)
+        fun onItemClickForComment(banner: PostItem,position: Int)
+    }
+
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        onItemClickListener = listener
+    }
 
 
     class LayoutOneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -108,20 +120,22 @@ class StatusAdapter(val listS : List<PostItem>, val context: Context) : Recycler
                     val count:Int
                     if(item.islike){
                         holder.likeButton.setImageResource(R.drawable.liked_vectore)
-                        count = item.Like_count.toInt()+1
+                        val like = item.likeCount.toInt()
+                        count = like + 1
                         holder.likeCount.text = count.toString()
                     }else{
                         holder.likeButton.setImageResource(R.drawable.svg_like_post)
-                        count = item.Like_count.toInt()
+                        val like = item.likeCount.toInt()
+                        count = like
                         holder.likeCount.text = count.toString()
                     }
 
-//                    onItemClickListener?.onItemClick(banner)
+                    onItemClickListener?.onItemClick(item)
                 }
 
-//                binding.comment.setOnClickListener {
-//                    onItemClickListener?.onItemClickForComment(banner,position)
-//                }
+                holder.commentButton.setOnClickListener {
+                    onItemClickListener?.onItemClickForComment(item,position)
+                }
 
             }
 

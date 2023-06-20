@@ -140,7 +140,9 @@ class UserProfileActivity : AppCompatActivity() {
             }
 
             dialogLanguage.findViewById<LinearLayout>(R.id.report).setOnClickListener {
-                startActivity(Intent(this, ReportProfileActivity::class.java))
+                val intent = Intent(this,ReportProfileActivity::class.java)
+                intent.putExtra("user_id",userID)
+                startActivity(intent)
                 dialogLanguage.dismiss()
             }
 

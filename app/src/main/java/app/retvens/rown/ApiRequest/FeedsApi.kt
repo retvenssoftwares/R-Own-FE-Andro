@@ -45,6 +45,9 @@ interface FeedsApi {
     @GET("getgroup")
     fun getCommunities():Call<List<GetCommunitiesData>>
 
+//    @GET("getgroup")
+//    fun getCommunities():Call<List<GetCommunitiesData>>
+
     @Multipart
     @POST("post/{user_id}")
     fun createPost(
@@ -153,9 +156,10 @@ interface FeedsApi {
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
 
-    @GET("getStatus/{user_id}")
+    @GET("getStatus/{user_id}/{User_id}")
     fun getNormalUserStatus(
         @Path("user_id")user_id:String,
+        @Path("User_id")User_id:String,
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
 
@@ -164,5 +168,17 @@ interface FeedsApi {
         @Path("postId")postId:String,
         @Path("optionId")optionId:String,
         @Body user_id: LikesCollection
+    ):Call<UpdateResponse>
+
+    @PATCH("editpost/{postId}")
+    fun editPost(
+        @Path("postId")postId:String,
+        @Body editPostClass: EditPostClass
+    ):Call<UpdateResponse>
+
+    @PATCH("editpost/{postId}")
+    fun deletePost(
+        @Path("postId")postId:String,
+        @Body deletePost: DeletePost
     ):Call<UpdateResponse>
 }

@@ -6,15 +6,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -78,12 +77,14 @@ class HomeFragment : Fragment() {
     private  var userProfilePic:String = ""
     private  var UserName:String = ""
     private lateinit var cummunity:Community
-
+    private  var isLoading:Boolean = false
     lateinit var viewAllCommunity : ImageView
-
+    private lateinit var progress:ProgressBar
     lateinit var shimmerFrameLayout2: ShimmerFrameLayout
-
+    private lateinit var nestedScroll:NestedScrollView
     lateinit var empty : TextView
+    private  var count:Int = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,11 +103,15 @@ class HomeFragment : Fragment() {
             startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
         }
 
+        nestedScroll = view.findViewById(R.id.homeFragment)
+
         empty = view.findViewById(R.id.empty)
 
         shimmerFrameLayout2 = view.findViewById(R.id.shimmer_tasks_view_container)
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
+        progress = view.findViewById(R.id.progress)
 
 //        val sharedPreferencesPro = context?.getSharedPreferences("SaveConnectionNo", AppCompatActivity.MODE_PRIVATE)
 //        val toPo = sharedPreferencesPro?.getString("connectionNo", "0")
@@ -130,7 +135,7 @@ class HomeFragment : Fragment() {
         communityArrayList = arrayListOf<Community>()
         commentList = ArrayList()
 
-        cummunity = Community("","","")
+        cummunity = Community("","","","")
 
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
@@ -171,6 +176,8 @@ class HomeFragment : Fragment() {
         mainRecyclerView.setHasFixedSize(true)
         mainRecyclerView.layoutManager = LinearLayoutManager(context)
 
+
+
         Thread{
             getCommunities()
         }.start()
@@ -183,6 +190,59 @@ class HomeFragment : Fragment() {
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
 
+
+//        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+//                {
+//                    isLoading = true;
+//
+//                }
+//            }
+//
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//
+//
+//                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//                    val currentItem = layoutManager.childCount
+//                    val totalItem = layoutManager.itemCount
+//                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+//                    if (isLoading){
+//                        Log.e("msg","scrolling")
+//                        isLoading = false
+//                        getData()
+//
+//                    }
+//
+//
+//
+//            }
+//        })
+
+        val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
+        nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
+            override fun onScrollChange(
+                v: NestedScrollView,
+                scrollX: Int,
+                scrollY: Int,
+                oldScrollX: Int,
+                oldScrollY: Int
+            ) {
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()))  {
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
+                        getData()
+                    }
+                }
+            }
+
+        })
+
         Thread {
             // Run whatever background code you want here.
             getPost(user_id)
@@ -190,6 +250,21 @@ class HomeFragment : Fragment() {
             getAllConnections(user_id)
         }.start()
 
+
+    }
+
+    private fun getData() {
+
+        val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
+
+
+        progress.setVisibility(View.VISIBLE);
+        val handler = Handler()
+        handler.postDelayed({
+            getPost(user_id)
+            progress.setVisibility(View.GONE)
+        }, 3000)
 
     }
 
@@ -266,7 +341,7 @@ class HomeFragment : Fragment() {
                     }
 
 
-
+                    adapter.notifyDataSetChanged()
 
                     adapter.setOnItemClickListener(object : MainAdapter.OnItemClickListener{
                         override fun onItemClick(dataItem: PostItem) {
@@ -303,7 +378,7 @@ class HomeFragment : Fragment() {
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
                 shimmerFrameLayout2.stopShimmer()
                 shimmerFrameLayout2.visibility = View.GONE
-
+                Log.e("error",t.message.toString())
             }
         })
 
@@ -322,7 +397,7 @@ class HomeFragment : Fragment() {
                     val response = response.body()!!
                     response.forEach{ it ->
 
-                        cummunity = Community(it.Profile_pic,it.group_name,"${response.size} members")
+                        cummunity = Community(it.Profile_pic,it.group_name,"${response.size} members",it.group_id)
                         if (communityArrayList.contains(cummunity)){
 
                         }else {

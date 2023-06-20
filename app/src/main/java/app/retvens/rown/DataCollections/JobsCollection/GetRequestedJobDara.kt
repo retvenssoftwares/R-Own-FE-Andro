@@ -2,7 +2,7 @@ package app.retvens.rown.DataCollections.JobsCollection
 
 data class GetRequestedJobDara(
     val id: String,
-    val userId: String,
+    val userID: String,
     val designationType: String,
     val noticePeriod: String,
     val department: String,

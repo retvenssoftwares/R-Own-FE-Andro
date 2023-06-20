@@ -26,7 +26,7 @@ interface ExploreApis {
     @GET("getExplorePosts/{user_id}")
     fun getExplorePost(
         @Path("user_id")user_id:String,
-        @Query("page")page:String
+        @Query("page") page: String
     ):Call<List<PostsDataClass>>
 
     @GET("getalljob")

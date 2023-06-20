@@ -21,6 +21,8 @@ import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.Disco
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
 import app.retvens.rown.NavigationFragments.profile.services.ServicesFragment
+import app.retvens.rown.NavigationFragments.profile.setting.profileSetting.OwnerSettingActivity
+import app.retvens.rown.NavigationFragments.profile.setting.saved.SavedActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.ReviewsActivity
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
@@ -211,13 +213,14 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                 startActivity(Intent(context, ReviewsActivity::class.java))
             }
             "settings" -> {
+                startActivity(Intent(context, OwnerSettingActivity::class.java))
 
             }
             "edit" -> {
                 startActivity(Intent(context, EditVendorsProfileActivity::class.java))
             }
             "saved" -> {
-
+                startActivity(Intent(context, SavedActivity::class.java))
             }
             "discover" -> {
                 startActivity(Intent(context, DiscoverPeopleActivity::class.java))

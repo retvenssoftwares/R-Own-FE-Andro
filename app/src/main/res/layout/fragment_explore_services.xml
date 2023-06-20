@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -37,12 +37,25 @@
         android:id="@+id/explore_services_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/card_sh"
         android:layout_marginTop="12dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
+        android:paddingBottom="160dp"
         tools:listitem="@layout/item_explore_services_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card_sh"/>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:progressTint="@color/green_own"
+        android:paddingBottom="160dp"
+        android:visibility="gone"
+        />
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerFrameLayout"
@@ -51,6 +64,7 @@
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_below="@id/card_sh"
         app:layout_constraintTop_toBottomOf="@id/card_sh"
         tools:ignore="MissingConstraints">
         <LinearLayout
@@ -117,9 +131,10 @@
         android:visibility="gone"
         android:textAlignment="center"
         android:layout_marginHorizontal="20dp"
+        android:layout_below="@id/card_sh"
         android:fontFamily="@font/montserrat_semibold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card_sh"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

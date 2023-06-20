@@ -188,6 +188,7 @@
                 app:layout_constraintStart_toStartOf="@id/employee_name_item_popular"/>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/view_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="8dp"

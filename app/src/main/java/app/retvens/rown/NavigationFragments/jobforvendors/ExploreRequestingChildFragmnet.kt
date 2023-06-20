@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.jobforvendors
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -52,6 +53,17 @@ class ExploreRequestingChildFragmnet : Fragment() {
         matchesRecycler.layoutManager = LinearLayoutManager(context)
         matchesRecycler.setHasFixedSize(true)
 
+        val viewAll = view.findViewById<TextView>(R.id.viewAll_popular)
+
+        viewAll.setOnClickListener {
+            startActivity(Intent(requireContext(),ViewAllPolpular::class.java))
+        }
+
+        val viewAllMatches = view.findViewById<TextView>(R.id.view_all_suggested)
+
+        viewAllMatches.setOnClickListener {
+            startActivity(Intent(requireContext(),ViewAllMatches::class.java))
+        }
 
         getRequedtedList()
     }

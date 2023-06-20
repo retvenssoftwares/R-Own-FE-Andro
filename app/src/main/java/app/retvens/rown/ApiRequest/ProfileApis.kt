@@ -2,6 +2,7 @@ package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.ReportDataClass
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.NavigationFragments.eventForUsers.onGoingEvents.OnGoingEventsData
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
@@ -205,4 +206,8 @@ interface ProfileApis {
         @Query("page")page:String
     ):Call<List<ExploreServiceData>>
 
+    @POST("report")
+    fun addreport(
+        @Body report:ReportDataClass
+    ):Call<UpdateResponse>
 }

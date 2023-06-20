@@ -10,18 +10,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
+import app.retvens.rown.NavigationFragments.profile.status.StatusAdapter
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetHotelierProfileSetting
+import app.retvens.rown.bottomsheet.BottomSheetPostEdit
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MediaFragment(val userId: String) : Fragment() {
+class MediaFragment(val userId: String) : Fragment(), MediaAdapter.OnItemClickListener {
 
     lateinit var mediaRecyclerView: RecyclerView
     lateinit var mediaAdapter: MediaAdapter
@@ -60,7 +64,7 @@ class MediaFragment(val userId: String) : Fragment() {
 
         val getMedia = RetrofitBuilder.feedsApi.getUserProfileMedia(userId,userId,"1")
 
-        getMedia.enqueue(object : Callback<List<PostsDataClass>?> {
+        getMedia.enqueue(object : Callback<List<PostsDataClass>?>{
             override fun onResponse(
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
@@ -74,12 +78,20 @@ class MediaFragment(val userId: String) : Fragment() {
                     val response = response.body()!!
 
                     response.forEach { postsDataClass ->
-
                         try {
-                            mediaAdapter = MediaAdapter(requireContext(),postsDataClass.posts)
-                            mediaRecyclerView.adapter = mediaAdapter
-                            mediaAdapter.notifyDataSetChanged()
-                        }catch (e : NullPointerException){
+                            val postsToDisplay = postsDataClass.posts.filter { it.display_status == "1" }
+                            if (postsToDisplay.isEmpty()) {
+                                // No posts to display
+                                notPosted.visibility = View.VISIBLE
+                            } else {
+                                // Display posts using the MediaAdapter
+                                mediaAdapter = MediaAdapter(requireContext(), postsToDisplay)
+                                mediaRecyclerView.adapter = mediaAdapter
+                                mediaAdapter.notifyDataSetChanged()
+                                mediaAdapter.setOnItemClickListener(this@MediaFragment)
+                            }
+                        } catch (e: NullPointerException) {
+                            // Handle NullPointerException
                             notPosted.visibility = View.VISIBLE
                         }
 
@@ -104,9 +116,17 @@ class MediaFragment(val userId: String) : Fragment() {
                 empty.text = "Try Again"
                 empty.visibility = View.VISIBLE
             }
+
+
         })
 
 
 
+    }
+
+    override fun onItemClick(dataItem: PostItem) {
+        val bottomSheet = BottomSheetPostEdit(dataItem.post_id,dataItem.caption,dataItem.location)
+        val fragManager = (activity as FragmentActivity).supportFragmentManager
+        fragManager.let{bottomSheet.show(it, BottomSheetPostEdit.Hotelier_TAG)}
     }
 }

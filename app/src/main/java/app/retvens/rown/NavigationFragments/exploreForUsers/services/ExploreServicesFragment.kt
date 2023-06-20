@@ -1,17 +1,23 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.services
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsData
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
+import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
@@ -24,9 +30,11 @@ class ExploreServicesFragment : Fragment() {
 
     lateinit var exploreBlogsRecyclerView: RecyclerView
     lateinit var exploreServicesAdapter: ExploreServicesAdapter
-
+    private var isLoading:Boolean = false
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
-
+    private var currentPage = 1
+    private lateinit var progress: ProgressBar
+    private var hotelList:ArrayList<ProfileServicesDataItem> = ArrayList()
     lateinit var empty : TextView
 
     override fun onCreateView(
@@ -45,15 +53,64 @@ class ExploreServicesFragment : Fragment() {
         exploreBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
         exploreBlogsRecyclerView.setHasFixedSize(true)
 
-        empty = view.findViewById(R.id.empty)
+        exploreServicesAdapter = ExploreServicesAdapter(hotelList, requireContext())
+        exploreBlogsRecyclerView.adapter = exploreServicesAdapter
 
+        empty = view.findViewById(R.id.empty)
+        progress = view.findViewById(R.id.progress)
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
+
+
+        exploreBlogsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+
+                        isLoading = false
+                        currentPage++
+                        getData()
+
+
+                    }
+                }
+
+
+            }
+        })
+
 
         getServices()
     }
 
+    private fun getData() {
+        val handler = Handler()
+
+        progress.setVisibility(View.VISIBLE);
+
+        handler.postDelayed({
+            getServices()
+            progress.setVisibility(View.GONE);
+        },
+            3000)
+    }
+
     private fun getServices() {
-        val serv = RetrofitBuilder.exploreApis.getExploreService("1")
+        val serv = RetrofitBuilder.exploreApis.getExploreService(currentPage.toString())
         serv.enqueue(object : Callback<List<ExploreServiceData>?> {
             override fun onResponse(
                 call: Call<List<ExploreServiceData>?>,
@@ -67,8 +124,8 @@ class ExploreServicesFragment : Fragment() {
                             if (response.body()!!.isNotEmpty()) {
                                 val data = response.body()!!
                                 data.forEach {
-                                    exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
-                                    exploreBlogsRecyclerView.adapter = exploreServicesAdapter
+
+                                    hotelList.addAll(it.events)
                                     exploreServicesAdapter.notifyDataSetChanged()
                                 }
                             } else {

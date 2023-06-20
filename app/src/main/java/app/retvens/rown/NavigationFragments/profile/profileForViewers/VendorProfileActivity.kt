@@ -154,7 +154,9 @@ class VendorProfileActivity : AppCompatActivity() {
             }
 
             dialogLanguage.findViewById<LinearLayout>(R.id.report).setOnClickListener {
-                startActivity(Intent(this, ReportProfileActivity::class.java))
+                val intent = Intent(this,ReportProfileActivity::class.java)
+                intent.putExtra("user_id",userId)
+                startActivity(intent)
                 dialogLanguage.dismiss()
             }
 
@@ -197,19 +199,20 @@ class VendorProfileActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
+                    Log.e("response",response.toString())
                     try{
-                        Glide.with(applicationContext).load(response.vendorInfo.vendorImage)
+                        Glide.with(applicationContext).load(response.roleDetails.Profile_pic)
                             .into(profile)
-                        name.text = response.vendorInfo.vendorName
-                        profile_username.text = response.vendorInfo.vendorName
-                        bio.text = response.vendorInfo.vendorDescription
+                        name.text = response.roleDetails.Full_name
+                        profile_username.text = response.roleDetails.User_name
+                        bio.text = response.roleDetails.vendorInfo.vendorDescription
 
                         connCount.text = response.connectioncount.toString()
-                        postCount.text = response.post_count.toString()
+                        postCount.text = response.postcount.toString()
 
-                        created = response.Created_On
-                        location = response.location
-                        verification = response.verificationStatus
+//                        created = response.Created_On
+//                        location = response.location
+//                        verification = response.verificationStatus
 
                         if (response.connectionStatus == "Connected"){
                             connStatus.text = "Remove"

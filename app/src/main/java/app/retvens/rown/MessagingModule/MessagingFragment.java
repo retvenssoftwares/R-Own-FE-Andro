@@ -961,8 +961,8 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
             } else if (profile.isChatting() && 0L == groupid) {
                 status = this.mMesiboUIOptions.joinedIndicationTitle;
             } else if (profile.isOnline() && 0L == groupid) {
-//                if (getContext().getResources().getString(R.string.online_text)!=null)
-//                status = getContext().getResources().getString(R.string.online_text);
+                if (getContext().getResources().getString(R.string.online_text)!=null)
+                status = getContext().getResources().getString(R.string.online_text);
             }
 
             return this.updateUserStatus(status, 0L);

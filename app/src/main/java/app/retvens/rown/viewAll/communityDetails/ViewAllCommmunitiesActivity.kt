@@ -34,7 +34,7 @@ class ViewAllCommmunitiesActivity : AppCompatActivity() {
         binding.recyclerViewAllCommunity.setHasFixedSize(true)
         communityArrayList = arrayListOf<Community>()
 
-        cummunity = Community("","","")
+        cummunity = Community("","","","")
         getCommunities()
     }
     private fun getCommunities() {
@@ -49,7 +49,7 @@ class ViewAllCommmunitiesActivity : AppCompatActivity() {
                     val response = response.body()!!
                     response.forEach{ it ->
 
-                        cummunity = Community(it.Profile_pic,it.group_name,"${response.size} members")
+                        cummunity = Community(it.Profile_pic,it.group_name,"${response.size} members",it.group_id)
                         communityArrayList.add(cummunity)
                         viewAllCommunitiesAdapter = ViewAllCommunitiesAdapter(this@ViewAllCommmunitiesActivity,communityArrayList)
                         binding.recyclerViewAllCommunity.adapter = viewAllCommunitiesAdapter

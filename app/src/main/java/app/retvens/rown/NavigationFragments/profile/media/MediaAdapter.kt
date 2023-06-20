@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.media
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -14,14 +15,27 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.NavigationFragments.home.PostDetailsActivity
+import app.retvens.rown.NavigationFragments.profile.status.StatusAdapter
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
 class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
 
+    private var onItemClickListener: OnItemClickListener? = null
+
+    interface OnItemClickListener {
+        fun onItemClick(dataItem: PostItem)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        onItemClickListener = listener
+    }
+
     class MediaViewHolder(itemView: View) : ViewHolder(itemView){
         val post_img = itemView.findViewById<ImageView>(R.id.posts_img)
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         val inflater : LayoutInflater = LayoutInflater.from(context)
@@ -33,14 +47,23 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
         return mediaList.size
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
 
         val media = mediaList[position]
 
+
         media.media.forEach { item ->
 
-            Glide.with(context).load(item.post).into(holder.post_img)
+                Glide.with(context).load(item.post).into(holder.post_img)
 
+            }
+
+
+
+        holder.itemView.setOnLongClickListener {
+            onItemClickListener?.onItemClick(media)
+            true
         }
 
 

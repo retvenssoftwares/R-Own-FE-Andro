@@ -22,7 +22,6 @@ import com.mesibo.messaging.MesiboEndToEndEncryptionActivity;
 
 import java.lang.ref.WeakReference;
 
- import app.retvens.rown.CreateCommunity.CreateCommunity;
  import app.retvens.rown.Dashboard.DashBoardActivity;
 
 public class MesiboUIManager {
@@ -112,7 +111,7 @@ public class MesiboUIManager {
     }
 
     public static void launchGroupActivity(Context context, Bundle bundle) {
-        Intent intent = new Intent(context, CreateCommunity.class);
+        Intent intent = new Intent(context, MesiboMessagingActivity.class);
         if (bundle != null) {
             intent.putExtra(MesiboUI.BUNDLE, bundle);
         }
