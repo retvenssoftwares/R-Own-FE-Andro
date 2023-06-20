@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.VendorProfileDataClass
 import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
@@ -170,24 +171,25 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
     }
     private fun getSelfUserProfile(userId: String, userId1: String) {
 
-        val getProfile = RetrofitBuilder.connectionApi.getconnProfile(userId,userId1)
+        val getProfile = RetrofitBuilder.connectionApi.getVendorProfile(userId,userId1)
 
-        getProfile.enqueue(object : Callback<NormalUserDataClass?> {
+        getProfile.enqueue(object : Callback<VendorProfileDataClass?> {
             override fun onResponse(
-                call: Call<NormalUserDataClass?>,
-                response: Response<NormalUserDataClass?>
+                call: Call<VendorProfileDataClass?>,
+                response: Response<VendorProfileDataClass?>
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
 
-                    postCount.text = response.data.postCountLength.toString()
-                    connCont.text = response.data.connCountLength.toString()
-                    requestCont.text = response.data.reqsCountLength.toString()
-                    bio.text = response.data.profile.userBio
-                    if (response.data.profile.User_name == ""){
+                    postCount.text = response.postcount.toString()
+                    connCont.text = response.connectioncount.toString()
+                    requestCont.text = response.requestcount.toString()
+                    bio.text = response.roleDetails.userBio
+                    websiteLinkV = response.roleDetails.vendorInfo.websiteLink
+                    if (response.roleDetails.User_name == ""){
                         userName.text = "Complete Your Profile"
                     } else {
-                        userName.text = response.data.profile.User_name
+                        userName.text = response.roleDetails.User_name
                     }
 
                     if (websiteLinkV == ""){
@@ -200,7 +202,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                 }
             }
 
-            override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
+            override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {
                 Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
             }
         })

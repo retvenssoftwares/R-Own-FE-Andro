@@ -36,6 +36,7 @@ import app.retvens.rown.NavigationFragments.ProfileFragment
 import app.retvens.rown.NavigationFragments.ProfileFragmentForHotelOwner
 import app.retvens.rown.NavigationFragments.ProfileFragmentForVendors
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
+import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet.Companion.TAG
@@ -212,7 +213,7 @@ class DashBoardActivity : AppCompatActivity() {
         }
         binding.postedJobsSn.setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
-            replaceFragment(JobsForHoteliers())
+            startActivity(Intent(this, JobsPostedByUser::class.java))
         }
         binding.eventsSn.setOnClickListener {
             startActivity(Intent(this, AllEventCategoryActivity::class.java))
@@ -318,7 +319,7 @@ class DashBoardActivity : AppCompatActivity() {
                     toolbar.visibility = View.VISIBLE
                 }
                 R.id.jobs ->
-                    if ((role =="Hotel Owner" || role == "Business Vendor / Freelancer") && profileCompletionStatus == "100"){
+                    if ((role =="Hotel Owner") && profileCompletionStatus == "100"){
                         replaceFragment(JobsForHoteliers())
                         toolbar.visibility = View.GONE
                     }else{

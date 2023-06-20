@@ -28,6 +28,7 @@ data class OnGoingEventsData(
     val User_name: String,
     val Profile_pic: String,
     val venue: String,
+    val category_name:String,
     val saved: String,
     val website_link: String
 )

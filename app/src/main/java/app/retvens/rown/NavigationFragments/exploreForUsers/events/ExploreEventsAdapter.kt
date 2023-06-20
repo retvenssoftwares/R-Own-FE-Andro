@@ -59,6 +59,8 @@ class ExploreEventsAdapter(val listS : List<OnGoingEventsData>, val context: Con
             holder.event_date.text = dateFormat(listS[position].date_added)
         }
 
+        holder.event_date.text = listS[position].event_start_date
+
         if (listS[position].saved == "saved"){
             operatioin = "pop"
             like = false
@@ -74,7 +76,7 @@ class ExploreEventsAdapter(val listS : List<OnGoingEventsData>, val context: Con
 
         Glide.with(context).load(listS[position].event_thumbnail).into(holder.cover)
 
-        holder.blogType.text = listS[position].event_category
+        holder.blogType.text = listS[position].category_name
 
         holder.saveEvent.setOnClickListener {
             saveEvent(listS[position].event_id, holder, operatioin, like){

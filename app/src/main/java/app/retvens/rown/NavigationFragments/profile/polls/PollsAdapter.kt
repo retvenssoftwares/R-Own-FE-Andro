@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -25,7 +26,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.mackhartley.roundedprogressbar.RoundedProgressBar
 import java.lang.IndexOutOfBoundsException
 
-class PollsAdapter(val pollList:List<PostItem>, val context: Context) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
+class PollsAdapter(val pollList:List<PostItem>, val context: Context,val UserID:String) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
 
     class PollsViewHolder(itemView: View) : ViewHolder(itemView){
         val title_poll = itemView.findViewById<TextView>(R.id.title_poll)
@@ -144,6 +145,12 @@ class PollsAdapter(val pollList:List<PostItem>, val context: Context) : Recycler
         Glide.with(context).load(poll.Profile_pic).into(holder.profile)
         holder.location.text = poll.location
 
+        val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        if (user_id != UserID){
+            holder.checkVotes.visibility = View.GONE
+        }
 
 
         holder.checkVotes.setOnClickListener {

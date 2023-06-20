@@ -139,31 +139,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-        <TextView
-            android:id="@+id/event_participants"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="14dp"
-            android:text="281"
-            android:textSize="10dp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+<!--        <TextView-->
+<!--            android:id="@+id/event_participants"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="10dp"-->
+<!--            android:layout_marginBottom="14dp"-->
+<!--            android:text="281"-->
+<!--            android:textSize="10dp"-->
+<!--            android:fontFamily="@font/montserrat_semibold"-->
+<!--            android:textColor="@color/black"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"/>-->
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginBottom="14dp"
-            android:text="Participants"
-            android:textSize="10dp"
-            android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toStartOf="@id/blog_date"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/event_participants"/>
+<!--        <TextView-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="5dp"-->
+<!--            android:layout_marginBottom="14dp"-->
+<!--            android:text="Participants"-->
+<!--            android:textSize="10dp"-->
+<!--            android:fontFamily="@font/montserrat_regular"-->
+<!--            android:textColor="@color/black"-->
+<!--            app:layout_constraintEnd_toStartOf="@id/blog_date"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/event_participants"/>-->
 
         <TextView
             android:id="@+id/blog_date"

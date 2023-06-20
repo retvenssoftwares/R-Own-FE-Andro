@@ -44,6 +44,10 @@ class PollsFragment(val userId: String) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+
         pollsRecyclerView = view.findViewById(R.id.pollsRecycler)
         pollsRecyclerView.layoutManager = LinearLayoutManager(context)
         pollsRecyclerView.setHasFixedSize(true)
@@ -54,6 +58,8 @@ class PollsFragment(val userId: String) : Fragment() {
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
         getPolls(userId)
+
+
 
     }
 
@@ -78,7 +84,7 @@ class PollsFragment(val userId: String) : Fragment() {
 
                         try {
 
-                            pollsAdapter = PollsAdapter(postsDataClass.posts, requireContext())
+                            pollsAdapter = PollsAdapter(postsDataClass.posts, requireContext(),userId)
                             pollsRecyclerView.adapter = pollsAdapter
                             pollsAdapter.notifyDataSetChanged()
                         }catch (e:NullPointerException){

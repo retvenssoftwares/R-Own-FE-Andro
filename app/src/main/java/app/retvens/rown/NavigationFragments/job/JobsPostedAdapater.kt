@@ -38,7 +38,7 @@ class JobsPostedAdapater(val context: Context, val jobList:List<JobsData>):Recyc
         val jobs = jobList[position]
 
 
-        holder.designation.text = jobs.jobTitle
+        holder.designation.text = jobs.designationType
         holder.location.text = jobs.jobLocation
         holder.type.text = jobs.jobType
         holder.title.text = "Remote"

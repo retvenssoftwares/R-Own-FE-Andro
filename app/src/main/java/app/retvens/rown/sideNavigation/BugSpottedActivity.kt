@@ -22,6 +22,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityBugSpottedBinding
 import app.retvens.rown.utils.cropImage
+import app.retvens.rown.utils.cropImage1
 import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide
 import com.yalantis.ucrop.UCrop
@@ -171,7 +172,7 @@ class BugSpottedActivity : AppCompatActivity() {
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropImage(imageUri, this)
+                cropImage1(imageUri, this)
             }
         }  else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {

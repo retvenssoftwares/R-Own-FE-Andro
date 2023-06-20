@@ -39,6 +39,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:screenOrientation="portrait"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rown"
@@ -46,6 +47,7 @@
         tools:targetApi="31">
         <activity
             android:name=".NavigationFragments.jobforvendors.ViewAllMatches"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -53,6 +55,7 @@
         </activity>
         <activity
             android:name=".NavigationFragments.jobforvendors.ViewAllPolpular"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -60,6 +63,7 @@
         </activity>
         <activity
             android:name=".NavigationFragments.profile.EditHotelProfileActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
@@ -69,26 +73,32 @@
         <activity
             android:name=".NavigationFragments.profile.EditVendorInfoActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".viewAll.vendorsDetails.VendorsImageViewActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".viewAll.AllHotelsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.job.ViewAllSuggestedJobsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.job.savedJobs.SavedJobsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".Dashboard.createPosts.CreatePostEventActivityChild"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash">
             <meta-data
                 android:name="android.app.lib_name"
@@ -97,10 +107,12 @@
         <activity
             android:name=".NavigationFragments.eventsForHoteliers.EditEventActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".Dashboard.createPosts.CreateClickAndSharePostActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity"
@@ -126,94 +138,117 @@
         <activity
             android:name=".NavigationFragments.eventForUsers.allEvents.SeeAllEventsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.eventForUsers.AllEventCategoryActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".api.p000ui.MesiboDefaultCallActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.eventForUsers.onGoingEvents.OnGoingEventsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".sideNavigation.PrivacyPolicyActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".sideNavigation.TermsAndCActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.eventsForHoteliers.AddEventDeatailsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.eventsForHoteliers.AllEventsPostedActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.eventsForHoteliers.AddEventActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.SelectPostActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.ReportProfileActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.ShareQRActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.settingForViewers.AboutProfileActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.profileForViewers.VendorProfileActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.profileForViewers.OwnerProfileActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.profileForViewers.UserProfileActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".viewAll.viewAllBlogs.ViewAllCategoriesActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".viewAll.viewAllBlogs.AllBlogsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".viewAll.viewAllBlogs.ViewAllBlogsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.setting.profileSetting.ApplyForVerificationActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.setting.profileSetting.LanguageSettingActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.setting.profileSetting.JobNotificationActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.setting.profileSetting.NotificationSettingActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.setting.profileSetting.AccountManagementActivity"
