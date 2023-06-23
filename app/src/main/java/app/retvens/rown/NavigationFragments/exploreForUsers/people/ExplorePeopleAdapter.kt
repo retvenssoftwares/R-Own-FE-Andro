@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.people
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -47,6 +48,7 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         return ExplorePeopleViewholder(view)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: ExplorePeopleViewholder, position: Int) {
 
         val data = peopleList[position]
