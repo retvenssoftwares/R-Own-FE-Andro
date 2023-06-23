@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -65,6 +66,7 @@ class HomeFragment : Fragment() {
 
     lateinit var recyclerCommunity : RecyclerView
     lateinit var communityArrayList : ArrayList<Community>
+    private var communitySize:ArrayList<Community> = ArrayList()
     lateinit var adapter:MainAdapter
     var profilepic: String = ""
     var userName:String = ""
@@ -190,37 +192,6 @@ class HomeFragment : Fragment() {
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
 
-
-//        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
-//                {
-//                    isLoading = true;
-//
-//                }
-//            }
-//
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//
-//
-//                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-//                    val currentItem = layoutManager.childCount
-//                    val totalItem = layoutManager.itemCount
-//                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-//                    if (isLoading){
-//                        Log.e("msg","scrolling")
-//                        isLoading = false
-//                        getData()
-//
-//                    }
-//
-//
-//
-//            }
-//        })
 
         val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
         nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
@@ -395,15 +366,22 @@ class HomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
+
+                    val viewAllCommunities = view?.findViewById<CardView>(R.id.view_allCommunity)
+                    if (response.size <= 1){
+                        viewAllCommunities?.visibility = View.GONE
+                    }
+
                     response.forEach{ it ->
 
                         cummunity = Community(it.Profile_pic,it.group_name,"${response.size} members",it.group_id)
+                        communitySize.add(cummunity)
                         if (communityArrayList.contains(cummunity)){
 
                         }else {
                             communityArrayList.add(cummunity)
-                            recyclerCommunity.adapter =
-                                CommunityListAdapter(requireContext(), communityArrayList)
+                            recyclerCommunity.adapter = CommunityListAdapter(requireContext(), communityArrayList)
+
                         }
                     }
                 }else{
@@ -659,7 +637,7 @@ class HomeFragment : Fragment() {
 //        mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
 //        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
 //        mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
-        mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
+//        mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
 //        mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
 
 //        mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))

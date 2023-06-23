@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.MessagingModule.MesiboMessagingActivity
+import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
@@ -49,6 +51,8 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
 
         val data = peopleList[position]
 
+
+
         if (data.Profile_pic.isNullOrEmpty()){
             holder.profile.setImageResource(R.drawable.svg_person_account)
         }else{
@@ -78,8 +82,9 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         var status = data.connectionStatus
 
         if (data.connectionStatus == "Connected"){
-            holder.connect.text = "Remove"
+            holder.connect.text = "Interact"
         }
+
 
         if (data.connectionStatus == "Requested"){
             holder.connect.text = "Requested"
@@ -96,9 +101,15 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
             if (status == "Requested" || data.connectionStatus == "Requested"){
                 connectClickListener?.onCancelRequest(data)
 
-                holder.connect.text = "CONNECT"
+//                holder.connect.text = "CONNECT"
             }
 
+            if ( holder.connect.text == "Interact"){
+                val intent = Intent(context,MesiboMessagingActivity::class.java)
+                    intent.putExtra(MesiboUI.PEER,data.Mesibo_account[0].address)
+                    context.startActivity(intent)
+
+            }
 
             status = "Requested"
 

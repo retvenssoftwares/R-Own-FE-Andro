@@ -71,7 +71,8 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
             val intent = Intent(context, EditHotelDetailsActivity::class.java)
             intent.putExtra("name", listS[position].hotelName)
             intent.putExtra("hotelId", listS[position].hotel_id)
-            intent.putExtra("hotelAddress", listS[position].hotelAddress)
+            intent.putExtra("location", listS[position].hotelAddress)
+            intent.putExtra("hotelDescription",listS[position].Hoteldescription)
             context.startActivity(intent)
         }
 

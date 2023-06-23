@@ -161,6 +161,7 @@
                         tools:listitem="@layout/create_cummunity_item" />
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/view_allCommunity"
                         android:layout_width="wrap_content"
                         android:layout_height="150dp"
                         android:layout_marginVertical="12dp"

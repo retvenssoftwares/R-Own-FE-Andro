@@ -6,6 +6,7 @@ import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -180,10 +181,20 @@ class UsernameFragment : Fragment() {
         }
         name.setText("Hi $profileName")
 
-        val firstN = profileName.split(" ")[0]
-        val lastN = profileName.split(" ")[1]
+        val nameParts = profileName.split(" ")
+        val firstN = nameParts.getOrElse(0) { "" }
+        var lastN = ""
+        try {
+            lastN = nameParts.getOrElse(1) { "" }
+        } catch (e: IndexOutOfBoundsException) {
+            Log.e("error", e.message.toString())
+        } catch (e: NullPointerException) {
+            Log.e("error", e.message.toString())
+        }
+
         firstName.setText(firstN)
         lastName.setText(lastN)
+
     }
     private fun verifyUserName() {
 

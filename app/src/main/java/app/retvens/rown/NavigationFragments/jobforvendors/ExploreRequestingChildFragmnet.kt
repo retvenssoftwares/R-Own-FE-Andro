@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.jobforvendors
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -79,17 +80,22 @@ class ExploreRequestingChildFragmnet : Fragment() {
             ) {
                 if (isAdded){
                     if (response.isSuccessful){
+                        try {
+                            val popularFieldsAdapter = PopularFieldsAdapter(requireContext(),response.body()!!)
+                            popularRecycler.adapter = popularFieldsAdapter
+                            popularFieldsAdapter.notifyDataSetChanged()
+
+                            val matchesJobAdapter = MatchesJobAdapter(requireContext(),response.body()!!)
+                            matchesRecycler.adapter = matchesJobAdapter
+                            matchesJobAdapter.notifyDataSetChanged()
+                        }catch (e:NullPointerException){
+                            Log.e("error",e.message.toString())
+                        }
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
                         if (response.body()!!.isNotEmpty()) {
 
-                    val popularFieldsAdapter = PopularFieldsAdapter(requireContext(),response.body()!!)
-                    popularRecycler.adapter = popularFieldsAdapter
-                    popularFieldsAdapter.notifyDataSetChanged()
 
-                    val matchesJobAdapter = MatchesJobAdapter(requireContext(),response.body()!!)
-                    matchesRecycler.adapter = matchesJobAdapter
-                    matchesJobAdapter.notifyDataSetChanged()
                 } else {
                         empty.visibility = View.VISIBLE
                 }

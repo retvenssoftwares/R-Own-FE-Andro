@@ -307,28 +307,53 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         val portfolio = portfolio.text.toString()
         val website = website.text.toString()
 
-        val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(
-            logoOfImageUri!!,"r",null
-        )?:return
-
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+        val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(
+            logoOfImageUri!!,"r",null
+        )?:return
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
         val file =  File(requireContext().cacheDir, "cropped_${getRandomString(6)}.jpg")
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
 
-        imagesList.forEach {
-            fileList.add(prepareFilePart(it, "portfolioLinkdata", requireContext())!!)
-        }
+        val parcelFileDescriptorimage1 = requireContext().contentResolver.openFileDescriptor(
+            imgUri1!!,"r",null
+        )?:return
+        val inputStreamImage1 = FileInputStream(parcelFileDescriptorimage1.fileDescriptor)
+        val fileImage1 =  File(requireContext().cacheDir, "cropped_${getRandomString(6)}.jpg")
+        val outputStreamImage1 = FileOutputStream(fileImage1)
+        inputStreamImage1.copyTo(outputStreamImage1)
+        val bodyImage1 = UploadRequestBody(fileImage1,"image")
+
+        val parcelFileDescriptorImage2 = requireContext().contentResolver.openFileDescriptor(
+            imgUri2!!,"r",null
+        )?:return
+        val inputStreamImage2 = FileInputStream(parcelFileDescriptorImage2.fileDescriptor)
+        val fileImage2 =  File(requireContext().cacheDir, "cropped_${getRandomString(6)}.jpg")
+        val outputStreamImage2 = FileOutputStream(fileImage2)
+        inputStreamImage2.copyTo(outputStreamImage2)
+        val bodyImage2 = UploadRequestBody(fileImage2,"image")
+
+        val parcelFileDescriptorImage3 = requireContext().contentResolver.openFileDescriptor(
+            imgUri3!!,"r",null
+        )?:return
+        val inputStreamImage3 = FileInputStream(parcelFileDescriptorImage3.fileDescriptor)
+        val fileImage3 =  File(requireContext().cacheDir, "cropped_${getRandomString(6)}.jpg")
+        val outputStreamImage3 = FileOutputStream(fileImage3)
+        inputStreamImage3.copyTo(outputStreamImage3)
+        val bodyImage3 = UploadRequestBody(fileImage3,"image")
+
 
         val send = RetrofitBuilder.profileCompletion.uploadVendorData(user_id,
+            MultipartBody.Part.createFormData("Vendorimg", file.name, body),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
-            MultipartBody.Part.createFormData("Vendorimg", file.name, body),
-            fileList,
+            MultipartBody.Part.createFormData("portfolioImages1", fileImage1.name, bodyImage1),
+            MultipartBody.Part.createFormData("portfolioImages2", fileImage2.name, bodyImage2),
+            MultipartBody.Part.createFormData("portfolioImages3", fileImage3.name, bodyImage3),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),website)
         )
 

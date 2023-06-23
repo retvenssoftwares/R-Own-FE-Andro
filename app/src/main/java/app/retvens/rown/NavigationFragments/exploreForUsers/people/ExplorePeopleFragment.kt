@@ -219,7 +219,10 @@ class ExplorePeopleFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                if (isAdded) {
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         })
 

@@ -53,8 +53,8 @@ class PopularFieldsAdapter(val context: Context, val requestData:List<GetRequest
 
         holder.noticePeriod.text = data.noticePeriod
         holder.ctc.text = data.expectedCTC
-        holder.title.text = data.jobTitle.get(0)
-        holder.type.text = data.jobType.get(0)
+//        holder.title.text = data.jobTitle.get(0)
+//        holder.type.text = data.jobType.get(0)
 
         val preflocation = data.preferredLocation
         val prefcity = preflocation.split(",")[0]

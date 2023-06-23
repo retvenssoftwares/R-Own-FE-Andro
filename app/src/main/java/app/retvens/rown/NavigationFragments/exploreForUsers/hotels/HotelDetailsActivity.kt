@@ -141,26 +141,26 @@ class HotelDetailsActivity : AppCompatActivity() {
 
 
                     if(data.gallery.size >= 3) {
-                        img1 = data.gallery.get(0).Images
-                        img2 = data.gallery.get(1).Images
-                        img3 = data.gallery.get(2).Images
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
-                        Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
-                        Glide.with(applicationContext).load(data.gallery.get(2).Images).into(binding.img3)
+                        img1 = data.gallery.get(0).Image1
+                        img2 = data.gallery.get(0).Image2
+                        img3 = data.gallery.get(0).Image3
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image3).into(binding.img3)
                     } else if (data.gallery.size >= 2) {
-                        img1 = data.gallery.get(0).Images
-                        img2 = data.gallery.get(1).Images
+                        img1 = data.gallery.get(0).Image1
+                        img2 = data.gallery.get(0).Image2
                         binding.img3.visibility = View.GONE
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
-                        Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
                     } else if (data.gallery.size > 0) {
-                        img1 = data.gallery.get(0).Images
+                        img1 = data.gallery.get(0).Image1
                         binding.img2.visibility = View.GONE
                         binding.img3.visibility = View.GONE
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
                     } else {
                         binding.img1.visibility = View.GONE
                         binding.img2.visibility = View.GONE

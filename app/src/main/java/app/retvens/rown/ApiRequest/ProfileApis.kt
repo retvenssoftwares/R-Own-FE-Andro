@@ -35,7 +35,7 @@ interface ProfileApis {
         @Path("user_id") user_id : String
     ) : Call<List<OnGoingEventsData>>
 
-    @GET("gethotelname/{user_id}")
+    @GET("gethotel/{user_id}")
     fun getProfileHotels(
         @Path("user_id") user_id : String
     ) : Call<List<HotelsName>>
@@ -56,12 +56,42 @@ interface ProfileApis {
 
     @Multipart
     @PATCH("updatehoteldata/{hotel_id}")
-    fun updateHotel(
+    fun updateHotels1(
         @Path("hotel_id") hotel_id:String,
         @Part("Hoteldescription") Hoteldescription: RequestBody,
         @Part("hotelName") hotelName: RequestBody,
         @Part("hotelAddress") hotelAddress: RequestBody,
-        @Part gallery : List<MultipartBody.Part>
+        @Part galleryImages1 : MultipartBody.Part,
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("updatehoteldata/{hotel_id}")
+    fun updateHotels2(
+        @Path("hotel_id") hotel_id:String,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
+        @Part("hotelName") hotelName: RequestBody,
+        @Part("hotelAddress") hotelAddress: RequestBody,
+        @Part galleryImages2 : MultipartBody.Part,
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("updatehoteldata/{hotel_id}")
+    fun updateHotels3(
+        @Path("hotel_id") hotel_id:String,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
+        @Part("hotelName") hotelName: RequestBody,
+        @Part("hotelAddress") hotelAddress: RequestBody,
+        @Part galleryImages3 : MultipartBody.Part
+
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("updatehoteldata/{hotel_id}")
+    fun updateHotels(
+        @Path("hotel_id") hotel_id:String,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
+        @Part("hotelName") hotelName: RequestBody,
+        @Part("hotelAddress") hotelAddress: RequestBody,
     ):Call<UpdateResponse>
 
     @Multipart

@@ -41,7 +41,10 @@ import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.cropProfileImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import com.mesibo.api.Mesibo
+import com.mesibo.api.MesiboProfile
 import com.yalantis.ucrop.UCrop
+import id.zelory.compressor.decodeSampledBitmapFromFile
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -202,6 +205,11 @@ class UploadIcon : AppCompatActivity() {
         }
     }
 
+    fun getProfile(): MesiboProfile {
+        if (groupId.toLong() > 0) return Mesibo.getProfile(groupId.toLong())
+        return Mesibo.getSelfProfile()
+    }
+
     private fun CreateGroup(name:String) {
 
         val GroupName = GroupCreate(name)
@@ -242,6 +250,7 @@ class UploadIcon : AppCompatActivity() {
         val formattedMembers = cleanedNumbers.joinToString(",")
 
         Toast.makeText(applicationContext,formattedMembers.toString(),Toast.LENGTH_SHORT).show()
+        Log.e("string",formattedMembers.toString())
         Toast.makeText(applicationContext,groupId.toString(),Toast.LENGTH_SHORT).show()
 
         Toast.makeText(applicationContext,members.toString(),Toast.LENGTH_SHORT).show()
@@ -277,7 +286,7 @@ class UploadIcon : AppCompatActivity() {
 
 
         val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file =  File(cacheDir, "cropped_${contentResolver.getFileName(communityUri!!)}.jpg")
+        val file =  File(cacheDir, "${app.retvens.rown.utils.getRandomString(6)}.jpg")
         val outputStream = FileOutputStream(file)
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
@@ -300,6 +309,10 @@ class UploadIcon : AppCompatActivity() {
                     val response = response.body()!!
                     Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     addCommunityMember()
+
+                    val profile = getProfile()
+                    profile.image = decodeSampledBitmapFromFile(file,200,150)
+                    profile.save()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -393,5 +406,12 @@ class UploadIcon : AppCompatActivity() {
             returnCursor.close()
         }
         return name
+    }
+
+    fun getRandomString(length: Int) : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 }

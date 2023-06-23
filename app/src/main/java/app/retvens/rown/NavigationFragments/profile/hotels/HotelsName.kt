@@ -7,5 +7,6 @@ data class HotelsName(
     val hotelCoverpicUrl: String,
     val hotelRating: String,
     val hotelAddress: String,
-    val hotelName: String
+    val hotelName: String,
+    val Hoteldescription:String
 )

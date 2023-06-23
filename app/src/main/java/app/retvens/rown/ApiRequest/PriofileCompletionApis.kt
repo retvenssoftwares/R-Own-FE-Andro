@@ -137,10 +137,12 @@ interface PriofileCompletionApis{
     @PATCH("/vendor/{user_id}")
     fun uploadVendorData(
         @Path("user_id") user_id : String,
+        @Part Vendorimg: MultipartBody.Part,
         @Part("vendorName") vendorName: RequestBody,
         @Part("vendorDescription") vendorDescription: RequestBody,
-        @Part Vendorimg: MultipartBody.Part,
-        @Part portfolioLinkdata: List<MultipartBody.Part>,
+        @Part portfolioImages1:MultipartBody.Part,
+        @Part portfolioImages2:MultipartBody.Part,
+        @Part portfolioImages3:MultipartBody.Part,
         @Part("websiteLink") websiteLink: RequestBody
     ): Call<UpdateResponse>
 

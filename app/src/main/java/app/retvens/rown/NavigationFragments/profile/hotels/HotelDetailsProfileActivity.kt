@@ -1,8 +1,10 @@
 package app.retvens.rown.NavigationFragments.profile.hotels
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -128,40 +130,51 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
 
         val hotel = RetrofitBuilder.ProfileApis.getHotelInfo(hotelId)
         hotel.enqueue(object : Callback<HotelData?> {
+            @SuppressLint("SuspiciousIndentation")
             override fun onResponse(call: Call<HotelData?>, response: Response<HotelData?>) {
                 if (response.isSuccessful){
                     val data = response.body()!!
                     binding.hotelName.text = data.hotelName
 //                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
 
-                    Hoteldescription = data.Hoteldescription
-                    if(data.gallery.size >= 3) {
-                        img1 = data.gallery.get(0).Images
-                        img2 = data.gallery.get(1).Images
-                        img3 = data.gallery.get(2).Images
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
-                        Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
-                        Glide.with(applicationContext).load(data.gallery.get(2).Images).into(binding.img3)
-                    } else if (data.gallery.size >= 2) {
-                        img1 = data.gallery.get(0).Images
-                        img2 = data.gallery.get(1).Images
-                        binding.img3.visibility = View.GONE
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
-                        Glide.with(applicationContext).load(data.gallery.get(1).Images).into(binding.img2)
-                    } else if (data.gallery.size > 0) {
-                        binding.img2.visibility = View.GONE
-                        binding.img3.visibility = View.GONE
-                        img1 = data.gallery.get(0).Images
-                            Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.img1)
-                            Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                    } else {
+                    try {
+                        Hoteldescription = data.Hoteldescription
+                        if(data.gallery.get(0).Image1 != "" && data.gallery.get(0).Image2 != "" && data.gallery.get(0).Image3 != "" ) {
+                            img1 = data.gallery.get(0).Image1
+                            img2 = data.gallery.get(0).Image2
+                            img3 = data.gallery.get(0).Image3
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image3).into(binding.img3)
+                        } else if (data.gallery.get(0).Image1 != "" && data.gallery.get(0).Image2 != "" ) {
+                            img1 = data.gallery.get(0).Image1
+                            img2 = data.gallery.get(0).Image2
+                            binding.img3.visibility = View.GONE
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
+                        } else if (data.gallery.get(0).Image1 != "") {
+                            binding.img2.visibility = View.GONE
+                            binding.img3.visibility = View.GONE
+                            img1 = data.gallery.get(0).Image1
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+                        } else {
+                            binding.img1.visibility = View.GONE
+                            binding.img2.visibility = View.GONE
+                            binding.img3.visibility = View.GONE
+                            Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
+                        }
+                    }catch (e:IndexOutOfBoundsException){
+                        Log.e("error",e.message.toString())
                         binding.img1.visibility = View.GONE
                         binding.img2.visibility = View.GONE
                         binding.img3.visibility = View.GONE
                         Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
                     }
+
+
 
                     binding.descriptionHotel.text = data.Hoteldescription
                     hotelLogo = data.hotelLogoUrl
