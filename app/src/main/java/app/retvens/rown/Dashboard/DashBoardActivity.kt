@@ -194,11 +194,11 @@ class DashBoardActivity : AppCompatActivity() {
             }
         }
         if (role =="Hotel Owner" && profileCompletionStatus == "100"){
-            binding.postedJobsSn.visibility = View.VISIBLE
+            binding.postedJobsSn.visibility = View.GONE
             binding.appliedJobsSn.visibility = View.GONE
         } else {
             binding.postedJobsSn.visibility = View.GONE
-            binding.appliedJobsSn.visibility = View.VISIBLE
+            binding.appliedJobsSn.visibility = View.GONE
         }
         binding.notificationsSn.setOnClickListener {
             startActivity(Intent(this, NotificationActivity::class.java))
@@ -285,7 +285,9 @@ class DashBoardActivity : AppCompatActivity() {
             clearFullName(applicationContext)
             clearProfileImage(applicationContext)
             clearConnectionNo(applicationContext)
-            startActivity(Intent(this, MainActivity::class.java))
+            val intent = Intent(this, MainActivity::class.java)
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
             finish()
         }
 

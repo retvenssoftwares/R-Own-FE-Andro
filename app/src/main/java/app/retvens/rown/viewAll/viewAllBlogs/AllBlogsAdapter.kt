@@ -2,6 +2,7 @@ package app.retvens.rown.viewAll.viewAllBlogs
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : RecyclerView.Adapter<AllBlogsAdapter.ExploreBlogsViewHolder>() {
+class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context) : RecyclerView.Adapter<AllBlogsAdapter.ExploreBlogsViewHolder>() {
 
     class ExploreBlogsViewHolder(itemView: View) : ViewHolder(itemView){
         val title = itemView.findViewById<TextView>(R.id.blog_title)
@@ -131,7 +132,7 @@ class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : Re
 
     }
 
-    fun searchView(searchText : List<AllBlogsData>){
+    fun searchView(searchText : ArrayList<AllBlogsData>){
         listS = searchText
         notifyDataSetChanged()
     }
@@ -163,6 +164,21 @@ class AllBlogsAdapter(var listS : List<AllBlogsData>, val context: Context) : Re
                 Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+
+    fun removeBlogFromList(data: List<AllBlogsData>){
+
+        try {
+
+            data.forEach {
+                if (it.display_status == "0"){
+                    listS.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
     }
 
 }

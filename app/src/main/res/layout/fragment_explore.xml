@@ -117,6 +117,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp"
+                    android:visibility="gone"
                     android:layout_marginVertical="12dp"
                     android:layout_marginStart="12dp"
                     app:cardBackgroundColor="@color/white">
@@ -252,6 +253,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp"
+                    android:visibility="gone"
                     android:layout_marginVertical="12dp"
                     android:layout_marginStart="12dp"
                     app:cardBackgroundColor="@color/white">

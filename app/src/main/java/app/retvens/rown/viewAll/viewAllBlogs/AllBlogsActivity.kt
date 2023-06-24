@@ -56,8 +56,9 @@ class AllBlogsActivity : AppCompatActivity() {
                 binding.shimmerFrameLayoutBlog.visibility = View.GONE
 
                 if (response.body()!!.isNotEmpty()) {
-                    allBlogsAdapter = AllBlogsAdapter(response.body()!!, this@AllBlogsActivity)
+                    allBlogsAdapter = AllBlogsAdapter(response.body()!! as ArrayList<AllBlogsData>, this@AllBlogsActivity)
                     binding.allBlogsRecycler.adapter = allBlogsAdapter
+                    allBlogsAdapter.removeBlogFromList(response.body()!!)
                     allBlogsAdapter.notifyDataSetChanged()
 
                     binding.searchBlogs.addTextChangedListener(object : TextWatcher {
@@ -82,7 +83,7 @@ class AllBlogsActivity : AppCompatActivity() {
 //                                searchUser.blog_content.contains(s.toString(),ignoreCase = true)
 //                                searchUser.User_name.contains(s.toString(),ignoreCase = true)
                             }
-                            allBlogsAdapter.searchView(filter)
+                            allBlogsAdapter.searchView(filter as ArrayList<AllBlogsData>)
                         }
 
                         override fun afterTextChanged(s: Editable?) {
@@ -127,8 +128,9 @@ class AllBlogsActivity : AppCompatActivity() {
                     binding.shimmerFrameLayoutBlog.visibility = View.GONE
 
                     if (response.body()!!.isNotEmpty()) {
-                        allBlogsAdapter = AllBlogsAdapter(response.body()!!, this@AllBlogsActivity)
+                        allBlogsAdapter = AllBlogsAdapter(response.body()!! as ArrayList<AllBlogsData>, this@AllBlogsActivity)
                         binding.allBlogsRecycler.adapter = allBlogsAdapter
+                        allBlogsAdapter.removeBlogFromList(response.body()!!)
                         allBlogsAdapter.notifyDataSetChanged()
 
                         binding.searchBlogs.addTextChangedListener(object : TextWatcher {
@@ -153,7 +155,7 @@ class AllBlogsActivity : AppCompatActivity() {
 //                                searchUser.blog_content.contains(s.toString(),ignoreCase = true)
 //                                searchUser.User_name.contains(s.toString(),ignoreCase = true)
                                 }
-                                allBlogsAdapter.searchView(filter)
+                                allBlogsAdapter.searchView(filter as ArrayList<AllBlogsData>)
                             }
 
                             override fun afterTextChanged(s: Editable?) {

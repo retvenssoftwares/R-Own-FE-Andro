@@ -36,6 +36,7 @@ var role = ""
 var profileCompletionStatus = "50"
 var websiteLinkV = ""
 var phone = ""
+var connectionCount = "1"
 
 fun dateFormat(date : String) : String {
     // Note, MM is months, not mm

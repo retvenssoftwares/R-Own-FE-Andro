@@ -42,8 +42,9 @@ import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
+import app.retvens.rown.utils.connectionCount
 import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
-import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsAdapter
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -100,6 +101,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val sharedPreferencesPro = context?.getSharedPreferences("SaveConnectionNo", AppCompatActivity.MODE_PRIVATE)
+        val toPo = sharedPreferencesPro?.getString("connectionNo", "0")
+
+        if (connectionCount == "0" || toPo == "0"){
+            val bottomSheet = BottomSheet()
+            val fragManager = (activity as FragmentActivity).supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
+        }
+
         viewAllCommunity = view.findViewById(R.id.view_all_bg)
         viewAllCommunity.setOnClickListener{
             startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
@@ -114,9 +124,6 @@ class HomeFragment : Fragment() {
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
 
         progress = view.findViewById(R.id.progress)
-
-//        val sharedPreferencesPro = context?.getSharedPreferences("SaveConnectionNo", AppCompatActivity.MODE_PRIVATE)
-//        val toPo = sharedPreferencesPro?.getString("connectionNo", "0")
 
 
         view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {

@@ -126,7 +126,7 @@
                         app:layout_constraintTop_toTopOf="@id/igl"
                         app:layout_constraintBottom_toBottomOf="@id/igl"
                         app:layout_constraintStart_toEndOf="@id/igl"/>
-
+<!--
                     <RatingBar
                         android:id="@+id/hotelRating"
                         android:layout_width="wrap_content"
@@ -138,15 +138,23 @@
                         android:layout_marginBottom="5dp"
                         style="@style/Widget.AppCompat.RatingBar.Small"
                         app:layout_constraintEnd_toStartOf="@id/rate"
-                        app:layout_constraintTop_toTopOf="@id/rate"/>
+                        app:layout_constraintTop_toTopOf="@id/rate"/>-->
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:src="@drawable/ic_star_black_18dp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintEnd_toStartOf="@id/hotelRating"
+                        app:layout_constraintTop_toTopOf="@id/hotelRating"/>
 
                     <TextView
-                        android:id="@+id/rate"
+                        android:id="@+id/hotelRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="5dp"
                         android:fontFamily="@font/montserrat_regular"
-                        android:text="4.3"
+                        android:text="3 Star Hotel"
                         android:textColor="@color/black"
                         android:textFontWeight="600"
                         android:textSize="12dp"

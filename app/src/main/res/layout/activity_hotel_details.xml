@@ -194,6 +194,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
+                android:visibility="gone"
                 android:layout_weight="1"
                 android:layout_marginVertical="12dp"
                 android:layout_marginStart="20dp"
@@ -218,8 +219,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
-                android:layout_weight="1"
-                android:layout_marginTop="12dp"
+                android:layout_weight="2"
+                android:layout_marginVertical="12dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="10dp">
 

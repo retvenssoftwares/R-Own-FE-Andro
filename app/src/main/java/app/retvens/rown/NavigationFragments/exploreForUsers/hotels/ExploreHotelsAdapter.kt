@@ -31,8 +31,9 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
     class ExploreHotelsViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.venue_name)
         val location = itemView.findViewById<TextView>(R.id.location_hotel)
+        val hotelStar = itemView.findViewById<TextView>(R.id.hotelStar)
 
-        val rating = itemView.findViewById<RatingBar>(R.id.ratingBar)
+//        val rating = itemView.findViewById<RatingBar>(R.id.ratingBar)
 
         val cover = itemView.findViewById<ImageView>(R.id.hotel_venue_cover)
         val like = itemView.findViewById<ImageView>(R.id.card_like)
@@ -55,6 +56,7 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
 
         holder.name.text = listS[position].hotelName
         holder.location.text = listS[position].hotelAddress
+        holder.hotelStar.text = listS[position].hotelRating.toString() + " Hotel"
 
         Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)
 

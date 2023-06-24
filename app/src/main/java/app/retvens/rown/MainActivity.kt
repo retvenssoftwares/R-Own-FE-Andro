@@ -8,8 +8,10 @@ import android.os.Looper
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.authentication.*
+import app.retvens.rown.utils.connectionCount
 import app.retvens.rown.utils.phone
 import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.role
@@ -98,10 +100,8 @@ class MainActivity : AppCompatActivity() {
 
                             websiteLinkV = response.vendorInfo.websiteLink
 
-                            saveConnectionNo(
-                                applicationContext,
-                                response.connection_count.toString()
-                            )
+                            getSelfUserProfile(user_id,user_id)
+
                             saveFullName(applicationContext, "${response.Full_name}")
                             saveProfileImage(applicationContext, "${response.Profile_pic}")
                         }
@@ -122,4 +122,37 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+    private fun getSelfUserProfile(userId: String, userId1: String) {
+
+        val getProfile = RetrofitBuilder.connectionApi.getconnProfile(userId,userId1)
+
+        getProfile.enqueue(object : Callback<NormalUserDataClass?> {
+            override fun onResponse(
+                call: Call<NormalUserDataClass?>,
+                response: Response<NormalUserDataClass?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+
+                    connectionCount = response.data.connCountLength.toString()
+
+                    saveConnectionNo(
+                        applicationContext,
+                        response.data.connCountLength.toString()
+                    )
+
+//                    Toast.makeText(applicationContext, response.data.connCountLength.toString(), Toast.LENGTH_SHORT)
+//                        .show()
+                }else{
+//                    Toast.makeText(requireContext(),response.code(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
+//                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
 }

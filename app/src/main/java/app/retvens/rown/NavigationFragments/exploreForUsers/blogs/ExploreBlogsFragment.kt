@@ -61,6 +61,7 @@ class ExploreBlogsFragment : Fragment() {
         allBlogsAdapter = AllBlogsAdapter(blogList, requireContext())
         exploreBlogsRecyclerView.adapter = allBlogsAdapter
 
+
         exploreBlogsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -129,6 +130,7 @@ class ExploreBlogsFragment : Fragment() {
                                 try {
 
                                     blogList.addAll(it.blogs)
+                                    allBlogsAdapter.removeBlogFromList(it.blogs)
                                     allBlogsAdapter.notifyDataSetChanged()
                                     Log.d("on", it.toString())
                                     /* searchBar.addTextChangedListener(object : TextWatcher {

@@ -16,6 +16,7 @@ import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsAd
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsData
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsAdapter
+import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -90,8 +91,9 @@ lateinit var savedBlogsAdapter: SavedBlogsAdapter
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
                             data.forEach {
-                                allBlogsAdapter = AllBlogsAdapter(it.blogs, requireContext())
+                                allBlogsAdapter = AllBlogsAdapter(it.blogs as ArrayList<AllBlogsData>, requireContext())
                                 savedBlogsRecyclerView.adapter = allBlogsAdapter
+                                allBlogsAdapter.removeBlogFromList(it.blogs)
                                 allBlogsAdapter.notifyDataSetChanged()
                                 Log.d("on", it.toString())
                             }

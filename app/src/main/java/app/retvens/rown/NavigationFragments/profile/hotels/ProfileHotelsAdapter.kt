@@ -38,7 +38,8 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
         val locationHotel = itemView.findViewById<TextView>(R.id.location_hotel)
 
         val cover = itemView.findViewById<ImageView>(R.id.hotel_venue_cover)
-        val hotelRating = itemView.findViewById<RatingBar>(R.id.hotelRating)
+        val hotelRating = itemView.findViewById<TextView>(R.id.hotelRating)
+//        val hotelRating = itemView.findViewById<RatingBar>(R.id.rate)
         val edit = itemView.findViewById<CardView>(R.id.read_more_blog)
         val del = itemView.findViewById<CardView>(R.id.del)
     }
@@ -63,9 +64,9 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
 
         Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)
 
-//        if (listS[position] != null) {
-//            holder.hotelRating.rating = listS[position].hotelRating.toFloat()
-//        }
+        if (listS[position] != null) {
+            holder.hotelRating.text = listS[position].hotelRating.toString() + " Hotel"
+        }
 
         holder.edit.setOnClickListener {
             val intent = Intent(context, EditHotelDetailsActivity::class.java)

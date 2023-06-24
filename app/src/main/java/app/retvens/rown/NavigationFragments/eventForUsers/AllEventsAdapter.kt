@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.eventForUsers
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -142,7 +143,9 @@ class AllEventsAdapter(var listS : List<OnGoingEventsData>, val context: Context
                     }
                     Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Log.d("eventSave", response.body()?.message.toString())
+//                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, response.message().toString(), Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {

@@ -69,7 +69,7 @@ class EditHotelProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.Designation.setOnClickListener {
-            openHotelTypeBottom()
+//            openHotelTypeBottom()
         }
 
         binding.profileBackBtn.setOnClickListener { onBackPressed() }

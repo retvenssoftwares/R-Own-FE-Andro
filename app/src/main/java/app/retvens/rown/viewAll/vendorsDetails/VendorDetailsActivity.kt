@@ -47,8 +47,8 @@ class VendorDetailsActivity : AppCompatActivity() {
 
         Glide.with(this).load(vendorImage).into(binding.vendorProfile)
 
-        topReview(user_id)
-        allReview(user_id)
+//        topReview(user_id)
+//        allReview(user_id)
 
         binding.img1.setOnClickListener {
             val intent = Intent(this, VendorsImageViewActivity::class.java)
