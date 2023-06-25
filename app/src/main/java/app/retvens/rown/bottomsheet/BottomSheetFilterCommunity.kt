@@ -105,4 +105,8 @@ class BottomSheetFilterCommunity : BottomSheetDialogFragment(),
         locationText.text = CountryStateCityFrBo
     }
 
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
+
 }

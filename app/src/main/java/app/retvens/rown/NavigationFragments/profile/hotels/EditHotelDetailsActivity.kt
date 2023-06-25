@@ -529,4 +529,8 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         binding.locationText.text = CountryStateCityFrBo
     }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
 }

@@ -32,7 +32,11 @@ interface FeedsApi {
         @Part("group_name") group_name : RequestBody,
         @Part("group_id") group_id: RequestBody,
         @Part("location") location: RequestBody,
+        @Part("latitude") latitude: RequestBody,
+        @Part("longitude") longitude: RequestBody,
         @Part("community_type") community_type: RequestBody,
+        @Part("creatorID") creatorID: RequestBody,
+        @Part("description") description: RequestBody,
         @Part Profile_pic: MultipartBody.Part
     ): Call<UpdateResponse>
 
@@ -42,9 +46,15 @@ interface FeedsApi {
         @Body addMember:AddUserDataClass
     ):Call<UpdateResponse>
 
-    @GET("getgroup")
-    fun getCommunities():Call<List<GetCommunitiesData>>
+    @GET("fetchgroup/{user_id}")
+    fun getCommunities(
+        @Path("user_id")user_id:String
+    ):Call<List<GetCommunitiesData>>
 
+    @GET("fetchcommunity/{user_id}")
+    fun getOpenCommunities(
+        @Path("user_id")user_id:String
+    ):Call<List<DataItem.CommunityRecyclerData>>
 //    @GET("getgroup")
 //    fun getCommunities():Call<List<GetCommunitiesData>>
 

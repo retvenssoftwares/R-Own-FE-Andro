@@ -33,6 +33,7 @@ class SelectMembers : AppCompatActivity() {
     private  var number:ArrayList<String> = ArrayList()
     private  var names:ArrayList<String> = ArrayList()
     private  var profile:ArrayList<String> = ArrayList()
+    private  var userId:ArrayList<String> = ArrayList()
     private  var userList: List<UserProfileRequestItem> = emptyList()
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,18 +62,23 @@ class SelectMembers : AppCompatActivity() {
         val description = intent.getStringExtra("desc")
         val location = intent.getStringExtra("location")
         val type = intent.getStringExtra("type")
-
+        val latitude = intent.getStringExtra("latitude")
+        val longitude = intent.getStringExtra("longitude")
 
         next.setOnClickListener {
                 val intent = Intent(this, UploadIcon::class.java)
                 intent.putStringArrayListExtra("number", number)
                 intent.putStringArrayListExtra("names", names)
                 intent.putStringArrayListExtra("pic", profile)
+                intent.putStringArrayListExtra("userId",userId)
                 intent.putExtra("name",name)
                 intent.putExtra("desc",description)
                 intent.putExtra("location",location)
                 intent.putExtra("type",type)
+                intent.putExtra("latitude",latitude)
+                intent.putExtra("longitude",longitude)
                 startActivity(intent)
+            Log.e("location",location.toString())
         }
 
         receiverProfileAdapter.setOnItemClickListener(object :
@@ -90,10 +96,12 @@ class SelectMembers : AppCompatActivity() {
                         number.add(member.Phone)
                         names.add(member.Full_name!!)
                         profile.add(member.Profile_pic!!)
+                        userId.add(member.User_id)
                     }else{
                         number.remove(member.Phone)
                         names.remove(member.Full_name)
                         profile.remove(member.Profile_pic)
+                        userId.remove(member.User_id)
                     }
 
                 } else {

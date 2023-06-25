@@ -248,4 +248,8 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         location.setText(CountryStateCityFrBo)
     }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
 }

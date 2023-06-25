@@ -104,6 +104,10 @@ class CreateEventPostActivity : AppCompatActivity(),
         binding.etLocationPostEvent.setText(CountryStateCityFrBo)
     }
 
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun bottomSelectAudienceClick(audienceFrBo: String) {
         if (canSee == 1){
             binding.canSeeText.text = audienceFrBo

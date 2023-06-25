@@ -66,6 +66,8 @@ class UploadIcon : AppCompatActivity() {
     private lateinit var profile:ShapeableImageView
     private lateinit var select:ImageView
     private lateinit var dialog:Dialog
+    private lateinit var latitude:String
+    private lateinit var longitude:String
     private  var communityUri:Uri? = null
     var PICK_IMAGE_REQUEST_CODE : Int = 0
 
@@ -100,13 +102,17 @@ class UploadIcon : AppCompatActivity() {
         val members = intent.getStringArrayListExtra("number")
         val names = intent.getStringArrayListExtra("names")
         val profile = intent.getStringArrayListExtra("pic")
-
+        val userId = intent.getStringArrayListExtra("userId")
 
 
         name = intent.getStringExtra("name").toString()
         description = intent.getStringExtra("desc")!!
-        location = intent.getStringArrayListExtra("location").toString()
+        location = intent.getStringExtra("location").toString()
         type = intent.getStringExtra("type")!!
+        latitude = intent.getStringExtra("latitude")!!
+        longitude = intent.getStringExtra("longitude")!!
+
+        Log.e("location",location.toString())
 
         val setName = findViewById<TextView>(R.id.Community_Name)
 
@@ -139,9 +145,6 @@ class UploadIcon : AppCompatActivity() {
             CreateGroup(name.toString())
 
         }
-
-
-
     }
 
     private fun openBottomCameraSheet() {
@@ -280,6 +283,9 @@ class UploadIcon : AppCompatActivity() {
 
     private fun createCommunity() {
 
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
         val parcelFileDescriptor = contentResolver.openFileDescriptor(
             communityUri!!,"r",null
         )?:return
@@ -295,7 +301,11 @@ class UploadIcon : AppCompatActivity() {
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),groupId),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),location),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),latitude),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),longitude),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),type),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
             MultipartBody.Part.createFormData("Profile_pic", file.name, body)
             )
 
@@ -326,11 +336,11 @@ class UploadIcon : AppCompatActivity() {
     }
 
     private fun addCommunityMember() {
-        val members = intent.getStringArrayListExtra("number")
+        val members = intent.getStringArrayListExtra("userId")
 
         for (x in members!!){
 
-           val data = AddUserDataClass("",x,"")
+           val data = AddUserDataClass(x)
 
             val send = RetrofitBuilder.feedsApi.addUser(groupId,data)
 
@@ -343,7 +353,7 @@ class UploadIcon : AppCompatActivity() {
                         val response = response.body()!!
                         Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                         val intent = Intent(applicationContext,MesiboMessagingActivity::class.java)
-                        intent.putExtra(groupId,MesiboUI.PEER)
+                        intent.putExtra(MesiboUI.GROUP_ID,groupId.toLong())
                         startActivity(intent)
 
                         finish()

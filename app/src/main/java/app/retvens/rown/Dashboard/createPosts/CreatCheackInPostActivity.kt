@@ -79,6 +79,11 @@ class CreatCheackInPostActivity : AppCompatActivity(),
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         binding.etLocationPost.setText(CountryStateCityFrBo)
     }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun bottomSelectAudienceClick(audienceFrBo: String) {
         if (canSee == 1){
             binding.canSeeText.text = audienceFrBo

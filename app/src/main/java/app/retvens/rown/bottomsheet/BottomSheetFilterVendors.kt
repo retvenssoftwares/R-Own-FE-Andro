@@ -77,6 +77,10 @@ BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener{
         locationText.text = CountryStateCityFrBo
     }
 
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {
         TODO("Not yet implemented")
     }

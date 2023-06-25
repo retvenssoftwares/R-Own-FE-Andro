@@ -35,6 +35,9 @@ import retrofit2.Response
 class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
     BottomSheetLocation.OnBottomLocationClickListener {
 
+    lateinit var latitude:String
+    lateinit var longtitide:String
+
     var mListener: OnBottomCountryStateCityClickListener ? = null
     fun setOnCountryStateCityClickListener(listener: OnBottomCountryStateCityClickListener?){
         mListener = listener
@@ -44,6 +47,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
     }
     interface OnBottomCountryStateCityClickListener{
         fun bottomCountryStateCityClick(CountryStateCityFrBo : String)
+        fun selectlocation(latitude:String,longitude:String)
     }
 
     companion object {
@@ -272,8 +276,9 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
                 Log.e("error",t.message.toString())
             }
 
-            override fun onStateDataClick(cityData: String) {
-                locationCityET.setText(cityData)
+            override fun onStateDataClick(cityData: CityData) {
+                locationCityET.setText(cityData.name)
+                mListener?.selectlocation(cityData.latitude,cityData.longitude)
                 dialogLanguage.dismiss()
             }
 

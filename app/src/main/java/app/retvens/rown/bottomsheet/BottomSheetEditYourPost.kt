@@ -113,4 +113,8 @@ class BottomSheetEditYourPost(val postId:String,val captiontext:String,val locat
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         location.setText(CountryStateCityFrBo)
     }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
 }

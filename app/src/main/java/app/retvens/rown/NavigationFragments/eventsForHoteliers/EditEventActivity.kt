@@ -513,6 +513,11 @@ class EditEventActivity : AppCompatActivity(),
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         binding.etLocationEvent.setText(CountryStateCityFrBo)
     }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun bottomVBLCClick(eventC: String, NumericCodeFrBo: String) {
         binding.etEventVenue.setText(eventC)
     }

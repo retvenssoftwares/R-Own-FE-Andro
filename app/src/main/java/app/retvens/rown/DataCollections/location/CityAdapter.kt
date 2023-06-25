@@ -20,7 +20,7 @@ class CityAdapter(val context: Context, var cityList:List<CityData>): RecyclerVi
     private var countryClickListener: OnLocationClickListener? = null
 
     interface OnLocationClickListener {
-        fun onStateDataClick(cityData: String)
+        fun onStateDataClick(cityData: CityData)
     }
 
     fun setOnLocationClickListener(listener: OnLocationClickListener) {
@@ -43,7 +43,7 @@ class CityAdapter(val context: Context, var cityList:List<CityData>): RecyclerVi
 
         holder.location.text = data.name.toString()
         holder.itemView.setOnClickListener {
-            countryClickListener?.onStateDataClick(data.name.toString())
+            countryClickListener?.onStateDataClick(data)
         }
 
     }

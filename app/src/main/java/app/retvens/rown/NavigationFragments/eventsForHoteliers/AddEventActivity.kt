@@ -76,6 +76,10 @@ class AddEventActivity : AppCompatActivity(),
         et_location_event.setText(CountryStateCityFrBo)
     }
 
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun bottomVBLCClick(eventC: String, NumericCodeFrBo: String) {
         et_event_venue.setText(eventC)
     }

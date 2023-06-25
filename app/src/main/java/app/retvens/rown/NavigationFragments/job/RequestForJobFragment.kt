@@ -210,4 +210,8 @@ class RequestForJobFragment : Fragment(),
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         selectJobLocationET.setText(CountryStateCityFrBo)
     }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
 }

@@ -220,4 +220,8 @@ class CreateTextPost : AppCompatActivity(),
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         binding.etLocationPostEvent.setText(CountryStateCityFrBo)
     }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
 }

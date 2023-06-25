@@ -543,4 +543,8 @@ class CreatePostActivity : AppCompatActivity(),
         binding.etLocationPostEvent.setText(CountryStateCityFrBo)
     }
 
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
+
 }

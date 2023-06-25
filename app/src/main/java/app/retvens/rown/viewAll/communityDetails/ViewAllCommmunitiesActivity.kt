@@ -38,7 +38,9 @@ class ViewAllCommmunitiesActivity : AppCompatActivity() {
         getCommunities()
     }
     private fun getCommunities() {
-        val getCommunity = RetrofitBuilder.feedsApi.getCommunities()
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+        val getCommunity = RetrofitBuilder.feedsApi.getCommunities(user_id)
 
         getCommunity.enqueue(object : Callback<List<GetCommunitiesData>?> {
             override fun onResponse(
@@ -49,7 +51,7 @@ class ViewAllCommmunitiesActivity : AppCompatActivity() {
                     val response = response.body()!!
                     response.forEach{ it ->
 
-                        cummunity = Community(it.Profile_pic,it.group_name,"${response.size} members",it.group_id)
+                        cummunity = Community(it.Profile_pic,it.group_name,"${it.Members.size} members",it.group_id)
                         communityArrayList.add(cummunity)
                         viewAllCommunitiesAdapter = ViewAllCommunitiesAdapter(this@ViewAllCommmunitiesActivity,communityArrayList)
                         binding.recyclerViewAllCommunity.adapter = viewAllCommunitiesAdapter

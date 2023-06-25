@@ -171,6 +171,11 @@ class JobPostActivity : AppCompatActivity(),
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         postLocationEt.setText(CountryStateCityFrBo)
     }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun bottomJobTitleClick(jobTitleFrBo: String) {
         designation.setText(jobTitleFrBo)
     }

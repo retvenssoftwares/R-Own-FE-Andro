@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.databinding.CreateCummunityItemBinding
 import app.retvens.rown.viewAll.viewAllCommunities.ClosedCommunityDetailsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.OpenCommunityDetailsActivity
+import com.bumptech.glide.Glide
+
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 class CommunityChildAdapter(private val context: Context, private val viewType: Int,
@@ -17,17 +19,20 @@ class CommunityChildAdapter(private val context: Context, private val viewType: 
 
     inner class CommunityViewHolder(private val binding : CreateCummunityItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindCommunityView(recyclerItem: DataItem.CommunityRecyclerData){
-            binding.cImg.setImageResource(recyclerItem.image)
-            binding.title.text = recyclerItem.title
-            binding.members.text = recyclerItem.members
-            binding.joinG.text = recyclerItem.join
+            Glide.with(context).load(recyclerItem.Profile_pic).into(binding.cImg)
+            binding.title.text = recyclerItem.group_name
+            binding.members.text = "${recyclerItem.Members.size.toString()}Members"
+            binding.joinG.text = "Join"
 
+//            binding.joinG.setOnClickListener {
+//                if (recyclerItem.join == "Join"){
+//                    context.startActivity(Intent(context, OpenCommunityDetailsActivity::class.java))
+//                } else {
+//                    context.startActivity(Intent(context, ClosedCommunityDetailsActivity::class.java))
+//                }
+//            }
             binding.joinG.setOnClickListener {
-                if (recyclerItem.join == "Join"){
-                    context.startActivity(Intent(context, OpenCommunityDetailsActivity::class.java))
-                } else {
-                    context.startActivity(Intent(context, ClosedCommunityDetailsActivity::class.java))
-                }
+                context.startActivity(Intent(context, OpenCommunityDetailsActivity::class.java))
             }
         }
     }

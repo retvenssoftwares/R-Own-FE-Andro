@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -66,7 +67,8 @@ class HomeFragment : Fragment() {
 
 
     lateinit var recyclerCommunity : RecyclerView
-    lateinit var communityArrayList : ArrayList<Community>
+    lateinit var communityArrayList : ArrayList<GetCommunitiesData>
+    private var opemcommunity:ArrayList<GetCommunitiesData> = ArrayList()
     private var communitySize:ArrayList<Community> = ArrayList()
     lateinit var adapter:MainAdapter
     var profilepic: String = ""
@@ -141,10 +143,9 @@ class HomeFragment : Fragment() {
         recyclerCommunity.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
         recyclerCommunity.setHasFixedSize(true)
 
-        communityArrayList = arrayListOf<Community>()
+        communityArrayList = arrayListOf<GetCommunitiesData>()
         commentList = ArrayList()
 
-        cummunity = Community("","","","")
 
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
@@ -195,6 +196,7 @@ class HomeFragment : Fragment() {
         getHotels()
         getServices()
         prepareData()
+        getOpenCommunites()
 
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
@@ -231,6 +233,33 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun getOpenCommunites() {
+        val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
+
+        val openCommunity = RetrofitBuilder.feedsApi.getOpenCommunities(user_id)
+
+        openCommunity.enqueue(object : Callback<List<DataItem.CommunityRecyclerData>?> {
+            override fun onResponse(
+                call: Call<List<DataItem.CommunityRecyclerData>?>,
+                response: Response<List<DataItem.CommunityRecyclerData>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    response.forEach { it ->
+                        mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = response))
+                    }
+                }else{
+                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<DataItem.CommunityRecyclerData>?>, t: Throwable) {
+                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     private fun getData() {
 
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -252,6 +281,7 @@ class HomeFragment : Fragment() {
         val getData = RetrofitBuilder.feedsApi.getPost(userId)
 
         getData.enqueue(object : Callback<List<PostsDataClass>?> {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
@@ -364,7 +394,11 @@ class HomeFragment : Fragment() {
 
 
     private fun getCommunities() {
-        val getCommunity = RetrofitBuilder.feedsApi.getCommunities()
+
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val getCommunity = RetrofitBuilder.feedsApi.getCommunities(user_id)
 
         getCommunity.enqueue(object : Callback<List<GetCommunitiesData>?> {
             override fun onResponse(
@@ -373,7 +407,7 @@ class HomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-
+                    Log.e("response",response.toString())
                     val viewAllCommunities = view?.findViewById<CardView>(R.id.view_allCommunity)
                     if (response.size <= 1){
                         viewAllCommunities?.visibility = View.GONE
@@ -381,15 +415,8 @@ class HomeFragment : Fragment() {
 
                     response.forEach{ it ->
 
-                        cummunity = Community(it.Profile_pic,it.group_name,"${response.size} members",it.group_id)
-                        communitySize.add(cummunity)
-                        if (communityArrayList.contains(cummunity)){
-
-                        }else {
-                            communityArrayList.add(cummunity)
-                            recyclerCommunity.adapter = CommunityListAdapter(requireContext(), communityArrayList)
-
-                        }
+//                            communityArrayList.add(it)
+//                            recyclerCommunity.adapter = CommunityListAdapter(requireContext(), response)
                     }
                 }else{
                     if (isAdded) {
@@ -606,11 +633,11 @@ class HomeFragment : Fragment() {
         })
     }
     private fun prepareData() {
-        val communityList = ArrayList<DataItem.CommunityRecyclerData>()
-        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12", "Join"))
-        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34", "Request"))
-        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3", "Join"))
-        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_post,"Vendor 4","78", "Request"))
+//        val communityList = ArrayList<DataItem.CommunityRecyclerData>()
+//        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12", "Join"))
+//        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34", "Request"))
+//        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3", "Join"))
+//        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_post,"Vendor 4","78", "Request"))
 
         val createCommunityList = ArrayList<DataItem.CreateCommunityRecyclerData>()
         createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12"))
