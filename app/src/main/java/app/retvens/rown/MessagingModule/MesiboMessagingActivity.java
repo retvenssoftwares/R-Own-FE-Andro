@@ -42,6 +42,7 @@ import app.retvens.rown.Dashboard.DashBoardActivity;
 import app.retvens.rown.R;
 import app.retvens.rown.api.MesiboCall;
 import app.retvens.rown.api.p000ui.MesiboDefaultCallActivity;
+import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity;
 
 
 public class MesiboMessagingActivity extends AppCompatActivity implements MesiboMessagingFragment.FragmentListener, Mesibo.ConnectionListener {
@@ -164,6 +165,12 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                         if (MesiboMessagingActivity.this.mMesiboUIHelperlistener != null) {
                             MesiboMessagingActivity.this.mMesiboUIHelperlistener.MesiboUI_onShowProfile(MesiboMessagingActivity.this, MesiboMessagingActivity.this.mUser);
                         }
+                        if (groupId > 0) {
+                            Intent intent = new Intent(MesiboMessagingActivity.this, CommunityDetailsActivity.class);
+                            intent.putExtra("groupId",groupId);
+                            startActivity(intent);
+                        }
+
                     }
                 });
             }

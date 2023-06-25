@@ -4,18 +4,30 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityCommunityDetailsBinding
 import com.bumptech.glide.Glide
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 class CommunityDetailsActivity : AppCompatActivity() {
     lateinit var binding: ActivityCommunityDetailsBinding
@@ -33,8 +45,11 @@ class CommunityDetailsActivity : AppCompatActivity() {
         val image = intent.getStringExtra("image")
         val title = intent.getStringExtra("title")
 
-        Glide.with(applicationContext).load(image).into(binding.communityProfile)
-        binding.communityDetailName.text = title
+        val groupId = intent.getLongExtra("groupId",0)
+
+        val grpID:String = groupId.toString()
+
+
 
         binding.communityDetailEditBtn.setOnClickListener {
             val intent = Intent(this, CommunityEditActivity::class.java)
@@ -94,7 +109,44 @@ class CommunityDetailsActivity : AppCompatActivity() {
                 }
             }
         }
+
+        getCommunityDetails(grpID)
     }
+
+    private fun getCommunityDetails(groupId: String?) {
+
+        val getCommunities = RetrofitBuilder.feedsApi.getGroup(groupId!!)
+
+        getCommunities.enqueue(object : Callback<GetCommunitiesData?> {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(
+                call: Call<GetCommunitiesData?>,
+                response: Response<GetCommunitiesData?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Log.e("response",response.toString())
+                    Glide.with(applicationContext).load(response.Profile_pic).into(binding.communityProfile)
+                    binding.communityDetailName.text = response.group_name
+                    binding.communityDetailMembers.text = "${response.Totalmember.toString()} members"
+                    binding.communityDescription.text = response.description
+
+                    val date = convertTimestampToFormattedDate(response.date_added)
+
+                    binding.communityCreatedBy.text = "Created by ${response.creator_name} | $date"
+
+
+                }
+
+            }
+
+            override fun onFailure(call: Call<GetCommunitiesData?>, t: Throwable) {
+
+            }
+        })
+
+    }
+
 
     private fun replaceFragment(fragment: Fragment) {
         if (fragment !=null){
@@ -102,5 +154,21 @@ class CommunityDetailsActivity : AppCompatActivity() {
             transaction.replace(R.id.community_fragment_container,fragment)
             transaction.commit()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertTimestampToFormattedDate(timestamp: String): String {
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yy")
+
+        try {
+            val instant = Instant.parse(timestamp)
+            val zonedDateTime = instant.atZone(ZoneId.of("UTC"))
+            return zonedDateTime.format(outputFormatter)
+        } catch (e: DateTimeParseException) {
+            e.printStackTrace()
+        }
+
+        return ""
     }
 }

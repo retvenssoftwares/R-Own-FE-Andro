@@ -8,6 +8,14 @@
     android:fitsSystemWindows="true"
     tools:context=".CreateCommunity.UploadIcon">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <RelativeLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
@@ -144,22 +152,26 @@
         android:textFontWeight="700"
         />
 
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerUpload"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/Community_Name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/Community_Name"
-            />
+            >
 
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerUpload"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+        </RelativeLayout>
 
-
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <ImageView
         android:id="@+id/nextUpload"
@@ -171,7 +183,4 @@
         android:layout_marginEnd="30dp"
         android:src="@drawable/nextbtn"
         />
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

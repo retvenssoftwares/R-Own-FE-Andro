@@ -32,7 +32,9 @@ class CommunityChildAdapter(private val context: Context, private val viewType: 
 //                }
 //            }
             binding.joinG.setOnClickListener {
-                context.startActivity(Intent(context, OpenCommunityDetailsActivity::class.java))
+                val intent = Intent(context,OpenCommunityDetailsActivity::class.java)
+                intent.putExtra("groupId",recyclerItem.group_id)
+                context.startActivity(intent)
             }
         }
     }

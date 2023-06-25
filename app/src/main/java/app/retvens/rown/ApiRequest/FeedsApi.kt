@@ -191,4 +191,15 @@ interface FeedsApi {
         @Path("postId")postId:String,
         @Body deletePost: DeletePost
     ):Call<UpdateResponse>
+
+    @GET("getgroup/{groupId}")
+    fun getGroup(
+        @Path("groupId")groupId:String
+    ):Call<GetCommunitiesData>
+
+
+    @GET("fetchcommunity/{userID}")
+    fun fetchOpenCommunity(
+        @Path("userID")userID:String
+    ):Call<List<GetCommunitiesData>>
 }

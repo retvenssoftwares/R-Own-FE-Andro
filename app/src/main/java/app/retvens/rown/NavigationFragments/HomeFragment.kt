@@ -415,8 +415,8 @@ class HomeFragment : Fragment() {
 
                     response.forEach{ it ->
 
-//                            communityArrayList.add(it)
-//                            recyclerCommunity.adapter = CommunityListAdapter(requireContext(), response)
+                            communityArrayList.add(it)
+                            recyclerCommunity.adapter = CommunityListAdapter(requireContext(), response)
                     }
                 }else{
                     if (isAdded) {

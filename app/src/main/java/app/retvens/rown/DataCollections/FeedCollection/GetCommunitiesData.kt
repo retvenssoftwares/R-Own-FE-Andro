@@ -15,6 +15,7 @@ data class GetCommunitiesData(
     val Admin: List<Admin>,
     val date_added: String,
     val Members: List<Member>,
+    val Totalmember:Int,
     val __v: Int
 )
 
