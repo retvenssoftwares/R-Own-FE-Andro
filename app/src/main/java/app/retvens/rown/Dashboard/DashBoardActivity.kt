@@ -255,7 +255,15 @@ class DashBoardActivity : AppCompatActivity() {
         }
 
         binding.dropMail.setOnClickListener {
-            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+            val intent = Intent(Intent.ACTION_SEND)
+            val recipients = arrayOf("rown@retvensservices.com")
+            intent.putExtra(Intent.EXTRA_EMAIL, recipients)
+//            intent.putExtra(Intent.EXTRA_SUBJECT, "Subject text here...")
+//            intent.putExtra(Intent.EXTRA_TEXT, "Body of the content here...")
+            intent.putExtra(Intent.EXTRA_CC, "rown@retvensservices.com")
+            intent.type = "text/html"
+            intent.setPackage("com.google.android.gm")
+            startActivity(Intent.createChooser(intent, "Send mail"))
         }
 
         binding.chatWithUs.setOnClickListener {

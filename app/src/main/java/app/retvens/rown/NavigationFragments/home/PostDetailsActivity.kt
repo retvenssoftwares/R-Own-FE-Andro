@@ -42,7 +42,7 @@ class PostDetailsActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener { onBackPressed() }
 
-        savedPost = findViewById(R.id.savedPost)
+        savedPost = findViewById(R.id.savePost)
 
         val name = findViewById<TextView>(R.id.user_name_post)
         val profile = findViewById<ShapeableImageView>(R.id.post_profile)

@@ -179,6 +179,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/can_see"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/user_location_post_event"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="Location"
+        android:textColorHint="@color/black"
+        app:boxStrokeColor="@color/black"
+        app:endIconDrawable="@drawable/png_location"
+        app:endIconMode="custom"
+        app:endIconTint="@color/black"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_complete_profile">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_location_post_event"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/black"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="Select Your Location"
+            android:editable="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/whatDY"
         android:layout_width="match_parent"
@@ -190,7 +220,7 @@
         android:layout_marginTop="18dp"
         app:layout_constraintStart_toStartOf="@id/user_complete_profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/user_complete_profile">
+        app:layout_constraintTop_toBottomOf="@id/user_location_post_event">
         <EditText
             android:id="@+id/whatDYEt"
             android:layout_width="match_parent"
@@ -205,35 +235,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/syjh"/>
     </androidx.cardview.widget.CardView>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/user_location_post_event"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Location"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="100dp"
-        android:textColorHint="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:boxStrokeColor="@color/black"
-        app:endIconDrawable="@drawable/png_location"
-        app:endIconMode="custom"
-        app:endIconTint="@color/black"
-        android:layout_marginTop="30dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_location_post_event"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/black"
-            android:clickable="true"
-            android:focusable="false"
-            android:hint="Select Your Location"
-            android:editable="false"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

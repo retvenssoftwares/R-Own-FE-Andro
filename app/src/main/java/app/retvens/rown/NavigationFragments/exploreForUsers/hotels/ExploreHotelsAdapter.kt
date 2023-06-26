@@ -55,7 +55,11 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
         var operatioin = "push"
 
         holder.name.text = listS[position].hotelName
-        holder.location.text = listS[position].hotelAddress
+
+        val nameParts = listS[position].hotelAddress.split(",")
+        val firstN = nameParts.getOrElse(0) { "" }
+
+        holder.location.text = firstN
         holder.hotelStar.text = listS[position].hotelRating.toString() + " Hotel"
 
         Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)

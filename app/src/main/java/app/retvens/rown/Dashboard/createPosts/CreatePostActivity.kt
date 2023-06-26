@@ -313,8 +313,8 @@ class CreatePostActivity : AppCompatActivity(),
                 Toast.makeText(applicationContext,"Select Comment Status",Toast.LENGTH_SHORT).show()
             }else if (imagesList.isEmpty()){
                 Toast.makeText(applicationContext,"Select Image",Toast.LENGTH_SHORT).show()
-            }else if (binding.etLocationPostEvent.text.toString().isEmpty()){
-                binding.etLocationPostEvent.error = "select location first!!"
+//            }else if (binding.etLocationPostEvent.text.toString().isEmpty()){
+//                binding.etLocationPostEvent.error = "select location first!!"
             }else{
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

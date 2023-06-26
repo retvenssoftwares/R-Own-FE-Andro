@@ -535,6 +535,7 @@
                             android:layout_marginVertical="4dp"
                             android:layout_marginHorizontal="18dp"
                             app:cardCornerRadius="12dp"
+                              android:visibility="gone"
                             app:cardBackgroundColor="@color/grey_3"
                             app:cardElevation="6dp">
 
@@ -619,6 +620,7 @@
                                 android:layout_marginVertical="4dp"
                                 android:layout_marginHorizontal="18dp"
                                 app:cardCornerRadius="12dp"
+                              android:visibility="gone"
                                 app:cardBackgroundColor="@color/grey_3"
                                 app:cardElevation="6dp">
 
@@ -765,6 +767,7 @@
                     android:textColor="@color/black"
                     android:layout_gravity="bottom"
                     android:text="Setting"
+                    android:visibility="gone"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="40dp"
                     android:layout_alignParentStart="true"
@@ -779,6 +782,7 @@
                     android:textColor="@color/black"
                     android:layout_gravity="bottom"
                     android:text="Logout"
+                    android:visibility="gone"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="40dp"
                     android:layout_alignParentEnd="true"
