@@ -70,6 +70,7 @@ import java.util.TimerTask;
 import app.retvens.rown.ChatSection.MesiboUsers;
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
 import app.retvens.rown.R;
+import app.retvens.rown.api.MesiboCall;
 
 public class UserListFragment extends Fragment implements Mesibo.MessageListener,
         Mesibo.PresenceListener, Mesibo.ConnectionListener, Mesibo.ProfileListener, Mesibo.SyncListener, Mesibo.GroupListener {
@@ -170,6 +171,9 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         MesiboImages.init(getActivity());
         this.mMesiboUIHelperListener = MesiboUI.getListener();
         this.mMesiboUIOptions = MesiboUI.getConfig();
+
+
+
         this.mSelectionMode = MesiboUserListFragment.MODE_MESSAGELIST;
         this.mReadQuery = null;
         Bundle b = getArguments();

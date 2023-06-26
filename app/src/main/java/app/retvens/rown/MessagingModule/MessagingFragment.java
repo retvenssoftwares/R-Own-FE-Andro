@@ -108,6 +108,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
 import app.retvens.rown.MessagingModule.AllUtils.TextToEmoji;
@@ -961,8 +962,8 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
             } else if (profile.isChatting() && 0L == groupid) {
                 status = this.mMesiboUIOptions.joinedIndicationTitle;
             } else if (profile.isOnline() && 0L == groupid) {
-                if (getContext().getResources().getString(R.string.online_text)!=null)
-                status = getContext().getResources().getString(R.string.online_text);
+                if (isAdded()&&requireContext().getResources().getString(R.string.online_text)!=null)
+                status = requireContext().getResources().getString(R.string.online_text);
             }
 
             return this.updateUserStatus(status, 0L);
@@ -1147,6 +1148,26 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     }
 
     public void Mesibo_onMessage(MesiboMessage msg) {
+
+
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (msg.isIncoming() && isAdded()) {
+//                    if (msg.is() && isAdded()) {
+//                        Log.e("msg", "sent");
+//                    } else {
+//                        Log.e("msg", "ok");
+//                    }
+//                }
+//            }
+//        });
+//
+//        thread.start();
+
+
+
+
         if (!msg.isIncomingCall() && !msg.isOutgoingCall()) {
             if (this.isForMe(msg)) {
                 if (msg.isEndToEndEncryptionStatus()) {
@@ -1158,6 +1179,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                         return;
                     }
                 }
+
 
                 MessageData m = this.findMessage(msg.mid);
                 if (null == m) {

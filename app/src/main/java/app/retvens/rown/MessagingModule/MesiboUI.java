@@ -72,7 +72,7 @@ public class MesiboUI {
         public int headerIcon = com.mesibo.messaging.R.drawable.ic_info_black;
         public int headerIconColor = -16742773;
         public String headerTitle = "";
-        public String joinedIndicationTitle = "joined";
+        public String joinedIndicationTitle = "Online";
         public boolean mConvertSmilyToEmoji = true;
         public boolean mEnableNotificationBadge = false;
         protected String mGoogleApiKey = null;

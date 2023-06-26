@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
@@ -38,24 +39,30 @@ class MesiboUsers : AppCompatActivity() {
 
     private fun getMesiboUsers() {
 
-        val send = RetrofitBuilder.retrofitBuilder.getProfile()
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        send.enqueue(object : Callback<List<UserProfileRequestItem>?> {
+        val send = RetrofitBuilder.connectionApi.getConnectionList(user_id)
+
+        send.enqueue(object : Callback<List<ConnectionListDataClass>?> {
             override fun onResponse(
-                call: Call<List<UserProfileRequestItem>?>,
-                response: Response<List<UserProfileRequestItem>?>
+                call: Call<List<ConnectionListDataClass>?>,
+                response: Response<List<ConnectionListDataClass>?>
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    receiverProfileAdapter = ReceiverProfileAdapter(baseContext,response)
-                    recycler.adapter = receiverProfileAdapter
-                    receiverProfileAdapter.notifyDataSetChanged()
+                    response.forEach {
+                        receiverProfileAdapter = ReceiverProfileAdapter(baseContext,it.conns)
+                        recycler.adapter = receiverProfileAdapter
+                        receiverProfileAdapter.notifyDataSetChanged()
+                    }
+
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<List<UserProfileRequestItem>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<ConnectionListDataClass>?>, t: Throwable) {
                 Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })

@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
@@ -19,7 +21,7 @@ import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.mesibo.api.MesiboProfile
 
-class ReceiverProfileAdapter(val context: Context, var userList:List<UserProfileRequestItem>) :
+class ReceiverProfileAdapter(val context: Context, var userList:List<Connections>) :
     RecyclerView.Adapter<ReceiverProfileAdapter.ProfileViewHolder>() {
 
     class ProfileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

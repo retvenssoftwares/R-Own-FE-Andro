@@ -26,34 +26,16 @@ import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
-import app.retvens.rown.NavigationFragments.EventFragment
-import app.retvens.rown.NavigationFragments.EventFragmentForHoteliers
-import app.retvens.rown.NavigationFragments.ExploreFragment
-import app.retvens.rown.NavigationFragments.HomeFragment
-import app.retvens.rown.NavigationFragments.JobFragment
-import app.retvens.rown.NavigationFragments.JobsForHoteliers
-import app.retvens.rown.NavigationFragments.ProfileFragment
-import app.retvens.rown.NavigationFragments.ProfileFragmentForHotelOwner
-import app.retvens.rown.NavigationFragments.ProfileFragmentForVendors
+import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
+import app.retvens.rown.api.MesiboCall
 import app.retvens.rown.bottomsheet.BottomSheet.Companion.TAG
 import app.retvens.rown.databinding.ActivityDashBoardBinding
-import app.retvens.rown.sideNavigation.BugSpottedActivity
-import app.retvens.rown.sideNavigation.ChatWithUsActivity
-import app.retvens.rown.sideNavigation.FAQ_Activity
-import app.retvens.rown.sideNavigation.PrivacyPolicyActivity
-import app.retvens.rown.sideNavigation.TermsAndCActivity
-import app.retvens.rown.utils.clearConnectionNo
-import app.retvens.rown.utils.clearFullName
-import app.retvens.rown.utils.clearProfileImage
-import app.retvens.rown.utils.clearUserId
-import app.retvens.rown.utils.moveToClear
-import app.retvens.rown.utils.phone
-import app.retvens.rown.utils.profileCompletionStatus
-import app.retvens.rown.utils.role
+import app.retvens.rown.sideNavigation.*
+import app.retvens.rown.utils.*
 import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
@@ -63,6 +45,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
+import com.mesibo.api.Mesibo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -112,6 +95,14 @@ class DashBoardActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         mActivityTitle = title.toString()
 
+
+//     Initializing call
+        val backThread = Thread{
+            MesiboCall.getInstance().init(this)
+            Mesibo.getInstance().init(this)
+        }
+
+        backThread.start()
 
 
         toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close)
