@@ -16,10 +16,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import app.retvens.rown.ApiRequest.MyBackgroundService
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
@@ -45,7 +49,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
-import com.mesibo.api.Mesibo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -97,12 +100,18 @@ class DashBoardActivity : AppCompatActivity() {
 
 
 //     Initializing call
-        val backThread = Thread{
-            MesiboCall.getInstance().init(this)
-            Mesibo.getInstance().init(this)
-        }
+//        val backThread = Thread{
+//            MesiboCall.getInstance().init(this)
+//        }
+//
+//        backThread.start()
 
-        backThread.start()
+        val serviceIntent = Intent(applicationContext, MyBackgroundService::class.java)
+        ContextCompat.startForegroundService(applicationContext, serviceIntent)
+
+
+//        val foregroundServiceIntent = Intent(applicationContext, MyForegroundService::class.java)
+//        ContextCompat.startForegroundService(applicationContext, foregroundServiceIntent)
 
 
         toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close)

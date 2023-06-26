@@ -59,6 +59,24 @@ interface FeedsApi {
 //    fun getCommunities():Call<List<GetCommunitiesData>>
 
     @Multipart
+    @PATCH("updategroup/{groupId}")
+    fun updateGroup(
+        @Path("groupId")groupId:String,
+        @Part("group_name")group_name:RequestBody,
+        @Part("description")description:RequestBody,
+        @Part Profile_pic: MultipartBody.Part
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("updategroup/{groupId}")
+    fun updateGroupDetails(
+        @Path("groupId")groupId:String,
+        @Part("group_name")group_name:RequestBody,
+        @Part("description")description:RequestBody,
+    ):Call<UpdateResponse>
+
+
+    @Multipart
     @POST("post/{user_id}")
     fun createPost(
         @Path("user_id") user_id:String,

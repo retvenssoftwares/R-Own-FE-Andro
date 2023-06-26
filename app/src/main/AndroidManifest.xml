@@ -384,6 +384,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+
+
         <activity
             android:name=".NavigationFragments.profile.viewRequests.ViewRequestsActivity"
             android:exported="false"
@@ -594,6 +597,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <service
+            android:name=".ApiRequest.MyBackgroundService"
+            android:stopWithTask="false" />
     </application>
+
 
 </manifest>

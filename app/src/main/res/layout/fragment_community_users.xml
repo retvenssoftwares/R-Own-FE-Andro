@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:paddingBottom="10dp"
             android:layout_marginHorizontal="10dp"
             app:cardBackgroundColor="@color/white">
 
@@ -33,102 +34,21 @@
 
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/staticCard"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listOfOwners"
             android:layout_width="match_parent"
-            android:background="#FFFFFF"
-            app:cardCornerRadius="8dp"
-            android:layout_marginVertical="12dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/personal_notification_profile"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginVertical="10dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    app:shapeAppearanceOverlay="@style/SquareCornerImage"
-                    android:src="@drawable/png_vendor"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
-
-                <TextView
-                    android:id="@+id/personal_notification_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:text="Indore Food Bloggers"
-                    android:textColor="@color/black"
-                    android:maxLines="2"
-                    android:textSize="14dp"
-                    android:layout_marginTop="2dp"
-                    app:layout_constraintEnd_toStartOf="@id/rating_bar"
-                    app:layout_constraintStart_toEndOf="@+id/personal_notification_profile"
-                    app:layout_constraintTop_toTopOf="@id/personal_notification_profile" />
-
-                <TextView
-                    android:id="@+id/location_notification"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:text="Location"
-                    android:textColor="@color/grey_60"
-                    android:textSize="12dp"
-                    android:drawableStart="@drawable/svg_navigation_location"
-                    android:drawableTint="@color/black"
-                    android:drawablePadding="5dp"
-                    app:layout_constraintEnd_toStartOf="@id/rating_bar"
-                    app:layout_constraintStart_toEndOf="@+id/personal_notification_profile"
-                    app:layout_constraintTop_toBottomOf="@+id/personal_notification_name" />
-
-                <RatingBar
-                    android:id="@+id/rating_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="15dp"
-                    android:rating="3"
-                    android:stepSize="5"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_margin="5dp"
-                    android:progress="5"
-                    android:progressTint="@color/quantum_yellow"
-                    app:layout_constraintEnd_toStartOf="@id/users"
-                    app:layout_constraintTop_toTopOf="@id/users"
-                    app:layout_constraintBottom_toBottomOf="@id/users"/>
-
-                <TextView
-                    android:id="@+id/users"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4.5"
-                    android:textSize="12dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="12dp"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textColor="@color/grey_60"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/vendors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginHorizontal="10dp"
             app:cardBackgroundColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -146,12 +66,18 @@
 
         </androidx.cardview.widget.CardView>
 
-        <include layout="@layout/item_businessess_in__community"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listOfVendors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/hoteliers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginHorizontal="10dp"
             app:cardBackgroundColor="@color/white">
 
@@ -172,6 +98,7 @@
             android:id="@+id/others"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginHorizontal="10dp"
             app:cardBackgroundColor="@color/white">
 

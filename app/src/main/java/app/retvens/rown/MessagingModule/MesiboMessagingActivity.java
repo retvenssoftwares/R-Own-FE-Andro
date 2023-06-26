@@ -70,7 +70,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
     private Toolbar mToolbar = null;
     private TextView mUserStatus = null;
     private ImageView isOnlineDot;
-
+    private Long groupId;
 
     /* access modifiers changed from: protected */
     @SuppressLint("MissingInflatedId")
@@ -104,7 +104,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             this.mMesiboUIHelperlistener = MesiboUI.getListener();
             this.mMesiboUIOptions = MesiboUI.getConfig();
             String peer = args.getString(MesiboUI.PEER);
-            long groupId = args.getLong(MesiboUI.GROUP_ID);
+            groupId = args.getLong(MesiboUI.GROUP_ID);
             if (groupId > 0) {
                 this.mUser = Mesibo.getProfile(groupId);
             } else {
@@ -178,6 +178,12 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         }
         this.callButton = findViewById(R.id.action_call);
         this.videoCallButton = findViewById(R.id.action_videocall);
+
+        if (groupId > 0) {
+            this.callButton.setVisibility(View.GONE);
+            this.videoCallButton.setVisibility(View.GONE);
+        }
+
         String destination = "destination";
         this.callButton.setOnClickListener(new View.OnClickListener() {
             @Override

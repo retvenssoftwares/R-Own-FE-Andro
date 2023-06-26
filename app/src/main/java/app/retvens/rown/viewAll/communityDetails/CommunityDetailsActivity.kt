@@ -31,7 +31,11 @@ import java.time.format.DateTimeParseException
 
 class CommunityDetailsActivity : AppCompatActivity() {
     lateinit var binding: ActivityCommunityDetailsBinding
-
+    lateinit var image:String
+    lateinit var name:String
+    lateinit var description:String
+    lateinit var groupId: String
+    lateinit var location :String
     private var isSwitchToCloseCommunity = true
     var isBusinessVisible = true
 
@@ -42,8 +46,7 @@ class CommunityDetailsActivity : AppCompatActivity() {
 
         binding.communityDetailBackBtn.setOnClickListener { onBackPressed() }
 
-        val image = intent.getStringExtra("image")
-        val title = intent.getStringExtra("title")
+
 
         val groupId = intent.getLongExtra("groupId",0)
 
@@ -54,16 +57,19 @@ class CommunityDetailsActivity : AppCompatActivity() {
         binding.communityDetailEditBtn.setOnClickListener {
             val intent = Intent(this, CommunityEditActivity::class.java)
             intent.putExtra("image", image)
-            intent.putExtra("title", title)
+            intent.putExtra("name", name)
+            intent.putExtra("desc",description)
+            intent.putExtra("groupId",grpID)
+            intent.putExtra("location",location)
             startActivity(intent)
         }
 
-        replaceFragment(CommunityUsersFragment())
+        replaceFragment(CommunityUsersFragment(grpID))
 
         binding.usersText.setOnClickListener {
             binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
             binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
-            replaceFragment(CommunityUsersFragment())
+            replaceFragment(CommunityUsersFragment(grpID))
         }
         binding.mediaText.setOnClickListener {
             binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
@@ -130,6 +136,11 @@ class CommunityDetailsActivity : AppCompatActivity() {
                     binding.communityDetailName.text = response.group_name
                     binding.communityDetailMembers.text = "${response.Totalmember.toString()} members"
                     binding.communityDescription.text = response.description
+
+                    image = response.Profile_pic
+                    name = response.group_name
+                    description = response.description
+                    location = ""
 
                     val date = convertTimestampToFormattedDate(response.date_added)
 

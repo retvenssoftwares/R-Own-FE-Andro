@@ -1150,20 +1150,19 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     public void Mesibo_onMessage(MesiboMessage msg) {
 
 
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (msg.isIncoming() && isAdded()) {
-//                    if (msg.is() && isAdded()) {
-//                        Log.e("msg", "sent");
-//                    } else {
-//                        Log.e("msg", "ok");
-//                    }
-//                }
-//            }
-//        });
-//
-//        thread.start();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (msg.isIncoming() && isAdded()) {
+
+                    Log.e("msg", "sent");
+                }else {
+                    Log.e("msg", "okk");
+                }
+            }
+        });
+
+        thread.start();
 
 
 
