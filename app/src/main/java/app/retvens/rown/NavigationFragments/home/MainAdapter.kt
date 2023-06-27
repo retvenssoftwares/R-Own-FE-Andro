@@ -57,6 +57,7 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
     interface OnItemClickListener {
         fun onItemClick(dataItem: PostItem)
         fun onItemClickForComment(banner: PostItem,position: Int)
+        fun onItemsharePost(share:PostItem,position: Int)
 
     }
 
@@ -133,6 +134,9 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                             binding.likePost.setImageResource(R.drawable.svg_like_post)
                         }
 
+            binding.sharePost.setOnClickListener {
+                onItemClickListener?.onItemsharePost(banner,position)
+            }
 
             banner.media.forEach { media ->
                 val timestamp = convertTimeToText(media.date_added)

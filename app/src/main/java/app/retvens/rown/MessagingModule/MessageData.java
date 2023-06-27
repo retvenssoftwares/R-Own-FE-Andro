@@ -12,11 +12,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboMessage;
 import com.mesibo.messaging.MesiboConfiguration;
 import com.mesibo.messaging.MesiboImages;
+
+import java.util.Locale;
 
 import app.retvens.rown.R;
 
@@ -41,8 +44,13 @@ public class MessageData {
         this.mContext = context;
         if (msg2.isDate()) {
             MesiboUI.Config opts = MesiboUI.getConfig();
-            msg2.message = msg2.getDate(true, context.getResources().getString(R.string.today_text),
-                    context.getResources().getString(R.string.yesterday));
+            try {
+                msg2.message = msg2.getDate(true, mContext.getResources().getString(R.string.today_text),
+                        mContext.getResources().getString(R.string.yesterday));
+            }catch (NullPointerException e){
+                Log.e("error",e.getMessage().toString());
+            }
+
         }
     }
 

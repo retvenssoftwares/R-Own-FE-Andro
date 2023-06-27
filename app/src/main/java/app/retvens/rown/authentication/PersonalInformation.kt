@@ -312,7 +312,7 @@ class PersonalInformation : AppCompatActivity() {
             val outputStream = FileOutputStream(file)
             inputStream!!.copyTo(outputStream)
 
-            val profile = getProfile()
+            val profile = Mesibo.getProfile(Mesibo_account.address)
             profile.image = decodeSampledBitmapFromFile(file,200,150)
             profile.save()
 
@@ -529,11 +529,6 @@ class PersonalInformation : AppCompatActivity() {
             }
 
         }
-    }
-
-    fun getProfile(): MesiboProfile {
-        if (mGroupId > 0) return Mesibo.getProfile(mGroupId)
-        return Mesibo.getSelfProfile()
     }
 
     private fun createImageUri(): Uri? {

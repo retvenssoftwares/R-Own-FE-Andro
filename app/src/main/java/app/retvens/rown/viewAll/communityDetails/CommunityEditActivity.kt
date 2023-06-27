@@ -120,6 +120,7 @@ class CommunityEditActivity : AppCompatActivity() {
         updateProfile.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
+
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful){

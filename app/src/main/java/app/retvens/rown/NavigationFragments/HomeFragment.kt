@@ -37,13 +37,10 @@ import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.home.Community
 import app.retvens.rown.NavigationFragments.home.CommunityListAdapter
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheet
 //import com.karan.multipleviewrecyclerview.Banner
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
-import app.retvens.rown.bottomsheet.BottomSheetComment
-import app.retvens.rown.bottomsheet.BottomSheetLocation
-import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
+import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.utils.connectionCount
 import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
@@ -361,6 +358,12 @@ class HomeFragment : Fragment() {
                             val bottomSheet = BottomSheetComment(banner.post_id,banner.Profile_pic)
                             val fragManager = (activity as FragmentActivity).supportFragmentManager
                             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
+                        }
+
+                        override fun onItemsharePost(share: PostItem, position: Int) {
+                            val bottomSheet = BottomSheetSharePost(share)
+                            val fragManager = (activity as FragmentActivity).supportFragmentManager
+                            fragManager.let{bottomSheet.show(it, BottomSheetSharePost.Company_TAG)}
                         }
 
                     })

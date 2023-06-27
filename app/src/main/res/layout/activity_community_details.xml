@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="55dp"
         android:background="#272A3D"
         android:paddingTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"

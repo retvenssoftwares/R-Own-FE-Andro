@@ -1149,24 +1149,6 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 
     public void Mesibo_onMessage(MesiboMessage msg) {
 
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (msg.isIncoming() && isAdded()) {
-
-                    Log.e("msg", "sent");
-                }else {
-                    Log.e("msg", "okk");
-                }
-            }
-        });
-
-        thread.start();
-
-
-
-
         if (!msg.isIncomingCall() && !msg.isOutgoingCall()) {
             if (this.isForMe(msg)) {
                 if (msg.isEndToEndEncryptionStatus()) {

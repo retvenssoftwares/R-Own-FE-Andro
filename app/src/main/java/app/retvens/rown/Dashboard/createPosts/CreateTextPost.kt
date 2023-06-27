@@ -222,6 +222,6 @@ class CreateTextPost : AppCompatActivity(),
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 }

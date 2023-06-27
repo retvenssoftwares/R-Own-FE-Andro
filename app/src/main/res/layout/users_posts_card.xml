@@ -141,6 +141,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/user_id_on_comment"/>
 
         <LinearLayout
+            android:id="@+id/postaction"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:orientation="horizontal"
@@ -210,6 +211,18 @@
         </LinearLayout>
 
     </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/share_post"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/vector_savedd"
+            app:layout_constraintStart_toEndOf="@+id/postaction"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="18dp"
+            android:layout_marginStart="16dp"
+            />
 
         <ImageView
             android:id="@+id/savePost"
