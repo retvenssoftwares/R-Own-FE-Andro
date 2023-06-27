@@ -2,13 +2,19 @@ package app.retvens.rown.utils
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.ImageView
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -16,6 +22,8 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
 import app.retvens.rown.Dashboard.profileCompletion.frags.VendorsFragment
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -174,4 +182,19 @@ fun compressImage(imageUri: Uri, context: Context): Uri {
         e.printStackTrace()
     }
     return compressed
+}
+
+fun showFullImage(profilePic : String, context: Context) {
+    val dialog = Dialog(context)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.setContentView(R.layout.dialog_full_image)
+
+
+    val profile = dialog.findViewById<ImageView>(R.id.profile)
+    Glide.with(context).load(profilePic).into(profile)
+
+    dialog.show()
+    dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
 }

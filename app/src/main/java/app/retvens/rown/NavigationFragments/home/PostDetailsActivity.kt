@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.home
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -92,7 +93,11 @@ class PostDetailsActivity : AppCompatActivity() {
         viewPager.adapter = viewPagerAdapter
 
 
-        indicator.setViewPager(viewPager)
+        if (postPic.size > 1) {
+            indicator.setViewPager(viewPager)
+        } else {
+            indicator.visibility = View.GONE
+        }
 
         var isLike = intent.getStringExtra("islike").toBoolean()
 

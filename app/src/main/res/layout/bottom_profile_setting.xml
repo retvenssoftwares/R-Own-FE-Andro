@@ -7,12 +7,15 @@
     android:paddingBottom="20dp"
     android:background="@drawable/top_round">
 
+    <!--Vendors Review visibility gone-->
+    <!--Vendors Review visibility gone-->
     <LinearLayout
         android:id="@+id/reviews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="40dp">
@@ -37,7 +40,11 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:visibility="gone"
         android:background="@color/grey_40" />
+    <!--Vendors Review visibility gone-->
+    <!--Vendors Review visibility gone-->
+
     <LinearLayout
         android:id="@+id/settings"
         android:layout_width="match_parent"

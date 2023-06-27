@@ -117,8 +117,12 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                             binding.viewPager.adapter = viewPagerAdapter
 
 
-                            indicator = binding.indicator as CircleIndicator
-                            indicator.setViewPager(binding.viewPager)
+                            if (post.media.size >1) {
+                                indicator = binding.indicator as CircleIndicator
+                                indicator.setViewPager(binding.viewPager)
+                            } else{
+                                binding.indicator.visibility = View.GONE
+                            }
                         }
 
 //
