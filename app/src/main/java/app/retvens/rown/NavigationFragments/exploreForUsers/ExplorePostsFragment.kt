@@ -27,7 +27,6 @@ import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
 import app.retvens.rown.NavigationFragments.profile.media.MediaData
 import app.retvens.rown.R
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.github.ybq.android.spinkit.SpinKitView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

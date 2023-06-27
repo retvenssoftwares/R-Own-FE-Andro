@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -28,6 +29,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -41,6 +43,7 @@ class VendorProfileActivity : AppCompatActivity() {
     lateinit var profile : ShapeableImageView
     lateinit var name : TextView
     lateinit var bio : TextView
+    lateinit var websiteLink : TextView
     lateinit var profile_username : TextView
 
     lateinit var polls : TextView
@@ -55,6 +58,7 @@ class VendorProfileActivity : AppCompatActivity() {
     var created = ""
     var location = ""
     var verification = ""
+    var profilePic = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +73,7 @@ class VendorProfileActivity : AppCompatActivity() {
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
+        websiteLink = findViewById(R.id.linkText)
 
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
@@ -81,6 +86,22 @@ class VendorProfileActivity : AppCompatActivity() {
         services = findViewById(R.id.services)
 
         val userId = intent.getStringExtra("userId").toString()
+        val connStat = intent.getStringExtra("status").toString()
+
+        if(connStat.isNotEmpty()){
+            if (connStat == "Not Connected"){
+                connStatus.text = "CONNECT"
+            } else if (connStat == "Connected"){
+                connStatus.text = "Interact"
+            } else {
+                connStatus.text = connStat
+            }
+        }
+
+        profile.setOnLongClickListener {
+            showFullImage(profilePic, this)
+            true
+        }
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -88,7 +109,7 @@ class VendorProfileActivity : AppCompatActivity() {
         getUserPofile(userId,user_id)
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId))
+        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId, false))
         transaction.commit()
 
         polls.setOnClickListener {
@@ -106,7 +127,7 @@ class VendorProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userId))
+            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userId, false))
             transaction.commit()
         }
         services.setOnClickListener {
@@ -128,6 +149,12 @@ class VendorProfileActivity : AppCompatActivity() {
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId))
             transaction.commit()
+        }
+
+        websiteLink.setOnClickListener{
+            val uri = Uri.parse("https://" + websiteLink.text.toString())
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
         }
 
         setting = findViewById(R.id.profile_setting)
@@ -201,11 +228,13 @@ class VendorProfileActivity : AppCompatActivity() {
                     val response = response.body()!!
                     Log.e("response",response.toString())
                     try{
+                        profilePic = response.roleDetails.Profile_pic
                         Glide.with(applicationContext).load(response.roleDetails.Profile_pic)
                             .into(profile)
                         name.text = response.roleDetails.Full_name
                         profile_username.text = response.roleDetails.User_name
                         bio.text = response.roleDetails.vendorInfo.vendorDescription
+                        websiteLink.text = response.roleDetails.vendorInfo.websiteLink
 
                         connCount.text = response.connectioncount.toString()
                         postCount.text = response.postcount.toString()

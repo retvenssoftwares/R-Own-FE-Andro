@@ -38,6 +38,7 @@ import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetHotelierProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetVendorsProfileSetting
+import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -64,6 +65,8 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     lateinit var postCount:TextView
     lateinit var connCont:TextView
     lateinit var requestCont:TextView
+
+    var profilePic = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,6 +95,11 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         postCount = view.findViewById(R.id.posts_count)
         connCont = view.findViewById(R.id.connections_count)
         requestCont = view.findViewById(R.id.requests_count)
+
+        profile.setOnLongClickListener {
+            showFullImage(profilePic, requireContext())
+            true
+        }
 
         val sharedPreferencesID = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesID?.getString("user_id", "").toString()
@@ -124,7 +132,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
 
 
-        val childFragment: Fragment = MediaFragment(user_id)
+        val childFragment: Fragment = MediaFragment(user_id, true)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -156,7 +164,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = MediaFragment(user_id)
+            val childFragment: Fragment = MediaFragment(user_id, true)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -230,6 +238,10 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
+
+                    profilePic = response.profiledata.Profile_pic
+                    Glide.with(requireContext()).load(profilePic).into(profile)
+
                     connCont.text = response.connection_Count.toString()
                     requestCont.text = response.requests_count.toString()
                     postCount.text = response.post_count.toString()

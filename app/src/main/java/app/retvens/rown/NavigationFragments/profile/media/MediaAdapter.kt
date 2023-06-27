@@ -62,7 +62,7 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
 
 
         holder.itemView.setOnLongClickListener {
-            onItemClickListener?.onItemClick(media)
+                onItemClickListener?.onItemClick(media)
             true
         }
 

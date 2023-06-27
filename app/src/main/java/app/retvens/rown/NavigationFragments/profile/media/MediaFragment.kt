@@ -25,7 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MediaFragment(val userId: String) : Fragment(), MediaAdapter.OnItemClickListener {
+class MediaFragment(val userId: String, val isOwner : Boolean) : Fragment(), MediaAdapter.OnItemClickListener {
 
     lateinit var mediaRecyclerView: RecyclerView
     lateinit var mediaAdapter: MediaAdapter
@@ -125,8 +125,10 @@ class MediaFragment(val userId: String) : Fragment(), MediaAdapter.OnItemClickLi
     }
 
     override fun onItemClick(dataItem: PostItem) {
+        if (isOwner){
         val bottomSheet = BottomSheetPostEdit(dataItem.post_id,dataItem.caption,dataItem.location)
         val fragManager = (activity as FragmentActivity).supportFragmentManager
         fragManager.let{bottomSheet.show(it, BottomSheetPostEdit.Hotelier_TAG)}
     }
+}
 }

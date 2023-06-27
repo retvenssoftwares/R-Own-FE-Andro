@@ -28,6 +28,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRAct
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
+import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -52,6 +53,7 @@ class UserProfileActivity : AppCompatActivity() {
     var created = ""
     var location = ""
     var verification = ""
+    var profilePic = ""
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +80,23 @@ class UserProfileActivity : AppCompatActivity() {
 
 
         val userID = intent.getStringExtra("userId").toString()
+        val connStat = intent.getStringExtra("status").toString()
+
+        if(connStat.isNotEmpty()){
+            if (connStat == "Not Connected"){
+                connStatus.text = "CONNECT"
+            } else if (connStat == "Connected"){
+                connStatus.text = "Interact"
+            } else {
+                connStatus.text = connStat
+            }
+        }
+
+
+        profile.setOnLongClickListener {
+            showFullImage(profilePic, this)
+            true
+        }
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -85,7 +104,7 @@ class UserProfileActivity : AppCompatActivity() {
         getUserPofile(userID,user_id)
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID))
+        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false))
         transaction.commit()
 
         polls.setOnClickListener {
@@ -103,7 +122,7 @@ class UserProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID))
+            transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false))
             transaction.commit()
         }
         status.setOnClickListener {
@@ -185,6 +204,7 @@ class UserProfileActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
+                    profilePic = response.data.profile.Profile_pic
                     Glide.with(applicationContext).load(response.data.profile.Profile_pic).into(profile)
                     profile_username.text = response.data.profile.User_name
                     name.text = response.data.profile.Full_name

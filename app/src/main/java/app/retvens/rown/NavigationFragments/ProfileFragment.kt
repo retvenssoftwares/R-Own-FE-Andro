@@ -1,15 +1,21 @@
 package app.retvens.rown.NavigationFragments
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
@@ -28,6 +34,7 @@ import app.retvens.rown.NavigationFragments.profile.viewRequests.ViewRequestsAct
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
+import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -50,6 +57,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
     lateinit var connCont:TextView
     lateinit var requestCont:TextView
 
+    var profilePic = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +81,10 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         connCont = view.findViewById(R.id.connections_count)
         requestCont = view.findViewById(R.id.requests_count)
 
-
+        profile.setOnLongClickListener {
+            showFullImage(profilePic, requireContext())
+            true
+        }
 
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
@@ -98,7 +109,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         }
         name.text = profileName
 
-        val childFragment: Fragment = MediaFragment(user_id)
+        val childFragment: Fragment = MediaFragment(user_id, true)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -125,7 +136,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
 
-            val childFragment: Fragment = MediaFragment(user_id)
+            val childFragment: Fragment = MediaFragment(user_id, true)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -159,6 +170,9 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
+
+                    profilePic = response.data.profile.Profile_pic
+                    Glide.with(requireContext()).load(profilePic).into(profile)
 
                     postCount.text = response.data.postCountLength.toString()
                     connCont.text = response.data.connCountLength.toString()

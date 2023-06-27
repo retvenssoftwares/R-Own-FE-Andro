@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -32,6 +33,7 @@ import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetVendorsProfileSetting
+import app.retvens.rown.utils.showFullImage
 import app.retvens.rown.utils.websiteLinkV
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -59,6 +61,8 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
     lateinit var status : TextView
     lateinit var services : TextView
 
+    var profilePic = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,6 +79,11 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         userName = view.findViewById(R.id.profile_username)
         bio = view.findViewById(R.id.bio)
         websiteLink = view.findViewById(R.id.websiteLink)
+        websiteLink.setOnClickListener{
+            val uri = Uri.parse("https://" + websiteLink.text.toString())
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
 
         postCount = view.findViewById(R.id.posts_count)
         connCont = view.findViewById(R.id.connections_count)
@@ -94,6 +103,11 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         Glide.with(requireContext()).load(profilePic).into(profile)
         name.text = profileName
 
+        profile.setOnLongClickListener {
+            showFullImage(profilePic, requireContext())
+            true
+        }
+
 
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
@@ -107,7 +121,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
         getSelfUserProfile(user_id,user_id)
 
-        val childFragment: Fragment = MediaFragment(user_id)
+        val childFragment: Fragment = MediaFragment(user_id, true)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -135,7 +149,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = MediaFragment(user_id)
+            val childFragment: Fragment = MediaFragment(user_id, true)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
