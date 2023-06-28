@@ -228,7 +228,7 @@ interface ProfileApis {
     fun getSavedPost(
         @Path("user_id")user_id:String,
         @Query("page")page:String
-    ):Call<List<PostsDataClass>>
+    ):Call<PostsDataClass>
 
     @GET("getsaveservice")
     fun getSaveService(

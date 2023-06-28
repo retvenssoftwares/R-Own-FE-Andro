@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.profile.polls
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.mackhartley.roundedprogressbar.RoundedProgressBar
 import java.lang.IndexOutOfBoundsException
 
-class PollsAdapter(val pollList:List<PostItem>, val context: Context,val UserID:String) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
+class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val UserID:String) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
 
     class PollsViewHolder(itemView: View) : ViewHolder(itemView){
         val title_poll = itemView.findViewById<TextView>(R.id.title_poll)
@@ -152,9 +153,19 @@ class PollsAdapter(val pollList:List<PostItem>, val context: Context,val UserID:
             holder.checkVotes.visibility = View.GONE
         }
 
-
         holder.checkVotes.setOnClickListener {
             context.startActivity(Intent(context, VotersActivity::class.java))
+        }
+    }
+    fun removePostsFromList(data: List<PostItem>){
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    pollList.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
         }
     }
 }

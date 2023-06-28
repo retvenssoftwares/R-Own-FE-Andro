@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
 import app.retvens.rown.NavigationFragments.profile.media.MediaData
@@ -84,8 +85,9 @@ class PollsFragment(val userId: String) : Fragment() {
 
                         try {
 
-                            pollsAdapter = PollsAdapter(postsDataClass.posts, requireContext(),userId)
+                            pollsAdapter = PollsAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext(),userId)
                             pollsRecyclerView.adapter = pollsAdapter
+                            pollsAdapter.removePostsFromList(postsDataClass.posts)
                             pollsAdapter.notifyDataSetChanged()
                         }catch (e:NullPointerException){
 

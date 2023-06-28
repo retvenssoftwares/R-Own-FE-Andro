@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.profile.setting.saved
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -26,6 +27,8 @@ class SavedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_saved)
+
+        findViewById<ImageView>(R.id.profile_backBtn).setOnClickListener { onBackPressed() }
 
         explorePosts = findViewById(R.id.explorePosts)
         exploreJobs = findViewById(R.id.exploreJobs)

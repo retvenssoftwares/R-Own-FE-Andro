@@ -98,7 +98,10 @@ class PersonalInformation : AppCompatActivity() {
 
         cameraImageUri = createImageUri()!!
 
-        val user_id = intent.getStringExtra("user_id").toString()
+//        val user_id = intent.getStringExtra("user_id").toString()
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
         fetchUser(user_id)
         binding.camera.setOnClickListener {
             //Requesting Permission For CAMERA
@@ -280,7 +283,11 @@ class PersonalInformation : AppCompatActivity() {
     }
 
     private fun uploadData(user_id: String) {
-        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
+
+        val sharedPreferences = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
+        val phone : Long = sharedPreferences.getString("savePhoneNumber", "00")!!.toLong()
+
+//        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
 //        val phone : Long = 7905845936
 
         val message = intent.getStringExtra("message")
@@ -297,7 +304,7 @@ class PersonalInformation : AppCompatActivity() {
 //        val addresse = "address Noted"
 //        val token = "Testing Token With Image"
 //        val uid = 18235
-//        Toast.makeText(applicationContext,SharedPreferenceManagerAdmin.getInstance(this).user.uid.toString(),Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext,phone.toString(),Toast.LENGTH_SHORT).show()
 
         val Interest = Interest(_id,uid.toString())
         val Mesibo_account = MesiboAccount(_id,addresse,token,uid)

@@ -44,10 +44,11 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import android.os.Handler
 import androidx.annotation.RequiresApi
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import kotlin.collections.ArrayList
 
 
-class MainAdapter(val context: Context, private val dataItemList: List<DataItem>) :
+class MainAdapter(val context: Context, private val dataItemList: ArrayList<DataItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
@@ -81,6 +82,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
                         binding.userNamePost.text = post.Full_name
 
                         binding.location.text = post.location
+
+            if(post.verificationStatus != "false"){
+                binding.verification.visibility = View.VISIBLE
+            }
 
             if (post.isSaved == "saved"){
                 operatioin = "pop"
@@ -343,6 +348,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
             binding.location.text = banner.location
 
+            if(banner.verificationStatus != "false"){
+                binding.verification.visibility = View.VISIBLE
+            }
+
             if (banner.isSaved == "saved"){
                 operatioin = "pop"
                 save = false
@@ -434,6 +443,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
 
             Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
             binding.userNamePost.text = banner.Full_name
+
+            if(banner.verificationStatus != "false"){
+                binding.verification.visibility = View.VISIBLE
+            }
 
             banner.pollQuestion.forEach { item ->
                 binding.titlePoll.text = item.Question
@@ -567,12 +580,18 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             binding.childRecyclerView.layoutManager = LinearLayoutManager(binding.root.context,RecyclerView.HORIZONTAL,false)
         }
         fun bindCreateCommunityRecyclerView(recyclerItemList : List<DataItem.CreateCommunityRecyclerData>){
-            val adapter = CreateCommunityChildAdapter(DataItemType.CREATE_COMMUNITY, recyclerItemList)
+            val adapter = CreateCommunityChildAdapter(DataItemType.CREATE_COMMUNITY,
+                recyclerItemList as ArrayList<DataItem.CreateCommunityRecyclerData>
+            )
+            adapter.removeCommunityFromList(recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.constRecycler.visibility = View.GONE
         }
         fun bindCommunityRecyclerView(recyclerItemList : List<DataItem.CommunityRecyclerData>){
-            val adapter = CommunityChildAdapter(context, DataItemType.COMMUNITY, recyclerItemList)
+            val adapter = CommunityChildAdapter(context, DataItemType.COMMUNITY,
+                recyclerItemList as ArrayList<DataItem.CommunityRecyclerData>
+            )
+            adapter.removeCommunityFromList(recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Connect with the like-minded individuals"
             binding.viewAllItem.setOnClickListener {
@@ -589,8 +608,11 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
         }
         fun bindBlogsRecyclerView(recyclerItemList : List<AllBlogsData>){
-            val adapter = BlogsChildAdapter(context, DataItemType.BLOGS, recyclerItemList)
+            val adapter = BlogsChildAdapter(context, DataItemType.BLOGS,
+                recyclerItemList as ArrayList<AllBlogsData>
+            )
             binding.childRecyclerView.adapter = adapter
+            adapter.removeBlogsFromList(recyclerItemList)
             binding.recyclerHeading.text = "Popular blogs you must read."
 
             binding.viewAllItem.setOnClickListener {
@@ -606,7 +628,10 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
             }
         }
         fun bindVendorsRecyclerView(recyclerItemList : List<ProfileServicesDataItem>){
-            val adapter = VendorsChildAdapter(context, DataItemType.VENDORS, recyclerItemList)
+            val adapter = VendorsChildAdapter(context, DataItemType.VENDORS,
+                recyclerItemList as ArrayList<ProfileServicesDataItem>
+            )
+            adapter.removeVendorFromList(recyclerItemList)
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Avail the Best-in-class service for yourself."
 
@@ -863,5 +888,29 @@ class MainAdapter(val context: Context, private val dataItemList: List<DataItem>
         })
     }
 
+
+    fun removePostsFromList(data: List<DataItem>){
+        try {
+            data.forEach {
+                if (it.banner!!.display_status == "0"){
+
+                    if (dataItemList.contains(DataItem(DataItemType.BANNER, banner = it.banner))) {
+                        dataItemList.remove(DataItem(DataItemType.BANNER, banner = it.banner))
+                    }
+                    if (dataItemList.contains(DataItem(DataItemType.POLL, banner = it.banner))) {
+                        dataItemList.remove(DataItem(DataItemType.POLL, banner = it.banner))
+                    }
+                    if (dataItemList.contains(DataItem(DataItemType.Status, banner = it.banner))) {
+                        dataItemList.remove(DataItem(DataItemType.Status, banner = it.banner))
+                    }
+                    if (dataItemList.contains(DataItem(DataItemType.Event, banner = it.banner))) {
+                        dataItemList.remove(DataItem(DataItemType.Event, banner = it.banner))
+                    }
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
 
 }

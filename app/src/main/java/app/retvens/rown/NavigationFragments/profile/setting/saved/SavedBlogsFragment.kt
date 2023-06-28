@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -33,6 +34,7 @@ lateinit var savedBlogsAdapter: SavedBlogsAdapter
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     lateinit var empty : TextView
+    lateinit var emptyImage : ImageView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +48,8 @@ lateinit var savedBlogsAdapter: SavedBlogsAdapter
 
 
         empty = view.findViewById(R.id.emptyBlog)
+        emptyImage = view.findViewById(R.id.emptyImage)
+
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayoutBlog)
 
         savedBlogsRecyclerView = view.findViewById(R.id.savedBlogsRecyclerView)
@@ -98,10 +102,12 @@ lateinit var savedBlogsAdapter: SavedBlogsAdapter
                                 Log.d("on", it.toString())
                             }
                         } else {
-                            empty.visibility = View.VISIBLE
+//                            empty.visibility = View.VISIBLE
+                            emptyImage.visibility = View.VISIBLE
                         }
                     } else {
-                        empty.visibility = View.VISIBLE
+//                        empty.visibility = View.VISIBLE
+                        emptyImage.visibility = View.VISIBLE
                         empty.text = response.code().toString()
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
@@ -112,7 +118,8 @@ lateinit var savedBlogsAdapter: SavedBlogsAdapter
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
-                empty.visibility = View.VISIBLE
+//                empty.visibility = View.VISIBLE
+                emptyImage.visibility = View.VISIBLE
             }
         })
     }

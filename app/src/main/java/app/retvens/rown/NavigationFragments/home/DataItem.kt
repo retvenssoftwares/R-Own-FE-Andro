@@ -47,9 +47,11 @@ data class DataItem(
                                      val community_type: String,
                                      val Admin: List<Admin>,
                                      val date_added: String,
+                                     val display_status: String,
                                      val Members: List<Member>,
                                      val __v: Int)
-    data class CreateCommunityRecyclerData(var image : Int, var title : String, var members : String)
+    data class CreateCommunityRecyclerData(var image : Int, var title : String, var members : String
+                                           ,val display_status: String)
 
 //    constructor(viewType: Int, recyclerItemList: List<RecyclerItem>) : this(viewType){
 //        this.recyclerItemList = recyclerItemList

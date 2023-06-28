@@ -7,11 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
@@ -39,6 +41,7 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         val profile = itemview.findViewById<ShapeableImageView>(R.id.explore_people_profile)
         val connect = itemview.findViewById<TextView>(R.id.suggetions_notification_connect)
         val viewProfile = itemview.findViewById<CardView>(R.id.ca_view_profile)
+        val verification = itemview.findViewById<ImageView>(R.id.verification)
 
     }
 
@@ -53,6 +56,10 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
 
         val data = peopleList[position]
 
+        val verificationStatus = data.verificationStatus
+        if (verificationStatus != "false"){
+            holder.verification.visibility = View.VISIBLE
+        }
 
 
         if (data.Profile_pic.isNullOrEmpty()){
@@ -143,6 +150,18 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
 
     override fun getItemCount(): Int {
        return peopleList.size
+    }
+    fun removeUsersFromList(data: List<Post>){
+
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    peopleList.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
     }
 
     fun removeUser(data: List<Post>){

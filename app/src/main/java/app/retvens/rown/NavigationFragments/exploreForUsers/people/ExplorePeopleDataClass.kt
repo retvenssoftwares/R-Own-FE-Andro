@@ -13,6 +13,7 @@ data class Post(
     val User_id: String,
     val verificationStatus: String,
     val Profile_pic: String,
+    val display_status: String,
     val connectionStatus: String,
     val userID:String
 )

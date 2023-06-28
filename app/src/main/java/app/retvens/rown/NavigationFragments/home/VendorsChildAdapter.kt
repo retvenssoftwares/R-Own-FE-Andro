@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,7 @@ import com.bumptech.glide.Glide
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 class VendorsChildAdapter(private val context: Context, private val viewType: Int,
-                          private val vendorsRecyclerData : List<ProfileServicesDataItem>,
+                          private val vendorsRecyclerData : ArrayList<ProfileServicesDataItem>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -57,6 +58,18 @@ class VendorsChildAdapter(private val context: Context, private val viewType: In
             is VendorsViewHolder -> {
                 holder.bindVendorsView(vendorsRecyclerData[position])
             }
+        }
+    }
+
+    fun removeVendorFromList(data: List<ProfileServicesDataItem>){
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    vendorsRecyclerData.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
         }
     }
 }

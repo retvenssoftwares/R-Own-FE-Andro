@@ -15,12 +15,15 @@ import android.provider.MediaStore
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.TimePicker
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
 import app.retvens.rown.Dashboard.profileCompletion.frags.VendorsFragment
+import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
@@ -44,6 +47,7 @@ var role = ""
 var profileCompletionStatus = "50"
 var websiteLinkV = ""
 var phone = ""
+var verificationStatus = ""
 var connectionCount = "1"
 
 fun dateFormat(date : String) : String {
@@ -197,4 +201,25 @@ fun showFullImage(profilePic : String, context: Context) {
     dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
+}
+
+
+fun removeConnection(userID: String, userId: String, context: Context, connStatusTextView : TextView) {
+    val remove = RetrofitBuilder.connectionApi.removeConnection(userID, ConnectionDataClass(userId))
+    remove.enqueue(object : Callback<UpdateResponse?> {
+        override fun onResponse(
+            call: Call<UpdateResponse?>,
+            response: Response<UpdateResponse?>
+        ) {
+            if (response.isSuccessful){
+                Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
+                connStatusTextView.text = "CONNECT"
+            } else {
+                Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+        override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+            Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+        }
+    })
 }

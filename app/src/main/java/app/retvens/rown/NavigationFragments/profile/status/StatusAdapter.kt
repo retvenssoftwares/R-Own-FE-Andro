@@ -2,6 +2,8 @@ package app.retvens.rown.NavigationFragments.profile.status
 
 import android.content.Context
 import android.content.Intent
+import android.util.ArraySet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +18,7 @@ import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class StatusAdapter(val listS : List<PostItem>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_LAYOUT_ONE = 1
     private val VIEW_TYPE_LAYOUT_TWO = 2
@@ -154,5 +156,17 @@ class StatusAdapter(val listS : List<PostItem>, val context: Context) : Recycler
             }
         }
 
+    }
+
+    fun removePostsFromList(data: List<PostItem>){
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    listS.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
     }
 }

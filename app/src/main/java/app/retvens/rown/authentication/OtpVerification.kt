@@ -33,6 +33,7 @@ import app.retvens.rown.bottomsheet.BottomSheetLanguage
 import app.retvens.rown.databinding.ActivityOtpVerifificationBinding
 import app.retvens.rown.utils.loadLocale
 import app.retvens.rown.utils.moveTo
+import app.retvens.rown.utils.savePhoneNo
 import app.retvens.rown.utils.saveUserId
 import app.retvens.rown.utils.setLocale
 import com.google.firebase.FirebaseException
@@ -331,6 +332,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                 val user_id = response.body()?.user_id.toString()
                 val message = response.body()?.message.toString()
                 saveUserId(applicationContext,user_id)
+                savePhoneNo(applicationContext, phone)
 //                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
                 Log.d("search",response.body().toString())
                 moveTo(applicationContext,"MoveToPI")
@@ -338,6 +340,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                 intent.putExtra("phone",phone)
                 intent.putExtra("user_id",user_id)
                 intent.putExtra("message",message)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
                 finish()
             }

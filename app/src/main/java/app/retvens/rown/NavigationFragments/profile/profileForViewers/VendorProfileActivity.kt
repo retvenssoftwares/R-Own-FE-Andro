@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
@@ -29,6 +30,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -41,6 +43,7 @@ class VendorProfileActivity : AppCompatActivity() {
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
+    lateinit var verificationS : ImageView
     lateinit var name : TextView
     lateinit var bio : TextView
     lateinit var websiteLink : TextView
@@ -69,7 +72,7 @@ class VendorProfileActivity : AppCompatActivity() {
         }
 
         profile = findViewById(R.id.profile)
-
+        verificationS = findViewById(R.id.verification)
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
@@ -107,6 +110,12 @@ class VendorProfileActivity : AppCompatActivity() {
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         getUserPofile(userId,user_id)
+
+        connStatus.setOnClickListener {
+            if (connStatus.text == "Remove"){
+                removeConnection(userId,user_id, applicationContext, connStatus)
+            }
+        }
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId, false))
@@ -239,9 +248,13 @@ class VendorProfileActivity : AppCompatActivity() {
                         connCount.text = response.connectioncount.toString()
                         postCount.text = response.postcount.toString()
 
-//                        created = response.Created_On
-//                        location = response.location
-//                        verification = response.verificationStatus
+                        created = response.roleDetails.Created_On
+                        location = response.roleDetails.location
+                        verification = response.roleDetails.verificationStatus
+
+                        if (verification != "false"){
+                            verificationS.visibility = View.VISIBLE
+                        }
 
                         if (response.connectionStatus == "Connected"){
                             connStatus.text = "Remove"

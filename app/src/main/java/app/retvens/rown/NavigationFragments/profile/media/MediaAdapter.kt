@@ -15,11 +15,12 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.NavigationFragments.home.PostDetailsActivity
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.status.StatusAdapter
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
+class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -93,4 +94,16 @@ class MediaAdapter(val context: Context,val mediaList:List<PostItem>) : Recycler
             context.startActivity(intent)
         }
     }
+    fun removePostsFromList(data: List<PostItem>){
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    mediaList.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
+
 }

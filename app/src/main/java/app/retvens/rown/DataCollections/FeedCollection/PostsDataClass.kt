@@ -19,6 +19,7 @@ data class PostItem(
     val User_name: String,
     val event_thumbnail:String,
     val event_start_date:String,
+    val verificationStatus: String,
     val price:String,
     var like:String,
     var liked:String,
@@ -66,6 +67,7 @@ data class Media(
 data class PostsDataClass(
     val posts: List<PostItem>,
     val page:Int,
+    val message:String,
     val pageSize:Int
 )
 

@@ -79,6 +79,14 @@
             app:layout_constraintTop_toBottomOf="@id/relative"
             app:layout_constraintStart_toStartOf="parent"/>
 
+        <ImageView
+            android:id="@+id/verification"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:src="@drawable/svg_verificationstatus"
+            app:layout_constraintTop_toTopOf="@id/profile"
+            app:layout_constraintEnd_toEndOf="@id/profile"/>
         <TextView
             android:id="@+id/profile_name"
             android:layout_width="wrap_content"

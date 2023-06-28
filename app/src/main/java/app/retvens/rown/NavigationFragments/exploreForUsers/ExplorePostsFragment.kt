@@ -63,6 +63,8 @@ class ExplorePostsFragment : Fragment() {
 
         mediaAdapter = MediaAdapter(requireContext(),postList)
         mediaRecyclerView.adapter = mediaAdapter
+        mediaAdapter.removePostsFromList(postList)
+        mediaAdapter.notifyDataSetChanged()
 
         empty = view.findViewById(R.id.empty)
 
@@ -152,6 +154,7 @@ class ExplorePostsFragment : Fragment() {
                         totalPages = postsDataClass.pageSize
 
                         postList.addAll(postsDataClass.posts)
+                        mediaAdapter.removePostsFromList(postsDataClass.posts)
                         mediaAdapter.notifyDataSetChanged()
                         searchBar.addTextChangedListener(object : TextWatcher{
                             override fun beforeTextChanged(
@@ -225,8 +228,11 @@ class ExplorePostsFragment : Fragment() {
                     val response = response.body()!!
 
                     response.forEach { postsDataClass ->
-                        mediaAdapter = MediaAdapter(requireContext(),postsDataClass.posts)
+                        mediaAdapter = MediaAdapter(requireContext(),
+                            postsDataClass.posts as ArrayList<PostItem>
+                        )
                         mediaRecyclerView.adapter = mediaAdapter
+                        mediaAdapter.removePostsFromList(postsDataClass.posts)
                         mediaAdapter.notifyDataSetChanged()
                     }
 

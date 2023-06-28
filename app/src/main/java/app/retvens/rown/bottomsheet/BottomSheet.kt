@@ -106,7 +106,11 @@ class BottomSheet : BottomSheetDialogFragment() {
 
                 if(response.isSuccessful && isAdded){
                     val data = response.body()!!
-                    usersProfileAdapter = UsersProfileAdapter(requireContext(), data)
+                    usersProfileAdapter = UsersProfileAdapter(requireContext(),
+                        data as ArrayList<UserProfileRequestItem>
+                    )
+                    usersProfileAdapter.removeUser(data)
+                    usersProfileAdapter.removeUsersFromList(data)
                     usersProfileAdapter.notifyDataSetChanged()
                     recycler.adapter = usersProfileAdapter
 

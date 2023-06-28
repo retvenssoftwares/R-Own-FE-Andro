@@ -18,6 +18,8 @@ data class UserProfileRequestItem(
     val Role: String,
     val userBio: String,
     val Gender: String,
+    val display_status: String,
+    val verificationStatus: String,
     val profileCompletionStatus: String,
     val __v: Int,
     val _id: String,

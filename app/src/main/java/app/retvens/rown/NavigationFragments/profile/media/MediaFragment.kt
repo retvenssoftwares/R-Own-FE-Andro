@@ -85,8 +85,11 @@ class MediaFragment(val userId: String, val isOwner : Boolean) : Fragment(), Med
                                 notPosted.visibility = View.VISIBLE
                             } else {
                                 // Display posts using the MediaAdapter
-                                mediaAdapter = MediaAdapter(requireContext(), postsToDisplay)
+                                mediaAdapter = MediaAdapter(requireContext(),
+                                    postsToDisplay as ArrayList<PostItem>
+                                )
                                 mediaRecyclerView.adapter = mediaAdapter
+                                mediaAdapter.removePostsFromList(postsDataClass.posts)
                                 mediaAdapter.notifyDataSetChanged()
                                 mediaAdapter.setOnItemClickListener(this@MediaFragment)
                             }

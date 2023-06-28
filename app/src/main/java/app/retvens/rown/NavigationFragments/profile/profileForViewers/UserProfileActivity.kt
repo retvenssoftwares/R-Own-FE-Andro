@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
@@ -19,7 +20,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.AboutProfileActivity
@@ -28,6 +31,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRAct
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
+import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -39,6 +43,7 @@ class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
+    lateinit var verificationS : ImageView
     lateinit var name : TextView
     lateinit var bio : TextView
     lateinit var profile_username : TextView
@@ -66,6 +71,7 @@ class UserProfileActivity : AppCompatActivity() {
 
         profile = findViewById(R.id.profile)
 
+        verificationS = findViewById(R.id.verification)
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
@@ -98,10 +104,16 @@ class UserProfileActivity : AppCompatActivity() {
             true
         }
 
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+       val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         getUserPofile(userID,user_id)
+
+        connStatus.setOnClickListener {
+            if (connStatus.text == "Remove"){
+        removeConnection(userID,user_id, applicationContext, connStatus)
+            }
+        }
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false))
@@ -216,6 +228,9 @@ class UserProfileActivity : AppCompatActivity() {
                     created = response.data.profile.Created_On
                     location = response.data.profile.location
                     verification = response.data.profile.verificationStatus
+                    if (verification != "false"){
+                        verificationS.visibility = View.VISIBLE
+                    }
 //                    Toast.makeText(applicationContext,response.data.connectionStatus,Toast.LENGTH_SHORT).show()
 
                     if (response.data.connectionStatus == "Connected"){

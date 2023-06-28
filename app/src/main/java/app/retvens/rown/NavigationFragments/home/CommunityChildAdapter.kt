@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ import com.bumptech.glide.Glide
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 class CommunityChildAdapter(private val context: Context, private val viewType: Int,
-                            private val communityRecyclerData : List<DataItem.CommunityRecyclerData>,
+                            private val communityRecyclerData : ArrayList<DataItem.CommunityRecyclerData>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -59,4 +60,17 @@ class CommunityChildAdapter(private val context: Context, private val viewType: 
             }
         }
     }
+
+    fun removeCommunityFromList(data: List<DataItem.CommunityRecyclerData>){
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    communityRecyclerData.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
+
 }

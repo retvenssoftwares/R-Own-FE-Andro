@@ -15,12 +15,12 @@
         android:icon="@drawable/chats"
         app:showAsAction="ifRoom"
         />
-    <item
+    <!--<item
         android:id="@+id/action_settings"
         android:title="Settings"
         android:icon="@drawable/setting"
         app:showAsAction="ifRoom"
-        />
+        />-->
 
 
 

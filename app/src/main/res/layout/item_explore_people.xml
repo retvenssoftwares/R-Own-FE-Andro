@@ -26,6 +26,14 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
 
+        <ImageView
+            android:id="@+id/verification"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:visibility="gone"
+            android:src="@drawable/svg_verificationstatus"
+            app:layout_constraintTop_toTopOf="@id/explore_people_profile"
+            app:layout_constraintEnd_toEndOf="@id/explore_people_profile"/>
         <TextView
             android:id="@+id/explore_people_name"
             android:layout_width="0dp"

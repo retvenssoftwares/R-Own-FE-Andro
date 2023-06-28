@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesAdapter
+import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetFilterVendors
 import app.retvens.rown.databinding.ActivityViewAllVendorsBinding
@@ -74,8 +75,9 @@ class ViewAllVendorsActivity : AppCompatActivity(), BottomSheetFilterVendors.OnB
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
                             data.forEach {
-                                exploreServicesAdapter = ExploreServicesAdapter(it.events, this@ViewAllVendorsActivity)
+                                exploreServicesAdapter = ExploreServicesAdapter(it.events as ArrayList<ProfileServicesDataItem>, this@ViewAllVendorsActivity)
                                 binding.viewAllVendorsRecycler.adapter = exploreServicesAdapter
+                                exploreServicesAdapter.removeServicesFromList(it.events)
                                 exploreServicesAdapter.notifyDataSetChanged()
                             }
                         } else {

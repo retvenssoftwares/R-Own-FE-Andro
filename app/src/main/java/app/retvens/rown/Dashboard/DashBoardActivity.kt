@@ -21,8 +21,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import app.retvens.rown.ApiRequest.MyBackgroundService
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
@@ -156,9 +154,13 @@ class DashBoardActivity : AppCompatActivity() {
             }
 
         profile = header.findViewById<ImageView>(R.id.nav_profile)
+        val verification = header.findViewById<ImageView>(R.id.verification)
         name = header.findViewById<TextView>(R.id.user_name)
         val phoneH = header.findViewById<TextView>(R.id.nav_phone)
 
+        if (verificationStatus != "false"){
+            verification.visibility = View.VISIBLE
+        }
         phoneH.text = phone
 
         val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
@@ -410,10 +412,10 @@ class DashBoardActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings -> {
+           /* R.id.action_settings -> {
                 Toast.makeText(applicationContext,"Setting",Toast.LENGTH_SHORT).show()
                 return true
-            }
+            }*/
             R.id.action_chats -> {
                 val myFragment = app.retvens.rown.MessagingModule.UserListFragment()
                 supportFragmentManager.beginTransaction().apply {

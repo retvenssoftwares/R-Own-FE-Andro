@@ -86,6 +86,7 @@ class HomeFragment : Fragment() {
     private lateinit var nestedScroll:NestedScrollView
     lateinit var empty : TextView
     private  var count:Int = 0
+    private  var postCounter:Int = 0
 
 
     override fun onCreateView(
@@ -154,9 +155,10 @@ class HomeFragment : Fragment() {
             Thread{
                 getCommunities()
             }.start()
+            postCounter = 0
 
             getAllBlogs()
-            getHotels()
+//            getHotels()
             getServices()
             prepareData()
 
@@ -197,6 +199,8 @@ class HomeFragment : Fragment() {
 
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
+        adapter.removePostsFromList(mList)
+        adapter.notifyDataSetChanged()
 
 
         val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
@@ -212,7 +216,7 @@ class HomeFragment : Fragment() {
                     val currentItem = layoutManager.childCount
                     val totalItem = layoutManager.itemCount
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
+                    if(!isLoading && totalItem <= (scrollOutItems+currentItem) && postCounter >= 10){
                         getData()
                     }
                 }
@@ -244,7 +248,14 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful){
                     val response = response.body()!!
                     response.forEach { it ->
-                        mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = response))
+                        if (!mList.contains(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = response))) {
+                            mList.add(
+                                DataItem(
+                                    DataItemType.COMMUNITY,
+                                    communityRecyclerDataList = response
+                                )
+                            )
+                        }
                     }
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -262,14 +273,15 @@ class HomeFragment : Fragment() {
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
 
+        if (postCounter >= 10) {
 
-        progress.setVisibility(View.VISIBLE);
-        val handler = Handler()
-        handler.postDelayed({
-            getPost(user_id)
-            progress.setVisibility(View.GONE)
-        }, 3000)
-
+            progress.setVisibility(View.VISIBLE);
+            val handler = Handler()
+            handler.postDelayed({
+                getPost(user_id)
+                progress.setVisibility(View.GONE)
+            }, 3000)
+        }
     }
 
     private fun getPost(userId: String) {
@@ -335,6 +347,7 @@ class HomeFragment : Fragment() {
                                     }
                                 }
 
+                                postCounter++
 
                             }
 
@@ -418,8 +431,10 @@ class HomeFragment : Fragment() {
 
                     response.forEach{ it ->
 
+                        if (!communityArrayList.contains(it)) {
                             communityArrayList.add(it)
                             recyclerCommunity.adapter = CommunityListAdapter(requireContext(), response)
+                        }
                     }
                 }else{
                     if (isAdded) {
@@ -571,16 +586,16 @@ class HomeFragment : Fragment() {
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
                             data.forEach {
-                                if (mList.contains(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  it.posts))){
-                                    mList.shuffle()
-                                    adapter.notifyDataSetChanged()
-                                } else {
+                                if (!mList.contains(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  it.posts))){
                                     mList.add(
                                         DataItem(
                                             DataItemType.HOTEL_SECTION,
                                             hotelSectionList = it.posts
                                         )
                                     )
+                                } else {
+                                    mList.shuffle()
+                                    adapter.notifyDataSetChanged()
                                 }
                             }
                         }
@@ -643,10 +658,10 @@ class HomeFragment : Fragment() {
 //        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_post,"Vendor 4","78", "Request"))
 
         val createCommunityList = ArrayList<DataItem.CreateCommunityRecyclerData>()
-        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12"))
-        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34"))
-        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3"))
-        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_post,"Vendor 4","78"))
+        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12", "0"))
+        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34", "0"))
+        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3", "1"))
+        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_post,"Vendor 4","78", "1"))
 
         val blogsList = ArrayList<DataItem.BlogsRecyclerData>()
         blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_blog,"Tom", R.drawable.png_profile))

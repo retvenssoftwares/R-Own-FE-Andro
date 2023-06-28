@@ -51,6 +51,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
+    lateinit var verification : ImageView
     lateinit var name : TextView
     lateinit var linkText : TextView
 
@@ -67,6 +68,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     lateinit var requestCont:TextView
 
     var profilePic = ""
+    var verificationStatus = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,6 +82,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         super.onViewCreated(view, savedInstanceState)
 
         profile = view.findViewById(R.id.profile)
+        verification = view.findViewById(R.id.verification)
         username = view.findViewById(R.id.profile_username)
         bio = view.findViewById(R.id.bio)
         name = view.findViewById(R.id.profile_name)
@@ -241,6 +244,11 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
                     profilePic = response.profiledata.Profile_pic
                     Glide.with(requireContext()).load(profilePic).into(profile)
+
+                    verificationStatus = response.profile.verificationStatus
+                    if (verificationStatus != "false"){
+                        verification.visibility = View.VISIBLE
+                    }
 
                     connCont.text = response.connection_Count.toString()
                     requestCont.text = response.requests_count.toString()

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
@@ -28,6 +29,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -38,6 +40,7 @@ import retrofit2.Response
 class OwnerProfileActivity : AppCompatActivity() {
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
+    lateinit var verificationS : ImageView
     lateinit var name : TextView
     lateinit var profile_username : TextView
     lateinit var bio : TextView
@@ -63,6 +66,7 @@ class OwnerProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_owner_profile)
 
         profile = findViewById(R.id.profile)
+        verificationS = findViewById(R.id.verification)
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
@@ -95,6 +99,11 @@ class OwnerProfileActivity : AppCompatActivity() {
 
         getUserPofile(userID,user_id)
 
+        connStatus.setOnClickListener {
+            if (connStatus.text == "Remove"){
+                removeConnection(userID,user_id, applicationContext, connStatus)
+            }
+        }
 
 
         findViewById<ImageView>(R.id.profile_backBtn).setOnClickListener {
@@ -257,6 +266,10 @@ class OwnerProfileActivity : AppCompatActivity() {
                     created = response.profile.Created_On
                     location = response.profile.location
                     verification = response.profile.verificationStatus
+
+                    if (verification != "false"){
+                        verificationS.visibility = View.VISIBLE
+                    }
 
                     if (response.connectionStatus == "Connected"){
                         connStatus.text = "Remove"

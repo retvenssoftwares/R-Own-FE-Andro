@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.services
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ import app.retvens.rown.R
 import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
 
-class ExploreServicesAdapter(val listS : List<ProfileServicesDataItem>, val context: Context) : RecyclerView.Adapter<ExploreServicesAdapter.ExploreServicesViewHolder>() {
+class ExploreServicesAdapter(val listS : ArrayList<ProfileServicesDataItem>, val context: Context) : RecyclerView.Adapter<ExploreServicesAdapter.ExploreServicesViewHolder>() {
 
     class ExploreServicesViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.vendor_name)
@@ -54,4 +55,16 @@ class ExploreServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
             context.startActivity(intent)
         }
     }
+    fun removeServicesFromList(data: List<ProfileServicesDataItem>){
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    listS.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
+
 }

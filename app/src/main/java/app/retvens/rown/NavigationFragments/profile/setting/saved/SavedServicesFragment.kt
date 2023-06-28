@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesData
+import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
@@ -31,6 +33,7 @@ class SavedServicesFragment : Fragment() {
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     lateinit var empty : TextView
+    lateinit var emptyImage : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +70,7 @@ class SavedServicesFragment : Fragment() {
 //        savedServicesAdapter.notifyDataSetChanged()
 
         empty = view.findViewById(R.id.empty)
+        emptyImage = view.findViewById(R.id.emptyImage)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
 
@@ -91,16 +95,19 @@ class SavedServicesFragment : Fragment() {
                                 try {
                                 val data = response.body()!!
                                 data.forEach {
-                                    exploreServicesAdapter = ExploreServicesAdapter(it.events, requireContext())
+                                    exploreServicesAdapter = ExploreServicesAdapter(it.events as ArrayList<ProfileServicesDataItem>, requireContext())
                                     savedServicesRecyclerView.adapter = exploreServicesAdapter
+                                    exploreServicesAdapter.removeServicesFromList(it.events)
                                     exploreServicesAdapter.notifyDataSetChanged()
 
                                 }
                                 }catch (e:Exception){
+                                    emptyImage.visibility = View.VISIBLE
                                 Toast.makeText(requireContext(),"No Services Yet", Toast.LENGTH_SHORT).show()
                             }
                             } else {
-                                empty.visibility = View.VISIBLE
+//                                empty.visibility = View.VISIBLE
+                                emptyImage.visibility = View.VISIBLE
                             }
                         } else {
                             empty.visibility = View.VISIBLE

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,7 @@ class SavedHotelsFragment : Fragment() {
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     lateinit var empty : TextView
+    lateinit var emptyImage : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +47,7 @@ class SavedHotelsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         empty = view.findViewById(R.id.empty)
+        emptyImage = view.findViewById(R.id.emptyImage)
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
 
         savedHotelsRecyclerView = view.findViewById(R.id.savedHotelsRecyclerView)
@@ -100,17 +103,20 @@ class SavedHotelsFragment : Fragment() {
                                     exploreHotelAdapter.notifyDataSetChanged()
                                 }
                             } else {
-                                empty.visibility = View.VISIBLE
+//                                empty.visibility = View.VISIBLE
+                                emptyImage.visibility = View.VISIBLE
                             }
                         } else {
-                            empty.visibility = View.VISIBLE
+//                            empty.visibility = View.VISIBLE
+                            emptyImage.visibility = View.VISIBLE
                             empty.text = response.code().toString()
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
                         }
                     }
                 }catch (e:NullPointerException){
-                    Toast.makeText(requireContext(),"No Hotels Yet", Toast.LENGTH_SHORT).show()
+                    emptyImage.visibility = View.VISIBLE
+//                    Toast.makeText(requireContext(),"No Hotels Yet", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -118,7 +124,8 @@ class SavedHotelsFragment : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again - ${t.localizedMessage}"
-                empty.visibility = View.VISIBLE
+//                empty.visibility = View.VISIBLE
+                emptyImage.visibility = View.VISIBLE
             }
         })
     }

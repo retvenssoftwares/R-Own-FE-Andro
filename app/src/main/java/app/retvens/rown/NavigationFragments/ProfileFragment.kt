@@ -46,6 +46,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
+    lateinit var verification : ImageView
     lateinit var name : TextView
     lateinit var bio : TextView
     lateinit var userName:TextView
@@ -58,6 +59,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
     lateinit var requestCont:TextView
 
     var profilePic = ""
+    var verificationStatus = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +72,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         super.onViewCreated(view, savedInstanceState)
 
         profile = view.findViewById(R.id.profile)
+        verification = view.findViewById(R.id.verification)
         name = view.findViewById(R.id.profile_name)
         userName = view.findViewById(R.id.profile_username)
         bio = view.findViewById(R.id.bio)
@@ -173,6 +176,11 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
                     profilePic = response.data.profile.Profile_pic
                     Glide.with(requireContext()).load(profilePic).into(profile)
+
+                    verificationStatus = response.data.profile.verificationStatus
+                    if (verificationStatus != "false"){
+                        verification.visibility = View.VISIBLE
+                    }
 
                     postCount.text = response.data.postCountLength.toString()
                     connCont.text = response.data.connCountLength.toString()

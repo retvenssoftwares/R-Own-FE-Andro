@@ -146,6 +146,7 @@ class ExplorePeopleFragment : Fragment() {
                                 try {
                                     peopleList.addAll(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)
+                                    explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.notifyDataSetChanged()
                                 }catch (e:NullPointerException){
                                     Log.e("error",e.message.toString())

@@ -157,7 +157,7 @@ class ExploreBlogsFragment : Fragment() {
                                          }
                                      })*/
                                 }catch (e:NullPointerException){
-                                    Toast.makeText(requireContext(),"No More Blogs",Toast.LENGTH_SHORT).show()
+//                                    Toast.makeText(requireContext(),"No More Blogs",Toast.LENGTH_SHORT).show()
                                 }
 
                             }

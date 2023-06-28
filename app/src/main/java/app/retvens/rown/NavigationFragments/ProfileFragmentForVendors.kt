@@ -46,6 +46,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
+    lateinit var verification : ImageView
     lateinit var name : TextView
 
     lateinit var bio : TextView
@@ -75,6 +76,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         super.onViewCreated(view, savedInstanceState)
 
         profile = view.findViewById(R.id.profile)
+        verification = view.findViewById(R.id.verification)
         name = view.findViewById(R.id.profile_name)
         userName = view.findViewById(R.id.profile_username)
         bio = view.findViewById(R.id.bio)
@@ -194,6 +196,12 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
+
+                    val verificationStatus = response.roleDetails.verificationStatus
+
+                    if (verificationStatus != "false"){
+                        verification.visibility = View.VISIBLE
+                    }
 
                     postCount.text = response.postcount.toString()
                     connCont.text = response.connectioncount.toString()

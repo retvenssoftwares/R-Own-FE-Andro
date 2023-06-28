@@ -55,6 +55,8 @@ class ExploreServicesFragment : Fragment() {
 
         exploreServicesAdapter = ExploreServicesAdapter(hotelList, requireContext())
         exploreBlogsRecyclerView.adapter = exploreServicesAdapter
+        exploreServicesAdapter.removeServicesFromList(hotelList)
+        exploreServicesAdapter.notifyDataSetChanged()
 
         empty = view.findViewById(R.id.empty)
         progress = view.findViewById(R.id.progress)
@@ -126,6 +128,7 @@ class ExploreServicesFragment : Fragment() {
                                 data.forEach {
 
                                     hotelList.addAll(it.events)
+                                    exploreServicesAdapter.removeServicesFromList(hotelList)
                                     exploreServicesAdapter.notifyDataSetChanged()
                                 }
                             } else {

@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -25,7 +26,7 @@ import retrofit2.Response
 class BlogsChildAdapter(
     private val context: Context,
     private val viewType: Int,
-    private val blogsRecyclerData: List<AllBlogsData>,
+    private val blogsRecyclerData: ArrayList<AllBlogsData>,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -136,6 +137,19 @@ class BlogsChildAdapter(
                 Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    fun removeBlogsFromList(data: List<AllBlogsData>){
+
+        try {
+            data.forEach {
+                if (it.display_status == "0"){
+                    blogsRecyclerData.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
     }
 
 }

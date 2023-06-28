@@ -84,8 +84,9 @@ class StatusFragment(val userId: String) : Fragment() {
                             response.forEach { postsDataClass ->
 
                         try {
-                            statusAdapter = StatusAdapter(postsDataClass.posts, requireContext())
+                            statusAdapter = StatusAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext())
                             statusRecycler.adapter = statusAdapter
+                            statusAdapter.removePostsFromList(postsDataClass.posts)
                             statusAdapter.notifyDataSetChanged()
 
                             statusAdapter.setOnItemClickListener(this)
