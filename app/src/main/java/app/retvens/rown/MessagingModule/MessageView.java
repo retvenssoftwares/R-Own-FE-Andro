@@ -10,6 +10,8 @@ package app.retvens.rown.MessagingModule;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.TextUtils;
@@ -23,11 +25,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboFile;
 import com.mesibo.emojiview.EmojiconTextView;
 
+import java.util.Objects;
+
+import app.retvens.rown.Dashboard.DashBoardActivity;
+import app.retvens.rown.NavigationFragments.home.PostDetailsActivity;
+import app.retvens.rown.NavigationFragments.home.PostsViewActivity;
 import app.retvens.rown.R;
 
 public class MessageView extends RelativeLayout {
@@ -48,6 +58,7 @@ public class MessageView extends RelativeLayout {
     ImageView mReplyImage;
     RelativeLayout mReplyLayout = null;
     TextView mReplyMessage;
+    Context context;
     TextView mReplyUserName;
     TextView mSubTitleView = null;
     FrameLayout.LayoutParams mThumbnailParams;
@@ -113,6 +124,32 @@ public class MessageView extends RelativeLayout {
 
     public void setData(MessageData data) {
         this.mData = data;
+
+        if (Objects.equals(data.msg.message, "Post")){
+            Log.e("msg","working");
+        }
+
+
+            mPicLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    context = getContext();
+
+
+                    if (Objects.equals(data.msg.message, "VIh5k3UYn")){
+                        Log.e("click","ok");
+                        Intent intent = new Intent(context, PostsViewActivity.class);
+                        intent.putExtra("postId",data.msg.message);
+                        context.startActivity(intent);
+                    }
+
+
+
+                }
+            });
+
+
         ViewGroup.LayoutParams PTTParams = getLayoutParams();
         String title = this.mData.getTitle();
         String subtitle = this.mData.getSubTitle();

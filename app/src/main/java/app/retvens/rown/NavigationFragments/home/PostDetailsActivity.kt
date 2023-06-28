@@ -80,9 +80,14 @@ class PostDetailsActivity : AppCompatActivity() {
 
         val timeStamp = intent.getStringExtra("time")
 
-        val exactTime = convertTimeToText(timeStamp!!)
+        try {
+            val exactTime = convertTimeToText(timeStamp!!)
+            time.text = exactTime
+        }catch (e:NullPointerException){
+            Log.e("error",e.message.toString())
+        }
 
-        time.text = exactTime
+
 
         Log.e("pic",postPic.toString())
 

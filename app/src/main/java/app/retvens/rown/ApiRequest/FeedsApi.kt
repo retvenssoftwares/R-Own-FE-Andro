@@ -26,6 +26,11 @@ interface FeedsApi {
         @Path("postId")postId : String
     ):Call<GetComments>
 
+    @GET("post/{postId}")
+    fun getPosts(
+        @Path("postId")postId : String
+    ):Call<PostItem>
+
     @Multipart
     @POST("usergroup")
     fun createCommunities(

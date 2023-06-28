@@ -37,7 +37,7 @@ class SharePostAdapter(val context: Context, var userList:List<Connections>) :
         val username = itemView.findViewById<TextView>(R.id.share_username)
         val profile = itemView.findViewById<ShapeableImageView>(R.id.share_profile)
         val share = itemView.findViewById<CardView>(R.id.ca_connect)
-
+        val text = itemView.findViewById<TextView>(R.id.shared)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
@@ -55,6 +55,8 @@ class SharePostAdapter(val context: Context, var userList:List<Connections>) :
 
         holder.share.setOnClickListener {
             onItemClickListener?.onItemClick(data)
+
+            holder.text.text = "sent"
         }
 
 
