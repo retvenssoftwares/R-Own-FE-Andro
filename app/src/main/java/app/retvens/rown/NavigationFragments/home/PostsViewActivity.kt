@@ -1,10 +1,16 @@
 package app.retvens.rown.NavigationFragments.home
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,12 +18,14 @@ import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
+import com.bumptech.glide.Glide
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import me.relex.circleindicator.CircleIndicator
@@ -29,7 +37,12 @@ class PostsViewActivity : AppCompatActivity() {
 
     lateinit var viewPagerAdapter: ImageSlideActivityAdapter
     lateinit var indicator: CircleIndicator
-
+    lateinit var profilePic:String
+    lateinit var postId:String
+    private var image:ArrayList<String> = ArrayList()
+    lateinit var caption:String
+    private lateinit var captions:TextView
+    lateinit var progressDialog:Dialog
     lateinit var savedPost : ImageView
     var save = true
     var operatioin = "push"
@@ -42,7 +55,7 @@ class PostsViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_posts_view)
 
 //        val postImage = findViewById<ShapeableImageView>(R.id.post_pic)
-        val caption = findViewById<TextView>(R.id.caption)
+        captions = findViewById<TextView>(R.id.caption)
         val createCommunity_backBtn = findViewById<ImageButton>(R.id.createCommunity_backBtn)
 
         savedPost = findViewById(R.id.savedPost)
@@ -53,11 +66,19 @@ class PostsViewActivity : AppCompatActivity() {
         val viewPager = findViewById<ViewPager>(R.id.post_pic)
         indicator = findViewById<CircleIndicator>(R.id.indicator)
 
-        caption.text = intent.getStringExtra("caption")
+        try {
+            captions.text = intent.getStringExtra("caption")
+            image = intent.getStringArrayListExtra("postPic")!!
+            postId = intent.getStringExtra("postId").toString()
+            profilePic = intent.getStringExtra("profilePic").toString()
+        }catch (e:NullPointerException){
+            val postIds = intent.getStringExtra("postId").toString()
+            getPost(postIds)
+        }
 
-        val image = intent.getStringArrayListExtra("postPic")
-        val postId = intent.getStringExtra("postId").toString()
-        val profilePic = intent.getStringExtra("profilePic")
+
+
+
         like = intent.getStringExtra("like").toString()
 
 //        Glide.with(applicationContext).load(image).into(postImage)
@@ -67,8 +88,18 @@ class PostsViewActivity : AppCompatActivity() {
             likeButton.setImageResource(R.drawable.svg_like_post)
         }
 
-        viewPagerAdapter = ImageSlideActivityAdapter(baseContext,image!!, like, postId, likeButton, likedAnimation)
-        viewPager.adapter = viewPagerAdapter
+        val handler = Handler(Looper.getMainLooper())
+
+        handler.postDelayed({
+
+
+
+            viewPagerAdapter = ImageSlideActivityAdapter(baseContext,image!!, like, postId, likeButton, likedAnimation)
+            viewPager.adapter = viewPagerAdapter
+
+        },1000)
+
+
 
         createCommunity_backBtn.setOnClickListener(DoubleClick(object : DoubleClickListener {
             override fun onSingleClick(view: View?) {
@@ -120,6 +151,30 @@ class PostsViewActivity : AppCompatActivity() {
         savedPost.setOnClickListener {
             savePosts(postId)
         }
+
+    }
+
+    private fun getPost(postIds:String) {
+
+        val getpost = RetrofitBuilder.feedsApi.getPosts(postIds)
+
+        getpost.enqueue(object : Callback<PostItem?> {
+            override fun onResponse(call: Call<PostItem?>, response: Response<PostItem?>) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    profilePic = response.Profile_pic
+                    captions.text = response.caption
+                    postId = response.post_id
+                    response.media.forEach {
+                        image.add(it.post)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<PostItem?>, t: Throwable) {
+
+            }
+        })
 
     }
 
