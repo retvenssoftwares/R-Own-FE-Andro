@@ -253,7 +253,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
         name_tite_layout = getActivity().findViewById(R.id.name_tite_layout);
 
-
         return view;
     }
 

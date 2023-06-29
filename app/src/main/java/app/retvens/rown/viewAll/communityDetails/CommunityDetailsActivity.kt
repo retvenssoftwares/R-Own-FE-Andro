@@ -8,18 +8,19 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.FilterSelectedMembers
 import app.retvens.rown.CreateCommunity.SelectMembers
+import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.DeleteCommunityDataClass
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityCommunityDetailsBinding
 import com.bumptech.glide.Glide
@@ -65,10 +66,13 @@ class CommunityDetailsActivity : AppCompatActivity(){
         binding.communityDetailAddBtn.setOnClickListener {
             val intent = Intent(this,FilterSelectedMembers::class.java)
             intent.putStringArrayListExtra("members",members)
+            intent.putExtra("groupId",grpID)
             startActivity(intent)
         }
 
         binding.communityDetailDeleteBtn.setOnClickListener {
+
+            openBottomSelectionCommunityRemove(grpID)
 
         }
 
@@ -158,6 +162,35 @@ class CommunityDetailsActivity : AppCompatActivity(){
         getCommunityDetails(grpID)
     }
 
+    private fun deleteCommunity(grpID: String) {
+
+        val delete = RetrofitBuilder.feedsApi.deleteCommunity(DeleteCommunityDataClass(grpID))
+
+        delete.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful) {
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext, response.message, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                } else {
+                    Toast.makeText(
+                        applicationContext,
+                        response.code().toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                }
+            }
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+            Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
     private fun getCommunityDetails(groupId: String?) {
 
         val getCommunities = RetrofitBuilder.feedsApi.getGroup(groupId!!)
@@ -203,6 +236,36 @@ class CommunityDetailsActivity : AppCompatActivity(){
 
     }
 
+    private fun openBottomSelectionCommunityRemove(groupId: String) {
+        val dialogLanguage = Dialog(this)
+        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogLanguage.setContentView(R.layout.bottom_delete_group)
+        dialogLanguage.setCancelable(true)
+
+// Set dialog size
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(dialogLanguage.window?.attributes)
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialogLanguage.window?.attributes = layoutParams
+
+// Set dialog background
+        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+// Set dialog window animations
+        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
+
+        dialogLanguage.show()
+
+        dialogLanguage.findViewById<TextView>(R.id.yes).setOnClickListener {
+            dialogLanguage.dismiss()
+            deleteCommunity(groupId)
+        }
+
+        dialogLanguage.findViewById<TextView>(R.id.not).setOnClickListener {
+            dialogLanguage.dismiss()
+        }
+    }
 
     private fun replaceFragment(fragment: Fragment) {
         if (fragment !=null){

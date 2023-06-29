@@ -46,7 +46,13 @@
         android:theme="@style/Theme.Rown"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Dashboard.ChatActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -125,7 +131,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".NavigationFragments.eventsForHoteliers.EditEventActivity"
             android:exported="false"
@@ -430,12 +435,10 @@
             android:name=".Dashboard.createPosts.CreatCheackInPostActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
-
         <activity
             android:name=".CreateCommunity.FilterSelectedMembers"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
-
         <activity
             android:name=".Dashboard.createPosts.CreateEventPostActivity"
             android:exported="false"
@@ -623,8 +626,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-
-
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
@@ -632,8 +633,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-
     </application>
 
 </manifest>

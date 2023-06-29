@@ -130,24 +130,24 @@ public class MessageView extends RelativeLayout {
         }
 
 
-            mPicLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    context = getContext();
-
-
-                    if (Objects.equals(data.msg.message, "VIh5k3UYn")){
-                        Log.e("click","ok");
-                        Intent intent = new Intent(context, PostsViewActivity.class);
-                        intent.putExtra("postId",data.msg.message);
-                        context.startActivity(intent);
-                    }
-
-
-
-                }
-            });
+//            mPicLayout.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    context = getContext();
+//
+//
+//                    if (Objects.equals(data.msg.message, "VIh5k3UYn")){
+//                        Log.e("click","ok");
+//                        Intent intent = new Intent(context, PostsViewActivity.class);
+//                        intent.putExtra("postId",data.msg.message);
+//                        context.startActivity(intent);
+//                    }
+//
+//
+//
+//                }
+//            });
 
 
         ViewGroup.LayoutParams PTTParams = getLayoutParams();

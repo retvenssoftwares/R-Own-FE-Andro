@@ -1,5 +1,6 @@
 package app.retvens.rown.ApiRequest
 
+import app.retvens.rown.DataCollections.DeleteCommunityDataClass
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -225,4 +226,9 @@ interface FeedsApi {
     fun fetchOpenCommunity(
         @Path("userID")userID:String
     ):Call<List<GetCommunitiesData>>
+
+    @PATCH("deletedata")
+    fun deleteCommunity(
+        @Body groupId:DeleteCommunityDataClass
+    ):Call<UpdateResponse>
 }

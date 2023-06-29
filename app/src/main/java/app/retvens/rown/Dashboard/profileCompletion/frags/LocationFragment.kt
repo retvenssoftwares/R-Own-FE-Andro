@@ -1,10 +1,18 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
+import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -16,6 +24,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,9 +39,16 @@ import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,9 +67,13 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
     private lateinit var dialogRole:Dialog
     private lateinit var profile:ShapeableImageView
     private lateinit var name:TextView
-
+    private val REQUEST_CHECK_SETTINGS = 1001
+    private val LOCATION_PERMISSION_REQUEST_CODE = 100
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var settingsClient: SettingsClient
+    private lateinit var locationRequest: LocationRequest
     lateinit var progressDialog : Dialog
-
+    lateinit var task:CardView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,6 +103,21 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
 //            openStateLocationSheet()
         }
 
+        task = view.findViewById<CardView>(R.id.autofetch)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        settingsClient = LocationServices.getSettingsClient(requireContext())
+
+        locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        task.setOnClickListener {
+            checkLocationSettings()
+        }
+
         view.findViewById<CardView>(R.id.card_location_next).setOnClickListener {
             if(etLocationCountry.text.toString() == "Select Your Location"){
                 userLocationCountry.error = "Select Your Location"
@@ -109,6 +145,104 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
             Glide.with(requireContext()).load(profilePic).into(profile)
         }
         name.setText("Hi $profileName")
+    }
+
+    private fun checkLocationSettings() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(requireContext())
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            // Location services enabled, proceed to fetch location
+            fetchLocation()
+            Log.e("click","1")
+        }
+
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                try {
+                    exception.startResolutionForResult(requireActivity(), REQUEST_CHECK_SETTINGS)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.e("error",sendEx.toString())
+                }
+            }
+        }
+    }
+
+    private fun fetchLocation() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            Log.e("click","2")
+        } else {
+            Log.e("click","3")
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    Log.e("latitude",latitude.toString())
+                    Log.e("longitude",longitude.toString())
+
+                    reverseGeocode(latitude, longitude)
+                    Log.e("click","4")
+                }else{
+                    Log.e("click","5")
+                }
+            }.addOnFailureListener { exception: Exception ->
+                Log.e("error",exception.toString())
+                Toast.makeText(requireContext(),"Permission Required",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun reverseGeocode(latitude: Double, longitude: Double) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val geocoder = Geocoder(requireContext())
+            try {
+                val addresses = withContext(Dispatchers.IO) {
+                    geocoder.getFromLocation(latitude, longitude, 1)
+                }
+                if (addresses!!.isNotEmpty()) {
+                    val address = addresses[0]
+                    val city = address.locality
+                    val state = address.adminArea
+                    val country = address.countryName
+
+                    etLocationCountry.setText("$city,$state,$country")
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == Activity.RESULT_OK) {
+                // Location services enabled, proceed to fetch location
+                fetchLocation()
+            } else {
+                val settingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(settingsIntent)
+            }
+        }
     }
 
 

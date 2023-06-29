@@ -1,15 +1,21 @@
 package app.retvens.rown.Dashboard.createPosts
 
 import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +24,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -34,7 +41,14 @@ import app.retvens.rown.utils.prepareFilePart
 import com.bumptech.glide.Glide
 import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity
 import com.dsphotoeditor.sdk.utils.DsPhotoEditorConstants
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -49,7 +63,12 @@ class CreatePostActivity : AppCompatActivity(),
 
     private var fileList : ArrayList<MultipartBody.Part> = ArrayList()
     private var imagesList : ArrayList<Uri> = ArrayList()
-
+    private val REQUEST_CHECK_SETTINGS = 1001
+    private val LOCATION_PERMISSION_REQUEST_CODE = 100
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var settingsClient: SettingsClient
+    private lateinit var locationRequest: LocationRequest
+    lateinit var task: CardView
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
     private var croppedImageUri: Uri?= null
@@ -123,7 +142,21 @@ class CreatePostActivity : AppCompatActivity(),
         Glide.with(applicationContext).load(profilePic).into(binding.userCompleteProfile)
         binding.userCompleteName.setText(profileName)
 
+        //AutoFetch
+        task = findViewById<CardView>(R.id.autofetch)
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        settingsClient = LocationServices.getSettingsClient(this)
+
+        locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        task.setOnClickListener {
+            checkLocationSettings()
+        }
 
         binding.canSee.setOnClickListener {
             canSee = 1
@@ -337,6 +370,91 @@ class CreatePostActivity : AppCompatActivity(),
 
     }
 
+    private fun checkLocationSettings() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            // Location services enabled, proceed to fetch location
+            fetchLocation()
+            Log.e("click","1")
+        }
+
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                try {
+                    exception.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.e("error",sendEx.toString())
+                }
+            }
+        }
+    }
+
+    private fun fetchLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            Log.e("click","2")
+        } else {
+            Log.e("click","3")
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    Log.e("latitude",latitude.toString())
+                    Log.e("longitude",longitude.toString())
+
+                    reverseGeocode(latitude, longitude)
+                    Log.e("click","4")
+                }else{
+                    Log.e("click","5")
+                }
+            }.addOnFailureListener { exception: Exception ->
+                Log.e("error",exception.toString())
+                Toast.makeText(applicationContext,"Permission Required",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun reverseGeocode(latitude: Double, longitude: Double) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val geocoder = Geocoder(this@CreatePostActivity)
+            try {
+                val addresses = withContext(Dispatchers.IO) {
+                    geocoder.getFromLocation(latitude, longitude, 1)
+                }
+                if (addresses!!.isNotEmpty()) {
+                    val address = addresses[0]
+                    val city = address.locality
+                    val state = address.adminArea
+                    val country = address.countryName
+
+                    binding.etLocationPostEvent.setText("$city,$state,$country")
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
     private fun createPost(userId: String) {
 
         val canSee = binding.canSeeText.text.toString()
@@ -426,6 +544,16 @@ class CreatePostActivity : AppCompatActivity(),
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == Activity.RESULT_OK) {
+                // Location services enabled, proceed to fetch location
+                fetchLocation()
+            } else {
+                val settingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(settingsIntent)
+            }
+        }
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
             val imageUri = data.data

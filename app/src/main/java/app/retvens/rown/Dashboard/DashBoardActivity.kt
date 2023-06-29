@@ -414,12 +414,7 @@ class DashBoardActivity : AppCompatActivity() {
                 return true
             }*/
             R.id.action_chats -> {
-                val myFragment = app.retvens.rown.MessagingModule.UserListFragment()
-                supportFragmentManager.beginTransaction().apply {
-                    replace(R.id.fragment_container, myFragment)
-                    addToBackStack(null)
-                    commit()
-                }
+               startActivity(Intent(this,ChatActivity::class.java))
                 return true
             }
             R.id.action_notify -> {
@@ -445,6 +440,11 @@ class DashBoardActivity : AppCompatActivity() {
             Log.e("token",token.toString())
 
         })
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 
 }

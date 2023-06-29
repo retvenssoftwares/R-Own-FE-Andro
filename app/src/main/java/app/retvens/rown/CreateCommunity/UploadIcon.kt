@@ -224,7 +224,7 @@ class UploadIcon : AppCompatActivity() {
                 call: Call<ResponseGroup?>,
                 response: Response<ResponseGroup?>
             ) {
-                progressDialog.dismiss()
+
                 if (response.isSuccessful){
                     val response = response.body()!!
                     groupId = response.group.gid.toString()
@@ -314,7 +314,6 @@ class UploadIcon : AppCompatActivity() {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
@@ -350,12 +349,12 @@ class UploadIcon : AppCompatActivity() {
                     response: Response<UpdateResponse?>
                 ) {
                     if (response.isSuccessful){
+                        progressDialog.dismiss()
                         val response = response.body()!!
                         Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                         val intent = Intent(applicationContext,MesiboMessagingActivity::class.java)
                         intent.putExtra(MesiboUI.GROUP_ID,groupId.toLong())
                         startActivity(intent)
-
                         finish()
                     }else{
                         Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()

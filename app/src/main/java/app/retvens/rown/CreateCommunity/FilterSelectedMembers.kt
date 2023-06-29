@@ -1,12 +1,16 @@
 package app.retvens.rown.CreateCommunity
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -15,13 +19,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.ChatSection.ReceiverProfileAdapter
+import app.retvens.rown.DataCollections.*
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.Connections
+import app.retvens.rown.DataCollections.FeedCollection.AddUserDataClass
 import app.retvens.rown.DataCollections.FeedCollection.Member
-import app.retvens.rown.DataCollections.MesiboUsersData
-import app.retvens.rown.DataCollections.UserProfileRequestItem
-import app.retvens.rown.DataCollections.UsersList
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.MessagingModule.MesiboMessagingActivity
+import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +47,7 @@ class FilterSelectedMembers : AppCompatActivity() {
     private  var profile:ArrayList<String> = ArrayList()
     private  var userId:ArrayList<String> = ArrayList()
     private  var userList: List<Connections> = emptyList()
+    private lateinit var progressDialog:Dialog
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +81,16 @@ class FilterSelectedMembers : AppCompatActivity() {
         val longitude = intent.getStringExtra("longitude")
 
         next.setOnClickListener {
+            progressDialog = Dialog(this)
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setCancelable(false)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
 
-
-
+            addMembers()
         }
 
         receiverProfileAdapter.setOnItemClickListener(object :
@@ -111,7 +126,6 @@ class FilterSelectedMembers : AppCompatActivity() {
                 selectedMembersAdapter.addSelectedMember(member)
                 selectedMembersAdapter.notifyDataSetChanged()
 
-                Toast.makeText(applicationContext,number.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -170,5 +184,79 @@ class FilterSelectedMembers : AppCompatActivity() {
 
 
     }
+    private fun addMembers() {
 
+
+// Remove any non-digit characters from each phone number
+        val cleanedNumbers = number!!.map { it.replace(Regex("[^\\d]"), "+") }
+
+// Join the cleaned phone numbers into a comma-separated string
+        val formattedMembers = cleanedNumbers.joinToString(",")
+
+        val groupId = intent.getStringExtra("groupId")
+
+
+        val data = AddMemberData(groupId!!, formattedMembers)
+
+        val send = RetrofitBuilder.retrofitBuilder.addMember(data)
+
+        send.enqueue(object : Callback<ResponseGroup?> {
+            override fun onResponse(
+                call: Call<ResponseGroup?>,
+                response: Response<ResponseGroup?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,response.result.toString(),Toast.LENGTH_SHORT).show()
+                    addCommunityMember()
+                }else{
+                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<ResponseGroup?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun addCommunityMember() {
+        val members = userId
+        val groupId = intent.getStringExtra("groupId")
+        for (x in members!!) {
+
+            val data = AddUserDataClass(x)
+
+            val send = RetrofitBuilder.feedsApi.addUser(groupId!!, data)
+
+            send.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        Toast.makeText(applicationContext, response.message, Toast.LENGTH_SHORT)
+                            .show()
+                        val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
+                        intent.putExtra(MesiboUI.GROUP_ID, groupId.toLong())
+                        startActivity(intent)
+                        progressDialog.dismiss()
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+
+        }
+    }
 }

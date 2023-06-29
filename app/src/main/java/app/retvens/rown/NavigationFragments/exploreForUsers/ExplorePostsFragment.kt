@@ -175,8 +175,12 @@ class ExplorePostsFragment : Fragment() {
                             ) {
 
                                 val letter = p0.toString()
+                                if (letter != ""){
+                                    searchPost(letter)
+                                }else{
 
-                                searchPost(letter)
+                                }
+
 
                             }
 
@@ -238,12 +242,12 @@ class ExplorePostsFragment : Fragment() {
 
 
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.code().toString())
                 }
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+               Log.e("error",t.message.toString())
             }
         })
 

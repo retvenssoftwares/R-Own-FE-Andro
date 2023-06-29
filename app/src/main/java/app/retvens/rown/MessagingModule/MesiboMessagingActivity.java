@@ -38,6 +38,7 @@ import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboMessage;
 import com.mesibo.api.MesiboProfile;
 
+import app.retvens.rown.Dashboard.ChatActivity;
 import app.retvens.rown.Dashboard.DashBoardActivity;
 import app.retvens.rown.R;
 import app.retvens.rown.api.MesiboCall;
@@ -295,7 +296,8 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         MessagingFragment f = this.mFragment;
 
         if (f == null || !f.Mesibo_onBackPressed()) {
-            super.onBackPressed();
+            Intent intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
             finish();
         }
     }
