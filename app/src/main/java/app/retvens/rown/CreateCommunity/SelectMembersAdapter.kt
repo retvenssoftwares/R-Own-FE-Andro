@@ -1,24 +1,26 @@
 package app.retvens.rown.CreateCommunity
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class SelectMembersAdapter(val context: Context, var userList:List<UserProfileRequestItem>) :
+class SelectMembersAdapter(val context: Context, var userList:List<Connections>) :
     RecyclerView.Adapter<SelectMembersAdapter.ProfileViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
 
     // Define an interface for the listener
     interface OnItemClickListener {
-        fun onItemClick(member: UserProfileRequestItem)
+        fun onItemClick(member: Connections)
     }
 
     // Define a function to set the listener
@@ -43,7 +45,6 @@ class SelectMembersAdapter(val context: Context, var userList:List<UserProfileRe
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
 
         val data = userList[position]
-
         holder.nameTextView.text = data.Full_name
         Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
@@ -51,10 +52,11 @@ class SelectMembersAdapter(val context: Context, var userList:List<UserProfileRe
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(data)
 
-            data.isSelected = !data.isSelected
+            data.isClick = !data.isClick
 
             // Update checkmark icon visibility
-            if (data.isSelected) {
+            if (data.isClick) {
+                Log.e("check","okkk")
                 holder.check.visibility = View.VISIBLE
             } else {
                 holder.check.visibility = View.GONE

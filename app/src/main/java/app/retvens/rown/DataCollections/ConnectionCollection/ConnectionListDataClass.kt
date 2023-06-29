@@ -9,6 +9,8 @@ data class Connections(
     val Full_name: String,
     val Phone: String,
     val Profile_pic: String,
+    var isSelected:Boolean,
+    var isClick:Boolean,
     val Mesibo_account: List<MesiboAccount>,
     val verificationStatus: String,
     val normalUserInfo: List<NormalUserInfos>,

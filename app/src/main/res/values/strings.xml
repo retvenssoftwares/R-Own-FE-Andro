@@ -128,5 +128,6 @@
     <string name="exit_group" translatable="false">Exit Group</string>
     <string name="Sample_Time" translatable="false">11:15</string>
     <string name="this_is_title" translatable="false">This is title</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 </resources>

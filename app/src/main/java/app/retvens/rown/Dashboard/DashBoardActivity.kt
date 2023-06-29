@@ -21,7 +21,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import app.retvens.rown.ApiRequest.MyBackgroundService
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
@@ -104,8 +103,6 @@ class DashBoardActivity : AppCompatActivity() {
 //
 //        backThread.start()
 
-        val serviceIntent = Intent(applicationContext, MyBackgroundService::class.java)
-        ContextCompat.startForegroundService(applicationContext, serviceIntent)
 
 
 //        val foregroundServiceIntent = Intent(applicationContext, MyForegroundService::class.java)

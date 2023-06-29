@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
@@ -17,7 +19,7 @@ import javax.microedition.khronos.opengles.GL
 class SelectedMembersAdapter(private val context: Context) :
     RecyclerView.Adapter<SelectedMembersAdapter.SelectedMemberViewHolder>() {
 
-    var selectedMembersList: MutableList<UserProfileRequestItem> = mutableListOf()
+    var selectedMembersList: MutableList<Connections> = mutableListOf()
 
     class SelectedMemberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileImageView = itemView.findViewById<ImageView>(R.id.selectedpic)
@@ -42,7 +44,7 @@ class SelectedMembersAdapter(private val context: Context) :
         return selectedMembersList.size
     }
 
-    fun addSelectedMember(member: UserProfileRequestItem) {
+    fun addSelectedMember(member: Connections) {
         val index = selectedMembersList.indexOf(member)
         if (index == -1) {
             selectedMembersList.add(member)

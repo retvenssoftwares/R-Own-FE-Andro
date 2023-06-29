@@ -17,6 +17,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.ChatSection.ReceiverProfileAdapter
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.Connections
+import app.retvens.rown.DataCollections.FeedCollection.Member
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
@@ -25,15 +26,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SelectMembers : AppCompatActivity() {
+class FilterSelectedMembers : AppCompatActivity() {
 
     private lateinit var receiverProfileAdapter: SelectMembersAdapter
     private lateinit var recycler: RecyclerView
     private lateinit var selectedMembersAdapter: SelectedMembersAdapter
     private lateinit var selectedMembersRecyclerView: RecyclerView
-    private  var selectedMembe: ArrayList<UserProfileRequestItem> = ArrayList()
+    private  var selectedMembe: ArrayList<Connections> = ArrayList()
     private  var number:ArrayList<String> = ArrayList()
     private  var names:ArrayList<String> = ArrayList()
+    private var existingMembers:ArrayList<String> = ArrayList()
+    private var newUserList:ArrayList<String> = ArrayList()
     private  var profile:ArrayList<String> = ArrayList()
     private  var userId:ArrayList<String> = ArrayList()
     private  var userList: List<Connections> = emptyList()
@@ -54,6 +57,8 @@ class SelectMembers : AppCompatActivity() {
 
         selectedMembersRecyclerView.adapter = selectedMembersAdapter
 
+        existingMembers = intent.getStringArrayListExtra("members")!!
+
         receiverProfileAdapter = SelectMembersAdapter(baseContext, emptyList())
         recycler.adapter = receiverProfileAdapter
         receiverProfileAdapter.notifyDataSetChanged()
@@ -68,19 +73,9 @@ class SelectMembers : AppCompatActivity() {
         val longitude = intent.getStringExtra("longitude")
 
         next.setOnClickListener {
-                val intent = Intent(this, UploadIcon::class.java)
-                intent.putStringArrayListExtra("number", number)
-                intent.putStringArrayListExtra("names", names)
-                intent.putStringArrayListExtra("pic", profile)
-                intent.putStringArrayListExtra("userId",userId)
-                intent.putExtra("name",name)
-                intent.putExtra("desc",description)
-                intent.putExtra("location",location)
-                intent.putExtra("type",type)
-                intent.putExtra("latitude",latitude)
-                intent.putExtra("longitude",longitude)
-                startActivity(intent)
-            Log.e("location",location.toString())
+
+
+
         }
 
         receiverProfileAdapter.setOnItemClickListener(object :
@@ -131,7 +126,6 @@ class SelectMembers : AppCompatActivity() {
     }
 
     private fun getUsers() {
-
         val sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
 
@@ -142,15 +136,30 @@ class SelectMembers : AppCompatActivity() {
                 call: Call<List<ConnectionListDataClass>?>,
                 response: Response<List<ConnectionListDataClass>?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val response = response.body()!!
                     response.forEach {
                         userList = it.conns
                     }
+
+                    val uniqueItems: ArrayList<Connections> = ArrayList()
+
+                    for (item in userList) {
+                        val userId = item.User_id
+                        if (!existingMembers.contains(userId)) {
+                            uniqueItems.add(item)
+                        }
+                    }
+
+                    println("List 1: $userList")
+                    println("List 2: $existingMembers")
+                    println("Unique Items: $uniqueItems")
+
                     // Update the adapter with the new data
-                    receiverProfileAdapter.userList = userList ?: emptyList()
+                    receiverProfileAdapter.userList = uniqueItems ?: emptyList()
                     receiverProfileAdapter.notifyDataSetChanged()
                 }
+
             }
 
             override fun onFailure(call: Call<List<ConnectionListDataClass>?>, t: Throwable) {

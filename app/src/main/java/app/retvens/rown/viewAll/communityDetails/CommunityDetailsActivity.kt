@@ -17,10 +17,18 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.CreateCommunity.FilterSelectedMembers
+import app.retvens.rown.CreateCommunity.SelectMembers
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityCommunityDetailsBinding
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,13 +37,18 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class CommunityDetailsActivity : AppCompatActivity() {
+class CommunityDetailsActivity : AppCompatActivity(){
     lateinit var binding: ActivityCommunityDetailsBinding
     lateinit var image:String
     lateinit var name:String
     lateinit var description:String
     lateinit var groupId: String
     lateinit var location :String
+    private var latitude:Double = 0.0
+    var longitude:Double = 0.0
+    private  var members:ArrayList<String> = ArrayList()
+    private lateinit var googleMap: GoogleMap
+    private lateinit var mMapFragment: SupportMapFragment
     private var isSwitchToCloseCommunity = true
     var isBusinessVisible = true
 
@@ -46,13 +59,18 @@ class CommunityDetailsActivity : AppCompatActivity() {
 
         binding.communityDetailBackBtn.setOnClickListener { onBackPressed() }
 
-
-
         val groupId = intent.getLongExtra("groupId",0)
-
         val grpID:String = groupId.toString()
 
+        binding.communityDetailAddBtn.setOnClickListener {
+            val intent = Intent(this,FilterSelectedMembers::class.java)
+            intent.putStringArrayListExtra("members",members)
+            startActivity(intent)
+        }
 
+        binding.communityDetailDeleteBtn.setOnClickListener {
+
+        }
 
         binding.communityDetailEditBtn.setOnClickListener {
             val intent = Intent(this, CommunityEditActivity::class.java)
@@ -116,6 +134,27 @@ class CommunityDetailsActivity : AppCompatActivity() {
             }
         }
 
+//        mMapFragment = supportFragmentManager.findFragmentById(R.id.map_show) as SupportMapFragment
+//        mMapFragment.getMapAsync(OnMapReadyCallback {
+//            googleMap = it
+//        })
+
+        mMapFragment = SupportMapFragment.newInstance()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.map_show, mMapFragment)
+            .commit()
+
+        mMapFragment.getMapAsync(object : OnMapReadyCallback{
+            override fun onMapReady(p0: GoogleMap) {
+
+                googleMap = p0
+                val location = LatLng( latitude, longitude)
+                googleMap.addMarker(MarkerOptions().position(location).title("location"))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15f))
+            }
+
+        })
+
         getCommunityDetails(grpID)
     }
 
@@ -140,7 +179,13 @@ class CommunityDetailsActivity : AppCompatActivity() {
                     image = response.Profile_pic
                     name = response.group_name
                     description = response.description
-                    location = ""
+                    location = response.location
+                    latitude = response.latitude.toDouble()
+                    longitude = response.longitude.toDouble()
+
+                    response.Members.forEach {
+                        members.add(it.user_id)
+                    }
 
                     val date = convertTimestampToFormattedDate(response.date_added)
 
@@ -182,4 +227,5 @@ class CommunityDetailsActivity : AppCompatActivity() {
 
         return ""
     }
+
 }
