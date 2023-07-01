@@ -84,55 +84,32 @@ class SavedPostsFragment : Fragment() {
 
         val getExplorePost = RetrofitBuilder.ProfileApis.getSavedPost(user_id,"1")
 
-        getExplorePost.enqueue(object : Callback<PostsDataClass?> {
+        getExplorePost.enqueue(object : Callback<List<PostsDataClass>?> {
             override fun onResponse(
-                call: Call<PostsDataClass?>,
-                response: Response<PostsDataClass?>
+                call: Call<List<PostsDataClass>?>,
+                response: Response<List<PostsDataClass>?>
             ) {
                 if (isAdded) {
                     if (response.isSuccessful) {
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
 
-//                        if (response.body()!!.isNotEmpty()) {
+                        if (response.body()!!.isNotEmpty()) {
                             val response = response.body()!!
-
-                            if (response.message != "You have reached the end") {
+                            response.forEach {
                                 mediaAdapter = MediaAdapter(
                                     requireContext(),
-                                    response.posts as ArrayList<PostItem>
+                                    it.posts as ArrayList<PostItem>
                                 )
                                 mediaRecyclerView.adapter = mediaAdapter
-                                mediaAdapter.removePostsFromList(response.posts)
+                                mediaAdapter.removePostsFromList(it.posts)
                                 mediaAdapter.notifyDataSetChanged()
+                            }
                             } else {
                                 empty.text = "You did'nt save post yet"
 //                                empty.visibility = View.VISIBLE
                                 emptyImage.visibility = View.VISIBLE
                             }
-
-                           /*
-                            val originalData = response.toList()
-                            response.forEach { postsDataClass ->
-
-                                if (postsDataClass.message != "You have reached the end") {
-                                    mediaAdapter = MediaAdapter(
-                                        requireContext(),
-                                        postsDataClass.posts as ArrayList<PostItem>
-                                    )
-                                    mediaRecyclerView.adapter = mediaAdapter
-                                    mediaAdapter.removePostsFromList(postsDataClass.posts)
-                                    mediaAdapter.notifyDataSetChanged()
-                                } else {
-                                    empty.text = "You did'nt save post yet"
-                                    empty.visibility = View.VISIBLE
-                                }
-                            }*/
-
-//                        } else {
-//                            empty.text = "You did'nt save post yet"
-//                            empty.visibility = View.VISIBLE
-//                        }
                     } else {
 //                        empty.visibility = View.VISIBLE
                         emptyImage.visibility = View.VISIBLE
@@ -143,7 +120,7 @@ class SavedPostsFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<PostsDataClass?>, t: Throwable) {
+            override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again ${t.localizedMessage}"

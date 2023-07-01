@@ -6,13 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import app.retvens.rown.NavigationFragments.exploreForUsers.ExplorePostsFragment
-import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsFragment
-import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventFragment
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsFragment
-import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobsFragment
-import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServicesFragment
+import app.retvens.rown.NavigationFragments.profile.setting.saved.hotels.SavedHotelsFragment
 import app.retvens.rown.R
 
 class SavedActivity : AppCompatActivity() {

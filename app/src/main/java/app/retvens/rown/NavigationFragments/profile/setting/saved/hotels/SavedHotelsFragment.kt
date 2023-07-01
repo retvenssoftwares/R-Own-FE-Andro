@@ -1,21 +1,17 @@
-package app.retvens.rown.NavigationFragments.profile.setting.saved
+package app.retvens.rown.NavigationFragments.profile.setting.saved.hotels
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelData
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsAdapter
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelsData
-import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.R
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
@@ -28,10 +24,7 @@ class SavedHotelsFragment : Fragment() {
     lateinit var savedHotelsRecyclerView : RecyclerView
     lateinit var savedHotelsAdapter: SavedHotelsAdapter
 
-    lateinit var exploreHotelAdapter : ExploreHotelsAdapter
-
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
-
     lateinit var empty : TextView
     lateinit var emptyImage : ImageView
 
@@ -54,77 +47,55 @@ class SavedHotelsFragment : Fragment() {
         savedHotelsRecyclerView.layoutManager = GridLayoutManager(context,2)
         savedHotelsRecyclerView.setHasFixedSize(true)
 
-        val blogs = listOf<ExploreHotelsData>(
-            ExploreHotelsData("Paradise Inn"),
-            ExploreHotelsData("Paradise Inn 2"),
-            ExploreHotelsData("Neck Deep Paradise Inn"),
-            ExploreHotelsData("Paradise Inn 23"),
-            ExploreHotelsData("Paradise Inn 1"),
-            ExploreHotelsData("Paradise Inn"),
-            ExploreHotelsData("Paradise Inn 2"),
-            ExploreHotelsData("Neck Deep Paradise Inn"),
-            ExploreHotelsData("Paradise Inn 23"),
-            ExploreHotelsData("Paradise Inn 1"),
-            ExploreHotelsData("Paradise Inn"),
-            ExploreHotelsData("Paradise Inn 2"),
-            ExploreHotelsData("Neck Deep Paradise Inn"),
-            ExploreHotelsData("Paradise Inn 23"),
-            ExploreHotelsData("Paradise Inn 1"),
-        )
-
-//        savedHotelsAdapter = SavedHotelsAdapter(blogs, requireContext())
-//        savedHotelsRecyclerView.adapter = savedHotelsAdapter
-//        savedHotelsAdapter.notifyDataSetChanged()
-        getHotels()
+        getSavedHotels()
     }
 
-    private fun getHotels() {
+    private fun getSavedHotels() {
 
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val getHotel = RetrofitBuilder.ProfileApis.getSaveHotel(user_id,"1")
-        getHotel.enqueue(object : Callback<List<ExploreHotelData>?> {
+        getHotel.enqueue(object : Callback<List<SavedHotelsDataItem>?> {
             override fun onResponse(
-                call: Call<List<ExploreHotelData>?>,
-                response: Response<List<ExploreHotelData>?>
+                call: Call<List<SavedHotelsDataItem>?>,
+                response: Response<List<SavedHotelsDataItem>?>
             ) {
                 try {
-                    if (isAdded){
-                        if (response.isSuccessful){
+                    if (isAdded) {
+                        if (response.isSuccessful) {
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
                             if (response.body()!!.isNotEmpty()) {
-                                val data = response.body()!!
-                                data.forEach {
-                                    exploreHotelAdapter = ExploreHotelsAdapter(it.posts as ArrayList<HotelData>, requireContext())
-                                    savedHotelsRecyclerView.adapter = exploreHotelAdapter
-                                    exploreHotelAdapter.removeHotelFromList(it.posts)
-                                    exploreHotelAdapter.notifyDataSetChanged()
+                                val data = response.body()
+                                data!!.forEach{
+                                    savedHotelsAdapter = SavedHotelsAdapter(it.hotels as ArrayList<Hotel>, requireContext())
+                                    savedHotelsRecyclerView.adapter = savedHotelsAdapter
+                                    savedHotelsAdapter.removeHotelFromList(it.hotels)
+                                    savedHotelsAdapter.notifyDataSetChanged()
                                 }
                             } else {
 //                                empty.visibility = View.VISIBLE
                                 emptyImage.visibility = View.VISIBLE
                             }
                         } else {
-//                            empty.visibility = View.VISIBLE
-                            emptyImage.visibility = View.VISIBLE
-                            empty.text = response.code().toString()
-                            shimmerFrameLayout.stopShimmer()
-                            shimmerFrameLayout.visibility = View.GONE
+//                            Toast.makeText(requireContext(),"${response.message()} ${response.code()} ${response.body().toString()}", Toast.LENGTH_SHORT).show()
+                            Log.d("tag", response.body().toString())
                         }
                     }
                 }catch (e:NullPointerException){
-                    emptyImage.visibility = View.VISIBLE
-//                    Toast.makeText(requireContext(),"No Hotels Yet", Toast.LENGTH_SHORT).show()
+                        emptyImage.visibility = View.VISIBLE
+                    Log.d("tag", e.toString())
                 }
             }
 
-            override fun onFailure(call: Call<List<ExploreHotelData>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<SavedHotelsDataItem>?>, t: Throwable) {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again - ${t.localizedMessage}"
 //                empty.visibility = View.VISIBLE
+                Log.d("tag", t.localizedMessage.toString())
+//                Toast.makeText(requireContext(),t.localizedMessage, Toast.LENGTH_SHORT).show()
                 emptyImage.visibility = View.VISIBLE
             }
         })

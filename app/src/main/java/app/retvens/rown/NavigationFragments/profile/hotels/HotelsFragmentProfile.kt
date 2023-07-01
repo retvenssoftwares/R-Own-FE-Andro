@@ -21,7 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class HotelsFragmentProfile(val userId:String, val isOwner : Boolean) : Fragment() {
+class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val username : String) : Fragment() {
 
     lateinit var recycler : RecyclerView
 
@@ -86,9 +86,21 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean) : Fragment
                             profileHotelsAdapter.notifyDataSetChanged()
                                } catch ( e : NullPointerException){
                                 notPosted.visibility = View.VISIBLE
+                                empty.visibility = View.VISIBLE
+                                if (isOwner){
+                                    empty.text = "You have not posted anything yet."
+                                } else {
+                                    empty.text = "$username have not posted anything yet."
+                                }
                         }
                         } else {
                             notPosted.visibility = View.VISIBLE
+                            empty.visibility = View.VISIBLE
+                            if (isOwner){
+                                empty.text = "You have not posted anything yet."
+                            } else {
+                                empty.text = "$username have not posted anything yet."
+                            }
                         }
                     } else {
                         addHotel.visibility = View.GONE

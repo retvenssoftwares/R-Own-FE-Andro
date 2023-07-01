@@ -25,7 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MediaFragment(val userId: String, val isOwner : Boolean) : Fragment(), MediaAdapter.OnItemClickListener {
+class MediaFragment(val userId: String, val isOwner : Boolean, val username : String) : Fragment(), MediaAdapter.OnItemClickListener {
 
     lateinit var mediaRecyclerView: RecyclerView
     lateinit var mediaAdapter: MediaAdapter
@@ -96,6 +96,12 @@ class MediaFragment(val userId: String, val isOwner : Boolean) : Fragment(), Med
                         } catch (e: NullPointerException) {
                             // Handle NullPointerException
                             notPosted.visibility = View.VISIBLE
+                            empty.visibility = View.VISIBLE
+                            if (isOwner){
+                            empty.text = "You have not posted anything yet."
+                            } else {
+                                empty.text = "$username have not posted anything yet."
+                            }
                         }
 
 
@@ -103,6 +109,12 @@ class MediaFragment(val userId: String, val isOwner : Boolean) : Fragment(), Med
                     }
                         } else {
                             notPosted.visibility = View.VISIBLE
+                            empty.visibility = View.VISIBLE
+                            if (isOwner){
+                                empty.text = "You have not posted anything yet."
+                            } else {
+                                empty.text = "$username have not posted anything yet."
+                            }
                         }
                     } else {
                         empty.visibility = View.VISIBLE

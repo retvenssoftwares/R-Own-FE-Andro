@@ -2,7 +2,7 @@ package app.retvens.rown.DataCollections.saveId
 
 data class SavePost(
     val operation : String,
-    val Postid : String,
+    val postid : String,
 
 //    "Postid": "your postid”,
 //    "jobid": "your jobid”,

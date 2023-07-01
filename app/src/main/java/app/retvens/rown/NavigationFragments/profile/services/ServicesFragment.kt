@@ -34,7 +34,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ServicesFragment(val userId:String, val isOwner : Boolean) : Fragment(), BottomSheetServiceName.OnBottomSNClickListener {
+class ServicesFragment(val userId:String, val isOwner : Boolean, val username : String) : Fragment(), BottomSheetServiceName.OnBottomSNClickListener {
 
     lateinit var servicesRecycler : RecyclerView
     lateinit var profileServicesAdapter: ProfileServicesAdapter
@@ -104,8 +104,13 @@ class ServicesFragment(val userId:String, val isOwner : Boolean) : Fragment(), B
                         } else {
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
-//                            empty.text = "You did'nt add any service yet"
                             notPosted.visibility = View.VISIBLE
+                            empty.visibility = View.VISIBLE
+                            if (isOwner){
+                                empty.text = "You have not posted anything yet."
+                            } else {
+                                empty.text = "$username have not posted anything yet."
+                            }
                         }
                         } else {
                         addService.visibility = View.GONE

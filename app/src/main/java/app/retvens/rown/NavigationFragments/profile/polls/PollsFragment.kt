@@ -24,7 +24,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PollsFragment(val userId: String) : Fragment() {
+class PollsFragment(val userId: String, val isOwner : Boolean, val username : String) : Fragment() {
 
     lateinit var pollsRecyclerView: RecyclerView
     lateinit var pollsAdapter: PollsAdapter
@@ -92,12 +92,24 @@ class PollsFragment(val userId: String) : Fragment() {
                         }catch (e:NullPointerException){
 
                             notPosted.visibility = View.VISIBLE
+                            empty.visibility = View.VISIBLE
+                            if (isOwner){
+                                empty.text = "You have not posted anything yet."
+                            } else {
+                                empty.text = "$username have not posted anything yet."
+                            }
                         }
 
 
                     }
                         } else {
                             notPosted.visibility = View.VISIBLE
+                            empty.visibility = View.VISIBLE
+                            if (isOwner){
+                                empty.text = "You have not posted anything yet."
+                            } else {
+                                empty.text = "$username have not posted anything yet."
+                            }
                         }
                     } else {
                         empty.visibility = View.VISIBLE

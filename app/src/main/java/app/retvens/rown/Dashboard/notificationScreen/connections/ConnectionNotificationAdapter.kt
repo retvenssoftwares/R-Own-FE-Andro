@@ -12,6 +12,9 @@ import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.Dashboard.notificationScreen.personal.PersonalNotificationDataItem
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.utils.dateFormat
 import com.bumptech.glide.Glide
@@ -22,6 +25,7 @@ class ConnectionNotificationAdapter(val listS : List<PersonalNotificationDataIte
         val categoryName = itemView.findViewById<TextView>(R.id.connection_notification_name)
         val date = itemView.findViewById<TextView>(R.id.connection_notification_time)
         val profile = itemView.findViewById<ImageView>(R.id.connection_notification_profile)
+        val verification = itemView.findViewById<ImageView>(R.id.verification)
         val ca_accept = itemView.findViewById<CardView>(R.id.ca_accept)
         val ca_decline = itemView.findViewById<CardView>(R.id.ca_decline)
     }
@@ -38,6 +42,13 @@ class ConnectionNotificationAdapter(val listS : List<PersonalNotificationDataIte
 
     override fun onBindViewHolder(holder: ViewAllVendorsViewHolder, position: Int) {
 
+        val data = listS[position]
+
+        val verificationStatus = data.verificationStatus
+        if (verificationStatus != "false"){
+            holder.verification.visibility = View.VISIBLE
+        }
+
         Glide.with(context).load(listS[position].Profile_pic).into(holder.profile)
         holder.categoryName.text = listS[position].body
         holder.date.text =  dateFormat(listS[position].date_added)
@@ -46,10 +57,25 @@ class ConnectionNotificationAdapter(val listS : List<PersonalNotificationDataIte
         holder.ca_decline.visibility = View.GONE
 
         holder.itemView.setOnClickListener {
-//            val intent = Intent(context, AllBlogsActivity::class.java)
-//            intent.putExtra("id", listS[position].category_id)
-//            intent.putExtra("name", listS[position].category_name)
-//            context.startActivity(intent)
+            if(data.Role == "Business Vendor / Freelancer"){
+                val intent = Intent(context, VendorProfileActivity::class.java)
+                intent.putExtra("userId",data.user_id)
+//                intent.putExtra("status",status)
+//                intent.putExtra("address",data.Mesibo_account[0].address)
+                context.startActivity(intent)
+            }else if (data.Role == "Hotel Owner"){
+                val intent = Intent(context, OwnerProfileActivity::class.java)
+                intent.putExtra("userId",data.user_id)
+//                intent.putExtra("status",status)
+//                intent.putExtra("address",data.Mesibo_account[0].address)
+                context.startActivity(intent)
+            } else {
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("userId",data.user_id)
+//                intent.putExtra("status",status)
+//                intent.putExtra("address",data.Mesibo_account[0].address)
+                context.startActivity(intent)
+            }
         }
 
     }

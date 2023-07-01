@@ -30,6 +30,7 @@ class ViewRequestsActivity : AppCompatActivity() {
         binding.requestsRecycler.setHasFixedSize(true)
 
 
+        binding.reBackBtn.setOnClickListener { onBackPressed() }
 
 
 

@@ -104,11 +104,11 @@ class HomeFragment : Fragment() {
         val sharedPreferencesPro = context?.getSharedPreferences("SaveConnectionNo", AppCompatActivity.MODE_PRIVATE)
         val toPo = sharedPreferencesPro?.getString("connectionNo", "0")
 
-        if (connectionCount == "0" || toPo == "0"){
+//        if (connectionCount == "0" || toPo == "0"){
             val bottomSheet = BottomSheet()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
-        }
+//        }
 
         viewAllCommunity = view.findViewById(R.id.view_all_bg)
         viewAllCommunity.setOnClickListener{

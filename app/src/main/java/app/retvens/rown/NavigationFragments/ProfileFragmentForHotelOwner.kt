@@ -135,7 +135,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
 
 
-        val childFragment: Fragment = MediaFragment(user_id, true)
+        val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString())
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -167,7 +167,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = MediaFragment(user_id, true)
+            val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString())
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -179,7 +179,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = PollsFragment(user_id)
+            val childFragment: Fragment = PollsFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -191,7 +191,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = StatusFragment(user_id)
+            val childFragment: Fragment = StatusFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -203,7 +203,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = HotelsFragmentProfile(user_id, true)
+            val childFragment: Fragment = HotelsFragmentProfile(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

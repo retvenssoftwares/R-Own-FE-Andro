@@ -55,6 +55,10 @@ class RequestsAdapter(val listS : GetAllRequestDataClass, val context: Context) 
 
         holder.accept.setOnClickListener {
             connectClickListener?.onJobSavedClick(data)
+            try {
+                listS.conns.remove(data)
+                notifyDataSetChanged()
+            }catch (e : Exception){}
         }
 
     }

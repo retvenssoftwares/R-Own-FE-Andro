@@ -12,9 +12,10 @@ data class Post(
     val Role: String,
     val User_id: String,
     val verificationStatus: String,
+    val userBio: String,
     val Profile_pic: String,
     val display_status: String,
-    val connectionStatus: String,
+    var connectionStatus: String,
     val userID:String
 )
 

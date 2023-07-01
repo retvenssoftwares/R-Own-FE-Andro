@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -15,10 +16,11 @@ import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataCl
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.R
+import app.retvens.rown.utils.removeConnection
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class ConnectionsAdapter(val listS : List<Connections>, val context: Context) : RecyclerView.Adapter<ConnectionsAdapter.ConnectionsViewHolder>() {
+class ConnectionsAdapter(val listS : ArrayList<Connections>, val context: Context) : RecyclerView.Adapter<ConnectionsAdapter.ConnectionsViewHolder>() {
 
     class ConnectionsViewHolder(itemView: View) : ViewHolder(itemView){
         val title = itemView.findViewById<TextView>(R.id.suggetions_notification_name)
@@ -54,6 +56,18 @@ class ConnectionsAdapter(val listS : List<Connections>, val context: Context) : 
             intent.putExtra(MesiboUI.PEER, mesibo.address)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
+        }
+
+        holder.remove.setOnClickListener {
+            val sharedPreferences =  context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+            val user_id = sharedPreferences?.getString("user_id", "").toString()
+            removeConnection(data.User_id, user_id, context, holder.interact)
+            try {
+            listS.remove(data)
+            notifyDataSetChanged()
+            } catch (e : Exception){
+
+            }
         }
 
     }

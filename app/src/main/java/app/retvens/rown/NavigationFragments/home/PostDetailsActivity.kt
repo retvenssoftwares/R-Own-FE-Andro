@@ -93,6 +93,17 @@ class PostDetailsActivity : AppCompatActivity() {
 
         val postId = intent.getStringExtra("postId").toString()
         val like = intent.getStringExtra("like").toString()
+        val isSaved = intent.getStringExtra("isSaved").toString()
+
+        if (isSaved == "saved"){
+            operatioin = "pop"
+            save = false
+            savedPost.setImageResource(R.drawable.svg_saved)
+        } else {
+            operatioin = "push"
+            save = true
+            savedPost.setImageResource(R.drawable.svg_save_post)
+        }
 
         viewPagerAdapter = ImageSlideActivityAdapter(baseContext, postPic!!, like, postId, likeButton, likedAnimation)
         viewPager.adapter = viewPagerAdapter
@@ -152,20 +163,8 @@ class PostDetailsActivity : AppCompatActivity() {
             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
         }
 
-        val saved = intent.getStringExtra("saved")
-
-        if (saved == "saved"){
-            operatioin = "pop"
-            save = false
-            savedPost.setImageResource(R.drawable.svg_saved)
-        } else {
-            operatioin = "push"
-            save = true
-            savedPost.setImageResource(R.drawable.svg_save_post)
-        }
-
         savedPost.setOnClickListener {
-            savePosts(postId!!)
+            savePosts(postId)
         }
 
 

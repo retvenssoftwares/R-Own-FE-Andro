@@ -4,5 +4,5 @@ import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesData
 
 data class ExploreServiceData(
     val events : List<ProfileServicesDataItem>,
-    val services : List<ProfileServicesDataItem>
+    val vendors : List<ProfileServicesDataItem>
     )

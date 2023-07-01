@@ -37,19 +37,20 @@
 
    <TextView
        android:id="@+id/empty"
-       android:layout_width="match_parent"
+       android:layout_width="200dp"
        android:layout_height="wrap_content"
-       android:text="Empty Data"
+       android:text="You have not posted anything yet."
        android:visibility="gone"
-       android:textColor="@color/black"
        android:textAlignment="center"
-       android:textSize="22sp"
+       android:textColor="@color/green_own"
+       android:textSize="16sp"
        android:fontFamily="@font/montserrat_semibold"
-       android:layout_marginTop="40dp"
-       android:layout_marginHorizontal="20dp"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintTop_toTopOf="parent"/>
+       app:layout_constraintVertical_bias="0.15"
+       app:layout_constraintHorizontal_bias="0.75"
+       app:layout_constraintBottom_toBottomOf="@id/notPosted"
+       app:layout_constraintStart_toStartOf="@id/notPosted"
+       app:layout_constraintEnd_toEndOf="@id/notPosted"
+       app:layout_constraintTop_toTopOf="@id/notPosted"/>
 
    <ImageView
        android:id="@+id/notPosted"
@@ -58,7 +59,10 @@
        android:layout_marginTop="40dp"
        android:visibility="gone"
        android:layout_gravity="center"
-       android:src="@drawable/svg_not_posted"/>
+       android:src="@drawable/svg_nothing_other"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toTopOf="parent"/>
 
    <androidx.cardview.widget.CardView
        android:id="@+id/addService"

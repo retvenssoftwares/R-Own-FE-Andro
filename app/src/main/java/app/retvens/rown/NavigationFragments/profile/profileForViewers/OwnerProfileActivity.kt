@@ -14,11 +14,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
+import app.retvens.rown.MessagingModule.MesiboMessagingActivity
+import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.profile.events.EventsProfileFragment
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsFragmentProfile
 import app.retvens.rown.NavigationFragments.profile.jobs.JobsOnProfileFragment
@@ -29,7 +32,9 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.removeConnection
+import app.retvens.rown.utils.sendConnectionRequest
 import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -53,10 +58,13 @@ class OwnerProfileActivity : AppCompatActivity() {
     lateinit var events : TextView
     lateinit var postCount:TextView
     lateinit var connCount:TextView
+
     lateinit var connStatus:TextView
+    lateinit var card_message:CardView
 
     var created = ""
     var location = ""
+    var nameProfile = ""
     var verification = ""
     var profilePic = ""
 
@@ -74,10 +82,16 @@ class OwnerProfileActivity : AppCompatActivity() {
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
         connStatus = findViewById(R.id.connStatus)
+        card_message = findViewById(R.id.card_message)
 
 
         val userID = intent.getStringExtra("userId").toString()
         val connStat = intent.getStringExtra("status").toString()
+        val address = intent.getStringExtra("address").toString()
+
+        if (address.isNotEmpty() && connStat == "Connected"){
+            card_message.visibility = View.VISIBLE
+        }
 
         if(connStat.isNotEmpty()){
             if (connStat == "Not Connected"){
@@ -99,9 +113,23 @@ class OwnerProfileActivity : AppCompatActivity() {
 
         getUserPofile(userID,user_id)
 
+        card_message.setOnClickListener{
+            val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
+            intent.putExtra(MesiboUI.PEER, address)
+            startActivity(intent)
+        }
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
                 removeConnection(userID,user_id, applicationContext, connStatus)
+            } else if (connStatus.text == "Not Connected") {
+                sendConnectionRequest(userID, applicationContext, connStatus)
+                connStatus.text = "Requested"
+            } else  if (connStatus.text == "Requested") {
+                removeConnRequest(userID, applicationContext, connStatus)
+            } else if (connStatus.text == "Interact") {
+                val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
+                intent.putExtra(MesiboUI.PEER, address)
+                startActivity(intent)
             }
         }
 
@@ -116,10 +144,6 @@ class OwnerProfileActivity : AppCompatActivity() {
         status = findViewById(R.id.status)
         hotels = findViewById(R.id.hotels)
         events = findViewById(R.id.events)
-
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false))
-        transaction.commit()
 
         jobs.setOnClickListener {
             jobs.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -139,7 +163,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userID, false))
+            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userID, false, nameProfile))
             transaction.commit()
         }
         polls.setOnClickListener {
@@ -148,7 +172,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userID))
+            transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userID, false, nameProfile))
             transaction.commit()
         }
         status.setOnClickListener {
@@ -157,7 +181,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID))
+            transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID, false, nameProfile))
             transaction.commit()
         }
         hotels.setOnClickListener {
@@ -169,7 +193,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             jobs.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false))
+            transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false, nameProfile))
             transaction.commit()
         }
         events.setOnClickListener {
@@ -258,7 +282,12 @@ class OwnerProfileActivity : AppCompatActivity() {
                     Glide.with(applicationContext).load(response.profiledata.Profile_pic).into(profile)
                     profile_username.text = response.profiledata.User_name
                     name.text = response.profiledata.User_name
+                    nameProfile = response.profiledata.User_name
                     bio.text = response.profiledata.userBio
+
+                    val transaction = supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
+                    transaction.commit()
 
                     connCount.text = response.connection_Count.toString()
                     postCount.text = response.post_count.toString()

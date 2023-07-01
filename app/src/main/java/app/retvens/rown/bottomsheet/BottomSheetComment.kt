@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -34,6 +36,9 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
     lateinit var child :String
     lateinit var parentCommentId:String
 
+    private lateinit var replying:ConstraintLayout
+    private lateinit var replyingText:TextView
+    private lateinit var cancelReply:ImageView
 
     var mListener: OnBottomWhatToPostClickListener ? = null
     fun setOnWhatToPostClickListener(listener: OnBottomWhatToPostClickListener?){
@@ -68,10 +73,19 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
         comments = view.findViewById(R.id.addThoughts)
 
         profile = view.findViewById(R.id.profileOnComment)
+        replying = view.findViewById(R.id.replying)
+        replyingText = view.findViewById(R.id.replyingText)
+        cancelReply = view.findViewById(R.id.cancelReply)
 
         val post = view.findViewById<TextView>(R.id.postComment)
 
         child = "0"
+
+        cancelReply.setOnClickListener {
+            child = "0"
+            replying.visibility = View.GONE
+            Glide.with(requireContext()).load(postprofile).into(profile)
+        }
 
         post.setOnClickListener {
 
@@ -176,6 +190,8 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
             override fun onItemClick(dataItem: Comments) {
                 Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
                 child = "1"
+                replyingText.text = " You are replying to ${dataItem.User_name}"
+                replying.visibility = View.VISIBLE
                 parentCommentId = dataItem.comment_id
             }
         })

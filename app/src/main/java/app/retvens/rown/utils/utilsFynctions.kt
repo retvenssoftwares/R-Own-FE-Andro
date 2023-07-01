@@ -143,7 +143,7 @@ fun cropImage(imageUri: Uri, context: Context) {
     val outputUri = File(context.filesDir, "croppedImage.jpg").toUri()
 
     UCrop.of(inputUri, outputUri)
-        .withAspectRatio(4F, 3F)
+        .withAspectRatio(3F, 4F)
         .start(context as Activity)
 }
 
@@ -222,4 +222,64 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
             Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
         }
     })
+}
+
+ fun removeConnRequest(userId: String, context: Context, connStatusTextView : TextView) {
+    val sharedPreferences =  context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+    val removeRequest = RetrofitBuilder.connectionApi.removeRequest(userId,
+        ConnectionDataClass(user_id)
+    )
+
+    removeRequest.enqueue(object : Callback<UpdateResponse?> {
+        override fun onResponse(
+            call: Call<UpdateResponse?>,
+            response: Response<UpdateResponse?>
+        ) {
+            if (response.isSuccessful){
+                val response = response.body()!!
+                connStatusTextView.text = "CONNECT"
+//                Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+            }else{
+//                Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+//            if (isAdded) {
+//                Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+        }
+    })
+}
+
+ fun sendConnectionRequest(userId: String,context: Context, connStatusTextView : TextView) {
+
+    val sharedPreferences =  context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+
+    val sendRequest = RetrofitBuilder.connectionApi.sendRequest(userId, ConnectionDataClass(user_id))
+
+    sendRequest.enqueue(object : Callback<UpdateResponse?> {
+        override fun onResponse(
+            call: Call<UpdateResponse?>,
+            response: Response<UpdateResponse?>
+        ) {
+            if (response.isSuccessful){
+                val response = response.body()!!
+                connStatusTextView.text = "Requested"
+//                Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+            }else{
+//                Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+//            Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+        }
+    })
+
 }

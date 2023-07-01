@@ -33,7 +33,7 @@ data class PostItem(
     val voted:String,
     val saved_post: List<Any>,
     val Full_name:String,
-    val isSaved:String,
+    var isSaved:String,
     val __v: Int
 )
 

@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.setting.saved
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -27,9 +28,7 @@ import retrofit2.Response
 class SavedBlogsFragment : Fragment() {
 
 lateinit var savedBlogsRecyclerView : RecyclerView
-lateinit var savedBlogsAdapter: SavedBlogsAdapter
-
-    lateinit var allBlogsAdapter: AllBlogsAdapter
+lateinit var allBlogsAdapter: SavedBlogsAdapter
 
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
@@ -56,20 +55,6 @@ lateinit var savedBlogsAdapter: SavedBlogsAdapter
         savedBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
         savedBlogsRecyclerView.setHasFixedSize(true)
 
-        val blogs = listOf<ExploreBlogsData>(
-            ExploreBlogsData("Title 1"),
-            ExploreBlogsData("Title 2"),
-            ExploreBlogsData("Title 3"),
-            ExploreBlogsData("Title 23"),
-            ExploreBlogsData("Title 1"),
-            ExploreBlogsData("Title 2"),
-            ExploreBlogsData("Title 3"),
-            ExploreBlogsData("Title 23"),
-            ExploreBlogsData("Title 1"),
-            ExploreBlogsData("Title 2"),
-            ExploreBlogsData("Title 3"),
-            ExploreBlogsData("Title 23"),
-        )
 
         getAllBlogs()
 
@@ -95,7 +80,7 @@ lateinit var savedBlogsAdapter: SavedBlogsAdapter
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
                             data.forEach {
-                                allBlogsAdapter = AllBlogsAdapter(it.blogs as ArrayList<AllBlogsData>, requireContext())
+                                allBlogsAdapter = SavedBlogsAdapter(it.blogs as ArrayList<AllBlogsData>, requireContext())
                                 savedBlogsRecyclerView.adapter = allBlogsAdapter
                                 allBlogsAdapter.removeBlogFromList(it.blogs)
                                 allBlogsAdapter.notifyDataSetChanged()

@@ -7,13 +7,12 @@ import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.NavigationFragments.eventForUsers.onGoingEvents.OnGoingEventsData
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventData
-import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelData
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
-import app.retvens.rown.NavigationFragments.profile.hotels.HotelDetailsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsName
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.NavigationFragments.profile.services.UpdatePrice
+import app.retvens.rown.NavigationFragments.profile.setting.saved.hotels.SavedHotelsDataItem
 import app.retvens.rown.sideNavigation.faqData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -210,7 +209,7 @@ interface ProfileApis {
     fun getSaveHotel(
         @Path("user_id") user_id : String,
         @Query("page")page:String
-    ):Call<List<ExploreHotelData>>
+    ):Call<List<SavedHotelsDataItem>>
 
     @GET("getsavedBlogs/{user_id}")
     fun getSavedBlog(
@@ -228,7 +227,7 @@ interface ProfileApis {
     fun getSavedPost(
         @Path("user_id")user_id:String,
         @Query("page")page:String
-    ):Call<PostsDataClass>
+    ):Call<List<PostsDataClass>>
 
     @GET("getsaveservice")
     fun getSaveService(

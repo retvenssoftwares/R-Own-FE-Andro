@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/topdiologe"
     tools:context=".bottomsheet.BottomSheet">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/title"
@@ -52,17 +56,119 @@
         android:src="@drawable/searchbar"
         />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/popularUsers_recycler"
+    <View
+        android:id="@+id/view2"
+        android:layout_width="40dp"
+        android:layout_height="1dp"
+        android:background="@color/white"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="@id/text_h2"
+        app:layout_constraintBottom_toBottomOf="@id/text_h2"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+        android:id="@+id/text_h2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="R-OWN Users from your contacts"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/view2"
+        app:layout_constraintTop_toBottomOf="@id/connections_search"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/white"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="@id/text_h2"
+        app:layout_constraintBottom_toBottomOf="@id/text_h2"
+        app:layout_constraintStart_toEndOf="@id/text_h2"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/discover"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_h2">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/popularUsers_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:spanCount="2"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/cardofusers"
+            />
+
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="No Matches Found"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"/>
+
+    </LinearLayout>
+    <View
+        android:id="@+id/view1"
+        android:layout_width="40dp"
+        android:layout_height="1dp"
+        android:background="@color/white"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="@id/text_h"
+        app:layout_constraintBottom_toBottomOf="@id/text_h"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+        android:id="@+id/text_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="R-OWN Users"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/view1"
+        app:layout_constraintTop_toBottomOf="@id/discover"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/white"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="@id/text_h"
+        app:layout_constraintBottom_toBottomOf="@id/text_h"
+        app:layout_constraintStart_toEndOf="@id/text_h"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/popularUsers_recycler2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        app:spanCount="2"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/cardofusers"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/connections_search"
+        app:layout_constraintTop_toBottomOf="@id/text_h"
         android:layout_marginHorizontal="15dp"
         />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

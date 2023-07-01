@@ -112,7 +112,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         }
         name.text = profileName
 
-        val childFragment: Fragment = MediaFragment(user_id, true)
+        val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -129,7 +129,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             media.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = PollsFragment(user_id)
+            val childFragment: Fragment = PollsFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -139,7 +139,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
 
-            val childFragment: Fragment = MediaFragment(user_id, true)
+            val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -148,7 +148,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
 
-            val childFragment: Fragment = StatusFragment(user_id)
+            val childFragment: Fragment = StatusFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

@@ -4,6 +4,7 @@ import app.retvens.rown.DataCollections.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.onboarding.*
 import app.retvens.rown.authentication.UpdateInterestClass
+import app.retvens.rown.bottomsheet.bottomSheetPeople.BottomSheetPeopleData
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -56,6 +57,11 @@ interface RownUrl {
 
     @GET("profile")
     fun getProfile() : Call<List<UserProfileRequestItem>>
+
+    @GET("details_of/{user_id}")
+    fun getContactsProfile(
+        @Path("user_id") user_id: String
+    ) : Call<BottomSheetPeopleData>
 
     @POST("usercreate")
     fun createMesiboUser(@Body create:MesiboDataClass):Call<MesiboResponseClass>

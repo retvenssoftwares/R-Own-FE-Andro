@@ -28,7 +28,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StatusFragment(val userId: String) : Fragment() {
+class StatusFragment(val userId: String, val isOwner : Boolean, val username : String) : Fragment() {
 
     lateinit var statusRecycler : RecyclerView
     lateinit var statusAdapter: StatusAdapter
@@ -92,6 +92,12 @@ class StatusFragment(val userId: String) : Fragment() {
                             statusAdapter.setOnItemClickListener(this)
                         }catch (e:NullPointerException){
                             notPosted.visibility = View.VISIBLE
+                            empty.visibility = View.VISIBLE
+                            if (isOwner){
+                                empty.text = "You have not posted anything yet."
+                            } else {
+                                empty.text = "$username have not posted anything yet."
+                            }
                         }
 
 
@@ -99,6 +105,12 @@ class StatusFragment(val userId: String) : Fragment() {
                     }
                         } else {
                             notPosted.visibility = View.VISIBLE
+                            empty.visibility = View.VISIBLE
+                            if (isOwner){
+                                empty.text = "You have not posted anything yet."
+                            } else {
+                                empty.text = "$username have not posted anything yet."
+                            }
                         }
                     } else {
                         empty.visibility = View.VISIBLE

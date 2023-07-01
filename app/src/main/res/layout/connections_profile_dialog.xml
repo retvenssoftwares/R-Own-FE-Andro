@@ -110,6 +110,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
+            android:id="@+id/connect"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingVertical="8dp"

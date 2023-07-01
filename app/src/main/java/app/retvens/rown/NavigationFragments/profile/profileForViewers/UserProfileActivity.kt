@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -23,6 +24,8 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.MessagingModule.MesiboMessagingActivity
+import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.AboutProfileActivity
@@ -31,7 +34,9 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRAct
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
+import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.removeConnection
+import app.retvens.rown.utils.sendConnectionRequest
 import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -54,10 +59,12 @@ class UserProfileActivity : AppCompatActivity() {
     lateinit var postCount:TextView
     lateinit var connCount:TextView
     lateinit var connStatus:TextView
+    lateinit var card_message: CardView
 
     var created = ""
     var location = ""
     var verification = ""
+    var nameProfile = ""
     var profilePic = ""
 
     @SuppressLint("MissingInflatedId")
@@ -83,12 +90,30 @@ class UserProfileActivity : AppCompatActivity() {
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
         connStatus = findViewById(R.id.connStatus)
+        card_message = findViewById(R.id.card_message)
 
 
         val userID = intent.getStringExtra("userId").toString()
         val connStat = intent.getStringExtra("status").toString()
+        val address = intent.getStringExtra("address").toString()
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        getUserPofile(userID,user_id)
+
+        if (address.isNotEmpty() && connStat == "Connected"){
+            card_message.visibility = View.VISIBLE
+        }
+
+        card_message.setOnClickListener{
+            val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
+            intent.putExtra(MesiboUI.PEER, address)
+            startActivity(intent)
+        }
 
         if(connStat.isNotEmpty()){
+//            Toast.makeText(applicationContext, connStat, Toast.LENGTH_SHORT).show()
             if (connStat == "Not Connected"){
                 connStatus.text = "CONNECT"
             } else if (connStat == "Connected"){
@@ -104,20 +129,20 @@ class UserProfileActivity : AppCompatActivity() {
             true
         }
 
-       val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        getUserPofile(userID,user_id)
-
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
-        removeConnection(userID,user_id, applicationContext, connStatus)
+                removeConnection(userID,user_id, applicationContext, connStatus)
+            } else if (connStatus.text == "CONNECT") {
+                sendConnectionRequest(userID, applicationContext, connStatus)
+                connStatus.text = "Requested"
+            } else  if (connStatus.text == "Requested") {
+                removeConnRequest(userID, applicationContext, connStatus)
+            } else if (connStatus.text == "Interact") {
+                val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
+                intent.putExtra(MesiboUI.PEER, address)
+                startActivity(intent)
             }
         }
-
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false))
-        transaction.commit()
 
         polls.setOnClickListener {
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -125,7 +150,7 @@ class UserProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,PollsFragment(userID))
+            transaction.replace(R.id.child_profile_fragments_container,PollsFragment(userID, false, nameProfile))
             transaction.commit()
         }
         media.setOnClickListener {
@@ -134,7 +159,7 @@ class UserProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false))
+            transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
             transaction.commit()
         }
         status.setOnClickListener {
@@ -143,7 +168,7 @@ class UserProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID))
+            transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID, false, nameProfile))
             transaction.commit()
         }
 
@@ -220,7 +245,12 @@ class UserProfileActivity : AppCompatActivity() {
                     Glide.with(applicationContext).load(response.data.profile.Profile_pic).into(profile)
                     profile_username.text = response.data.profile.User_name
                     name.text = response.data.profile.Full_name
+                    nameProfile = response.data.profile.Full_name.toString()
                     bio.text = response.data.profile.userBio
+
+                    val transaction = supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
+                    transaction.commit()
 
                     connCount.text = response.data.connCountLength.toString()
                     postCount.text = response.data.postCountLength.toString()

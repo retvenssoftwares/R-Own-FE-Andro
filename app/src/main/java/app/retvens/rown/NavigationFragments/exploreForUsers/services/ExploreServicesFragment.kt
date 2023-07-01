@@ -127,7 +127,7 @@ class ExploreServicesFragment : Fragment() {
                                 val data = response.body()!!
                                 data.forEach {
 
-                                    hotelList.addAll(it.events)
+                                    hotelList.addAll(it.vendors)
                                     exploreServicesAdapter.removeServicesFromList(hotelList)
                                     exploreServicesAdapter.notifyDataSetChanged()
                                 }

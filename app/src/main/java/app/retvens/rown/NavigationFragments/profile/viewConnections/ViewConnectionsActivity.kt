@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.NavigationFragments.profile.viewRequests.RequestsAdapter
 import app.retvens.rown.NavigationFragments.profile.viewRequests.RequestsData
@@ -53,7 +54,7 @@ class ViewConnectionsActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val response = response.body()!!
                         response.forEach {
-                            connectionsAdapter = ConnectionsAdapter(it.conns, applicationContext)
+                            connectionsAdapter = ConnectionsAdapter(it.conns as ArrayList<Connections>, applicationContext)
                             binding.connectionsRecycler.adapter = connectionsAdapter
                             connectionsAdapter.notifyDataSetChanged()
                         }

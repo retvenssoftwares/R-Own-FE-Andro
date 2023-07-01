@@ -1,4 +1,4 @@
-package app.retvens.rown.NavigationFragments.exploreForUsers.people
+package app.retvens.rown.bottomsheet.bottomSheetPeople
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,20 +10,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
-import com.google.android.material.imageview.ShapeableImageView
 
-class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):RecyclerView.Adapter<ExplorePeopleAdapter.ExplorePeopleViewholder>() {
+class BottomSheetAdapterPeople(val context: Context, val peopleList:ArrayList<Post>):RecyclerView.Adapter<BottomSheetAdapterPeople.ExplorePeopleViewholder>() {
 
     var userId = ""
     interface ConnectClickListener {
@@ -36,18 +35,18 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
 
     class ExplorePeopleViewholder(itemview:View): ViewHolder(itemview) {
 
-        val name = itemview.findViewById<TextView>(R.id.explore_people_name)
-        val role = itemview.findViewById<TextView>(R.id.suggetions_notification_role)
-        val profile = itemview.findViewById<ShapeableImageView>(R.id.explore_people_profile)
-        val connect = itemview.findViewById<TextView>(R.id.suggetions_notification_connect)
-        val viewProfile = itemview.findViewById<CardView>(R.id.ca_view_profile)
-        val verification = itemview.findViewById<ImageView>(R.id.verification)
+        val role = itemview.findViewById<TextView>(R.id.connection_position)
+        val connect = itemview.findViewById<TextView>(R.id.connectUser)
 
+        var name = itemView.findViewById<TextView>(R.id.connection_name)
+        var bio = itemView.findViewById<TextView>(R.id.bio)
+        var profile = itemView.findViewById<ImageView>(R.id.connection_profile)
+        val verification = itemView.findViewById<ImageView>(R.id.verification)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExplorePeopleViewholder {
         val inflater : LayoutInflater = LayoutInflater.from(context)
-        val view : View = inflater.inflate(R.layout.item_explore_people, parent, false)
+        val view : View = inflater.inflate(R.layout.cardofusers, parent, false)
         return ExplorePeopleViewholder(view)
     }
 
@@ -57,50 +56,61 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         val data = peopleList[position]
 
         val verificationStatus = data.verificationStatus
-        if (verificationStatus != "false"){
+        if (verificationStatus != "false") {
             holder.verification.visibility = View.VISIBLE
         }
 
 
-        if (data.Profile_pic.isNullOrEmpty()){
+        if (data.Profile_pic.isNullOrEmpty()) {
             holder.profile.setImageResource(R.drawable.svg_person_account)
-        }else{
+        } else {
             Glide.with(context).load(data.Profile_pic).into(holder.profile)
         }
         holder.name.text = data.Full_name
         holder.role.text = data.Role
+        holder.bio.text = data.userBio
 
         userId = data.User_id
 
         var status = data.connectionStatus
 
-        if (data.connectionStatus == "Connected"){
+        if (data.connectionStatus == "Connected") {
             holder.connect.text = "Interact"
+            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
         }
 
 
-        if (data.connectionStatus == "Requested"){
+        if (data.connectionStatus == "Requested") {
             holder.connect.text = "Requested"
+            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
         }
 
         holder.connect.setOnClickListener {
 
-            if (status == "Not Connected"){
+            if (status == "Not Connected") {
                 connectClickListener?.onJobSavedClick(data)
 
                 holder.connect.text = "Requested"
+                data.connectionStatus = "Requested"
+                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
             }
 
-            if (status == "Requested" || data.connectionStatus == "Requested"){
+            if (status == "Requested" || data.connectionStatus == "Requested") {
                 connectClickListener?.onCancelRequest(data)
 
-//                holder.connect.text = "CONNECT"
+                data.connectionStatus = "Not Connected"
+                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
+                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
+                holder.connect.text = "CONNECT"
             }
 
-            if ( holder.connect.text == "Interact"){
-                val intent = Intent(context,MesiboMessagingActivity::class.java)
-                    intent.putExtra(MesiboUI.PEER,data.Mesibo_account[0].address)
-                    context.startActivity(intent)
+            if (holder.connect.text == "Interact") {
+                val intent = Intent(context, MesiboMessagingActivity::class.java)
+                intent.putExtra(MesiboUI.PEER, data.Mesibo_account[0].address)
+                context.startActivity(intent)
 
             }
 
@@ -108,7 +118,7 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
 
         }
 
-        holder.viewProfile.setOnClickListener {
+        holder.profile.setOnClickListener {
 
             if(data.Role == "Business Vendor / Freelancer"){
                 val intent = Intent(context, VendorProfileActivity::class.java)
@@ -129,8 +139,6 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
                 intent.putExtra("address",data.Mesibo_account[0].address)
                 context.startActivity(intent)
             }
-
-
         }
 
     }

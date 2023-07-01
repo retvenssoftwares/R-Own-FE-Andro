@@ -44,19 +44,20 @@
 
     <TextView
         android:id="@+id/empty"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Empty Data"
-        android:textAlignment="center"
+        android:text="You have not posted anything yet."
         android:visibility="gone"
-        android:textColor="@color/black"
-        android:textSize="22sp"
+        android:textAlignment="center"
+        android:textColor="@color/green_own"
+        android:textSize="16sp"
         android:fontFamily="@font/montserrat_semibold"
-        android:layout_marginTop="40dp"
-        app:layout_constraintBottom_toTopOf="@id/addHotel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintVertical_bias="0.15"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintBottom_toBottomOf="@id/notPosted"
+        app:layout_constraintStart_toStartOf="@id/notPosted"
+        app:layout_constraintEnd_toEndOf="@id/notPosted"
+        app:layout_constraintTop_toTopOf="@id/notPosted"/>
 
     <ImageView
         android:id="@+id/notPosted"
@@ -65,7 +66,7 @@
         android:layout_marginTop="40dp"
         android:visibility="gone"
         android:layout_gravity="center"
-        android:src="@drawable/svg_not_posted"
+        android:src="@drawable/svg_nothing_other"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

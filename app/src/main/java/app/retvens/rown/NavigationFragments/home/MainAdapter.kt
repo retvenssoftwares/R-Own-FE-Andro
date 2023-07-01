@@ -102,9 +102,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                        if (it == 0) {
                            operatioin = "pop"
                            save = !save
+                           post.isSaved = "saved"
                        } else {
                            operatioin = "push"
                            save = !save
+                           post.isSaved = "not saved"
                        }
                    }
                }
@@ -190,6 +192,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 intent.putExtra("likeCount",banner.Like_count)
                 intent.putExtra("commentCount",banner.Comment_count)
                 intent.putExtra("like",banner.like)
+                intent.putExtra("isSaved",banner.isSaved)
                 intent.putExtra("postId",banner.post_id)
                 context.startActivity(intent)
             }

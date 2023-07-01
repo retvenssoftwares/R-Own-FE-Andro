@@ -136,7 +136,7 @@ class PostsViewActivity : AppCompatActivity() {
             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
         }
 
-        val saved = intent.getStringExtra("saved")
+        val saved = intent.getStringExtra("isSaved")
 
         if (saved == "saved"){
             operatioin = "pop"

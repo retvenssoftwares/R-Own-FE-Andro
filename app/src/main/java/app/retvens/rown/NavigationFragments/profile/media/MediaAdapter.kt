@@ -61,6 +61,9 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>) : Rec
             }
 
 
+        if (media.isSaved.isNullOrBlank()){
+            media.isSaved = "saved"
+        }
 
         holder.itemView.setOnLongClickListener {
                 onItemClickListener?.onItemClick(media)

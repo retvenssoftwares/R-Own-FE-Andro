@@ -123,7 +123,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
         getSelfUserProfile(user_id,user_id)
 
-        val childFragment: Fragment = MediaFragment(user_id, true)
+        val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -141,7 +141,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = PollsFragment(user_id)
+            val childFragment: Fragment = PollsFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -151,7 +151,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = MediaFragment(user_id, true)
+            val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -161,7 +161,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
-            val childFragment: Fragment = ServicesFragment(user_id, true)
+            val childFragment: Fragment = ServicesFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -172,7 +172,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
 
-            val childFragment: Fragment = StatusFragment(user_id)
+            val childFragment: Fragment = StatusFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

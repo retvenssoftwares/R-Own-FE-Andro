@@ -62,6 +62,7 @@ class ImageSlideAdapter(private val context: Context, private var imageList: Lis
                 intent.putExtra("postId",banner.post_id)
                 intent.putExtra("profilePic",banner.Profile_pic)
                 intent.putExtra("like",banner.like)
+                intent.putExtra("isSaved",banner.isSaved)
                 context.startActivity(intent)
             }
 
