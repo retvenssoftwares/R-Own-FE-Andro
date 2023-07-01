@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
@@ -48,6 +49,7 @@ class OwnerProfileActivity : AppCompatActivity() {
     lateinit var verificationS : ImageView
     lateinit var name : TextView
     lateinit var profile_username : TextView
+    lateinit var websiteLink : TextView
     lateinit var bio : TextView
 
     lateinit var polls : TextView
@@ -78,6 +80,7 @@ class OwnerProfileActivity : AppCompatActivity() {
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
+        websiteLink = findViewById(R.id.linkText)
 
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
@@ -133,6 +136,11 @@ class OwnerProfileActivity : AppCompatActivity() {
             }
         }
 
+        websiteLink.setOnClickListener{
+            val uri = Uri.parse("https://" + websiteLink.text.toString())
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
 
         findViewById<ImageView>(R.id.profile_backBtn).setOnClickListener {
             onBackPressed()
@@ -284,6 +292,7 @@ class OwnerProfileActivity : AppCompatActivity() {
                     name.text = response.profiledata.User_name
                     nameProfile = response.profiledata.User_name
                     bio.text = response.profiledata.userBio
+                    websiteLink.text = response.profile.hotelOwnerInfo.websiteLink
 
                     val transaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))

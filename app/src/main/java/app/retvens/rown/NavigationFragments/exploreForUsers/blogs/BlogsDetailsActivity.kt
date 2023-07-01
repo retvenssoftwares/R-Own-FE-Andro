@@ -62,6 +62,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
             isLiked = true
             binding.likePost.setImageResource(R.drawable.svg_like_post)
         }
+        getBlog(blogId)
 
         Glide.with(this).load(cover).into(binding.blogPic)
         binding.blogTitle.text = title
@@ -86,7 +87,6 @@ class BlogsDetailsActivity : AppCompatActivity() {
             savePosts(blogId)
         }
 
-        getBlog(blogId)
     }
 
     private fun getBlog(blogId: String?) {
@@ -102,6 +102,15 @@ class BlogsDetailsActivity : AppCompatActivity() {
                 Log.d("res", response.body().toString())
                 if (response.isSuccessful){
                     val res = response.body()!!
+                    if(res.get(0).saved != "not saved"){
+                        operatioin = "pop"
+                        isSaved = false
+                        binding.savePost.setImageResource(R.drawable.svg_saved)
+                    }
+                    if(res.get(0).like == "liked"){
+                        isLiked = false
+                        binding.likePost.setImageResource(R.drawable.likes)
+                    }
                     try {
                         binding.userName.text = res.get(0).User_name
                         binding.blogTitle.text = res.get(0).blog_title

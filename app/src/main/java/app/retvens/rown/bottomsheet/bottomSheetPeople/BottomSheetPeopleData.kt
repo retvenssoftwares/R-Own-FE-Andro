@@ -1,5 +1,7 @@
 package app.retvens.rown.bottomsheet.bottomSheetPeople
 
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.MesiboAccount
+
 data class BottomSheetPeopleData(
     val matchedContacts: List<MatchedContact>,
     val message: String
@@ -15,6 +17,7 @@ data class MatchedNumber(
     val Profile_pic: String,
     val Role: String,
     val _id: String,
+    val Mesibo_account: List<MesiboAccount>,
     val connections: List<Connection>,
     val hospitalityExpertInfo: List<Any>,
     val normalUserInfo: List<NormalUserInfo>,

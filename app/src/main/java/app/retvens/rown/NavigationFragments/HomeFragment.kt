@@ -42,6 +42,7 @@ import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
 import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.utils.connectionCount
+import app.retvens.rown.utils.isBS
 import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import com.bumptech.glide.Glide
@@ -87,7 +88,7 @@ class HomeFragment : Fragment() {
     lateinit var empty : TextView
     private  var count:Int = 0
     private  var postCounter:Int = 0
-
+    private  var pageCounter:Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,11 +105,12 @@ class HomeFragment : Fragment() {
         val sharedPreferencesPro = context?.getSharedPreferences("SaveConnectionNo", AppCompatActivity.MODE_PRIVATE)
         val toPo = sharedPreferencesPro?.getString("connectionNo", "0")
 
-//        if (connectionCount == "0" || toPo == "0"){
+        if (connectionCount == "0" || toPo == "0" && isBS){
             val bottomSheet = BottomSheet()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheet.TAG)}
-//        }
+            isBS = false
+        }
 
         viewAllCommunity = view.findViewById(R.id.view_all_bg)
         viewAllCommunity.setOnClickListener{
@@ -156,11 +158,7 @@ class HomeFragment : Fragment() {
                 getCommunities()
             }.start()
             postCounter = 0
-
-            getAllBlogs()
-//            getHotels()
-            getServices()
-            prepareData()
+            pageCounter = 1
 
             Thread {
                 // Run whatever background code you want here.
@@ -191,11 +189,7 @@ class HomeFragment : Fragment() {
             getCommunities()
         }.start()
 
-        getAllBlogs()
-        getHotels()
-        getServices()
         prepareData()
-        getOpenCommunites()
 
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
@@ -216,6 +210,8 @@ class HomeFragment : Fragment() {
                     val currentItem = layoutManager.childCount
                     val totalItem = layoutManager.itemCount
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+//                    Toast.makeText(requireContext(), postCounter.toString(), Toast.LENGTH_SHORT).show()
+
                     if(!isLoading && totalItem <= (scrollOutItems+currentItem) && postCounter >= 10){
                         getData()
                     }
@@ -227,10 +223,8 @@ class HomeFragment : Fragment() {
         Thread {
             // Run whatever background code you want here.
             getPost(user_id)
-
             getAllConnections(user_id)
         }.start()
-
 
     }
 
@@ -273,7 +267,19 @@ class HomeFragment : Fragment() {
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
 
-        if (postCounter >= 10) {
+        if (pageCounter > 1) {
+
+            if (pageCounter == 2) {
+                getHotels()
+            }else if (pageCounter == 3) {
+                getHotels()
+            }else if (pageCounter == 4) {
+                getAllBlogs()
+            }else if (pageCounter == 5) {
+                getServices()
+            }else if (pageCounter == 6) {
+                getOpenCommunites()
+            }
 
             progress.setVisibility(View.VISIBLE);
             val handler = Handler()
@@ -319,6 +325,7 @@ class HomeFragment : Fragment() {
                                         adapter.notifyDataSetChanged()
                                     } else {
                                         mList.add(0, DataItem(DataItemType.BANNER, banner = item))
+                                        postCounter += 1
                                     }
                                 }
                                 if (item.post_type == "Polls"){
@@ -327,6 +334,7 @@ class HomeFragment : Fragment() {
                                         adapter.notifyDataSetChanged()
                                     } else {
                                         mList.add(0, DataItem(DataItemType.POLL, banner = item))
+                                        postCounter += 1
                                     }
                                 }
                                 if (item.post_type == "normal status"){
@@ -335,6 +343,7 @@ class HomeFragment : Fragment() {
                                         adapter.notifyDataSetChanged()
                                     } else {
                                         mList.add(0, DataItem(DataItemType.Status, banner = item))
+                                        postCounter += 1
                                     }
                                 }
 
@@ -344,11 +353,15 @@ class HomeFragment : Fragment() {
                                         adapter.notifyDataSetChanged()
                                     } else {
                                         mList.add(0, DataItem(DataItemType.Event, banner = item))
+                                        postCounter += 1
                                     }
                                 }
 
-                                postCounter++
 
+                                if (postCounter >= 10) {
+                                    pageCounter++
+                                    postCounter = 0
+                                }
                             }
 
 //
@@ -627,7 +640,7 @@ class HomeFragment : Fragment() {
                             data.forEach {
                                 if (mList.contains(DataItem(
                                         DataItemType.VENDORS,
-                                        vendorsRecyclerDataList = it.events
+                                        vendorsRecyclerDataList = it.vendors
                                     ))){
                                     mList.shuffle()
                                     adapter.notifyDataSetChanged()
@@ -635,7 +648,7 @@ class HomeFragment : Fragment() {
                                     mList.add(
                                         DataItem(
                                             DataItemType.VENDORS,
-                                            vendorsRecyclerDataList = it.events
+                                            vendorsRecyclerDataList = it.vendors
                                         )
                                     )
                                     Log.e("services", data.toString())

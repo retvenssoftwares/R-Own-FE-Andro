@@ -147,6 +147,7 @@ class VendorProfileActivity : AppCompatActivity() {
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
+            services.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userId, false, name.text.toString()))
@@ -156,6 +157,7 @@ class VendorProfileActivity : AppCompatActivity() {
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
+            services.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userId, false, name.text.toString()))
@@ -176,6 +178,7 @@ class VendorProfileActivity : AppCompatActivity() {
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            services.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId, false, name.text.toString()))

@@ -49,6 +49,7 @@ var websiteLinkV = ""
 var phone = ""
 var verificationStatus = ""
 var connectionCount = "1"
+var isBS:Boolean = true
 
 fun dateFormat(date : String) : String {
     // Note, MM is months, not mm

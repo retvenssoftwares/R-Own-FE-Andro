@@ -62,7 +62,7 @@ class SavedBlogsAdapter(val listS : ArrayList<AllBlogsData>, val context: Contex
 
         holder.blogLike.setImageResource(R.drawable.svg_heart_liked)
         holder.blogLike.setOnClickListener {
-            savePosts(listS[position].blog_id, "pop", listS[position])
+            savePosts(listS[position].blogid, "pop", listS[position])
         }
 
         holder.bloggerName.text = listS[position].User_name
@@ -78,7 +78,7 @@ class SavedBlogsAdapter(val listS : ArrayList<AllBlogsData>, val context: Contex
             intent.putExtra("date", listS[position].date_added)
             intent.putExtra("userName", listS[position].User_name)
             intent.putExtra("userProfile", listS[position].Profile_pic)
-            intent.putExtra("blogId", listS[position].blog_id)
+            intent.putExtra("blogId", listS[position].blogid)
             intent.putExtra("saved", listS[position].saved)
             intent.putExtra("like", listS[position].like)
             context.startActivity(intent)

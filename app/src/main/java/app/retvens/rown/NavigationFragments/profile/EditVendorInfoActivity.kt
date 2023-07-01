@@ -286,14 +286,14 @@ class EditVendorInfoActivity : AppCompatActivity() {
                     binding.websiteLink.setText(response.body()!!.vendorInfo.websiteLink)
                     response.body()!!.vendorInfo.portfolioLink.forEach {
                         if(response.body()!!.vendorInfo.portfolioLink.size >= 3) {
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).images).into(binding.img1)
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(1).images).into(binding.img2)
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(2).images).into(binding.img3)
+                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image1).into(binding.img1)
+                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image2).into(binding.img2)
+                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image3).into(binding.img3)
                         } else if (response.body()!!.vendorInfo.portfolioLink.size >= 2) {
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).images).into(binding.img1)
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(1).images).into(binding.img2)
+                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image1).into(binding.img1)
+                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image2).into(binding.img2)
                         } else if (response.body()!!.vendorInfo.portfolioLink.size > 0) {
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).images).into(binding.img1)
+                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image1).into(binding.img1)
                         }
 
                     }

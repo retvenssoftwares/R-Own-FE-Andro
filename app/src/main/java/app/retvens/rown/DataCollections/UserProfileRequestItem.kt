@@ -3,6 +3,7 @@ package app.retvens.rown.DataCollections
 import android.telecom.Call.Details
 import app.retvens.rown.NavigationFragments.PortfolioImages
 import app.retvens.rown.NavigationFragments.profile.hotels.GalleryImages
+import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 
 data class UserProfileRequestItem(
 
@@ -33,6 +34,7 @@ data class UserProfileRequestItem(
         val vendorImage:String,
         val vendorDescription:String,
         val websiteLink:String,
+        val vendorServices:List<ProfileServicesDataItem>,
         val portfolioLink:List<PortfolioImages>,
     )
     data class HotelOwnerInfo(

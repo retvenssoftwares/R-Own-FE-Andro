@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.util.query
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -45,7 +46,10 @@ class VendorDetailsActivity : AppCompatActivity() {
         val vendorImage = intent.getStringExtra("vendorImage").toString()
         val vendorName = intent.getStringExtra("vendorName").toString()
 
-        Glide.with(this).load(vendorImage).into(binding.vendorProfile)
+//        Glide.with(this).load(vendorImage).into(binding.vendorProfile)
+
+        binding.servicesGrid.layoutManager = GridLayoutManager(this,3)
+        binding.servicesGrid.setHasFixedSize(true)
 
 //        topReview(user_id)
 //        allReview(user_id)
@@ -153,63 +157,91 @@ class VendorDetailsActivity : AppCompatActivity() {
                 call: Call<UserProfileRequestItem?>,
                 response: Response<UserProfileRequestItem?>
             ) {
-                Log.d("fetch",response.body().toString())
+                Log.d("fetch", response.body().toString())
 
                 if (response.isSuccessful) {
                     val image = response.body()?.vendorInfo?.vendorImage
                     val name = response.body()?.Full_name
 //                    val name = response.body()?.vendorInfo?.vendorDescription
+                    val vendorServicesAdapter = VendorServicesAdapter(applicationContext, response.body()!!.vendorInfo.vendorServices)
+                    binding.servicesGrid.adapter = vendorServicesAdapter
+                    vendorServicesAdapter.notifyDataSetChanged()
 
                     Glide.with(applicationContext).load(image).into(binding.vendorProfile)
                     binding.vendorName.text = (name).toString()
                     try {
                         binding.vendorDescription.text =
                             (response.body()!!.vendorInfo.vendorDescription).toString()
-                    } catch (e:NullPointerException){
+                    } catch (e: NullPointerException) {
 
                     }
-                    try {
-                        if (response.body()!!.vendorInfo.portfolioLink.size >= 3) {
-                            image1 = response.body()!!.vendorInfo.portfolioLink.get(0).images
-                            image2 = response.body()!!.vendorInfo.portfolioLink.get(1).images
-                            image3 = response.body()!!.vendorInfo.portfolioLink.get(2).images
-                            
-                            Glide.with(applicationContext)
-                                .load(response.body()!!.vendorInfo.portfolioLink.get(0).images)
-                                .into(binding.img1)
-                            Glide.with(applicationContext)
-                                .load(response.body()!!.vendorInfo.portfolioLink.get(1).images)
-                                .into(binding.img2)
-                            Glide.with(applicationContext)
-                                .load(response.body()!!.vendorInfo.portfolioLink.get(2).images)
-                                .into(binding.img3)
-                        } else if (response.body()!!.vendorInfo.portfolioLink.size >= 2) {
-                            binding.img3.visibility = View.GONE
-                            image1 = response.body()!!.vendorInfo.portfolioLink.get(0).images
-                            image2 = response.body()!!.vendorInfo.portfolioLink.get(1).images
+                    if (response.body()!!.vendorInfo.portfolioLink.isNotEmpty()) {
+                        val i1 = response.body()!!.vendorInfo.portfolioLink.get(0).Image1
+                        val i2 = response.body()!!.vendorInfo.portfolioLink.get(0).Image2
+                        val i3 = response.body()!!.vendorInfo.portfolioLink.get(0).Image3
+                        try {
+                            if (i1.isNotEmpty() && i2.isNotEmpty() && i3.isNotEmpty()) {
+                                image1 = i1
+                                image2 = i2
+                                image3 = i3
 
-                            Glide.with(applicationContext)
-                                .load(response.body()!!.vendorInfo.portfolioLink.get(0).images)
-                                .into(binding.img1)
-                            Glide.with(applicationContext)
-                                .load(response.body()!!.vendorInfo.portfolioLink.get(1).images)
-                                .into(binding.img2)
+                                Glide.with(applicationContext)
+                                    .load(i1)
+                                    .into(binding.img1)
+                                Glide.with(applicationContext)
+                                    .load(i2)
+                                    .into(binding.img2)
+                                Glide.with(applicationContext)
+                                    .load(i3)
+                                    .into(binding.img3)
+                            } else if (i1.isNotEmpty() && i2.isNotEmpty()) {
+                                binding.img3.visibility = View.GONE
+                                image1 = i1
+                                image2 = i2
+                                image3 = ""
 
-                        } else if (response.body()!!.vendorInfo.portfolioLink.size > 0) {
+                                Glide.with(applicationContext)
+                                    .load(i1)
+                                    .into(binding.img1)
+                                Glide.with(applicationContext)
+                                    .load(i2)
+                                    .into(binding.img2)
+                            } else if (i1.isNotEmpty() && i1.isNotBlank()) {
+                                binding.img3.visibility = View.GONE
+                                binding.img2.visibility = View.GONE
+                                image1 = i1
+                                image2 = ""
+                                image3 = ""
+
+                                Glide.with(applicationContext)
+                                    .load(i1)
+                                    .into(binding.img1)
+                            } else {
+                                image1 = ""
+                                image2 = ""
+                                image3 = ""
+                                binding.img3.visibility = View.GONE
+                                binding.img2.visibility = View.GONE
+                                binding.img3.visibility = View.GONE
+                            }
+                        } catch (e: NullPointerException) {
+                            image1 = ""
+                            image2 = ""
+                            image3 = ""
                             binding.img3.visibility = View.GONE
                             binding.img2.visibility = View.GONE
-                            image1 = response.body()!!.vendorInfo.portfolioLink.get(0).images
-
-                            Glide.with(applicationContext)
-                                .load(response.body()!!.vendorInfo.portfolioLink.get(0).images)
-                                .into(binding.img1)
+                            binding.img3.visibility = View.GONE
                         }
-                    } catch (e:NullPointerException){
-
+                    } else {
+                        image1 = ""
+                        image2 = ""
+                        image3 = ""
+                        binding.img3.visibility = View.GONE
+                        binding.img2.visibility = View.GONE
+                        binding.img3.visibility = View.GONE
                     }
                 }
             }
-
             override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
                 Toast.makeText(applicationContext,t.localizedMessage, Toast.LENGTH_SHORT).show()
             }

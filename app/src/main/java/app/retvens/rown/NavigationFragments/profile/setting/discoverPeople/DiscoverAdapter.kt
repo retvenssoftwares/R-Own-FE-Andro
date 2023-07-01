@@ -108,9 +108,9 @@ class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Contex
             }
 
             if (holder.connect.text == "Interact") {
-//                val intent = Intent(context, MesiboMessagingActivity::class.java)
-//                intent.putExtra(MesiboUI.PEER, currentItem.matchedNumber. .Mesibo_account[0].address)
-//                context.startActivity(intent)
+                val intent = Intent(context, MesiboMessagingActivity::class.java)
+                intent.putExtra(MesiboUI.PEER, currentItem.matchedNumber.Mesibo_account[0].address)
+                context.startActivity(intent)
             }
 
             status = "Requested"
@@ -122,19 +122,19 @@ class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Contex
                 val intent = Intent(context, VendorProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.matchedNumber.User_id)
                 intent.putExtra("status",status)
-//                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
+                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
                 context.startActivity(intent)
             }else if (currentItem.matchedNumber.Role == "Hotel Owner"){
                 val intent = Intent(context, OwnerProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.matchedNumber.User_id)
                 intent.putExtra("status",status)
-//                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
+                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
                 context.startActivity(intent)
             } else {
                 val intent = Intent(context, UserProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.matchedNumber.User_id)
                 intent.putExtra("status",status)
-//                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
+                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
                 context.startActivity(intent)
             }
         }

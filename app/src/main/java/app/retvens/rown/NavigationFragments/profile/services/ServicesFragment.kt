@@ -82,7 +82,7 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val serviceG = RetrofitBuilder.ProfileApis.getProfileService(user_id)
+        val serviceG = RetrofitBuilder.ProfileApis.getProfileService(userId)
         serviceG.enqueue(object : Callback<List<ProfileServicesDataItem>?> {
             override fun onResponse(
                 call: Call<List<ProfileServicesDataItem>?>,

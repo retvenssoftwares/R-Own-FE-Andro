@@ -108,12 +108,12 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
                 currentItem.connectionStatus = "Not Connected"
             }
 
-//            if (holder.connect.text == "Interact") {
-//                val intent = Intent(context, MesiboMessagingActivity::class.java)
-//                intent.putExtra(MesiboUI.PEER, currentItem.matchedNumber. .Mesibo_account[0].address)
-//                context.startActivity(intent)
-//
-//            }
+            if (holder.connect.text == "Interact") {
+                val intent = Intent(context, MesiboMessagingActivity::class.java)
+                intent.putExtra(MesiboUI.PEER, currentItem.matchedNumber.Mesibo_account[0].address)
+                context.startActivity(intent)
+
+            }
 
             status = "Requested"
 

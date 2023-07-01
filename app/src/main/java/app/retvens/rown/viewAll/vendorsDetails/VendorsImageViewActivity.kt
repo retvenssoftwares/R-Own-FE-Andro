@@ -47,6 +47,10 @@ class VendorsImageViewActivity : AppCompatActivity() {
                 Glide.with(applicationContext)
                     .load(img1)
                     .into(binding.img1)
+            } else {
+                binding.img3.visibility = View.GONE
+                binding.img2.visibility = View.GONE
+                binding.img3.visibility = View.GONE
             }
         } catch (e:NullPointerException){
 
