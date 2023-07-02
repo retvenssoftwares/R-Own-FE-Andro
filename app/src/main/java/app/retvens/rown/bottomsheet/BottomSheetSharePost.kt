@@ -18,11 +18,6 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder.gson
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.Connections
-import app.retvens.rown.DataCollections.FeedCollection.PostItem
-import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
-import app.retvens.rown.DataCollections.location.CompanyAdapter
-import app.retvens.rown.MessagingModule.MesiboMessagingActivity
-import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.home.SharePostAdapter
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -33,7 +28,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BottomSheetSharePost(val datas:PostItem) : BottomSheetDialogFragment() {
+class BottomSheetSharePost(val datas:String) : BottomSheetDialogFragment() {
 
     var mListener: OnBottomCompanyClickListener ? = null
     fun setOnCompanyClickListener(listener: OnBottomCompanyClickListener?){
@@ -103,20 +98,23 @@ class BottomSheetSharePost(val datas:PostItem) : BottomSheetDialogFragment() {
 
                 val address = data.Mesibo_account[0].address
 
-                val imageString = datas.media[0].post
-                val bitmap: Bitmap? = convertImageStringToBitmap(imageString)
-                Log.e("image",imageString)
+
                 val recipientProfile: MesiboProfile
                 recipientProfile = Mesibo.getProfile(address)
-//                recipientProfile.name = "Recipient Name"
 
+                Log.e("share",datas)
 
-                // Create a MesiboMessage object and set its profile and message text
+//                // Create a MesiboMessage object and set its profile and message text
                 val sendmessage:MesiboMessage = recipientProfile.newMessage()
-                sendmessage.message = datas.post_id
-                sendmessage.setContent(imageString)
+                sendmessage.message = "this//is//the//$$//post,$datas"
                 sendmessage.send()
 
+                val extract = decodeData(datas)
+                Log.e("extract",extract.toString())
+
+                extract.forEach { (key, value) ->
+                    println("$key: $value")
+                }
             }
 
 
@@ -134,6 +132,43 @@ class BottomSheetSharePost(val datas:PostItem) : BottomSheetDialogFragment() {
     override fun onDetach() {
         super.onDetach()
         mListener = null
+    }
+
+    fun decodeData(encodedData: String): Map<String, String> {
+        val keys = listOf("messageType", "userId", "postId", "profilePictureLink", "firstImageLink", "username", "caption","fullName")
+        val values = encodedData.split('|')
+        val decodedValues = values.mapIndexed { index, value ->
+            val shift = when (index) {
+                0 -> 3 // Example: Caesar cipher shift for messageType
+                1 -> 5 // Example: Caesar cipher shift for userId
+                2 -> 2 // Example: Caesar cipher shift for postId
+                3 -> 4 // Example: Caesar cipher shift for profilePictureLink
+                4 -> 1 // Example: Caesar cipher shift for firstImageLink
+                5 -> 6 // Example: Caesar cipher shift for username
+                6 -> 7 // Example: Caesar cipher shift for caption
+                7 -> 8
+                else -> 0
+            }
+            decodeString(value, shift)
+        }
+
+        return keys.zip(decodedValues).toMap()
+    }
+
+    fun decodeString(encodedData: String, shift: Int): String {
+        val decodedData = StringBuilder()
+        for (char in encodedData) {
+            // Example: Caesar cipher decoding with a shift of 'shift' to reverse the encoding
+            val decodedChar = if (char.isLetter()) {
+                val base = if (char.isLowerCase()) 'a' else 'A'
+                val decodedAscii = (char.toInt() - base.toInt() - shift + 26) % 26
+                (decodedAscii + base.toInt()).toChar()
+            } else {
+                char
+            }
+            decodedData.append(decodedChar)
+        }
+        return decodedData.toString()
     }
 
 }

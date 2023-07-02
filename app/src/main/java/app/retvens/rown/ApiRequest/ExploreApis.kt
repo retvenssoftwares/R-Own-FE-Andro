@@ -2,6 +2,7 @@ package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.BlogData
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventData
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelData
@@ -40,6 +41,27 @@ interface ExploreApis {
         @Path("user_id")user_id:String,
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
+
+    @GET("searchpeople/{text}/{user_id}")
+    fun searchPeople(
+        @Path("text")text:String,
+        @Path("user_id")user_id:String,
+        @Query("page")page:String
+    ):Call<List<ExplorePeopleDataClass>>
+
+    @GET("searchblog/{text}/{user_id}")
+    fun searchBlog(
+        @Path("text")text:String,
+        @Path("user_id")user_id:String,
+        @Query("page")page:String
+    ):Call<List<BlogData>>
+
+    @GET("searchotel/{text}/{user_id}")
+    fun searchHotel(
+        @Path("text")text:String,
+        @Path("user_id")user_id:String,
+        @Query("page")page:String
+    ):Call<List<ExploreHotelData>>
 
     @GET("getSearchJob/{text}")
     fun searchJob(

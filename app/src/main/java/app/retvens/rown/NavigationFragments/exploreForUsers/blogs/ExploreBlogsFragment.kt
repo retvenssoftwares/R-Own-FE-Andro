@@ -133,7 +133,7 @@ class ExploreBlogsFragment : Fragment() {
                                     allBlogsAdapter.removeBlogFromList(it.blogs)
                                     allBlogsAdapter.notifyDataSetChanged()
                                     Log.d("on", it.toString())
-                                    /* searchBar.addTextChangedListener(object : TextWatcher {
+                                     searchBar.addTextChangedListener(object : TextWatcher {
                                          override fun beforeTextChanged(
                                              p0: CharSequence?,
                                              p1: Int,
@@ -149,15 +149,16 @@ class ExploreBlogsFragment : Fragment() {
                                              p2: Int,
                                              p3: Int
                                          ) {
-
+                                                val text = p0.toString()
+                                                searchBlog(text)
                                          }
 
                                          override fun afterTextChanged(p0: Editable?) {
 
                                          }
-                                     })*/
+                                     })
                                 }catch (e:NullPointerException){
-//                                    Toast.makeText(requireContext(),"No More Blogs",Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(),"No More Blogs",Toast.LENGTH_SHORT).show()
                                 }
 
                             }
@@ -177,6 +178,49 @@ class ExploreBlogsFragment : Fragment() {
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
                 empty.visibility = View.VISIBLE
+            }
+        })
+    }
+
+    private fun searchBlog(text: String) {
+
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        Log.e("userid",user_id)
+        Log.e("word",text)
+
+        val searchBlog = RetrofitBuilder.exploreApis.searchBlog(user_id,text,"1")
+
+        searchBlog.enqueue(object : Callback<List<BlogData>?> {
+            override fun onResponse(
+                call: Call<List<BlogData>?>,
+                response: Response<List<BlogData>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Log.e("res",response.toString())
+                    val searchList:ArrayList<Blog> = ArrayList()
+//                    try {
+//                        response.forEach {
+//                            searchList.addAll(it.blogs)
+//                            allBlogsAdapter = AllBlogsAdapter(searchList, requireContext())
+//                            exploreBlogsRecyclerView.adapter = allBlogsAdapter
+//                            allBlogsAdapter.notifyDataSetChanged()
+//                        }
+//                    }catch (e:NullPointerException){
+//                        allBlogsAdapter = AllBlogsAdapter(searchList, requireContext())
+//                        exploreBlogsRecyclerView.adapter = allBlogsAdapter
+//                        allBlogsAdapter.notifyDataSetChanged()
+//                    }
+
+                }else{
+                    Log.e("error",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<List<BlogData>?>, t: Throwable) {
+                Log.e("error",t.message.toString())
             }
         })
     }

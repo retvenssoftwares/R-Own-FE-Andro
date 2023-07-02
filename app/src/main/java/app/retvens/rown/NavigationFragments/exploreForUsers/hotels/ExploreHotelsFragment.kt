@@ -2,11 +2,15 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.hotels
 
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -15,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.BlogData
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsData
@@ -34,6 +39,7 @@ class ExploreHotelsFragment : Fragment() {
     lateinit var exploreHotelAdapter : ExploreHotelsAdapter
     private var isLoading:Boolean = false
     private var currentPage = 1
+    private lateinit var searchBar:EditText
     private lateinit var progress: ProgressBar
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
     private var hotelList:ArrayList<HotelData> = ArrayList()
@@ -55,6 +61,7 @@ class ExploreHotelsFragment : Fragment() {
         exploreBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
         exploreBlogsRecyclerView.setHasFixedSize(true)
 
+        searchBar = view.findViewById(R.id.search_explore_hotels)
 
         empty = view.findViewById(R.id.empty)
         progress = view.findViewById(R.id.progress)
@@ -134,6 +141,33 @@ class ExploreHotelsFragment : Fragment() {
                                     exploreBlogsRecyclerView.adapter = exploreHotelAdapter
                                     exploreHotelAdapter.removeHotelFromList(it.posts)
                                     exploreHotelAdapter.notifyDataSetChanged()
+
+                                    searchBar.addTextChangedListener(object :TextWatcher{
+                                        override fun beforeTextChanged(
+                                            p0: CharSequence?,
+                                            p1: Int,
+                                            p2: Int,
+                                            p3: Int
+                                        ) {
+
+                                        }
+
+                                        override fun onTextChanged(
+                                            p0: CharSequence?,
+                                            p1: Int,
+                                            p2: Int,
+                                            p3: Int
+                                        ) {
+                                            val letter = p0.toString()
+                                            searchHotel(letter)
+                                        }
+
+                                        override fun afterTextChanged(p0: Editable?) {
+
+                                        }
+
+                                    })
+
                                 }
                             } else {
                                 empty.visibility = View.VISIBLE
@@ -159,5 +193,45 @@ class ExploreHotelsFragment : Fragment() {
                 empty.visibility = View.VISIBLE
             }
         })
+    }
+
+    private fun searchHotel(letter: String) {
+
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val searchHotel = RetrofitBuilder.exploreApis.searchHotel(letter,user_id,"1")
+
+        searchHotel.enqueue(object : Callback<List<ExploreHotelData>?> {
+            override fun onResponse(
+                call: Call<List<ExploreHotelData>?>,
+                response: Response<List<ExploreHotelData>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Log.e("response",response.toString())
+                    val searchHotel:ArrayList<HotelData> = ArrayList()
+                    response.forEach {
+                        try {
+                            searchHotel.addAll(it.posts)
+                            exploreHotelAdapter = ExploreHotelsAdapter(searchHotel, requireContext())
+                            exploreBlogsRecyclerView.adapter = exploreHotelAdapter
+                            exploreHotelAdapter.removeHotelFromList(it.posts)
+                            exploreHotelAdapter.notifyDataSetChanged()
+                        }catch (e:NullPointerException){
+                            Log.e("error",e.message.toString())
+                        }
+
+                    }
+                }else{
+                    getBlogs()
+                }
+            }
+
+            override fun onFailure(call: Call<List<ExploreHotelData>?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
+
     }
 }

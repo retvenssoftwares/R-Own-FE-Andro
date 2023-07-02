@@ -28,12 +28,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboFile;
 import com.mesibo.emojiview.EmojiconTextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import app.retvens.rown.Dashboard.DashBoardActivity;
 import app.retvens.rown.NavigationFragments.home.PostDetailsActivity;
@@ -65,6 +75,12 @@ public class MessageView extends RelativeLayout {
     LinearLayout mTitleLayout = null;
     LayoutParams mTitleParams;
     TextView mTitleView = null;
+    ShapeableImageView profile;
+    TextView fullName;
+    TextView userName;
+    ShapeableImageView postImage;
+    TextView caption;
+    CardView postCard;
 
     public MessageView(Context context) {
         super(context);
@@ -88,6 +104,12 @@ public class MessageView extends RelativeLayout {
     public void init() {
         View v = this.mInflater.inflate(R.layout.message_view, this, true);
         this.mMessageView = v;
+        this.postCard = v.findViewById(R.id.postCard);
+        this.profile = v.findViewById(R.id.post_profile);
+        this.fullName = v.findViewById(R.id.user_name_post);
+        this.postImage = v.findViewById(R.id.Image);
+        this.userName = v.findViewById(R.id.user_id_on_comment);
+        this.caption = v.findViewById(R.id.recentCommentByUser);
         this.mPicLayout = (FrameLayout) v.findViewById(R.id.m_piclayout);
         this.mTitleLayout = (LinearLayout) v.findViewById(R.id.m_titlelayout);
         this.mTitleView = (TextView) v.findViewById(R.id.m_ptitle);
@@ -129,26 +151,7 @@ public class MessageView extends RelativeLayout {
             Log.e("msg","working");
         }
 
-
-//            mPicLayout.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                    context = getContext();
-//
-//
-//                    if (Objects.equals(data.msg.message, "VIh5k3UYn")){
-//                        Log.e("click","ok");
-//                        Intent intent = new Intent(context, PostsViewActivity.class);
-//                        intent.putExtra("postId",data.msg.message);
-//                        context.startActivity(intent);
-//                    }
-//
-//
-//
-//                }
-//            });
-
+        context = getContext();
 
         ViewGroup.LayoutParams PTTParams = getLayoutParams();
         String title = this.mData.getTitle();
@@ -273,17 +276,91 @@ public class MessageView extends RelativeLayout {
             boolean incoming = data.getStatus() == 19 || data.getStatus() == 18;
             if (data.getFavourite().booleanValue()) {
                 if (incoming) {
+                    Log.e("1",message.toString());
                     this.mMessageTextView.setText(message + " " + "              ");
                 } else {
+                    Log.e("2",message.toString());
                     this.mMessageTextView.setText(message + " " + MesiboConfiguration.FAVORITED_OUTGOING_MESSAGE_DATE_View);
                 }
             } else if (incoming) {
-                this.mMessageTextView.setText(message + " " + "              ");
+                String input = message;
+                String[] parts = input.split(",");
+                if (parts[0].equals("this//is//the//$$//post")){
+                    this.mMessageTextView.setVisibility(8);
+                    DecodeDataHelper decodeDataHelper = new DecodeDataHelper();
+                    String encodedData = parts[1];
+                    Map<String, String> decodedData = decodeDataHelper.decodeData(encodedData);
+                    String messageType = decodedData.get("messageType");
+                    String userId = decodedData.get("userId");
+                    String postId = decodedData.get("postId");
+                    String profilePictureLink = decodedData.get("profilePictureLink");
+                    String firstImageLink = decodedData.get("firstImageLink");
+                    String username = decodedData.get("username");
+                    String caption = decodedData.get("caption");
+                    String fullName = decodedData.get("fullName");
+
+                    this.fullName.setText(fullName);
+                    this.caption.setText(caption);
+                    this.userName.setText(username);
+                    Glide.with(this).load(profilePictureLink).into(this.profile);
+                    Glide.with(this).load(firstImageLink).into(this.postImage);
+                    this.postCard.setVisibility(0);
+
+                    this.postCard.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, PostsViewActivity.class);
+                            intent.putExtra("postId", postId);
+                            context.startActivity(intent);
+                        }
+                    });
+                    Log.e("3","working");
+                }else {
+                    this.postCard.setVisibility(8);
+                    this.mMessageTextView.setText(message + " " + "              ");
+                }
             } else {
-                this.mMessageTextView.setText(message + " " + MesiboConfiguration.NORMAL_OUTGOING_MESSAGE_DATE_View);
+                String input = message;
+                String[] parts = input.split(",");
+                if (parts[0].equals("this//is//the//$$//post")){
+                    this.mMessageTextView.setVisibility(8);
+                    DecodeDataHelper decodeDataHelper = new DecodeDataHelper();
+                    String encodedData = parts[1];
+                    Map<String, String> decodedData = decodeDataHelper.decodeData(encodedData);
+                    String messageType = decodedData.get("messageType");
+                    String userId = decodedData.get("userId");
+                    String postId = decodedData.get("postId");
+                    String profilePictureLink = decodedData.get("profilePictureLink");
+                    String firstImageLink = decodedData.get("firstImageLink");
+                    String username = decodedData.get("username");
+                    String caption = decodedData.get("caption");
+                    String fullName = decodedData.get("fullName");
+
+                    this.fullName.setText(fullName);
+                    this.caption.setText(caption);
+                    this.userName.setText(username);
+                    Glide.with(this).load(profilePictureLink).into(this.profile);
+                    Glide.with(this).load(firstImageLink).into(this.postImage);
+                    this.postCard.setVisibility(0);
+                    Log.e("4","working");
+
+                    this.postCard.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, PostsViewActivity.class);
+                            intent.putExtra("postId", postId);
+                            context.startActivity(intent);
+                        }
+                    });
+                }else {
+                    this.postCard.setVisibility(8);
+                    this.mMessageTextView.setText(message + " " + MesiboConfiguration.NORMAL_OUTGOING_MESSAGE_DATE_View);
+                }
+
             }
         } else {
             this.mMessageTextView.setVisibility(8);
+            this.postCard.setVisibility(8);
         }
         if (thumbnail == null) {
             PTTParams.width = -2;
@@ -301,5 +378,72 @@ public class MessageView extends RelativeLayout {
     public void setImage(Bitmap image) {
 //        loadImageView();
         this.mPictureThumbnail.setImage(image);
+    }
+
+    public class DecodeDataHelper {
+        public Map<String, String> decodeData(String encodedData) {
+            List<String> keys = List.of("messageType", "userId", "postId", "profilePictureLink", "firstImageLink", "username", "caption", "fullName");
+            List<String> values = Arrays.asList(encodedData.split("\\|"));
+            List<String> decodedValues = values.stream().map((value) -> {
+                int index = values.indexOf(value);
+                int shift = 0;
+                switch (index) {
+                    case 0:
+                        shift = 3;
+                        break;
+                    case 1:
+                        shift = 5;
+                        break;
+                    case 2:
+                        shift = 2;
+                        break;
+                    case 3:
+                        shift = 4;
+                        break;
+                    case 4:
+                        shift = 1;
+                        break;
+                    case 5:
+                        shift = 6;
+                        break;
+                    case 6:
+                        shift = 7;
+                        break;
+                    case 7:
+                        shift = 8;
+                        break;
+                    default:
+                        shift = 0;
+                        break;
+                }
+                return decodeString(value, shift);
+            }).collect(Collectors.toList());
+
+            if (keys.size() != decodedValues.size()) {
+                throw new IllegalArgumentException("Number of keys and values do not match.");
+            }
+
+            Map<String, String> decodedData = new HashMap<>();
+            for (int i = 0; i < keys.size(); i++) {
+                decodedData.put(keys.get(i), decodedValues.get(i));
+            }
+
+            return decodedData;
+        }
+
+        public String decodeString(String encodedData, int shift) {
+            StringBuilder decodedData = new StringBuilder();
+            for (char c : encodedData.toCharArray()) {
+                if (Character.isLetter(c)) {
+                    char base = Character.isLowerCase(c) ? 'a' : 'A';
+                    int decodedAscii = (c - base - shift + 26) % 26;
+                    char decodedChar = (char) (decodedAscii + base);
+                    decodedData.append(decodedChar);
+                } else {
+                    decodedData.append(c);
+                }
+            }
+            return decodedData.toString();
+        }
     }
 }

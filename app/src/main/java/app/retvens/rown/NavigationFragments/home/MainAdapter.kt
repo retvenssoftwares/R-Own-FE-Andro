@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri.encode
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,6 +46,9 @@ import java.util.concurrent.TimeUnit
 import android.os.Handler
 import androidx.annotation.RequiresApi
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
+import okio.ByteString
+import okio.ByteString.Companion.encodeString
+import java.nio.charset.Charset
 import kotlin.collections.ArrayList
 
 
@@ -58,7 +62,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     interface OnItemClickListener {
         fun onItemClick(dataItem: PostItem)
         fun onItemClickForComment(banner: PostItem,position: Int)
-        fun onItemsharePost(share:PostItem,position: Int)
+        fun onItemsharePost(share:String)
 
     }
 
@@ -141,8 +145,18 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                             binding.likePost.setImageResource(R.drawable.svg_like_post)
                         }
 
+            val messageType = post.post_type
+            val userId = post.user_id
+            val postId = post.post_id
+            val profilePictureLink = post.Profile_pic
+            val firstImageLink = post.media.get(0).post
+            val username = post.User_name
+            val caption = post.caption
+            val fullName = post.Full_name
+            val encodedData = encodeData(messageType, userId, postId, profilePictureLink, firstImageLink, username, caption,fullName)
+
             binding.sharePost.setOnClickListener {
-                onItemClickListener?.onItemsharePost(banner,position)
+                onItemClickListener?.onItemsharePost(encodedData)
             }
 
             banner.media.forEach { media ->
@@ -916,4 +930,42 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
         }
     }
 
+    fun encodeData(
+        messageType: String,
+        userId: String,
+        postId: String,
+        profilePictureLink: String,
+        firstImageLink: String,
+        username: String,
+        caption: String,
+        fullName:String
+    ): String {
+        val encodedMessageType = encodeString(messageType, 3) // Example: Caesar cipher with a shift of 3
+        val encodedUserId = encodeString(userId, 5) // Example: Caesar cipher with a shift of 5
+        val encodedPostId = encodeString(postId, 2) // Example: Caesar cipher with a shift of 2
+        val encodedProfilePictureLink = encodeString(profilePictureLink, 4) // Example: Caesar cipher with a shift of 4
+        val encodedFirstImageLink = encodeString(firstImageLink, 1) // Example: Caesar cipher with a shift of 1
+        val encodedUsername = encodeString(username, 6) // Example: Caesar cipher with a shift of 6
+        val encodedCaption = encodeString(caption, 7) // Example: Caesar cipher with a shift of 7
+        val encodedFullName = encodeString(fullName,8)
+
+        return "$encodedMessageType|$encodedUserId|$encodedPostId|$encodedProfilePictureLink|$encodedFirstImageLink|$encodedUsername|$encodedCaption|$encodedFullName"
+    }
+
+
+    fun encodeString(input: String, shift: Int): String {
+        val encodedData = StringBuilder()
+        for (char in input) {
+            // Example: Caesar cipher encoding with a shift of 'shift'
+            val encodedChar = if (char.isLetter()) {
+                val base = if (char.isLowerCase()) 'a' else 'A'
+                val encodedAscii = (char.toInt() - base.toInt() + shift) % 26
+                (encodedAscii + base.toInt()).toChar()
+            } else {
+                char
+            }
+            encodedData.append(encodedChar)
+        }
+        return encodedData.toString()
+    }
 }

@@ -3,12 +3,15 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.people
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -29,7 +32,7 @@ class ExplorePeopleFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var explorePeopleAdapter: ExplorePeopleAdapter
-
+    private lateinit var searchBar:EditText
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
     private var currentPage = 1
     private var totalPages = 0
@@ -59,6 +62,8 @@ class ExplorePeopleFragment : Fragment() {
         recyclerView = view.findViewById(R.id.explore_peoples_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
+
+        searchBar = view.findViewById(R.id.search_explore_peoples)
 
         explorePeopleAdapter = ExplorePeopleAdapter(requireContext(), peopleList)
         recyclerView.adapter = explorePeopleAdapter
@@ -158,6 +163,30 @@ class ExplorePeopleFragment : Fragment() {
                             explorePeopleAdapter.setJobSavedClickListener(this)
                             explorePeopleAdapter.cancelConnRequest(this)
 
+                            searchBar.addTextChangedListener(object :TextWatcher{
+                                override fun beforeTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
+
+                                }
+
+                                override fun onTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
+                                    val text = p0.toString()
+                                    searchPeople(text)
+                                }
+
+                                override fun afterTextChanged(p0: Editable?) {
+
+                                }
+                            })
 
                 } else {
                             empty.text = "You did'nt post yet"
@@ -196,6 +225,47 @@ class ExplorePeopleFragment : Fragment() {
 
 
 
+    }
+
+    private fun searchPeople(text: String) {
+
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val searchPeople = RetrofitBuilder.exploreApis.searchPeople(text,user_id,"1")
+
+        searchPeople.enqueue(object : Callback<List<ExplorePeopleDataClass>?> {
+            override fun onResponse(
+                call: Call<List<ExplorePeopleDataClass>?>,
+                response: Response<List<ExplorePeopleDataClass>?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+
+                    val searchList:ArrayList<Post> = ArrayList()
+                    response.forEach {
+                        try {
+                            searchList.addAll(it.posts)
+                            explorePeopleAdapter.removeUser(it.posts)
+                            explorePeopleAdapter.removeUsersFromList(it.posts)
+                            explorePeopleAdapter.notifyDataSetChanged()
+
+                            explorePeopleAdapter = ExplorePeopleAdapter(requireContext(), searchList)
+                            recyclerView.adapter = explorePeopleAdapter
+                        }catch (e:NullPointerException){
+                            Log.e("error",e.message.toString())
+                        }
+                    }
+                }else{
+                    Log.e("error",response.code().toString())
+                    getAllProfiles()
+                }
+
+            }
+            override fun onFailure(call: Call<List<ExplorePeopleDataClass>?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
     }
 
     private fun removeConnRequest(userId: String) {

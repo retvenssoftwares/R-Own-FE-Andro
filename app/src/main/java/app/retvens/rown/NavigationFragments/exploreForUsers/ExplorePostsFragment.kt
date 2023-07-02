@@ -243,6 +243,7 @@ class ExplorePostsFragment : Fragment() {
 
                 }else{
                     Log.e("error",response.code().toString())
+                    getExplorePost()
                 }
             }
 

@@ -244,9 +244,11 @@ class CreateTextPost : AppCompatActivity(),
                 }
                 if (addresses!!.isNotEmpty()) {
                     val address = addresses[0]
+
                     val city = address.locality
                     val state = address.adminArea
                     val country = address.countryName
+
 
                     binding.etLocationPostEvent.setText("$city,$state,$country")
                 }

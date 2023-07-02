@@ -386,7 +386,8 @@ class HomeFragment : Fragment() {
                             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
                         }
 
-                        override fun onItemsharePost(share: PostItem, position: Int) {
+                        override fun onItemsharePost(share: String) {
+
                             val bottomSheet = BottomSheetSharePost(share)
                             val fragManager = (activity as FragmentActivity).supportFragmentManager
                             fragManager.let{bottomSheet.show(it, BottomSheetSharePost.Company_TAG)}
@@ -708,4 +709,5 @@ class HomeFragment : Fragment() {
 //        mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
 //        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
     }
+
 }
