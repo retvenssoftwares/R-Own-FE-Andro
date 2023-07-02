@@ -9,11 +9,7 @@ import app.retvens.rown.DataCollections.saveId.SaveBlog
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.AllReviewsData
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.VendorReviewsData
 import app.retvens.rown.viewAll.vendorsDetails.ReviewData
-import app.retvens.rown.viewAll.viewAllBlogs.LikeBlog
-import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
-import app.retvens.rown.viewAll.viewAllBlogs.BlogAllComments
-import app.retvens.rown.viewAll.viewAllBlogs.GetBlogById
-import app.retvens.rown.viewAll.viewAllBlogs.ViewAllCategoriesData
+import app.retvens.rown.viewAll.viewAllBlogs.*
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -46,7 +42,7 @@ interface ViewAll {
     fun getBlogsByBlogId(
         @Path("blog_id") blog_id:String,
         @Path("User_id") User_id : String
-    ) : Call<GetBlogById>
+    ) : Call<List<GetBlogByIdItem>>
 
 //        @PATCH("deleterequest/saveid/{user_id}")
     @PATCH("saveid/{user_id}")

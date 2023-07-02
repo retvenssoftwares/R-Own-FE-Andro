@@ -13,6 +13,7 @@ import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.databinding.ActivityBlogsDetailsBinding
 import app.retvens.rown.utils.dateFormat
 import app.retvens.rown.viewAll.viewAllBlogs.GetBlogById
+import app.retvens.rown.viewAll.viewAllBlogs.GetBlogByIdItem
 import app.retvens.rown.viewAll.viewAllBlogs.LikeBlog
 import com.bumptech.glide.Glide
 import retrofit2.Call
@@ -93,11 +94,13 @@ class BlogsDetailsActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
+        Log.e("blogId",blogId!!)
+
         val blog = RetrofitBuilder.viewAllApi.getBlogsByBlogId(blogId!!, user_id)
-        blog.enqueue(object : Callback<GetBlogById?> {
+        blog.enqueue(object : Callback<List<GetBlogByIdItem>?> {
             override fun onResponse(
-                call: Call<GetBlogById?>,
-                response: Response<GetBlogById?>
+                call: Call<List<GetBlogByIdItem>?>,
+                response: Response<List<GetBlogByIdItem>?>
             ) {
                 Log.d("res", response.body().toString())
                 if (response.isSuccessful){
@@ -118,19 +121,16 @@ class BlogsDetailsActivity : AppCompatActivity() {
                         Glide.with(applicationContext).load(res.get(0).blog_image).into(binding.blogPic)
                         Glide.with(applicationContext).load(res.get(0).Profile_pic).into(binding.userProfile)
 
-//                        binding.userName.text = res.User_name
-//                        binding.blogTitle.text = res.blog_title
-//                        binding.blogContent.text = res.blog_content
-//                        Glide.with(applicationContext).load(res.blog_image).into(binding.blogPic)
-//                        Glide.with(applicationContext).load(res.Profile_pic).into(binding.userProfile)
+
                     } catch (e:IndexOutOfBoundsException){Log.d("e", e.toString())}
                 }
             }
 
-            override fun onFailure(call: Call<GetBlogById?>, t: Throwable) {
-                Log.d("res", t.localizedMessage.toString())
+            override fun onFailure(call: Call<List<GetBlogByIdItem>?>, t: Throwable) {
+
             }
         })
+
     }
 
     private fun savePosts(blogId: String?) {
