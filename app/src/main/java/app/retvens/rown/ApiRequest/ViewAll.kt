@@ -1,7 +1,6 @@
 package app.retvens.rown.ApiRequest
 
 
-import app.retvens.rown.DataCollections.FeedCollection.PostCommentClass
 import app.retvens.rown.DataCollections.FeedCollection.PostCommentReplyClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileResponse
@@ -10,6 +9,8 @@ import app.retvens.rown.NavigationFragments.profile.vendorsReview.AllReviewsData
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.VendorReviewsData
 import app.retvens.rown.viewAll.vendorsDetails.ReviewData
 import app.retvens.rown.viewAll.viewAllBlogs.*
+import app.retvens.rown.viewAll.viewAllBlogs.CommentData.BlogPostComment
+import app.retvens.rown.viewAll.viewAllBlogs.CommentData.CommentBlog
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -26,11 +27,11 @@ interface ViewAll {
     @GET("getcomment/{blog_id}")
     fun getBlogComment(
         @Path("blog_id") blog_id : String
-    ):Call<BlogAllComments>
+    ):Call<CommentBlog>
     @PATCH("comment/{blog_id}")
     fun blogComment(
         @Path("blog_id") blog_id:String,
-        @Body postComment: PostCommentClass
+        @Body postComment: BlogPostComment
     ):Call<UpdateResponse>
     @PATCH("replycomment/{blog_id}")
     fun replyBlogComment(

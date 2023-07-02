@@ -14,16 +14,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.DataCollections.FeedCollection.Comments
-import app.retvens.rown.DataCollections.FeedCollection.GetComments
-import app.retvens.rown.DataCollections.FeedCollection.PostCommentClass
 import app.retvens.rown.DataCollections.FeedCollection.PostCommentReplyClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.NavigationFragments.FragmntAdapters.CommentAdapter
 import app.retvens.rown.R
-import app.retvens.rown.viewAll.viewAllBlogs.BlogAllComments
+import app.retvens.rown.viewAll.viewAllBlogs.CommentData.BlogPostComment
 import app.retvens.rown.viewAll.viewAllBlogs.BlogsCommentAdapter
 import app.retvens.rown.viewAll.viewAllBlogs.Comment
+import app.retvens.rown.viewAll.viewAllBlogs.CommentData.CommentBlog
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.imageview.ShapeableImageView
@@ -145,7 +142,7 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
 
         val comment = comment.text.toString()
 
-        val sendComment = RetrofitBuilder.viewAllApi.blogComment(blog_id, PostCommentClass(user_id,comment))
+        val sendComment = RetrofitBuilder.viewAllApi.blogComment(blog_id, BlogPostComment(user_id,comment))
 
         sendComment.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -172,28 +169,28 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
     private fun getCommentList(blog_id: String) {
         val getComments = RetrofitBuilder.viewAllApi.getBlogComment(blog_id)
 
-        getComments.enqueue(object : Callback<BlogAllComments?>, BlogsCommentAdapter.OnItemClickListener {
-            override fun onResponse(call: Call<BlogAllComments?>, response: Response<BlogAllComments?>) {
+        getComments.enqueue(object : Callback<CommentBlog?>, BlogsCommentAdapter.OnItemClickListener {
+            override fun onResponse(call: Call<CommentBlog?>, response: Response<CommentBlog?>) {
                 Toast.makeText(requireContext(), response.message().toString(), Toast.LENGTH_SHORT).show()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Log.d("BlogCommentsGET", response.toString())
                     try {
-                        blogsCommentAdapter = BlogsCommentAdapter(requireContext(),response.comments)
+                        blogsCommentAdapter = BlogsCommentAdapter(requireContext(),response.get(0))
                         recyclerView.adapter = blogsCommentAdapter
                         blogsCommentAdapter.notifyDataSetChanged()
+                        blogsCommentAdapter.setOnItemClickListener(this)
                     } catch (e : NullPointerException){
                         Log.d("BlogCommentsGET", e.toString())
                     }
 
 
-                    blogsCommentAdapter.setOnItemClickListener(this)
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<BlogAllComments?>, t: Throwable) {
+            override fun onFailure(call: Call<CommentBlog?>, t: Throwable) {
                 Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
             }
 

@@ -8,8 +8,6 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import app.retvens.rown.DataCollections.FeedCollection.Comments
-import app.retvens.rown.DataCollections.FeedCollection.GetComments
 import app.retvens.rown.NavigationFragments.FragmntAdapters.NestedCommentAdapter
 import app.retvens.rown.R
 import com.bumptech.glide.Glide

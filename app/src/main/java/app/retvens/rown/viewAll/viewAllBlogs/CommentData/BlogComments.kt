@@ -1,8 +1,9 @@
 package app.retvens.rown.viewAll.viewAllBlogs
 
-import app.retvens.rown.DataCollections.FeedCollection.PostCommentReplyClass
 import app.retvens.rown.DataCollections.FeedCollection.Reply
 
+//class CommentBlog : ArrayList<CommentBlogSubList>()
+//class CommentBlogSubList : ArrayList<BlogAllComments>()
 data class BlogAllComments(
     val _id: String,
     val blog_image: String,
