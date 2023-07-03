@@ -91,8 +91,8 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
         holder.connect.setOnClickListener {
 
             if (status == "Not Connected") {
-                connectClickListener?.onJobSavedClick(currentItem)
-
+//                connectClickListener?.onJobSavedClick(currentItem)
+                sendConnectionRequest(currentItem.matchedNumber.User_id, context, holder.connect)
                 holder.connect.text = "Requested"
                 currentItem.connectionStatus = "Requested"
                 holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
@@ -100,8 +100,8 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
             }
 
             if (status == "Requested" || currentItem.connectionStatus == "Requested") {
-                connectClickListener?.onCancelRequest(currentItem)
-
+//                connectClickListener?.onCancelRequest(currentItem)
+                removeConnRequest(currentItem.matchedNumber.User_id, context, holder.connect)
                 holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
                 holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
                 holder.connect.text = "CONNECT"

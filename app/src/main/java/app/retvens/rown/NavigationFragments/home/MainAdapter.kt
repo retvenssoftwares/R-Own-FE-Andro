@@ -79,7 +79,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         val post = banner
 
                         Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
-                        binding.userIdOnComment.text = post.User_name
+            if (post.User_name.isNotEmpty()){
+                binding.userIdOnComment.text = post.User_name
+            } else{
+                binding.userIdOnComment.text = post.Full_name
+            }
                         Log.e("username",post.toString())
                         binding.recentCommentByUser.text = post.caption
                         Log.e("caption",post.caption)
@@ -277,11 +281,15 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             val post = banner
             Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+            if (post.User_name.isNotEmpty()){
                 binding.userIdOnComment.text = post.User_name
+            } else{
+                binding.userIdOnComment.text = post.Full_name
+            }
                 Log.e("username",post.User_name)
                 binding.recentCommentByUser.text = post.caption
                 Log.e("caption",post.caption)
-                binding.userNamePost.text = post.User_name
+                binding.userNamePost.text = post.Full_name
 
                 binding.eventTitle.text = post.Event_name
 

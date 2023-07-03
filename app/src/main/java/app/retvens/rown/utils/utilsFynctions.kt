@@ -19,6 +19,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
@@ -215,6 +216,8 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
             if (response.isSuccessful){
                 Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
                 connStatusTextView.text = "CONNECT"
+                connStatusTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
+                connStatusTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
             } else {
                 Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
             }
@@ -241,6 +244,8 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
             if (response.isSuccessful){
                 val response = response.body()!!
                 connStatusTextView.text = "CONNECT"
+                connStatusTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
+                connStatusTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
 //                Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
             }else{
 //                Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -272,6 +277,8 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
             if (response.isSuccessful){
                 val response = response.body()!!
                 connStatusTextView.text = "Requested"
+                connStatusTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+                connStatusTextView.setTextColor(ContextCompat.getColor(context, R.color.green_own))
 //                Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
             }else{
 //                Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -279,7 +286,7 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
         }
 
         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-//            Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,t.message.toString(),Toast.LENGTH_SHORT).show()
         }
     })
 

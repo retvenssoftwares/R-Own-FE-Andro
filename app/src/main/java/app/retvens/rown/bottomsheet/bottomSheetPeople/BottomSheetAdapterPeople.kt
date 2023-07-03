@@ -20,6 +20,8 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfi
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
+import app.retvens.rown.utils.removeConnRequest
+import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 
 class BottomSheetAdapterPeople(val context: Context, val peopleList:ArrayList<Post>):RecyclerView.Adapter<BottomSheetAdapterPeople.ExplorePeopleViewholder>() {
@@ -90,7 +92,8 @@ class BottomSheetAdapterPeople(val context: Context, val peopleList:ArrayList<Po
         holder.connect.setOnClickListener {
 
             if (status == "Not Connected") {
-                connectClickListener?.onJobSavedClick(data)
+//                connectClickListener?.onJobSavedClick(data)
+                sendConnectionRequest(data.User_id, context, holder.connect)
 
                 holder.connect.text = "Requested"
                 data.connectionStatus = "Requested"
@@ -99,7 +102,8 @@ class BottomSheetAdapterPeople(val context: Context, val peopleList:ArrayList<Po
             }
 
             if (status == "Requested" || data.connectionStatus == "Requested") {
-                connectClickListener?.onCancelRequest(data)
+//                connectClickListener?.onCancelRequest(data)
+                removeConnRequest(data.User_id, context, holder.connect)
 
                 data.connectionStatus = "Not Connected"
                 holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))

@@ -89,11 +89,11 @@ class DiscoverAllAdapter(val listS : ArrayList<Post>, val context: Context) : Re
 //                connectClickListener?.onJobSavedClick(currentItem)
 
                 sendConnectionRequest(currentItem.User_id, context, holder.connect)
-
-                holder.connect.text = "Requested"
                 currentItem.connectionStatus = "Requested"
-                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
+
+//                holder.connect.text = "Requested"
+//                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+//                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
             }
 
             if (status == "Requested" || currentItem.connectionStatus == "Requested") {
@@ -101,9 +101,9 @@ class DiscoverAllAdapter(val listS : ArrayList<Post>, val context: Context) : Re
 
                 removeConnRequest(currentItem.User_id, context, holder.connect)
 
-                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
-                holder.connect.text = "CONNECT"
+//                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
+//                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
+//                holder.connect.text = "CONNECT"
                 currentItem.connectionStatus = "Not Connected"
             }
 

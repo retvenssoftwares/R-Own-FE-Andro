@@ -1,5 +1,7 @@
 package app.retvens.rown.DataCollections.ConnectionCollection
 
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.MesiboAccount
+
 data class NormalUserDataClass(
     val data: ProfileData
 )
@@ -19,6 +21,7 @@ data class Profile(
     val verificationStatus: String,
     val userBio: String,
     val User_name: String,
+    val Mesibo_account: List<MesiboAccount>,
     val location: String,
     val normalUserInfo: List<NormalUserInfoo>,
     val User_id: String,

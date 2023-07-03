@@ -66,6 +66,8 @@ class UserProfileActivity : AppCompatActivity() {
     var verification = ""
     var nameProfile = ""
     var profilePic = ""
+    var connStat =  ""
+    var address =  ""
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,33 +96,29 @@ class UserProfileActivity : AppCompatActivity() {
 
 
         val userID = intent.getStringExtra("userId").toString()
-        val connStat = intent.getStringExtra("status").toString()
-        val address = intent.getStringExtra("address").toString()
+//        connStat = intent.getStringExtra("status").toString()
+//        val address = intent.getStringExtra("address").toString()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        getUserPofile(userID,user_id)
+//        if(connStat.isNotEmpty()){
+////            Toast.makeText(applicationContext, connStat, Toast.LENGTH_SHORT).show()
+//            if (connStat == "Not Connected"){
+//                connStatus.text = "CONNECT"
+//            } else if (connStat == "Connected"){
+//                connStatus.text = "Interact"
+//            } else {
+//                connStatus.text = connStat
+//            }
+//        }
 
-        if (address.isNotEmpty() && connStat == "Connected"){
-            card_message.visibility = View.VISIBLE
-        }
+        getUserPofile(userID,user_id)
 
         card_message.setOnClickListener{
             val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
             intent.putExtra(MesiboUI.PEER, address)
             startActivity(intent)
-        }
-
-        if(connStat.isNotEmpty()){
-//            Toast.makeText(applicationContext, connStat, Toast.LENGTH_SHORT).show()
-            if (connStat == "Not Connected"){
-                connStatus.text = "CONNECT"
-            } else if (connStat == "Connected"){
-                connStatus.text = "Interact"
-            } else {
-                connStatus.text = connStat
-            }
         }
 
 
@@ -137,10 +135,11 @@ class UserProfileActivity : AppCompatActivity() {
                 connStatus.text = "Requested"
             } else  if (connStatus.text == "Requested") {
                 removeConnRequest(userID, applicationContext, connStatus)
-            } else if (connStatus.text == "Interact") {
-                val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
-                intent.putExtra(MesiboUI.PEER, address)
-                startActivity(intent)
+            } else if (connStatus.text == "Accept Connection") {
+                accceptRequest(userID)
+                if (address.isNotEmpty() && connStat == "Connected"){
+                    card_message.visibility = View.VISIBLE
+                }
             }
         }
 
@@ -255,16 +254,29 @@ class UserProfileActivity : AppCompatActivity() {
                     connCount.text = response.data.connCountLength.toString()
                     postCount.text = response.data.postCountLength.toString()
 
+                    address = response.data.profile.Mesibo_account.get(0).address
+
                     created = response.data.profile.Created_On
                     location = response.data.profile.location
                     verification = response.data.profile.verificationStatus
                     if (verification != "false"){
                         verificationS.visibility = View.VISIBLE
                     }
-//                    Toast.makeText(applicationContext,response.data.connectionStatus,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,response.data.connectionStatus,Toast.LENGTH_SHORT).show()
 
                     if (response.data.connectionStatus == "Connected"){
                         connStatus.text = "Remove"
+                        card_message.visibility = View.VISIBLE
+                        connStat = "Connected"
+                    }else if (response.data.connectionStatus == "Not connected"){
+                        connStatus.text = "CONNECT"
+                        connStat = "Not Connected"
+                    }else if (response.data.connectionStatus ==  "Confirm request"){
+                        connStatus.text = "Accept Connection"
+                        connStat = "Confirm request"
+                    } else{
+                        connStat = response.data.connectionStatus
+                        connStatus.text = response.data.connectionStatus
                     }
                 }
             }
@@ -276,4 +288,32 @@ class UserProfileActivity : AppCompatActivity() {
 
 
     }
+    private fun accceptRequest(userId: String) {
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val accept = RetrofitBuilder.connectionApi.sendRequest(user_id, ConnectionDataClass(userId))
+
+        accept.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    connStatus.text = "Remove"
+                    connStat = "Connected"
+                    Toast.makeText(applicationContext,"Request Accepted",Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(applicationContext,"Request Accepted",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 }
