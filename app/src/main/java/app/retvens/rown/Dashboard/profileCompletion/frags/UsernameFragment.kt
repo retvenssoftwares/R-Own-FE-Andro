@@ -25,6 +25,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
 import app.retvens.rown.R
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
+import app.retvens.rown.utils.saveUserName
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
@@ -256,6 +257,7 @@ class UsernameFragment : Fragment() {
             ) {
                 if (response.isSuccessful){
                     progressDialog.dismiss()
+                    saveUserName(requireContext(), username)
                     profileComStatus(context!!, "60")
                     profileCompletionStatus = "60"
                     val fragment = BioGenderFragment()

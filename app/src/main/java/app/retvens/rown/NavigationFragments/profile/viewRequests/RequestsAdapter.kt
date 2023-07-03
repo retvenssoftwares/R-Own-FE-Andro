@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ class RequestsAdapter(val listS : GetAllRequestDataClass, val context: Context) 
         val accept = itemView.findViewById<TextView>(R.id.suggetions_notification_connect)
         val reject = itemView.findViewById<TextView>(R.id.suggetions_notification_view)
         val profile = itemView.findViewById<ShapeableImageView>(R.id.suggetions_notification_profile)
+        val verification = itemView.findViewById<ImageView>(R.id.verification)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestsViewHolder {
@@ -52,6 +54,10 @@ class RequestsAdapter(val listS : GetAllRequestDataClass, val context: Context) 
         holder.reject.text = "Reject"
 
         Glide.with(context).load(data.Profile_pic).into(holder.profile)
+
+        if (data.verificationStatus != "false"){
+            holder.verification.visibility = View.VISIBLE
+        }
 
         holder.accept.setOnClickListener {
             connectClickListener?.onJobSavedClick(data)

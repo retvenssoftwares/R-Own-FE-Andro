@@ -18,6 +18,7 @@ import app.retvens.rown.utils.role
 import app.retvens.rown.utils.saveConnectionNo
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
+import app.retvens.rown.utils.saveUserName
 import app.retvens.rown.utils.verificationStatus
 import app.retvens.rown.utils.websiteLinkV
 import com.google.firebase.auth.FirebaseAuth
@@ -104,6 +105,7 @@ class MainActivity : AppCompatActivity() {
                             getSelfUserProfile(user_id,user_id)
 
                             saveFullName(applicationContext, "${response.Full_name}")
+                            saveUserName(applicationContext, "${response.User_name}")
                             saveProfileImage(applicationContext, "${response.Profile_pic}")
                         }
                     } else {

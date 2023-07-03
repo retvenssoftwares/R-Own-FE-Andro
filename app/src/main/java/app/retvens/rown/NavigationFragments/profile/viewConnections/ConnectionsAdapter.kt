@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -27,6 +28,7 @@ class ConnectionsAdapter(val listS : ArrayList<Connections>, val context: Contex
         val interact = itemView.findViewById<TextView>(R.id.suggetions_notification_connect)
         val remove = itemView.findViewById<TextView>(R.id.suggetions_notification_view)
         val profile = itemView.findViewById<ShapeableImageView>(R.id.suggetions_notification_profile)
+        val verification = itemView.findViewById<ImageView>(R.id.verification)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConnectionsViewHolder {
@@ -49,6 +51,9 @@ class ConnectionsAdapter(val listS : ArrayList<Connections>, val context: Contex
         holder.interact.text = "INTERACT"
         holder.remove.text = "REMOVE"
 
+        if (data.verificationStatus != "false"){
+            holder.verification.visibility = View.VISIBLE
+        }
         val mesibo = data.Mesibo_account[0]
 
         holder.interact.setOnClickListener {

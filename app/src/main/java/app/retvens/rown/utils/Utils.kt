@@ -34,6 +34,13 @@ fun saveFullName(context:Context,fullName : String){
     editor.putString("full_name", fullName)
     editor.apply()
 }
+fun saveUserName(context:Context,UserName : String){
+    val editor : SharedPreferences.Editor = context.getSharedPreferences("SaveUserName",
+        AppCompatActivity.MODE_PRIVATE
+    ).edit()
+    editor.putString("user_name", UserName)
+    editor.apply()
+}
 fun savePhoneNo(context:Context,phone : String){
     val editor : SharedPreferences.Editor = context.getSharedPreferences("savePhoneNo",
         AppCompatActivity.MODE_PRIVATE

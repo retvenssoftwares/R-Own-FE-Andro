@@ -170,4 +170,15 @@ interface PriofileCompletionApis{
         @Body details: PostVendorSerivces
     ):Call<UpdateResponse>
 
+    @Multipart
+    @POST("/document")
+    fun uploadDocs(
+        @Part("user_id") user_id : RequestBody,
+//        @Part("CountryorRegion") CountryorRegion: RequestBody,
+        @Part("Category") Category: RequestBody,
+        @Part("User_name") User_name: RequestBody,
+        @Part("Full_name") Full_name: RequestBody,
+        @Part Documents: MultipartBody.Part,
+    ): Call<UpdateResponse>
+
 }

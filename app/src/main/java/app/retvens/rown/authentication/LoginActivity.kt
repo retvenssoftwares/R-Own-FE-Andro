@@ -137,6 +137,11 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             val intent = Intent(Intent.ACTION_VIEW,uri)
             startActivity(intent)
         }
+        binding.tnc.setOnClickListener{
+            val uri : Uri = Uri.parse("https://www.r-own.com/terms-and-conditions")
+            val intent = Intent(Intent.ACTION_VIEW,uri)
+            startActivity(intent)
+        }
 
         //googleLogin
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

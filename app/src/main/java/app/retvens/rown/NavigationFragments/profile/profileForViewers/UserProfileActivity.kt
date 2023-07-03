@@ -130,6 +130,7 @@ class UserProfileActivity : AppCompatActivity() {
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
                 removeConnection(userID,user_id, applicationContext, connStatus)
+                card_message.visibility = View.GONE
             } else if (connStatus.text == "CONNECT") {
                 sendConnectionRequest(userID, applicationContext, connStatus)
                 connStatus.text = "Requested"

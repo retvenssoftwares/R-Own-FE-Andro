@@ -129,5 +129,6 @@
     <string name="Sample_Time" translatable="false">11:15</string>
     <string name="this_is_title" translatable="false">This is title</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="apply_for_verification_text">Verified accounts display a green checkmark next to their names, indicating that we have verified their authenticity as representatives of public figures, celebrities, or brands.</string>
 
 </resources>

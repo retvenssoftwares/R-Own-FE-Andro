@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.util.query
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.AllReviewAdapter
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.AllReviewsData
 import app.retvens.rown.NavigationFragments.profile.vendorsReview.QuickReviewAdapter
@@ -81,6 +82,12 @@ class VendorDetailsActivity : AppCompatActivity() {
             val bottomSheet = BottomSheetAddReview(title, vendorName, user_id)
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetAddReview.Review_TAG)}
+        }
+
+        binding.cardHire.setOnClickListener {
+            val intent = Intent(this, VendorProfileActivity::class.java)
+            intent.putExtra("userId", user_id)
+            startActivity(intent)
         }
     }
 

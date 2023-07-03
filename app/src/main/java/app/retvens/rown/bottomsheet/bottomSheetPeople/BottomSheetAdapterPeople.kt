@@ -24,7 +24,7 @@ import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 
-class BottomSheetAdapterPeople(val context: Context, val peopleList:ArrayList<Post>):RecyclerView.Adapter<BottomSheetAdapterPeople.ExplorePeopleViewholder>() {
+class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Post>):RecyclerView.Adapter<BottomSheetAdapterPeople.ExplorePeopleViewholder>() {
 
     var userId = ""
     interface ConnectClickListener {
@@ -163,6 +163,10 @@ class BottomSheetAdapterPeople(val context: Context, val peopleList:ArrayList<Po
         }
     }
 
+    fun searchConnection(searchText : List<Post>){
+        peopleList = searchText as ArrayList<Post>
+        notifyDataSetChanged()
+    }
     fun removeUser(data: List<Post>){
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()

@@ -52,10 +52,19 @@ class BlogsCommentAdapter(val context: Context, var commentList: List<Comment>):
         val data = commentList[position]
 
 
-        holder.name.text = data.User_name
+        if (data.User_name.isNotEmpty()){
+            holder.name.text = data.User_name
+        } else {
+            holder.name.text = data.User_name
+        }
         holder.comment.text = data.comment
         Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
+        if (data.replies.isNotEmpty()){
+            holder.relies.text = data.replies.size.toString() + " Replies"
+        } else {
+            holder.relies.visibility = View.GONE
+        }
         holder.relies.setOnClickListener {
             holder.recycler.visibility = View.VISIBLE
         }

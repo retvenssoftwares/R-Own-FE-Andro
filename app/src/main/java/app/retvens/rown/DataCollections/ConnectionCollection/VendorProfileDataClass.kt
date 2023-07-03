@@ -1,5 +1,7 @@
 package app.retvens.rown.DataCollections.ConnectionCollection
 
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.MesiboAccount
+
 data class RoleDetails(
     val vendorInfo: VendorInfo,
     val _id: String,
@@ -7,6 +9,7 @@ data class RoleDetails(
     val Profile_pic: String,
     val verificationStatus: String,
     val userBio: String,
+    val Mesibo_account: List<MesiboAccount>,
     val User_name: String,
     val location: String,
     val post_count: List<Post>,

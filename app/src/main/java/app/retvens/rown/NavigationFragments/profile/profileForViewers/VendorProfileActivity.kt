@@ -21,8 +21,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.VendorProfileDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
@@ -68,6 +70,7 @@ class VendorProfileActivity : AppCompatActivity() {
     var location = ""
     var verification = ""
     var profilePic = ""
+    var address =  ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,25 +99,23 @@ class VendorProfileActivity : AppCompatActivity() {
         services = findViewById(R.id.services)
 
         val userId = intent.getStringExtra("userId").toString()
-        val connStat = intent.getStringExtra("status").toString()
-        val address = intent.getStringExtra("address").toString()
 
-        if (address.isNotEmpty() && connStat == "Connected"){
-            card_message.visibility = View.VISIBLE
-        }
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        getUserPofile(userId,user_id)
+
+//        val connStat = intent.getStringExtra("status").toString()
+//        val address = intent.getStringExtra("address").toString()
+
+//        if (address.isNotEmpty() && connStat == "Connected"){
+//            card_message.visibility = View.VISIBLE
+//        }
         card_message.setOnClickListener{
-            val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
-            intent.putExtra(MesiboUI.PEER, address)
-            startActivity(intent)
-        }
-
-        if(connStat.isNotEmpty()){
-            if (connStat == "Not Connected"){
-                connStatus.text = "CONNECT"
-            } else if (connStat == "Connected"){
-                connStatus.text = "Interact"
-            } else {
-                connStatus.text = connStat
+            if (address.isNotEmpty()) {
+                val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
+                intent.putExtra(MesiboUI.PEER, address)
+                startActivity(intent)
             }
         }
 
@@ -122,11 +123,6 @@ class VendorProfileActivity : AppCompatActivity() {
             showFullImage(profilePic, this)
             true
         }
-
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        getUserPofile(userId,user_id)
 
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
@@ -136,10 +132,8 @@ class VendorProfileActivity : AppCompatActivity() {
                 connStatus.text = "Requested"
             } else  if (connStatus.text == "Requested") {
                 removeConnRequest(userId, applicationContext, connStatus)
-            } else if (connStatus.text == "Interact") {
-                val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
-                intent.putExtra(MesiboUI.PEER, address)
-                startActivity(intent)
+            } else if (connStatus.text == "Accept Connection") {
+                accceptRequest(userId)
             }
         }
 
@@ -262,6 +256,8 @@ class VendorProfileActivity : AppCompatActivity() {
                     val response = response.body()!!
                     Log.e("response",response.toString())
                     try{
+                        address = response.roleDetails.Mesibo_account.get(0).address
+
                         profilePic = response.roleDetails.Profile_pic
                         Glide.with(applicationContext).load(response.roleDetails.Profile_pic)
                             .into(profile)
@@ -287,6 +283,17 @@ class VendorProfileActivity : AppCompatActivity() {
 
                         if (response.connectionStatus == "Connected"){
                             connStatus.text = "Remove"
+                            card_message.visibility = View.VISIBLE
+//                            connStat = "Connected"
+                        }else if (response.connectionStatus == "Not connected"){
+                            connStatus.text = "CONNECT"
+//                            connStat = "Not Connected"
+                        }else if (response.connectionStatus ==  "Confirm request"){
+                            connStatus.text = "Accept Connection"
+//                            connStat = "Confirm request"
+                        } else{
+//                            connStat = response.data.connectionStatus
+                            connStatus.text = response.connectionStatus
                         }
                     } catch (e : NullPointerException){
                         Toast.makeText(applicationContext, e.toString(), Toast.LENGTH_SHORT).show()
@@ -302,6 +309,30 @@ class VendorProfileActivity : AppCompatActivity() {
             }
         })
     }
+    private fun accceptRequest(userId: String) {
 
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+        val accept = RetrofitBuilder.connectionApi.sendRequest(user_id, ConnectionDataClass(userId))
+
+        accept.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    connStatus.text = "Remove"
+                    Toast.makeText(applicationContext,"Request Accepted",Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(applicationContext,"Request Accepted",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 }

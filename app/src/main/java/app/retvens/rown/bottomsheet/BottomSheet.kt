@@ -1,6 +1,8 @@
 package app.retvens.rown.bottomsheet
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -197,6 +199,35 @@ class BottomSheet : BottomSheetDialogFragment() {
                                     usersProfileAdapter.removeUsersFromList(response.matchedContacts)
                                     usersProfileAdapter.notifyDataSetChanged()
                                     recycler.adapter = usersProfileAdapter
+
+                                    connectionsSerch.addTextChangedListener(object : TextWatcher {
+                                        override fun beforeTextChanged(
+                                            s: CharSequence?,
+                                            start: Int,
+                                            count: Int,
+                                            after: Int
+                                        ) {
+
+                                        }
+
+                                        override fun onTextChanged(
+                                            s: CharSequence?,
+                                            start: Int,
+                                            before: Int,
+                                            count: Int
+                                        ) {
+                                            val original = response.matchedContacts.toList()
+                                            val filter = original.filter { searchUser ->
+                                                searchUser.matchedNumber.Full_name.contains(s.toString(),ignoreCase = false)
+                                            }
+                                            usersProfileAdapter.searchConnection(filter)
+                                        }
+
+                                        override fun afterTextChanged(s: Editable?) {
+
+                                        }
+                                    })
+
                                 }catch (e:NullPointerException){
                                     empty.visibility = View.VISIBLE
                                     Log.e("error",e.message.toString())
@@ -261,6 +292,35 @@ class BottomSheet : BottomSheetDialogFragment() {
                                     explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.notifyDataSetChanged()
                                     recyclerAll.adapter = explorePeopleAdapter
+
+                                    connectionsSerch.addTextChangedListener(object : TextWatcher {
+                                        override fun beforeTextChanged(
+                                            s: CharSequence?,
+                                            start: Int,
+                                            count: Int,
+                                            after: Int
+                                        ) {
+
+                                        }
+
+                                        override fun onTextChanged(
+                                            s: CharSequence?,
+                                            start: Int,
+                                            before: Int,
+                                            count: Int
+                                        ) {
+                                            val original = explorePeopleDataClass.posts.toList()
+                                            val filter = original.filter { searchUser ->
+                                                searchUser.Full_name.contains(s.toString(),ignoreCase = false)
+                                            }
+                                            explorePeopleAdapter.searchConnection(filter)
+                                        }
+
+                                        override fun afterTextChanged(s: Editable?) {
+
+                                        }
+                                    })
+
                                 }catch (e:NullPointerException){
                                     Log.e("error",e.message.toString())
                                 }
