@@ -10,7 +10,7 @@
         <item name="android:textFontWeight" tools:targetApi="p">600</item>
         <!-- set the desired text size -->
     </style>
-
+    <string name = "default_notification_channel_id" translatable="false">Channel ID</string>
     <string name="navigation_drawer_close" translatable="false">Close Drawer</string>
     <string name="navigation_drawer_open" translatable="false">Open Drawer</string>
     <string name="world_s_1st">World\'s 1st</string>

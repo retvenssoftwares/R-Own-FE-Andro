@@ -40,4 +40,6 @@ object RetrofitBuilder {
     val exploreApis = retrofitBuilder2.create(ExploreApis::class.java)
 
     val Notification = retrofitBuilder2.create(Notification::class.java)
+
+    val calling = retrofitBuilder2.create(CallingInterface::class.java)
 }

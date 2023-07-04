@@ -40,14 +40,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.microedition.khronos.opengles.GL;
+
 import app.retvens.rown.Dashboard.DashBoardActivity;
 import app.retvens.rown.NavigationFragments.home.PostDetailsActivity;
 import app.retvens.rown.NavigationFragments.home.PostsViewActivity;
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity;
 import app.retvens.rown.R;
 
 public class MessageView extends RelativeLayout {
@@ -81,6 +85,11 @@ public class MessageView extends RelativeLayout {
     ShapeableImageView postImage;
     TextView caption;
     CardView postCard;
+    CardView profileCard;
+    TextView profileName;
+    TextView profileRole;
+    ShapeableImageView mprofile;
+    String type;
 
     public MessageView(Context context) {
         super(context);
@@ -104,6 +113,10 @@ public class MessageView extends RelativeLayout {
     public void init() {
         View v = this.mInflater.inflate(R.layout.message_view, this, true);
         this.mMessageView = v;
+        this.profileCard = v.findViewById(R.id.profileCard);
+        this.mprofile = v.findViewById(R.id.profile);
+        this.profileName = v.findViewById(R.id.profilename);
+        this.profileRole = v.findViewById(R.id.profileRole);
         this.postCard = v.findViewById(R.id.postCard);
         this.profile = v.findViewById(R.id.post_profile);
         this.fullName = v.findViewById(R.id.user_name_post);
@@ -144,6 +157,7 @@ public class MessageView extends RelativeLayout {
         }
     }
 
+    @SuppressLint("CheckResult")
     public void setData(MessageData data) {
         this.mData = data;
 
@@ -283,14 +297,15 @@ public class MessageView extends RelativeLayout {
                     this.mMessageTextView.setText(message + " " + MesiboConfiguration.FAVORITED_OUTGOING_MESSAGE_DATE_View);
                 }
             } else if (incoming) {
-                String input = message;
-                String[] parts = input.split(",");
-                if (parts[0].equals("this//is//the//$$//post")){
+                DecodeDataHelper decodeDataHelper = new DecodeDataHelper();
+                Map<String, String> decodedData = decodeDataHelper.decodeData(message);
+
+                Map<String, String> decodedprofile = Decoder.decodeProfileData(message);
+                String messageType = decodedData.get("messageType");
+                this.type = decodedData.get("messageType");
+                if (Objects.equals(this.type, "Post")){
                     this.mMessageTextView.setVisibility(8);
-                    DecodeDataHelper decodeDataHelper = new DecodeDataHelper();
-                    String encodedData = parts[1];
-                    Map<String, String> decodedData = decodeDataHelper.decodeData(encodedData);
-                    String messageType = decodedData.get("messageType");
+                    this.mprofile.setVisibility(8);
                     String userId = decodedData.get("userId");
                     String postId = decodedData.get("postId");
                     String profilePictureLink = decodedData.get("profilePictureLink");
@@ -298,6 +313,7 @@ public class MessageView extends RelativeLayout {
                     String username = decodedData.get("username");
                     String caption = decodedData.get("caption");
                     String fullName = decodedData.get("fullName");
+                    String verication = decodedData.get("verificationStatus");
 
                     this.fullName.setText(fullName);
                     this.caption.setText(caption);
@@ -305,7 +321,6 @@ public class MessageView extends RelativeLayout {
                     Glide.with(this).load(profilePictureLink).into(this.profile);
                     Glide.with(this).load(firstImageLink).into(this.postImage);
                     this.postCard.setVisibility(0);
-
                     this.postCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -315,25 +330,56 @@ public class MessageView extends RelativeLayout {
                         }
                     });
                     Log.e("3","working");
-                }else {
+                }else if(Objects.equals(messageType, "Profile")){
+                    this.profileCard.setVisibility(0);
+                    this.mMessageTextView.setVisibility(8);
                     this.postCard.setVisibility(8);
+                    String userID = decodedprofile.get("userID");
+                    String verificationStatus = decodedprofile.get("verificationStatus");
+                    String fullName = decodedprofile.get("fullName");
+                    String userName = decodedprofile.get("userName");
+                    String userRole = decodedprofile.get("userRole");
+                    String pic = decodedprofile.get("profilePictureLink");
+
+                    Log.e("11",fullName);
+                    Log.e("22",pic);
+                    Log.e("11",userRole);
+
+                    this.profileName.setText(fullName);
+                    this.profileRole.setText(userRole);
+                    Glide.with(this).load(pic).into(this.mprofile);
+
+                    this.profileCard.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, PostsViewActivity.class);
+                            intent.putExtra("userId", userID);
+                            context.startActivity(intent);
+                        }
+                    });
+
+                }
+                else {
+                    this.postCard.setVisibility(8);
+                    this.profileCard.setVisibility(8);
                     this.mMessageTextView.setText(message + " " + "              ");
                 }
             } else {
-                String input = message;
-                String[] parts = input.split(",");
-                if (parts[0].equals("this//is//the//$$//post")){
+                DecodeDataHelper decodeDataHelper = new DecodeDataHelper();
+                Map<String, String> decodedData = decodeDataHelper.decodeData(message);
+                Map<String, String> decodedprofile = Decoder.decodeProfileData(message);
+                String messageType = decodedData.get("messageType");
+                this.type = decodedData.get("messageType");
+                if (Objects.equals(this.type, "Post")){
                     this.mMessageTextView.setVisibility(8);
-                    DecodeDataHelper decodeDataHelper = new DecodeDataHelper();
-                    String encodedData = parts[1];
-                    Map<String, String> decodedData = decodeDataHelper.decodeData(encodedData);
-                    String messageType = decodedData.get("messageType");
+                    this.profileCard.setVisibility(8);
                     String userId = decodedData.get("userId");
                     String postId = decodedData.get("postId");
                     String profilePictureLink = decodedData.get("profilePictureLink");
                     String firstImageLink = decodedData.get("firstImageLink");
                     String username = decodedData.get("username");
                     String caption = decodedData.get("caption");
+                    String verication = decodedData.get("verificationStatus");
                     String fullName = decodedData.get("fullName");
 
                     this.fullName.setText(fullName);
@@ -347,13 +393,41 @@ public class MessageView extends RelativeLayout {
                     this.postCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, PostsViewActivity.class);
+                            Intent intent = new Intent(context, UserProfileActivity.class);
                             intent.putExtra("postId", postId);
                             context.startActivity(intent);
                         }
                     });
-                }else {
+                }else if(Objects.equals(messageType, "Profile")){
+                    this.profileCard.setVisibility(0);
+                    this.mMessageTextView.setVisibility(8);
                     this.postCard.setVisibility(8);
+                    String userID = decodedprofile.get("userID");
+                    String verificationStatus = decodedprofile.get("verificationStatus");
+                    String fullName = decodedprofile.get("fullName");
+                    String userName = decodedprofile.get("userName");
+                    String userRole = decodedprofile.get("userRole");
+                    String pic = decodedprofile.get("profilePictureLink");
+
+                    Log.e("55",fullName);
+                    Log.e("66",pic);
+                    Log.e("77",userRole);
+
+                    this.profileName.setText(fullName);
+                    this.profileRole.setText(userRole);
+                    Glide.with(this).load(pic).into(this.mprofile);
+                    this.profileCard.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(context, UserProfileActivity.class);
+                            intent.putExtra("userId", userID);
+                            context.startActivity(intent);
+                        }
+                    });
+
+                } else {
+                    this.postCard.setVisibility(8);
+                    this.profileCard.setVisibility(8);
                     this.mMessageTextView.setText(message + " " + MesiboConfiguration.NORMAL_OUTGOING_MESSAGE_DATE_View);
                 }
 
@@ -361,6 +435,7 @@ public class MessageView extends RelativeLayout {
         } else {
             this.mMessageTextView.setVisibility(8);
             this.postCard.setVisibility(8);
+            this.profileCard.setVisibility(8);
         }
         if (thumbnail == null) {
             PTTParams.width = -2;
@@ -380,13 +455,42 @@ public class MessageView extends RelativeLayout {
         this.mPictureThumbnail.setImage(image);
     }
 
-    public class DecodeDataHelper {
-        public Map<String, String> decodeData(String encodedData) {
-            List<String> keys = List.of("messageType", "userId", "postId", "profilePictureLink", "firstImageLink", "username", "caption", "fullName");
+    public static class DecodeDataHelper {
+        public static String decodeString(String input, int shift) {
+            StringBuilder decodedData = new StringBuilder();
+            for (char ch : input.toCharArray()) {
+                int asciiValue = (int) ch;
+                if (Character.isLetter(ch)) {
+                    boolean isUpperCase = Character.isUpperCase(ch);
+                    int base = isUpperCase ? 65 : 97;
+                    int decodedAscii = (asciiValue - base - shift + 26) % 26;
+                    char decodedChar = (char) (decodedAscii + base);
+                    decodedData.append(decodedChar);
+                } else {
+                    decodedData.append(ch);
+                }
+            }
+            return decodedData.toString();
+        }
+
+        public static Map<String, String> decodeData(String encodedData) {
             List<String> values = Arrays.asList(encodedData.split("\\|"));
-            List<String> decodedValues = values.stream().map((value) -> {
-                int index = values.indexOf(value);
-                int shift = 0;
+            List<String> keys = Arrays.asList(
+                    "messageType",
+                    "userId",
+                    "postId",
+                    "profilePictureLink",
+                    "firstImageLink",
+                    "username",
+                    "caption",
+                    "verificationStatus",
+                    "fullName"
+            );
+
+            List<String> decodedValues = new ArrayList<>();
+            for (int index = 0; index < values.size(); index++) {
+                String value = values.get(index);
+                int shift;
                 switch (index) {
                     case 0:
                         shift = 3;
@@ -412,38 +516,121 @@ public class MessageView extends RelativeLayout {
                     case 7:
                         shift = 8;
                         break;
+                    case 8:
+                        shift = 9;
+                        break;
                     default:
                         shift = 0;
-                        break;
                 }
-                return decodeString(value, shift);
-            }).collect(Collectors.toList());
-
-            if (keys.size() != decodedValues.size()) {
-                throw new IllegalArgumentException("Number of keys and values do not match.");
+                decodedValues.add(decodeString(value, shift));
             }
 
             Map<String, String> decodedData = new HashMap<>();
-            for (int i = 0; i < keys.size(); i++) {
-                decodedData.put(keys.get(i), decodedValues.get(i));
+            int minSize = Math.min(keys.size(), decodedValues.size()); // Ensure iterating over the smaller size
+
+            try {
+                for (int i = 0; i < minSize; i++) {
+                    String key = keys.get(i);
+                    String value = decodedValues.get(i);
+                    decodedData.put(key, value);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                // Handle the exception here
+                // You can log an error message, provide a default value, or take appropriate action
+                System.err.println("Index out of bounds: " + e.getMessage());
+                // Perform fallback behavior or recovery steps if needed
+            }
+
+            return decodedData;
+        }
+    }
+
+
+    public static class Decoder {
+        public static Map<String, String> decodeProfileData(String encodedData) {
+            List<String> keys = Arrays.asList(
+                    "messageType",
+                    "userID",
+                    "verificationStatus",
+                    "fullName",
+                    "userName",
+                    "userRole",
+                    "profilePictureLink"
+            );
+            List<String> values = new ArrayList<>(Arrays.asList(encodedData.split("\\|")));
+
+            List<String> decodedValues = new ArrayList<>();
+            for (int index = 0; index < values.size(); index++) {
+                String value = values.get(index);
+                int shift;
+                switch (index) {
+                    case 0:
+                        shift = 3;
+                        break;
+                    case 1:
+                        shift = 5;
+                        break;
+                    case 2:
+                        shift = 2;
+                        break;
+                    case 3:
+                        shift = 4;
+                        break;
+                    case 4:
+                        shift = 1;
+                        break;
+                    case 5:
+                        shift = 6;
+                        break;
+                    case 6:
+                        shift = 7;
+                        break;
+                    default:
+                        shift = 0;
+                }
+                decodedValues.add(decodeString(value, shift));
+            }
+
+            Map<String, String> decodedData = new HashMap<>();
+            int minSize = Math.min(keys.size(), decodedValues.size()); // Ensure iterating over the smaller size
+
+            try {
+                for (int i = 0; i < minSize; i++) {
+                    String key = keys.get(i);
+                    String value = decodedValues.get(i);
+                    decodedData.put(key, value);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                // Handle the exception here
+                // You can log an error message, provide a default value, or take appropriate action
+                System.err.println("Index out of bounds: " + e.getMessage());
+                // Perform fallback behavior or recovery steps if needed
             }
 
             return decodedData;
         }
 
-        public String decodeString(String encodedData, int shift) {
+        public static String decodeString(String input, int shift) {
             StringBuilder decodedData = new StringBuilder();
-            for (char c : encodedData.toCharArray()) {
-                if (Character.isLetter(c)) {
-                    char base = Character.isLowerCase(c) ? 'a' : 'A';
-                    int decodedAscii = (c - base - shift + 26) % 26;
+            for (char ch : input.toCharArray()) {
+                if (Character.isLetter(ch)) {
+                    char base = Character.isLowerCase(ch) ? 'a' : 'A';
+                    int decodedAscii = (ch - base - shift + 26) % 26;
                     char decodedChar = (char) (decodedAscii + base);
                     decodedData.append(decodedChar);
                 } else {
-                    decodedData.append(c);
+                    decodedData.append(ch);
                 }
             }
             return decodedData.toString();
         }
     }
+
+
+
+
+
+
+
+
 }

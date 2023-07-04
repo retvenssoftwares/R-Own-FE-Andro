@@ -12,6 +12,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -38,12 +39,26 @@ import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboMessage;
 import com.mesibo.api.MesiboProfile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import app.retvens.rown.ApiRequest.CallDataClass;
+import app.retvens.rown.ApiRequest.CallResponse;
+import app.retvens.rown.ApiRequest.RetrofitBuilder;
 import app.retvens.rown.Dashboard.ChatActivity;
 import app.retvens.rown.Dashboard.DashBoardActivity;
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse;
 import app.retvens.rown.R;
 import app.retvens.rown.api.MesiboCall;
 import app.retvens.rown.api.p000ui.MesiboDefaultCallActivity;
 import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MesiboMessagingActivity extends AppCompatActivity implements MesiboMessagingFragment.FragmentListener, Mesibo.ConnectionListener {
@@ -177,6 +192,17 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             }
             startFragment(savedInstanceState);
         }
+        String peer = args.getString(MesiboUI.PEER);
+        MesiboProfile profile = new MesiboProfile();
+        profile = Mesibo.getProfile(peer);
+
+        String Status = profile.getStatus();
+
+        Map<String, String> decodedData = Decoder.decodeData(Status);
+
+        String userID = decodedData.get("userID");
+        String userRole = decodedData.get("userRole");
+
         this.callButton = findViewById(R.id.action_call);
         this.videoCallButton = findViewById(R.id.action_videocall);
 
@@ -185,10 +211,16 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             this.videoCallButton.setVisibility(View.GONE);
         }
 
-        String destination = "destination";
+
         this.callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE);
+                String user_id = sharedPreferences1.getString("user_id", "");
+                Log.e("userID",userID);
+                Log.e("user_id",user_id);
+            backgroundCall(user_id,userID);
+
 /**
  //    if (view.getId() == R.id.imageView2) { // For Calling
  // if (0 == mParameter.groupid) {
@@ -206,22 +238,18 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
  intent.putExtra("incoming", false);
  startActivity(intent);*/
 //                Log.e("Aditya", "reached");
-                if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)) {
 
-                    Log.e("Arr", String.valueOf(MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)));
-                    MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
-                }
-                launchCustomCallActivity(destination, true, false);
 
             }
 
 
         });
-
+        String destination = "destination";
         this.videoCallButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SuspiciousIndentation")
             @Override
             public void onClick(View view) {
+
                 Log.e("Aditya", "reached1");
                 /**if (view.getId() == R.id.imageView4) {
                  //if(0 == mParameter.groupid) {
@@ -487,5 +515,96 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             ActionMode unused = MesiboMessagingActivity.this.mActionMode = null;
         }
     }
+
+    public static class Decoder {
+        public static Map<String, String> decodeData(String encodedData) {
+            String[] decodedValues = encodedData.split("\\|");
+            List<String> keys = Arrays.asList("userID", "userRole");
+            List<String> values = new ArrayList<>();
+
+            for (int index = 0; index < decodedValues.length; index++) {
+                String value = decodedValues[index];
+                int shift = 0;
+                switch (index) {
+                    case 0:
+                        shift = 5;
+                        break;
+                    case 1:
+                        shift = 6;
+                        break;
+                    default:
+                        break;
+                }
+                String decodedValue = decodeString(value, shift);
+                values.add(decodedValue);
+            }
+
+            Map<String, String> decodedData = new HashMap<>();
+            int minSize = Math.min(keys.size(), values.size()); // Ensure iterating over the smaller size
+
+            try {
+                for (int i = 0; i < minSize; i++) {
+                    String key = keys.get(i);
+                    String value = values.get(i);
+                    decodedData.put(key, value);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                // Handle the exception here
+                // You can log an error message, provide a default value, or take appropriate action
+                System.err.println("Index out of bounds: " + e.getMessage());
+                // Perform fallback behavior or recovery steps if needed
+            }
+
+            return decodedData;
+        }
+
+        public static String decodeString(String input, int shift) {
+            StringBuilder decodedData = new StringBuilder();
+            for (char ch : input.toCharArray()) {
+                if (Character.isLetter(ch)) {
+                    char base = Character.isLowerCase(ch) ? 'a' : 'A';
+                    int decodedAscii = (ch - base - shift + 26) % 26;
+                    char decodedChar = (char) (decodedAscii + base);
+                    decodedData.append(decodedChar);
+                } else {
+                    decodedData.append(ch);
+                }
+            }
+            return decodedData.toString();
+        }
+    }
+
+
+
+    public void backgroundCall(String senderUserID, String receiverUserID) {
+
+        String destination = "destination";
+        Call<CallResponse> call = RetrofitBuilder.INSTANCE.getCalling().calling(receiverUserID, new CallDataClass(senderUserID));
+        call.enqueue(new Callback<CallResponse>() {
+            @Override
+            public void onResponse(Call<CallResponse> call, Response<CallResponse> response) {
+                if (response.isSuccessful()) {
+                    CallResponse callResponse = response.body();
+                    Log.e("success",callResponse.getMessage());
+                    if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)) {
+
+                        Log.e("Arr", String.valueOf(MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)));
+                        MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
+                    }
+                    launchCustomCallActivity(destination, true, false);
+                } else {
+                    Log.e("success",response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallResponse> call, Throwable t) {
+                Log.e("success",t.getMessage().toString());
+            }
+        });
+    }
+
+
+
 
 }

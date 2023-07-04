@@ -261,4 +261,63 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/profileCard"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:cardCornerRadius="20dp"
+        android:backgroundTint="#5A5858"
+        android:visibility="gone"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        >
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            >
+            
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@id/profile"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                app:shapeAppearanceOverlay="@style/RoundedCornerImage"
+                android:src="@drawable/peoplevector"
+
+                />
+
+            <TextView
+                android:id="@+id/profilename"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="Rahul Bhalerao"
+                android:textSize="20dp"
+                android:textFontWeight="700"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat_semibold"
+                android:layout_toEndOf="@+id/profile" />
+
+            <TextView
+                android:id="@+id/profileRole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profilename"
+                android:layout_marginTop="3dp"
+                android:layout_toEndOf="@+id/profile"
+                android:layout_marginStart="15dp"
+                android:text="Normal User"
+                android:textSize="14dp"
+                android:textColor="@color/grey"
+                android:fontFamily="@font/montserrat_regular"
+                android:textFontWeight="500"
+                />
+            
+        </RelativeLayout>
+        
+    </androidx.cardview.widget.CardView>
+
 </RelativeLayout>

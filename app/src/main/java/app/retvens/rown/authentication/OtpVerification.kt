@@ -236,6 +236,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
                 Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
@@ -309,6 +310,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                     }
 
                 }else{
+
                     Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
                 }
 
@@ -316,6 +318,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
 
             override fun onFailure(call: Call<MesiboResponseClass?>, t: Throwable) {
                 Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                Log.e("help",t.message.toString())
             }
         })
 

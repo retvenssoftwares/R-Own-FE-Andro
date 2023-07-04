@@ -106,15 +106,15 @@ class BottomSheetSharePost(val datas:String) : BottomSheetDialogFragment() {
 
 //                // Create a MesiboMessage object and set its profile and message text
                 val sendmessage:MesiboMessage = recipientProfile.newMessage()
-                sendmessage.message = "this//is//the//$$//post,$datas"
+                sendmessage.message = datas
                 sendmessage.send()
 
-                val extract = decodeData(datas)
-                Log.e("extract",extract.toString())
-
-                extract.forEach { (key, value) ->
-                    println("$key: $value")
-                }
+//                val extract = decodeData(datas)
+//                Log.e("extract",extract.toString())
+//
+//                extract.forEach { (key, value) ->
+//                    println("$key: $value")
+//                }
             }
 
 
@@ -134,41 +134,6 @@ class BottomSheetSharePost(val datas:String) : BottomSheetDialogFragment() {
         mListener = null
     }
 
-    fun decodeData(encodedData: String): Map<String, String> {
-        val keys = listOf("messageType", "userId", "postId", "profilePictureLink", "firstImageLink", "username", "caption","fullName")
-        val values = encodedData.split('|')
-        val decodedValues = values.mapIndexed { index, value ->
-            val shift = when (index) {
-                0 -> 3 // Example: Caesar cipher shift for messageType
-                1 -> 5 // Example: Caesar cipher shift for userId
-                2 -> 2 // Example: Caesar cipher shift for postId
-                3 -> 4 // Example: Caesar cipher shift for profilePictureLink
-                4 -> 1 // Example: Caesar cipher shift for firstImageLink
-                5 -> 6 // Example: Caesar cipher shift for username
-                6 -> 7 // Example: Caesar cipher shift for caption
-                7 -> 8
-                else -> 0
-            }
-            decodeString(value, shift)
-        }
 
-        return keys.zip(decodedValues).toMap()
-    }
-
-    fun decodeString(encodedData: String, shift: Int): String {
-        val decodedData = StringBuilder()
-        for (char in encodedData) {
-            // Example: Caesar cipher decoding with a shift of 'shift' to reverse the encoding
-            val decodedChar = if (char.isLetter()) {
-                val base = if (char.isLowerCase()) 'a' else 'A'
-                val decodedAscii = (char.toInt() - base.toInt() - shift + 26) % 26
-                (decodedAscii + base.toInt()).toChar()
-            } else {
-                char
-            }
-            decodedData.append(decodedChar)
-        }
-        return decodedData.toString()
-    }
 
 }

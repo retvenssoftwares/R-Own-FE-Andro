@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ConnectionApis {
@@ -56,5 +57,12 @@ interface ConnectionApis {
         @Path("userId")userId:String,
         @Path("connUserId")connUserId:String
     ):Call<VendorProfileDataClass>
+
+    @POST("call/{receiveruserId}")
+    fun calling(
+        @Path("receiveruserId")receiveruserId:String,
+        @Body senderUserId:String
+    ):Call<UpdateResponse>
+
 
 }

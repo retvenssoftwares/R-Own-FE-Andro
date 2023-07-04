@@ -1,27 +1,5 @@
-package app.retvens.rown
+package app.retvens.rown.NavigationFragments.exploreForUsers.events
 
-import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.util.Log
-import android.widget.RemoteViews
-import app.retvens.rown.ApiRequest.MesiboBackgroundService
-import app.retvens.rown.Dashboard.DashBoardActivity
-import app.retvens.rown.api.MesiboCall
-import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.RemoteMessage
-import com.google.firebase.messaging.ktx.remoteMessage
-
-@SuppressLint("MissingFirebaseInstanceTokenRefresh")
-
-const val channelId = "Notification_Channel"
-const val channelName = "app.retvens.rown"
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {

@@ -100,6 +100,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -215,6 +216,8 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     private boolean mLoading = false;
     private long mLoadTs = 0L;
     private boolean mGoogleApiClientChecked = false;
+    private String userID;
+    private String userRole;
 
     public MessagingFragment() {
     }
@@ -235,6 +238,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         if (null == container) {
             return null;
         } else {
@@ -256,6 +260,16 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                         this.mMessageList = new ArrayList();
                     }
                 }
+                MesiboProfile profile = new MesiboProfile();
+                profile = Mesibo.getProfile(peer);
+                String Status = profile.getStatus();
+
+                Map<String, String> decodedData = Decoder.decodeData(Status);
+
+                this.userID = decodedData.get("userID");
+                this.userRole = decodedData.get("userRole");
+
+
 
                 this.mPeer = peer;
                 this.mGroupId = gid;
@@ -489,6 +503,69 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     return view;
                 }
             }
+
+        }
+
+
+
+    }
+
+
+    public static class Decoder {
+        public static Map<String, String> decodeData(String encodedData) {
+            String[] decodedValues = encodedData.split("\\|");
+            List<String> keys = Arrays.asList("userID", "userRole");
+            List<String> values = new ArrayList<>();
+
+            for (int index = 0; index < decodedValues.length; index++) {
+                String value = decodedValues[index];
+                int shift = 0;
+                switch (index) {
+                    case 0:
+                        shift = 5;
+                        break;
+                    case 1:
+                        shift = 6;
+                        break;
+                    default:
+                        break;
+                }
+                String decodedValue = decodeString(value, shift);
+                values.add(decodedValue);
+            }
+
+            Map<String, String> decodedData = new HashMap<>();
+            int minSize = Math.min(keys.size(), values.size()); // Ensure iterating over the smaller size
+
+            try {
+                for (int i = 0; i < minSize; i++) {
+                    String key = keys.get(i);
+                    String value = values.get(i);
+                    decodedData.put(key, value);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                // Handle the exception here
+                // You can log an error message, provide a default value, or take appropriate action
+                System.err.println("Index out of bounds: " + e.getMessage());
+                // Perform fallback behavior or recovery steps if needed
+            }
+
+            return decodedData;
+        }
+
+        public static String decodeString(String input, int shift) {
+            StringBuilder decodedData = new StringBuilder();
+            for (char ch : input.toCharArray()) {
+                if (Character.isLetter(ch)) {
+                    char base = Character.isLowerCase(ch) ? 'a' : 'A';
+                    int decodedAscii = (ch - base - shift + 26) % 26;
+                    char decodedChar = (char) (decodedAscii + base);
+                    decodedData.append(decodedChar);
+                } else {
+                    decodedData.append(ch);
+                }
+            }
+            return decodedData.toString();
         }
     }
 
@@ -1149,6 +1226,17 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 
     public void Mesibo_onMessage(MesiboMessage msg) {
 
+        if (msg.isIncoming()){
+            Log.e("check","1");
+            if (msg.isRealtimeMessage()){
+                Log.e("check","2");
+            }else {
+                Log.e("check","3");
+            }
+        }else if (msg.isOutgoing()){
+            Log.e("check","4");
+        }
+
         if (!msg.isIncomingCall() && !msg.isOutgoingCall()) {
             if (this.isForMe(msg)) {
                 if (msg.isEndToEndEncryptionStatus()) {
@@ -1172,6 +1260,9 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     }
 
                 }
+
+
+
             }
         } else {
             this.updateUiIfLastMessage(msg);

@@ -35,6 +35,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetSharePost
 import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
@@ -71,6 +72,8 @@ class VendorProfileActivity : AppCompatActivity() {
     var verification = ""
     var profilePic = ""
     var address =  ""
+    var fullName = ""
+    var userName =  ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -221,7 +224,10 @@ class VendorProfileActivity : AppCompatActivity() {
             }
 
             dialogLanguage.findViewById<LinearLayout>(R.id.shareProfileInMessage).setOnClickListener {
-
+                val share = encodeData("Profile",userId,verification, fullName ,userName,"Business Vendor / Freelancerb",profilePic)
+                val bottomSheet = BottomSheetSharePost(share)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetSharePost.Company_TAG)}
                 dialogLanguage.dismiss()
             }
 
@@ -265,7 +271,8 @@ class VendorProfileActivity : AppCompatActivity() {
                         profile_username.text = response.roleDetails.User_name
                         bio.text = response.roleDetails.vendorInfo.vendorDescription
                         websiteLink.text = response.roleDetails.vendorInfo.websiteLink
-
+                        fullName = response.roleDetails.Full_name
+                        userName = response.roleDetails.User_name
                         val transaction = supportFragmentManager.beginTransaction()
                         transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId, false, name.text.toString()))
                         transaction.commit()
@@ -334,5 +341,39 @@ class VendorProfileActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
+    }
+    fun encodeData(
+        messageType: String,
+        userID: String,
+        verificationStatus: String,
+        fullName: String,
+        userName: String,
+        userRole: String,
+        profilePictureLink: String
+    ): String {
+        val encodedMessageType = encodeString(messageType, 3)
+        val encodedUserID = encodeString(userID, 5)
+        val encodedVerificationStatus = encodeString(verificationStatus, 2)
+        val encodedFullName = encodeString(fullName, 4)
+        val encodedUserName = encodeString(userName, 1)
+        val encodedUserRole = encodeString(userRole, 6)
+        val encodedProfilePictureLink = encodeString(profilePictureLink, 7)
+
+        return "$encodedMessageType|$encodedUserID|$encodedVerificationStatus|$encodedFullName|$encodedUserName|$encodedUserRole|$encodedProfilePictureLink"
+    }
+
+    fun encodeString(input: String, shift: Int): String {
+        val encodedData = StringBuilder()
+        for (char in input) {
+            if (char.isLetter()) {
+                val base = if (char.isLowerCase()) 'a' else 'A'
+                val encodedAscii = (char.toInt() - base.toInt() + shift) % 26
+                val encodedChar = (encodedAscii + base.toInt()).toChar()
+                encodedData.append(encodedChar)
+            } else {
+                encodedData.append(char)
+            }
+        }
+        return encodedData.toString()
     }
 }

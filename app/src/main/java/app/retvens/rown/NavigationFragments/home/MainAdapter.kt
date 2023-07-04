@@ -149,7 +149,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                             binding.likePost.setImageResource(R.drawable.svg_like_post)
                         }
 
-            val messageType = post.post_type
+            val messageType = "Post"
             val userId = post.user_id
             val postId = post.post_id
             val profilePictureLink = post.Profile_pic
@@ -157,7 +157,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             val username = post.User_name
             val caption = post.caption
             val fullName = post.Full_name
-            val encodedData = encodeData(messageType, userId, postId, profilePictureLink, firstImageLink, username, caption,fullName)
+            val verificationStatus = post.verificationStatus
+            val encodedData = encodeData(messageType, userId, postId, profilePictureLink, firstImageLink, username, caption,verificationStatus,fullName)
 
             binding.sharePost.setOnClickListener {
                 onItemClickListener?.onItemsharePost(encodedData)
@@ -946,33 +947,35 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
         firstImageLink: String,
         username: String,
         caption: String,
-        fullName:String
+        verificationStatus: String,
+        fullName: String
     ): String {
-        val encodedMessageType = encodeString(messageType, 3) // Example: Caesar cipher with a shift of 3
-        val encodedUserId = encodeString(userId, 5) // Example: Caesar cipher with a shift of 5
-        val encodedPostId = encodeString(postId, 2) // Example: Caesar cipher with a shift of 2
-        val encodedProfilePictureLink = encodeString(profilePictureLink, 4) // Example: Caesar cipher with a shift of 4
-        val encodedFirstImageLink = encodeString(firstImageLink, 1) // Example: Caesar cipher with a shift of 1
-        val encodedUsername = encodeString(username, 6) // Example: Caesar cipher with a shift of 6
-        val encodedCaption = encodeString(caption, 7) // Example: Caesar cipher with a shift of 7
-        val encodedFullName = encodeString(fullName,8)
+        val encodedMessageType = encodeString(messageType, 3)
+        val encodedUserId = encodeString(userId, 5)
+        val encodedPostId = encodeString(postId, 2)
+        val encodedProfilePictureLink = encodeString(profilePictureLink, 4)
+        val encodedFirstImageLink = encodeString(firstImageLink, 1)
+        val encodedUsername = encodeString(username, 6)
+        val encodedCaption = encodeString(caption, 7)
+        val encodedVerificationStatus = encodeString(verificationStatus, 8)
+        val encodedFullName = encodeString(fullName, 9)
 
-        return "$encodedMessageType|$encodedUserId|$encodedPostId|$encodedProfilePictureLink|$encodedFirstImageLink|$encodedUsername|$encodedCaption|$encodedFullName"
+        return "$encodedMessageType|$encodedUserId|$encodedPostId|$encodedProfilePictureLink|$encodedFirstImageLink|$encodedUsername|$encodedCaption|$encodedVerificationStatus|$encodedFullName"
     }
-
 
     fun encodeString(input: String, shift: Int): String {
         val encodedData = StringBuilder()
         for (char in input) {
-            // Example: Caesar cipher encoding with a shift of 'shift'
-            val encodedChar = if (char.isLetter()) {
-                val base = if (char.isLowerCase()) 'a' else 'A'
-                val encodedAscii = (char.toInt() - base.toInt() + shift) % 26
-                (encodedAscii + base.toInt()).toChar()
+            val asciiValue = char.toInt()
+            if (char.isLetter()) {
+                val isUpperCase = char.isUpperCase()
+                val base = if (isUpperCase) 65 else 97
+                val encodedAscii = (asciiValue - base + shift) % 26
+                val encodedChar = (encodedAscii + base).toChar()
+                encodedData.append(encodedChar)
             } else {
-                char
+                encodedData.append(char)
             }
-            encodedData.append(encodedChar)
         }
         return encodedData.toString()
     }

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetSharePost
 import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
@@ -72,7 +74,8 @@ class OwnerProfileActivity : AppCompatActivity() {
     var verification = ""
     var profilePic = ""
     var address =  ""
-
+    var userName = ""
+    var role = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -240,7 +243,10 @@ class OwnerProfileActivity : AppCompatActivity() {
             }
 
             dialogLanguage.findViewById<LinearLayout>(R.id.shareProfileInMessage).setOnClickListener {
-
+                val share = encodeData("Profile",userID,verification,nameProfile,userName,"Hotel Owner",profilePic)
+                val bottomSheet = BottomSheetSharePost(share)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetSharePost.Company_TAG)}
                 dialogLanguage.dismiss()
             }
 
@@ -279,7 +285,7 @@ class OwnerProfileActivity : AppCompatActivity() {
                     nameProfile = response.profiledata.User_name
                     bio.text = response.profiledata.userBio
                     websiteLink.text = response.profile.hotelOwnerInfo.websiteLink
-
+                    userName = response.profiledata.User_name
                     val transaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
                     transaction.commit()
@@ -338,5 +344,40 @@ class OwnerProfileActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    fun encodeData(
+        messageType: String,
+        userID: String,
+        verificationStatus: String,
+        fullName: String,
+        userName: String,
+        userRole: String,
+        profilePictureLink: String
+    ): String {
+        val encodedMessageType = encodeString(messageType, 3)
+        val encodedUserID = encodeString(userID, 5)
+        val encodedVerificationStatus = encodeString(verificationStatus, 2)
+        val encodedFullName = encodeString(fullName, 4)
+        val encodedUserName = encodeString(userName, 1)
+        val encodedUserRole = encodeString(userRole, 6)
+        val encodedProfilePictureLink = encodeString(profilePictureLink, 7)
+
+        return "$encodedMessageType|$encodedUserID|$encodedVerificationStatus|$encodedFullName|$encodedUserName|$encodedUserRole|$encodedProfilePictureLink"
+    }
+
+    fun encodeString(input: String, shift: Int): String {
+        val encodedData = StringBuilder()
+        for (char in input) {
+            if (char.isLetter()) {
+                val base = if (char.isLowerCase()) 'a' else 'A'
+                val encodedAscii = (char.toInt() - base.toInt() + shift) % 26
+                val encodedChar = (encodedAscii + base.toInt()).toChar()
+                encodedData.append(encodedChar)
+            } else {
+                encodedData.append(char)
+            }
+        }
+        return encodedData.toString()
     }
 }
