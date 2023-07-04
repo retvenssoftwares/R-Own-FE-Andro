@@ -3,6 +3,7 @@ package app.retvens.rown.ApiRequest
 import app.retvens.rown.DataCollections.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.onboarding.*
+import app.retvens.rown.NavigationFragments.profile.setting.profileSetting.CheckContacts
 import app.retvens.rown.authentication.UpdateInterestClass
 import app.retvens.rown.bottomsheet.bottomSheetPeople.BottomSheetPeopleData
 import okhttp3.MultipartBody
@@ -81,6 +82,11 @@ interface RownUrl {
     @POST("contacts")
     fun uploadContacts(
         @Body contacts : ContactsData
+    ) : Call<ContactResponse>
+
+    @POST("checkContacts")
+    fun checkContacts(
+        @Body checkContacts: CheckContacts
     ) : Call<ContactResponse>
 
     @GET("get_interest")

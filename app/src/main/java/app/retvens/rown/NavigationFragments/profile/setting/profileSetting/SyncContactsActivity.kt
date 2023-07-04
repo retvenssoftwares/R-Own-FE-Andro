@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
@@ -48,6 +49,16 @@ class SyncContactsActivity : AppCompatActivity() {
 
         binding.reBackBtn.setOnClickListener { onBackPressed() }
 
+        progressDialog = Dialog(this)
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setCancelable(false)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
+        checkContacts()
+
         binding.goContacts.setOnClickListener {
             progressDialog = Dialog(this)
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -66,6 +77,34 @@ class SyncContactsActivity : AppCompatActivity() {
 
         }
     }
+
+    private fun checkContacts() {
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+        val upload = RetrofitBuilder.retrofitBuilder.checkContacts(CheckContacts(user_id))
+        upload.enqueue(object : Callback<ContactResponse?> {
+            override fun onResponse(
+                call: Call<ContactResponse?>,
+                response: Response<ContactResponse?>
+            ) {
+                progressDialog.dismiss()
+                if (response.isSuccessful){
+                    if (response.body()!!.message == "Synced") {
+                        binding.svgUploaded.visibility = View.VISIBLE
+                        binding.layout.visibility = View.GONE
+                    }
+                    Toast.makeText(applicationContext, "${response.body()!!.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
+                progressDialog.dismiss()
+                Toast.makeText(applicationContext, t.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
+
+    }
+
     private fun loadContacts() {
         var builder = StringBuilder()
 
