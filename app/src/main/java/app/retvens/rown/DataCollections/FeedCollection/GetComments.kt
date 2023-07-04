@@ -19,6 +19,7 @@ data class Reply(
     val date_added: String,
     val Profile_pic: String,
     val User_name: String,
+    val Full_name: String,
     val _id: String
 )
 

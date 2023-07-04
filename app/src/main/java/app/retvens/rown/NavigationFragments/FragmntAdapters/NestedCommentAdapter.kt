@@ -34,8 +34,12 @@ class NestedCommentAdapter(val context: Context,private val nestedComments: List
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val data = nestedComments[position]
 
+        if (data.User_name.isNotEmpty()){
+            holder.name.text = data.User_name
+        } else {
+            holder.name.text = data.Full_name
+        }
 
-        holder.name.text = data.User_name
         holder.comment.text = data.comment
         Glide.with(context).load(data.Profile_pic).into(holder.profile)
 

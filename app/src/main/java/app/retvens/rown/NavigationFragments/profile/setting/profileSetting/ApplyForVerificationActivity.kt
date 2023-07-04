@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
@@ -20,6 +21,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityApplyForVerificationBinding
 import app.retvens.rown.utils.prepareFilePart
+import app.retvens.rown.utils.verificationStatus
 import com.bumptech.glide.Glide
 import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -42,6 +44,11 @@ class ApplyForVerificationActivity : AppCompatActivity() {
         binding = ActivityApplyForVerificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.reBackBtn.setOnClickListener { onBackPressed() }
+
+        if (verificationStatus != "false"){
+            binding.layout.visibility = View.GONE
+            binding.alreadyApplied.visibility = View.VISIBLE
+        }
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
