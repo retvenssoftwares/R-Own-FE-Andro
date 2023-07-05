@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import app.retvens.rown.ApiRequest.CallDataClass;
 import app.retvens.rown.ApiRequest.CallResponse;
@@ -87,6 +88,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
     private TextView mUserStatus = null;
     private ImageView isOnlineDot;
     private Long groupId;
+    private String page = "0";
 
     /* access modifiers changed from: protected */
     @SuppressLint("MissingInflatedId")
@@ -107,6 +109,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
 
         MesiboCall.getInstance().init(this);
 
+        this.page = args.getString("page");
 
         /* set profile so that it is visible in call screen */
         MesiboProfile u = new MesiboProfile();
@@ -192,16 +195,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             }
             startFragment(savedInstanceState);
         }
-        String peer = args.getString(MesiboUI.PEER);
-        MesiboProfile profile = new MesiboProfile();
-        profile = Mesibo.getProfile(peer);
 
-        String Status = profile.getStatus();
-
-        Map<String, String> decodedData = Decoder.decodeData(Status);
-
-        String userID = decodedData.get("userID");
-        String userRole = decodedData.get("userRole");
 
         this.callButton = findViewById(R.id.action_call);
         this.videoCallButton = findViewById(R.id.action_videocall);
@@ -215,6 +209,16 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         this.callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String peer = args.getString(MesiboUI.PEER);
+                MesiboProfile profile = new MesiboProfile();
+                profile = Mesibo.getProfile(peer);
+
+                String Status = profile.getStatus();
+
+                Map<String, String> decodedData = Decoder.decodeData(Status);
+
+                String userID = decodedData.get("userID");
+                String userRole = decodedData.get("userRole");
                 SharedPreferences sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE);
                 String user_id = sharedPreferences1.getString("user_id", "");
                 Log.e("userID",userID);
@@ -324,9 +328,13 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         MessagingFragment f = this.mFragment;
 
         if (f == null || !f.Mesibo_onBackPressed()) {
-            Intent intent = new Intent(this, ChatActivity.class);
-            startActivity(intent);
-            finish();
+            if (Objects.equals(this.page, "2")){
+                Intent intent = new Intent(this, DashBoardActivity.class);
+                startActivity(intent);
+            }else {
+                super.onBackPressed();
+            }
+
         }
     }
 

@@ -68,7 +68,7 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
         binding.mediaText.setOnClickListener {
             binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
             binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
-            replaceFragment(CommunityMediaFragment())
+            replaceFragment(CommunityMediaFragment(groupId))
         }
 
         binding.joinCommunity.setOnClickListener {

@@ -22,7 +22,7 @@ import com.google.firebase.messaging.ktx.remoteMessage
 
 const val channelId = "Notification_Channel"
 const val channelName = "app.retvens.rown"
-class MyFirebaseMessagingService : FirebaseMessagingService() {
+class MyFirebaseMessagingServices : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         Log.e(TAG, "Refreshed token: $token")
@@ -65,15 +65,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     }
 
-    @SuppressLint("RemoteViewLayout")
-    fun getRemoteView(title: String, message: String): RemoteViews {
-        val remoteViews = RemoteViews("app.retvens.rown", R.layout.notification)
-        remoteViews.setTextViewText(R.id.titlenotify, title)
-        remoteViews.setTextViewText(R.id.description, message)
-        remoteViews.setImageViewResource(R.id.img, R.drawable.png_r_logo)
-
-        return remoteViews
-    }
+//    @SuppressLint("RemoteViewLayout")
+//    fun getRemoteView(title: String, message: String): RemoteViews {
+//        val remoteViews = RemoteViews("app.retvens.rown", R.layout.notification)
+//        remoteViews.setTextViewText(R.id.titlenotify, title)
+//        remoteViews.setTextViewText(R.id.description, message)
+//        remoteViews.setImageViewResource(R.id.img, R.drawable.png_r_logo)
+//
+//        return remoteViews
+//    }
 
 
 }

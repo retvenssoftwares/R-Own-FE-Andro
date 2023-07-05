@@ -111,9 +111,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import app.retvens.rown.ApiRequest.ChatDataClass;
+import app.retvens.rown.ApiRequest.RetrofitBuilder;
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse;
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
 import app.retvens.rown.MessagingModule.AllUtils.TextToEmoji;
 import app.retvens.rown.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MessagingFragment extends BaseFragment implements MessageListener, PresenceListener, ConnectionListener, SyncListener, OnClickListener, MessageViewHolder.ClickListener, OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener, ImageEditorListener, Listener, MessageAdapter.MessagingAdapterListener, MessagingActivityListener{
     public static final int MESIBO_MESSAGECONTEXTACTION_FORWARD = 1;
@@ -260,14 +266,21 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                         this.mMessageList = new ArrayList();
                     }
                 }
-                MesiboProfile profile = new MesiboProfile();
-                profile = Mesibo.getProfile(peer);
-                String Status = profile.getStatus();
+                try {
+                    MesiboProfile profile = new MesiboProfile();
+                    profile = Mesibo.getProfile(peer);
+                    String Status = profile.getStatus();
 
-                Map<String, String> decodedData = Decoder.decodeData(Status);
+                    Map<String, String> decodedData = Decoder.decodeData(Status);
 
-                this.userID = decodedData.get("userID");
-                this.userRole = decodedData.get("userRole");
+                    this.userID = decodedData.get("userID");
+                    this.userRole = decodedData.get("userRole");
+                }catch (NullPointerException e){
+                    Log.e("error",e.toString());
+                }
+
+
+
 
 
 
@@ -1226,18 +1239,10 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 
     public void Mesibo_onMessage(MesiboMessage msg) {
 
-        if (msg.isIncoming()){
-            Log.e("check","1");
-            if (msg.isRealtimeMessage()){
-                Log.e("check","2");
-            }else {
-                Log.e("check","3");
-            }
-        }else if (msg.isOutgoing()){
-            Log.e("check","4");
-        }
-
         if (!msg.isIncomingCall() && !msg.isOutgoingCall()) {
+
+
+
             if (this.isForMe(msg)) {
                 if (msg.isEndToEndEncryptionStatus()) {
                     if (!Mesibo.e2ee().isEnabled()) {
@@ -1533,11 +1538,43 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
             profile = getProfile();
 //            NotificationSendClass.pushNotifications(getContext(), mUser.getAddress()
 //                    , ""+profile.getName(), ""+msg.message.toString());
-            Toast.makeText(mActivity, ""+msg.message.toString(), Toast.LENGTH_SHORT).show();
              this.mEmojiEditText.getText().clear();
+             MesiboProfile cc = Mesibo.getProfile(this.mPeer);
+            try {
+                performChatNotification(this.userID, cc.getName(), msg.message);
+            }catch (NullPointerException e){
+                Log.e("error",e.getMessage().toString());
+            }
+
+
+
         }
     }
 
+    private void performChatNotification(String userId,String title,String body) {
+        Log.e("user",userId);
+        Log.e("title",title);
+        Log.e("body",body);
+        // Make the API call
+        Call<UpdateResponse> call = RetrofitBuilder.INSTANCE.getCalling().chatNotification(userId, new ChatDataClass(title,body));
+        call.enqueue(new Callback<UpdateResponse>() {
+            @Override
+            public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
+                if (response.isSuccessful()) {
+                    // API call was successful, handle the response
+                    UpdateResponse updateResponse = response.body();
+                    Log.e("success",updateResponse.getMessage());
+                } else {
+                    Log.e("error",response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateResponse> call, Throwable t) {
+                Log.e("error",t.getMessage().toString());
+            }
+        });
+    }
     public MesiboProfile getProfile() {
         if (mGroupId > 0) return Mesibo.getProfile(mGroupId);
         return Mesibo.getSelfProfile();

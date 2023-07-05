@@ -40,7 +40,7 @@
             android:id="@+id/listOfOwners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
 
@@ -71,7 +71,7 @@
             android:id="@+id/listOfVendors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
         <androidx.cardview.widget.CardView
@@ -97,7 +97,7 @@
             android:id="@+id/listOfExpert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
         <androidx.cardview.widget.CardView
@@ -124,7 +124,7 @@
             android:id="@+id/listOfNormalUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
     </LinearLayout>

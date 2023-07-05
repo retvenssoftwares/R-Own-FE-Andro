@@ -58,6 +58,10 @@ import java.io.IOException
 
 class UploadIcon : AppCompatActivity() {
 
+    companion object {
+        private const val MESIBO_MESSAGING_REQUEST_CODE = 1001
+    }
+
     private lateinit var groupId:String
     private lateinit var description:String
     private var type:String = ""
@@ -205,6 +209,19 @@ class UploadIcon : AppCompatActivity() {
             } else if (resultCode == UCrop.RESULT_ERROR) {
                 Toast.makeText(applicationContext,"Try Again",Toast.LENGTH_SHORT).show()
             }
+        }
+
+        if (requestCode == MESIBO_MESSAGING_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                val cameFromUploadIcon = data?.getBooleanExtra("cameFromUploadIcon", false)
+                if (cameFromUploadIcon == true) {
+                    val intent = Intent(applicationContext, DashBoardActivity::class.java)
+                    startActivity(intent)
+                    finishActivity(requestCode)
+                }
+            }
+        } else {
+            // Handle other activity results
         }
     }
 
@@ -354,6 +371,7 @@ class UploadIcon : AppCompatActivity() {
                         Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                         val intent = Intent(applicationContext,MesiboMessagingActivity::class.java)
                         intent.putExtra(MesiboUI.GROUP_ID,groupId.toLong())
+                        intent.putExtra("page","2")
                         startActivity(intent)
                         finish()
                     }else{
@@ -371,6 +389,7 @@ class UploadIcon : AppCompatActivity() {
 
 
     }
+
 
     private fun createImageUri(): Uri? {
         val image = File(applicationContext.filesDir,"camera_photo.png")

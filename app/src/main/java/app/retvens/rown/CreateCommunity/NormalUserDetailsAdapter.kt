@@ -8,12 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.FeedCollection.Member
+import app.retvens.rown.DataCollections.FeedCollection.User
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import java.util.*
 
-class NormalUserDetailsAdapter(val context: Context, var userList:List<Member>) :
+class NormalUserDetailsAdapter(val context: Context, var userList:List<User>) :
     RecyclerView.Adapter<NormalUserDetailsAdapter.ProfileViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
@@ -33,7 +35,7 @@ class NormalUserDetailsAdapter(val context: Context, var userList:List<Member>) 
         val name = itemView.findViewById<TextView>(R.id.personal_notification_name)
         val location = itemView.findViewById<TextView>(R.id.location_notification)
         val profile = itemView.findViewById<ShapeableImageView>(R.id.personal_notification_profile)
-
+        val admin = itemView.findViewById<TextView>(R.id.admin)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
@@ -51,7 +53,12 @@ class NormalUserDetailsAdapter(val context: Context, var userList:List<Member>) 
             holder.location.text = cityName
             Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
-
+        if (data.admin == "true"){
+            holder.admin.text = "Admin"
+            Collections.swap(userList, position, 0)
+        }else{
+            holder.admin.visibility = View.GONE
+        }
 
 
     }

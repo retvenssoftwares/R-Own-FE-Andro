@@ -19,30 +19,38 @@ data class GetCommunitiesData(
     val __v: Int
 )
 
-data class Admin(
-    val user_id: String,
-    val Full_name: String,
-    val address: String,
-    val uid: Int,
-    val Profile_pic: String,
-    val verificationStatus: String,
-    val location: String,
-    val Role: String,
-    val admin: String,
-    val _id: String
-)
+interface User {
+    val Role: String
+    val location: String
+    val Profile_pic: String
+    val Full_name: String
+    val admin: String
+    // Add any other common properties or methods here
+}
 
 data class Member(
     val user_id: String,
-    val Full_name: String,
+    override val Full_name: String,
     val address: String,
     val uid: Int,
-    val Profile_pic: String,
+    override val Profile_pic: String,
     val verificationStatus: String,
-    val location: String,
-    val Role: String,
-    val admin: String,
+    override val location: String,
+    override val Role: String,
+    override val admin: String,
     val _id: String
-)
+) : User
 
+data class Admin(
+    val user_id: String,
+    override val Full_name: String,
+    val address: String,
+    val uid: Int,
+    override val Profile_pic: String,
+    val verificationStatus: String,
+    override val location: String,
+    override val Role: String,
+    override val admin: String,
+    val _id: String
+) : User
 

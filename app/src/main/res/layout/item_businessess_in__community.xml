@@ -46,6 +46,20 @@
             app:layout_constraintTop_toTopOf="@id/personal_notification_profile" />
 
         <TextView
+            android:id="@+id/admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="15dp"
+            android:textSize="14dp"
+            android:text="Admin"
+            android:fontFamily="@font/montserrat_semibold"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/grey_60"
+            />
+
+        <TextView
             android:id="@+id/location_notification"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

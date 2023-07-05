@@ -28,6 +28,7 @@ import app.retvens.rown.CreateCommunity.UserDetailsAdapter
 import app.retvens.rown.CreateCommunity.VendorDetailsAdapter
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.DataCollections.FeedCollection.Member
+import app.retvens.rown.DataCollections.FeedCollection.User
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import retrofit2.Call
@@ -45,10 +46,10 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
     lateinit var userDetailsAdapter: UserDetailsAdapter
     lateinit var vendorDetailsAdapter: VendorDetailsAdapter
     lateinit var normalUserDetailsAdapter: NormalUserDetailsAdapter
-    private var ownerList:ArrayList<Member> = ArrayList()
-    private var vendorList:ArrayList<Member> = ArrayList()
-    private var userList:ArrayList<Member> = ArrayList()
-    private var expertList:ArrayList<Member> = ArrayList()
+    private var ownerList:ArrayList<User> = ArrayList()
+    private var vendorList:ArrayList<User> = ArrayList()
+    private var userList:ArrayList<User> = ArrayList()
+    private var expertList:ArrayList<User> = ArrayList()
     lateinit var progressDialog: Dialog
     private var click:Boolean = false
     private var click1:Boolean = false
@@ -223,40 +224,46 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
                 call: Call<GetCommunitiesData?>,
                 response: Response<GetCommunitiesData?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val response = response.body()!!
 
-                    response.Members.forEach {
-                        if (it.Role == "Hotel Owner"){
-                           ownerList.add(it)
-                        }else if (it.Role == "Business Vendor / Freelancer"){
-                            vendorList.add(it)
-                        }else if (it.Role == "Normal User"){
-                            userList.add(it)
-                        }else if (it.Role == "Hospitality Expert"){
-                            expertList.add(it)
+                    response.Members.forEach { member ->
+                        when (member.Role) {
+                            "Hotel Owner" -> ownerList.add(member)
+                            "Business Vendor / Freelancer" -> vendorList.add(member)
+                            "Normal User" -> userList.add(member)
+                            "Hospitality Expert" -> expertList.add(member)
                         }
-
-
-                        userDetailsAdapter = UserDetailsAdapter(requireContext(),ownerList)
-                        recyclerViewOwner.adapter = userDetailsAdapter
-                        userDetailsAdapter.notifyDataSetChanged()
-
-                        vendorDetailsAdapter = VendorDetailsAdapter(requireContext(),vendorList)
-                        recyclerViewVendor.adapter = vendorDetailsAdapter
-                        vendorDetailsAdapter.notifyDataSetChanged()
-
-                        normalUserDetailsAdapter = NormalUserDetailsAdapter(requireContext(),userList)
-                        recylerViewUser.adapter = normalUserDetailsAdapter
-                        normalUserDetailsAdapter.notifyDataSetChanged()
-
-                        expertDetailsAdapter = ExpertDetailsAdapter(requireContext(),expertList)
-                        recyclerViewExpert.adapter = expertDetailsAdapter
-                        expertDetailsAdapter.notifyDataSetChanged()
                     }
 
+                    response.Admin.forEach { admin ->
+                        when (admin.Role) {
+                            "Hotel Owner" -> ownerList.add(admin)
+                            "Business Vendor / Freelancer" -> vendorList.add(admin)
+                            "Normal User" -> userList.add(admin)
+                            "Hospitality Expert" -> expertList.add(admin)
+                        }
+                    }
 
-                }else{
+                    userDetailsAdapter = UserDetailsAdapter(requireContext(), ownerList)
+                    recyclerViewOwner.adapter = userDetailsAdapter
+                    userDetailsAdapter.notifyDataSetChanged()
+
+                    vendorDetailsAdapter = VendorDetailsAdapter(requireContext(), vendorList)
+                    recyclerViewVendor.adapter = vendorDetailsAdapter
+                    vendorDetailsAdapter.notifyDataSetChanged()
+
+                    normalUserDetailsAdapter = NormalUserDetailsAdapter(requireContext(), userList)
+                    recylerViewUser.adapter = normalUserDetailsAdapter
+                    normalUserDetailsAdapter.notifyDataSetChanged()
+
+                    expertDetailsAdapter = ExpertDetailsAdapter(requireContext(), expertList)
+                    recyclerViewExpert.adapter = expertDetailsAdapter
+                    expertDetailsAdapter.notifyDataSetChanged()
+
+
+
+                } else{
                     Log.e("error",response.message().toString())
                 }
 
