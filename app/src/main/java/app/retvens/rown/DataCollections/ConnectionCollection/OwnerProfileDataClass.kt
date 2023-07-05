@@ -15,7 +15,8 @@ data class ProfileOwnerData(
     val Profile_pic: String,
     val userBio: String,
     val User_name: String,
-    val post_count: List<Any>
+    val post_count: List<Any>,
+    val Full_name:String
 )
 
 data class HotelLogo(

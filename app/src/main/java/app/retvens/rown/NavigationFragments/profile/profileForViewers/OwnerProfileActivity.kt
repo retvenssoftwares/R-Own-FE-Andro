@@ -305,8 +305,8 @@ class OwnerProfileActivity : AppCompatActivity() {
                     profilePic = response.profiledata.Profile_pic
                     Glide.with(applicationContext).load(response.profiledata.Profile_pic).into(profile)
                     profile_username.text = response.profiledata.User_name
-                    name.text = response.profiledata.User_name
-                    nameProfile = response.profiledata.User_name
+                    name.text = response.profiledata.Full_name
+                    nameProfile = response.profiledata.Full_name
                     bio.text = response.profiledata.userBio
                     websiteLink.text = response.profile.hotelOwnerInfo.websiteLink
                     userName = response.profiledata.User_name
