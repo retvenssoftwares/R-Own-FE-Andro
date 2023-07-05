@@ -66,12 +66,13 @@ class ConnectionsAdapter(val listS : ArrayList<Connections>, val context: Contex
         holder.remove.setOnClickListener {
             val sharedPreferences =  context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
             val user_id = sharedPreferences?.getString("user_id", "").toString()
-            removeConnection(data.User_id, user_id, context, holder.interact)
-            try {
-            listS.remove(data)
-            notifyDataSetChanged()
-            } catch (e : Exception){
+            removeConnection(data.User_id, user_id, context){
+                try {
+                    listS.remove(data)
+                    notifyDataSetChanged()
+                } catch (e : Exception){
 
+                }
             }
         }
 

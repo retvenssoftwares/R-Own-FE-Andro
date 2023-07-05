@@ -41,6 +41,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
         val status = itemView.findViewById<TextView>(R.id.title_status)
         val likeButton = itemView.findViewById<ImageView>(R.id.like_post)
         val commentButton = itemView.findViewById<ImageView>(R.id.comment)
+        val verification = itemView.findViewById<ImageView>(R.id.verification)
         val location = itemView.findViewById<TextView>(R.id.post_time)
         val likeCount = itemView.findViewById<TextView>(R.id.like_count)
         val commentCount = itemView.findViewById<TextView>(R.id.comment_count)
@@ -98,7 +99,16 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
         when (holder.itemViewType) {
             VIEW_TYPE_LAYOUT_ONE -> {
                 val layoutOneViewHolder = holder as LayoutOneViewHolder
-                layoutOneViewHolder.name.text = item.User_name
+
+                if (item.verificationStatus != "false"){
+                    layoutOneViewHolder.verification.visibility = View.VISIBLE
+                }
+
+                if (item.User_name.isNotEmpty()){
+                    layoutOneViewHolder.name.text = item.User_name
+                } else{
+                    layoutOneViewHolder.name.text = item.Full_name
+                }
                 layoutOneViewHolder.status.text = item.caption
                 Glide.with(context).load(item.Profile_pic).into(layoutOneViewHolder.postProfile)
 
@@ -144,7 +154,16 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
 
             VIEW_TYPE_LAYOUT_TWO -> {
                 val layoutTwoViewHolder = holder as LayoutTwoViewHolder
-                layoutTwoViewHolder.name.text = item.Full_name
+
+//                if (item.verificationStatus != "false"){
+//                    layoutTwoViewHolder.verification.visibility = View.VISIBLE
+//                }
+
+                if (item.User_name.isNotEmpty()){
+                    layoutTwoViewHolder.name.text = item.User_name
+                } else{
+                    layoutTwoViewHolder.name.text = item.Full_name
+                }
                 layoutTwoViewHolder.caption.text = item.caption
                 layoutTwoViewHolder.title.text = item.Event_name
                 layoutTwoViewHolder.username.text = item.User_name

@@ -17,10 +17,12 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityApplyForVerificationBinding
 import app.retvens.rown.utils.prepareFilePart
+import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.verificationStatus
 import com.bumptech.glide.Glide
 import com.yalantis.ucrop.UCrop
@@ -45,9 +47,20 @@ class ApplyForVerificationActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.reBackBtn.setOnClickListener { onBackPressed() }
 
+        if (profileCompletionStatus != "100"){
+            binding.layout.visibility = View.GONE
+            binding.alreadyApplied.visibility = View.GONE
+            binding.profileCompletion.visibility = View.VISIBLE
+        }
+
         if (verificationStatus != "false"){
             binding.layout.visibility = View.GONE
             binding.alreadyApplied.visibility = View.VISIBLE
+        }
+
+        binding.complete.setOnClickListener {
+            startActivity(Intent(this, UserName::class.java))
+            finish()
         }
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -170,6 +183,7 @@ class ApplyForVerificationActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK) {
                 val croppedImage = UCrop.getOutput(data!!)!!
                 croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage, this)
+                binding.preview.setImageURI(croppedImageUri)
             } else if (resultCode == UCrop.RESULT_ERROR) {
                 Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show()
             }

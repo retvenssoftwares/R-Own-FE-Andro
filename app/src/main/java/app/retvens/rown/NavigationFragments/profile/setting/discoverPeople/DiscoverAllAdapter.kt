@@ -22,11 +22,16 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfil
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.bottomSheetPeople.MatchedContact
+import app.retvens.rown.utils.acceptRequest
 import app.retvens.rown.utils.removeConnRequest
+import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 
 class DiscoverAllAdapter(val listS : ArrayList<Post>, val context: Context) : RecyclerView.Adapter<DiscoverAllAdapter.DiscoverViewHolder>() {
+
+    val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
 
     class DiscoverViewHolder(itemView: View) : ViewHolder(itemView){
         val profile = itemView.findViewById<ImageView>(R.id.suggetions_notification_profile)
@@ -49,6 +54,7 @@ class DiscoverAllAdapter(val listS : ArrayList<Post>, val context: Context) : Re
 
     override fun onBindViewHolder(holder: DiscoverViewHolder, position: Int) {
         val currentItem = listS?.get(position)
+        val data = listS.get(position)
 
         holder.title.text = currentItem!!.Full_name
         holder.role.text = currentItem.Role
@@ -66,55 +72,48 @@ class DiscoverAllAdapter(val listS : ArrayList<Post>, val context: Context) : Re
             holder.role.text = "Incomplete Profile"
         }
 
-        var status = currentItem.connectionStatus
-
-        if (currentItem.connectionStatus == "Connected") {
-            holder.connect.text = "Interact"
-            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-        }
-        if (currentItem.connectionStatus == "Requested") {
-            holder.connect.text = "Requested"
-            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-        }
-
         if(currentItem.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(currentItem.Profile_pic).into(holder.profile)
         }
 
+
+        val userId = data.User_id
+
+        if (data.connectionStatus == "Connected"){
+            holder.connect.text = "Interact"
+        } else if (data.connectionStatus == "Not connected"){
+            holder.connect.text = "CONNECT"
+        } else if (data.connectionStatus == "Requested"){
+            holder.connect.text = "Requested"
+        } else if (data.connectionStatus == "Confirm request"){
+            holder.connect.text = "Accept"
+        }
         holder.connect.setOnClickListener {
+            if (holder.connect.text == "Remove"){
 
-            if (status == "Not Connected") {
-//                connectClickListener?.onJobSavedClick(currentItem)
+                removeConnection(userId,user_id, context){
+                    holder.connect.text = "CONNECT"
+                }
 
-                sendConnectionRequest(currentItem.User_id, context, holder.connect)
-                currentItem.connectionStatus = "Requested"
+            } else if (holder.connect.text == "CONNECT") {
 
-//                holder.connect.text = "Requested"
-//                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-//                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
+                sendConnectionRequest(userId, context){
+                    holder.connect.text = "Requested"
+                }
+
+            } else  if (holder.connect.text == "Requested") {
+
+                removeConnRequest(userId, context){
+                    holder.connect.text = "CONNECT"
+                }
+
+            } else if (holder.connect.text == "Accept") {
+
+                acceptRequest(userId, context){
+                    holder.connect.text = "Remove"
+                }
+
             }
-
-            if (status == "Requested" || currentItem.connectionStatus == "Requested") {
-//                connectClickListener?.onCancelRequest(currentItem)
-
-                removeConnRequest(currentItem.User_id, context, holder.connect)
-
-//                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-//                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
-//                holder.connect.text = "CONNECT"
-                currentItem.connectionStatus = "Not Connected"
-            }
-
-            if (holder.connect.text == "Interact") {
-                val intent = Intent(context, MesiboMessagingActivity::class.java)
-                intent.putExtra(MesiboUI.PEER, currentItem.Mesibo_account[0].address)
-                context.startActivity(intent)
-            }
-
-            status = "Requested"
-
         }
 
         holder.itemView.setOnClickListener {
@@ -122,20 +121,14 @@ class DiscoverAllAdapter(val listS : ArrayList<Post>, val context: Context) : Re
             if(currentItem.Role == "Business Vendor / Freelancer"){
                 val intent = Intent(context, VendorProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",currentItem.Mesibo_account[0].address)
                 context.startActivity(intent)
             }else if (currentItem.Role == "Hotel Owner"){
                 val intent = Intent(context, OwnerProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",currentItem.Mesibo_account[0].address)
                 context.startActivity(intent)
             } else {
                 val intent = Intent(context, UserProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",currentItem.Mesibo_account[0].address)
                 context.startActivity(intent)
             }
         }

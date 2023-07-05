@@ -120,6 +120,8 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
+                    child = "0"
+                    replying.visibility = View.GONE
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     getCommentList(blog_id)
                 }else{

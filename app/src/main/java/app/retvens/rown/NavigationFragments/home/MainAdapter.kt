@@ -287,7 +287,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             } else{
                 binding.userIdOnComment.text = post.Full_name
             }
-                Log.e("username",post.User_name)
+
+            if(post.verificationStatus != "false"){
+                binding.verification.visibility = View.VISIBLE
+            }
+
+            Log.e("username",post.User_name)
                 binding.recentCommentByUser.text = post.caption
                 Log.e("caption",post.caption)
                 binding.userNamePost.text = post.Full_name
@@ -369,7 +374,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             var save = true
             var operatioin = "push"
 
-            binding.userNamePost.text = banner.Full_name
+            if (banner.User_name.isNotEmpty()){
+                binding.userNamePost.text = banner.User_name
+            } else{
+                binding.userNamePost.text = banner.Full_name
+            }
+
             binding.titleStatus.text = banner.caption
             Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
             binding.location.text = banner.location

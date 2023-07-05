@@ -35,6 +35,8 @@ import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetSharePost
+import app.retvens.rown.utils.acceptRequest
+import app.retvens.rown.utils.rejectConnRequest
 import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
@@ -59,7 +61,10 @@ class UserProfileActivity : AppCompatActivity() {
     lateinit var status : TextView
     lateinit var postCount:TextView
     lateinit var connCount:TextView
+
     lateinit var connStatus:TextView
+    lateinit var reject:TextView
+    lateinit var rejectCard: CardView
     lateinit var card_message: CardView
 
     var created = ""
@@ -87,6 +92,8 @@ class UserProfileActivity : AppCompatActivity() {
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
+        reject = findViewById(R.id.reject)
+        rejectCard = findViewById(R.id.openReview)
 
         polls = findViewById(R.id.polls)
         media = findViewById(R.id.media)
@@ -105,16 +112,10 @@ class UserProfileActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-//        if(connStat.isNotEmpty()){
-////            Toast.makeText(applicationContext, connStat, Toast.LENGTH_SHORT).show()
-//            if (connStat == "Not Connected"){
-//                connStatus.text = "CONNECT"
-//            } else if (connStat == "Connected"){
-//                connStatus.text = "Interact"
-//            } else {
-//                connStatus.text = connStat
-//            }
-//        }
+        if (user_id == userID){
+            connStatus.visibility = View.GONE
+            card_message.visibility = View.GONE
+        }
 
         getUserPofile(userID,user_id)
 
@@ -132,18 +133,40 @@ class UserProfileActivity : AppCompatActivity() {
 
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
-                removeConnection(userID,user_id, applicationContext, connStatus)
-                card_message.visibility = View.GONE
+
+                removeConnection(userID,user_id, applicationContext){
+                    connStatus.text = "CONNECT"
+                    card_message.visibility = View.GONE
+                }
+
             } else if (connStatus.text == "CONNECT") {
-                sendConnectionRequest(userID, applicationContext, connStatus)
-                connStatus.text = "Requested"
+
+                sendConnectionRequest(userID, applicationContext){
+                    connStatus.text = "Requested"
+                }
+
             } else  if (connStatus.text == "Requested") {
-                removeConnRequest(userID, applicationContext, connStatus)
-            } else if (connStatus.text == "Accept Connection") {
-                accceptRequest(userID)
-                if (address.isNotEmpty() && connStat == "Connected"){
+
+                removeConnRequest(userID, applicationContext){
+                    connStatus.text = "CONNECT"
+                }
+
+            } else if (connStatus.text == "Accept") {
+
+                acceptRequest(userID, applicationContext){
+                    connStatus.text = "Remove"
+
+                    rejectCard.visibility = View.GONE
                     card_message.visibility = View.VISIBLE
                 }
+
+            }
+        }
+
+        rejectCard.setOnClickListener {
+            rejectConnRequest(userID, applicationContext){
+                rejectCard.visibility = View.GONE
+                connStatus.text = "CONNECT"
             }
         }
 
@@ -281,8 +304,11 @@ class UserProfileActivity : AppCompatActivity() {
                         connStatus.text = "CONNECT"
                         connStat = "Not Connected"
                     }else if (response.data.connectionStatus ==  "Confirm request"){
-                        connStatus.text = "Accept Connection"
+                        connStatus.text = "Accept"
                         connStat = "Confirm request"
+
+                        rejectCard.visibility = View.VISIBLE
+                        reject.text = "REJECT"
                     } else{
                         connStat = response.data.connectionStatus
                         connStatus.text = response.data.connectionStatus
@@ -292,35 +318,6 @@ class UserProfileActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
 
-            }
-        })
-
-
-    }
-    private fun accceptRequest(userId: String) {
-
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        val accept = RetrofitBuilder.connectionApi.sendRequest(user_id, ConnectionDataClass(userId))
-
-        accept.enqueue(object : Callback<UpdateResponse?> {
-            override fun onResponse(
-                call: Call<UpdateResponse?>,
-                response: Response<UpdateResponse?>
-            ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    connStatus.text = "Remove"
-                    connStat = "Connected"
-                    Toast.makeText(applicationContext,"Request Accepted",Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(applicationContext,"Request Accepted",Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })
     }

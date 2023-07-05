@@ -22,11 +22,16 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfil
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.bottomSheetPeople.MatchedContact
+import app.retvens.rown.utils.acceptRequest
 import app.retvens.rown.utils.removeConnRequest
+import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 
 class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Context) : RecyclerView.Adapter<DiscoverAdapter.DiscoverViewHolder>() {
+
+    val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
 
     class DiscoverViewHolder(itemView: View) : ViewHolder(itemView){
         val profile = itemView.findViewById<ImageView>(R.id.suggetions_notification_profile)
@@ -49,6 +54,7 @@ class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Contex
 
     override fun onBindViewHolder(holder: DiscoverViewHolder, position: Int) {
         val currentItem = listS?.get(position)
+        val data = listS.get(position)
 
         holder.title.text = currentItem!!.matchedNumber.Full_name
         holder.role.text = currentItem.matchedNumber.Role
@@ -66,75 +72,62 @@ class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Contex
             holder.role.text = "Incomplete Profile"
         }
 
-        var status = currentItem.connectionStatus
-
-        if (currentItem.connectionStatus == "Connected") {
-            holder.connect.text = "Interact"
-            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-        }
-        if (currentItem.connectionStatus == "Requested") {
-            holder.connect.text = "Requested"
-            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-        }
-
         if(currentItem.matchedNumber!!.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(currentItem.matchedNumber.Profile_pic).into(holder.profile)
         }
 
-        holder.connect.setOnClickListener {
+        val userId = data.matchedNumber.User_id
 
-            if (status == "Not Connected") {
-//                connectClickListener?.onJobSavedClick(currentItem)
-
-                currentItem.connectionStatus = "Requested"
-                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-                sendConnectionRequest(currentItem.matchedNumber.User_id, context, holder.reject)
-
-                holder.connect.text = "Requested"
-            }
-
-            if (status == "Requested" || currentItem.connectionStatus == "Requested") {
-//                connectClickListener?.onCancelRequest(currentItem)
-
-                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
-                holder.connect.text = "CONNECT"
-                currentItem.connectionStatus = "Not Connected"
-                removeConnRequest(currentItem.matchedNumber.User_id, context, holder.reject)
-
-            }
-
-            if (holder.connect.text == "Interact") {
-                val intent = Intent(context, MesiboMessagingActivity::class.java)
-                intent.putExtra(MesiboUI.PEER, currentItem.matchedNumber.Mesibo_account[0].address)
-                context.startActivity(intent)
-            }
-
-            status = "Requested"
-
+        if (data.connectionStatus == "Connected"){
+            holder.connect.text = "Interact"
+        } else if (data.connectionStatus == "Not connected"){
+            holder.connect.text = "CONNECT"
+        } else if (data.connectionStatus == "Requested"){
+            holder.connect.text = "Requested"
+        } else if (data.connectionStatus == "Confirm request"){
+            holder.connect.text = "Accept"
         }
+        holder.connect.setOnClickListener {
+            if (holder.connect.text == "Remove"){
+
+                removeConnection(userId,user_id, context){
+                    holder.connect.text = "CONNECT"
+                }
+
+            } else if (holder.connect.text == "CONNECT") {
+
+                sendConnectionRequest(userId, context){
+                    holder.connect.text = "Requested"
+                }
+
+            } else  if (holder.connect.text == "Requested") {
+
+                removeConnRequest(userId, context){
+                    holder.connect.text = "CONNECT"
+                }
+
+            } else if (holder.connect.text == "Accept") {
+
+                acceptRequest(userId, context){
+                    holder.connect.text = "Remove"
+                }
+
+            }
+        }
+
 
         holder.itemView.setOnClickListener {
             if(currentItem.matchedNumber.Role == "Business Vendor / Freelancer"){
                 val intent = Intent(context, VendorProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.matchedNumber.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
                 context.startActivity(intent)
             }else if (currentItem.matchedNumber.Role == "Hotel Owner"){
                 val intent = Intent(context, OwnerProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.matchedNumber.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
                 context.startActivity(intent)
             } else {
                 val intent = Intent(context, UserProfileActivity::class.java)
                 intent.putExtra("userId",currentItem.matchedNumber.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",currentItem.matchedNumber.Mesibo_account[0].address)
                 context.startActivity(intent)
             }
         }

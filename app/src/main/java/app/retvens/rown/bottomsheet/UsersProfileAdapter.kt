@@ -22,11 +22,16 @@ import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeople
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.bottomSheetPeople.MatchedContact
+import app.retvens.rown.utils.acceptRequest
 import app.retvens.rown.utils.removeConnRequest
+import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 
 class UsersProfileAdapter(val context: Context, var profileList : ArrayList<MatchedContact>) : RecyclerView.Adapter<UsersProfileAdapter.InterestViewHolder>() {
+
+    val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
 
     interface ConnectClickListener {
         fun onJobSavedClick(connect: MatchedContact)
@@ -56,7 +61,10 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: InterestViewHolder, position: Int) {
         val currentItem = profileList[position]
-//        holder.name.text = currentItem.Mesibo_account.get(0).address.toString()
+        val data = profileList[position]
+
+        val userId = data.matchedNumber.User_id
+
         holder.name.text = currentItem.matchedNumber.Full_name
         holder.bio.text = currentItem.matchedNumber.userBio
 
@@ -69,54 +77,50 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
         } else {
             holder.position.text = "Incomplete Profile"
         }
-
-        var status = currentItem.connectionStatus
-
-        if (currentItem.connectionStatus == "Connected") {
-            holder.connect.text = "Interact"
-            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-        }
-
-        if (currentItem.connectionStatus == "Requested") {
-            holder.connect.text = "Requested"
-            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-        }
-
         if(currentItem.matchedNumber!!.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(currentItem.matchedNumber.Profile_pic).into(holder.profile)
         }
 
+        if (data.connectionStatus == "Connected"){
+            holder.connect.text = "Interact"
+            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
+        } else if (data.connectionStatus == "Not connected"){
+            holder.connect.text = "CONNECT"
+        } else if (data.connectionStatus == "Requested"){
+            holder.connect.text = "Requested"
+            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
+        } else if (data.connectionStatus == "Confirm request"){
+            holder.connect.text = "Accept"
+        }
+
         holder.connect.setOnClickListener {
+            if (holder.connect.text == "Remove"){
 
-            if (status == "Not Connected") {
-//                connectClickListener?.onJobSavedClick(currentItem)
-                sendConnectionRequest(currentItem.matchedNumber.User_id, context, holder.connect)
-                holder.connect.text = "Requested"
-                currentItem.connectionStatus = "Requested"
-                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
+                removeConnection(userId,user_id, context){
+                    holder.connect.text = "CONNECT"
+                }
+
+            } else if (holder.connect.text == "CONNECT") {
+
+                sendConnectionRequest(userId, context){
+                    holder.connect.text = "Requested"
+                }
+
+            } else  if (holder.connect.text == "Requested") {
+
+                removeConnRequest(userId, context){
+                    holder.connect.text = "CONNECT"
+                }
+
+            } else if (holder.connect.text == "Accept") {
+
+                acceptRequest(userId, context){
+                    holder.connect.text = "Remove"
+                }
+
             }
-
-            if (status == "Requested" || currentItem.connectionStatus == "Requested") {
-//                connectClickListener?.onCancelRequest(currentItem)
-                removeConnRequest(currentItem.matchedNumber.User_id, context, holder.connect)
-                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
-                holder.connect.text = "CONNECT"
-                currentItem.connectionStatus = "Not Connected"
-            }
-
-            if (holder.connect.text == "Interact") {
-                val intent = Intent(context, MesiboMessagingActivity::class.java)
-                intent.putExtra(MesiboUI.PEER, currentItem.matchedNumber.Mesibo_account[0].address)
-                context.startActivity(intent)
-
-            }
-
-            status = "Requested"
-
         }
 
         holder.profile.setOnClickListener {
@@ -162,9 +166,7 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
             connect.text = "Interact"
             connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
             connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-        }
-
-        if (connectionStatus == "Requested") {
+        } else if (connectionStatus == "Requested") {
             connect.text = "Requested"
             connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
             connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
@@ -172,20 +174,20 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
 
         connect.setOnClickListener {
 
-            if (connectionStatus == "Not Connected") {
-                sendConnectionRequest(userId, context, connect)
+            if (connectionStatus == "Not Connected" || connect.text == "CONNECT") {
+                sendConnectionRequest(userId, context){
+                    connect.text = "Requested"
+                    connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+                    connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
+                }
 
-                connect.text = "Requested"
-                connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-                connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-            }
+            } else if (connectionStatus == "Requested" || connect.text == "Requested") {
+                removeConnRequest(userId, context){
+                    connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
+                    connect.setTextColor(ContextCompat.getColor(context, R.color.black))
+                    connect.text = "CONNECT"
+                }
 
-            if (connectionStatus == "Requested") {
-                removeConnRequest(userId, context, connect)
-
-                connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                connect.setTextColor(ContextCompat.getColor(context, R.color.white))
-                connect.text = "CONNECT"
             }
         }
 

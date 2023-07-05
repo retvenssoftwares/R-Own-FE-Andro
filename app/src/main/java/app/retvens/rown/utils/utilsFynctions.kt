@@ -206,7 +206,7 @@ fun showFullImage(profilePic : String, context: Context) {
 }
 
 
-fun removeConnection(userID: String, userId: String, context: Context, connStatusTextView : TextView) {
+fun removeConnection(userID: String, userId: String, context: Context, onClick: () -> Unit) {
     val remove = RetrofitBuilder.connectionApi.removeConnection(userID, ConnectionDataClass(userId))
     remove.enqueue(object : Callback<UpdateResponse?> {
         override fun onResponse(
@@ -215,9 +215,7 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
         ) {
             if (response.isSuccessful){
                 Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
-                connStatusTextView.text = "CONNECT"
-                connStatusTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                connStatusTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
+                onClick.invoke()
             } else {
                 Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
             }
@@ -228,7 +226,7 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
     })
 }
 
- fun removeConnRequest(userId: String, context: Context, connStatusTextView : TextView) {
+ fun removeConnRequest(userId: String, context: Context, onClick: () -> Unit) {
     val sharedPreferences =  context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
     val user_id = sharedPreferences?.getString("user_id", "").toString()
 
@@ -243,9 +241,7 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
         ) {
             if (response.isSuccessful){
                 val response = response.body()!!
-                connStatusTextView.text = "CONNECT"
-                connStatusTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                connStatusTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
+                onClick.invoke()
 //                Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
             }else{
 //                Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -253,15 +249,41 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
         }
 
         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-//            if (isAdded) {
-//                Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
-//                    .show()
-//            }
+
         }
     })
 }
 
- fun sendConnectionRequest(userId: String,context: Context, connStatusTextView : TextView) {
+ fun rejectConnRequest(userId: String, context: Context, onClick : () -> Unit) {
+    val sharedPreferences =  context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+    val removeRequest = RetrofitBuilder.connectionApi.removeRequest(user_id,
+        ConnectionDataClass(userId)
+    )
+
+    removeRequest.enqueue(object : Callback<UpdateResponse?> {
+        override fun onResponse(
+            call: Call<UpdateResponse?>,
+            response: Response<UpdateResponse?>
+        ) {
+            if (response.isSuccessful){
+                val response = response.body()!!
+                onClick.invoke()
+                Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
+                    .show()
+        }
+    })
+}
+
+ fun sendConnectionRequest(userId: String,context: Context, onClick: () -> Unit) {
 
     val sharedPreferences =  context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
     val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -276,12 +298,9 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
         ) {
             if (response.isSuccessful){
                 val response = response.body()!!
-                connStatusTextView.text = "Requested"
-                connStatusTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-                connStatusTextView.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-//                Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                onClick.invoke()
             }else{
-//                Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+
             }
         }
 
@@ -291,3 +310,31 @@ fun removeConnection(userID: String, userId: String, context: Context, connStatu
     })
 
 }
+
+ fun acceptRequest(userId: String, context: Context, onClick : () -> Unit) {
+
+    val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+    val accept = RetrofitBuilder.connectionApi.sendRequest(user_id, ConnectionDataClass(userId))
+
+    accept.enqueue(object : Callback<UpdateResponse?> {
+        override fun onResponse(
+            call: Call<UpdateResponse?>,
+            response: Response<UpdateResponse?>
+        ) {
+            if (response.isSuccessful){
+                val response = response.body()!!
+                onClick.invoke()
+                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+            Toast.makeText(context,t.message.toString(),Toast.LENGTH_SHORT).show()
+        }
+    })
+}
+

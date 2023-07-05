@@ -145,6 +145,45 @@ interface FeedsApi {
         @Part("pollQuestion[0][Options][1][Option]")Option2:RequestBody,
     ):Call<UpdateResponse>
 
+    @Multipart
+    @POST("post/{user_id}")
+    fun create3Poll(
+        @Path("user_id") user_id:String,
+        @Part("user_id")userId:RequestBody,
+        @Part("post_type")post_type:RequestBody,
+        @Part("pollQuestion[0][Question]")question:RequestBody,
+        @Part("pollQuestion[0][Options][0][Option]")Option1:RequestBody,
+        @Part("pollQuestion[0][Options][1][Option]")Option2:RequestBody,
+        @Part("pollQuestion[0][Options][2][Option]")Option3:RequestBody,
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @POST("post/{user_id}")
+    fun create4Poll(
+        @Path("user_id") user_id:String,
+        @Part("user_id")userId:RequestBody,
+        @Part("post_type")post_type:RequestBody,
+        @Part("pollQuestion[0][Question]")question:RequestBody,
+        @Part("pollQuestion[0][Options][0][Option]")Option1:RequestBody,
+        @Part("pollQuestion[0][Options][1][Option]")Option2:RequestBody,
+        @Part("pollQuestion[0][Options][2][Option]")Option3:RequestBody,
+        @Part("pollQuestion[0][Options][3][Option]")Option4:RequestBody,
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @POST("post/{user_id}")
+    fun create5Poll(
+        @Path("user_id") user_id:String,
+        @Part("user_id")userId:RequestBody,
+        @Part("post_type")post_type:RequestBody,
+        @Part("pollQuestion[0][Question]")question:RequestBody,
+        @Part("pollQuestion[0][Options][0][Option]")Option1:RequestBody,
+        @Part("pollQuestion[0][Options][1][Option]")Option2:RequestBody,
+        @Part("pollQuestion[0][Options][2][Option]")Option3:RequestBody,
+        @Part("pollQuestion[0][Options][3][Option]")Option4:RequestBody,
+        @Part("pollQuestion[0][Options][4][Option]")Option5:RequestBody,
+    ):Call<UpdateResponse>
+
     @GET("getconnpost/{user_Id}")
     fun getPost(
         @Path("user_Id")user_Id:String

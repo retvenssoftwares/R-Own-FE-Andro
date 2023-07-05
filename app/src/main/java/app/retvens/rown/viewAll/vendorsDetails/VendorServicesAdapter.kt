@@ -34,7 +34,7 @@ class VendorServicesAdapter(val context: Context, var interestList : List<Profil
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InterestViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.interest_grid_item,parent,false)
+        val view = inflater.inflate(R.layout.item_services_grid,parent,false)
         return InterestViewHolder(view)
     }
 

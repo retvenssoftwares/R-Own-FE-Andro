@@ -93,7 +93,7 @@ class PostDetailsActivity : AppCompatActivity() {
 
         val postId = intent.getStringExtra("postId").toString()
         val like = intent.getStringExtra("like").toString()
-        val isSaved = intent.getStringExtra("isSaved").toString()
+        val isSaved = intent.getStringExtra("saved").toString()
 
         if (isSaved == "saved"){
             operatioin = "pop"

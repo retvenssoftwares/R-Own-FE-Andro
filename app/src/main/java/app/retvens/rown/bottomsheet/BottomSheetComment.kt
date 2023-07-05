@@ -118,6 +118,8 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
+                    child = "0"
+                    replying.visibility = View.GONE
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     getCommentList(postID)
                     comments.text.clear()

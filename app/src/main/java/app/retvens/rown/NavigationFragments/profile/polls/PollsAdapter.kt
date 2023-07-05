@@ -22,6 +22,7 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfi
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
+import app.retvens.rown.utils.verificationStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.mackhartley.roundedprogressbar.RoundedProgressBar
@@ -36,6 +37,7 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
         val option2 = itemView.findViewById<TextView>(R.id.option2)
         val name = itemView.findViewById<TextView>(R.id.user_name_post)
         val profile = itemView.findViewById<ShapeableImageView>(R.id.post_profile)
+        val verification = itemView.findViewById<ImageView>(R.id.verification)
         val location = itemView.findViewById<TextView>(R.id.location)
         val time = itemView.findViewById<TextView>(R.id.post_time)
         val progressBar1 = itemView.findViewById<RoundedProgressBar>(R.id.progressBar)
@@ -62,6 +64,9 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
 
         val poll = pollList[position]
 
+        if (poll.verificationStatus != "false"){
+            holder.verification.visibility = View.VISIBLE
+        }
         try {
             val question = poll.pollQuestion[position]
 
@@ -142,7 +147,12 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
 
 
         } catch (e : IndexOutOfBoundsException){}
-        holder.name.text = poll.Full_name
+
+        if (poll.User_name.isNotEmpty()){
+            holder.name.text = poll.User_name
+        } else{
+            holder.name.text = poll.Full_name
+        }
         Glide.with(context).load(poll.Profile_pic).into(holder.profile)
         holder.location.text = poll.location
 

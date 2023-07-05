@@ -20,13 +20,17 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfi
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
+import app.retvens.rown.utils.acceptRequest
 import app.retvens.rown.utils.removeConnRequest
+import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 
 class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Post>):RecyclerView.Adapter<BottomSheetAdapterPeople.ExplorePeopleViewholder>() {
 
-    var userId = ""
+    val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
+
     interface ConnectClickListener {
         fun onJobSavedClick(connect: Post)
 
@@ -72,54 +76,49 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
         holder.role.text = data.Role
         holder.bio.text = data.userBio
 
-        userId = data.User_id
+        val userId = data.User_id
 
-        var status = data.connectionStatus
 
-        if (data.connectionStatus == "Connected") {
+        if (data.connectionStatus == "Connected"){
             holder.connect.text = "Interact"
             holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
             holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-        }
-
-
-        if (data.connectionStatus == "Requested") {
+        } else if (data.connectionStatus == "Not connected"){
+            holder.connect.text = "CONNECT"
+        } else if (data.connectionStatus == "Requested"){
             holder.connect.text = "Requested"
             holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
             holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
+        } else if (data.connectionStatus == "Confirm request"){
+            holder.connect.text = "Accept"
         }
 
         holder.connect.setOnClickListener {
+            if (holder.connect.text == "Remove"){
 
-            if (status == "Not Connected") {
-//                connectClickListener?.onJobSavedClick(data)
-                sendConnectionRequest(data.User_id, context, holder.connect)
+                removeConnection(userId,user_id, context){
+                    holder.connect.text = "CONNECT"
+                }
 
-                holder.connect.text = "Requested"
-                data.connectionStatus = "Requested"
-                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
-                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
-            }
+            } else if (holder.connect.text == "CONNECT") {
 
-            if (status == "Requested" || data.connectionStatus == "Requested") {
-//                connectClickListener?.onCancelRequest(data)
-                removeConnRequest(data.User_id, context, holder.connect)
+                sendConnectionRequest(userId, context){
+                    holder.connect.text = "Requested"
+                }
 
-                data.connectionStatus = "Not Connected"
-                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
-                holder.connect.text = "CONNECT"
-            }
+            } else  if (holder.connect.text == "Requested") {
 
-            if (holder.connect.text == "Interact") {
-                val intent = Intent(context, MesiboMessagingActivity::class.java)
-                intent.putExtra(MesiboUI.PEER, data.Mesibo_account[0].address)
-                context.startActivity(intent)
+                removeConnRequest(userId, context){
+                    holder.connect.text = "CONNECT"
+                }
+
+            } else if (holder.connect.text == "Accept") {
+
+                acceptRequest(userId, context){
+                    holder.connect.text = "Remove"
+                }
 
             }
-
-            status = "Requested"
-
         }
 
         holder.profile.setOnClickListener {
@@ -127,20 +126,14 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
             if(data.Role == "Business Vendor / Freelancer"){
                 val intent = Intent(context, VendorProfileActivity::class.java)
                 intent.putExtra("userId",data.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",data.Mesibo_account[0].address)
                 context.startActivity(intent)
             }else if (data.Role == "Hotel Owner"){
                 val intent = Intent(context, OwnerProfileActivity::class.java)
                 intent.putExtra("userId",data.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",data.Mesibo_account[0].address)
                 context.startActivity(intent)
             } else {
                 val intent = Intent(context, UserProfileActivity::class.java)
                 intent.putExtra("userId",data.User_id)
-                intent.putExtra("status",status)
-                intent.putExtra("address",data.Mesibo_account[0].address)
                 context.startActivity(intent)
             }
         }

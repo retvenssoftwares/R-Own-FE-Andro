@@ -56,25 +56,6 @@ class SavedPostsFragment : Fragment() {
         emptyImage = view.findViewById(R.id.emptyImage)
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
-        val blogs = listOf<MediaData>(
-            MediaData(R.drawable.png_post),
-            MediaData(R.drawable.png_blog),
-            MediaData(R.drawable.png_post),
-            MediaData(R.drawable.png_awards),
-            MediaData(R.drawable.png_blog),
-            MediaData(R.drawable.png_post),
-            MediaData(R.drawable.png_post),
-            MediaData(R.drawable.png_blog),
-            MediaData(R.drawable.png_post),
-            MediaData(R.drawable.png_awards),
-            MediaData(R.drawable.png_blog),
-            MediaData(R.drawable.png_post),
-        )
-
-//        savedPostsAdapter = SavedPostsAdapter(blogs, requireContext())
-//        mediaRecyclerView.adapter = savedPostsAdapter
-//        savedPostsAdapter.notifyDataSetChanged()
-
         getExplorePost()
     }
 
@@ -97,13 +78,14 @@ class SavedPostsFragment : Fragment() {
                         if (response.body()!!.isNotEmpty()) {
                             val response = response.body()!!
                             response.forEach {
-                                mediaAdapter = MediaAdapter(
-                                    requireContext(),
-                                    it.posts as ArrayList<PostItem>
-                                )
-                                mediaRecyclerView.adapter = mediaAdapter
-                                mediaAdapter.removePostsFromList(it.posts)
-                                mediaAdapter.notifyDataSetChanged()
+
+                            savedPostsAdapter = SavedPostsAdapter(
+                                requireContext(),
+                                it.posts as ArrayList<PostItem>
+                            )
+                                mediaRecyclerView.adapter = savedPostsAdapter
+                                savedPostsAdapter.removePostsFromList(it.posts)
+                                savedPostsAdapter.notifyDataSetChanged()
                             }
                             } else {
                                 empty.text = "You did'nt save post yet"

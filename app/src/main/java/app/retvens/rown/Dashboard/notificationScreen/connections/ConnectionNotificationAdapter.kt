@@ -60,20 +60,14 @@ class ConnectionNotificationAdapter(val listS : List<PersonalNotificationDataIte
             if(data.Role == "Business Vendor / Freelancer"){
                 val intent = Intent(context, VendorProfileActivity::class.java)
                 intent.putExtra("userId",data.user_id)
-//                intent.putExtra("status",status)
-//                intent.putExtra("address",data.Mesibo_account[0].address)
                 context.startActivity(intent)
             }else if (data.Role == "Hotel Owner"){
                 val intent = Intent(context, OwnerProfileActivity::class.java)
                 intent.putExtra("userId",data.user_id)
-//                intent.putExtra("status",status)
-//                intent.putExtra("address",data.Mesibo_account[0].address)
                 context.startActivity(intent)
             } else {
                 val intent = Intent(context, UserProfileActivity::class.java)
                 intent.putExtra("userId",data.user_id)
-//                intent.putExtra("status",status)
-//                intent.putExtra("address",data.Mesibo_account[0].address)
                 context.startActivity(intent)
             }
         }

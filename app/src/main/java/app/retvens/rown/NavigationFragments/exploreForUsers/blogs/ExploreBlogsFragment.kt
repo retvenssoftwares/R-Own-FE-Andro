@@ -80,8 +80,7 @@ class ExploreBlogsFragment : Fragment() {
                     val totalItem = layoutManager.itemCount
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-
+                    if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
                         isLoading = false
                         currentPage++
                         getData()
@@ -103,8 +102,10 @@ class ExploreBlogsFragment : Fragment() {
         progress.setVisibility(View.VISIBLE);
 
         handler.postDelayed({
-            getAllBlogs()
-            progress.setVisibility(View.GONE);
+            if (isAdded) {
+                getAllBlogs()
+                progress.setVisibility(View.GONE);
+            }
         },
             3000)
     }
@@ -158,7 +159,7 @@ class ExploreBlogsFragment : Fragment() {
                                          }
                                      })
                                 }catch (e:NullPointerException){
-                                    Toast.makeText(requireContext(),"No More Blogs",Toast.LENGTH_SHORT).show()
+//                                    Toast.makeText(requireContext(),"No More Blogs",Toast.LENGTH_SHORT).show()
                                 }
 
                             }

@@ -36,6 +36,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRAct
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetSharePost
+import app.retvens.rown.utils.acceptRequest
 import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
@@ -65,6 +66,8 @@ class VendorProfileActivity : AppCompatActivity() {
     lateinit var connCount:TextView
 
     lateinit var connStatus:TextView
+    lateinit var reject:TextView
+    lateinit var rejectCard: CardView
     lateinit var card_message: CardView
 
     var created = ""
@@ -90,6 +93,9 @@ class VendorProfileActivity : AppCompatActivity() {
         bio = findViewById(R.id.bio)
         websiteLink = findViewById(R.id.linkText)
 
+        reject = findViewById(R.id.reject)
+        rejectCard = findViewById(R.id.openReview)
+
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
 
@@ -108,12 +114,11 @@ class VendorProfileActivity : AppCompatActivity() {
 
         getUserPofile(userId,user_id)
 
-//        val connStat = intent.getStringExtra("status").toString()
-//        val address = intent.getStringExtra("address").toString()
+        if (user_id == userId){
+            connStatus.visibility = View.GONE
+            card_message.visibility = View.GONE
+        }
 
-//        if (address.isNotEmpty() && connStat == "Connected"){
-//            card_message.visibility = View.VISIBLE
-//        }
         card_message.setOnClickListener{
             if (address.isNotEmpty()) {
                 val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
@@ -129,14 +134,30 @@ class VendorProfileActivity : AppCompatActivity() {
 
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
-                removeConnection(userId,user_id, applicationContext, connStatus)
+
+                removeConnection(userId,user_id, applicationContext){
+                    connStatus.text = "CONNECT"
+                }
+
             } else if (connStatus.text == "CONNECT") {
-                sendConnectionRequest(userId, applicationContext, connStatus)
-                connStatus.text = "Requested"
+
+                sendConnectionRequest(userId, applicationContext){
+                    connStatus.text = "Requested"
+                }
+
             } else  if (connStatus.text == "Requested") {
-                removeConnRequest(userId, applicationContext, connStatus)
-            } else if (connStatus.text == "Accept Connection") {
-                accceptRequest(userId)
+
+                removeConnRequest(userId, applicationContext){
+                    connStatus.text = "CONNECT"
+                }
+
+            } else if (connStatus.text == "Accept") {
+
+                acceptRequest(userId, applicationContext){
+                    connStatus.text = "Remove"
+
+                    rejectCard.visibility = View.GONE
+                }
             }
         }
 
@@ -274,7 +295,7 @@ class VendorProfileActivity : AppCompatActivity() {
                         fullName = response.roleDetails.Full_name
                         userName = response.roleDetails.User_name
                         val transaction = supportFragmentManager.beginTransaction()
-                        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userId, false, name.text.toString()))
+                        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, name.text.toString()))
                         transaction.commit()
 
                         connCount.text = response.connectioncount.toString()
@@ -294,12 +315,14 @@ class VendorProfileActivity : AppCompatActivity() {
 //                            connStat = "Connected"
                         }else if (response.connectionStatus == "Not connected"){
                             connStatus.text = "CONNECT"
-//                            connStat = "Not Connected"
+
                         }else if (response.connectionStatus ==  "Confirm request"){
-                            connStatus.text = "Accept Connection"
-//                            connStat = "Confirm request"
+                            connStatus.text = "Accept"
+
+                            rejectCard.visibility = View.VISIBLE
+                            reject.text = "REJECT"
                         } else{
-//                            connStat = response.data.connectionStatus
+
                             connStatus.text = response.connectionStatus
                         }
                     } catch (e : NullPointerException){

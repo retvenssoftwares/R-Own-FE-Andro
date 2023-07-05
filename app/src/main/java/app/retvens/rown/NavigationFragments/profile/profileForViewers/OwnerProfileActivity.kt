@@ -66,6 +66,8 @@ class OwnerProfileActivity : AppCompatActivity() {
     lateinit var connCount:TextView
 
     lateinit var connStatus:TextView
+    lateinit var reject:TextView
+    lateinit var rejectCard: CardView
     lateinit var card_message:CardView
 
     var created = ""
@@ -87,6 +89,9 @@ class OwnerProfileActivity : AppCompatActivity() {
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
         websiteLink = findViewById(R.id.linkText)
+        reject = findViewById(R.id.reject)
+        rejectCard = findViewById(R.id.openReview)
+
 
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
@@ -98,6 +103,11 @@ class OwnerProfileActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        if (user_id == userID){
+            connStatus.visibility = View.GONE
+            card_message.visibility = View.GONE
+        }
 
         getUserPofile(userID,user_id)
 
@@ -113,15 +123,29 @@ class OwnerProfileActivity : AppCompatActivity() {
         }
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
-                removeConnection(userID,user_id, applicationContext, connStatus)
-                card_message.visibility = View.GONE
-            } else if (connStatus.text == "Not Connected") {
-                sendConnectionRequest(userID, applicationContext, connStatus)
-                connStatus.text = "Requested"
+
+                removeConnection(userID,user_id, applicationContext){
+                    connStatus.text = "CONNECT"
+                    card_message.visibility = View.GONE
+                }
+
+            } else if (connStatus.text == "CONNECT") {
+
+                sendConnectionRequest(userID, applicationContext){
+                    connStatus.text = "Requested"
+                }
+
             } else  if (connStatus.text == "Requested") {
-                removeConnRequest(userID, applicationContext, connStatus)
+
+                removeConnRequest(userID, applicationContext){
+                    connStatus.text = "CONNECT"
+                }
+
             } else if (connStatus.text == "Accept Connection") {
-                accceptRequest(userID)
+                connStatus.text = "Remove"
+
+                rejectCard.visibility = View.GONE
+                card_message.visibility = View.VISIBLE
             }
         }
 
@@ -307,7 +331,9 @@ class OwnerProfileActivity : AppCompatActivity() {
                     }else if (response.connectionStatus == "Not connected"){
                         connStatus.text = "CONNECT"
                     }else if (response.connectionStatus ==  "Confirm request"){
-                        connStatus.text = "Accept Connection"
+                        connStatus.text = "Accept"
+                        rejectCard.visibility = View.VISIBLE
+                        reject.text = "REJECT"
                     } else{
                         connStatus.text = response.connectionStatus
                     }
