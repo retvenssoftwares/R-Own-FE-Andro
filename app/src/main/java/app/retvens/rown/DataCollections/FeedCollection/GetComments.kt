@@ -7,6 +7,8 @@ data class Comments(
     val date_added: String,
     val Profile_pic: String,
     val User_name: String,
+    val Full_name: String,
+    val Role: String,
     val _id: String,
     val replies: List<Reply>
 )
@@ -17,6 +19,7 @@ data class Reply(
     val comment_id: String,
     val parent_comment_id: String,
     val date_added: String,
+    val Role: String,
     val Profile_pic: String,
     val User_name: String,
     val Full_name: String,

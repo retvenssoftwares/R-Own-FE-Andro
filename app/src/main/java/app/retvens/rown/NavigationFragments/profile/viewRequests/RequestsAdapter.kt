@@ -15,6 +15,8 @@ import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataCl
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeopleAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.R
+import app.retvens.rown.utils.rejectConnRequest
+import app.retvens.rown.utils.removeConnRequest
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -65,6 +67,15 @@ class RequestsAdapter(val listS : GetAllRequestDataClass, val context: Context) 
                 listS.conns.remove(data)
                 notifyDataSetChanged()
             }catch (e : Exception){}
+        }
+
+        holder.reject.setOnClickListener {
+            rejectConnRequest(data.User_id, context){
+                try {
+                    listS.conns.remove(data)
+                    notifyDataSetChanged()
+                }catch (e : Exception){}
+            }
         }
 
     }

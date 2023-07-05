@@ -36,6 +36,7 @@ data class Comment(
     val Profile_pic: String,
     val comment_id: String,
     val date_added: String,
+    val Role: String,
     val _id: String,
     val replies: List<Reply>
 )

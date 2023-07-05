@@ -64,6 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="10dp"
@@ -91,6 +92,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="@color/grey_40" />
 
         <LinearLayout
@@ -99,6 +101,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp">
@@ -125,10 +128,11 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="@color/grey_40" />
 
         <LinearLayout
-            android:id="@+id/management"
+            android:id="@+id/deleteAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

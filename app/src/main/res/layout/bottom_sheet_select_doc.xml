@@ -17,7 +17,7 @@
             android:id="@+id/syjt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Expected CTC?"
+            android:text="Select any Document"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="16dp"
             android:layout_gravity="center"

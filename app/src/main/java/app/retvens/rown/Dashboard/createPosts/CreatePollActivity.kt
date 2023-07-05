@@ -4,8 +4,10 @@ import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
@@ -28,6 +30,7 @@ class CreatePollActivity : AppCompatActivity() {
 
     lateinit var progressDialog: Dialog
 
+    var pollNumber = 2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreatePollBinding.inflate(layoutInflater)
@@ -45,6 +48,12 @@ class CreatePollActivity : AppCompatActivity() {
                 binding.opinion1Layout.error = "Add Opinion"
             }else if (binding.opinion2.text!!.isEmpty()){
                 binding.opinion2Layout.error = "Add Opinion"
+            }else if (binding.opinion3.text!!.isEmpty() && pollNumber == 3){
+                binding.opinion3Layout.error = "Add Opinion"
+            }else if (binding.opinion4.text!!.isEmpty() && pollNumber == 4){
+                binding.opinion4Layout.error = "Add Opinion"
+            }else if (binding.opinion5.text!!.isEmpty() && pollNumber == 5){
+                binding.opinion5Layout.error = "Add Opinion"
             }else{
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -62,6 +71,19 @@ class CreatePollActivity : AppCompatActivity() {
 
 
 
+        binding.nextUpdateEvent.setOnClickListener {
+            if (pollNumber < 5) {
+                pollNumber++
+            }
+
+            if (pollNumber == 3){
+                binding.opinion3Layout.visibility = View.VISIBLE
+            }else if (pollNumber == 4){
+                binding.opinion4Layout.visibility = View.VISIBLE
+            } else if (pollNumber == 5){
+                binding.opinion5Layout.visibility = View.VISIBLE
+            }
+        }
 
 
     }
@@ -71,39 +93,152 @@ class CreatePollActivity : AppCompatActivity() {
         val statement = binding.etAddStatement.text.toString()
         val opinion1 = binding.opinion1.text.toString()
         val opinion2 = binding.opinion2.text.toString()
+        val opinion3 = binding.opinion3.text.toString()
+        val opinion4 = binding.opinion4.text.toString()
+        val opinion5 = binding.opinion5.text.toString()
 
-        val sendPoll = RetrofitBuilder.feedsApi.createPoll(userId,
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),userId),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"Polls"),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),statement),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),opinion1),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),opinion2)
+        if (pollNumber == 2) {
+            val sendPoll = RetrofitBuilder.feedsApi.createPoll(
+                userId,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), userId),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), "Polls"),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), statement),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion1),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion2)
             )
 
-        sendPoll.enqueue(object : Callback<UpdateResponse?> {
-            override fun onResponse(
-                call: Call<UpdateResponse?>,
-                response: Response<UpdateResponse?>
-            ) {
-                progressDialog.dismiss()
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    val intent = Intent(applicationContext,DashBoardActivity::class.java)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    finish()
-                }else{
+            sendPoll.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    progressDialog.dismiss()
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        val intent = Intent(applicationContext, DashBoardActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(intent)
+                        finish()
+                    } else {
 //                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                        onBackPressed()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+//                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
                     onBackPressed()
                 }
-            }
+            })
+        } else if (pollNumber == 3) {
+            val sendPoll = RetrofitBuilder.feedsApi.create3Poll(
+                userId,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), userId),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), "Polls"),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), statement),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion1),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion2),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion3)
+            )
 
-            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                progressDialog.dismiss()
+            sendPoll.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    progressDialog.dismiss()
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        val intent = Intent(applicationContext, DashBoardActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(intent)
+                        finish()
+                    } else {
+//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                        onBackPressed()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
 //                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
-                onBackPressed()
-            }
-        })
+                    onBackPressed()
+                }
+            })
+        }  else if (pollNumber == 4) {
+            val sendPoll = RetrofitBuilder.feedsApi.create4Poll(
+                userId,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), userId),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), "Polls"),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), statement),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion1),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion2),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion3),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion4)
+            )
 
+            sendPoll.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    progressDialog.dismiss()
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        val intent = Intent(applicationContext, DashBoardActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(intent)
+                        finish()
+                    } else {
+//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                        onBackPressed()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+//                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                    onBackPressed()
+                }
+            })
+        }  else if (pollNumber == 5) {
+            val sendPoll = RetrofitBuilder.feedsApi.create5Poll(
+                userId,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), userId),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), "Polls"),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), statement),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion1),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion2),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion3),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion4),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), opinion5)
+            )
+
+            sendPoll.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    progressDialog.dismiss()
+                    if (response.isSuccessful) {
+                        val response = response.body()!!
+                        val intent = Intent(applicationContext, DashBoardActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(intent)
+                        finish()
+                    } else {
+//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                        onBackPressed()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+//                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                    onBackPressed()
+                }
+            })
+        }
     }
 }

@@ -14,5 +14,6 @@ class AccountManagementActivity : AppCompatActivity() {
 
         binding.reBackBtn.setOnClickListener { onBackPressed() }
 
+        binding.deleteAccount.setOnClickListener {  }
     }
 }

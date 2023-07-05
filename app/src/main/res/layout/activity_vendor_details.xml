@@ -71,7 +71,7 @@
             android:layout_marginHorizontal="40dp"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="3"
-            tools:listitem="@layout/interest_grid_item"
+            tools:listitem="@layout/item_services_grid"
             android:verticalSpacing="5dp"
             app:layout_constraintVertical_bias="0.03"
             app:layout_constraintTop_toBottomOf="@id/vendor_name"
