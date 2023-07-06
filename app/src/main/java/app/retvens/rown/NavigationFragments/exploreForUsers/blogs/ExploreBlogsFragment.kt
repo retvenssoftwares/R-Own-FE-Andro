@@ -29,13 +29,18 @@ class ExploreBlogsFragment : Fragment() {
 
     lateinit var exploreBlogsRecyclerView: RecyclerView
     lateinit var allBlogsAdapter: AllBlogsAdapter
-    private var currentPage = 1
+
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
     private var isLoading:Boolean = false
     lateinit var empty : TextView
+    lateinit var errorImage : ImageView
     private lateinit var progress: ProgressBar
     lateinit var searchBar : EditText
     private var blogList:ArrayList<AllBlogsData> = ArrayList()
+
+    private var currentPage = 1
+    var pageSize = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +57,7 @@ class ExploreBlogsFragment : Fragment() {
         exploreBlogsRecyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.emptyBlog)
+        errorImage = view.findViewById(R.id.errorImage)
         searchBar = view.findViewById(R.id.search_explore_blogs)
 
         progress = view.findViewById(R.id.progress)
@@ -130,9 +136,14 @@ class ExploreBlogsFragment : Fragment() {
 
                                 try {
 
+                                    pageSize = it.blogs.size
                                     blogList.addAll(it.blogs)
                                     allBlogsAdapter.removeBlogFromList(it.blogs)
                                     allBlogsAdapter.notifyDataSetChanged()
+                                    if (pageSize == 10){
+                                        pageSize = 0
+                                        currentPage++
+                                    }
                                     Log.d("on", it.toString())
                                      searchBar.addTextChangedListener(object : TextWatcher {
                                          override fun beforeTextChanged(
@@ -159,15 +170,16 @@ class ExploreBlogsFragment : Fragment() {
                                          }
                                      })
                                 }catch (e:NullPointerException){
+//                                    errorImage.visibility = View.VISIBLE
 //                                    Toast.makeText(requireContext(),"No More Blogs",Toast.LENGTH_SHORT).show()
                                 }
 
                             }
                         } else {
-                            empty.visibility = View.VISIBLE
+                            errorImage.visibility = View.VISIBLE
                         }
                     } else {
-                        empty.visibility = View.VISIBLE
+                        errorImage.visibility = View.VISIBLE
                         empty.text = response.code().toString()
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
@@ -178,7 +190,7 @@ class ExploreBlogsFragment : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
-                empty.visibility = View.VISIBLE
+                errorImage.visibility = View.VISIBLE
             }
         })
     }

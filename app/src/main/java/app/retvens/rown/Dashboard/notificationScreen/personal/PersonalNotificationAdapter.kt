@@ -44,7 +44,9 @@ class PersonalNotificationAdapter(val listS : List<PersonalNotificationDataItem>
             holder.endPic.setImageResource(R.drawable.svg_notification)
         }
 
-        holder.date.text =  dateFormat(listS[position].date_added)
+        if (listS[position].date_added.isNotEmpty()) {
+            holder.date.text = dateFormat(listS[position].date_added)
+        }
 
         Glide.with(context).load(listS[position].Profile_pic).into(holder.profile)
         holder.categoryName.text = listS[position].body

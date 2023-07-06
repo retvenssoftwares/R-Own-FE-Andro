@@ -6,6 +6,7 @@ data class PostItem(
     val caption: String,
     val location: String,
     val post_type: String,
+    val date_added: String,
     val Can_See: String,
     val Can_comment: String,
     val Event_location: String,
@@ -34,6 +35,7 @@ data class PostItem(
     val saved_post: List<Any>,
     val Full_name:String,
     var isSaved:String,
+    val saved:String,
     val __v: Int
 )
 

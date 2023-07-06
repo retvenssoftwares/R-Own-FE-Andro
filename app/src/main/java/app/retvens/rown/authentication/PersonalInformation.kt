@@ -287,7 +287,7 @@ class PersonalInformation : AppCompatActivity() {
     private fun uploadData(user_id: String) {
 
         val sharedPreferences = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
-        val phone : Long = sharedPreferences.getString("savePhoneNumber", "00")!!.toLong()
+        val phone : Long = sharedPreferences.getString("savePhoneNumber", "0000000000")!!.toLong()
 
 //        val phone : Long = intent.getStringExtra("phone")?.toLong()!!
 //        val phone : Long = 7905845936

@@ -25,7 +25,9 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
 import app.retvens.rown.Dashboard.profileCompletion.frags.VendorsFragment
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.yalantis.ucrop.UCrop
@@ -39,6 +41,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.DateFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -48,19 +51,30 @@ var role = ""
 var profileCompletionStatus = "50"
 var websiteLinkV = ""
 var phone = ""
+var profileImage = ""
 var verificationStatus = ""
 var connectionCount = "1"
 var isBS:Boolean = true
 
 fun dateFormat(date : String) : String {
     // Note, MM is months, not mm
-    val outputFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-    val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
+//    val outputFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+//    val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
+//
+//    val datee: Date = inputFormat.parse(date)
+//    val outputText: String = outputFormat.format(datee)
+//
+//    return outputText
 
-    val datee: Date = inputFormat.parse(date)
-    val outputText: String = outputFormat.format(datee)
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    var outputText2 = ""
+    try {
+    val outputText = inputFormat.parse(date)
+     outputText2 = outputFormat.format(outputText)
+    } catch (e:ParseException){ }
 
-    return outputText
+    return outputText2
 }
 
 fun showCalendar(context: Context, date: (String)-> Unit) {
@@ -338,3 +352,85 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
     })
 }
 
+ fun getProfileInfo(context: Context) {
+
+    val sharedPreferences =
+        context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+    val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+    if (user_id != "") {
+        val send = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
+
+        send.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful) {
+                    if (response.body() != null) {
+                        val response = response.body()!!
+                        phone = response.Phone
+                        role = response.Role
+                        profileCompletionStatus = response.profileCompletionStatus
+                        verificationStatus = response.verificationStatus
+
+                        profileImage = response.Profile_pic.toString()
+
+                        websiteLinkV = response.vendorInfo.websiteLink
+
+                        getSelfUserProfile(user_id,user_id, context)
+
+                        saveFullName(context, "${response.Full_name}")
+                        saveUserName(context, "${response.User_name}")
+                        saveProfileImage(context, "${response.Profile_pic}")
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        response.code().toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+
+    }
+}
+
+fun getSelfUserProfile(userId: String, userId1: String, context: Context) {
+
+    val getProfile = RetrofitBuilder.connectionApi.getconnProfile(userId,userId1)
+
+    getProfile.enqueue(object : Callback<NormalUserDataClass?> {
+        override fun onResponse(
+            call: Call<NormalUserDataClass?>,
+            response: Response<NormalUserDataClass?>
+        ) {
+            if (response.isSuccessful){
+                val response = response.body()!!
+
+                connectionCount = response.data.connCountLength.toString()
+
+                saveConnectionNo(
+                    context,
+                    response.data.connCountLength.toString()
+                )
+
+//                    Toast.makeText(applicationContext, response.data.connCountLength.toString(), Toast.LENGTH_SHORT)
+//                        .show()
+            }else{
+//                    Toast.makeText(requireContext(),response.code(),Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
+//                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+        }
+    })
+
+}

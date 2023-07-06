@@ -34,6 +34,7 @@ class DiscoverPeopleActivity : AppCompatActivity() {
         binding = ActivityDiscoverPeopleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.profileBackBtn.setOnClickListener { onBackPressed() }
         binding.discoverRecycler.layoutManager = LinearLayoutManager(this)
         binding.discoverRecycler.setHasFixedSize(true)
         getContacts()

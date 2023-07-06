@@ -137,4 +137,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/card_sh"/>
 
+    <ImageView
+        android:id="@+id/errorImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/svg_nothing"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_alignTop="@id/card_sh"
+        android:layout_marginTop="100dp"/>
+
 </RelativeLayout>

@@ -44,9 +44,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import android.os.Handler
+import android.os.Looper
+import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.databinding.ItemHotelPostBinding
+import com.pedromassango.doubleclick.DoubleClick
+import com.pedromassango.doubleclick.DoubleClickListener
 import okio.ByteString
 import okio.ByteString.Companion.encodeString
 import java.nio.charset.Charset
@@ -372,11 +376,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     inner class BannerItemViewHolderCheck(private val binding : ItemHotelPostBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner: PostItem, position: Int){
 
+            val post = banner
+
             var save = true
+            var like = true
             var operatioin = "push"
 
-            val post = banner
             Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+
             if (post.User_name.isNotEmpty()){
                 binding.userIdOnComment.text = post.User_name
             } else{
@@ -401,6 +408,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
             if (post.Comment_count != ""){
                 binding.commentCount.text = post.Comment_count
+            }
+            if (post.like != "Unliked"){
+                like = false
+                binding.likePost.setImageResource(R.drawable.liked_vectore)
+            }else {
+                like = true
+                binding.likePost.setImageResource(R.drawable.svg_like_post)
             }
 
             if (post.isSaved == "saved"){
@@ -427,6 +441,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 }
             }
 
+            val timestamp = convertTimeToText(post.date_added)
+
+            binding.postTime.text = timestamp
 
 
             binding.postProfile.setOnClickListener {
@@ -448,6 +465,56 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
 
+            var count:Int = 0
+
+            binding.likePost.setOnClickListener {
+
+                    if(like){
+                        post.like = "Liked"
+                        like = false
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+                        count = post.Like_count.toInt()+1
+                        post.Like_count = count.toString()
+                        binding.likeCount.text = count.toString()
+                        onItemClickListener?.onItemClick(banner)
+                    } else{
+                        post.like = "Unliked"
+                        like = true
+                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+                        count = post.Like_count.toInt()
+                        post.Like_count = count.toString()
+                        binding.likeCount.text = count.toString()
+                        onItemClickListener?.onItemClick(banner)
+                    }
+            }
+
+            binding.eventImage.setOnClickListener(DoubleClick(object : DoubleClickListener {
+                override fun onSingleClick(view: View?) {
+
+                }
+
+                override fun onDoubleClick(view: View?) {
+                    val anim = AnimationUtils.loadAnimation(context, R.anim.slide_in_bottom)
+                    binding.likedAnimation.startAnimation(anim)
+                    binding.likedAnimation.visibility = View.VISIBLE
+
+                    if(like){
+                        post.like = "Liked"
+                        like = false
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+                        count = post.Like_count.toInt()+1
+                        post.Like_count = count.toString()
+                        binding.likeCount.text = count.toString()
+                        onItemClickListener?.onItemClick(banner)
+                    }
+
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        val anim = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)
+                        binding.likedAnimation.startAnimation(anim)
+                        binding.likedAnimation.visibility = View.GONE }, 500)
+                }
+            }))
 
             binding.likePost.setOnClickListener {
                 onItemClickListener?.onItemClick(banner)
@@ -835,8 +902,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
             R.layout.item_hotel_post ->{
-                val hotel = ItemEventPostBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-                BannerItemViewHolderEvent(hotel)
+                val hotel = ItemHotelPostBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+                BannerItemViewHolderCheck(hotel)
             }
 
             else -> {

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -38,6 +39,7 @@ class ExplorePeopleFragment : Fragment() {
     private var totalPages = 0
     private var isLoading = false
     lateinit var empty : TextView
+    lateinit var errorImage : ImageView
     private lateinit var progress: ProgressBar
     private var peopleList:ArrayList<Post> = ArrayList()
 
@@ -69,6 +71,7 @@ class ExplorePeopleFragment : Fragment() {
         recyclerView.adapter = explorePeopleAdapter
 
         empty = view.findViewById(R.id.empty)
+        errorImage = view.findViewById(R.id.errorImage)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
         progress = view.findViewById(R.id.progress)
@@ -154,6 +157,7 @@ class ExplorePeopleFragment : Fragment() {
                                     explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.notifyDataSetChanged()
                                 }catch (e:NullPointerException){
+                                    errorImage.visibility = View.VISIBLE
                                     Log.e("error",e.message.toString())
                                 }
 
@@ -190,10 +194,10 @@ class ExplorePeopleFragment : Fragment() {
 
                 } else {
                             empty.text = "You did'nt post yet"
-                            empty.visibility = View.VISIBLE
+                            errorImage.visibility = View.VISIBLE
                         }
                     } else {
-                        empty.visibility = View.VISIBLE
+                        errorImage.visibility = View.VISIBLE
                         empty.text = response.code().toString()
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
@@ -205,7 +209,7 @@ class ExplorePeopleFragment : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
-                empty.visibility = View.VISIBLE
+                errorImage.visibility = View.VISIBLE
 
                 isLoading = false
             }

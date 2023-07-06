@@ -172,6 +172,13 @@ class DashBoardActivity : AppCompatActivity() {
 
         if (profilePic.isNotEmpty()) {
             Glide.with(applicationContext).load(profilePic).into(profile)
+        }  else {
+            if (profileImage.isNotEmpty()) {
+                Glide.with(this).load(profileImage).into(profile)
+            } else{
+            getProfileInfo(this)
+                Glide.with(this).load(profileImage).into(profile)
+            }
         }
         name.setText("Hi $profileName")
 

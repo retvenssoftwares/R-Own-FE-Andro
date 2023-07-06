@@ -124,7 +124,17 @@
 
             />
 
-
+        <ImageView
+            android:id="@+id/likedAnimation"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:elevation="8dp"
+            android:visibility="gone"
+            android:src="@drawable/liked_vectore"
+            app:layout_constraintTop_toTopOf="@id/event_image"
+            app:layout_constraintBottom_toBottomOf="@id/event_image"
+            app:layout_constraintEnd_toEndOf="@id/event_image"
+            app:layout_constraintStart_toStartOf="@id/event_image"/>
 
         <TextView
             android:id="@+id/book"

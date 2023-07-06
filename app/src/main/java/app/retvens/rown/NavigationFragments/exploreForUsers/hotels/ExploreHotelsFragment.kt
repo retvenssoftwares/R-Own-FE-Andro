@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -44,6 +45,7 @@ class ExploreHotelsFragment : Fragment() {
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
     private var hotelList:ArrayList<HotelData> = ArrayList()
     lateinit var empty : TextView
+    lateinit var errorImage : ImageView
 
 
     override fun onCreateView(
@@ -64,6 +66,7 @@ class ExploreHotelsFragment : Fragment() {
         searchBar = view.findViewById(R.id.search_explore_hotels)
 
         empty = view.findViewById(R.id.empty)
+        errorImage = view.findViewById(R.id.errorImage)
         progress = view.findViewById(R.id.progress)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
@@ -170,16 +173,17 @@ class ExploreHotelsFragment : Fragment() {
 
                                 }
                             } else {
-                                empty.visibility = View.VISIBLE
+                                errorImage.visibility = View.VISIBLE
                             }
                         } else {
-                            empty.visibility = View.VISIBLE
+                            errorImage.visibility = View.VISIBLE
                             empty.text = response.code().toString()
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
                         }
                     }
                 }catch (e:NullPointerException){
+                    errorImage.visibility = View.VISIBLE
                     Toast.makeText(requireContext(),"No Hotels Yet",Toast.LENGTH_SHORT).show()
                 }
 
@@ -190,7 +194,7 @@ class ExploreHotelsFragment : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again - ${t.localizedMessage}"
-                empty.visibility = View.VISIBLE
+                errorImage.visibility = View.VISIBLE
             }
         })
     }

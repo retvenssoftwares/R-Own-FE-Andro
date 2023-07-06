@@ -42,7 +42,9 @@ import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
 import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.utils.connectionCount
+import app.retvens.rown.utils.getProfileInfo
 import app.retvens.rown.utils.isBS
+import app.retvens.rown.utils.profileImage
 import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import com.bumptech.glide.Glide
@@ -137,6 +139,9 @@ class HomeFragment : Fragment() {
         val homeProfile = view.findViewById<ShapeableImageView>(R.id.home_profile)
         if (profilePic.isNotEmpty()) {
             Glide.with(requireContext()).load(profilePic).into(homeProfile)
+        } else {
+            getProfileInfo(requireContext())
+            Glide.with(requireContext()).load(profileImage).into(homeProfile)
         }
 
         recyclerCommunity = view.findViewById(R.id.recyclerCommunity)
@@ -185,10 +190,9 @@ class HomeFragment : Fragment() {
 
 
 
-        Thread{
             getCommunities()
-        }.start()
-
+            getPost(user_id)
+            getAllConnections(user_id)
         prepareData()
 
         adapter = MainAdapter(requireContext(),mList)
@@ -220,11 +224,6 @@ class HomeFragment : Fragment() {
 
         })
 
-        Thread {
-            // Run whatever background code you want here.
-            getPost(user_id)
-            getAllConnections(user_id)
-        }.start()
 
     }
 
@@ -272,13 +271,11 @@ class HomeFragment : Fragment() {
             if (pageCounter == 2) {
                 getHotels()
             }else if (pageCounter == 3) {
-                getHotels()
+                getOpenCommunites()
             }else if (pageCounter == 4) {
                 getAllBlogs()
             }else if (pageCounter == 5) {
                 getServices()
-            }else if (pageCounter == 6) {
-                getOpenCommunites()
             }
 
             progress.setVisibility(View.VISIBLE);
@@ -347,12 +344,22 @@ class HomeFragment : Fragment() {
                                     }
                                 }
 
-                                if (item.post_type == "Update about an event"){
-                                    if (mList.contains(DataItem(DataItemType.Event, banner = item))){
+//                                if (item.post_type == "Update about an event"){
+//                                    if (mList.contains(DataItem(DataItemType.Event, banner = item))){
+//                                        mList.shuffle()
+//                                        adapter.notifyDataSetChanged()
+//                                    } else {
+//                                        mList.add(0, DataItem(DataItemType.Event, banner = item))
+//                                        postCounter += 1
+//                                    }
+//                                }
+
+                                if (item.post_type == "Check-in"){
+                                    if (mList.contains(DataItem(DataItemType.CheckIn, banner = item))){
                                         mList.shuffle()
                                         adapter.notifyDataSetChanged()
                                     } else {
-                                        mList.add(0, DataItem(DataItemType.Event, banner = item))
+                                        mList.add(0, DataItem(DataItemType.CheckIn, banner = item))
                                         postCounter += 1
                                     }
                                 }

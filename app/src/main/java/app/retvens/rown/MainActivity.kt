@@ -12,6 +12,7 @@ import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.authentication.*
 import app.retvens.rown.utils.connectionCount
+import app.retvens.rown.utils.getProfileInfo
 import app.retvens.rown.utils.phone
 import app.retvens.rown.utils.profileCompletionStatus
 import app.retvens.rown.utils.role
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getProfileInfo()
+        getProfileInfo(this)
 
         auth = FirebaseAuth.getInstance()
 
@@ -77,85 +78,4 @@ class MainActivity : AppCompatActivity() {
 
         },2000)
     }
-
-    private fun getProfileInfo() {
-
-        val sharedPreferences =
-            applicationContext?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        if (user_id != "") {
-            val send = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
-
-            send.enqueue(object : Callback<UserProfileRequestItem?> {
-                override fun onResponse(
-                    call: Call<UserProfileRequestItem?>,
-                    response: Response<UserProfileRequestItem?>
-                ) {
-                    if (response.isSuccessful) {
-                        if (response.body() != null) {
-                            val response = response.body()!!
-                            phone = response.Phone
-                            role = response.Role
-                            profileCompletionStatus = response.profileCompletionStatus
-                            verificationStatus = response.verificationStatus
-
-                            websiteLinkV = response.vendorInfo.websiteLink
-
-                            getSelfUserProfile(user_id,user_id)
-
-                            saveFullName(applicationContext, "${response.Full_name}")
-                            saveUserName(applicationContext, "${response.User_name}")
-                            saveProfileImage(applicationContext, "${response.Profile_pic}")
-                        }
-                    } else {
-                        Toast.makeText(
-                            applicationContext,
-                            response.code().toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
-                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
-                }
-            })
-
-        }
-    }
-    private fun getSelfUserProfile(userId: String, userId1: String) {
-
-        val getProfile = RetrofitBuilder.connectionApi.getconnProfile(userId,userId1)
-
-        getProfile.enqueue(object : Callback<NormalUserDataClass?> {
-            override fun onResponse(
-                call: Call<NormalUserDataClass?>,
-                response: Response<NormalUserDataClass?>
-            ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-
-                    connectionCount = response.data.connCountLength.toString()
-
-                    saveConnectionNo(
-                        applicationContext,
-                        response.data.connCountLength.toString()
-                    )
-
-//                    Toast.makeText(applicationContext, response.data.connCountLength.toString(), Toast.LENGTH_SHORT)
-//                        .show()
-                }else{
-//                    Toast.makeText(requireContext(),response.code(),Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
-//                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
-
-    }
-
 }

@@ -93,7 +93,7 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>) : Rec
             intent.putExtra("like",media.liked)
             intent.putExtra("islike",media.islike)
             intent.putExtra("postId",media.post_id)
-            intent.putExtra("saved",media.isSaved)
+            intent.putExtra("saved",media.saved)
             context.startActivity(intent)
         }
     }

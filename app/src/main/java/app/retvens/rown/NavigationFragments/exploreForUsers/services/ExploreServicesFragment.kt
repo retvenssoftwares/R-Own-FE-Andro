@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -36,6 +37,7 @@ class ExploreServicesFragment : Fragment() {
     private lateinit var progress: ProgressBar
     private var hotelList:ArrayList<ProfileServicesDataItem> = ArrayList()
     lateinit var empty : TextView
+    lateinit var errorImage : ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +61,7 @@ class ExploreServicesFragment : Fragment() {
         exploreServicesAdapter.notifyDataSetChanged()
 
         empty = view.findViewById(R.id.empty)
+        errorImage = view.findViewById(R.id.errorImage)
         progress = view.findViewById(R.id.progress)
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
 
@@ -132,16 +135,17 @@ class ExploreServicesFragment : Fragment() {
                                     exploreServicesAdapter.notifyDataSetChanged()
                                 }
                             } else {
-                                empty.visibility = View.VISIBLE
+                                errorImage.visibility = View.VISIBLE
                             }
                         } else {
-                            empty.visibility = View.VISIBLE
+                            errorImage.visibility = View.VISIBLE
                             empty.text = response.code().toString()
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
                         }
                     }
                 }catch (e:NullPointerException){
+                    errorImage.visibility = View.VISIBLE
                     Toast.makeText(requireContext(),"No Services Yet",Toast.LENGTH_SHORT).show()
                 }
 
@@ -152,7 +156,7 @@ class ExploreServicesFragment : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again - ${t.localizedMessage}"
-                empty.visibility = View.VISIBLE
+                errorImage.visibility = View.VISIBLE
             }
         })
     }
