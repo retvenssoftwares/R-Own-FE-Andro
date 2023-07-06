@@ -229,7 +229,6 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,"Device Token Generated",Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }

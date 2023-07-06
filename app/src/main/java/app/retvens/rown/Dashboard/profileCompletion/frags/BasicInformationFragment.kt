@@ -32,6 +32,7 @@ import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.mesibo.api.Mesibo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -190,7 +191,11 @@ class BasicInformationFragment : Fragment(),
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+                    val sharedPreferences1 = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+                    val user_id1 = sharedPreferences1?.getString("user_id", "").toString()
 
+                    val sharedPreferences2 = requireContext().getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
+                    val phone2 = sharedPreferences2?.getString("savePhoneNumber", "").toString()
                     progressDialog.dismiss()
 
                     when (nextFrag) {
@@ -201,6 +206,16 @@ class BasicInformationFragment : Fragment(),
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
                             transaction?.commit()
+
+
+
+
+                            val setStatus = encodeData(user_id1,"Normal User")
+
+                            val profilez = Mesibo.getProfile(phone2)
+
+                            profilez.status = setStatus
+                            profilez.save()
                         }
                         1 -> {
                             profileComStatus(context!!, "75")
@@ -210,7 +225,12 @@ class BasicInformationFragment : Fragment(),
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
                             transaction?.commit()
+                            val setStatus = encodeData(user_id1,"Hotel Owner")
 
+                            val profilez = Mesibo.getProfile(phone2)
+
+                            profilez.status = setStatus
+                            profilez.save()
                         }
                         2 -> {
                             profileComStatus(context!!, "85")
@@ -220,6 +240,12 @@ class BasicInformationFragment : Fragment(),
                             transaction?.replace(R.id.fragment_username,fragment)
                             transaction?.commit()
 
+                            val setStatus = encodeData(user_id1,"Hospitality Expert")
+
+                            val profilez = Mesibo.getProfile(phone2)
+
+                            profilez.status = setStatus
+                            profilez.save()
                         }
                         3 -> {
                             profileComStatus(context!!, "90")
@@ -230,6 +256,12 @@ class BasicInformationFragment : Fragment(),
                             transaction?.replace(R.id.fragment_username,fragment)
                             transaction?.commit()
 
+                            val setStatus = encodeData(user_id1,"Business Vendor / Freelancer")
+
+                            val profilez = Mesibo.getProfile(phone2)
+
+                            profilez.status = setStatus
+                            profilez.save()
                         }
                     }
 
@@ -246,6 +278,28 @@ class BasicInformationFragment : Fragment(),
         })
 
 
+    }
+
+    fun encodeString(input: String, shift: Int): String {
+        val encodedData = StringBuilder()
+        for (char in input) {
+            val encodedChar = when {
+                char.isLetter() -> {
+                    val base = if (char.isLowerCase()) 'a' else 'A'
+                    val encodedAscii = (char.toInt() - base.toInt() + shift) % 26
+                    (encodedAscii + base.toInt()).toChar()
+                }
+                else -> char
+            }
+            encodedData.append(encodedChar)
+        }
+        return encodedData.toString()
+    }
+
+    fun encodeData(userID: String, userRole: String): String {
+        val encodedUserID = encodeString(userID, 5)
+        val encodedUserRole = encodeString(userRole, 6)
+        return "$encodedUserID|$encodedUserRole"
     }
 
     private fun openBottomRecentJob() {
@@ -296,7 +350,7 @@ class BasicInformationFragment : Fragment(),
     }
 
     override fun onJobClick(job: GetJobDataClass) {
-        TODO("Not yet implemented")
+
     }
 
     override fun bottomJobTitleClick(jobTitleFrBo: String) {

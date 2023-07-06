@@ -16,6 +16,7 @@ class CreatCheackInPostActivity : AppCompatActivity(),
     BottomSheetHotelByLocation.OnBottomCountryStateCityClickListener {
     lateinit var binding: ActivityCreatCheackInPostBinding
     var canSee : Int ?= 0
+    var location:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +63,19 @@ class CreatCheackInPostActivity : AppCompatActivity(),
             bottomSheet.setOnCountryStateCityClickListener(this)
         }
         binding.etVenuePost.setOnClickListener {
-            val bottomSheet = BottomSheetHotelByLocation()
-            val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetHotelByLocation.CountryStateCity_TAG)}
-            bottomSheet.setOnCountryStateCityClickListener(this)
-
+            if (location != "") {
+                val bottomSheet = BottomSheetHotelByLocation(location)
+                val fragManager = supportFragmentManager
+                fragManager.let {
+                    bottomSheet.show(
+                        it,
+                        BottomSheetHotelByLocation.CountryStateCity_TAG
+                    )
+                }
+                bottomSheet.setOnCountryStateCityClickListener(this)
+            }else{
+                Toast.makeText(applicationContext,"Select Location First",Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.nextCheckIn.setOnClickListener {
@@ -78,10 +87,11 @@ class CreatCheackInPostActivity : AppCompatActivity(),
 
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
         binding.etLocationPost.setText(CountryStateCityFrBo)
+        location = CountryStateCityFrBo
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun bottomSelectAudienceClick(audienceFrBo: String) {

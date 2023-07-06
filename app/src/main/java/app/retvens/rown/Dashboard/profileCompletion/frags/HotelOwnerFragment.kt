@@ -628,7 +628,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 
 }

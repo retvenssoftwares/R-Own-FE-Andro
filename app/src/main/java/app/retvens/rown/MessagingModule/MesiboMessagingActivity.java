@@ -53,6 +53,9 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder;
 import app.retvens.rown.Dashboard.ChatActivity;
 import app.retvens.rown.Dashboard.DashBoardActivity;
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse;
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity;
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity;
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity;
 import app.retvens.rown.R;
 import app.retvens.rown.api.MesiboCall;
 import app.retvens.rown.api.p000ui.MesiboDefaultCallActivity;
@@ -188,6 +191,32 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                             Intent intent = new Intent(MesiboMessagingActivity.this, CommunityDetailsActivity.class);
                             intent.putExtra("groupId",groupId);
                             startActivity(intent);
+                        }else{
+                            String peer = args.getString(MesiboUI.PEER);
+                            MesiboProfile profile = Mesibo.getProfile(peer);
+
+                            String status = profile.getStatus();
+
+                            Map<String, String> decodedData = Decoder.decodeData(status);
+
+                            String userID = decodedData.get("userID");
+                            String userRole = decodedData.get("userRole");
+
+                            if (userRole == "Hotel Owner"){
+                                Intent intent = new Intent(MesiboMessagingActivity.this, OwnerProfileActivity.class);
+                                intent.putExtra("userId",userID);
+                                startActivity(intent);
+                            }else if (userRole == "Business Vendor / Freelancer"){
+                                Intent intent = new Intent(MesiboMessagingActivity.this, VendorProfileActivity.class);
+                                intent.putExtra("userId",userID);
+                                startActivity(intent);
+                            }else {
+                                Intent intent = new Intent(MesiboMessagingActivity.this, UserProfileActivity.class);
+                                intent.putExtra("userId",userID);
+                                startActivity(intent);
+                            }
+
+
                         }
 
                     }
@@ -275,6 +304,63 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
     private void setProfilePicture() {
     }
 
+    public static class Decoder {
+        public static Map<String, String> decodeData(String encodedData) {
+            String[] decodedValues = encodedData.split("\\|");
+            List<String> keys = Arrays.asList("userID", "userRole");
+            List<String> values = new ArrayList<>();
+
+            for (int index = 0; index < decodedValues.length; index++) {
+                String value = decodedValues[index];
+                int shift = 0;
+                switch (index) {
+                    case 0:
+                        shift = 5;
+                        break;
+                    case 1:
+                        shift = 6;
+                        break;
+                    default:
+                        break;
+                }
+                String decodedValue = decodeString(value, shift);
+                values.add(decodedValue);
+            }
+
+            Map<String, String> decodedData = new HashMap<>();
+            int minSize = Math.min(keys.size(), values.size()); // Ensure iterating over the smaller size
+
+            try {
+                for (int i = 0; i < minSize; i++) {
+                    String key = keys.get(i);
+                    String value = values.get(i);
+                    decodedData.put(key, value);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                // Handle the exception here
+                // You can log an error message, provide a default value, or take appropriate action
+                System.err.println("Index out of bounds: " + e.getMessage());
+                // Perform fallback behavior or recovery steps if needed
+            }
+
+            return decodedData;
+        }
+
+        public static String decodeString(String input, int shift) {
+            StringBuilder decodedData = new StringBuilder();
+            for (char ch : input.toCharArray()) {
+                if (Character.isLetter(ch)) {
+                    char base = Character.isLowerCase(ch) ? 'a' : 'A';
+                    int decodedAscii = (ch - base - shift + 26) % 26;
+                    char decodedChar = (char) (decodedAscii + base);
+                    decodedData.append(decodedChar);
+                } else {
+                    decodedData.append(ch);
+                }
+            }
+            return decodedData.toString();
+        }
+    }
 
     protected void launchCustomCallActivity(String destination, boolean video, boolean incoming) {
         Intent intent = new Intent(this, MesiboDefaultCallActivity.class);
@@ -524,63 +610,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         }
     }
 
-    public static class Decoder {
-        public static Map<String, String> decodeData(String encodedData) {
-            String[] decodedValues = encodedData.split("\\|");
-            List<String> keys = Arrays.asList("userID", "userRole");
-            List<String> values = new ArrayList<>();
 
-            for (int index = 0; index < decodedValues.length; index++) {
-                String value = decodedValues[index];
-                int shift = 0;
-                switch (index) {
-                    case 0:
-                        shift = 5;
-                        break;
-                    case 1:
-                        shift = 6;
-                        break;
-                    default:
-                        break;
-                }
-                String decodedValue = decodeString(value, shift);
-                values.add(decodedValue);
-            }
-
-            Map<String, String> decodedData = new HashMap<>();
-            int minSize = Math.min(keys.size(), values.size()); // Ensure iterating over the smaller size
-
-            try {
-                for (int i = 0; i < minSize; i++) {
-                    String key = keys.get(i);
-                    String value = values.get(i);
-                    decodedData.put(key, value);
-                }
-            } catch (IndexOutOfBoundsException e) {
-                // Handle the exception here
-                // You can log an error message, provide a default value, or take appropriate action
-                System.err.println("Index out of bounds: " + e.getMessage());
-                // Perform fallback behavior or recovery steps if needed
-            }
-
-            return decodedData;
-        }
-
-        public static String decodeString(String input, int shift) {
-            StringBuilder decodedData = new StringBuilder();
-            for (char ch : input.toCharArray()) {
-                if (Character.isLetter(ch)) {
-                    char base = Character.isLowerCase(ch) ? 'a' : 'A';
-                    int decodedAscii = (ch - base - shift + 26) % 26;
-                    char decodedChar = (char) (decodedAscii + base);
-                    decodedData.append(decodedChar);
-                } else {
-                    decodedData.append(ch);
-                }
-            }
-            return decodedData.toString();
-        }
-    }
 
 
 

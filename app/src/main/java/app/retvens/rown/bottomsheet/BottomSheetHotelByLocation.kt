@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BottomSheetHotelByLocation : BottomSheetDialogFragment() {
+class BottomSheetHotelByLocation(val location:String) : BottomSheetDialogFragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var bottomSheetHotelAdapter: BottomSheetHotelAdapter
@@ -61,7 +61,7 @@ class BottomSheetHotelByLocation : BottomSheetDialogFragment() {
 
     private fun getHotel() {
 
-        val getHotel = RetrofitBuilder.feedsApi.fetchbyLocation("Indore,Madhya Pradesh,India")
+        val getHotel = RetrofitBuilder.feedsApi.fetchbyLocation(location)
 
         getHotel.enqueue(object : Callback<List<GetHotelDataClass>?> {
             override fun onResponse(
@@ -70,7 +70,7 @@ class BottomSheetHotelByLocation : BottomSheetDialogFragment() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    bottomSheetHotelAdapter = BottomSheetHotelAdapter(requireContext(),response)
+                    bottomSheetHotelAdapter = BottomSheetHotelAdapter(requireContext(),response,location)
                     recyclerView.adapter = bottomSheetHotelAdapter
                     bottomSheetHotelAdapter.notifyDataSetChanged()
                 }else{

@@ -13,6 +13,7 @@ class DataItemType {
         const val POLL = 7
         const val Status = 8
         const val Event = 9
+        const val CheckIn = 10
     }
 
 }

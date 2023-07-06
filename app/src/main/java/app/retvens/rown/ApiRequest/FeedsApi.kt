@@ -136,6 +136,20 @@ interface FeedsApi {
 
     @Multipart
     @POST("post/{user_id}")
+    fun createCheckIn(
+        @Path("user_id") user_id:String,
+        @Part("user_id")userId:RequestBody,
+        @Part("post_type")post_type:RequestBody,
+        @Part("Can_See")Can_See:RequestBody,
+        @Part("Can_comment")Can_comment:RequestBody,
+        @Part("caption")caption:RequestBody,
+        @Part("event_thumbnail")event_thumbnail:RequestBody,
+        @Part("checkinVenue")Event_name:RequestBody,
+        @Part("checkinLocation")Event_location:RequestBody
+    ):Call<UpdateResponse>
+
+    @Multipart
+    @POST("post/{user_id}")
     fun createPoll(
         @Path("user_id") user_id:String,
         @Part("user_id")userId:RequestBody,
@@ -206,9 +220,9 @@ interface FeedsApi {
         @Body postComment:PostCommentReplyClass
     ):Call<UpdateResponse>
 
-    @GET("gethotelinpost")
+    @GET("gethotelinpost/{location}")
     fun fetchbyLocation(
-        location:String
+        @Path("location") location:String,
     ):Call<List<GetHotelDataClass>>
 
     @GET("geteventposting/{location}")
@@ -240,7 +254,7 @@ interface FeedsApi {
     fun votePost(
         @Path("postId")postId:String,
         @Path("optionId")optionId:String,
-        @Body user_id: LikesCollection
+        @Body user_id: VoteCollection
     ):Call<UpdateResponse>
 
     @PATCH("editpost/{postId}")

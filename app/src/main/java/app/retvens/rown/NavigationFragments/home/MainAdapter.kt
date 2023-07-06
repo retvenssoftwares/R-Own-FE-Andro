@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit
 import android.os.Handler
 import androidx.annotation.RequiresApi
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
+import app.retvens.rown.databinding.ItemHotelPostBinding
 import okio.ByteString
 import okio.ByteString.Companion.encodeString
 import java.nio.charset.Charset
@@ -368,6 +369,98 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     }
 
 
+    inner class BannerItemViewHolderCheck(private val binding : ItemHotelPostBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bindBannerView(banner: PostItem, position: Int){
+
+            var save = true
+            var operatioin = "push"
+
+            val post = banner
+            Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+            if (post.User_name.isNotEmpty()){
+                binding.userIdOnComment.text = post.User_name
+            } else{
+                binding.userIdOnComment.text = post.Full_name
+            }
+
+            if(post.verificationStatus != "false"){
+                binding.verification.visibility = View.VISIBLE
+            }
+
+            Log.e("username",post.User_name)
+            binding.recentCommentByUser.text = post.caption
+            Log.e("caption",post.caption)
+            binding.userNamePost.text = post.Full_name
+
+            binding.titleStatus.text = "Hello all, I am here at ${post.checkinVenue}. Let’s Catch Up."
+
+            Glide.with(context).load(post.event_thumbnail).into(binding.eventImage)
+
+            if (post.Like_count != ""){
+                binding.likeCount.text = post.Like_count
+            }
+            if (post.Comment_count != ""){
+                binding.commentCount.text = post.Comment_count
+            }
+
+            if (post.isSaved == "saved"){
+                operatioin = "pop"
+                save = false
+                binding.savePost.setImageResource(R.drawable.svg_saved)
+            } else {
+                operatioin = "push"
+                save = true
+                binding.savePost.setImageResource(R.drawable.svg_save_post)
+            }
+
+            binding.savePost.setOnClickListener {
+                if (post.post_id != null) {
+                    saveHotel(post.post_id, binding, operatioin, save) {
+                        if (it == 0) {
+                            operatioin = "pop"
+                            save = !save
+                        } else {
+                            operatioin = "push"
+                            save = !save
+                        }
+                    }
+                }
+            }
+
+
+
+            binding.postProfile.setOnClickListener {
+
+                if(banner.Role == "Business Vendor/Freelancer"){
+                    val intent = Intent(context,VendorProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                }else if (banner.Role == "Hotel Owner"){
+                    val intent = Intent(context,OwnerProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+                } else {
+                    val intent = Intent(context,UserProfileActivity::class.java)
+                    intent.putExtra("userId",banner.user_id)
+                    context.startActivity(intent)
+
+                }
+            }
+
+
+
+            binding.likePost.setOnClickListener {
+                onItemClickListener?.onItemClick(banner)
+            }
+
+            binding.comment.setOnClickListener {
+                onItemClickListener?.onItemClickForComment(banner,position)
+            }
+
+        }
+    }
+
+
     inner class BannerItemViewHolderStatus(private val binding : ItemStatusBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner: PostItem, position: Int){
 
@@ -472,7 +565,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     }
 
 
-    inner class BannerItemViewHolderPoll(private val binding : ItemPollProfileBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class BannerItemViewHolderPoll(private val binding : ItemPollProfileBinding) : RecyclerView.ViewHolder(binding.root),
+        PollsAdapter.OnItemClickListener {
         fun bindBannerView(banner: PostItem, position: Int){
 
             binding.checkVotes.visibility = View.GONE
@@ -484,22 +578,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.verification.visibility = View.VISIBLE
             }
 
-            banner.pollQuestion.forEach { item ->
-                binding.titlePoll.text = item.Question
-                binding.option1.text = item.Options[0].Option
-                binding.option2.text = item.Options[1].Option
-
-                val progressBarOption1: RoundedProgressBar = binding.progressBar
-                val progressBarOption2: RoundedProgressBar = binding.progressBar2
-
-
-                val vote1: List<String> = item.Options[0].votes.map { it.user_id }
-                val vote2: List<String> = item.Options[1].votes.map { it.user_id }
-
-                val timestamp = convertTimeToText(item.date_added)
-                binding.postTime.text = timestamp
-
-                binding.postProfile.setOnClickListener {
+            binding.postProfile.setOnClickListener {
                     if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
 
                         val intent = Intent(context,UserProfileActivity::class.java)
@@ -517,67 +596,91 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     }
                 }
 
+            binding.votesOptionsrecycler.layoutManager = LinearLayoutManager(context)
+            val adapter = PollsAdapter(context, banner.pollQuestion[0].Options,
+                PollsDetails(banner.post_id,banner.voted)
+            )
+            binding.votesOptionsrecycler.adapter = adapter
 
-                binding.voteOption1.setOnClickListener {
+            banner.pollQuestion.forEach { item ->
+                binding.titlePoll.text = item.Question
 
-                    if (banner.voted == "no") {
-                        voteOption(banner.post_id, item.Options[0].option_id)
-                        val vote = vote1.size+1
-                        binding.Option1Votes.text = "${vote} votes"
-                        val totalVotes = vote + vote2.size
-                        val completedTasks = totalVotes
-                        val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
-                        if (!completedPercentage.isNaN()) {
-                            progressBarOption1.setProgressPercentage(completedPercentage)
-                            binding.option1Percentage.text = "${completedPercentage}%"
-                        }
-                    }
-                }
-
-
-
-
-                binding.voteOption2.setOnClickListener {
-
-                    if (banner.voted == "no"){
-                        voteOption(banner.post_id,item.Options[1].option_id)
-
-                        val vote = vote2.size + 1
-                        binding.Option2Votes.text = "${vote} votes"
-                        val totalVotes = vote1.size + vote
-                        val completedTasks2 = totalVotes
-                        val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
-                        if (!completedPercentage2.isNaN()) {
-                            progressBarOption2.setProgressPercentage(completedPercentage2)
-                            binding.option2Percentage.text = "${completedPercentage2}%"
-
-                        }
-                    }
-
-                }
-
-                    binding.Option1Votes.text = "${vote1.size} votes"
-                    binding.Option2Votes.text = "${vote2.size} votes"
-
-                    val totalVotes = vote1.size + vote2.size
-                    val completedTasks = vote1.size
-                val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
-                if (!completedPercentage.isNaN()) {
-                    progressBarOption1.setProgressPercentage(completedPercentage)
-                    binding.option1Percentage.text = "${completedPercentage}%"
-                }
-
-
-                val completedTasks2 = vote2.size
-                val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
-                if (!completedPercentage2.isNaN()) {
-                    progressBarOption2.setProgressPercentage(completedPercentage2)
-                    binding.option2Percentage.text = "${completedPercentage2}%"
-                }
-
-
-
+                val timestamp = convertTimeToText(item.date_added)
+                binding.postTime.text = timestamp
             }
+
+            binding.location.text = banner.Role
+
+            adapter.setOnItemClickListener(this)
+//            banner.pollQuestion.forEach { item ->
+//                binding.titlePoll.text = item.Question
+//                binding.option1.text = item.Options[0].Option
+//                binding.option2.text = item.Options[1].Option
+//
+//                val progressBarOption1: RoundedProgressBar = binding.progressBar
+//                val progressBarOption2: RoundedProgressBar = binding.progressBar2
+//
+//
+//                val vote1: List<String> = item.Options[0].votes.map { it.user_id }
+//                val vote2: List<String> = item.Options[1].votes.map { it.user_id }
+//
+//                val timestamp = convertTimeToText(item.date_added)
+//                binding.postTime.text = timestamp
+//
+//
+//
+//                binding.voteOption1.setOnClickListener {
+//
+//                    if (banner.voted == "no") {
+//                        voteOption(banner.post_id, item.Options[0].option_id)
+//                        val vote = vote1.size+1
+//                        binding.Option1Votes.text = "${vote} votes"
+//                        val totalVotes = vote + vote2.size
+//                        val completedTasks = totalVotes
+//                        val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
+//                        if (!completedPercentage.isNaN()) {
+//                            progressBarOption1.setProgressPercentage(completedPercentage)
+//                            binding.option1Percentage.text = "${completedPercentage}%"
+//                        }
+//                    }
+//                }
+//
+//
+//
+//
+//                binding.voteOption2.setOnClickListener {
+//
+//                    if (banner.voted == "no"){
+//                        voteOption(banner.post_id,item.Options[1].option_id)
+//
+
+//                    }
+//
+//                }
+//
+//                    binding.Option1Votes.text = "${vote1.size} votes"
+//                    binding.Option2Votes.text = "${vote2.size} votes"
+//
+//                    val totalVotes = vote1.size + vote2.size
+//                    val completedTasks = vote1.size
+//                val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
+//                if (!completedPercentage.isNaN()) {
+//                    progressBarOption1.setProgressPercentage(completedPercentage)
+//                    binding.option1Percentage.text = "${completedPercentage}%"
+//                }
+//
+//
+//                val completedTasks2 = vote2.size
+//                val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
+//                if (!completedPercentage2.isNaN()) {
+//                    progressBarOption2.setProgressPercentage(completedPercentage2)
+//                    binding.option2Percentage.text = "${completedPercentage2}%"
+//                }
+
+
+
+
+//            }
 
         }
 
@@ -586,7 +689,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
             val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-            val postVote = RetrofitBuilder.feedsApi.votePost(postId,optionId, LikesCollection(user_id))
+            val postVote = RetrofitBuilder.feedsApi.votePost(postId,optionId, VoteCollection(user_id))
 
             postVote.enqueue(object : Callback<UpdateResponse?> {
                 override fun onResponse(
@@ -608,6 +711,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
 
         }
+
+        override fun onItemClick(optionId: String, postId: String) {
+            voteOption(postId,optionId)
+        }
+
+
     }
 
     inner class RecyclerItemViewHolder(private val binding: EachItemBinding) : RecyclerView.ViewHolder(binding.root){
@@ -693,6 +802,10 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 R.layout.item_event_post
             }
 
+            DataItemType.CheckIn ->{
+                R.layout.item_hotel_post
+            }
+
             else ->
                 R.layout.each_item
         }
@@ -719,6 +832,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             R.layout.item_event_post ->{
                 val event = ItemEventPostBinding.inflate(LayoutInflater.from(parent.context),parent,false)
                 BannerItemViewHolderEvent(event)
+            }
+
+            R.layout.item_hotel_post ->{
+                val hotel = ItemEventPostBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+                BannerItemViewHolderEvent(hotel)
             }
 
             else -> {
@@ -748,6 +866,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
             }
             is BannerItemViewHolderEvent ->{
+                dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
+            }
+            is BannerItemViewHolderCheck -> {
                 dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
             }
 
@@ -863,6 +984,38 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     }
 
     private fun saveEvent(blogId: String?, binding : ItemEventPostBinding, operation: String, like: Boolean, onLiked : (Int) -> Unit) {
+        val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val savePost = RetrofitBuilder.feedsApi.savePost(user_id, SavePost(operation,blogId!!))
+        savePost.enqueue(object : Callback<UserProfileResponse?> {
+            override fun onResponse(
+                call: Call<UserProfileResponse?>,
+                response: Response<UserProfileResponse?>
+            ) {
+                if (response.isSuccessful){
+                    if (like){
+                        binding.savePost.setImageResource(R.drawable.svg_saved)
+                        onLiked.invoke(0)
+                    } else {
+                        binding.savePost.setImageResource(R.drawable.svg_save_post)
+                        onLiked.invoke(1)
+                    }
+                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                    Log.d("savePost", "${response.toString()} ${response.body().toString()}")
+                } else {
+                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
+                Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    private fun saveHotel(blogId: String?, binding : ItemHotelPostBinding, operation: String, like: Boolean, onLiked : (Int) -> Unit) {
         val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 

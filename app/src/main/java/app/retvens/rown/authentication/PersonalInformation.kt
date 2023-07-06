@@ -151,6 +151,8 @@ class PersonalInformation : AppCompatActivity() {
 
         mGroupId = 0
 
+
+
     }
 
     private fun fetchUser(userId: String) {
@@ -438,7 +440,42 @@ class PersonalInformation : AppCompatActivity() {
             })
         }
 
+        val sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
+
+        val sharedPreferences2 = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
+        val phone2 = sharedPreferences2?.getString("savePhoneNumber", "").toString()
+
+
+        val setStatus = encodeData(user_id,"Normal User")
+
+        val profilez = Mesibo.getProfile(phone2)
+
+        profilez.status = setStatus
+        profilez.save()
        
+    }
+
+    fun encodeString(input: String, shift: Int): String {
+        val encodedData = StringBuilder()
+        for (char in input) {
+            val encodedChar = when {
+                char.isLetter() -> {
+                    val base = if (char.isLowerCase()) 'a' else 'A'
+                    val encodedAscii = (char.toInt() - base.toInt() + shift) % 26
+                    (encodedAscii + base.toInt()).toChar()
+                }
+                else -> char
+            }
+            encodedData.append(encodedChar)
+        }
+        return encodedData.toString()
+    }
+
+    fun encodeData(userID: String, userRole: String): String {
+        val encodedUserID = encodeString(userID, 5)
+        val encodedUserRole = encodeString(userRole, 6)
+        return "$encodedUserID|$encodedUserRole"
     }
 
     private fun setMesiboProfile(username: String) {

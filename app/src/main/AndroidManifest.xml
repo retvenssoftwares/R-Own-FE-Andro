@@ -47,6 +47,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Dashboard.createPosts.CheckInChildActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Dashboard.ChatActivity"
             android:exported="false">
             <meta-data
@@ -624,12 +631,10 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-<!--        <service-->
-<!--            android:name=".ApiRequest.MesiboBackgroundService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="false" />-->
+        </provider> <!-- <service -->
+        <!-- android:name=".ApiRequest.MesiboBackgroundService" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="false" /> -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />

@@ -111,19 +111,6 @@ class DashBoardActivity : AppCompatActivity() {
 //        val foregroundServiceIntent = Intent(applicationContext, MyForegroundService::class.java)
 //        ContextCompat.startForegroundService(applicationContext, foregroundServiceIntent)
 
-        val sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences1?.getString("user_id", "").toString()
-
-        val sharedPreferences2 = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
-        val phone = sharedPreferences2?.getString("savePhoneNumber", "").toString()
-
-
-        val setStatus = encodeData(user_id,"Normal User")
-
-        val profilez = Mesibo.getProfile(phone)
-
-        profilez.status = setStatus
-        profilez.save()
 
 
         toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close)
@@ -464,27 +451,7 @@ class DashBoardActivity : AppCompatActivity() {
         finishAffinity()
     }
 
-    fun encodeString(input: String, shift: Int): String {
-        val encodedData = StringBuilder()
-        for (char in input) {
-            val encodedChar = when {
-                char.isLetter() -> {
-                    val base = if (char.isLowerCase()) 'a' else 'A'
-                    val encodedAscii = (char.toInt() - base.toInt() + shift) % 26
-                    (encodedAscii + base.toInt()).toChar()
-                }
-                else -> char
-            }
-            encodedData.append(encodedChar)
-        }
-        return encodedData.toString()
-    }
 
-    fun encodeData(userID: String, userRole: String): String {
-        val encodedUserID = encodeString(userID, 5)
-        val encodedUserRole = encodeString(userRole, 6)
-        return "$encodedUserID|$encodedUserRole"
-    }
 
 
 
