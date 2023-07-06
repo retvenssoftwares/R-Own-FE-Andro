@@ -92,7 +92,7 @@ class CheckInChildActivity : AppCompatActivity(),
 
         val sendPost  = RetrofitBuilder.feedsApi.createCheckIn(userId,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),userId),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"Update about an event"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"Check-in"),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canSee),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canComment),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption),

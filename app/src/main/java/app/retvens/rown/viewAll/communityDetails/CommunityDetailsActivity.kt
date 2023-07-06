@@ -30,6 +30,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -237,34 +238,25 @@ class CommunityDetailsActivity : AppCompatActivity(){
     }
 
     private fun openBottomSelectionCommunityRemove(groupId: String) {
-        val dialogLanguage = Dialog(this)
-        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogLanguage.setContentView(R.layout.bottom_delete_group)
-        dialogLanguage.setCancelable(true)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(R.layout.bottom_delete_group)
+        bottomSheetDialog.setCancelable(true)
 
-// Set dialog size
-        val layoutParams = WindowManager.LayoutParams()
-        layoutParams.copyFrom(dialogLanguage.window?.attributes)
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialogLanguage.window?.attributes = layoutParams
+        // Set dialog window animations
+        bottomSheetDialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
 
-// Set dialog background
-        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-// Set dialog window animations
-        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
-
-        dialogLanguage.show()
-
-        dialogLanguage.findViewById<TextView>(R.id.yes).setOnClickListener {
-            dialogLanguage.dismiss()
+        // Handle "Yes" button click
+        bottomSheetDialog.findViewById<TextView>(R.id.yes)?.setOnClickListener {
+            bottomSheetDialog.dismiss()
             deleteCommunity(groupId)
         }
 
-        dialogLanguage.findViewById<TextView>(R.id.not).setOnClickListener {
-            dialogLanguage.dismiss()
+        // Handle "No" button click
+        bottomSheetDialog.findViewById<TextView>(R.id.not)?.setOnClickListener {
+            bottomSheetDialog.dismiss()
         }
+
+        bottomSheetDialog.show()
     }
 
     private fun replaceFragment(fragment: Fragment) {
