@@ -29,8 +29,6 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
 
     interface OnItemClickListener {
         fun onItemClick(optionId: String,postId:String)
-
-
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -54,11 +52,18 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
     override fun onBindViewHolder(holder: MyViewHolderClass, position: Int) {
         val data = pollList[position]
 
-        Log.e("option",data.Option.toString())
+        Log.e("kk",data.toString())
 
         holder.options.text = data.Option
 
         holder.count.text = data.votes.size.toString()
+        var totalVotess = 0
+        for (votes in pollList) {
+            totalVotess += votes.votes.size
+        }
+
+        Log.e("size",totalVotess.toString())
+
 
         val vote = data.votes
         holder.count.text = "${vote.size} votes"

@@ -51,6 +51,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.mesibo.api.Mesibo
+import com.mesibo.api.MesiboSelfProfile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -92,6 +93,13 @@ class DashBoardActivity : AppCompatActivity() {
         }.start()
 
         auth = FirebaseAuth.getInstance()
+
+        val sharedPreferences2 = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
+        val phone2 = sharedPreferences2?.getString("savePhoneNumber", "").toString()
+
+
+        val profiles = Mesibo.getSelfProfile()
+        Log.e("okk",profiles.status)
 
         devicetoken()
 

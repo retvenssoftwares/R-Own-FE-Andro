@@ -61,20 +61,8 @@ public class RecordedAudioToFileController implements JavaAudioDeviceModule.Samp
         }
     }
 
-    /*  JADX ERROR: Method load error
-        jadx.core.utils.exceptions.DecodeException: Load method exception: Unknown instruction: 'invoke-custom' in method: com.mesibo.calls.api.RecordedAudioToFileController.onWebRtcAudioRecordSamplesReady(org.webrtc.audio.JavaAudioDeviceModule$AudioSamples):void, dex: classes.jar
-        	at jadx.core.dex.nodes.MethodNode.load(MethodNode.java:151)
-        	at jadx.core.dex.nodes.ClassNode.load(ClassNode.java:286)
-        	at jadx.core.ProcessClass.process(ProcessClass.java:36)
-        	at java.base/java.util.ArrayList.forEach(ArrayList.java:1540)
-        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:59)
-        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-        Caused by: jadx.core.utils.exceptions.DecodeException: Unknown instruction: 'invoke-custom'
-        	at jadx.core.dex.instructions.InsnDecoder.decode(InsnDecoder.java:588)
-        	at jadx.core.dex.instructions.InsnDecoder.process(InsnDecoder.java:78)
-        	at jadx.core.dex.nodes.MethodNode.load(MethodNode.java:136)
-        	... 5 more
-        */
+
+
     public void onWebRtcAudioRecordSamplesReady(JavaAudioDeviceModule.AudioSamples r1) {
         /*
         // Can't load method instructions: Load method exception: Unknown instruction: 'invoke-custom' in method: com.mesibo.calls.api.RecordedAudioToFileController.onWebRtcAudioRecordSamplesReady(org.webrtc.audio.JavaAudioDeviceModule$AudioSamples):void, dex: classes.jar

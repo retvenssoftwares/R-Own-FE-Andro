@@ -76,7 +76,7 @@ class CreateTextPost : AppCompatActivity(),
     private lateinit var locationRequest: LocationRequest
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
-    lateinit var task:CardView
+    lateinit var task:ImageView
     var canSee : Int ?= 0
 
     var selectedImg : Int = 0
@@ -98,7 +98,7 @@ class CreateTextPost : AppCompatActivity(),
         binding.userCompleteName.setText(profileName)
 
 
-        task = findViewById<CardView>(R.id.autofetch)
+        task = findViewById(R.id.autofetch)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         settingsClient = LocationServices.getSettingsClient(this)

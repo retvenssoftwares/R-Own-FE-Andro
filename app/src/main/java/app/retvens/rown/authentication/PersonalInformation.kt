@@ -446,14 +446,20 @@ class PersonalInformation : AppCompatActivity() {
         val sharedPreferences2 = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
         val phone2 = sharedPreferences2?.getString("savePhoneNumber", "").toString()
 
+        Log.e("phone",phone2)
+        Log.e("userid",user_id)
 
         val setStatus = encodeData(user_id,"Normal User")
-
-        val profilez = Mesibo.getProfile(phone2)
-
+        Log.e("status",setStatus)
+        val profilez = Mesibo.getSelfProfile()
+        Log.e("2",profilez.address.toString())
         profilez.status = setStatus
+        Log.e("1","success")
         profilez.save()
-       
+        Log.e("ok",profilez.status.toString())
+
+        SetStatus.setStatusToMesibo(setStatus,phone2)
+
     }
 
     fun encodeString(input: String, shift: Int): String {
@@ -484,11 +490,7 @@ class PersonalInformation : AppCompatActivity() {
         val selfProfile = Mesibo.getSelfProfile()
 
         selfProfile.name = username
-        selfProfile.status = "Hey! I am using this app."
-//        selfProfile.setImage(bitmap)
-        selfProfile.save() // publish
-
-
+        selfProfile.save()
 
     }
 

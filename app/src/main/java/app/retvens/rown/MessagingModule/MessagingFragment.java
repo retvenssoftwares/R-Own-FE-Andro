@@ -86,6 +86,7 @@ import com.mesibo.api.MesiboPresence;
 import com.mesibo.api.MesiboProfile;
 import com.mesibo.api.MesiboProfile.Listener;
 import com.mesibo.api.MesiboReadSession;
+import com.mesibo.api.MesiboSelfProfile;
 import com.mesibo.emojiview.EmojiconEditText;
 import com.mesibo.emojiview.EmojiconGridView;
 import com.mesibo.emojiview.EmojiconTextView;
@@ -245,6 +246,12 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+//        MesiboProfile profiles = Mesibo.getSelfProfile();
+//        profiles.setStatus("hello");
+//        profiles.save();
+//
+//        Log.e("status",profiles.getStatus());
+
         if (null == container) {
             return null;
         } else {
@@ -268,13 +275,19 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                 }
                 try {
                     MesiboProfile profile = new MesiboProfile();
+                    Log.e("perr",peer);
                     profile = Mesibo.getProfile(peer);
                     String Status = profile.getStatus();
-
+                    Log.e("status",Status);
+                    Log.e("name",profile.getName());
                     Map<String, String> decodedData = Decoder.decodeData(Status);
 
                     this.userID = decodedData.get("userID");
                     this.userRole = decodedData.get("userRole");
+
+                    Log.e("id",this.userID);
+                    Log.e("role",this.userRole);
+
                 }catch (NullPointerException e){
                     Log.e("error",e.toString());
                 }
@@ -525,15 +538,30 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 
 
     public static class Decoder {
+        public static String decodeString(String input, int shift) {
+            StringBuilder decodedData = new StringBuilder();
+            for (char c : input.toCharArray()) {
+                char decodedChar;
+                if (Character.isLetter(c)) {
+                    char base = Character.isLowerCase(c) ? 'a' : 'A';
+                    int decodedAscii = (c - base - shift + 26) % 26;
+                    decodedChar = (char) (decodedAscii + base);
+                } else {
+                    decodedChar = c;
+                }
+                decodedData.append(decodedChar);
+            }
+            return decodedData.toString();
+        }
+
         public static Map<String, String> decodeData(String encodedData) {
-            String[] decodedValues = encodedData.split("\\|");
+            List<String> decodedValues = Arrays.asList(encodedData.split("\\|"));
             List<String> keys = Arrays.asList("userID", "userRole");
             List<String> values = new ArrayList<>();
 
-            for (int index = 0; index < decodedValues.length; index++) {
-                String value = decodedValues[index];
-                int shift = 0;
-                switch (index) {
+            for (int i = 0; i < decodedValues.size() && i < keys.size(); i++) {
+                int shift;
+                switch (i) {
                     case 0:
                         shift = 5;
                         break;
@@ -541,44 +569,28 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                         shift = 6;
                         break;
                     default:
+                        shift = 0;
                         break;
                 }
-                String decodedValue = decodeString(value, shift);
+                String decodedValue = decodeString(decodedValues.get(i), shift);
                 values.add(decodedValue);
             }
 
             Map<String, String> decodedData = new HashMap<>();
-            int minSize = Math.min(keys.size(), values.size()); // Ensure iterating over the smaller size
-
-            try {
-                for (int i = 0; i < minSize; i++) {
-                    String key = keys.get(i);
-                    String value = values.get(i);
-                    decodedData.put(key, value);
-                }
-            } catch (IndexOutOfBoundsException e) {
-                // Handle the exception here
-                // You can log an error message, provide a default value, or take appropriate action
-                System.err.println("Index out of bounds: " + e.getMessage());
-                // Perform fallback behavior or recovery steps if needed
+            for (int i = 0; i < keys.size() && i < values.size(); i++) {
+                decodedData.put(keys.get(i), values.get(i));
             }
 
             return decodedData;
         }
 
-        public static String decodeString(String input, int shift) {
-            StringBuilder decodedData = new StringBuilder();
-            for (char ch : input.toCharArray()) {
-                if (Character.isLetter(ch)) {
-                    char base = Character.isLowerCase(ch) ? 'a' : 'A';
-                    int decodedAscii = (ch - base - shift + 26) % 26;
-                    char decodedChar = (char) (decodedAscii + base);
-                    decodedData.append(decodedChar);
-                } else {
-                    decodedData.append(ch);
-                }
+        public static void main(String[] args) {
+            String encodedData = "RovvyUxqj!Jvsq";
+            Map<String, String> decodedData = decodeData(encodedData);
+
+            for (Map.Entry<String, String> entry : decodedData.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
             }
-            return decodedData.toString();
         }
     }
 

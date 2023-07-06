@@ -47,6 +47,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
+import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.databinding.ItemHotelPostBinding
 import com.pedromassango.doubleclick.DoubleClick
@@ -169,11 +170,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 onItemClickListener?.onItemsharePost(encodedData)
             }
 
-            banner.media.forEach { media ->
-                val timestamp = convertTimeToText(media.date_added)
+
+                Log.e("date",banner.date_added)
+                val timestamp = convertTimeToText(banner.date_added)
 
                 binding.postTime.text = timestamp
-            }
 
 
             binding.postProfile.setOnClickListener {
@@ -641,6 +642,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
             binding.userNamePost.text = banner.Full_name
 
+            val date = TimesStamp.convertTimeToText(banner.date_added)
+            binding.postTime.text = date
+
             if(banner.verificationStatus != "false"){
                 binding.verification.visibility = View.VISIBLE
             }
@@ -672,7 +676,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             banner.pollQuestion.forEach { item ->
                 binding.titlePoll.text = item.Question
 
-                val timestamp = convertTimeToText(item.date_added)
+                val timestamp = convertTimeToText(banner.date_added)
                 binding.postTime.text = timestamp
             }
 
@@ -982,35 +986,30 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
     fun convertTimeToText(dataDate: String): String? {
         var convTime: String? = null
-        val prefix = ""
         val suffix = "Ago"
 
         try {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val pasTime: Date = dateFormat.parse(dataDate)
             val nowTime = Date()
             val dateDiff = nowTime.time - pasTime.time
-            val second = TimeUnit.MILLISECONDS.toSeconds(dateDiff)
-            val minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff)
-            val hour = TimeUnit.MILLISECONDS.toHours(dateDiff)
-            val day = TimeUnit.MILLISECONDS.toDays(dateDiff)
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(dateDiff)
+            val minutes = TimeUnit.MILLISECONDS.toMinutes(dateDiff)
+            val hours = TimeUnit.MILLISECONDS.toHours(dateDiff)
+            val days = TimeUnit.MILLISECONDS.toDays(dateDiff)
 
-            if (second < 60) {
-                convTime = "$second Sec $suffix"
-            } else if (minute < 60) {
-                convTime = "$minute Min $suffix"
-            } else if (hour < 24) {
-                convTime = "$hour Hrs $suffix"
-            } else if (day >= 7) {
-                if (day > 360) {
-                    convTime = "${day / 360} Yr $suffix"
-                } else if (day > 30) {
-                    convTime = "${day / 30} Months $suffix"
-                } else {
-                    convTime = "${day / 7} Week $suffix"
+            when {
+                seconds < 60 -> convTime = "$seconds Sec $suffix"
+                minutes < 60 -> convTime = "$minutes Min $suffix"
+                hours < 24 -> convTime = "$hours Hrs $suffix"
+                days >= 7 -> {
+                    convTime = when {
+                        days > 360 -> "${days / 360} Yr $suffix"
+                        days > 30 -> "${days / 30} Months $suffix"
+                        else -> "${days / 7} Week $suffix"
+                    }
                 }
-            } else if (day < 7) {
-                convTime = "$day D $suffix"
+                days < 7 -> convTime = "$days D $suffix"
             }
         } catch (e: ParseException) {
             e.printStackTrace()

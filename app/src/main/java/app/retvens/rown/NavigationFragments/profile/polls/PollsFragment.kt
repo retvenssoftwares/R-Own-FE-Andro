@@ -85,9 +85,9 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
 
                         try {
 
-//                            pollsAdapter = PollsAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext(),userId)
-//                            pollsRecyclerView.adapter = pollsAdapter
-//                            pollsAdapter.removePostsFromList(postsDataClass.posts)
+                            pollsAdapter = PollsAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext(),userId)
+                            pollsRecyclerView.adapter = pollsAdapter
+                            pollsAdapter.removePostsFromList(postsDataClass.posts)
                             pollsAdapter.notifyDataSetChanged()
                         }catch (e:NullPointerException){
 

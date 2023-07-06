@@ -44,10 +44,14 @@ class MainActivity : AppCompatActivity() {
             val move = sharedPreferences.getString("MoveTo", "")
 
             if (move == "MoveToPI"){
+                MesiboApi.init(applicationContext)
+                MesiboApi.startMesibo(true)
                 val intent = Intent(this, PersonalInformation::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             } else if (move == "MoveToPIP"){
+                MesiboApi.init(applicationContext)
+                MesiboApi.startMesibo(true)
                 val intent = Intent(this, PersonalInformationPhone::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
@@ -66,6 +70,8 @@ class MainActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             } else{
+                MesiboApi.init(applicationContext)
+                MesiboApi.startMesibo(true)
                 startActivity(Intent(this,LoginActivity::class.java))
                 finish()
             }

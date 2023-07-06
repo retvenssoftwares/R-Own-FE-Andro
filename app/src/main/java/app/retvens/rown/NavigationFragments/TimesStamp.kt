@@ -14,7 +14,7 @@ object TimesStamp {
         val suffix = "Ago"
 
         try {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val pasTime: Date = dateFormat.parse(dataDate)
             val nowTime = Date()
             val dateDiff = nowTime.time - pasTime.time

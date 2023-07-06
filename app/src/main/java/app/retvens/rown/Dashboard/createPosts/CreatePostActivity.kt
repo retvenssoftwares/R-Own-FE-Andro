@@ -68,7 +68,7 @@ class CreatePostActivity : AppCompatActivity(),
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var settingsClient: SettingsClient
     private lateinit var locationRequest: LocationRequest
-    lateinit var task: CardView
+    lateinit var task: ImageView
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
     private var croppedImageUri: Uri?= null
@@ -143,7 +143,7 @@ class CreatePostActivity : AppCompatActivity(),
         binding.userCompleteName.setText(profileName)
 
         //AutoFetch
-        task = findViewById<CardView>(R.id.autofetch)
+        task = findViewById(R.id.autofetch)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         settingsClient = LocationServices.getSettingsClient(this)

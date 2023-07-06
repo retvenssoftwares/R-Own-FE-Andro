@@ -19,10 +19,12 @@ import app.retvens.rown.CreateCommunity.FilterSelectedMembers
 import app.retvens.rown.CreateCommunity.SelectMembers
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.DeleteCommunityDataClass
+import app.retvens.rown.DataCollections.FeedCollection.Admin
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityCommunityDetailsBinding
+import app.retvens.rown.viewAll.viewAllCommunities.OpenCommunityDetailsActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,9 +37,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CommunityDetailsActivity : AppCompatActivity(){
     lateinit var binding: ActivityCommunityDetailsBinding
@@ -49,6 +55,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
     private var latitude:Double = 0.0
     var longitude:Double = 0.0
     private  var members:ArrayList<String> = ArrayList()
+    private var admin:ArrayList<String> = ArrayList()
     private lateinit var googleMap: GoogleMap
     private lateinit var mMapFragment: SupportMapFragment
     private var isSwitchToCloseCommunity = true
@@ -61,8 +68,25 @@ class CommunityDetailsActivity : AppCompatActivity(){
 
         binding.communityDetailBackBtn.setOnClickListener { onBackPressed() }
 
+
         val groupId = intent.getLongExtra("groupId",0)
         val grpID:String = groupId.toString()
+
+        val sharedPreferences1 =getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
+
+        for (x in admin){
+            if (x == user_id){
+                val intent = Intent(this,OpenCommunityDetailsActivity::class.java)
+                intent.putExtra("groupId",grpID)
+                startActivity(intent)
+                Log.e("ok","okkk")
+            }else{
+                Log.e("ok","not okkk")
+            }
+        }
+
+        Log.e("top","not okkk")
 
         binding.communityDetailAddBtn.setOnClickListener {
             val intent = Intent(this,FilterSelectedMembers::class.java)
@@ -161,6 +185,8 @@ class CommunityDetailsActivity : AppCompatActivity(){
         })
 
         getCommunityDetails(grpID)
+
+
     }
 
     private fun deleteCommunity(grpID: String) {
@@ -225,6 +251,9 @@ class CommunityDetailsActivity : AppCompatActivity(){
 
                     binding.communityCreatedBy.text = "Created by ${response.creator_name} | $date"
 
+                    response.Admin.forEach {
+                        admin.add(it.user_id)
+                    }
 
                 }
 
@@ -269,18 +298,18 @@ class CommunityDetailsActivity : AppCompatActivity(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun convertTimestampToFormattedDate(timestamp: String): String {
-        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yy")
 
         try {
-            val instant = Instant.parse(timestamp)
-            val zonedDateTime = instant.atZone(ZoneId.of("UTC"))
-            return zonedDateTime.format(outputFormatter)
+            val localDateTime = LocalDateTime.parse(timestamp, inputFormatter)
+            return localDateTime.format(outputFormatter)
         } catch (e: DateTimeParseException) {
             e.printStackTrace()
         }
 
         return ""
     }
+
 
 }

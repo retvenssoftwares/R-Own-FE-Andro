@@ -331,20 +331,26 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                 call: Call<UserProfileResponse?>,
                 response: Response<UserProfileResponse?>
             ) {
+                if (response.isSuccessful) {
+
+
                 val user_id = response.body()?.user_id.toString()
                 val message = response.body()?.message.toString()
-                saveUserId(applicationContext,user_id)
+                saveUserId(applicationContext, user_id)
                 savePhoneNo(applicationContext, phone)
 //                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
-                Log.d("search",response.body().toString())
-                moveTo(applicationContext,"MoveToPI")
+                Log.e("search", response.body().toString())
+                moveTo(applicationContext, "MoveToPI")
                 val intent = Intent(applicationContext, PersonalInformation::class.java)
-                intent.putExtra("phone",phone)
-                intent.putExtra("user_id",user_id)
-                intent.putExtra("message",message)
+                intent.putExtra("phone", phone)
+                intent.putExtra("user_id", user_id)
+                intent.putExtra("message", message)
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
                 finish()
+            }else{
+                        Log.e("error",response.message().toString())
+                }
             }
 
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {

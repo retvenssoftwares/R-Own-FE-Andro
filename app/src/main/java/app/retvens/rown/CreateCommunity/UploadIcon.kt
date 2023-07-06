@@ -146,7 +146,12 @@ class UploadIcon : AppCompatActivity() {
             Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
             val name = intent.getStringExtra("name")
-            CreateGroup(name.toString())
+            if (communityUri != null) {
+                CreateGroup(name.toString())
+            }else{
+                Toast.makeText(applicationContext,"Select Community Profile First!!",Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+            }
 
         }
     }

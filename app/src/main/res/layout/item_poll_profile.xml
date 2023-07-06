@@ -132,7 +132,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginHorizontal="90dp"
                 app:cardBackgroundColor="@color/white"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/votesOptionsrecycler"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

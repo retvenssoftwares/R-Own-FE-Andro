@@ -66,7 +66,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var settingsClient: SettingsClient
     private lateinit var locationRequest: LocationRequest
-    lateinit var task: CardView
+    lateinit var task: ImageView
     var canSee : Int ?= 0
 
     var selectedImg : Int = 0
@@ -153,7 +153,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
         }
 
         //AutoFetch
-        task = findViewById<CardView>(R.id.autofetch)
+        task = findViewById(R.id.autofetch)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         settingsClient = LocationServices.getSettingsClient(this)
