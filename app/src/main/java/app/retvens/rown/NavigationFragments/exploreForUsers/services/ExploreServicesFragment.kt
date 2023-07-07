@@ -39,6 +39,8 @@ class ExploreServicesFragment : Fragment() {
     lateinit var empty : TextView
     lateinit var errorImage : ImageView
 
+    private var lastPage = 1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,12 +87,11 @@ class ExploreServicesFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-
-                        isLoading = false
-                        currentPage++
-                        getData()
-
-
+                        if (currentPage > lastPage) {
+                            isLoading = false
+                            lastPage++
+                            getData()
+                        }
                     }
                 }
 
@@ -129,7 +130,9 @@ class ExploreServicesFragment : Fragment() {
                             if (response.body()!!.isNotEmpty()) {
                                 val data = response.body()!!
                                 data.forEach {
-
+                                    if (it.vendors.size >= 10){
+                                        currentPage++
+                                    }
                                     hotelList.addAll(it.vendors)
                                     exploreServicesAdapter.removeServicesFromList(hotelList)
                                     exploreServicesAdapter.notifyDataSetChanged()

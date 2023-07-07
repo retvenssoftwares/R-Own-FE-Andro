@@ -39,7 +39,7 @@ class ExploreBlogsFragment : Fragment() {
     private var blogList:ArrayList<AllBlogsData> = ArrayList()
 
     private var currentPage = 1
-    var pageSize = 0
+    private var lastPage = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,11 +87,11 @@ class ExploreBlogsFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        isLoading = false
-                        currentPage++
-                        getData()
-
-
+                        if (currentPage > lastPage) {
+                            isLoading = false
+                            lastPage++
+                            getData()
+                        }
                     }
                 }
 
@@ -136,12 +136,10 @@ class ExploreBlogsFragment : Fragment() {
 
                                 try {
 
-                                    pageSize = it.blogs.size
                                     blogList.addAll(it.blogs)
                                     allBlogsAdapter.removeBlogFromList(it.blogs)
                                     allBlogsAdapter.notifyDataSetChanged()
-                                    if (pageSize == 10){
-                                        pageSize = 0
+                                    if (it.blogs.size >= 10){
                                         currentPage++
                                     }
                                     Log.d("on", it.toString())

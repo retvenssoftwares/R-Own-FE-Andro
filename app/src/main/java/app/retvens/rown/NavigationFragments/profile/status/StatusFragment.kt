@@ -1,11 +1,14 @@
 package app.retvens.rown.NavigationFragments.profile.status
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -37,6 +40,15 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
 
     lateinit var empty : TextView
     lateinit var notPosted : ImageView
+
+    private var list:ArrayList<PostItem> = ArrayList()
+
+    private var isLoading:Boolean = false
+    private lateinit var progress: ProgressBar
+    private var currentPage = 1
+    var pageSize = 0
+    private var lastPage = 1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,16 +68,61 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
         empty = view.findViewById(R.id.empty)
         notPosted = view.findViewById(R.id.notPosted)
 
+        progress = view.findViewById(R.id.progress)
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
+        statusAdapter = StatusAdapter(list, requireContext())
+        statusRecycler.adapter = statusAdapter
+
+
+        statusRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
+                        if (currentPage > lastPage) {
+                            isLoading = false
+                            lastPage++
+                            getData()
+                        }
+                    }
+                }
+            }
+        })
 
 
         getMedia(userId)
     }
+    private fun getData() {
+        val handler = Handler()
+
+        progress.visibility = View.VISIBLE;
+
+        handler.postDelayed({
+            if (isAdded) {
+                getMedia(userId)
+                progress.visibility = View.GONE;
+            }
+        },
+            3000)
+    }
 
     private fun getMedia(userId: String) {
 
-        val getMedia = RetrofitBuilder.feedsApi.getNormalUserStatus(userId,userId, "1")
+        val getMedia = RetrofitBuilder.feedsApi.getNormalUserStatus(userId,userId, "$currentPage")
 
         getMedia.enqueue(object : Callback<List<PostsDataClass>?>,
             StatusAdapter.OnItemClickListener {
@@ -78,12 +135,17 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
 
+                        isLoading = false
                         val response = response.body()!!
                         if (response.isNotEmpty()) {
 
                             response.forEach { postsDataClass ->
-
+                                if (postsDataClass.posts.size >= 10){
+                                    currentPage++
+                                }
+                                isLoading = false
                         try {
+                            list.addAll(postsDataClass.posts)
                             statusAdapter = StatusAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext())
                             statusRecycler.adapter = statusAdapter
                             statusAdapter.removePostsFromList(postsDataClass.posts)

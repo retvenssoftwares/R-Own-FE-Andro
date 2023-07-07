@@ -52,10 +52,18 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
         val event_Image = itemView.findViewById<ShapeableImageView>(R.id.event_image)
         val name = itemView.findViewById<TextView>(R.id.user_name_post)
         val profile = itemView.findViewById<ShapeableImageView>(R.id.post_profile)
+        val verification = itemView.findViewById<ImageView>(R.id.verification)
         val status = itemView.findViewById<TextView>(R.id.title_status)
-        val title = itemView.findViewById<TextView>(R.id.event_title)
+        val title = itemView.findViewById<TextView>(R.id.post_user_type)
+        val location = itemView.findViewById<TextView>(R.id.post_user_dominican)
         val username = itemView.findViewById<TextView>(R.id.user_id_on_comment)
         val caption = itemView.findViewById<TextView>(R.id.recentCommentByUser)
+
+        val likeButton = itemView.findViewById<ImageView>(R.id.like_post)
+        val commentButton = itemView.findViewById<ImageView>(R.id.comment)
+        val likeCount = itemView.findViewById<TextView>(R.id.like_count)
+        val commentCount = itemView.findViewById<TextView>(R.id.comment_count)
+        val post_time = itemView.findViewById<TextView>(R.id.post_time)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -67,7 +75,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 LayoutOneViewHolder(status)
             }
             VIEW_TYPE_LAYOUT_TWO -> {
-                val status: View = inflater.inflate(R.layout.item_event_post, parent, false)
+                val status: View = inflater.inflate(R.layout.item_hotel_post, parent, false)
                 LayoutTwoViewHolder(status)
             }
             else -> throw IllegalArgumentException("Invalid view type")
@@ -112,16 +120,16 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 layoutOneViewHolder.status.text = item.caption
                 Glide.with(context).load(item.Profile_pic).into(layoutOneViewHolder.postProfile)
 
-                if (item.Like_count != ""){
-                    holder.likeCount.text = item.Like_count
+                if (item.likeCount != ""){
+                    holder.likeCount.text = item.likeCount
                 }
-                if (item.Comment_count != ""){
-                    holder.commentCount.text = item.Comment_count
+                if (item.commentCount != ""){
+                    holder.commentCount.text = item.commentCount
                 }
 
-                if (item.like == "Liked"){
+                if (item.liked != "not liked"){
                     holder.likeButton.setImageResource(R.drawable.liked_vectore)
-                }else if (item.like == "Unliked"){
+                }else if (item.liked == "not liked"){
                     holder.likeButton.setImageResource(R.drawable.svg_like_post)
                 }
 
@@ -155,22 +163,61 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
             VIEW_TYPE_LAYOUT_TWO -> {
                 val layoutTwoViewHolder = holder as LayoutTwoViewHolder
 
-//                if (item.verificationStatus != "false"){
-//                    layoutTwoViewHolder.verification.visibility = View.VISIBLE
-//                }
+                if (item.verificationStatus != "false"){
+                    layoutTwoViewHolder.verification.visibility = View.VISIBLE
+                }
 
                 if (item.User_name.isNotEmpty()){
-                    layoutTwoViewHolder.name.text = item.User_name
+                    layoutTwoViewHolder.username.text = item.User_name
                 } else{
-                    layoutTwoViewHolder.name.text = item.Full_name
+                    layoutTwoViewHolder.username.text = item.Full_name
                 }
                 layoutTwoViewHolder.caption.text = item.caption
-                layoutTwoViewHolder.title.text = item.Event_name
-                layoutTwoViewHolder.username.text = item.User_name
-                layoutTwoViewHolder.status.text = "Hello all, I am going to ${item.Event_name} on ${item.event_start_date}"
-
+                try {
+                    layoutTwoViewHolder.location.text = item.checkinLocation.toString()
+                    layoutTwoViewHolder.title.text = item.checkinVenue.toString()
+                    layoutTwoViewHolder.name.text = item.Full_name
+                    layoutTwoViewHolder.status.text =
+                        "Hello all, I am here at ${item.checkinVenue}. Let’s Catch Up."
+                }catch (e:Exception){}
                 Glide.with(context).load(item.Profile_pic).into(layoutTwoViewHolder.profile)
-                Glide.with(context).load(item.event_thumbnail).into(layoutTwoViewHolder.event_Image)
+//                Glide.with(context).load(item.event_thumbnail).into(layoutTwoViewHolder.event_Image)
+                if (item.likeCount != ""){
+                    holder.likeCount.text = item.likeCount
+                }
+                if (item.commentCount != ""){
+                    holder.commentCount.text = item.commentCount
+                }
+
+                if (item.liked != "not liked"){
+                    holder.likeButton.setImageResource(R.drawable.liked_vectore)
+                }else if (item.liked == "not liked"){
+                    holder.likeButton.setImageResource(R.drawable.svg_like_post)
+                }
+
+
+                holder.likeButton.setOnClickListener {
+                    item.islike = !item.islike
+
+                    val count:Int
+                    if(item.islike){
+                        holder.likeButton.setImageResource(R.drawable.liked_vectore)
+                        val like = item.likeCount.toInt()
+                        count = like + 1
+                        holder.likeCount.text = count.toString()
+                    }else{
+                        holder.likeButton.setImageResource(R.drawable.svg_like_post)
+                        val like = item.likeCount.toInt()
+                        count = like
+                        holder.likeCount.text = count.toString()
+                    }
+
+                    onItemClickListener?.onItemClick(item)
+                }
+
+                holder.commentButton.setOnClickListener {
+                    onItemClickListener?.onItemClickForComment(item,position)
+                }
 
             }
         }

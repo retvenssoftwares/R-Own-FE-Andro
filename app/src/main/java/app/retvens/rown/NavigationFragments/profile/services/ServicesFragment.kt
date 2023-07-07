@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,8 +14,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.VendorServicesAdapter
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.ProfileCompletion.VendorServicesData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetEventCategory
@@ -44,6 +48,15 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
     lateinit var notPosted : ImageView
 
     lateinit var addService: CardView
+
+    private var list:ArrayList<ProfileServicesDataItem> = ArrayList()
+
+    private var isLoading:Boolean = false
+    private lateinit var progress: ProgressBar
+    private var currentPage = 1
+    var pageSize = 0
+    private var lastPage = 1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,13 +74,46 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
 
         empty = view.findViewById(R.id.empty)
         notPosted = view.findViewById(R.id.notPosted)
+        progress = view.findViewById(R.id.progress)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
+        profileServicesAdapter = ProfileServicesAdapter(list, requireContext(), isOwner)
+        servicesRecycler.adapter = profileServicesAdapter
 
         addService = view.findViewById(R.id.addService)
         if (!isOwner){
             addService.visibility = View.GONE
         }
+
+        servicesRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
+                        if (currentPage > lastPage) {
+                            isLoading = false
+                            lastPage++
+                            getData()
+                        }
+                    }
+                }
+            }
+        })
+
+
         getServices()
 
         addService.setOnClickListener {
@@ -76,6 +122,19 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
             fragManager.let{bottomSheet.show(it, BottomSheetServiceName.SN_TAG)}
             bottomSheet.setOnSNclickListener(this)
         }
+    }
+    private fun getData() {
+        val handler = Handler()
+
+        progress.visibility = View.VISIBLE;
+
+        handler.postDelayed({
+            if (isAdded) {
+                getServices()
+                progress.visibility = View.GONE;
+            }
+        },
+            3000)
     }
 
     private fun getServices() {
@@ -96,6 +155,15 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
                         Log.d("res", response.body().toString())
                         val response = response.body()!!
                         if (response.isNotEmpty()) {
+
+                            list.addAll(response)
+
+                            if (response.size >= 10){
+                                currentPage++
+                            }
+
+                            isLoading = false
+
                             profileServicesAdapter =
                                 ProfileServicesAdapter(response, requireContext(), isOwner)
                             servicesRecycler.adapter = profileServicesAdapter

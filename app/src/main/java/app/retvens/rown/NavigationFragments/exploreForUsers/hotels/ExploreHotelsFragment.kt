@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.BlogData
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsAdapter
@@ -47,6 +48,7 @@ class ExploreHotelsFragment : Fragment() {
     lateinit var empty : TextView
     lateinit var errorImage : ImageView
 
+    private var lastPage = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,12 +92,11 @@ class ExploreHotelsFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-
-                        isLoading = false
-                        currentPage++
-                        getData()
-
-
+                        if (currentPage > lastPage) {
+                            isLoading = false
+                            lastPage++
+                            getData()
+                        }
                     }
                 }
 
@@ -139,7 +140,9 @@ class ExploreHotelsFragment : Fragment() {
                                 data.forEach {
 
                                     hotelList.addAll(it.posts)
-
+                                    if (it.posts.size >= 10){
+                                        currentPage++
+                                    }
                                     exploreHotelAdapter = ExploreHotelsAdapter(hotelList, requireContext())
                                     exploreBlogsRecyclerView.adapter = exploreHotelAdapter
                                     exploreHotelAdapter.removeHotelFromList(it.posts)

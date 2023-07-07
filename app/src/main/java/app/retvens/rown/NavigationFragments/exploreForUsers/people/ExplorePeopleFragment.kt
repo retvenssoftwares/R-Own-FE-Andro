@@ -43,6 +43,8 @@ class ExplorePeopleFragment : Fragment() {
     private lateinit var progress: ProgressBar
     private var peopleList:ArrayList<Post> = ArrayList()
 
+    private var lastPage = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -95,11 +97,11 @@ class ExplorePeopleFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-
-                        isLoading = false
-                        currentPage++
-                        getData()
-
+                        if (currentPage > lastPage) {
+                            isLoading = false
+                            lastPage++
+                            getData()
+                        }
 
                     }
                 }
@@ -150,7 +152,9 @@ class ExplorePeopleFragment : Fragment() {
                             val response = response.body()!!
 
                             response.forEach { explorePeopleDataClass ->
-
+                                if (explorePeopleDataClass.posts.size >= 10){
+                                    currentPage++
+                                }
                                 try {
                                     peopleList.addAll(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)

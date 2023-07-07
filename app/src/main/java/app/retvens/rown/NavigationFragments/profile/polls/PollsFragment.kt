@@ -1,11 +1,14 @@
 package app.retvens.rown.NavigationFragments.profile.polls
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +37,14 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
     lateinit var empty : TextView
     lateinit var notPosted : ImageView
 
+    private var list:ArrayList<PostItem> = ArrayList()
+
+    private var isLoading:Boolean = false
+    private lateinit var progress: ProgressBar
+    private var currentPage = 1
+    var pageSize = 0
+    private var lastPage = 1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +59,7 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
+        progress = view.findViewById(R.id.progress)
 
         pollsRecyclerView = view.findViewById(R.id.pollsRecycler)
         pollsRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -58,10 +70,54 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
+        pollsAdapter = PollsAdapter(list, requireContext(), userId)
+        pollsRecyclerView.adapter = pollsAdapter
+
+
+        pollsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
+                        if (currentPage > lastPage) {
+                            isLoading = false
+                            lastPage++
+                            getData()
+                        }
+                    }
+                }
+            }
+        })
+
         getPolls(userId)
 
+    }
 
+    private fun getData() {
+        val handler = Handler()
 
+        progress.visibility = View.VISIBLE
+
+        handler.postDelayed({
+            if (isAdded) {
+                getPolls(userId)
+                progress.visibility = View.GONE
+            }
+        },
+            3000)
     }
 
     private fun getPolls(userId: String) {
@@ -84,7 +140,11 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
                     response.forEach { postsDataClass ->
 
                         try {
-
+                            if (postsDataClass.posts.size >= 10){
+                                currentPage++
+                            }
+                            isLoading = false
+                            list.addAll(postsDataClass.posts)
                             pollsAdapter = PollsAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext(),userId)
                             pollsRecyclerView.adapter = pollsAdapter
                             pollsAdapter.removePostsFromList(postsDataClass.posts)

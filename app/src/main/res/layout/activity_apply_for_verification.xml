@@ -90,10 +90,10 @@
             app:layout_constraintTop_toBottomOf="@id/applyTxt"/>
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
-            android:src="@drawable/png_r_logo"/>
+            android:src="@drawable/r_own_logo"/>
 
         <TextView
             android:layout_width="wrap_content"
