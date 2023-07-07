@@ -79,6 +79,8 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
         }
         if(currentItem.matchedNumber!!.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(currentItem.matchedNumber.Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
         }
 
         if (data.connectionStatus == "Connected"){
@@ -86,7 +88,7 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
             holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
             holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
         } else if (data.connectionStatus == "Not connected"){
-            holder.connect.text = "CONNECT"
+            holder.connect.text = "Connect"
         } else if (data.connectionStatus == "Requested"){
             holder.connect.text = "Requested"
             holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
@@ -99,10 +101,10 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
             if (holder.connect.text == "Remove"){
 
                 removeConnection(userId,user_id, context){
-                    holder.connect.text = "CONNECT"
+                    holder.connect.text = "Connect"
                 }
 
-            } else if (holder.connect.text == "CONNECT") {
+            } else if (holder.connect.text == "Connect") {
 
                 sendConnectionRequest(userId, context){
                     holder.connect.text = "Requested"
@@ -111,7 +113,7 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
             } else  if (holder.connect.text == "Requested") {
 
                 removeConnRequest(userId, context){
-                    holder.connect.text = "CONNECT"
+                    holder.connect.text = "Connect"
                 }
 
             } else if (holder.connect.text == "Accept") {
@@ -185,7 +187,7 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
                 removeConnRequest(userId, context){
                     connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
                     connect.setTextColor(ContextCompat.getColor(context, R.color.black))
-                    connect.text = "CONNECT"
+                    connect.text = "Connect"
                 }
 
             }

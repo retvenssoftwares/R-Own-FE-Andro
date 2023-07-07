@@ -175,7 +175,12 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                     val response = response.body()!!
 
                     profilePic = response.data.profile.Profile_pic
-                    Glide.with(requireContext()).load(profilePic).into(profile)
+
+                    if (profilePic.isNotEmpty()) {
+                        Glide.with(requireContext()).load(profilePic).into(profile)
+                    } else{
+                        profile.setImageResource(R.drawable.svg_user)
+                    }
 
                     verificationStatus = response.data.profile.verificationStatus
                     if (verificationStatus != "false"){

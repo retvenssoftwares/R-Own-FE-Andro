@@ -128,8 +128,10 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferences?.getString("profile_image", "")
 
-        if (!profilePic.isNullOrEmpty()) {
+        if (profilePic!!.isNotEmpty()) {
             Glide.with(requireContext()).load(profilePic).into(profile)
+        } else{
+            profile.setImageResource(R.drawable.svg_user)
         }
         name.text = profileName
 

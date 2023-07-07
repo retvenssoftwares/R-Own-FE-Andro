@@ -77,7 +77,10 @@ class BioGenderFragment : Fragment() {
 
         if (profilePic.isNotEmpty()) {
             Glide.with(requireContext()).load(profilePic).into(profile)
+        }else {
+            profile.setImageResource(R.drawable.svg_user)
         }
+
         name.setText("Hi $profileName")
 
         male.setOnClickListener {

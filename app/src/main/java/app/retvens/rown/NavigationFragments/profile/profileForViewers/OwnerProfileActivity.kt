@@ -303,7 +303,13 @@ class OwnerProfileActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val response = response.body()!!
                     profilePic = response.profiledata.Profile_pic
+
+                    if (profilePic.isNotEmpty()){
                     Glide.with(applicationContext).load(response.profiledata.Profile_pic).into(profile)
+                    } else {
+                        profile.setImageResource(R.drawable.svg_user)
+                    }
+
                     profile_username.text = response.profiledata.User_name
                     name.text = response.profiledata.Full_name
                     nameProfile = response.profiledata.Full_name

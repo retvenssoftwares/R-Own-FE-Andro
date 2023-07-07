@@ -138,17 +138,17 @@ class ExploreServicesFragment : Fragment() {
                                     exploreServicesAdapter.notifyDataSetChanged()
                                 }
                             } else {
-                                errorImage.visibility = View.VISIBLE
+//                                errorImage.visibility = View.VISIBLE
                             }
                         } else {
-                            errorImage.visibility = View.VISIBLE
+//                            errorImage.visibility = View.VISIBLE
                             empty.text = response.code().toString()
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
                         }
                     }
                 }catch (e:NullPointerException){
-                    errorImage.visibility = View.VISIBLE
+//                    errorImage.visibility = View.VISIBLE
                     Toast.makeText(requireContext(),"No Services Yet",Toast.LENGTH_SHORT).show()
                 }
 

@@ -273,8 +273,18 @@ class UserProfileActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val response = response.body()!!
                     profilePic = response.data.profile.Profile_pic
-                    Glide.with(applicationContext).load(response.data.profile.Profile_pic).into(profile)
-                    profile_username.text = response.data.profile.User_name
+
+                    if (profilePic.isNotEmpty()){
+                        Glide.with(applicationContext).load(response.data.profile.Profile_pic).into(profile)
+                    } else {
+                        profile.setImageResource(R.drawable.svg_user)
+                    }
+
+                    if (response.data.profile.User_name.isNotEmpty()) {
+                        profile_username.text = response.data.profile.User_name
+                    } else{
+                        profile_username.text = response.data.profile.Full_name
+                    }
                     name.text = response.data.profile.Full_name
                     nameProfile = response.data.profile.Full_name.toString()
                     bio.text = response.data.profile.userBio

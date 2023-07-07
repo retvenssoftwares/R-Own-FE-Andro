@@ -141,7 +141,11 @@ class HomeFragment : Fragment() {
             Glide.with(requireContext()).load(profilePic).into(homeProfile)
         } else {
             getProfileInfo(requireContext())
-            Glide.with(requireContext()).load(profileImage).into(homeProfile)
+            if (profileImage.isNotEmpty()) {
+                Glide.with(requireContext()).load(profileImage).into(homeProfile)
+            }  else {
+                homeProfile.setImageResource(R.drawable.svg_user)
+            }
         }
 
         recyclerCommunity = view.findViewById(R.id.recyclerCommunity)

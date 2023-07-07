@@ -286,10 +286,20 @@ class VendorProfileActivity : AppCompatActivity() {
                         address = response.roleDetails.Mesibo_account.get(0).address
 
                         profilePic = response.roleDetails.Profile_pic
-                        Glide.with(applicationContext).load(response.roleDetails.Profile_pic)
-                            .into(profile)
+
+                        if (profilePic.isNotEmpty()){
+                            Glide.with(applicationContext).load(response.roleDetails.Profile_pic)
+                                .into(profile)
+                        } else {
+                            profile.setImageResource(R.drawable.svg_user)
+                        }
+
                         name.text = response.roleDetails.Full_name
-                        profile_username.text = response.roleDetails.User_name
+                        if (response.roleDetails.User_name.isNotEmpty()) {
+                            profile_username.text = response.roleDetails.User_name
+                        } else {
+                            profile_username.text = response.roleDetails.Full_name
+                        }
                         bio.text = response.roleDetails.vendorInfo.vendorDescription
                         websiteLink.text = response.roleDetails.vendorInfo.websiteLink
                         fullName = response.roleDetails.Full_name

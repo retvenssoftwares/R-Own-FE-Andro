@@ -28,33 +28,44 @@
         />
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/searchboxusers"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="20dp">
 
-    <EditText
-        android:layout_marginTop="10dp"
-        android:id="@+id/connections_search"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="Who do you want to connect with"
-        android:paddingLeft="10dp"
-        android:textSize="15dp"
-        android:textColor="@color/grey_40"
-        android:textColorHint="@color/grey_40"
-        android:background="@drawable/searchboxusers"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="20dp"
-        />
+            <EditText
+                android:id="@+id/connections_search"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:hint="Who do you want to connect with"
+                android:paddingLeft="10dp"
+                android:textSize="15dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_marginHorizontal="6dp"
+                android:textColor="@color/grey_40"
+                android:textColorHint="@color/grey_40"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/sImg"
+                />
 
-    <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="40dp"
-        android:src="@drawable/searchbar"
-        />
+            <ImageView
+                android:id="@+id/sImg"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/searchbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/view2"
@@ -70,14 +81,14 @@
         android:id="@+id/text_h2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat_semibold"
+        android:fontFamily="@font/montserrat_regular"
         android:text="R-OWN Users from your contacts"
         android:textColor="@color/white"
         android:textSize="14dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         app:layout_constraintStart_toEndOf="@id/view2"
-        app:layout_constraintTop_toBottomOf="@id/connections_search"/>
+        app:layout_constraintTop_toBottomOf="@id/cSearch"/>
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
@@ -115,7 +126,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:visibility="gone"
-            android:fontFamily="@font/montserrat_semibold"
+            android:fontFamily="@font/montserrat_regular"
             android:text="No Matches Found"
             android:textColor="@color/black"
             android:textSize="15dp"
@@ -137,7 +148,7 @@
         android:id="@+id/text_h"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat_semibold"
+        android:fontFamily="@font/montserrat_regular"
         android:text="R-OWN Users"
         android:textColor="@color/white"
         android:textSize="14dp"

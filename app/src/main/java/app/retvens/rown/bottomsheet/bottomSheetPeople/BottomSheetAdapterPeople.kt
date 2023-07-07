@@ -68,7 +68,7 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
 
 
         if (data.Profile_pic.isNullOrEmpty()) {
-            holder.profile.setImageResource(R.drawable.svg_person_account)
+            holder.profile.setImageResource(R.drawable.svg_user)
         } else {
             Glide.with(context).load(data.Profile_pic).into(holder.profile)
         }
@@ -84,7 +84,7 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
             holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
             holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
         } else if (data.connectionStatus == "Not connected"){
-            holder.connect.text = "CONNECT"
+            holder.connect.text = "Connect"
         } else if (data.connectionStatus == "Requested"){
             holder.connect.text = "Requested"
             holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
@@ -97,10 +97,10 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
             if (holder.connect.text == "Remove"){
 
                 removeConnection(userId,user_id, context){
-                    holder.connect.text = "CONNECT"
+                    holder.connect.text = "Connect"
                 }
 
-            } else if (holder.connect.text == "CONNECT") {
+            } else if (holder.connect.text == "Connect") {
 
                 sendConnectionRequest(userId, context){
                     holder.connect.text = "Requested"
@@ -109,7 +109,7 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
             } else  if (holder.connect.text == "Requested") {
 
                 removeConnRequest(userId, context){
-                    holder.connect.text = "CONNECT"
+                    holder.connect.text = "Connect"
                 }
 
             } else if (holder.connect.text == "Accept") {

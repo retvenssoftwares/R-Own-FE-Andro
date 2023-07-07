@@ -22,7 +22,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:shapeAppearanceOverlay="@style/SpecificCornerRounded"
-            android:src="@drawable/svg_person_account"
+            android:src="@drawable/svg_user"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"

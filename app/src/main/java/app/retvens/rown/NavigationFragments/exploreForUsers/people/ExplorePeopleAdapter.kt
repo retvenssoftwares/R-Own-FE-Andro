@@ -68,10 +68,10 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         }
 
 
-        if (data.Profile_pic.isNullOrEmpty()){
-            holder.profile.setImageResource(R.drawable.svg_person_account)
-        }else{
+        if (data.Profile_pic.isNotEmpty()){
             Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        }else{
+            holder.profile.setImageResource(R.drawable.svg_user)
         }
         holder.name.text = data.Full_name
         holder.role.text = data.Role

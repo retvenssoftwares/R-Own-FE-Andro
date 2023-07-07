@@ -185,7 +185,11 @@ class DashBoardActivity : AppCompatActivity() {
                 Glide.with(this).load(profileImage).into(profile)
             } else{
             getProfileInfo(this)
-                Glide.with(this).load(profileImage).into(profile)
+                if (profileImage.isNotEmpty()) {
+                    Glide.with(this).load(profileImage).into(profile)
+                } else {
+                    profile.setImageResource(R.drawable.svg_user)
+                }
             }
         }
         name.setText("Hi $profileName")

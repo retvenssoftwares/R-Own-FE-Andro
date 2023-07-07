@@ -24,6 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetLanguage
@@ -107,6 +108,16 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             fragManager.let{bottomSheet.show(it, BottomSheetLanguage.CTC_TAG)}
             bottomSheet.setOnLangClickListener(this)
 //             openBottomLanguageSheet()
+        }
+
+        binding.editPhone.addTextChangedListener {
+            if (binding.editPhone.text.length == 10){
+                binding.cardContinue.isClickable = true
+                binding.continueText.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
+            } else {
+                binding.cardContinue.isClickable = false
+                binding.continueText.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_60))
+            }
         }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {

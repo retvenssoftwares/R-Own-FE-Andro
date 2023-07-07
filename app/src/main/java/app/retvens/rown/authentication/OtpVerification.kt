@@ -18,6 +18,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.MesiboDataClass
@@ -102,6 +103,11 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
 //        startSmartUserConsent()
 
         showKeyBoard(otpET1)
+
+        otpET6.addTextChangedListener {
+            binding.cardVerifyOtp.visibility = View.VISIBLE
+            binding.textVerifyBtn.setBackgroundColor(resources.getColor(R.color.green_own))
+        }
 
         phoneNumber =  intent.getStringExtra("phoneNum").toString() //without CountryCode
         phone =  intent.getStringExtra("phone").toString() // with CountryCode and +

@@ -84,7 +84,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
                         val post = banner
 
-                        Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+            if (banner.Profile_pic.isNotEmpty()) {
+                Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+            }else {
+                binding.postProfile.setImageResource(R.drawable.svg_user)
+            }
+
             if (post.User_name.isNotEmpty()){
                 binding.userIdOnComment.text = post.User_name
             } else{
@@ -287,7 +292,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             var operatioin = "push"
 
             val post = banner
-            Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+
+            if (banner.Profile_pic.isNotEmpty()) {
+                Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+            }else {
+                binding.postProfile.setImageResource(R.drawable.svg_user)
+            }
+
             if (post.User_name.isNotEmpty()){
                 binding.userIdOnComment.text = post.User_name
             } else{
@@ -383,7 +394,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             var like = true
             var operatioin = "push"
 
-            Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+            if (post.Profile_pic.isNotEmpty()) {
+                Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+            }else {
+                binding.postProfile.setImageResource(R.drawable.svg_user)
+            }
 
             if (post.User_name.isNotEmpty()){
                 binding.userIdOnComment.text = post.User_name
@@ -542,7 +557,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
             binding.titleStatus.text = banner.caption
-            Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+            if (banner.Profile_pic.isNotEmpty()) {
+                Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+            }else {
+                binding.postProfile.setImageResource(R.drawable.svg_user)
+            }
+
             binding.location.text = banner.location
 
             if(banner.verificationStatus != "false"){
@@ -639,7 +659,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.checkVotes.visibility = View.GONE
 
-            Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+
+            if (banner.Profile_pic.isNotEmpty()) {
+                Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+            }else {
+                binding.postProfile.setImageResource(R.drawable.svg_user)
+            }
+
             binding.userNamePost.text = banner.Full_name
 
             val date = TimesStamp.convertTimeToText(banner.date_added)

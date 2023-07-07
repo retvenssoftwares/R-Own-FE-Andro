@@ -152,16 +152,16 @@ class ExplorePeopleFragment : Fragment() {
                             val response = response.body()!!
 
                             response.forEach { explorePeopleDataClass ->
-                                if (explorePeopleDataClass.posts.size >= 10){
-                                    currentPage++
-                                }
                                 try {
+                                    if (explorePeopleDataClass.posts.size >= 10){
+                                        currentPage++
+                                    }
                                     peopleList.addAll(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.notifyDataSetChanged()
                                 }catch (e:NullPointerException){
-                                    errorImage.visibility = View.VISIBLE
+//                                    errorImage.visibility = View.VISIBLE
                                     Log.e("error",e.message.toString())
                                 }
 
