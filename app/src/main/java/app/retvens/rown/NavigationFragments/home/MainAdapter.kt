@@ -397,12 +397,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             Log.e("username",post.User_name)
             binding.recentCommentByUser.text = post.caption
-            Log.e("caption",post.caption)
+//            Log.e("caption",post.caption)
             binding.userNamePost.text = post.Full_name
 
-            binding.titleStatus.text = "Hello all, I am here at ${post.checkinVenue}. Let’s Catch Up."
+            binding.titleStatus.text = "Hello all, I am here at ${post.Event_name}. Let’s Catch Up."
 
-            Glide.with(context).load(post.event_thumbnail).into(binding.eventImage)
+            Glide.with(context).load(post.checkinVenue).into(binding.eventImage)
 
             if (post.Like_count != ""){
                 binding.likeCount.text = post.Like_count
