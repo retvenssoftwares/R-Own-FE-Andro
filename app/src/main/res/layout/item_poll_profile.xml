@@ -148,6 +148,7 @@
                     android:textAlignment="center"
                     android:paddingVertical="8dp"
                     android:paddingHorizontal="8dp"
+                    android:visibility="gone"
                     android:background="@color/black"
                     android:text="Check Votes"/>
 

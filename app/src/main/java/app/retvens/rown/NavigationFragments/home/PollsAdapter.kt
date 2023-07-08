@@ -25,7 +25,7 @@ import com.mackhartley.roundedprogressbar.RoundedProgressBar
 class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:PollsDetails,var totelVotes:Int): RecyclerView.Adapter<PollsAdapter.MyViewHolderClass>() {
 
     private var onItemClickListener: OnItemClickListener? = null
-
+    private var voted:String = "no"
 
     interface OnItemClickListener {
         fun onItemClick(optionId: String,postId:String)
@@ -58,7 +58,39 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
 
         val vote = data.votes
 
-        var voted = datas.voted
+        voted = datas.voted
+
+        if (voted != "yes") {
+            holder.itemView.setOnClickListener {
+                if (voted != "yes") {
+                    var click = 1
+
+                        val total = totelVotes + 1
+                        Log.e("total", total.toString())
+
+                        // Perform the necessary operations related to voting
+                        val vote = data.votes
+                        val completedTasks2 = vote.size + 1
+                        Log.e("task", completedTasks2.toString())
+                        val completedPercentage2 = (completedTasks2.toDouble() / total) * 100.0
+                        if (!completedPercentage2.isNaN()) {
+                            holder.progress.setProgressPercentage(completedPercentage2)
+                            holder.percentage.text = "${completedPercentage2.toInt()}%"
+                            Log.e("check", "3")
+                        }
+
+                        // Update the vote count
+                        holder.count.text = "${completedTasks2} votes"
+                        onItemClickListener?.onItemClick(data.option_id, datas.post_id)
+                        voted = "yes" // Move the assignment inside the click listener block
+                        Log.e("what", voted)
+
+                }
+            }
+            Log.e("nit", voted)
+        }
+
+
 
         if (voted == "yes"){
             holder.count.text = "${vote.size} votes"
@@ -66,28 +98,8 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
             val completedPercentage2 = (completedTasks2.toDouble() / totelVotes) * 100.0
             if (!completedPercentage2.isNaN()) {
                 holder.progress.setProgressPercentage(completedPercentage2)
-                holder.percentage.text = "${completedPercentage2}%"
-
-            }
-        }else{
-            holder.itemView.setOnClickListener {
-                val total  = totelVotes+1
-                Log.e("total",total.toString())
-                val vote = data.votes
-                holder.count.text = "${vote.size+1} votes"
-                val completedTasks2 = vote.size+1
-                Log.e("task",completedTasks2.toString())
-                val completedPercentage2 = (completedTasks2.toDouble() / total) * 100.0
-                if (!completedPercentage2.isNaN()) {
-                    holder.progress.setProgressPercentage(completedPercentage2)
-                    holder.percentage.text = "${completedPercentage2}%"
-                }
-
-
-                onItemClickListener?.onItemClick(data.option_id,datas.post_id)
-
-                voted == "yes"
-
+                holder.percentage.text = "${completedPercentage2.toInt()}%"
+                Log.e("check","1")
             }
 
         }
