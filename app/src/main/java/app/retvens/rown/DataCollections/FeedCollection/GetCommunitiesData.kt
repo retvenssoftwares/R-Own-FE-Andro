@@ -21,6 +21,8 @@ data class GetCommunitiesData(
 
 interface User {
     val Role: String
+    val user_id: String
+    val address: String
     val location: String
     val Profile_pic: String
     val Full_name: String
@@ -29,9 +31,9 @@ interface User {
 }
 
 data class Member(
-    val user_id: String,
+    override val user_id: String,
     override val Full_name: String,
-    val address: String,
+    override val address: String,
     val uid: Int,
     override val Profile_pic: String,
     val verificationStatus: String,
@@ -42,9 +44,9 @@ data class Member(
 ) : User
 
 data class Admin(
-    val user_id: String,
+    override val user_id: String,
     override val Full_name: String,
-    val address: String,
+    override val address: String,
     val uid: Int,
     override val Profile_pic: String,
     val verificationStatus: String,

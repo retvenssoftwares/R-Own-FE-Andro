@@ -671,9 +671,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             val date = TimesStamp.convertTimeToText(banner.date_added)
             binding.postTime.text = date
 
+
             if(banner.verificationStatus != "false"){
                 binding.verification.visibility = View.VISIBLE
             }
+
+            val total = calculateTotalVotes(banner.pollQuestion[0].Options.toTypedArray())
+            Log.e("totel",total.toString())
 
             binding.postProfile.setOnClickListener {
                     if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
@@ -695,7 +699,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.votesOptionsrecycler.layoutManager = LinearLayoutManager(context)
             val adapter = PollsAdapter(context, banner.pollQuestion[0].Options,
-                PollsDetails(banner.post_id,banner.voted)
+                PollsDetails(banner.post_id,banner.voted),total
             )
             binding.votesOptionsrecycler.adapter = adapter
 
@@ -1233,5 +1237,15 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
         }
         return encodedData.toString()
+    }
+
+    fun calculateTotalVotes(options: Array<Option>): Int {
+        var totalVotes = 0
+
+        for (option in options) {
+            totalVotes += option.votes.size
+        }
+
+        return totalVotes
     }
 }

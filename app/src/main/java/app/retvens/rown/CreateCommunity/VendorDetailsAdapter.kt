@@ -22,7 +22,7 @@ class VendorDetailsAdapter(val context: Context, var userList:List<User>) :
 
     // Define an interface for the listener
     interface OnItemClickListener {
-        fun onItemClick(member: UserProfileRequestItem)
+        fun onItemClick(member: User)
     }
 
     // Define a function to set the listener

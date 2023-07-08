@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.DataCollections.FeedCollection.Option
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.NavigationFragments.TimesStamp.convertTimeToText
@@ -90,8 +91,10 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
 
         val option = poll.pollQuestion[0].Options
 
+        val total = calculateTotalVotes(poll.pollQuestion[0].Options.toTypedArray())
+
         val adapter = app.retvens.rown.NavigationFragments.home.PollsAdapter(context,option,
-            PollsDetails(poll.post_id,poll.voted)
+            PollsDetails(poll.post_id,poll.voted),total
         )
         holder.recycler.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -107,5 +110,16 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
         } catch (e : ConcurrentModificationException){
             Log.d("EPA", e.toString())
         }
+    }
+
+
+    fun calculateTotalVotes(options: Array<Option>): Int {
+        var totalVotes = 0
+
+        for (option in options) {
+            totalVotes += option.votes.size
+        }
+
+        return totalVotes
     }
 }

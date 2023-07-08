@@ -138,13 +138,13 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
                         isLoading = false
                         val response = response.body()!!
                         if (response.isNotEmpty()) {
-
-                            response.forEach { postsDataClass ->
+                        response.forEach { postsDataClass ->
+                                try {
                                 if (postsDataClass.posts.size >= 10){
                                     currentPage++
                                 }
                                 isLoading = false
-                        try {
+
                             list.addAll(postsDataClass.posts)
                             statusAdapter = StatusAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext())
                             statusRecycler.adapter = statusAdapter

@@ -29,6 +29,7 @@ import app.retvens.rown.CreateCommunity.VendorDetailsAdapter
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.DataCollections.FeedCollection.Member
 import app.retvens.rown.DataCollections.FeedCollection.User
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import retrofit2.Call
@@ -168,7 +169,7 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
 
     }
 
-    private fun openBottomSelectionCommunity() {
+    private fun openBottomSelectionCommunity(userId:String,number:String) {
         val dialogLanguage = Dialog(requireContext())
         dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogLanguage.setContentView(R.layout.bottom_remove_from_community)
@@ -218,7 +219,9 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
 
         val getCommunities = RetrofitBuilder.feedsApi.getGroup(groupId!!)
 
-        getCommunities.enqueue(object : Callback<GetCommunitiesData?> {
+        getCommunities.enqueue(object : Callback<GetCommunitiesData?>,
+            UserDetailsAdapter.OnItemClickListener, VendorDetailsAdapter.OnItemClickListener,
+            ExpertDetailsAdapter.OnItemClickListener, NormalUserDetailsAdapter.OnItemClickListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(
                 call: Call<GetCommunitiesData?>,
@@ -262,6 +265,10 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
                     expertDetailsAdapter.notifyDataSetChanged()
 
 
+                    userDetailsAdapter.setOnItemClickListener(this)
+                    vendorDetailsAdapter.setOnItemClickListener(this)
+                    expertDetailsAdapter.setOnItemClickListener(this)
+                    normalUserDetailsAdapter.setOnItemClickListener(this)
 
                 } else{
                     Log.e("error",response.message().toString())
@@ -272,6 +279,14 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
             override fun onFailure(call: Call<GetCommunitiesData?>, t: Throwable) {
                 Log.e("error",t.message.toString())
             }
+
+            override fun onItemClick(member: User) {
+                Log.e("1","working")
+                openBottomSelectionCommunity(member.user_id,member.address)
+
+            }
+
+
         })
 
     }
