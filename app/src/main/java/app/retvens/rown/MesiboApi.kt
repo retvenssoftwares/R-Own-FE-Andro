@@ -18,7 +18,7 @@ object MesiboApi : MesiboCall.IncomingListener {
         val api = Mesibo.getInstance()
         api.init(context)
 
-        //Mesibo.setSecureConnection(true);
+//        Mesibo.setSecureConnection(true);
         if (!TextUtils.isEmpty(SharedPreferenceManagerAdmin.getInstance(mContext!!).user.uid)) {
             startMesibo(false)
 

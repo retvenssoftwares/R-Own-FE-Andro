@@ -98,8 +98,6 @@ class DashBoardActivity : AppCompatActivity() {
         val phone2 = sharedPreferences2?.getString("savePhoneNumber", "").toString()
 
 
-        val profiles = Mesibo.getSelfProfile()
-        Log.e("okk",profiles.status)
 
         devicetoken()
 

@@ -16,6 +16,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import app.retvens.rown.ApiRequest.MesiboBackgroundService
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.MessagingModule.MesiboMessagingActivity
+import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.api.MesiboCall
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -28,6 +30,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private lateinit var title: String
     private lateinit var body: String
+    private lateinit var type:String
+    private lateinit var address:String
 
     override fun onNewToken(token: String) {
         Log.e(TAG, "Refreshed token: $token")
@@ -40,16 +44,32 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.e("message",message.toString())
 
 
-        if (message.notification != null) {
-            MesiboCall.getInstance().init(applicationContext)
+
+//            MesiboCall.getInstance().init(applicationContext)
             title = message.data["title"].toString()
             body = message.data["body"].toString()
-        }
+            address = message.data["address"].toString()
+            type = message.data["type"].toString()
+            Log.e("type",type.toString())
 
-        MesiboCall.getInstance().init(applicationContext)
         Log.e("received", "success")
 
         createNotification()
+
+
+        if (type == "call"){
+            try {
+                MesiboApi.init(applicationContext)
+                MesiboApi.startMesibo(true)
+                MesiboCall.getInstance().init(this)
+
+
+            } catch (e: Exception) {
+                Log.e(TAG, "MesiboCall initialization failed: ${e.message}")
+            }
+
+
+        }
 
         super.onMessageReceived(message);
     }
@@ -66,12 +86,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setDefaults(Notification.DEFAULT_ALL) // Add default notification behaviors (sound, vibration, etc.)
 
         // Create the full-screen intent
-        val fullScreenIntent = Intent(this, DashBoardActivity::class.java)
-        fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        if (type == "message"){
+            val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
+            fullScreenIntent.putExtra(MesiboUI.PEER,address)
+            fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+        }else{
+            val fullScreenIntent = Intent(this, DashBoardActivity::class.java)
+            fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+        }
+
+
 
         // Set the full-screen intent
-        notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+
 
         // Build the notification
         val notification = notificationBuilder.build()

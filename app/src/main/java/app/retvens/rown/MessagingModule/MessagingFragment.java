@@ -17,6 +17,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -54,6 +55,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -1551,7 +1553,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 //            NotificationSendClass.pushNotifications(getContext(), mUser.getAddress()
 //                    , ""+profile.getName(), ""+msg.message.toString());
              this.mEmojiEditText.getText().clear();
-             MesiboProfile cc = Mesibo.getProfile(this.mPeer);
+             MesiboProfile cc = Mesibo.getSelfProfile();
             try {
                 performChatNotification(this.userID, cc.getName(), msg.message);
             }catch (NullPointerException e){
@@ -1567,8 +1569,12 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
         Log.e("user",userId);
         Log.e("title",title);
         Log.e("body",body);
+
+        SharedPreferences sharedPreferences1 = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE);
+        String user_id = sharedPreferences1.getString("user_id", "");
+
         // Make the API call
-        Call<UpdateResponse> call = RetrofitBuilder.INSTANCE.getCalling().chatNotification(userId, new ChatDataClass(title,body));
+        Call<UpdateResponse> call = RetrofitBuilder.INSTANCE.getCalling().chatNotification(userId, new ChatDataClass(title,body,user_id));
         call.enqueue(new Callback<UpdateResponse>() {
             @Override
             public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {

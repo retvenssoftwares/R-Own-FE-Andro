@@ -147,8 +147,8 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         this.ui.callHold = var4.findViewById(R.id.textView23);
         this.ui.controlLayout = var4.findViewById(R.id.control_container);
         this.ui.contactOngoinName = var4.findViewById(R.id.textView4);
-        this.ui.backArrow = (ImageView) var4.findViewById(R.id.imageView4);
-        this.ui.chatOngoing = (ImageView) var4.findViewById(R.id.imageView5);
+//        this.ui.backArrow = (ImageView) var4.findViewById(R.id.imageView4);
+//        this.ui.chatOngoing = (ImageView) var4.findViewById(R.id.imageView5);
         this.ui.speaker = (ImageView) var4.findViewById(R.id.one);
         this.ui.mute = (ImageView) var4.findViewById(R.id.four);
         this.ui.switchS = (ImageView) var4.findViewById(R.id.two);
@@ -298,7 +298,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
                     this.ui.speaker.setImageResource(R.drawable.speakerlow);
                     speakerFirst = false;
                 }else {
-                    this.ui.speaker.setImageResource(R.drawable.ic_speakerhigh);
+                    this.ui.speaker.setImageResource(R.drawable.vector_speaker);
                     speakerFirst = true;}
 
             }
@@ -452,8 +452,8 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
                 this.ui.speaker.setVisibility(View.GONE);
                 this.ui.background.setVisibility(View.GONE);
                 this.ui.contactOngoinName.setVisibility(View.GONE);
-                this.ui.backArrow.setImageResource(R.drawable.arrow_left);
-                this.ui.chatOngoing.setImageResource(R.drawable.vector__2_);
+//                this.ui.backArrow.setImageResource(R.drawable.arrow_left);
+//                this.ui.chatOngoing.setImageResource(R.drawable.vector__2_);
                 this.ui.status.setTextColor(Color.WHITE);
                 this.setSwappedFeeds(false);
             }

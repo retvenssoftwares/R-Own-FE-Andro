@@ -114,7 +114,7 @@ public class MesiboParticipantViewHolder implements View.OnClickListener {
             this.mStream.toggleAudioMute();
             muteStatus = this.mStream.getMuteStatus(false);
         }
-        view.setBackgroundResource(muteStatus ? R.drawable.ic_mesibo_mic_off : R.drawable.ic_mesibo_mic);
+        view.setBackgroundResource(muteStatus ? app.retvens.rown.R.drawable.vector_mutemike : app.retvens.rown.R.drawable.vector_open_mike);
     }
 
     private void onToggleStreamFullScreen(View view) {
@@ -168,7 +168,7 @@ public class MesiboParticipantViewHolder implements View.OnClickListener {
         int i = -1;
         int argb = Color.argb(200, 200, 0, 0);
         if (muteStatus) {
-            i = R.drawable.ic_mesibo_mic_off;
+            i = app.retvens.rown.R.drawable.vector_mutemike;
         }
         if (muteStatus2) {
             i = R.drawable.ic_mesibo_videocam_off;
@@ -177,7 +177,7 @@ public class MesiboParticipantViewHolder implements View.OnClickListener {
             i = R.drawable.ic_mesibo_tv_off;
         }
         if (isTalking) {
-            i = R.drawable.ic_mesibo_volume_up;
+            i = app.retvens.rown.R.drawable.vector_speaker;
             argb = Color.argb(200, 0, 200, 0);
         }
         if (i >= 0) {
