@@ -61,7 +61,7 @@ class CheckInChildActivity : AppCompatActivity(),
 
         binding.nextCumm.setOnClickListener {
             val name = intent.getStringExtra("hotelName")
-            val pic = intent.getStringExtra("hotelPic")
+            val hotelId = intent.getStringExtra("hotelId")
             val date = intent.getStringExtra("date")
             val location = intent.getStringExtra("location")
 
@@ -73,7 +73,7 @@ class CheckInChildActivity : AppCompatActivity(),
             }else if (binding.canCommentText.text == "Can comment"){
                 Toast.makeText(applicationContext,"Select Comment Status", Toast.LENGTH_SHORT).show()
             }else{
-                shareCheckIn(user_id,name,pic,location!!)
+                shareCheckIn(user_id,name,hotelId,location!!)
             }
         }
 
@@ -82,7 +82,7 @@ class CheckInChildActivity : AppCompatActivity(),
     private fun shareCheckIn(
         userId: String,
         name: String?,
-        pic: String?,
+        hotelId: String?,
         location: String
     ) {
         val canSee = binding.canSeeText.text.toString()
@@ -92,12 +92,11 @@ class CheckInChildActivity : AppCompatActivity(),
 
         val sendPost  = RetrofitBuilder.feedsApi.createCheckIn(userId,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),userId),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),hotelId!!),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"Check-in"),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canSee),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),canComment),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),caption),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),pic!!),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name!!),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),location)
         )
 

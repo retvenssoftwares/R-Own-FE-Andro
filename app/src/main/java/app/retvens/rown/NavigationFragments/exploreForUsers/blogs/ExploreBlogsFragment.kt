@@ -64,7 +64,7 @@ class ExploreBlogsFragment : Fragment() {
 
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayoutBlog)
 
-        allBlogsAdapter = AllBlogsAdapter(blogList, requireContext())
+        allBlogsAdapter = AllBlogsAdapter(blogList, requireContext(), true)
         exploreBlogsRecyclerView.adapter = allBlogsAdapter
 
 

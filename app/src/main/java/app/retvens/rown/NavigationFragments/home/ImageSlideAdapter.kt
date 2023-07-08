@@ -70,29 +70,17 @@ class ImageSlideAdapter(private val context: Context, private var imageList: Lis
                 val anim = AnimationUtils.loadAnimation(context, R.anim.slide_in_bottom)
                 binding.likedAnimation.startAnimation(anim)
                 binding.likedAnimation.visibility = View.VISIBLE
-                if (banner.like == "Unliked"){
-                    banner.islike = !banner.islike
-
-                    val count:Int
+                    var count:Int =  banner.Like_count.toInt()
                     if(banner.islike){
-                        binding.likePost.setImageResource(R.drawable.liked_vectore)
-                        count = banner.Like_count.toInt()+1
-                        banner.like = "Liked"
-                        banner.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
-                    }else{
-                        binding.likePost.setImageResource(R.drawable.svg_like_post)
-                        count = banner.Like_count.toInt()
-                        banner.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
+                        app.retvens.rown.utils.postLike(banner.post_id, context) {
+                            banner.like = "Liked"
+                            banner.islike = false
+                            binding.likePost.setImageResource(R.drawable.liked_vectore)
+                            count += 1
+                            banner.Like_count = count.toString()
+                            binding.likeCount.text = count.toString()
+                        }
                     }
-                    postLike(banner.post_id)
-                }
-                if (banner.like == "Liked"){
-//                    binding.likedAnimation.visibility = View.VISIBLE
-//                    val handler = Handler(Looper.getMainLooper())
-//                    handler.postDelayed({ binding.likedAnimation.visibility = View.GONE }, 1000)
-                }
                 val handler = Handler(Looper.getMainLooper())
                 handler.postDelayed({
                     val anim = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)

@@ -292,6 +292,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="12dp"
             android:fillViewport="true"
+            android:background="@color/grey_3"
             app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
@@ -300,15 +301,12 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:weightSum="4"
-                android:padding="5dp"
-                android:background="@color/grey_3">
+                android:padding="5dp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
-                    android:layout_weight="1"
                     android:visibility="gone"
                     android:layout_marginVertical="3dp"
                     android:layout_marginEnd="5dp"
@@ -331,10 +329,9 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
-                    android:layout_weight="1"
                     android:layout_marginVertical="3dp"
                     android:layout_marginHorizontal="5dp"
                     app:cardBackgroundColor="@color/green_own">
@@ -355,10 +352,9 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
-                    android:layout_weight="1"
                     android:layout_marginVertical="3dp"
                     android:layout_marginHorizontal="5dp"
                     app:cardBackgroundColor="@color/green_own">
@@ -379,10 +375,9 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
-                    android:layout_weight="1"
                     android:layout_marginVertical="3dp"
                     android:layout_marginHorizontal="5dp"
                     app:cardBackgroundColor="@color/green_own">
@@ -403,10 +398,9 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
-                    android:layout_weight="1"
                     android:layout_marginVertical="3dp"
                     android:layout_marginHorizontal="5dp"
                     app:cardBackgroundColor="@color/green_own">
@@ -427,10 +421,9 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="8dp"
-                    android:layout_weight="1"
                     android:visibility="gone"
                     android:layout_marginVertical="3dp"
                     android:layout_marginStart="5dp"

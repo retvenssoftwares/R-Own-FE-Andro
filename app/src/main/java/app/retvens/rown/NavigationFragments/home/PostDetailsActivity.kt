@@ -2,8 +2,11 @@ package app.retvens.rown.NavigationFragments.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,6 +20,7 @@ import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import me.relex.circleindicator.CircleIndicator
@@ -28,12 +32,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class PostDetailsActivity : AppCompatActivity() {
+class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnImageClickListener {
 
     lateinit var viewPagerAdapter: ImageSlideActivityAdapter
     lateinit var indicator: CircleIndicator
 
     lateinit var savedPost : ImageView
+    lateinit var likeButton : ImageView
+    lateinit var likedAnimation : ImageView
+    lateinit var likeCountText : TextView
+    private  var likeCount = 0
+    private  var postId = ""
+    private  var like = ""
+    private var isLike = true
     var save = true
     var operatioin = "push"
 
@@ -50,12 +61,12 @@ class PostDetailsActivity : AppCompatActivity() {
 
         val username = findViewById<TextView>(R.id.user_name)
         val caption = findViewById<TextView>(R.id.caption)
-        val likeButton = findViewById<ImageView>(R.id.like_post)
-        val likedAnimation = findViewById<ImageView>(R.id.likedAnimation)
+        likeButton = findViewById<ImageView>(R.id.like_post)
+        likedAnimation = findViewById<ImageView>(R.id.likedAnimation)
         val commentButtom = findViewById<ImageView>(R.id.comment)
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
         indicator = findViewById<CircleIndicator>(R.id.indicator)
-        val likeC = findViewById<TextView>(R.id.like_count)
+        likeCountText = findViewById<TextView>(R.id.like_count)
         val commentC = findViewById<TextView>(R.id.comment_count)
         val time = findViewById<TextView>(R.id.post_time)
         val postLocation = findViewById<TextView>(R.id.location)
@@ -64,18 +75,21 @@ class PostDetailsActivity : AppCompatActivity() {
         username.text = intent.getStringExtra("userName").toString()
         caption.text = intent.getStringExtra("caption").toString()
 
+        val postPic = intent.getStringArrayListExtra("postPic")
+        val commentCount = intent.getStringExtra("commentCount")
+        val location = intent.getStringExtra("location")
         val profilePic = intent.getStringExtra("profilePic")
+        val isSaved = intent.getStringExtra("saved").toString()
+
+        postId = intent.getStringExtra("postId").toString()
+        like = intent.getStringExtra("like").toString()
+        likeCount = intent.getStringExtra("likeCount")?.toInt()!!
 
         Glide.with(applicationContext).load(profilePic).into(profile)
 
-        val postPic = intent.getStringArrayListExtra("postPic")
-        val likeCount = intent.getStringExtra("likeCount")?.toInt()
-        val commentCount = intent.getStringExtra("commentCount")
-        val location = intent.getStringExtra("location")
-
         postLocation.text = location
 
-        likeC.text = likeCount.toString()
+        likeCountText.text = likeCount.toString()
         commentC.text = commentCount.toString()
 
         val timeStamp = intent.getStringExtra("time")
@@ -91,10 +105,6 @@ class PostDetailsActivity : AppCompatActivity() {
 
         Log.e("pic",postPic.toString())
 
-        val postId = intent.getStringExtra("postId").toString()
-        val like = intent.getStringExtra("like").toString()
-        val isSaved = intent.getStringExtra("saved").toString()
-
         if (isSaved == "saved"){
             operatioin = "pop"
             save = false
@@ -105,8 +115,9 @@ class PostDetailsActivity : AppCompatActivity() {
             savedPost.setImageResource(R.drawable.svg_save_post)
         }
 
-        viewPagerAdapter = ImageSlideActivityAdapter(baseContext, postPic!!, like, postId, likeButton, likedAnimation)
+        viewPagerAdapter = ImageSlideActivityAdapter(baseContext, postPic!!)
         viewPager.adapter = viewPagerAdapter
+        viewPagerAdapter.setOnImageClickListener(this)
 
 
         if (postPic.size > 1) {
@@ -118,47 +129,40 @@ class PostDetailsActivity : AppCompatActivity() {
         var isLike = intent.getStringExtra("islike").toBoolean()
 
         if (like == "Liked" || like == "liked"){
+            isLike = false
+//            Toast.makeText(applicationContext, "$isLike", Toast.LENGTH_SHORT).show()
             likeButton.setImageResource(R.drawable.liked_vectore)
         }else if (like == "Unliked" || like == "not liked"){
+            isLike = true
+//            Toast.makeText(applicationContext, "$isLike", Toast.LENGTH_SHORT).show()
             likeButton.setImageResource(R.drawable.svg_like_post)
         }
 
 
         likeButton.setOnClickListener {
-
-            likePost(postId)
-            var count:Int
-            if (like == "Liked" || like == "liked"){
-                isLike = !isLike
-                if (isLike){
-                    likeButton.setImageResource(R.drawable.svg_like_post)
-                    count = likeCount!!.toInt()-1
-                    likeC.text = count.toString()
-                }else{
+            if (isLike) {
+                postLike(postId, applicationContext) {
+                    isLike = false
                     likeButton.setImageResource(R.drawable.liked_vectore)
-                    count = likeCount!!.toInt()
-                    likeC.text = count.toString()
+                    likeCount += 1
+//                    post.Like_count = count.toString()
+                    likeCountText.text = likeCount.toString()
+                }
+            } else {
+                postLike(postId, applicationContext) {
+                    isLike = true
+                    likeButton.setImageResource(R.drawable.svg_like_post)
+                    likeCount -= 1
+//                    post.Like_count = count.toString()
+                    likeCountText.text = likeCount.toString()
                 }
             }
-            if (like == "Unliked" || like == "not liked"){
-                isLike = !isLike
-                if (isLike){
-                    likeButton.setImageResource(R.drawable.liked_vectore)
-                    count = likeCount!!.toInt()+1
-                    likeC.text = count.toString()
-                }else{
-                    likeButton.setImageResource(R.drawable.svg_like_post)
-                    count = likeCount!!.toInt()
-                    likeC.text = count.toString()
-                }
-            }
-
         }
 
 
 
         commentButtom.setOnClickListener {
-            val bottomSheet = BottomSheetComment(postId!!,profilePic!!)
+            val bottomSheet = BottomSheetComment(postId,profilePic!!)
             val fragManager = supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetLocation.LOCATION_TAG)}
         }
@@ -166,20 +170,6 @@ class PostDetailsActivity : AppCompatActivity() {
         savedPost.setOnClickListener {
             savePosts(postId)
         }
-
-
-
-//        val count:Int
-//        if(media.islike){
-//            media.likePost.setImageResource(R.drawable.liked_vectore)
-//            count = media.Like_count.toInt()+1
-//            media.likeCount.text = count.toString()
-//        }else{
-//            binding.likePost.setImageResource(R.drawable.svg_like_post)
-//            count = banner.Like_count.toInt()
-//            binding.likeCount.text = count.toString()
-//        }
-
     }
     private fun savePosts(blogId: String) {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -234,7 +224,11 @@ class PostDetailsActivity : AppCompatActivity() {
                     val response = response.body()!!
                     Toast.makeText(applicationContext, response.message, Toast.LENGTH_SHORT)
                         .show()
-
+                    isLike = true
+                    likeButton.setImageResource(R.drawable.svg_like_post)
+                    likeCount -= 1
+//                    post.Like_count = count.toString()
+                    likeCountText.text = likeCount.toString()
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -286,5 +280,29 @@ class PostDetailsActivity : AppCompatActivity() {
             Log.e("ConvTimeE", e.message!!)
         }
         return convTime
+    }
+
+    override fun imageClick(CTCFrBo: String) {
+        if (CTCFrBo == "image"){
+            val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_in_bottom)
+            likedAnimation.startAnimation(anim)
+            likedAnimation.visibility = View.VISIBLE
+
+            var count = likeCount
+            if (isLike){
+                postLike(postId, applicationContext) {
+                    isLike = false
+                    likeButton.setImageResource(R.drawable.liked_vectore)
+                    count += 1
+                    likeCountText.text = count.toString()
+                }
+            }
+
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_out_bottom)
+                likedAnimation.startAnimation(anim)
+                likedAnimation.visibility = View.GONE }, 1000)
+        }
     }
 }

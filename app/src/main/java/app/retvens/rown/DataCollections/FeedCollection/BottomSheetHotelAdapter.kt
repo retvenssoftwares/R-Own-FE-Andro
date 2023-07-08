@@ -44,6 +44,7 @@ class BottomSheetHotelAdapter(val context: Context,val mList:List<GetHotelDataCl
         holder.itemView.setOnClickListener {
             val intent = Intent(context,CheckInChildActivity::class.java)
             intent.putExtra("hotelPic",data.hotelLogoUrl)
+            intent.putExtra("hotelId",data.hotel_id)
             intent.putExtra("hotelName",data.hotelName)
             intent.putExtra("location",location)
             context.startActivity(intent)

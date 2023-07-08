@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
@@ -18,6 +19,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 
 
 import app.retvens.rown.R
+import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
@@ -27,14 +29,18 @@ import retrofit2.Response
 
 class ImageSlideActivityAdapter(
     private val context: Context,
-    private var imageList: ArrayList<String>,
-    private var like: String,
-    private var postId: String,
-    private var likeButton: ImageView,
-    private var likedAnimation: ImageView
+    private var imageList: ArrayList<String>
 ) : PagerAdapter() {
     override fun getCount(): Int {
         return imageList.size
+    }
+
+    var mListener: OnImageClickListener ? = null
+    fun setOnImageClickListener(listener: OnImageClickListener?){
+        mListener = listener
+    }
+    interface OnImageClickListener{
+        fun imageClick(CTCFrBo : String)
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -56,21 +62,7 @@ class ImageSlideActivityAdapter(
             }
 
             override fun onDoubleClick(view: View?) {
-                val anim = AnimationUtils.loadAnimation(context, R.anim.slide_in_bottom)
-                likedAnimation.startAnimation(anim)
-                likedAnimation.visibility = View.VISIBLE
-                if (like == "Unliked"){
-                    likeButton.setImageResource(R.drawable.liked_vectore)
-                    postLike(postId)
-                }
-                if (like == "Liked"){
-
-                }
-                val handler = Handler(Looper.getMainLooper())
-                handler.postDelayed({
-                    val anim = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)
-                    likedAnimation.startAnimation(anim)
-                    likedAnimation.visibility = View.GONE }, 1000)
+                mListener?.imageClick("image")
             }
         }))
 
@@ -84,36 +76,4 @@ class ImageSlideActivityAdapter(
         val view = `object` as View
         vp.removeView(view)
     }
-    private fun postLike(postId:String) {
-
-        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-
-        val data = LikesCollection(user_id)
-
-        val like = RetrofitBuilder.feedsApi.postLike(postId,data)
-
-        like.enqueue(object : Callback<UpdateResponse?> {
-            override fun onResponse(
-                call: Call<UpdateResponse?>,
-                response: Response<UpdateResponse?>
-            ) {
-                if (response.isSuccessful) {
-                    val response = response.body()!!
-                    Toast.makeText(context, response.message, Toast.LENGTH_SHORT)
-                        .show()
-
-                } else {
-                    Toast.makeText(context, response.message().toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
-
-    }
-
 }

@@ -1,5 +1,6 @@
 package app.retvens.rown.bottomsheet
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,11 +18,14 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.PostCommentReplyClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.utils.setupFullHeight
 import app.retvens.rown.viewAll.viewAllBlogs.CommentData.BlogPostComment
 import app.retvens.rown.viewAll.viewAllBlogs.BlogsCommentAdapter
 import app.retvens.rown.viewAll.viewAllBlogs.Comment
 import app.retvens.rown.viewAll.viewAllBlogs.CommentData.CommentBlog
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -42,6 +46,7 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
     private lateinit var replyingText:TextView
     private lateinit var cancelReply: ImageView
 
+    private lateinit var empty:TextView
 
     var mListener: OnBottomWhatToPostClickListener ? = null
     fun setOnWhatToPostClickListener(listener: OnBottomWhatToPostClickListener?){
@@ -63,6 +68,21 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_bottom_sheet_comment, container, false)
     }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = BottomSheetDialog(requireContext(), theme)
+        dialog.setOnShowListener {
+
+            val bottomSheetDialog = it as BottomSheetDialog
+            val parentLayout =
+                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            parentLayout?.let { it ->
+                val behaviour = BottomSheetBehavior.from(it)
+                setupFullHeight(it)
+                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+        return dialog
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,6 +90,7 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+        empty = view.findViewById(R.id.empty)
         recyclerView = view.findViewById(R.id.comment_recyclerview)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -142,9 +163,9 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val comment = comment.text.toString()
+        val comments = comment.text.toString()
 
-        val sendComment = RetrofitBuilder.viewAllApi.blogComment(blog_id, BlogPostComment(user_id,comment))
+        val sendComment = RetrofitBuilder.viewAllApi.blogComment(blog_id, BlogPostComment(user_id,comments))
 
         sendComment.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -153,7 +174,8 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    comment.text.clear()
                     getCommentList(blog_id)
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -173,16 +195,20 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
 
         getComments.enqueue(object : Callback<CommentBlog?>, BlogsCommentAdapter.OnItemClickListener {
             override fun onResponse(call: Call<CommentBlog?>, response: Response<CommentBlog?>) {
-                Toast.makeText(requireContext(), response.message().toString(), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), response.message().toString(), Toast.LENGTH_SHORT).show()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Log.d("BlogCommentsGET", response.toString())
                     try {
+                        if (response.get(0).isEmpty()){
+                            empty.visibility = View.VISIBLE
+                        }
                         blogsCommentAdapter = BlogsCommentAdapter(requireContext(),response.get(0))
                         recyclerView.adapter = blogsCommentAdapter
                         blogsCommentAdapter.notifyDataSetChanged()
                         blogsCommentAdapter.setOnItemClickListener(this)
                     } catch (e : NullPointerException){
+                        empty.visibility = View.VISIBLE
                         Log.d("BlogCommentsGET", e.toString())
                     }
 

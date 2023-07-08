@@ -46,7 +46,12 @@ class ExploreServicesAdapter(val listS : ArrayList<ProfileServicesDataItem>, val
             holder.avg_price.text = "${listS[position].vendorServicePrice}"
         }
         Glide.with(context).load(listS[position].vendorImage).into(holder.cover)
-        Glide.with(context).load(listS[position].Profile_pic).into(holder.profile)
+
+        if (listS[position].Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(listS[position].Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
+        }
         holder.itemView.setOnClickListener {
             val intent = Intent(context, VendorDetailsActivity::class.java)
             intent.putExtra("user_id", recyclerItem.user_id)

@@ -181,4 +181,9 @@ interface PriofileCompletionApis{
         @Part Documents: MultipartBody.Part,
     ): Call<UpdateResponse>
 
+    @GET("checkVerification/{user_id}")
+    fun appliedFor(
+        @Path("user_id") user_id : String
+    ):Call<UpdateResponse>
+
 }

@@ -139,12 +139,11 @@ interface FeedsApi {
     fun createCheckIn(
         @Path("user_id") user_id:String,
         @Part("user_id")userId:RequestBody,
+        @Part("hotel_id")hotel_id:RequestBody,
         @Part("post_type")post_type:RequestBody,
         @Part("Can_See")Can_See:RequestBody,
         @Part("Can_comment")Can_comment:RequestBody,
         @Part("caption")caption:RequestBody,
-        @Part("checkinVenue")event_thumbnail:RequestBody,
-        @Part("Event_name")Event_name:RequestBody,
         @Part("checkinLocation")Event_location:RequestBody
     ):Call<UpdateResponse>
 

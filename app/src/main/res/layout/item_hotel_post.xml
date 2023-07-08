@@ -76,10 +76,11 @@
             android:layout_height="wrap_content"
             android:text="2W"
             android:textSize="11dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="18dp"
             android:fontFamily="@font/montserrat_regular"
             android:textColor="@color/grey_60"
-            app:layout_constraintTop_toBottomOf="@id/post_user_type"
+            app:layout_constraintTop_toTopOf="@id/user_name_post"
+            app:layout_constraintBottom_toBottomOf="@id/user_name_post"
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <View
@@ -90,7 +91,7 @@
             android:background="@color/grey_40"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/post_time"/>
+            app:layout_constraintTop_toBottomOf="@id/post_profile"/>
 
         <TextView
             android:id="@+id/title_status"
@@ -113,6 +114,7 @@
             android:id="@+id/event_image"
             android:layout_width="match_parent"
             android:layout_height="180dp"
+            android:src="@drawable/svg_nothing_other"
             android:background="@color/white"
             android:scaleType="centerCrop"
             android:layout_marginTop="5dp"

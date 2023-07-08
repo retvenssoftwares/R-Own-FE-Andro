@@ -47,6 +47,7 @@ class ApplyForVerificationActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.reBackBtn.setOnClickListener { onBackPressed() }
 
+
         if (profileCompletionStatus != "100"){
             binding.layout.visibility = View.GONE
             binding.alreadyApplied.visibility = View.GONE
@@ -62,9 +63,10 @@ class ApplyForVerificationActivity : AppCompatActivity() {
             startActivity(Intent(this, UserName::class.java))
             finish()
         }
-
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        checkVerification(user_id)
 
         val sharedPreferencess = getSharedPreferences("SaveUserName", AppCompatActivity.MODE_PRIVATE)
         val userName = sharedPreferencess.getString("user_name", "").toString()
@@ -127,6 +129,32 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Please Select an document", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    private fun checkVerification(user_id: String) {
+//                        Toast.makeText(this@ApplyForVerificationActivity, "User $user_id ", Toast.LENGTH_SHORT).show()
+
+        val check = RetrofitBuilder.profileCompletion.appliedFor(user_id)
+        check.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+//                Toast.makeText(this@ApplyForVerificationActivity, "${response.body()!!.message} ", Toast.LENGTH_SHORT).show()
+
+//                Log.d("check------------------------", "${response.body()!!.message} ${response.code().toString()}")
+                if (response.isSuccessful){
+                    if (response.body()!!.message == "applied"){
+                        binding.layout.visibility = View.GONE
+                        binding.alreadyApplied.visibility = View.VISIBLE
+                    }
+                    Toast.makeText(applicationContext, "${response.body()!!.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext, "${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun upload(user_id: String) {

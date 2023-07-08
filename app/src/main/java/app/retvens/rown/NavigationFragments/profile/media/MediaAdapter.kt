@@ -73,9 +73,6 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>) : Rec
 
 
         holder.itemView.setOnClickListener {
-
-
-
             val intent = Intent(context,PostDetailsActivity::class.java)
             intent.putExtra("profilePic",media.Profile_pic)
             intent.putExtra("profileName",media.Full_name)
@@ -91,7 +88,7 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>) : Rec
             intent.putExtra("likeCount",media.likeCount)
             intent.putExtra("commentCount",media.commentCount)
             intent.putExtra("like",media.liked)
-            intent.putExtra("islike",media.islike)
+//            intent.putExtra("islike",media.islike)
             intent.putExtra("postId",media.post_id)
             intent.putExtra("saved",media.saved)
             context.startActivity(intent)

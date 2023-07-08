@@ -19,7 +19,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginStart="15dp"
                 android:src="@drawable/png_profile_post"
                 app:layout_constraintTop_toTopOf="parent"
@@ -54,7 +54,7 @@
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Travel Influencer"
+                android:text=""
                 android:textSize="11dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/grey_60"
@@ -78,10 +78,11 @@
                 android:layout_height="wrap_content"
                 android:text="2W"
                 android:textSize="11dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginEnd="18dp"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/grey_60"
-                app:layout_constraintTop_toBottomOf="@id/location"
+                app:layout_constraintTop_toTopOf="@id/user_name_post"
+                app:layout_constraintBottom_toBottomOf="@id/user_name_post"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <View
@@ -92,7 +93,7 @@
                 android:background="@color/grey_40"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/post_time"/>
+                app:layout_constraintTop_toBottomOf="@id/post_profile"/>
 
 
             <TextView

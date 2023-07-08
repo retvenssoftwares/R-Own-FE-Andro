@@ -12,6 +12,7 @@ data class Connection(
     val normalUserInfo: List<NormalUserInfo>,
     val User_id: String,
     val Profile_pic: String,
+    val Role: String,
     val verificationStatus: String,
     val mesiboAccount: List<Mesibo_account>
 )

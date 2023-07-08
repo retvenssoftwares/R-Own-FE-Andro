@@ -8,6 +8,7 @@ data class HotelData(
     val hotelRating: String,
     val hotelLogoUrl: String,
     val hotelCoverpicUrl: String,
+    val bookingengineLink: String,
     val date_added: String,
     val Hoteldescription: String,
     val display_status: String,

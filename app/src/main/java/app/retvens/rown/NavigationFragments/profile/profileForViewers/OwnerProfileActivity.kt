@@ -182,6 +182,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
+            hotels.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userID, false, nameProfile))
@@ -191,6 +192,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
+            hotels.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userID, false, nameProfile))
@@ -200,6 +202,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            hotels.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID, false, nameProfile))

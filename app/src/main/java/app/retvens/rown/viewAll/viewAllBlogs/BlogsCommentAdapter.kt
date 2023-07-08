@@ -14,6 +14,7 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfi
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
+import app.retvens.rown.utils.convertTimeToText
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -62,8 +63,11 @@ class BlogsCommentAdapter(val context: Context, var commentList: List<Comment>):
             holder.name.text = data.Full_name
         }
         holder.comment.text = data.comment
-        Glide.with(context).load(data.Profile_pic).into(holder.profile)
-
+        if (data.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        } else{
+            holder.profile.setImageResource(R.drawable.svg_user)
+        }
         if (data.replies.isNotEmpty()){
             if (data.replies.size > 1) {
                 holder.relies.text = data.replies.size.toString() + " Replies"
@@ -84,6 +88,9 @@ class BlogsCommentAdapter(val context: Context, var commentList: List<Comment>):
         holder.reply.setOnClickListener {
             onItemClickListener?.onItemClick(data)
         }
+
+        val timestamp = convertTimeToText(data.date_added)
+        holder.time.text = timestamp
 
         holder.profile.setOnClickListener {
             if(data.Role == "Business Vendor / Freelancer"){

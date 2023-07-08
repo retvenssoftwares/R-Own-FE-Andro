@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.hotels
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -139,6 +140,11 @@ class HotelDetailsActivity : AppCompatActivity() {
                         location = "Not Found"
                     }
 
+                    binding.cardBook.setOnClickListener {
+                        val uri = Uri.parse("https://${data.bookingengineLink}")
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        startActivity(intent)
+                    }
 
                     if(data.gallery.size >= 3) {
                         img1 = data.gallery.get(0).Image1

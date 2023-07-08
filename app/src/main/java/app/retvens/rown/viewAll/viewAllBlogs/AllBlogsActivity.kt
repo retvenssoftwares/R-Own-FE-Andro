@@ -14,6 +14,7 @@ import app.retvens.rown.databinding.ActivityAllBlogsBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 class AllBlogsActivity : AppCompatActivity() {
     lateinit var binding:ActivityAllBlogsBinding
@@ -56,40 +57,45 @@ class AllBlogsActivity : AppCompatActivity() {
                 binding.shimmerFrameLayoutBlog.visibility = View.GONE
 
                 if (response.body()!!.isNotEmpty()) {
-                    allBlogsAdapter = AllBlogsAdapter(response.body()!! as ArrayList<AllBlogsData>, this@AllBlogsActivity)
-                    binding.allBlogsRecycler.adapter = allBlogsAdapter
-                    allBlogsAdapter.removeBlogFromList(response.body()!!)
-                    allBlogsAdapter.notifyDataSetChanged()
+                    try {
+                        allBlogsAdapter = AllBlogsAdapter(
+                            response.body()!! as ArrayList<AllBlogsData>,
+                            this@AllBlogsActivity,
+                            true
+                        )
+                        binding.allBlogsRecycler.adapter = allBlogsAdapter
+                        allBlogsAdapter.removeBlogFromList(response.body()!!)
+                        allBlogsAdapter.notifyDataSetChanged()
+                        binding.searchBlogs.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
 
-                    binding.searchBlogs.addTextChangedListener(object : TextWatcher {
-                        override fun beforeTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            count: Int,
-                            after: Int
-                        ) {
+                            }
 
-                        }
-
-                        override fun onTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            before: Int,
-                            count: Int
-                        ) {
-                            val original = response.body()!!.toList()
-                            val filter = original.filter { searchUser ->
-                                searchUser.blog_title.contains(s.toString(), ignoreCase = true)
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                                val original = response.body()!!.toList()
+                                val filter = original.filter { searchUser ->
+                                    searchUser.blog_title.contains(s.toString(), ignoreCase = true)
 //                                searchUser.blog_content.contains(s.toString(),ignoreCase = true)
 //                                searchUser.User_name.contains(s.toString(),ignoreCase = true)
+                                }
+                                allBlogsAdapter.searchView(filter as ArrayList<AllBlogsData>)
                             }
-                            allBlogsAdapter.searchView(filter as ArrayList<AllBlogsData>)
-                        }
 
-                        override fun afterTextChanged(s: Editable?) {
+                            override fun afterTextChanged(s: Editable?) {
 
-                        }
-                    })
+                            }
+                        })
+                    } catch (e : Exception){}
                 } else {
                     binding.emptyBlog.text = "No blogs Posted"
                     binding.emptyBlog.visibility = View.VISIBLE
@@ -128,7 +134,8 @@ class AllBlogsActivity : AppCompatActivity() {
                     binding.shimmerFrameLayoutBlog.visibility = View.GONE
 
                     if (response.body()!!.isNotEmpty()) {
-                        allBlogsAdapter = AllBlogsAdapter(response.body()!! as ArrayList<AllBlogsData>, this@AllBlogsActivity)
+
+                        allBlogsAdapter = AllBlogsAdapter(response.body()!! as ArrayList<AllBlogsData>, this@AllBlogsActivity, true)
                         binding.allBlogsRecycler.adapter = allBlogsAdapter
                         allBlogsAdapter.removeBlogFromList(response.body()!!)
                         allBlogsAdapter.notifyDataSetChanged()

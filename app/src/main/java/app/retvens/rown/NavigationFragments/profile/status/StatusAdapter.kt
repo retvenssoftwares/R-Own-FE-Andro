@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.profile.status
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.ArraySet
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
+import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
@@ -64,6 +66,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
         val likeCount = itemView.findViewById<TextView>(R.id.like_count)
         val commentCount = itemView.findViewById<TextView>(R.id.comment_count)
         val post_time = itemView.findViewById<TextView>(R.id.post_time)
+        val book = itemView.findViewById<TextView>(R.id.book)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -174,14 +177,47 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 }
                 layoutTwoViewHolder.caption.text = item.caption
                 try {
-                    layoutTwoViewHolder.location.text = item.checkinLocation.toString()
-                    layoutTwoViewHolder.title.text = item.checkinVenue.toString()
+                    layoutTwoViewHolder.book.setOnClickListener {
+                        val uri : Uri = Uri.parse("https://${item.bookingengineLink}")
+                        val intent = Intent(Intent.ACTION_VIEW, uri)
+                        context.startActivity(intent)
+                    }
+                    layoutTwoViewHolder.title.text = item.hotelName.toString()
+                    layoutTwoViewHolder.location.text = item.hotelAddress.toString()
                     layoutTwoViewHolder.name.text = item.Full_name
                     layoutTwoViewHolder.status.text =
-                        "Hello all, I am here at ${item.checkinVenue}. Let’s Catch Up."
+                        "Hello all, I am here at ${item.hotelName}. Let’s Catch Up."
                 }catch (e:Exception){}
-                Glide.with(context).load(item.Profile_pic).into(layoutTwoViewHolder.profile)
-//                Glide.with(context).load(item.event_thumbnail).into(layoutTwoViewHolder.event_Image)
+
+                if (item.Profile_pic.isNotEmpty()) {
+                    Glide.with(context).load(item.Profile_pic).into(layoutTwoViewHolder.profile)
+                } else {
+                    layoutTwoViewHolder.profile.setImageResource(R.drawable.svg_user)
+                }
+
+                if (item.hotelCoverpicUrl.isNotEmpty()) {
+                    Glide.with(context).load(item.hotelCoverpicUrl)
+                        .into(layoutTwoViewHolder.event_Image)
+                }
+
+                layoutTwoViewHolder.event_Image.setOnClickListener {
+                    val intent = Intent(context, HotelDetailsActivity::class.java)
+                    intent.putExtra("name", item.hotelName)
+                    intent.putExtra("logo", item.hotelCoverpicUrl)
+                    intent.putExtra("hotelId", item.hotel_id)
+                    intent.putExtra("hotelAddress", item.hotelAddress)
+                    context.startActivity(intent)
+                }
+
+                layoutTwoViewHolder.title.setOnClickListener {
+                    val intent = Intent(context, HotelDetailsActivity::class.java)
+                    intent.putExtra("name", item.hotelName)
+                    intent.putExtra("logo", item.hotelCoverpicUrl)
+                    intent.putExtra("hotelId", item.hotel_id)
+                    intent.putExtra("hotelAddress", item.hotelAddress)
+                    context.startActivity(intent)
+                }
+
                 if (item.likeCount != ""){
                     holder.likeCount.text = item.likeCount
                 }

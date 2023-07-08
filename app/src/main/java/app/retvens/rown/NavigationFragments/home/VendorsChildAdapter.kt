@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.databinding.ItemExploreServicesCardBinding
+import app.retvens.rown.databinding.ItemServicesHomeCardBinding
 import app.retvens.rown.databinding.VendorsCardHomeBinding
 import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
@@ -19,7 +20,7 @@ class VendorsChildAdapter(private val context: Context, private val viewType: In
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class VendorsViewHolder(private val binding : ItemExploreServicesCardBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class VendorsViewHolder(private val binding : ItemServicesHomeCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindVendorsView(recyclerItem: ProfileServicesDataItem){
             binding.vendorName.text = recyclerItem.vendorName
             binding.vendorsId.text = "@${recyclerItem.User_name}"
@@ -45,7 +46,7 @@ class VendorsChildAdapter(private val context: Context, private val viewType: In
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-                val binding = ItemExploreServicesCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val binding = ItemServicesHomeCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 return VendorsViewHolder(binding)
     }
 

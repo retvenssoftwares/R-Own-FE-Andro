@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
-                    android:text="Travel Influencer"
+                    android:text=""
                     android:textColor="@color/grey_60"
                     android:textSize="11dp"
                     app:layout_constraintStart_toStartOf="@id/user_name_post"
@@ -141,7 +141,8 @@
                     android:textColor="@color/grey_60"
                     android:textSize="11dp"
                     app:layout_constraintEnd_toEndOf="@id/viewPager"
-                    app:layout_constraintTop_toBottomOf="@id/location" />
+                    app:layout_constraintBottom_toBottomOf="@id/user_name_post"
+                    app:layout_constraintTop_toTopOf="@id/user_name_post" />
 
                 <ImageView
                     android:id="@+id/likedAnimation"
@@ -239,7 +240,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_semibold"
-                            android:text="5k"
+                            android:text="0"
                             android:textSize="12dp"
                             android:textAlignment="center"
                             android:textColor="@color/black" />
@@ -269,7 +270,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_semibold"
-                            android:text="5k"
+                            android:text="0"
                             android:textSize="12dp"
                             android:textAlignment="center"
                             android:textColor="@color/black" />

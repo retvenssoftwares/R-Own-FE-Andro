@@ -62,7 +62,7 @@ class ViewAllBlogsActivity : AppCompatActivity() {
                     binding.shimmerFrameLayoutBlog.visibility = View.GONE
 
                     if (response.body()!!.isNotEmpty()) {
-                    allBlogsAdapter = AllBlogsAdapter(response.body()!! as ArrayList<AllBlogsData>, this@ViewAllBlogsActivity)
+                    allBlogsAdapter = AllBlogsAdapter(response.body()!! as ArrayList<AllBlogsData>, this@ViewAllBlogsActivity, false)
                     binding.blogsRecyclerView.adapter = allBlogsAdapter
                     allBlogsAdapter.removeBlogFromList(response.body()!!)
                     allBlogsAdapter.notifyDataSetChanged()

@@ -16,6 +16,9 @@ import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.utils.removeConnection
 import com.bumptech.glide.Glide
@@ -45,7 +48,11 @@ class ConnectionsAdapter(val listS : ArrayList<Connections>, val context: Contex
 
         val data = listS[position]
 
-        Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        if (data.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        } else{
+            holder.profile.setImageResource(R.drawable.svg_user)
+        }
 
         holder.title.text = data.Full_name
         holder.interact.text = "INTERACT"
@@ -73,6 +80,22 @@ class ConnectionsAdapter(val listS : ArrayList<Connections>, val context: Contex
                 } catch (e : Exception){
 
                 }
+            }
+        }
+
+        holder.itemView.setOnClickListener {
+            if(data.Role == "Business Vendor / Freelancer"){
+                val intent = Intent(context, VendorProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
+            }else if (data.Role == "Hotel Owner"){
+                val intent = Intent(context, OwnerProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
+            } else {
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("userId",data.User_id)
+                context.startActivity(intent)
             }
         }
 

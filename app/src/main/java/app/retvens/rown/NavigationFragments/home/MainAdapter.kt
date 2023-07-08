@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.net.Uri.encode
 import android.os.Build
 import android.util.Log
@@ -48,8 +49,10 @@ import android.os.Looper
 import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
 import app.retvens.rown.NavigationFragments.TimesStamp
+import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.databinding.ItemHotelPostBinding
+import app.retvens.rown.utils.postLike
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import okio.ByteString
@@ -80,9 +83,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindBannerView(banner: PostItem, position: Int){
             var save = true
+            var like = true
             var operatioin = "push"
+            var count = banner.Like_count.toInt()
 
-                        val post = banner
+            val post = banner
 
             if (banner.Profile_pic.isNotEmpty()) {
                 Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
@@ -100,7 +105,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         Log.e("caption",post.caption)
                         binding.userNamePost.text = post.Full_name
 
-                        binding.location.text = post.location
+
+            if (post.location.isNotEmpty()) {
+                binding.location.text = post.location
+            } else {
+                binding.location.text = post.Role
+            }
+
 
             if(post.verificationStatus != "false"){
                 binding.verification.visibility = View.VISIBLE
@@ -155,8 +166,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //
 
                         if (post.like == "Liked"){
+                            like = false
+                            banner.islike = false
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
                         }else if (post.like == "Unliked"){
+                            like = true
+                            banner.islike = true
                             binding.likePost.setImageResource(R.drawable.svg_like_post)
                         }
 
@@ -184,9 +199,6 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.postProfile.setOnClickListener {
 
-//                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
-//
-//                }else
                 if(banner.Role == "Business Vendor / Freelancer"){
                     val intent = Intent(context,VendorProfileActivity::class.java)
                     intent.putExtra("userId",banner.user_id)
@@ -219,7 +231,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     intent.putExtra("time",item.date_added)
                 }
                 intent.putStringArrayListExtra("postPic",images)
-                intent.putExtra("likeCount",banner.Like_count)
+                intent.putExtra("likeCount",binding.likeCount.text)
+                intent.putExtra("location",binding.location.text)
+                intent.putExtra("time",post.date_added)
                 intent.putExtra("commentCount",banner.Comment_count)
                 intent.putExtra("like",banner.like)
                 intent.putExtra("isSaved",banner.isSaved)
@@ -229,49 +243,29 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.likePost.setOnClickListener {
 
-                if (post.like == "Unliked"){
-                    banner.islike = !banner.islike
-
-                    val count:Int
-                    if(banner.islike){
-                        post.like = "Liked"
+                if(like){
+                    postLike(banner.post_id, context) {
+                        banner.like = "Liked"
+                        like = false
+                        banner.islike = false
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
-                        count = post.Like_count.toInt()+1
-                        post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
-                    }else{
-                        post.like = "Unliked"
-                        binding.likePost.setImageResource(R.drawable.svg_like_post)
-                        count = post.Like_count.toInt()
+                        count += 1
                         post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }
-
-                    onItemClickListener?.onItemClick(banner)
-                }
-                if (post.like == "Liked"){
-                    banner.islike = !banner.islike
-
-                    val count:Int
-                    if(banner.islike){
-                        post.like = "Unliked"
+//                        onItemClickListener?.onItemClick(banner)
+                } else{
+                    postLike(banner.post_id, context){
+                        banner.like = "Unliked"
+                        like = true
+                        banner.islike = true
                         binding.likePost.setImageResource(R.drawable.svg_like_post)
-                        count = post.Like_count.toInt()-1
-                        post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
-                    }else{
-                        post.like = "Liked"
-                        binding.likePost.setImageResource(R.drawable.liked_vectore)
-                        count = post.Like_count.toInt()
+//                            count = post.Like_count.toInt()
+                        count -= 1
                         post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }
-
-                    onItemClickListener?.onItemClick(banner)
                 }
-
-
-
             }
 
             binding.comment.setOnClickListener {
@@ -406,6 +400,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.userIdOnComment.text = post.Full_name
             }
 
+//            if (post.location.isNotEmpty()) {
+                binding.postUserType.text = post.hotelName
+//            } else {
+                binding.postUserDominican.text = post.hotelAddress
+//            }
+
             if(post.verificationStatus != "false"){
                 binding.verification.visibility = View.VISIBLE
             }
@@ -415,16 +415,40 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //            Log.e("caption",post.caption)
             binding.userNamePost.text = post.Full_name
 
-            binding.titleStatus.text = "Hello all, I am here at ${post.Event_name}. Let’s Catch Up."
+            binding.titleStatus.text = "Hello all, I am here at ${post.hotelName}. Let’s Catch Up."
 
-            Glide.with(context).load(post.checkinVenue).into(binding.eventImage)
+            Glide.with(context).load(post.hotelCoverpicUrl).into(binding.eventImage)
 
+            binding.eventImage.setOnClickListener {
+                val intent = Intent(context, HotelDetailsActivity::class.java)
+                intent.putExtra("name", post.hotelName)
+                intent.putExtra("logo", post.hotelCoverpicUrl)
+                intent.putExtra("hotelId", post.hotel_id)
+                intent.putExtra("hotelAddress", post.hotelAddress)
+                context.startActivity(intent)
+            }
+
+            binding.postUserType.setOnClickListener {
+                val intent = Intent(context, HotelDetailsActivity::class.java)
+                intent.putExtra("name", post.hotelName)
+                intent.putExtra("logo", post.hotelCoverpicUrl)
+                intent.putExtra("hotelId", post.hotel_id)
+                intent.putExtra("hotelAddress", post.hotelAddress)
+                context.startActivity(intent)
+            }
+
+            binding.book.setOnClickListener {
+                val uri : Uri = Uri.parse("https://${post.bookingengineLink}")
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                context.startActivity(intent)
+            }
             if (post.Like_count != ""){
                 binding.likeCount.text = post.Like_count
             }
             if (post.Comment_count != ""){
                 binding.commentCount.text = post.Comment_count
             }
+
             if (post.like != "Unliked"){
                 like = false
                 binding.likePost.setImageResource(R.drawable.liked_vectore)
@@ -442,6 +466,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 save = true
                 binding.savePost.setImageResource(R.drawable.svg_save_post)
             }
+
 
             binding.savePost.setOnClickListener {
                 if (post.post_id != null) {
@@ -481,26 +506,33 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
 
-            var count:Int = 0
+            var count = post.Like_count.toInt()
 
             binding.likePost.setOnClickListener {
 
                     if(like){
-                        post.like = "Liked"
-                        like = false
-                        binding.likePost.setImageResource(R.drawable.liked_vectore)
-                        count = post.Like_count.toInt()+1
-                        post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
-                        onItemClickListener?.onItemClick(banner)
+                        postLike(banner.post_id, context) {
+                            post.like = "Liked"
+                            like = false
+                            binding.likePost.setImageResource(R.drawable.liked_vectore)
+                            count += 1
+//                            post.Like_count = count.toString()
+                            binding.likeCount.text = count.toString()
+                        }
+//                        onItemClickListener?.onItemClick(banner)
                     } else{
-                        post.like = "Unliked"
-                        like = true
-                        binding.likePost.setImageResource(R.drawable.svg_like_post)
-                        count = post.Like_count.toInt()
-                        post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
-                        onItemClickListener?.onItemClick(banner)
+
+                        postLike(banner.post_id, context){
+                            post.like = "Unliked"
+                            like = true
+                            binding.likePost.setImageResource(R.drawable.svg_like_post)
+//                            count = post.Like_count.toInt()
+//                            post.Like_count = count.toString()
+                            count -= 1
+                            binding.likeCount.text = count.toString()
+                        }
+
+//                        onItemClickListener?.onItemClick(banner)
                     }
             }
 
@@ -514,16 +546,16 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.likedAnimation.startAnimation(anim)
                     binding.likedAnimation.visibility = View.VISIBLE
 
-                    if(like){
-                        post.like = "Liked"
-                        like = false
-                        binding.likePost.setImageResource(R.drawable.liked_vectore)
-                        count = post.Like_count.toInt()+1
-                        post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
-                        onItemClickListener?.onItemClick(banner)
+                    if(like) {
+                        postLike(banner.post_id, context) {
+                            banner.like = "Liked"
+                            like = false
+                            binding.likePost.setImageResource(R.drawable.liked_vectore)
+                            count += 1
+//                            post.Like_count = count.toString()
+                            binding.likeCount.text = count.toString()
+                        }
                     }
-
                     val handler = Handler(Looper.getMainLooper())
                     handler.postDelayed({
                         val anim = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)
@@ -532,9 +564,6 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 }
             }))
 
-            binding.likePost.setOnClickListener {
-                onItemClickListener?.onItemClick(banner)
-            }
 
             binding.comment.setOnClickListener {
                 onItemClickListener?.onItemClickForComment(banner,position)
@@ -548,6 +577,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
         fun bindBannerView(banner: PostItem, position: Int){
 
             var save = true
+            var like = true
             var operatioin = "push"
 
             if (banner.User_name.isNotEmpty()){
@@ -563,7 +593,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.postProfile.setImageResource(R.drawable.svg_user)
             }
 
-            binding.location.text = banner.location
+            if (banner.location.isNotEmpty()) {
+                binding.location.text = banner.location
+            } else {
+                binding.location.text = banner.Role
+            }
 
             if(banner.verificationStatus != "false"){
                 binding.verification.visibility = View.VISIBLE
@@ -622,27 +656,39 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
             if (banner.like == "Liked"){
+                like = false
                 binding.likePost.setImageResource(R.drawable.liked_vectore)
             }else if (banner.like == "Unliked"){
+                like = true
                 binding.likePost.setImageResource(R.drawable.svg_like_post)
             }
 
+            var count = banner.Like_count.toInt()
 
             binding.likePost.setOnClickListener {
-                banner.islike = !banner.islike
 
-                val count:Int
-                if(banner.islike){
-                    binding.likePost.setImageResource(R.drawable.liked_vectore)
-                    count = banner.Like_count.toInt()+1
-                    binding.likeCount.text = count.toString()
-                }else{
-                    binding.likePost.setImageResource(R.drawable.svg_like_post)
-                    count = banner.Like_count.toInt()
-                    binding.likeCount.text = count.toString()
+                if(like){
+                    postLike(banner.post_id, context) {
+                        banner.like = "Liked"
+                        like = false
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+                        count += 1
+//                            post.Like_count = count.toString()
+                        binding.likeCount.text = count.toString()
+                    }
+//                        onItemClickListener?.onItemClick(banner)
+                } else{
+
+                    postLike(banner.post_id, context){
+                        banner.like = "Unliked"
+                        like = true
+                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+//                            count = post.Like_count.toInt()
+//                            post.Like_count = count.toString()
+                        count -= 1
+                        binding.likeCount.text = count.toString()
+                    }
                 }
-
-                onItemClickListener?.onItemClick(banner)
             }
 
             binding.comment.setOnClickListener {
@@ -671,6 +717,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             val date = TimesStamp.convertTimeToText(banner.date_added)
             binding.postTime.text = date
 
+            if (banner.location.isNotEmpty()) {
+                binding.location.text = banner.location
+            } else {
+                binding.location.text = banner.Role
+            }
 
             if(banner.verificationStatus != "false"){
                 binding.verification.visibility = View.VISIBLE
@@ -709,8 +760,6 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 val timestamp = convertTimeToText(banner.date_added)
                 binding.postTime.text = timestamp
             }
-
-            binding.location.text = banner.Role
 
             adapter.setOnItemClickListener(this)
 //            banner.pollQuestion.forEach { item ->

@@ -1,9 +1,11 @@
 package app.retvens.rown.bottomsheet
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,7 +22,10 @@ import app.retvens.rown.DataCollections.FeedCollection.PostCommentReplyClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.FragmntAdapters.CommentAdapter
 import app.retvens.rown.R
+import app.retvens.rown.utils.setupFullHeight
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -39,6 +44,8 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
     private lateinit var replying:ConstraintLayout
     private lateinit var replyingText:TextView
     private lateinit var cancelReply:ImageView
+
+    private lateinit var empty:TextView
 
     var mListener: OnBottomWhatToPostClickListener ? = null
     fun setOnWhatToPostClickListener(listener: OnBottomWhatToPostClickListener?){
@@ -60,12 +67,29 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_bottom_sheet_comment, container, false)
     }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = BottomSheetDialog(requireContext(), theme)
+        dialog.setOnShowListener {
+
+            val bottomSheetDialog = it as BottomSheetDialog
+            val parentLayout =
+                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            parentLayout?.let { it ->
+                val behaviour = BottomSheetBehavior.from(it)
+                setupFullHeight(it)
+                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+        return dialog
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        empty = view.findViewById(R.id.empty)
 
         recyclerView = view.findViewById(R.id.comment_recyclerview)
         recyclerView.setHasFixedSize(true)
@@ -104,7 +128,6 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
 
         getCommentList(postID)
     }
-
     private fun replyComment(userId: String, parentCommentId: String, postID: String) {
 
         val comment = comments.text.toString()
@@ -174,7 +197,11 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
         getComments.enqueue(object : Callback<GetComments?>, CommentAdapter.OnItemClickListener {
             override fun onResponse(call: Call<GetComments?>, response: Response<GetComments?>) {
                 if (response.isSuccessful){
+
                     val response = response.body()!!
+                    if (response.post.comments.isEmpty()){
+                        empty.visibility = View.VISIBLE
+                    }
                     commentAdapter = CommentAdapter(requireContext(),response)
                     recyclerView.adapter = commentAdapter
                     commentAdapter.notifyDataSetChanged()

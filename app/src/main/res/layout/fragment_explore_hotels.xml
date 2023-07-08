@@ -40,7 +40,7 @@
         android:layout_marginTop="12dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
-        android:paddingBottom="160dp"
+        android:paddingBottom="20dp"
         android:layout_below="@id/card_sh"
         tools:listitem="@layout/item_explore_hotels_card"
         app:layout_constraintStart_toStartOf="parent"

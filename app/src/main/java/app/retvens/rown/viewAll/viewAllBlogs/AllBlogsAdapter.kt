@@ -25,7 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context) : RecyclerView.Adapter<AllBlogsAdapter.ExploreBlogsViewHolder>() {
+class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context, val isGrid : Boolean) : RecyclerView.Adapter<AllBlogsAdapter.ExploreBlogsViewHolder>() {
 
     class ExploreBlogsViewHolder(itemView: View) : ViewHolder(itemView){
         val title = itemView.findViewById<TextView>(R.id.blog_title)
@@ -41,9 +41,15 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExploreBlogsViewHolder {
-        val inflater : LayoutInflater = LayoutInflater.from(context)
-        val view : View = inflater.inflate(R.layout.item_explore_blogs_card, parent, false)
-        return ExploreBlogsViewHolder(view)
+        if (isGrid) {
+            val inflater: LayoutInflater = LayoutInflater.from(context)
+            val view: View = inflater.inflate(R.layout.item_explore_blogs_card, parent, false)
+            return ExploreBlogsViewHolder(view)
+        } else {
+            val inflater: LayoutInflater = LayoutInflater.from(context)
+            val view: View = inflater.inflate(R.layout.item_blogs_all_card, parent, false)
+            return ExploreBlogsViewHolder(view)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -112,6 +112,12 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
                     holder.connect.text = "Remove"
                 }
 
+            } else if (holder.connect.text == "Interact") {
+
+                val intent = Intent(context, MesiboMessagingActivity::class.java)
+                intent.putExtra(MesiboUI.PEER, data.Mesibo_account.get(0).address)
+                context.startActivity(intent)
+
             }
         }
 

@@ -54,7 +54,7 @@ class ViewConnectionsActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val response = response.body()!!
                         response.forEach {
-                            connectionsAdapter = ConnectionsAdapter(it.conns as ArrayList<Connections>, applicationContext)
+                            connectionsAdapter = ConnectionsAdapter(it.conns as ArrayList<Connections>, this@ViewConnectionsActivity)
                             binding.connectionsRecycler.adapter = connectionsAdapter
                             connectionsAdapter.notifyDataSetChanged()
                         }

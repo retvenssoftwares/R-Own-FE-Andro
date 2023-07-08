@@ -51,7 +51,7 @@ class ViewRequestsActivity : AppCompatActivity() {
            ) {
                if (response.isSuccessful){
                    val response = response.body()!!
-                   requestsAdapter = RequestsAdapter(response, applicationContext)
+                   requestsAdapter = RequestsAdapter(response, this@ViewRequestsActivity)
                    binding.requestsRecycler.adapter = requestsAdapter
                    requestsAdapter.notifyDataSetChanged()
 
