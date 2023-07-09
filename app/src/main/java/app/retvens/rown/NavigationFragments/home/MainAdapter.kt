@@ -100,9 +100,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             } else{
                 binding.userIdOnComment.text = post.Full_name
             }
-                        Log.e("username",post.toString())
+//                        Log.e("username",post.toString())
                         binding.recentCommentByUser.text = post.caption
-                        Log.e("caption",post.caption)
+//                        Log.e("caption",post.caption)
                         binding.userNamePost.text = post.Full_name
 
 
@@ -191,7 +191,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
 
-                Log.e("date",banner.date_added)
+//                Log.e("date",banner.date_added)
                 val timestamp = convertTimeToText(banner.date_added)
 
                 binding.postTime.text = timestamp
@@ -410,7 +410,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.verification.visibility = View.VISIBLE
             }
 
-            Log.e("username",post.User_name)
+//            Log.e("username",post.User_name)
             binding.recentCommentByUser.text = post.caption
 //            Log.e("caption",post.caption)
             binding.userNamePost.text = post.Full_name
@@ -613,6 +613,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.savePost.setImageResource(R.drawable.svg_save_post)
             }
 
+            val time = TimesStamp.convertTimeToText(banner.date_added)
+            binding.postTime.text = time
+
             binding.savePost.setOnClickListener {
                 if (banner.post_id != null) {
                     saveStatus(banner.post_id, binding, operatioin, save) {
@@ -728,7 +731,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
             val total = calculateTotalVotes(banner.pollQuestion[0].Options.toTypedArray())
-            Log.e("totel",total.toString())
+//            Log.e("totel",total.toString())
 
             binding.postProfile.setOnClickListener {
                     if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){

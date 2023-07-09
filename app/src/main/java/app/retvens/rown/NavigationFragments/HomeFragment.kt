@@ -220,8 +220,11 @@ class HomeFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
 //                    Toast.makeText(requireContext(), postCounter.toString(), Toast.LENGTH_SHORT).show()
 
-                    if(!isLoading && totalItem <= (scrollOutItems+currentItem) && postCounter >= 10){
+                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
+                        Log.e("working","okk")
+                        progress.setVisibility(View.VISIBLE);
                         getData()
+
                     }
                 }
             }
@@ -269,20 +272,23 @@ class HomeFragment : Fragment() {
 
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
-
-        if (pageCounter > 1) {
-
+        if (pageCounter >= 1) {
+            Log.e("check","1")
             if (pageCounter == 2) {
+                Log.e("check","2")
                 getHotels()
             }else if (pageCounter == 3) {
+                Log.e("check","3")
                 getOpenCommunites()
             }else if (pageCounter == 4) {
+                Log.e("check","4")
                 getAllBlogs()
             }else if (pageCounter == 5) {
+                Log.e("check","5")
                 getServices()
             }
 
-            progress.setVisibility(View.VISIBLE);
+
             val handler = Handler()
             handler.postDelayed({
                 getPost(user_id)
@@ -311,7 +317,7 @@ class HomeFragment : Fragment() {
 
                     try {
 
-                    Log.e("response",response.toString())
+//                    Log.e("response",response.toString())
 
                     val postList = ArrayList<DataItem.Banner>()
 

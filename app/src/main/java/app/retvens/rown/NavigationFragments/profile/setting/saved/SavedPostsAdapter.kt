@@ -53,9 +53,9 @@ class SavedPostsAdapter(val context: Context, val mediaList:ArrayList<PostItem>)
 
         val media = mediaList[position]
 
+        Log.e("image",media.toString())
 
         media.media.forEach { item ->
-
                 Glide.with(context).load(item.post).into(holder.post_img)
 
             }

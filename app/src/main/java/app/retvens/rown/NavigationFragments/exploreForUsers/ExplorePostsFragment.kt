@@ -84,15 +84,15 @@ class ExplorePostsFragment : Fragment() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
+                Log.e("working","okk")
                 if (dy > 0){
                     val layoutManager = recyclerView.layoutManager as GridLayoutManager
                     val currentItem = layoutManager.childCount
                     val totalItem = layoutManager.itemCount
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    Log.e("working","okk")
                     if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-
                         isLoading = false
                         currentPage++
                         getData()
@@ -209,7 +209,7 @@ class ExplorePostsFragment : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
 //                empty.text = "Try Again"
-                empty.visibility = View.VISIBLE
+//                empty.visibility = View.VISIBLE
                 Log.e("error",t.message.toString())
             }
         })

@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
+import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.R
@@ -44,7 +45,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
         val likeButton = itemView.findViewById<ImageView>(R.id.like_post)
         val commentButton = itemView.findViewById<ImageView>(R.id.comment)
         val verification = itemView.findViewById<ImageView>(R.id.verification)
-        val location = itemView.findViewById<TextView>(R.id.post_time)
+        val time = itemView.findViewById<TextView>(R.id.post_time)
         val likeCount = itemView.findViewById<TextView>(R.id.like_count)
         val commentCount = itemView.findViewById<TextView>(R.id.comment_count)
     }
@@ -60,7 +61,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
         val location = itemView.findViewById<TextView>(R.id.post_user_dominican)
         val username = itemView.findViewById<TextView>(R.id.user_id_on_comment)
         val caption = itemView.findViewById<TextView>(R.id.recentCommentByUser)
-
+        val time = itemView.findViewById<TextView>(R.id.post_time)
         val likeButton = itemView.findViewById<ImageView>(R.id.like_post)
         val commentButton = itemView.findViewById<ImageView>(R.id.comment)
         val likeCount = itemView.findViewById<TextView>(R.id.like_count)
@@ -110,6 +111,9 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
         when (holder.itemViewType) {
             VIEW_TYPE_LAYOUT_ONE -> {
                 val layoutOneViewHolder = holder as LayoutOneViewHolder
+
+                val time = TimesStamp.convertTimeToText(item.date_added)
+                layoutOneViewHolder.time.text = time
 
                 if (item.verificationStatus != "false"){
                     layoutOneViewHolder.verification.visibility = View.VISIBLE
@@ -165,11 +169,16 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     onItemClickListener?.onItemClickForComment(item,position)
                 }
 
+
+
             }
 
 
             VIEW_TYPE_LAYOUT_TWO -> {
                 val layoutTwoViewHolder = holder as LayoutTwoViewHolder
+
+                val time = TimesStamp.convertTimeToText(item.date_added)
+                layoutTwoViewHolder.time.text = time
 
                 if (item.verificationStatus != "false"){
                     layoutTwoViewHolder.verification.visibility = View.VISIBLE

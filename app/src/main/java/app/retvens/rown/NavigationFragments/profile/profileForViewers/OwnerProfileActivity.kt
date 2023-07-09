@@ -325,7 +325,7 @@ class OwnerProfileActivity : AppCompatActivity() {
 
                     connCount.text = response.connection_Count.toString()
                     postCount.text = response.post_count.toString()
-
+                    address = response.profiledata.Mesibo_account.get(0).address
                     created = response.profile.Created_On
                     location = response.profile.location
                     verification = response.profile.verificationStatus

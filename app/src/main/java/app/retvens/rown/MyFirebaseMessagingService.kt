@@ -63,7 +63,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 MesiboApi.startMesibo(true)
                 MesiboCall.getInstance().init(this)
 
-
             } catch (e: Exception) {
                 Log.e(TAG, "MesiboCall initialization failed: ${e.message}")
             }

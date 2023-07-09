@@ -1,5 +1,7 @@
 package app.retvens.rown.DataCollections.ConnectionCollection
 
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.MesiboAccount
+
 data class OwnerProfileDataClass(
     val profiledata: ProfileOwnerData,
     val hotellogo: HotelLogo,
@@ -14,6 +16,7 @@ data class ProfileOwnerData(
     val _id: String,
     val Profile_pic: String,
     val userBio: String,
+    val Mesibo_account: List<MesiboAccount>,
     val User_name: String,
     val post_count: List<Any>,
     val Full_name:String

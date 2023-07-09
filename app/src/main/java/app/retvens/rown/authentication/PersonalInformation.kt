@@ -205,12 +205,13 @@ class PersonalInformation : AppCompatActivity() {
                 auth.signInWithEmailLink(mail, emailLink)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            progressDialog.dismiss()
+
 //                            Toast.makeText(applicationContext,"mail is verified",Toast.LENGTH_SHORT).show()
                             val intent = Intent(this,DashBoardActivity::class.java)
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
                             val user = task.result?.user
+                            progressDialog.dismiss()
                             // do something with the user object
                         } else {
                             Toast.makeText(applicationContext,"fail to verify",Toast.LENGTH_SHORT).show()
@@ -353,7 +354,6 @@ class PersonalInformation : AppCompatActivity() {
                     call: Call<UserProfileResponse?>,
                     response: Response<UserProfileResponse?>
                 ) {
-                    progressDialog.dismiss()
 //                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
 //                    Toast.makeText(applicationContext,"user_id : "+user_id, Toast.LENGTH_SHORT).show()
                     Log.d("image file", file.toString())
@@ -369,6 +369,7 @@ class PersonalInformation : AppCompatActivity() {
                             setMesiboProfile(username)
                             startActivity(intent)
                             finish()
+                            progressDialog.dismiss()
                         }else{
                             moveTo(this@PersonalInformation,"MoveToD")
                             saveFullName(applicationContext, username)
@@ -379,6 +380,7 @@ class PersonalInformation : AppCompatActivity() {
                             setMesiboProfile(username)
                             startActivity(intent)
                             finish()
+                            progressDialog.dismiss()
                         }
                     }
 //                Toast.makeText(applicationContext,file.name.toString(),Toast.LENGTH_SHORT).show()

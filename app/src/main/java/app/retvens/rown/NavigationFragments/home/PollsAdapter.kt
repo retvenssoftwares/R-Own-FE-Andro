@@ -76,7 +76,7 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
                         if (!completedPercentage2.isNaN()) {
                             holder.progress.setProgressPercentage(completedPercentage2)
                             holder.percentage.text = "${completedPercentage2.toInt()}%"
-                            Log.e("check", "3")
+//                            Log.e("check", "3")
                         }
 
                         // Update the vote count
@@ -99,7 +99,7 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
             if (!completedPercentage2.isNaN()) {
                 holder.progress.setProgressPercentage(completedPercentage2)
                 holder.percentage.text = "${completedPercentage2.toInt()}%"
-                Log.e("check","1")
+//                Log.e("check","1")
             }
 
         }

@@ -11,6 +11,18 @@
         android:layout_height="match_parent"
         android:gravity="end"
         android:textAlignment="textEnd">
+        
+        <EditText
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/edit_search_bg"
+            android:drawableLeft="@drawable/searchbar"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            />
+        
 
         <LinearLayout
                 android:id="@+id/bottom_forward_btn"
@@ -47,7 +59,10 @@
             android:id="@+id/message_contact_frag_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/md_white_1000" />
+            android:background="@color/md_white_1000"
+            app:layout_anchor="@+id/emptyview_text"
+            android:layout_marginTop="40dp"
+            app:layout_anchorGravity="center" />
 
         <LinearLayout
             android:visibility="visible"

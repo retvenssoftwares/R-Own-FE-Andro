@@ -97,11 +97,11 @@ class ExplorePeopleFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        if (currentPage > lastPage) {
+//                        if (currentPage > lastPage) {
                             isLoading = false
                             lastPage++
                             getData()
-                        }
+//                        }
 
                     }
                 }
@@ -153,9 +153,9 @@ class ExplorePeopleFragment : Fragment() {
 
                             response.forEach { explorePeopleDataClass ->
                                 try {
-                                    if (explorePeopleDataClass.posts.size >= 10){
+//                                    if (explorePeopleDataClass.posts.size >= 10){
                                         currentPage++
-                                    }
+//                                    }
                                     peopleList.addAll(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
