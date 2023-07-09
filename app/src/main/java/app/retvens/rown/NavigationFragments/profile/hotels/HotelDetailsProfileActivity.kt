@@ -137,6 +137,8 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                     binding.hotelName.text = data.hotelName
 //                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
 
+                    binding.hotelRating.text = "${data.hotelRating} Hotel"
+
                     try {
                         Hoteldescription = data.Hoteldescription
                         if(data.gallery.get(0).Image1 != "" && data.gallery.get(0).Image2 != "" && data.gallery.get(0).Image3 != "" ) {

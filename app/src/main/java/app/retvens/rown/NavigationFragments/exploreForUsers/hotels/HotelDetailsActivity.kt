@@ -131,6 +131,7 @@ class HotelDetailsActivity : AppCompatActivity() {
 //                    Glide.with(applicationContext).load().into(binding.vendorImage)
                     hotelLogo = data.hotelLogoUrl
 
+                    binding.hotelRating.text = "${data.hotelRating} Hotel"
                     Hoteldescription = data.Hoteldescription
                     binding.descriptionHotel.text = data.Hoteldescription
                     binding.location.text = data.hotelAddress
