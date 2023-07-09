@@ -137,6 +137,7 @@ interface ProfileApis {
         @Part("Full_name") Name: RequestBody,
         @Part("userBio") userBio: RequestBody,
         @Part("Gender") Gender: RequestBody,
+        @Part("normalUserInfo[jobTitle]") designation : RequestBody,
         @Part Profile_pic: MultipartBody.Part,
     ) : Call<UserProfileResponse>
 
@@ -168,6 +169,7 @@ interface ProfileApis {
         @Part("Full_name") Name: RequestBody,
         @Part("userBio") userBio: RequestBody,
         @Part("Gender") Gender: RequestBody,
+        @Part("normalUserInfo[jobTitle]") designation : RequestBody,
     ) : Call<UserProfileResponse>
 
     @Multipart

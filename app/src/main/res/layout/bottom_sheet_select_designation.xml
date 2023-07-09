@@ -52,7 +52,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="BD"
+            android:hint="Search here.."
             android:textColorHint="@color/grey_40"
             style="@style/TextAppearance.AppCompat.Body1"
             android:background="@null"

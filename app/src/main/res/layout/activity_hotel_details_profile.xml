@@ -149,6 +149,7 @@
             android:rating="5"
             android:stepSize="3"
             android:numStars="5"
+            android:visibility="gone"
             android:layout_marginBottom="5dp"
             style="@style/Widget.AppCompat.RatingBar.Small"
             app:layout_constraintTop_toBottomOf="@id/hotelName"

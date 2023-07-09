@@ -31,6 +31,7 @@ import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.authentication.UserInterest
 import app.retvens.rown.bottomsheet.BottomSheetJobDesignation
+import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.databinding.ActivityEditProfileBinding
 import app.retvens.rown.utils.cropProfileImage
 import app.retvens.rown.utils.getRandomString
@@ -53,7 +54,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.NullPointerException
 
-class EditProfileActivity : AppCompatActivity(), BottomSheetJobDesignation.OnBottomJobDesignationClickListener {
+class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJobTitleClickListener {
     lateinit var binding:ActivityEditProfileBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
@@ -97,10 +98,10 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobDesignation.OnBot
         }
 
         binding.Designation.setOnClickListener {
-            val bottomSheet = BottomSheetJobDesignation()
+            val bottomSheet = BottomSheetJobTitle()
             val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetJobDesignation.Job_Designation_TAG)}
-            bottomSheet.setOnJobDesignationClickListener(this)
+            fragManager.let{bottomSheet.show(it, BottomSheetJobTitle.Job_Title_TAG)}
+            bottomSheet.setOnJobTitleClickListener(this)
         }
 
         binding.male.setOnClickListener {
@@ -171,6 +172,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobDesignation.OnBot
                 user_id,
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.etNameEdit.text.toString()),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.bioEt.text.toString()),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.dText.text.toString()),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Gender),
                 image!!
             )
@@ -291,6 +293,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobDesignation.OnBot
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.etNameEdit.text.toString()),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.bioEt.text.toString()),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Gender),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.dText.text.toString())
             )
             pWithoutImg.enqueue(object : Callback<UserProfileResponse?> {
                 override fun onResponse(
@@ -464,7 +467,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobDesignation.OnBot
         return compressed
     }
 
-    override fun bottomJobDesignationClick(jobDesignationFrBo: String) {
-        binding.dText.text = jobDesignationFrBo
+    override fun bottomJobTitleClick(jobTitleFrBo: String) {
+        binding.dText.text = jobTitleFrBo
     }
 }
