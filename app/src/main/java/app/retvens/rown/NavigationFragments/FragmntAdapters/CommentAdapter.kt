@@ -113,7 +113,7 @@ class CommentAdapter(val context: Context, var commentList:GetComments): Recycle
             onItemClickListener?.onItemClick(data)
         }
 
-        val timestamp = convertTimeToText(data.date_added)
+        val timestamp = TimesStamp.convertTimeToText(data.date_added)
         holder.time.text = timestamp
 
     }

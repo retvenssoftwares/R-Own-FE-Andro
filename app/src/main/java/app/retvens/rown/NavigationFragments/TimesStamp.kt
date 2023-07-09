@@ -18,27 +18,23 @@ object TimesStamp {
             val pasTime: Date = dateFormat.parse(dataDate)
             val nowTime = Date()
             val dateDiff = nowTime.time - pasTime.time
-            val second = TimeUnit.MILLISECONDS.toSeconds(dateDiff)
-            val minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff)
-            val hour = TimeUnit.MILLISECONDS.toHours(dateDiff)
             val day = TimeUnit.MILLISECONDS.toDays(dateDiff)
 
-            if (second < 60) {
-                convTime = "$second Sec $suffix"
-            } else if (minute < 60) {
-                convTime = "$minute Min $suffix"
-            } else if (hour < 24) {
-                convTime = "$hour Hrs $suffix"
-            } else if (day >= 7) {
-                if (day > 360) {
-                    convTime = "${day / 360} Yr $suffix"
-                } else if (day > 30) {
-                    convTime = "${day / 30} Months $suffix"
-                } else {
-                    convTime = "${day / 7} Week $suffix"
-                }
-            } else if (day < 7) {
+            if (day >= 1) {
                 convTime = "$day D $suffix"
+            } else {
+                val hour = TimeUnit.MILLISECONDS.toHours(dateDiff)
+                if (hour >= 1) {
+                    convTime = "$hour Hrs $suffix"
+                } else {
+                    val minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff)
+                    if (minute >= 1) {
+                        convTime = "$minute Min $suffix"
+                    } else {
+                        val second = TimeUnit.MILLISECONDS.toSeconds(dateDiff)
+                        convTime = "$second Sec $suffix"
+                    }
+                }
             }
         } catch (e: ParseException) {
             e.printStackTrace()
