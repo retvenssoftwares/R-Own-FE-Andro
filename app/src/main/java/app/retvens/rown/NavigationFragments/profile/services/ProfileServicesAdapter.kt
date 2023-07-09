@@ -63,7 +63,12 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
         holder.serviceName.text = data.service_name
         holder.location.text = data.location
         holder.servicePrice.text = data.vendorServicePrice
-        Glide.with(context).load(data.Profile_pic).into(holder.vendor_profile)
+
+        if (data.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(data.Profile_pic).into(holder.vendor_profile)
+        } else {
+            holder.vendor_profile.setImageResource(R.drawable.svg_user)
+        }
 
         holder.del.setOnClickListener {
             openBottomForDel(listS[position].vendorServiceId)

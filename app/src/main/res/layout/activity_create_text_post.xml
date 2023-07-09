@@ -71,6 +71,7 @@
         android:layout_alignParentTop="true"
         app:shapeAppearance="@style/RoundedCornerImage"
         android:layout_marginTop="40dp"
+        android:src="@drawable/svg_user"
         app:layout_constraintTop_toBottomOf="@id/relative"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.07"
@@ -93,7 +94,7 @@
 
     <LinearLayout
         android:id="@+id/can_see"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
@@ -101,6 +102,7 @@
         android:background="@drawable/border"
         android:layout_marginStart="8dp"
         android:paddingHorizontal="7dp"
+        app:layout_constraintEnd_toStartOf="@id/can_comment"
         app:layout_constraintTop_toBottomOf="@id/user_complete_name"
         app:layout_constraintStart_toEndOf="@id/user_complete_profile">
 
@@ -132,14 +134,16 @@
 
     <LinearLayout
         android:id="@+id/can_comment"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
         android:gravity="center"
         android:background="@drawable/border"
         android:layout_marginStart="6dp"
+        android:layout_marginEnd="12dp"
         android:paddingHorizontal="7dp"
+        app:layout_constraintEnd_toStartOf="@id/createP"
         app:layout_constraintTop_toBottomOf="@id/user_complete_name"
         app:layout_constraintStart_toEndOf="@id/can_see">
 

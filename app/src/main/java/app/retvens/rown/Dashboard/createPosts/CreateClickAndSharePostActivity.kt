@@ -187,7 +187,12 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
         val sharedPreferences = getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferences?.getString("profile_image", "").toString()
 
-        Glide.with(applicationContext).load(profilePic).into(binding.userCompleteProfile)
+        if (profilePic.isNotEmpty()) {
+            Glide.with(applicationContext).load(profilePic).into(binding.userCompleteProfile)
+        } else {
+            binding.userCompleteProfile.setImageResource(R.drawable.svg_user)
+        }
+
         binding.userCompleteName.setText(profileName)
 
         binding.canSee.setOnClickListener {

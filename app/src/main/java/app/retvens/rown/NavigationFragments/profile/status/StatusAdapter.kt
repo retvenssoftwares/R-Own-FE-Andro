@@ -121,7 +121,12 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     layoutOneViewHolder.name.text = item.Full_name
                 }
                 layoutOneViewHolder.status.text = item.caption
-                Glide.with(context).load(item.Profile_pic).into(layoutOneViewHolder.postProfile)
+
+                if (item.Profile_pic.isNotEmpty()) {
+                    Glide.with(context).load(item.Profile_pic).into(layoutOneViewHolder.postProfile)
+                } else {
+                    layoutOneViewHolder.postProfile.setImageResource(R.drawable.svg_user)
+                }
 
                 if (item.likeCount != ""){
                     holder.likeCount.text = item.likeCount

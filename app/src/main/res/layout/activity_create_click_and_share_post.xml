@@ -70,6 +70,7 @@
         android:layout_alignParentTop="true"
         app:shapeAppearance="@style/RoundedCornerImage"
         android:layout_marginTop="40dp"
+        android:src="@drawable/svg_user"
         app:layout_constraintTop_toBottomOf="@id/relative"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.07"
@@ -139,6 +140,8 @@
         android:background="@drawable/border"
         android:layout_marginStart="6dp"
         android:paddingHorizontal="7dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/user_complete_name"
         app:layout_constraintStart_toEndOf="@id/can_see">
 

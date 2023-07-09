@@ -62,7 +62,11 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
         holder.name.text = listS[position].hotelName
         holder.locationHotel.text = listS[position].hotelAddress
 
-        Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)
+        if (listS[position].hotelCoverpicUrl.isNotEmpty()) {
+            Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)
+        } else {
+            holder.cover.setImageResource(R.drawable.svg_user)
+        }
 
         if (listS[position] != null) {
             holder.hotelRating.text = listS[position].hotelRating.toString() + " Hotel"

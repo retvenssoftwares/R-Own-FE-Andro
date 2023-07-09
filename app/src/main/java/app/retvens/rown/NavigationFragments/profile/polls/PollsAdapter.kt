@@ -72,7 +72,13 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
         } else{
             holder.name.text = poll.Full_name
         }
-        Glide.with(context).load(poll.Profile_pic).into(holder.profile)
+
+        if (poll.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(poll.Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
+        }
+
         holder.location.text = poll.location
 
         val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
