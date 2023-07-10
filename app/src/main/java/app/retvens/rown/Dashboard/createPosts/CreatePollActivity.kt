@@ -45,14 +45,29 @@ class CreatePollActivity : AppCompatActivity() {
             if (binding.etAddStatement.text!!.isEmpty()){
                 binding.addStatement.error = "Add Statement"
             }else if (binding.opinion1.text!!.isEmpty()){
+                binding.addStatement.isErrorEnabled = false
                 binding.opinion1Layout.error = "Add Opinion"
             }else if (binding.opinion2.text!!.isEmpty()){
+                binding.addStatement.isErrorEnabled = false
+                binding.opinion1Layout.isErrorEnabled = false
                 binding.opinion2Layout.error = "Add Opinion"
-            }else if (binding.opinion3.text!!.isEmpty() && pollNumber == 3){
+            }else if (binding.opinion3.text!!.isEmpty() && (pollNumber == 3 || pollNumber == 4 || pollNumber == 5) ){
+                binding.addStatement.isErrorEnabled = false
+                binding.opinion1Layout.isErrorEnabled = false
+                binding.opinion2Layout.isErrorEnabled = false
                 binding.opinion3Layout.error = "Add Opinion"
-            }else if (binding.opinion4.text!!.isEmpty() && pollNumber == 4){
+            }else if (binding.opinion4.text!!.isEmpty() && (pollNumber == 4 || pollNumber == 5) ){
+                binding.addStatement.isErrorEnabled = false
+                binding.opinion1Layout.isErrorEnabled = false
+                binding.opinion2Layout.isErrorEnabled = false
+                binding.opinion3Layout.isErrorEnabled = false
                 binding.opinion4Layout.error = "Add Opinion"
-            }else if (binding.opinion5.text!!.isEmpty() && pollNumber == 5){
+            }else if (binding.opinion5.text!!.isEmpty() && (pollNumber == 5) ){
+                binding.addStatement.isErrorEnabled = false
+                binding.opinion1Layout.isErrorEnabled = false
+                binding.opinion2Layout.isErrorEnabled = false
+                binding.opinion3Layout.isErrorEnabled = false
+                binding.opinion4Layout.isErrorEnabled = false
                 binding.opinion5Layout.error = "Add Opinion"
             }else{
                 progressDialog = Dialog(this)
@@ -70,6 +85,53 @@ class CreatePollActivity : AppCompatActivity() {
         }
 
 
+        binding.opinion3Layout.setEndIconOnClickListener {
+            if (pollNumber == 5) {
+                pollNumber = 4
+                binding.opinion5Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            } else if (pollNumber == 4) {
+                pollNumber = 3
+                binding.opinion4Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            } else if (pollNumber == 3) {
+                pollNumber = 2
+                binding.opinion3Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            }
+        }
+
+        binding.opinion4Layout.setEndIconOnClickListener {
+            if (pollNumber == 5) {
+                pollNumber = 4
+                binding.opinion5Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            } else if (pollNumber == 4) {
+                pollNumber = 3
+                binding.opinion4Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            } else if (pollNumber == 3) {
+                pollNumber = 2
+                binding.opinion3Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            }
+        }
+
+        binding.opinion5Layout.setEndIconOnClickListener {
+            if (pollNumber == 5) {
+                pollNumber = 4
+                binding.opinion5Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            } else if (pollNumber == 4) {
+                pollNumber = 3
+                binding.opinion4Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            } else if (pollNumber == 3) {
+                pollNumber = 2
+                binding.opinion3Layout.visibility = View.GONE
+                binding.nextUpdateEvent.visibility = View.VISIBLE
+            }
+        }
 
         binding.nextUpdateEvent.setOnClickListener {
             if (pollNumber < 5) {
@@ -82,6 +144,7 @@ class CreatePollActivity : AppCompatActivity() {
                 binding.opinion4Layout.visibility = View.VISIBLE
             } else if (pollNumber == 5){
                 binding.opinion5Layout.visibility = View.VISIBLE
+                binding.nextUpdateEvent.visibility = View.GONE
             }
         }
 

@@ -161,6 +161,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Add Opinion 3"
             android:visibility="gone"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/close_circle"
+            app:endIconTint="@color/black"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/black"
             android:layout_marginTop="8dp">
@@ -181,6 +184,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Add Opinion 4"
             android:visibility="gone"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/close_circle"
+            app:endIconTint="@color/black"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/black"
             android:layout_marginTop="8dp">
@@ -201,6 +207,9 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="Add Opinion 5"
             android:visibility="gone"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/close_circle"
+            app:endIconTint="@color/black"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/black"
             android:layout_marginTop="8dp">

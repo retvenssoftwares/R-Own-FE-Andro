@@ -335,6 +335,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
                     binding.bioEt.setText(response.body()!!.userBio)
                     response.body()!!.vendorInfo
                     try {
+                        binding.dText.text = response.body()?.normalUserInfo!!.get(0).jobTitle
 //                        Toast.makeText(applicationContext, response.body()?.Gender.toString(), Toast.LENGTH_SHORT).show()
                         when (response.body()!!.Gender) {
                             "Male" -> {

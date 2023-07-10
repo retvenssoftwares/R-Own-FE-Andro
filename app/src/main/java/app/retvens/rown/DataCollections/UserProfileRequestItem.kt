@@ -1,6 +1,7 @@
 package app.retvens.rown.DataCollections
 
 import android.telecom.Call.Details
+import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserInfoo
 import app.retvens.rown.NavigationFragments.PortfolioImages
 import app.retvens.rown.NavigationFragments.profile.hotels.GalleryImages
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
@@ -9,6 +10,7 @@ data class UserProfileRequestItem(
 
     val Email: String,
     val Full_name: String?,
+    val normalUserInfo: List<NormalUserInfoo>,
     val hotelOwnerInfo: HotelOwnerInfo,
     val Interest: List<Interest>,
     val Mesibo_account: List<MesiboAccount>,

@@ -270,13 +270,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:background="@color/white">
-                    <include layout = "@layout/shimmer_users_posts_card"/>
-                    <include layout = "@layout/shimmer_users_posts_card"/>
-                    <include layout = "@layout/shimmer_users_posts_card"/>
-                    <include layout = "@layout/shimmer_users_posts_card"/>
-                    <include layout = "@layout/shimmer_users_posts_card"/>
-                    <include layout = "@layout/shimmer_users_posts_card"/>
-                    <include layout = "@layout/shimmer_users_posts_card"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
+                    <include layout = "@layout/shimmer_users_posts_card_new"/>
                 </LinearLayout>
 
             </com.facebook.shimmer.ShimmerFrameLayout>

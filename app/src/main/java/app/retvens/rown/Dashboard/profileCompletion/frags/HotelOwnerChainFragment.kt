@@ -224,20 +224,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
 
         if (counter <= n){
 
-                counter++
                 uploadData()
-
-            counterText.text = "$counter/$n"
-
-            nameTIL.setHint("Hotel $counter Name")
-            chainHotelDescriptionLayout.setHint("Hotel $counter Description")
-            locationTIL.setHint("Hotel $counter Location")
-            ratingTIL.setHint("Hotel $counter Star rating")
-
-            nameET.setText("")
-            chainHotelDescriptionET.setText("")
-            location.setText("Select Your Location")
-            rating.setText("Select Rating")
 
         }else {
             Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
@@ -287,6 +274,32 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                 if (response.isSuccessful && isAdded){
                     profileComStatus(context!!, "100")
                     profileCompletionStatus = "100"
+
+                    if (counter < n) {
+                        counter++
+                        counterText.text = "$counter/$n"
+                    } else {
+                        Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
+                        profileCompletionStatus = "100"
+
+                        progressDialog.dismiss()
+                        startActivity(Intent(requireContext(),DashBoardActivity::class.java))
+                        activity?.finish()
+                    }
+
+                    nameTIL.setHint("Hotel $counter Name")
+                    chainHotelDescriptionLayout.setHint("Hotel $counter Description")
+                    locationTIL.setHint("Hotel $counter Location")
+                    ratingTIL.setHint("Hotel $counter Star rating")
+
+                    nameET.setText("")
+                    chainHotelDescriptionET.setText("")
+                    location.setText("Select Your Location")
+                    rating.setText("Select Rating")
+
+                    if (counter == n) {
+
+                    }
 
                     progressDialog.dismiss()
                 }else{
