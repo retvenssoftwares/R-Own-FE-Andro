@@ -247,7 +247,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
                     }
             }else {
                 if (croppedOwnerProfileImageUri == null) {
-                    Toast.makeText(context, "Please select an Profile", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Please select an logo", Toast.LENGTH_SHORT).show()
                 } else if (croppedOwnerCoverImageUri == null) {
                     Toast.makeText(context, "Please select an Cover Image", Toast.LENGTH_SHORT)
                         .show()
