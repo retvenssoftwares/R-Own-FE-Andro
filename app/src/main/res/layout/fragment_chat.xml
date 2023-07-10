@@ -15,12 +15,15 @@
         <EditText
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
+            android:hint="Search"
+
+            android:textColorHint="@color/grey"
             android:layout_marginHorizontal="20dp"
             android:background="@drawable/edit_search_bg"
             android:drawableLeft="@drawable/searchbar"
             android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
+            android:paddingLeft="10dp"
             />
         
 
@@ -61,7 +64,7 @@
             android:layout_height="match_parent"
             android:background="@color/md_white_1000"
             app:layout_anchor="@+id/emptyview_text"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             app:layout_anchorGravity="center" />
 
         <LinearLayout

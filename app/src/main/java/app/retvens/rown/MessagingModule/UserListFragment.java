@@ -19,7 +19,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -29,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -62,10 +65,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 import app.retvens.rown.ChatSection.MesiboUsers;
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
@@ -98,6 +103,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
     /* access modifiers changed from: private */
     public long mUiUpdateTimestamp = 0;
     MessageContactAdapter mAdapter = null;
+    private EditText searchBar;
     /* access modifiers changed from: private */
     public Runnable mUiUpdateRunnable = new Runnable() {
         public void run() {
@@ -172,8 +178,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         this.mMesiboUIHelperListener = MesiboUI.getListener();
         this.mMesiboUIOptions = MesiboUI.getConfig();
 
-
-
         this.mSelectionMode = MesiboUserListFragment.MODE_MESSAGELIST;
         this.mReadQuery = null;
         Bundle b = getArguments();
@@ -240,7 +244,34 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         this.mAdapter = new MessageContactAdapter(getActivity(), this, this.mUserProfiles, this.mSearchResultList);
         this.mRecyclerView.setAdapter(this.mAdapter);
         this.fabadd = view.findViewById(R.id.fab_add);
-        this.fabadd.setOnClickListener(new View.OnClickListener() {
+        this.searchBar = view.findViewById(R.id.search_bar);
+
+        ArrayList<MesiboProfile> Search = this.mUserProfiles;
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ArrayList<MesiboProfile> filter = Search.stream()
+                        .filter(item -> item.getName().contains(s.toString()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                mAdapter.updateData(filter);
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+                this.fabadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!isSheetOpen)
@@ -733,6 +764,11 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             this.mSearchResults = searchResults;
             this.mDataList = list;
             this.mSelectionItems = new SparseBooleanArray();
+        }
+
+        public void updateData(ArrayList<MesiboProfile> newItems) {
+            this.mDataList = newItems;
+            notifyDataSetChanged();
         }
 
         public ArrayList<MesiboProfile> getActiveUserlist() {

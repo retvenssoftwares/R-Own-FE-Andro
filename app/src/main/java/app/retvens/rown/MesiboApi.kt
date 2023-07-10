@@ -9,7 +9,7 @@ import com.mesibo.api.MesiboProfile
 import com.mesibo.calls.api.MesiboCall
 
 @SuppressLint("StaticFieldLeak")
-object MesiboApi : MesiboCall.IncomingListener {
+object MesiboApi :  app.retvens.rown.api.MesiboCall.IncomingListener {
 
     private var mContext: Context? = null
 
@@ -31,7 +31,7 @@ object MesiboApi : MesiboCall.IncomingListener {
 
         // add lister
         Mesibo.addListener(this)
-        MesiboCall.getInstance().setListener(this)
+        app.retvens.rown.api.MesiboCall.getInstance().setListener(this)
 
 
 
@@ -54,23 +54,35 @@ object MesiboApi : MesiboCall.IncomingListener {
         return true
     }
 
-    override fun MesiboCall_OnIncoming(p0: MesiboProfile?, p1: Boolean): MesiboCall.CallProperties {
-        TODO("Not yet implemented")
+    override fun MesiboCall_OnError(
+        callProperties: app.retvens.rown.api.MesiboCall.CallProperties?,
+        i: Int
+    ) {
+
+    }
+
+    override fun MesiboCall_OnIncoming(
+        mesiboProfile: MesiboProfile?,
+        z: Boolean
+    ): app.retvens.rown.api.MesiboCall.CallProperties? {
+        return null
     }
 
     override fun MesiboCall_OnShowUserInterface(
-        p0: MesiboCall.Call?,
-        p1: MesiboCall.CallProperties?
+        call: app.retvens.rown.api.MesiboCall.Call?,
+        callProperties: app.retvens.rown.api.MesiboCall.CallProperties?
     ): Boolean {
-        TODO("Not yet implemented")
+       return true
     }
 
-    override fun MesiboCall_OnError(p0: MesiboCall.CallProperties?, p1: Int) {
-        TODO("Not yet implemented")
-    }
+
+
+
 
     override fun MesiboCall_onNotify(p0: Int, p1: MesiboProfile?, p2: Boolean): Boolean {
-        TODO("Not yet implemented")
+
+       return true
     }
+
 
 }

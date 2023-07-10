@@ -9,7 +9,7 @@ import app.retvens.rown.Dashboard.DashBoardActivity
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         // Handle the custom action triggered by the notification
-        if (intent.action == "your_custom_action") {
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
 
             Log.e("count","1")
 

@@ -36,13 +36,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         Log.e(TAG, "Refreshed token: $token")
 
-        // Save the token to your backend server
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
 
         Log.e("message",message.toString())
-
 
 
 //            MesiboCall.getInstance().init(applicationContext)
@@ -61,7 +59,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             try {
                 MesiboApi.init(applicationContext)
                 MesiboApi.startMesibo(true)
-                MesiboCall.getInstance().init(this)
+                MesiboCall.getInstance().init(applicationContext)
 
             } catch (e: Exception) {
                 Log.e(TAG, "MesiboCall initialization failed: ${e.message}")
@@ -87,6 +85,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Create the full-screen intent
 
         if (type == "message"){
+
+//            MesiboApi.init(applicationContext)
+//            MesiboApi.startMesibo(true)
+
             val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
             fullScreenIntent.putExtra(MesiboUI.PEER,address)
             fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

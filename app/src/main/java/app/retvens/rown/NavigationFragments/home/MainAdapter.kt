@@ -730,7 +730,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.verification.visibility = View.VISIBLE
             }
 
-            val total = calculateTotalVotes(banner.pollQuestion[0].Options.toTypedArray())
+//            val total = calculateTotalVotes(banner.pollQuestion[0].Options.toTypedArray())
 //            Log.e("totel",total.toString())
 
             binding.postProfile.setOnClickListener {
@@ -752,10 +752,10 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 }
 
             binding.votesOptionsrecycler.layoutManager = LinearLayoutManager(context)
-            val adapter = PollsAdapter(context, banner.pollQuestion[0].Options,
-                PollsDetails(banner.post_id,banner.voted),total
-            )
-            binding.votesOptionsrecycler.adapter = adapter
+//            val adapter = PollsAdapter(context, banner.pollQuestion[0].Options,
+//                PollsDetails(banner.post_id,banner.voted),total
+//            )
+//            binding.votesOptionsrecycler.adapter = adapter
 
             banner.pollQuestion.forEach { item ->
                 binding.titlePoll.text = item.Question
@@ -764,7 +764,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.postTime.text = timestamp
             }
 
-            adapter.setOnItemClickListener(this)
+//            adapter.setOnItemClickListener(this)
 //            banner.pollQuestion.forEach { item ->
 //                binding.titlePoll.text = item.Question
 //                binding.option1.text = item.Options[0].Option

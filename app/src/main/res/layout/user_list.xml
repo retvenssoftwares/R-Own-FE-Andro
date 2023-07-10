@@ -46,9 +46,9 @@
             android:layout_toLeftOf="@+id/mes_rv_date"
             android:layout_toRightOf="@+id/mes_rv_profile"
             android:text="Mesibo Username"
-            android:textColor="#505050"
+            android:textColor="#171717"
+            android:fontFamily="@font/inter_medium"
             android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/isOnlineDot"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -130,7 +130,7 @@
 
             <TextView
                 android:id="@+id/mes_alert"
-                android:layout_width="wrap_content"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"

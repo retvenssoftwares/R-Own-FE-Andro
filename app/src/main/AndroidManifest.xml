@@ -651,9 +651,12 @@
             android:name=".NotificationReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="your_custom_action" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".api.MesiboCallsReceiver"/>
 
     </application>
 

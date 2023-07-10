@@ -279,7 +279,7 @@
                         android:layout_marginRight="4dp"
                         android:layout_marginBottom="3dp"
                         android:background="@null"
-                        android:hint="Type Your Message"
+                        android:hint="Type Your Message..."
                         android:inputType="textMultiLine"
                         android:paddingTop="2dp"
                         android:singleLine="false"
@@ -290,6 +290,14 @@
 
                 </LinearLayout>
 
+                <ImageButton
+                    android:id="@+id/showAttachment"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="0dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/vector_chat_attach" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -316,29 +324,21 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/ic_camera_light"
+                        android:src="@drawable/vector_chat_cam"
                         android:visibility="visible"
                         app:tint="#828282" />
 
                 </RelativeLayout>
 
-                <ImageButton
-                    android:id="@+id/showAttachment"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="0dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/four_dot" />
 
-                <ImageButton
-                    android:id="@+id/voicenotes"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="0dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/mikeicon" />
+<!--                <ImageButton-->
+<!--                    android:id="@+id/voicenotes"-->
+<!--                    android:layout_width="35dp"-->
+<!--                    android:layout_height="35dp"-->
+<!--                    android:layout_gravity="bottom"-->
+<!--                    android:layout_marginBottom="0dp"-->
+<!--                    android:background="@android:color/transparent"-->
+<!--                    android:src="@drawable/mikeicon" />-->
 
 
             </LinearLayout>

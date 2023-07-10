@@ -333,8 +333,8 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     this.mRecyclerView.setAdapter(this.mAdapter);
                     this.ib_cam = (ImageButton) view.findViewById(R.id.cameraButton);
                     this.ib_cam.setOnClickListener(this);
-                    this.ib_voice = (ImageButton) view.findViewById(R.id.voicenotes);
-                    this.ib_voice.setOnClickListener(this);
+//                    this.ib_voice = (ImageButton) view.findViewById(R.id.voicenotes);
+//                    this.ib_voice.setOnClickListener(this);
                     this.showMessage = (LinearLayout) view.findViewById(R.id.messageLayout);
                     if (this.mAdapter.getItemCount() != 0 && this.mLayoutManager.findLastCompletelyVisibleItemPosition() == this.mAdapter.getItemCount() - 1) {
                         this.showMessgeVisible();
@@ -754,25 +754,26 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
             builder.show();
         } else if (buttonId == R.id.gallery) {
             MediaPicker.launchPicker(this.myActivity(), MediaPicker.TYPE_FILEIMAGE);
-        }else if (buttonId == R.id.voicenotes){
-            CharSequence[] options = new CharSequence[]{MesiboUI.getConfig().voiceNoteFromRecorderTitle, MesiboUI.getConfig().voiceNoteFromGalleryTitle};
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.mActivity);
-            builder.setTitle(MesiboUI.getConfig().voiceNoteSelectTitle);
-            builder.setItems(options, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (which == 0) {
-                        launchVoiceNoteRecorder();
-                    } else if (which == 1) {
-                        // Launch voice note selection from gallery
-
-                    }
-                }
-            });
-
-            builder.show();
         }
+//        else if (buttonId == R.id.voicenotes){
+//            CharSequence[] options = new CharSequence[]{MesiboUI.getConfig().voiceNoteFromRecorderTitle, MesiboUI.getConfig().voiceNoteFromGalleryTitle};
+//
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this.mActivity);
+//            builder.setTitle(MesiboUI.getConfig().voiceNoteSelectTitle);
+//            builder.setItems(options, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    if (which == 0) {
+//                        launchVoiceNoteRecorder();
+//                    } else if (which == 1) {
+//                        // Launch voice note selection from gallery
+//
+//                    }
+//                }
+//            });
+//
+//            builder.show();
+//        }
 
     }
 

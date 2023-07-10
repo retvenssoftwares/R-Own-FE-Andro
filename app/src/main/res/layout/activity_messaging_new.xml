@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chat_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,7 +31,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:src="@drawable/chevron_left" />
+                android:src="@drawable/vector_chat_back" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,12 +77,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:fontFamily="@font/montserrat_semibold"
+                    android:fontFamily="@font/inter_medium"
                     android:maxLines="1"
+                    android:textFontWeight="200"
                     android:text="testUserSample"
                     android:textColor="@color/text_color_black_white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/chat_profile_subtitle"
@@ -107,6 +108,19 @@
                 android:orientation="horizontal">
 
 
+                <ImageButton
+                    android:id="@+id/action_call"
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@android:color/transparent"
+                    android:foregroundGravity="right"
+                    android:src="@drawable/vector_voice_call"
+                    android:title="Call"
+                    android:visible="true"
+                    app:showAsAction="always"/>
 
                 <ImageButton
                     android:id="@+id/action_videocall"
@@ -117,34 +131,25 @@
                     android:layout_marginRight="15dp"
                     android:background="@android:color/transparent"
                     android:foregroundGravity="right"
-                    android:src="@drawable/video"
+                    android:src="@drawable/vector_video_call"
                     android:title="Video Call"
 
                     android:visible="true"
                     app:showAsAction="always" />
 
-                <ImageButton
-                    android:id="@+id/action_call"
-                    android:layout_width="30dp"
-                    android:layout_height="28dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@android:color/transparent"
-                    android:foregroundGravity="right"
-                    android:src="@drawable/call"
-                    android:title="Call"
-                    android:visible="true"
-                    app:showAsAction="always"
 
-                    />
 
             </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>
 
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#A4D71D"
+            tools:ignore="MissingConstraints" />
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <!-- https://stackoverflow.com/questions/32956071/add-views-below-toolbar-in-coordinatorlayout
      layout_behavior is important
