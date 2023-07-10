@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Univerist/Colllege"
+            android:hint="University/School"
             android:textColorHint="@color/black"
             app:hintTextColor="@color/black"
             app:boxStrokeColor="@color/black"

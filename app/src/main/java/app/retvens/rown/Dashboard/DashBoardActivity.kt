@@ -34,6 +34,8 @@ import app.retvens.rown.MainActivity
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
+import app.retvens.rown.NavigationFragments.profile.HotelOwnerDetailsActivity
+import app.retvens.rown.NavigationFragments.profile.UserDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
 import app.retvens.rown.api.MesiboCall
@@ -267,11 +269,11 @@ class DashBoardActivity : AppCompatActivity() {
         }
 
         binding.tnc.setOnClickListener {
-            startActivity(Intent(this, TermsAndCActivity::class.java))
+            startActivity(Intent(this, UserDetailsActivity::class.java))
         }
 
         binding.pp.setOnClickListener {
-            startActivity(Intent(this, PrivacyPolicyActivity::class.java))
+            startActivity(Intent(this, HotelOwnerDetailsActivity::class.java))
         }
 
         binding.dropMail.setOnClickListener {
