@@ -27,6 +27,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
 
+        <ImageView
+            android:id="@+id/verification"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="-2dp"
+            android:layout_marginTop="-2dp"
+            android:visibility="gone"
+            android:src="@drawable/svg_verificationstatus"
+            app:layout_constraintTop_toTopOf="@id/receiver_image"
+            app:layout_constraintEnd_toEndOf="@id/receiver_image"/>
+
         <TextView
             android:id="@+id/receiver_name"
             android:layout_width="wrap_content"
@@ -64,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:background="#A4D71D"
+        android:background="@color/grey"
         tools:ignore="MissingConstraints" />
 
 </androidx.cardview.widget.CardView>

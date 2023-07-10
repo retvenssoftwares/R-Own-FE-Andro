@@ -295,10 +295,6 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                 }
 
 
-
-
-
-
                 this.mPeer = peer;
                 this.mGroupId = gid;
                 long forwardid = args.getLong("mid", 0L);
@@ -374,7 +370,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     this.ib_audio.setOnClickListener(this);
                     this.ib_upload.setOnClickListener(this);
                     this.ib_gallery.setOnClickListener(this);
-                    this.ib_location.setOnClickListener(this);
+//                    this.ib_location.setOnClickListener(this);
                     this.ib_video.setOnClickListener(this);
                     this.ib_showattach = (ImageButton) view.findViewById(R.id.showAttachment);
                     this.ib_showattach.setOnClickListener(new OnClickListener() {
@@ -725,7 +721,8 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
             MediaPicker.launchPicker(this.myActivity(), MediaPicker.TYPE_CAMERAIMAGE, Mesibo.getTempFilesPath());
         } else if (buttonId == R.id.audio) {
             MediaPicker.launchPicker(this.myActivity(), MediaPicker.TYPE_AUDIO);
-        } else if (buttonId == R.id.document_btn) {
+        }
+        else if (buttonId == R.id.document_btn) {
             MediaPicker.launchPicker(this.myActivity(), MediaPicker.TYPE_FILE);
         }
 //        else if (buttonId == R.id.location) {

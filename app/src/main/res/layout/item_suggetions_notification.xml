@@ -36,6 +36,7 @@
             android:src="@drawable/svg_verificationstatus"
             app:layout_constraintTop_toTopOf="@id/suggetions_notification_profile"
             app:layout_constraintEnd_toEndOf="@id/suggetions_notification_profile"/>
+
         <TextView
             android:id="@+id/suggetions_notification_name"
             android:layout_width="0dp"

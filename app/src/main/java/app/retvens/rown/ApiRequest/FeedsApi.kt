@@ -9,6 +9,7 @@ import app.retvens.rown.DataCollections.location.UpcomingEventDataclass
 import app.retvens.rown.DataCollections.saveId.SaveBlog
 import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.NavigationFragments.home.DataItem
+import app.retvens.rown.NavigationFragments.profile.polls.VotesDataClass
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -236,11 +237,17 @@ interface FeedsApi {
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
 
-    @GET("getPolls/{user_id}")
+    @GET("getPolls/{user_id}/{User_id}")
     fun getNormalUserPoll(
         @Path("user_id")user_id:String,
+        @Path("User_id")Otheruser_id:String,
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
+
+    @GET("getpollsvotes/{post_Id}")
+    fun getVotes(
+        @Path("post_Id")post_Id:String,
+    ):Call<List<VotesDataClass>>
 
     @GET("getStatus/{user_id}/{User_id}")
     fun getNormalUserStatus(

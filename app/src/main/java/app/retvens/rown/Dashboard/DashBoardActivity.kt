@@ -269,11 +269,11 @@ class DashBoardActivity : AppCompatActivity() {
         }
 
         binding.tnc.setOnClickListener {
-            startActivity(Intent(this, UserDetailsActivity::class.java))
+            startActivity(Intent(this, TermsAndCActivity::class.java))
         }
 
         binding.pp.setOnClickListener {
-            startActivity(Intent(this, HotelOwnerDetailsActivity::class.java))
+            startActivity(Intent(this, PrivacyPolicyActivity::class.java))
         }
 
         binding.dropMail.setOnClickListener {

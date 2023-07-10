@@ -186,4 +186,15 @@ interface PriofileCompletionApis{
         @Path("user_id") user_id : String
     ):Call<UpdateResponse>
 
+    @PATCH("update/{userId}")
+    fun updateExperience(
+        @Path("userId") user_id : String,
+        @Body updateData:AddExperienceDataClass
+    ):Call<UpdateResponse>
+
+    @PATCH("addmultiple/{userId}")
+    fun addExperience(
+        @Path("userId") user_id : String,
+        @Body updateData:AddExperienceDataClass
+    ):Call<UpdateResponse>
 }

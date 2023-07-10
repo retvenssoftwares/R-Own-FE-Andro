@@ -317,7 +317,7 @@ class HomeFragment : Fragment() {
 
                     try {
 
-//                    Log.e("response",response.toString())
+                    Log.e("response",response.toString())
 
                     val postList = ArrayList<DataItem.Banner>()
 

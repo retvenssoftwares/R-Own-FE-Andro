@@ -17,6 +17,7 @@ import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.saveId.SavePost
+import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
@@ -92,14 +93,10 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         likeCountText.text = likeCount.toString()
         commentC.text = commentCount.toString()
 
-        val timeStamp = intent.getStringExtra("time")
+        val timeStamp = intent.getStringExtra("time")!!
 
-        try {
-            val exactTime = convertTimeToText(timeStamp!!)
-            time.text = exactTime
-        }catch (e:NullPointerException){
-            Log.e("error",e.message.toString())
-        }
+        val extact = TimesStamp.convertTimeToText(timeStamp)
+        time.text = extact.toString()
 
 
 

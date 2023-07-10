@@ -55,6 +55,13 @@
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent"  />
         <activity
+            android:name=".NavigationFragments.profile.polls.VotesActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Dashboard.createPosts.CheckInChildActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash">
@@ -661,13 +668,11 @@
             android:name=".NotificationReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.PACKAGE_RESTARTED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".api.MesiboCallsReceiver"/>
-
+        <receiver android:name=".api.MesiboCallsReceiver" />
     </application>
 
 </manifest>

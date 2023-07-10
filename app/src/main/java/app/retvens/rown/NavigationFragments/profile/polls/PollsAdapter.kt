@@ -89,8 +89,12 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
         }
 
         holder.checkVotes.setOnClickListener {
-            context.startActivity(Intent(context, VotersActivity::class.java))
+
+            val intent = Intent(context,VotesActivity::class.java)
+            intent.putExtra("postId",poll.post_id)
+            context.startActivity(intent)
         }
+
 
         holder.recycler.layoutManager = LinearLayoutManager(context)
         holder.recycler.setHasFixedSize(true)

@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.profile
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetEditEducation
 import app.retvens.rown.bottomsheet.BottomSheetEditExperience
@@ -34,6 +35,12 @@ class UserDetailsActivity : AppCompatActivity(),
             fragManager.let{bottomSheet.show(it, BottomSheetEditEducation.Edit_TAG)}
             bottomSheet.setOnEditEdClickListener(this)
         }
+
+        binding.recyclerExperience.layoutManager = LinearLayoutManager(this)
+        binding.recyclerExperience.setHasFixedSize(true)
+
+
+
     }
 
     override fun bottomEditClick(CTCFrBo: String) {

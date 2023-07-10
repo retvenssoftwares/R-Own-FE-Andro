@@ -16,7 +16,7 @@
         android:paddingBottom="1dp"
         android:layout_marginLeft="10dp"
         android:layout_marginBottom="6dp"
-        android:backgroundTint="#0F272A3D"
+        android:backgroundTint="#EEEEF3"
         android:layout_alignParentLeft="true"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp"
