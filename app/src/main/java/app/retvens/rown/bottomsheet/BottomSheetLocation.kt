@@ -23,6 +23,9 @@ import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragme
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.R
+import app.retvens.rown.utils.setupFullHeight
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
 import retrofit2.Callback
@@ -60,7 +63,21 @@ class BottomSheetLocation : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.bottom_sheet_location, container, false)
     }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = BottomSheetDialog(requireContext(), theme)
+        dialog.setOnShowListener {
 
+            val bottomSheetDialog = it as BottomSheetDialog
+            val parentLayout =
+                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            parentLayout?.let { it ->
+                val behaviour = BottomSheetBehavior.from(it)
+                setupFullHeight(it)
+                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
+        return dialog
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

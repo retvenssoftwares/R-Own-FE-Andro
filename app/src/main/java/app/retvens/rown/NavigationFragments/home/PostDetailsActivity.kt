@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -18,6 +19,9 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.NavigationFragments.TimesStamp
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
@@ -80,13 +84,51 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         val commentCount = intent.getStringExtra("commentCount")
         val location = intent.getStringExtra("location")
         val profilePic = intent.getStringExtra("profilePic")
+        val role = intent.getStringExtra("role")
+        val user_id = intent.getStringExtra("user_id")
         val isSaved = intent.getStringExtra("saved").toString()
 
         postId = intent.getStringExtra("postId").toString()
         like = intent.getStringExtra("like").toString()
         likeCount = intent.getStringExtra("likeCount")?.toInt()!!
 
-        Glide.with(applicationContext).load(profilePic).into(profile)
+        if (postPic!!.isNotEmpty()) {
+            Glide.with(applicationContext).load(profilePic).into(profile)
+        } else {
+            profile.setImageResource(R.drawable.svg_user)
+        }
+
+        profile.setOnClickListener {
+            if(role == "Business Vendor / Freelancer"){
+                val intent = Intent(this, VendorProfileActivity::class.java)
+                intent.putExtra("userId",user_id)
+                startActivity(intent)
+            }else if (role == "Hotel Owner"){
+                val intent = Intent(this, OwnerProfileActivity::class.java)
+                intent.putExtra("userId",user_id)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, UserProfileActivity::class.java)
+                intent.putExtra("userId",user_id)
+                startActivity(intent)
+            }
+        }
+
+        name.setOnClickListener {
+            if(role == "Business Vendor / Freelancer"){
+                val intent = Intent(this, VendorProfileActivity::class.java)
+                intent.putExtra("userId",user_id)
+                startActivity(intent)
+            }else if (role == "Hotel Owner"){
+                val intent = Intent(this, OwnerProfileActivity::class.java)
+                intent.putExtra("userId",user_id)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, UserProfileActivity::class.java)
+                intent.putExtra("userId",user_id)
+                startActivity(intent)
+            }
+        }
 
         postLocation.text = location
 

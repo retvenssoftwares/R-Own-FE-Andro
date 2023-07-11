@@ -91,6 +91,8 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>) : Rec
 //            intent.putExtra("islike",media.islike)
             intent.putExtra("postId",media.post_id)
             intent.putExtra("saved",media.saved)
+            intent.putExtra("role",media.Role)
+            intent.putExtra("user_id",media.user_id)
             context.startActivity(intent)
         }
     }

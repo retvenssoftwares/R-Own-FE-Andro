@@ -39,6 +39,11 @@ class ViewConnectionsActivity : AppCompatActivity() {
         val user_id = sharedPreferences?.getString("user_id", "").toString()
         getAllConnections(user_id)
 
+        binding.refreshLayout.setOnRefreshListener {
+            getAllConnections(user_id)
+            binding.refreshLayout.isRefreshing = false
+        }
+
     }
 
     private fun getAllConnections(userId: String) {

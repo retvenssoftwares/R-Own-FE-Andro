@@ -31,6 +31,17 @@ class AllBlogsActivity : AppCompatActivity() {
         binding.allBlogsRecycler.layoutManager = GridLayoutManager(this, 2)
         binding.allBlogsRecycler.setHasFixedSize(true)
 
+        binding.refreshLayout.setOnRefreshListener {
+            val idCategory = intent.getStringExtra("id")
+            if (idCategory == null){
+                getAllBlogs()
+            } else {
+                val categoryName = intent.getStringExtra("name")
+                binding.topTitle.text = categoryName
+                getBlogsByCategory(idCategory)
+            }
+            binding.refreshLayout.isRefreshing = false
+        }
         val idCategory = intent.getStringExtra("id")
         if (idCategory == null){
             getAllBlogs()

@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
@@ -78,6 +79,8 @@ class VendorProfileActivity : AppCompatActivity() {
     var fullName = ""
     var userName =  ""
 
+    var selected = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vendor_profile)
@@ -107,10 +110,32 @@ class VendorProfileActivity : AppCompatActivity() {
         status = findViewById(R.id.status)
         services = findViewById(R.id.services)
 
+        val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
+
         val userId = intent.getStringExtra("userId").toString()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        refresh.setOnRefreshListener {
+            if (selected == 1) {
+                getUserPofile(userId, user_id)
+            } else if (selected == 2){
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userId, false, name.text.toString()))
+                transaction.commit()
+            } else if (selected == 3){
+
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId, false, name.text.toString()))
+                transaction.commit()
+            } else if (selected == 4){
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId, false, name.text.toString()))
+                transaction.commit()
+            }
+            refresh.isRefreshing = false
+        }
 
         getUserPofile(userId,user_id)
 
@@ -167,6 +192,7 @@ class VendorProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             services.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
+            selected = 2
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userId, false, name.text.toString()))
             transaction.commit()
@@ -176,6 +202,8 @@ class VendorProfileActivity : AppCompatActivity() {
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             services.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
+
+            selected = 1
 
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userId, false, name.text.toString()))
@@ -187,6 +215,7 @@ class VendorProfileActivity : AppCompatActivity() {
             services.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
+            selected = 4
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId, false, name.text.toString()))
             transaction.commit()
@@ -197,6 +226,8 @@ class VendorProfileActivity : AppCompatActivity() {
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             services.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
+
+            selected = 3
 
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId, false, name.text.toString()))
@@ -304,6 +335,14 @@ class VendorProfileActivity : AppCompatActivity() {
                         websiteLink.text = response.roleDetails.vendorInfo.websiteLink
                         fullName = response.roleDetails.Full_name
                         userName = response.roleDetails.User_name
+
+                        media.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+                        polls.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+                        status.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+                        services.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+
+                        selected = 1
+
                         val transaction = supportFragmentManager.beginTransaction()
                         transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, name.text.toString()))
                         transaction.commit()

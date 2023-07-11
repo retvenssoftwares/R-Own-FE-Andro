@@ -64,6 +64,8 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
     var profilePic = ""
 
+    var selected = 1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -122,7 +124,24 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
 
         refresh.setOnRefreshListener {
-            getSelfUserProfile(user_id,user_id)
+            if (selected == 1) {
+                getSelfUserProfile(user_id,user_id)
+                val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            } else if (selected == 2){
+                val childFragment: Fragment = PollsFragment(user_id, true, "")
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            } else if (selected == 3){
+                val childFragment: Fragment = StatusFragment(user_id, true, "")
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            } else if (selected == 4){
+                val childFragment: Fragment = ServicesFragment(user_id, true, "")
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            }
             refresh.isRefreshing = false
         }
 
@@ -146,6 +165,8 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
+            selected = 2
+
             val childFragment: Fragment = PollsFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
@@ -155,6 +176,8 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
+
+            selected = 1
 
             val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -166,6 +189,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
+            selected = 4
             val childFragment: Fragment = ServicesFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
@@ -176,6 +200,8 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             polls.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             services.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+            selected = 3
 
             val childFragment: Fragment = StatusFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()

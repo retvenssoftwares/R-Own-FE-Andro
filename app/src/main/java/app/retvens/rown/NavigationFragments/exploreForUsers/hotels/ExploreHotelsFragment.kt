@@ -92,11 +92,11 @@ class ExploreHotelsFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        if (currentPage > lastPage) {
+//                        if (currentPage > lastPage) {
                             isLoading = false
                             lastPage++
                             getData()
-                        }
+//                        }
                     }
                 }
 
@@ -140,9 +140,9 @@ class ExploreHotelsFragment : Fragment() {
                                 data.forEach {
 
                                     hotelList.addAll(it.posts)
-                                    if (it.posts.size >= 10){
+//                                    if (it.posts.size >= 10){
                                         currentPage++
-                                    }
+//                                    }
                                     exploreHotelAdapter = ExploreHotelsAdapter(hotelList, requireContext())
                                     exploreBlogsRecyclerView.adapter = exploreHotelAdapter
                                     exploreHotelAdapter.removeHotelFromList(it.posts)
@@ -176,17 +176,19 @@ class ExploreHotelsFragment : Fragment() {
 
                                 }
                             } else {
-                                errorImage.visibility = View.VISIBLE
+//                                errorImage.visibility = View.VISIBLE
                             }
                         } else {
-                            errorImage.visibility = View.VISIBLE
+//                            errorImage.visibility = View.VISIBLE
+//                            exploreBlogsRecyclerView.visibility = View.GONE
                             empty.text = response.code().toString()
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
                         }
                     }
                 }catch (e:NullPointerException){
-                    errorImage.visibility = View.VISIBLE
+//                    errorImage.visibility = View.VISIBLE
+//                    exploreBlogsRecyclerView.visibility = View.GONE
                     Toast.makeText(requireContext(),"No Hotels Yet",Toast.LENGTH_SHORT).show()
                 }
 

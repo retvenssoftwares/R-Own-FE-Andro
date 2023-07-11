@@ -194,10 +194,11 @@ class ExplorePostsFragment : Fragment() {
 
                 } else {
                             empty.text = "You did'nt post yet"
-                            empty.visibility = View.VISIBLE
+//                            empty.visibility = View.VISIBLE
                         }
                     } else {
-                        empty.visibility = View.VISIBLE
+//                        empty.visibility = View.VISIBLE
+//                        mediaRecyclerView.visibility = View.GONE
                         empty.text = response.code().toString()
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
@@ -210,6 +211,7 @@ class ExplorePostsFragment : Fragment() {
                 shimmerFrameLayout.visibility = View.GONE
 //                empty.text = "Try Again"
 //                empty.visibility = View.VISIBLE
+//                mediaRecyclerView.visibility = View.GONE
                 Log.e("error",t.message.toString())
             }
         })

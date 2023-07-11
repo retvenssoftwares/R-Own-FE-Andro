@@ -87,11 +87,11 @@ class ExploreBlogsFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        if (currentPage > lastPage) {
+//                        if (currentPage > lastPage) {
                             isLoading = false
                             lastPage++
                             getData()
-                        }
+//                        }
                     }
                 }
 
@@ -139,9 +139,9 @@ class ExploreBlogsFragment : Fragment() {
                                     blogList.addAll(it.blogs)
                                     allBlogsAdapter.removeBlogFromList(it.blogs)
                                     allBlogsAdapter.notifyDataSetChanged()
-                                    if (it.blogs.size >= 10){
+//                                    if (it.blogs.size >= 10){
                                         currentPage++
-                                    }
+//                                    }
                                     Log.d("on", it.toString())
                                      searchBar.addTextChangedListener(object : TextWatcher {
                                          override fun beforeTextChanged(
@@ -174,10 +174,10 @@ class ExploreBlogsFragment : Fragment() {
 
                             }
                         } else {
-                            errorImage.visibility = View.VISIBLE
+//                            errorImage.visibility = View.VISIBLE
                         }
                     } else {
-                        errorImage.visibility = View.VISIBLE
+//                        errorImage.visibility = View.VISIBLE
                         empty.text = response.code().toString()
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
@@ -188,7 +188,7 @@ class ExploreBlogsFragment : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
-                errorImage.visibility = View.VISIBLE
+//                errorImage.visibility = View.VISIBLE
             }
         })
     }

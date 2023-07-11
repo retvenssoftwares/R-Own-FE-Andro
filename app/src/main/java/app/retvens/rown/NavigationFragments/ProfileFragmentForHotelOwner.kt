@@ -70,6 +70,8 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     var profilePic = ""
     var verificationStatus = ""
 
+    var selected = 1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -119,7 +121,24 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
 
         refresh.setOnRefreshListener {
-            getOwnerProfile(user_id,user_id)
+            if (selected == 1) {
+                getOwnerProfile(user_id,user_id)
+                val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString())
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            } else if (selected == 2){
+                val childFragment: Fragment = PollsFragment(user_id, true, "")
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            } else if (selected == 3){
+                val childFragment: Fragment = StatusFragment(user_id, true, "")
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            } else if (selected == 4){
+                val childFragment: Fragment = HotelsFragmentProfile(user_id, true, "")
+                val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
+            }
             refresh.isRefreshing = false
         }
 
@@ -169,6 +188,8 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
+            selected = 1
+
             val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString())
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
@@ -181,6 +202,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
+            selected = 2
             val childFragment: Fragment = PollsFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
@@ -193,6 +215,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
+            selected = 3
             val childFragment: Fragment = StatusFragment(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
@@ -205,6 +228,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             events.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
+            selected = 4
             val childFragment: Fragment = HotelsFragmentProfile(user_id, true, "")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
@@ -245,7 +269,11 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                     val response = response.body()!!
 
                     profilePic = response.profiledata.Profile_pic
-                    Glide.with(requireContext()).load(profilePic).into(profile)
+                    if (profilePic.isNotEmpty()) {
+                        Glide.with(requireContext()).load(profilePic).into(profile)
+                    } else {
+                        profile.setImageResource(R.drawable.svg_user)
+                    }
 
                     verificationStatus = response.profile.verificationStatus
                     if (verificationStatus != "false"){

@@ -24,6 +24,9 @@ import app.retvens.rown.DataCollections.location.CityData
 import app.retvens.rown.DataCollections.location.StateAdapter
 import app.retvens.rown.DataCollections.location.StateData
 import app.retvens.rown.R
+import app.retvens.rown.utils.setupFullHeight
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -133,13 +136,14 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
         dialogLanguage.setContentView(R.layout.bottom_sheet_location)
         dialogLanguage.setCancelable(true)
 
-        dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
         dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
         dialogLanguage.window?.setGravity(Gravity.BOTTOM)
         dialogLanguage.show()
         val recyclerViewD = dialogLanguage.findViewById<RecyclerView>(R.id.location_recycler)
         val search = dialogLanguage.findViewById<EditText>(R.id.search_country)
+        search.setHint("Search for $s")
         recyclerViewD.setHasFixedSize(true)
         recyclerViewD.layoutManager = LinearLayoutManager(requireContext())
         if (s=="state") {

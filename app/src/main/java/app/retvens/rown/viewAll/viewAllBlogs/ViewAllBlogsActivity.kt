@@ -42,6 +42,15 @@ class ViewAllBlogsActivity : AppCompatActivity() {
         binding.blogsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.blogsRecyclerView.setHasFixedSize(true)
 
+        binding.refreshLayout.setOnRefreshListener {
+
+            getAllBlogs()
+
+            getCategories()
+
+            binding.refreshLayout.isRefreshing = false
+        }
+
         getAllBlogs()
 
         getCategories()

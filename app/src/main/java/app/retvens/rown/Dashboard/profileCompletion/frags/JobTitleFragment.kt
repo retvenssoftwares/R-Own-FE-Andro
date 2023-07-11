@@ -16,9 +16,12 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -87,6 +90,8 @@ class JobTitleFragment : Fragment(), BackHandler,
         }
 
         val submit = view.findViewById<CardView>(R.id.card_job_next)
+        submit.isClickable = false
+        submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
 
         jobTitle = view.findViewById(R.id.rJob_et)
         jobType = view.findViewById(R.id.eType_et)
@@ -97,6 +102,46 @@ class JobTitleFragment : Fragment(), BackHandler,
         startLayout = view.findViewById(R.id.session_start)
         endLayout = view.findViewById(R.id.session_end)
 
+        val presentText = view.findViewById<TextView>(R.id.presentText)
+
+        presentText.setOnClickListener {
+            end.setText("Present")
+            endLayout.isErrorEnabled = false
+        }
+
+        start.addTextChangedListener {
+            if (start.text!!.length > 3 && end.length() > 3){
+                endLayout.isErrorEnabled = false
+                submit.isClickable = true
+                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.green_own))
+            } else {
+                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                submit.isClickable = false
+            }
+        }
+
+        end.addTextChangedListener {
+            if (end.length() > 3 && start.length() > 3){
+                endLayout.isErrorEnabled = false
+                submit.isClickable = true
+                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.green_own))
+
+                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
+                    end.setText("")
+                    endLayout.error = "Please enter end year"
+                    submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    submit.isClickable = false
+                }
+            } else {
+                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
+                    end.setText("")
+                    endLayout.error = "Please enter end year"
+                    submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    submit.isClickable = false
+                }
+            }
+        }
+
         jobTitle.setOnClickListener {
             val bottomSheet = BottomSheetJobTitle()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
@@ -105,12 +150,17 @@ class JobTitleFragment : Fragment(), BackHandler,
         }
 
         submit.setOnClickListener {
-            if(jobTitle.length() < 3){
+            val startY = start.text.toString().toInt()
+            val endY =  if (end.text.toString() != "Present") {
+                              end.text.toString().toInt()
+                           } else { startY + 10 }
+
+            if(jobTitle.text!!.length < 3){
                 jobTitleLayout.error = "Please enter your Job Tittle"
-            } else if(start.length() < 3){
+            } else if(start.text!!.length < 3){
                 jobTitleLayout.isErrorEnabled = false
                 startLayout.error = "Please enter start year"
-            } else if(end.length() < 3){
+            } else if(end.text!!.length < 3 && startY > endY){
                 jobTitleLayout.isErrorEnabled = false
                 startLayout.isErrorEnabled = false
                 endLayout.error = "Please enter end year"

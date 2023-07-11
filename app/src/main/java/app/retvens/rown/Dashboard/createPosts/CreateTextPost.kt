@@ -151,6 +151,8 @@ class CreateTextPost : AppCompatActivity(),
                 Toast.makeText(applicationContext,"Select Post Seen Status",Toast.LENGTH_SHORT).show()
             }else if (binding.canCommentText.text == "Can comment"){
                 Toast.makeText(applicationContext,"Select Comment Status",Toast.LENGTH_SHORT).show()
+            }else if (binding.whatDYEt.text.toString() == ""){
+                Toast.makeText(applicationContext,"Please enter caption",Toast.LENGTH_SHORT).show()
             }else{
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

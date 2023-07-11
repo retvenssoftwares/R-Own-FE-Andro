@@ -94,8 +94,8 @@ class PostsViewActivity : AppCompatActivity() {
 
 
 
-//            viewPagerAdapter = ImageSlideActivityAdapter(baseContext,image!!, like, postId, likeButton, likedAnimation)
-//            viewPager.adapter = viewPagerAdapter
+            viewPagerAdapter = ImageSlideActivityAdapter(baseContext,image)
+            viewPager.adapter = viewPagerAdapter
 
         },1000)
 

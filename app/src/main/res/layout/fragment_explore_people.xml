@@ -53,7 +53,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:progressTint="@color/green_own"
-        android:paddingBottom="160dp"
+        android:paddingBottom="60dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
@@ -31,6 +32,7 @@ import app.retvens.rown.NavigationFragments.profile.hotels.HotelsFragmentProfile
 import app.retvens.rown.NavigationFragments.profile.jobs.JobsOnProfileFragment
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
+import app.retvens.rown.NavigationFragments.profile.services.ServicesFragment
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.AboutProfileActivity
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProfileActivity
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
@@ -79,6 +81,8 @@ class OwnerProfileActivity : AppCompatActivity() {
     var userName = ""
     var role = ""
 
+    var selected = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_owner_profile)
@@ -92,6 +96,7 @@ class OwnerProfileActivity : AppCompatActivity() {
         reject = findViewById(R.id.reject)
         rejectCard = findViewById(R.id.openReview)
 
+        val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
 
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
@@ -107,6 +112,25 @@ class OwnerProfileActivity : AppCompatActivity() {
         if (user_id == userID){
             connStatus.visibility = View.GONE
             card_message.visibility = View.GONE
+        }
+
+        refresh.setOnRefreshListener {
+            if (selected == 1) {
+            getUserPofile(userID, user_id)
+        } else if (selected == 2){
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userID, false, nameProfile))
+                transaction.commit()
+        } else if (selected == 3){
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID, false, nameProfile))
+                transaction.commit()
+        } else if (selected == 4){
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false, nameProfile))
+                transaction.commit()
+            }
+            refresh.isRefreshing = false
         }
 
         getUserPofile(userID,user_id)
@@ -184,6 +208,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             hotels.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
+            selected = 1
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userID, false, nameProfile))
             transaction.commit()
@@ -194,6 +219,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             hotels.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
+            selected = 2
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, PollsFragment(userID, false, nameProfile))
             transaction.commit()
@@ -204,6 +230,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             hotels.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
+            selected = 3
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID, false, nameProfile))
             transaction.commit()
@@ -216,6 +243,7 @@ class OwnerProfileActivity : AppCompatActivity() {
             events.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             jobs.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
+            selected = 4
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false, nameProfile))
             transaction.commit()
@@ -319,6 +347,13 @@ class OwnerProfileActivity : AppCompatActivity() {
                     bio.text = response.profiledata.userBio
                     websiteLink.text = response.profile.hotelOwnerInfo.websiteLink
                     userName = response.profiledata.User_name
+
+                    media.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+                    polls.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+                    status.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+                    hotels.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+
+                    selected = 1
                     val transaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
                     transaction.commit()

@@ -1,14 +1,18 @@
 package app.retvens.rown.NavigationFragments.profile.setting.saved
 
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,6 +39,12 @@ class SavedPostsFragment : Fragment() {
     lateinit var empty : TextView
     lateinit var emptyImage : ImageView
 
+    private var postList:ArrayList<PostItem> = ArrayList()
+    private lateinit var progress: ProgressBar
+
+    private var currentPage = 1
+    private var isLoading:Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,6 +61,38 @@ class SavedPostsFragment : Fragment() {
         mediaRecyclerView.layoutManager = GridLayoutManager(context,3)
         mediaRecyclerView.setHasFixedSize(true)
 
+        progress = view.findViewById(R.id.progress)
+
+        mediaRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                Log.e("working","okk")
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    Log.e("working","okk")
+//                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+                        isLoading = false
+                        getData()
+
+
+//                    }
+                }
+
+
+            }
+        })
 
         empty = view.findViewById(R.id.empty)
         emptyImage = view.findViewById(R.id.emptyImage)
@@ -59,11 +101,23 @@ class SavedPostsFragment : Fragment() {
         getExplorePost()
     }
 
+    private fun getData() {
+        val handler = Handler()
+
+        progress.setVisibility(View.VISIBLE);
+
+        handler.postDelayed({
+            getExplorePost()
+            progress.setVisibility(View.GONE);
+        },
+            3000)
+    }
+
     private fun getExplorePost() {
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getExplorePost = RetrofitBuilder.ProfileApis.getSavedPost(user_id,"1")
+        val getExplorePost = RetrofitBuilder.ProfileApis.getSavedPost(user_id,"$currentPage")
 
         getExplorePost.enqueue(object : Callback<List<PostsDataClass>?> {
             override fun onResponse(
@@ -79,22 +133,28 @@ class SavedPostsFragment : Fragment() {
                             val response = response.body()!!
                             response.forEach {
 
-                            savedPostsAdapter = SavedPostsAdapter(
-                                requireContext(),
-                                it.posts as ArrayList<PostItem>
-                            )
-                                mediaRecyclerView.adapter = savedPostsAdapter
-                                savedPostsAdapter.removePostsFromList(it.posts)
-                                savedPostsAdapter.notifyDataSetChanged()
+                                currentPage++
+                                postList.addAll(it.posts)
+                                mediaAdapter = MediaAdapter(requireContext(),postList)
+                                mediaRecyclerView.adapter = mediaAdapter
+                                mediaAdapter.removePostsFromList(postList)
+                                mediaAdapter.notifyDataSetChanged()
+
                             }
                             } else {
                                 empty.text = "You did'nt save post yet"
 //                                empty.visibility = View.VISIBLE
+                            if (currentPage == 1) {
                                 emptyImage.visibility = View.VISIBLE
+                                mediaRecyclerView.visibility = View.GONE
+                            }
                             }
                     } else {
 //                        empty.visibility = View.VISIBLE
-                        emptyImage.visibility = View.VISIBLE
+                        if (currentPage == 1) {
+                            emptyImage.visibility = View.VISIBLE
+                            mediaRecyclerView.visibility = View.GONE
+                        }
                         empty.text = response.code().toString()
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE

@@ -167,7 +167,7 @@ class DashBoardActivity : AppCompatActivity() {
         name = header.findViewById<TextView>(R.id.user_name)
         val phoneH = header.findViewById<TextView>(R.id.nav_phone)
 
-        if (verificationStatus != "false"){
+        if (verificationStatus != "false" && verificationStatus != ""){
             verification.visibility = View.VISIBLE
         }
         phoneH.text = phone

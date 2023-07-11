@@ -18,6 +18,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
@@ -55,6 +57,12 @@ class BasicInformationFragment : Fragment(),
     private lateinit var start:TextInputEditText
     private lateinit var end:TextInputEditText
     lateinit var progressDialog : Dialog
+
+    private lateinit var startLayout : TextInputLayout
+    private lateinit var endLayout : TextInputLayout
+
+    lateinit var presentText : TextView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,7 +88,48 @@ class BasicInformationFragment : Fragment(),
         university = view.findViewById(R.id.dob_et)
         start = view.findViewById(R.id.et_session_Start)
         end = view.findViewById(R.id.et_end)
+        startLayout = view.findViewById(R.id.session_start)
+        endLayout = view.findViewById(R.id.session_end)
 
+        presentText = view.findViewById(R.id.presentText)
+        presentText.setOnClickListener {
+            end.setText("Present")
+            endLayout.isErrorEnabled = false
+        }
+
+        start.addTextChangedListener {
+            if (start.text!!.length > 3 && end.length() > 3 ){
+
+            } else {
+
+            }
+        }
+
+        end.addTextChangedListener {
+
+            if (end.length() > 3 && start.length() > 3) {
+
+                if (end.text.toString() == "Present" || end.text.toString() == "Presen" || end.text!!.length > 7 ) {
+                    endLayout.isErrorEnabled = false
+                } else{
+                    if (end.text.toString().toInt() < start.text.toString().toInt()) {
+                        end.setText("")
+                        endLayout.error = "Please enter end year"
+                    } else{
+                        endLayout.isErrorEnabled = false
+                    }
+                }
+
+            if (end.length() == 5 || end.length() == 6 || end.length() > 7){
+                    end.setText("")
+                }
+            } else {
+                if (end.length() == 5 || end.length() == 6 || end.length() > 8){
+                    end.setText("")
+                }
+            }
+
+        }
 
         val recentJob = view.findViewById<TextInputLayout>(R.id.recentJobLayout)
 

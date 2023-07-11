@@ -113,8 +113,8 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/event_image"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:src="@drawable/svg_nothing_other"
+            android:layout_height="280dp"
+            android:src="@drawable/svg_nothing"
             android:background="@color/white"
             android:scaleType="centerCrop"
             android:layout_marginTop="5dp"
@@ -149,7 +149,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="Book Now"
-            android:fontFamily="@font/montserrat_regular"
+            android:textSize="18dp"
+            android:paddingVertical="6dp"
+            android:fontFamily="@font/montserrat_semibold"
             android:textFontWeight="500"
             android:paddingLeft="20dp"
             />

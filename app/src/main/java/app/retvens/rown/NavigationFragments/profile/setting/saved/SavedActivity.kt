@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.NavigationFragments.profile.setting.saved.hotels.SavedHotelsFragment
 import app.retvens.rown.R
 
@@ -17,6 +18,8 @@ class SavedActivity : AppCompatActivity() {
     private lateinit var exploreEvents : CardView
     private lateinit var exploreHotels : CardView
     private lateinit var exploreServices : CardView
+
+    var selected = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,27 @@ class SavedActivity : AppCompatActivity() {
         exploreEvents = findViewById(R.id.exploreEvents)
         exploreHotels = findViewById(R.id.exploreHotels)
         exploreServices = findViewById(R.id.exploreServices)
+
+        val refresh = findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+        refresh.setOnRefreshListener {
+            if (selected == 1){
+                val fragment: Fragment = SavedPostsFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_saved_fragments_container,fragment)
+                transaction.commit()
+            } else if (selected == 2){
+                val fragment: Fragment = SavedBlogsFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_saved_fragments_container,fragment)
+                transaction.commit()
+            }  else if (selected == 3){
+                val fragment: Fragment = SavedHotelsFragment()
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_saved_fragments_container,fragment)
+                transaction.commit()
+            }
+                refresh.isRefreshing = false
+        }
 
         val fragment: Fragment = SavedPostsFragment()
         val transaction = supportFragmentManager.beginTransaction()
@@ -46,6 +70,7 @@ class SavedActivity : AppCompatActivity() {
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
+            selected = 1
 
             val fragment: Fragment = SavedPostsFragment()
             val transaction = supportFragmentManager.beginTransaction()
@@ -79,6 +104,7 @@ class SavedActivity : AppCompatActivity() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            selected = 2
 
             val fragment: Fragment = SavedBlogsFragment()
             val transaction = supportFragmentManager.beginTransaction()
@@ -111,6 +137,8 @@ class SavedActivity : AppCompatActivity() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#ADD134"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            selected = 3
 
             val fragment: Fragment = SavedHotelsFragment()
             val transaction = supportFragmentManager.beginTransaction()

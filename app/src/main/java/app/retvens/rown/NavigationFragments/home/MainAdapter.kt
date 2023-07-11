@@ -3,8 +3,6 @@ package app.retvens.rown.NavigationFragments.home
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.net.Uri.encode
-import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +33,6 @@ import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import app.retvens.rown.viewAll.viewAllBlogs.ViewAllBlogsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity
 import com.bumptech.glide.Glide
-import com.mackhartley.roundedprogressbar.RoundedProgressBar
 import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,17 +44,12 @@ import java.util.concurrent.TimeUnit
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.AnimationUtils
-import androidx.annotation.RequiresApi
 import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
-import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.databinding.ItemHotelPostBinding
 import app.retvens.rown.utils.postLike
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
-import okio.ByteString
-import okio.ByteString.Companion.encodeString
-import java.nio.charset.Charset
 import kotlin.collections.ArrayList
 
 
@@ -81,7 +73,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
 
     inner class BannerItemViewHolder(private val binding : UsersPostsCardBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bindBannerView(banner: PostItem, position: Int){
+        fun bindBannerView(banner: PostItem, position: Int) {
             var save = true
             var like = true
             var operatioin = "push"
@@ -238,6 +230,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 intent.putExtra("like",banner.like)
                 intent.putExtra("isSaved",banner.isSaved)
                 intent.putExtra("postId",banner.post_id)
+                intent.putExtra("role",banner.Role)
+                intent.putExtra("user_id",banner.user_id)
                 context.startActivity(intent)
             }
 
@@ -271,12 +265,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.comment.setOnClickListener {
                 onItemClickListener?.onItemClickForComment(banner,position)
             }
-
         }
-
-
-
-
     }
 
     inner class BannerItemViewHolderEvent(private val binding : ItemEventPostBinding) : RecyclerView.ViewHolder(binding.root){

@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
@@ -77,6 +78,8 @@ class UserProfileActivity : AppCompatActivity() {
     var username = ""
     var userrole = ""
 
+    var selected = 1
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +107,8 @@ class UserProfileActivity : AppCompatActivity() {
         connStatus = findViewById(R.id.connStatus)
         card_message = findViewById(R.id.card_message)
 
+        val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
+
 
         val userID = intent.getStringExtra("userId").toString()
 //        connStat = intent.getStringExtra("status").toString()
@@ -115,6 +120,21 @@ class UserProfileActivity : AppCompatActivity() {
         if (user_id == userID){
             connStatus.visibility = View.GONE
             card_message.visibility = View.GONE
+        }
+
+        refresh.setOnRefreshListener {
+            if (selected == 1) {
+                getUserPofile(userID, user_id)
+            } else if (selected == 2){
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container,PollsFragment(userID, false, nameProfile))
+                transaction.commit()
+            } else if (selected == 3){
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID, false, nameProfile))
+                transaction.commit()
+            }
+            refresh.isRefreshing = false
         }
 
         getUserPofile(userID,user_id)
@@ -175,6 +195,7 @@ class UserProfileActivity : AppCompatActivity() {
             media.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
+            selected = 2
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container,PollsFragment(userID, false, nameProfile))
             transaction.commit()
@@ -184,6 +205,7 @@ class UserProfileActivity : AppCompatActivity() {
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
 
+            selected = 1
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
             transaction.commit()
@@ -193,6 +215,7 @@ class UserProfileActivity : AppCompatActivity() {
             polls.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
             status.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
 
+            selected = 3
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID, false, nameProfile))
             transaction.commit()
@@ -289,6 +312,12 @@ class UserProfileActivity : AppCompatActivity() {
                     nameProfile = response.data.profile.Full_name.toString()
                     bio.text = response.data.profile.userBio
                     username = response.data.profile.User_name
+
+                    media.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+                    polls.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+                    status.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
+
+                    selected = 1
                     val transaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
                     transaction.commit()

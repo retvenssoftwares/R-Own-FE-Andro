@@ -105,20 +105,18 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:weightSum="2"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/session_start"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:hint="Session Start"
-                android:layout_weight="1"
                 android:textColorHint="@color/black"
                 app:hintTextColor="@color/black"
                 app:boxStrokeColor="@color/black"
@@ -127,7 +125,11 @@
                 app:endIconMode="custom"
                 app:endIconTint="@color/black"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toStartOf="@id/session_end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_session_Start"
@@ -137,17 +139,16 @@
                     android:textColor="@color/black"
                     android:hint="2020"
                     android:textColorHint="@drawable/hint_selector"
-                    android:inputType="text"/>
+                    android:inputType="number"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/session_end"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:hint="Session End"
-                android:layout_weight="1"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:boxStrokeWidthFocused="2dp"
@@ -155,7 +156,11 @@
                 app:endIconMode="custom"
                 app:endIconTint="@color/black"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="20dp">
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/session_start">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_end"
@@ -165,12 +170,22 @@
                     android:textColor="@color/black"
                     android:hint="2024"
                     android:textColorHint="@drawable/hint_selector"
-                    android:inputType="text"/>
+                    android:inputType="number"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/presentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Click here if still persuing"
+                android:textColor="@color/black"
+                android:textSize="13dp"
+                android:paddingVertical="2dp"
+                app:layout_constraintTop_toBottomOf="@id/session_end"
+                app:layout_constraintEnd_toEndOf="@id/session_end"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

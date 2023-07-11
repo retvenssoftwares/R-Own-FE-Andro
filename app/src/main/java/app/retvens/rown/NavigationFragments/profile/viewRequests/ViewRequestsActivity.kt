@@ -33,10 +33,15 @@ class ViewRequestsActivity : AppCompatActivity() {
         binding.reBackBtn.setOnClickListener { onBackPressed() }
 
 
-
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
         getAppRequestConnection(user_id)
+
+        binding.refreshLayout.setOnRefreshListener {
+            getAppRequestConnection(user_id)
+            binding.refreshLayout.isRefreshing = false
+        }
+
     }
 
     private fun getAppRequestConnection(userId: String) {
