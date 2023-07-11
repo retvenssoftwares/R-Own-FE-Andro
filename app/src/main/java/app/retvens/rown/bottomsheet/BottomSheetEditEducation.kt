@@ -2,15 +2,21 @@ package app.retvens.rown.bottomsheet
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RelativeLayout
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.utils.setupFullHeight
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -18,6 +24,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class BottomSheetEditEducation : BottomSheetDialogFragment() {
@@ -84,11 +93,45 @@ class BottomSheetEditEducation : BottomSheetDialogFragment() {
 
 
         cardSave.setOnClickListener {
+            saveEducation()
             dismiss()
         }
         cardAdd.setOnClickListener {
             dismiss()
         }
+    }
+
+    private fun saveEducation() {
+
+        val university = university.text.toString()
+        val start = start.text.toString()
+        val end = end.text.toString()
+
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val data = UserProfileRequestItem.StudentEducation(university,start,end)
+
+        val updateEducation = RetrofitBuilder.profileCompletion.addEducation(user_id,data)
+
+        updateEducation.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                }else{
+                    Log.e("error",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
+
     }
 
     override fun onDetach() {

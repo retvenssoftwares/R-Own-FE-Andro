@@ -106,7 +106,7 @@ class BottomSheetFilterCommunity : BottomSheetDialogFragment(),
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 
 }

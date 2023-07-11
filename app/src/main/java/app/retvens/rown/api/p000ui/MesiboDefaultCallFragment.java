@@ -47,7 +47,6 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
     private boolean callControlFragmentVisible = true;
     protected long autoHideVideoControlsTimeout = 7000L;
     private Thread mControlHidingThread = null;
-
     public MesiboDefaultCallFragment() {
     }
 
@@ -160,7 +159,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         this.ui.disconnectButton = (ImageView) var4.findViewById(R.id.button_call_disconnectt);
         this.ui.buttonDisconnect = (ImageView) var4.findViewById(R.id.three);
         this.ui.cameraSwitchButton = (ImageView)var4.findViewById(R.id.button_call_switch_cameraa);
-        this.ui.sourceSwitchButton = (ImageView)var4.findViewById(R.id.button_call_switch_source);
+//        this.ui.sourceSwitchButton = (ImageView)var4.findViewById(R.id.button_call_switch_source);
         this.ui.toggleSpeakerButton = (ImageView) var4.findViewById(R.id.button_call_toggle_speaker);
         this.ui.toggleCameraButton = (ImageView) var4.findViewById(R.id.button_call_toggle_camera);
         this.ui.toggleMuteButton = (ImageView) var4.findViewById(R.id.button_call_toggle_mic);
@@ -168,7 +167,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         this.ui.acceptAudioButton = (ImageView) var4.findViewById(R.id.incoming_audio_call_connect);
         this.ui.declineButton = (ImageView) var4.findViewById(R.id.incoming_call_disconnect);
         this.ui.cameraToggleLayout = var4.findViewById(R.id.layout_toggle_camera);
-        this.ui.sourceSwitchLayout = var4.findViewById(R.id.layout_switch_source);
+//        this.ui.sourceSwitchLayout = var4.findViewById(R.id.layout_switch_source);
         this.ui.cameraSwitchLayout = var4.findViewById(R.id.layout_switch_camera);
         this.ui.incomingView = var4.findViewById(R.id.incoming_call_container);
         this.ui.inprogressView = var4.findViewById(R.id.outgoing_call_container);
@@ -180,7 +179,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         this.ui.disconnectButton.setOnClickListener(this);
         this.ui.buttonDisconnect.setOnClickListener(this);
         this.ui.cameraSwitchButton.setOnClickListener(this);
-        this.ui.sourceSwitchButton.setOnClickListener(this);
+//        this.ui.sourceSwitchButton.setOnClickListener(this);
         this.ui.toggleSpeakerButton.setOnClickListener(this);
         this.ui.toggleCameraButton.setOnClickListener(this);
         //this.ui.switchSource.setOnClickListener(this);
@@ -295,7 +294,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
             } else if (var2 == R.id.one) {
                 this.mCall.toggleAudioDevice(MesiboCall.AudioDevice.SPEAKER);
                 if(speakerFirst == true){
-                    this.ui.speaker.setImageResource(R.drawable.speakerlow);
+                    this.ui.speaker.setImageResource(R.drawable.vector_speaker);
                     speakerFirst = false;
                 }else {
                     this.ui.speaker.setImageResource(R.drawable.vector_speaker);
@@ -444,8 +443,8 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
             this.ui.contactView.setVisibility(View.GONE);
             this.ui.background.setVisibility(View.VISIBLE);
             this.ui.contactOngoinName.setVisibility(View.VISIBLE);
-            this.ui.backArrow.setVisibility(View.VISIBLE);
-            this.ui.chatOngoing.setVisibility(View.VISIBLE);
+//            this.ui.backArrow.setVisibility(View.VISIBLE);
+//            this.ui.chatOngoing.setVisibility(View.VISIBLE);
             if (this.mCall.isVideoCall()) {
                 this.ui.pipVideo.setVisibility(View.VISIBLE);
                 this.ui.star.setVisibility(View.VISIBLE);
@@ -539,9 +538,9 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
                 this.ui.fullscreenVideo.setVisibility(var7);
                 this.ui.cameraToggleLayout.setVisibility(var7);
                 this.ui.cameraSwitchLayout.setVisibility(var7);
-                if (this.mCp.f2ui.showScreenSharing) {
-                    this.ui.sourceSwitchLayout.setVisibility(var7);
-                }
+//                if (this.mCp.f2ui.showScreenSharing) {
+//                    this.ui.sourceSwitchLayout.setVisibility(var7);
+//                }
 
                 //this.ui.thumbnailLayout.setVisibility(View.VISIBLE);
                 //this.ui.thumbnailLayout.setVisibility(var7);

@@ -293,7 +293,7 @@ class HomeFragment : Fragment() {
             handler.postDelayed({
                 getPost(user_id)
                 progress.setVisibility(View.GONE)
-            }, 3000)
+            }, 1000)
         }
     }
 

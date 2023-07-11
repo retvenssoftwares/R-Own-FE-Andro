@@ -2,16 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card1"
+        android:id="@+id/card2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
         app:cardBackgroundColor="@color/white"
         app:cardElevation="6dp"
         app:cardCornerRadius="6dp"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -20,8 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="vertical">
+
+
             <LinearLayout
-                android:id="@+id/edit"
+                android:id="@+id/editEducation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -30,8 +35,8 @@
                 android:paddingVertical="1dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/black_border"
-                app:layout_constraintTop_toTopOf="@id/cardCompanyName"
-                app:layout_constraintBottom_toBottomOf="@id/cardCompanyName"
+                app:layout_constraintTop_toTopOf="@id/cardCollegeName"
+                app:layout_constraintBottom_toBottomOf="@id/cardCollegeName"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -52,36 +57,37 @@
                     android:textColor="@color/black"/>
             </LinearLayout>
 
+
             <ImageView
-                android:id="@+id/circle"
+                android:id="@+id/circle2"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="18dp"
-                app:tint = "@color/black"
+                app:tint = "@color/green_own"
                 android:src="@drawable/circle_gray_background"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardCompanyName"
+                android:id="@+id/cardCollegeName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                app:cardBackgroundColor="@color/black"
+                app:cardBackgroundColor="@color/green_own"
                 app:cardElevation="6dp"
                 app:cardCornerRadius="6dp"
-                app:layout_constraintBottom_toBottomOf="@id/circle"
-                app:layout_constraintTop_toTopOf="@id/circle"
-                app:layout_constraintStart_toEndOf="@id/circle">
+                app:layout_constraintBottom_toBottomOf="@id/circle2"
+                app:layout_constraintTop_toTopOf="@id/circle2"
+                app:layout_constraintStart_toEndOf="@id/circle2">
 
                 <TextView
-                    android:id="@+id/companyName"
+                    android:id="@+id/collageName"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/app_name"
+                    android:text="College Name"
                     android:textSize="14dp"
-                    android:textColor="@color/green_own"
+                    android:textColor="@color/black"
                     android:paddingVertical="4dp"
                     android:paddingHorizontal="12dp"/>
 
@@ -93,14 +99,13 @@
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/cardCompanyName"
-                app:layout_constraintStart_toStartOf="@id/cardCompanyName">
-
+                app:layout_constraintTop_toBottomOf="@id/cardCollegeName"
+                app:layout_constraintStart_toStartOf="@id/cardCollegeName">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Designation:"
+                    android:text="Session Years:"
                     android:fontFamily="@font/montserrat_semibold"
                     android:textSize="14dp"
                     android:textColor="@color/black"
@@ -111,37 +116,10 @@
                     app:layout_constraintStart_toStartOf="parent"/>
 
                 <TextView
-                    android:id="@+id/designation"
+                    android:id="@+id/experience"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Executive Manager \nFull-Time"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textSize="13dp"
-                    android:textColor="@color/black"
-                    android:layout_marginHorizontal="16dp"
-                    app:layout_constraintTop_toTopOf="@id/edit"
-                    app:layout_constraintBottom_toBottomOf="@id/edit"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Employment Year:"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textSize="14dp"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginHorizontal="10dp"
-                    app:layout_constraintTop_toTopOf="@id/edit"
-                    app:layout_constraintBottom_toBottomOf="@id/edit"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-                <TextView
-                    android:id="@+id/timeLine"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2022 - Present"
+                    android:text="2022 - 2024"
                     android:fontFamily="@font/montserrat_regular"
                     android:textSize="13dp"
                     android:textColor="@color/black"
@@ -155,6 +133,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

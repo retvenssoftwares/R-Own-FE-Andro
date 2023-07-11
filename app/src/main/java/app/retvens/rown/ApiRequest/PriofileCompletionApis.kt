@@ -3,6 +3,7 @@ package app.retvens.rown.ApiRequest
 import androidx.room.SkipQueryVerification
 import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
 import app.retvens.rown.DataCollections.ProfileCompletion.*
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.location.CityData
 import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.DataCollections.location.StateData
@@ -196,5 +197,11 @@ interface PriofileCompletionApis{
     fun addExperience(
         @Path("userId") user_id : String,
         @Body updateData:AddExperienceDataClass
+    ):Call<UpdateResponse>
+
+    @PATCH("addmultiple/{userId}")
+    fun addEducation(
+        @Path("userId") user_id : String,
+        @Body updateData:UserProfileRequestItem.StudentEducation
     ):Call<UpdateResponse>
 }

@@ -352,7 +352,7 @@ public class MessageView extends RelativeLayout {
                     this.profileCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, PostsViewActivity.class);
+                            Intent intent = new Intent(context, UserProfileActivity.class);
                             intent.putExtra("userId", userID);
                             context.startActivity(intent);
                         }
@@ -393,7 +393,7 @@ public class MessageView extends RelativeLayout {
                     this.postCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, UserProfileActivity.class);
+                            Intent intent = new Intent(context, PostsViewActivity.class);
                             intent.putExtra("postId", postId);
                             context.startActivity(intent);
                         }

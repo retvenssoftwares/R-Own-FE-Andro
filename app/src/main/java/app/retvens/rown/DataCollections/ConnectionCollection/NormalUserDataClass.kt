@@ -30,6 +30,10 @@ data class Profile(
 )
 
 data class NormalUserInfoo(
-    val jobTitle: String
+    val jobType:String,
+    val jobCompany:String,
+    val jobStartYear:String,
+    val jobEndYear:String,
+    val jobTitle:String
 )
 

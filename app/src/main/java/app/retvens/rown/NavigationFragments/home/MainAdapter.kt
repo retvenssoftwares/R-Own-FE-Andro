@@ -59,6 +59,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     private var onItemClickListener: OnItemClickListener? = null
     lateinit var viewPagerAdapter: ImageSlideAdapter
     lateinit var indicator: CircleIndicator
+    private lateinit var adapter:PollsAdapter
 
     interface OnItemClickListener {
         fun onItemClick(dataItem: PostItem)
@@ -718,9 +719,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             if(banner.verificationStatus != "false"){
                 binding.verification.visibility = View.VISIBLE
             }
-
-            val total = calculateTotalVotes(banner.pollQuestion[0].Options.toTypedArray())
+//            val total = calculateTotalVotes(banner.pollQuestion[0].Options.toTypedArray())
 //            Log.e("totel",total.toString())
+                var total:Int = 0
+            banner.pollQuestion.forEach {
+                total = calculateTotalVotes(it.Options.toTypedArray())
+            }
 
             binding.postProfile.setOnClickListener {
                     if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert"){
@@ -740,11 +744,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     }
                 }
 
-            binding.votesOptionsrecycler.layoutManager = LinearLayoutManager(context)
-            val adapter = PollsAdapter(context, banner.pollQuestion[0].Options,
-                PollsDetails(banner.post_id,banner.voted),total
-            )
-            binding.votesOptionsrecycler.adapter = adapter
+            banner.pollQuestion.forEach {
+                binding.votesOptionsrecycler.layoutManager = LinearLayoutManager(context)
+                adapter = PollsAdapter(context, it.Options,
+                    PollsDetails(banner.post_id,banner.voted),total
+                )
+                binding.votesOptionsrecycler.adapter = adapter
+            }
+            adapter.setOnItemClickListener(this)
 
             banner.pollQuestion.forEach { item ->
                 binding.titlePoll.text = item.Question
@@ -753,80 +760,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.postTime.text = timestamp
             }
 
-            adapter.setOnItemClickListener(this)
-//            banner.pollQuestion.forEach { item ->
-//                binding.titlePoll.text = item.Question
-//                binding.option1.text = item.Options[0].Option
-//                binding.option2.text = item.Options[1].Option
-//
-//                val progressBarOption1: RoundedProgressBar = binding.progressBar
-//                val progressBarOption2: RoundedProgressBar = binding.progressBar2
-//
-//
-//                val vote1: List<String> = item.Options[0].votes.map { it.user_id }
-//                val vote2: List<String> = item.Options[1].votes.map { it.user_id }
-//
-//                val timestamp = convertTimeToText(item.date_added)
-//                binding.postTime.text = timestamp
-//
-//
-//
-//                binding.voteOption1.setOnClickListener {
-//
-//                    if (banner.voted == "no") {
-//                        voteOption(banner.post_id, item.Options[0].option_id)
-//                        val vote = vote1.size+1
-//                        binding.Option1Votes.text = "${vote} votes"
-//                        val totalVotes = vote + vote2.size
-//                        val completedTasks = totalVotes
-//                        val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
-//                        if (!completedPercentage.isNaN()) {
-//                            progressBarOption1.setProgressPercentage(completedPercentage)
-//                            binding.option1Percentage.text = "${completedPercentage}%"
-//                        }
-//                    }
-//                }
-//
-//
-//
-//
-//                binding.voteOption2.setOnClickListener {
-//
-//                    if (banner.voted == "no"){
-//                        voteOption(banner.post_id,item.Options[1].option_id)
-//
-
-//                    }
-//
-//                }
-//
-//                    binding.Option1Votes.text = "${vote1.size} votes"
-//                    binding.Option2Votes.text = "${vote2.size} votes"
-//
-//                    val totalVotes = vote1.size + vote2.size
-//                    val completedTasks = vote1.size
-//                val completedPercentage = (completedTasks.toDouble() / totalVotes) * 100.0
-//                if (!completedPercentage.isNaN()) {
-//                    progressBarOption1.setProgressPercentage(completedPercentage)
-//                    binding.option1Percentage.text = "${completedPercentage}%"
-//                }
-//
-//
-//                val completedTasks2 = vote2.size
-//                val completedPercentage2 = (completedTasks2.toDouble() / totalVotes) * 100.0
-//                if (!completedPercentage2.isNaN()) {
-//                    progressBarOption2.setProgressPercentage(completedPercentage2)
-//                    binding.option2Percentage.text = "${completedPercentage2}%"
-//                }
-
-
-
-
-//            }
 
         }
 
         private fun voteOption(postId: String, optionId: String) {
+
 
             val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
             val user_id = sharedPreferences?.getString("user_id", "").toString()

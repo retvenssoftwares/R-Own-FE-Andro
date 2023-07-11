@@ -182,7 +182,7 @@ fun cropProfileImage(imageUri: Uri, context: Context) {
         .start(context as Activity)
 }
 fun compressImage(imageUri: Uri, context: Context): Uri {
-    lateinit var compressed : Uri
+    var compressed : Uri? = null
     try {
         val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver,imageUri)
         val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
@@ -201,7 +201,7 @@ fun compressImage(imageUri: Uri, context: Context): Uri {
     }catch (e: IOException){
         e.printStackTrace()
     }
-    return compressed
+    return compressed!!
 }
 
 fun showFullImage(profilePic : String, context: Context) {

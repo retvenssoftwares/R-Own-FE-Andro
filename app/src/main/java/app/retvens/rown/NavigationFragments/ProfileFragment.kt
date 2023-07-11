@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.NavigationFragments.profile.EditProfileActivity
+import app.retvens.rown.NavigationFragments.profile.UserDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
@@ -89,6 +90,10 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         profile.setOnLongClickListener {
             showFullImage(profilePic, requireContext())
             true
+        }
+
+        profile.setOnClickListener {
+            startActivity(Intent(requireContext(),UserDetailsActivity::class.java))
         }
 
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
