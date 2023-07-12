@@ -2,18 +2,30 @@ package app.retvens.rown.NavigationFragments.profile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheetEditEducation
-import app.retvens.rown.bottomsheet.BottomSheetEditExperience
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserInfoo
+import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.NavigationFragments.profile.viewRequests.ExperienceAdapter
+import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.databinding.ActivityUserDetailsBinding
+import com.bumptech.glide.Glide
+import com.google.android.material.textfield.TextInputEditText
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class UserDetailsActivity : AppCompatActivity(),
     BottomSheetEditExperience.OnBottomEditExClickListener,
     BottomSheetEditEducation.OnBottomEditEdClickListener {
 
     lateinit var binding : ActivityUserDetailsBinding
+    private lateinit var experienceAdapter: ExperienceAdapter
+    private lateinit var educationAdapter: EducationAdapter
+    private lateinit var type:TextInputEditText
+    private lateinit var company:TextInputEditText
+    private lateinit var disignation:TextInputEditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +51,93 @@ class UserDetailsActivity : AppCompatActivity(),
         binding.recyclerExperience.layoutManager = LinearLayoutManager(this)
         binding.recyclerExperience.setHasFixedSize(true)
 
+        binding.recyclerEducation.layoutManager = LinearLayoutManager(this)
+        binding.recyclerEducation.setHasFixedSize(true)
 
+        getProfile()
+
+    }
+
+    private fun getProfile() {
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val fetchUser = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
+
+        fetchUser.enqueue(object : Callback<UserProfileRequestItem?>,
+            ExperienceAdapter.OnBottomSheetFilterCommunityClickListener,
+            BottomSheetJobType.OnBottomJobTypeClickListener,
+            BottomSheetCompany.OnBottomCompanyClickListener,
+            BottomSheetJobTitle.OnBottomJobTitleClickListener,
+            EducationAdapter.OnBottomSheetFilterCommunityClickListener {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    try {
+                        val response = response.body()!!
+                        experienceAdapter = ExperienceAdapter(applicationContext,response)
+                        binding.recyclerExperience.adapter = experienceAdapter
+                        experienceAdapter.notifyDataSetChanged()
+                        experienceAdapter.setOnFilterClickListener(this)
+                        Glide.with(applicationContext).load(response.Profile_pic).into(binding.vendorProfile)
+                        binding.vendorName.text = response.Full_name
+                        binding.username.text = response.User_name
+                        binding.bio.text = response.userBio
+
+                        educationAdapter = EducationAdapter(applicationContext,response)
+                        binding.recyclerEducation.adapter = educationAdapter
+                        educationAdapter.notifyDataSetChanged()
+                        educationAdapter.setOnFilterClickListener(this)
+                    }catch (e:NullPointerException){
+                        Log.e("error",e.message.toString())
+                    }
+
+
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+
+            override fun onBottomSheetFilterCommunityClick(
+                jonDetails: NormalUserInfoo,
+                position: Int
+            ) {
+
+                val bottomSheet = BottomSheetUpdateExperience(jonDetails,position)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetUpdateExperience.Edit_TAG)}
+
+
+            }
+
+            override fun bottomJobTypeClick(jobTypeFrBo: String) {
+                type.setText(jobTypeFrBo)
+            }
+
+            override fun bottomLocationClick(CompanyFrBo: String) {
+                company.setText(CompanyFrBo)
+            }
+
+            override fun bottomJobTitleClick(jobTitleFrBo: String) {
+                disignation.setText(jobTitleFrBo)
+            }
+
+            override fun onBottomSheetFilterCommunityClick(
+                jonDetails: UserProfileRequestItem.StudentEducation,
+                position: Int
+            ) {
+                val bottomSheet = BottomSheetUpdateEducation(jonDetails,position)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetUpdateEducation.Edit_TAG)}
+            }
+
+
+        })
 
     }
 

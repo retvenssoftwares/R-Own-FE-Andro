@@ -5,6 +5,6 @@ data class UpdateExperienceDataClass(
     val jobType:String,
     val jobCompany:String,
     val jobStartYear:String,
-    val jonEndYear:String,
+    val jobEndYear:String,
     val jobTitle:String
 )

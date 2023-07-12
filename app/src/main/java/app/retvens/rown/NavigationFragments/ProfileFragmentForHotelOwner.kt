@@ -21,6 +21,7 @@ import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.profile.EditHotelOwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.EditHotelProfileActivity
 import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
+import app.retvens.rown.NavigationFragments.profile.HotelOwnerDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.events.EventsProfileFragment
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsFragmentProfile
@@ -104,6 +105,10 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         profile.setOnLongClickListener {
             showFullImage(profilePic, requireContext())
             true
+        }
+
+        profile.setOnClickListener {
+            startActivity(Intent(requireContext(),HotelOwnerDetailsActivity::class.java))
         }
 
         val sharedPreferencesID = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)

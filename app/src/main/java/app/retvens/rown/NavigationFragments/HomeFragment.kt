@@ -279,24 +279,24 @@ class HomeFragment : Fragment() {
             Log.e("check","1")
             if (pageCounter == 1) {
                 Log.e("check","1")
+                getHotels()
                 handler.postDelayed({
-                    getHotels()
                     getPost(user_id)
                     progress.setVisibility(View.GONE)
                 }, 3000)
 
             }else if (pageCounter == 2) {
                 Log.e("check","2")
+                getOpenCommunites()
                 handler.postDelayed({
-                    getOpenCommunites()
                     getPost(user_id)
                     progress.setVisibility(View.GONE)
                 }, 3000)
 
             }else if (pageCounter == 3) {
                 Log.e("check","3")
+                getAllBlogs()
                 handler.postDelayed({
-                    getAllBlogs()
                     getPost(user_id)
                     progress.setVisibility(View.GONE)
                 }, 3000)

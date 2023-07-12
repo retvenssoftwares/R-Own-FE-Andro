@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
     tools:context=".NavigationFragments.profile.HotelOwnerDetailsActivity">
 
     <RelativeLayout
@@ -173,6 +174,7 @@
                         app:layout_constraintStart_toEndOf="@id/userProfile"/>
 
                     <TextView
+                        android:id="@+id/location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Location"
@@ -274,62 +276,18 @@
                         app:layout_constraintTop_toBottomOf="@id/v2"
                         app:layout_constraintStart_toStartOf="parent"/>
 
-                    <ImageView
-                        android:id="@+id/circle"
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="12dp"
-                        app:tint = "@color/black"
-                        android:src="@drawable/circle_gray_background"
-                        app:layout_constraintTop_toBottomOf="@id/listed"
-                        app:layout_constraintStart_toStartOf="parent"/>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/property_recycler"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:layout_marginTop="-4dp"
-                        app:layout_constraintTop_toTopOf="@id/circle"
-                        app:layout_constraintStart_toEndOf="@id/circle">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Hotel name"
-                            android:fontFamily="@font/montserrat_semibold"
-                            android:textSize="14dp"
-                            android:textColor="@color/black"
-                            android:layout_marginHorizontal="10dp"
-                            app:layout_constraintStart_toStartOf="parent"/>
-
-                        <TextView
-                            android:id="@+id/textExperience"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="5 Star Hotel"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:textSize="13dp"
-                            android:textColor="@color/black"
-                            android:layout_marginHorizontal="16dp"
-                            app:layout_constraintStart_toStartOf="parent"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Location"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:textSize="13dp"
-                            android:textColor="@color/black"
-                            android:layout_marginHorizontal="15dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:drawableStartCompat="@drawable/svg_navigation_location"
-                            app:drawableTint="@color/green_own"
-                            android:drawablePadding="2dp"/>
-
-                    </LinearLayout>
+                        app:layout_constraintTop_toBottomOf="@+id/listed"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginHorizontal="15dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:paddingBottom="70dp"
+                        />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

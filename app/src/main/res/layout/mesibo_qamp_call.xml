@@ -192,8 +192,8 @@
                         android:paddingTop="34sp"
                         android:paddingRight="32sp"
                         android:paddingBottom="32sp"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/ic_camerarotate" />
+                        android:visibility="visible"
+                        app:srcCompat="@drawable/vector_revese_cam" />
 
                     <ImageView
                         android:id="@+id/one"
@@ -215,7 +215,7 @@
                         android:paddingLeft="10sp"
                         android:paddingTop="32sp"
                         android:paddingRight="20sp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:paddingBottom="20sp"
                         app:srcCompat="@drawable/vector_onvideocall" />
 
@@ -283,33 +283,33 @@
 
                         <ImageButton
                             android:id="@+id/button_call_switch_cameraa"
-                            android:layout_width="@dimen/outgoing_video_call_icon_size"
-                            android:layout_height="@dimen/outgoing_video_call_icon_size"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
                             android:layout_gravity="left"
                             android:background="@drawable/vector_revese_cam"
                             android:contentDescription="@string/switch_camera" />
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/layout_switch_source"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/outgoing_video_call_icon_margin"
-                        android:layout_weight="1"
-                        android:background="@drawable/drawable_background_circle"
-                        android:gravity="center"
-                        android:padding="@dimen/outgoing_video_call_icon_padding">
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/layout_switch_source"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_margin="@dimen/outgoing_video_call_icon_margin"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:background="@drawable/drawable_background_circle"-->
+<!--                        android:gravity="center"-->
+<!--                        android:padding="@dimen/outgoing_video_call_icon_padding">-->
 
-                        <ImageButton
-                            android:id="@+id/button_call_switch_source"
-                            android:layout_width="@dimen/outgoing_video_call_icon_size"
-                            android:layout_height="@dimen/outgoing_video_call_icon_size"
-                            android:layout_gravity="left"
-                            android:background="@drawable/ic_mesibo_screen_sharing"
-                            android:contentDescription="@string/switch_source" />
+<!--                        <ImageButton-->
+<!--                            android:id="@+id/button_call_switch_source"-->
+<!--                            android:layout_width="@dimen/outgoing_video_call_icon_size"-->
+<!--                            android:layout_height="@dimen/outgoing_video_call_icon_size"-->
+<!--                            android:layout_gravity="left"-->
+<!--                            android:background="@drawable/ic_mesibo_screen_sharing"-->
+<!--                            android:contentDescription="@string/switch_source" />-->
 
-                    </LinearLayout>
+<!--                    </LinearLayout>-->
 
                     <LinearLayout
                         android:id="@+id/layout_toggle_camera"

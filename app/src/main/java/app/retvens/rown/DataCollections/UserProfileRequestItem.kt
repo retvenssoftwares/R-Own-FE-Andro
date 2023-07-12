@@ -15,11 +15,13 @@ data class UserProfileRequestItem(
     val Interest: List<Interest>,
     val Mesibo_account: List<MesiboAccount>,
     val Phone: String,
+    val studentEducation:List<StudentEducation>,
     val Post_count: Int,
     val Profile_pic: String?,
     val User_id: String,
     val Role: String,
     val userBio: String,
+    val location:String,
     val Gender: String,
     val display_status: String,
     val verificationStatus: String,
@@ -45,5 +47,11 @@ data class UserProfileRequestItem(
         val hotelType:String,
         val websiteLink:String,
         val bookingEngineLink:String
+    )
+
+    data class StudentEducation(
+        val educationPlace:String,
+        val education_session_start:String,
+        val education_session_end:String
     )
 }

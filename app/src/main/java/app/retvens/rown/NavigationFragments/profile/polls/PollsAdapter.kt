@@ -33,6 +33,8 @@ import java.lang.IndexOutOfBoundsException
 
 class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val UserID:String) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
 
+    private  var option:ArrayList<app.retvens.rown.DataCollections.FeedCollection.Option> = ArrayList()
+
     class PollsViewHolder(itemView: View) : ViewHolder(itemView){
         val checkVotes = itemView.findViewById<CardView>(R.id.checkVotes)
         val name = itemView.findViewById<TextView>(R.id.user_name_post)
@@ -65,7 +67,9 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
         val time = TimesStamp.convertTimeToText(poll.date_added)
         holder.time.text = time
 
-        holder.title.text = poll.pollQuestion[0].Question
+        poll.pollQuestion.forEach {
+            holder.title.text = it.Question
+        }
 
         if (poll.User_name.isNotEmpty()){
             holder.name.text = poll.User_name
@@ -99,15 +103,27 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
         holder.recycler.layoutManager = LinearLayoutManager(context)
         holder.recycler.setHasFixedSize(true)
 
-        val option = poll.pollQuestion[0].Options
+        poll.pollQuestion.forEach {
+            option.addAll(it.Options)
+        }
+        var total:Int = 0
+        poll.pollQuestion.forEach {
+            total = calculateTotalVotes(it.Options.toTypedArray())
+        }
 
-        val total = calculateTotalVotes(poll.pollQuestion[0].Options.toTypedArray())
+        Log.e("total",total.toString())
 
-        val adapter = app.retvens.rown.NavigationFragments.home.PollsAdapter(context,option,
-            PollsDetails(poll.post_id,poll.voted),total
-        )
-        holder.recycler.adapter = adapter
-        adapter.notifyDataSetChanged()
+        try {
+            val adapter = app.retvens.rown.NavigationFragments.home.PollsAdapter(context,option,
+                PollsDetails(poll.post_id,poll.voted),total
+            )
+            holder.recycler.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }catch (e:NullPointerException){
+            Log.e("error",e.message.toString())
+        }
+
+
 
     }
     fun removePostsFromList(data: List<PostItem>){

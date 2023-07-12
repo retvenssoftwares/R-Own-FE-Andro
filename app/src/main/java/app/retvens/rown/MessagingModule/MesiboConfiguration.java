@@ -158,7 +158,7 @@ public class MesiboConfiguration {
     public static final String TITLE_INVALID_GROUP = "Invalid group";
     public static final String MSG_INVALID_GROUP = "You are not a member of this group or not allowed to send message to this group";
 
-    public static final int TOOLBAR_COLOR = MesiboUI.getConfig().mToolbarColor;
+    public static final int TOOLBAR_COLOR = 16777215;
     public static final int TOOLBAR_TEXT_COLOR = MesiboUI.getConfig().mToolbarTextColor;
     public static final int TOOLBAR_STATUSBAR_COLOR = MesiboUI.getConfig().mStatusbarColor;
 

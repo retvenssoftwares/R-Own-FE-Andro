@@ -29,14 +29,14 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BottomSheetEditEducation : BottomSheetDialogFragment() {
+class BottomSheetUpdateEducation(val data:UserProfileRequestItem.StudentEducation,val position:Int) : BottomSheetDialogFragment() {
 
     var mListener: OnBottomEditEdClickListener ? = null
     fun setOnEditEdClickListener(listener: OnBottomEditEdClickListener?){
         mListener = listener
     }
-    fun newInstance(): BottomSheetEditEducation? {
-        return BottomSheetEditEducation()
+    fun newInstance(): BottomSheetUpdateEducation? {
+        return BottomSheetUpdateEducation(data,position)
     }
     interface OnBottomEditEdClickListener{
         fun bottomEditEdClick(EdFrBo : String)
@@ -91,6 +91,9 @@ class BottomSheetEditEducation : BottomSheetDialogFragment() {
         start = view.findViewById(R.id.et_session_Start)
         end = view.findViewById(R.id.et_end)
 
+        university.setText(data.educationPlace)
+        start.setText(data.education_session_start)
+        end.setText(data.education_session_end)
 
         cardSave.setOnClickListener {
             saveEducation()
@@ -110,9 +113,9 @@ class BottomSheetEditEducation : BottomSheetDialogFragment() {
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val data = UserProfileRequestItem.StudentEducation(university,start,end)
+        val data = UpdateEducationDataClass(position,university,start,end)
 
-        val updateEducation = RetrofitBuilder.profileCompletion.addEducation(user_id,data)
+        val updateEducation = RetrofitBuilder.profileCompletion.updateEducation(user_id,data)
 
         updateEducation.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(

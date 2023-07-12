@@ -586,9 +586,9 @@ class PersonalInformation : AppCompatActivity() {
             }
         }   else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == RESULT_OK) {
-                val croppedImage = UCrop.getOutput(data!!)!!
-
-                croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage, this)
+                val croppedImage = UCrop.getOutput(data!!)
+                Log.e("error",croppedImage.toString())
+                croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage!!, this)
                 binding.profile.setImageURI(croppedImageUri)
 
             } else if (resultCode == UCrop.RESULT_ERROR) {
