@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
@@ -41,6 +42,19 @@ class CommunityListAdapter(val context : Context, val list: List<GetCommunitiesD
         holder.title.text = currentItem.group_name
         holder.member.text = "${currentItem.Members.size.toString()} members"
 
+
+        val sharedPreferences1 =context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
+        var isAdmin = "false"
+
+        currentItem.Admin.forEach {
+            if (user_id == it.user_id){
+                isAdmin = "true"
+            }else{
+                Log.e("error","not")
+            }
+        }
+
         holder.itemView.setOnClickListener {
 //            val intent = Intent(context, CommunityDetailsActivity::class.java)
 //            intent.putExtra("image", currentItem.image)
@@ -50,7 +64,9 @@ class CommunityListAdapter(val context : Context, val list: List<GetCommunitiesD
             Log.e("click",currentItem.group_id)
 
             val intent = Intent(context, MesiboMessagingActivity::class.java)
+            intent.putExtra("admin",isAdmin)
             intent.putExtra(MesiboUI.GROUP_ID, currentItem.group_id.toLong())
+
             context.startActivity(intent)
         }
     }

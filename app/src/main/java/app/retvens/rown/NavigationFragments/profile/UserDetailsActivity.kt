@@ -1,28 +1,17 @@
 package app.retvens.rown.NavigationFragments.profile
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.ImageView
-import androidx.cardview.widget.CardView
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserInfoo
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.profile.viewRequests.ExperienceAdapter
-import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.databinding.ActivityUserDetailsBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -80,25 +69,32 @@ class UserDetailsActivity : AppCompatActivity(),
             ExperienceAdapter.OnBottomSheetFilterCommunityClickListener,
             BottomSheetJobType.OnBottomJobTypeClickListener,
             BottomSheetCompany.OnBottomCompanyClickListener,
-            BottomSheetJobTitle.OnBottomJobTitleClickListener {
+            BottomSheetJobTitle.OnBottomJobTitleClickListener,
+            EducationAdapter.OnBottomSheetFilterCommunityClickListener {
             override fun onResponse(
                 call: Call<UserProfileRequestItem?>,
                 response: Response<UserProfileRequestItem?>
             ) {
                 if (response.isSuccessful){
-                    val response = response.body()!!
-                    experienceAdapter = ExperienceAdapter(applicationContext,response)
-                    binding.recyclerExperience.adapter = experienceAdapter
-                    experienceAdapter.notifyDataSetChanged()
-                    experienceAdapter.setOnFilterClickListener(this)
-                    Glide.with(applicationContext).load(response.Profile_pic).into(binding.vendorProfile)
-                    binding.vendorName.text = response.Full_name
-                    binding.username.text = response.User_name
-                    binding.bio.text = response.userBio
+                    try {
+                        val response = response.body()!!
+                        experienceAdapter = ExperienceAdapter(applicationContext,response)
+                        binding.recyclerExperience.adapter = experienceAdapter
+                        experienceAdapter.notifyDataSetChanged()
+                        experienceAdapter.setOnFilterClickListener(this)
+                        Glide.with(applicationContext).load(response.Profile_pic).into(binding.vendorProfile)
+                        binding.vendorName.text = response.Full_name
+                        binding.username.text = response.User_name
+                        binding.bio.text = response.userBio
 
-                    educationAdapter = EducationAdapter(applicationContext,response)
-                    binding.recyclerEducation.adapter = educationAdapter
-                    educationAdapter.notifyDataSetChanged()
+                        educationAdapter = EducationAdapter(applicationContext,response)
+                        binding.recyclerEducation.adapter = educationAdapter
+                        educationAdapter.notifyDataSetChanged()
+                        educationAdapter.setOnFilterClickListener(this)
+                    }catch (e:NullPointerException){
+                        Log.e("error",e.message.toString())
+                    }
+
 
                 }
             }
@@ -112,56 +108,11 @@ class UserDetailsActivity : AppCompatActivity(),
                 position: Int
             ) {
 
-                val dialog = Dialog(baseContext)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                dialog.setCancelable(false)
-                dialog.setContentView(R.layout.bottom_sheet_edit_expereince)
-
-                dialog.show()
-                dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
-                dialog.window?.setGravity(Gravity.BOTTOM)
-
-                disignation = dialog.findViewById<TextInputEditText>(R.id.rJob_et)
-                company = dialog.findViewById<TextInputEditText>(R.id.recentComET)
-                type = dialog.findViewById<TextInputEditText>(R.id.eType_et)
-                val start = dialog.findViewById<TextInputEditText>(R.id.et_session_Start)
-                val end = dialog.findViewById<TextInputEditText>(R.id.et_session_end)
-
-                disignation.setText(jonDetails.jobTitle)
-                company.setText(jonDetails.jobCompany)
-                type.setText(jonDetails.jobType)
-                start.setText(jonDetails.jobStartYear)
-                end.setText(jonDetails.jobEndYear)
-
-                type.setOnClickListener {
-                    val bottomSheet = BottomSheetJobType()
-                    val fragManager = supportFragmentManager
-                    fragManager.let{bottomSheet.show(it, BottomSheetJobType.Job_TYPE_TAG)}
-                    bottomSheet.setOnJobTypeClickListener(this)
-                }
-
-                company.setOnClickListener {
-                    val bottomSheet = BottomSheetCompany()
-                    val fragManager = supportFragmentManager
-                    fragManager.let{bottomSheet.show(it, BottomSheetCompany.Company_TAG)}
-                    bottomSheet.setOnCompanyClickListener(this)
-                }
-
-                disignation.setOnClickListener {
-                    val bottomSheet = BottomSheetJobTitle()
-                    val fragManager = supportFragmentManager
-                    fragManager.let{bottomSheet.show(it, BottomSheetJobTitle.Job_Title_TAG)}
-                    bottomSheet.setOnJobTitleClickListener(this)
-                }
-
-                dialog.findViewById<CardView>(R.id.cardSave).setOnClickListener {
+                val bottomSheet = BottomSheetUpdateExperience(jonDetails,position)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetUpdateExperience.Edit_TAG)}
 
 
-
-                }
-//            val back =  dialog.findViewById<>()
             }
 
             override fun bottomJobTypeClick(jobTypeFrBo: String) {
@@ -175,6 +126,17 @@ class UserDetailsActivity : AppCompatActivity(),
             override fun bottomJobTitleClick(jobTitleFrBo: String) {
                 disignation.setText(jobTitleFrBo)
             }
+
+            override fun onBottomSheetFilterCommunityClick(
+                jonDetails: UserProfileRequestItem.StudentEducation,
+                position: Int
+            ) {
+                val bottomSheet = BottomSheetUpdateEducation(jonDetails,position)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetUpdateEducation.Edit_TAG)}
+            }
+
+
         })
 
     }

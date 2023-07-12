@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
@@ -60,6 +63,7 @@ import app.retvens.rown.R;
 import app.retvens.rown.api.MesiboCall;
 import app.retvens.rown.api.p000ui.MesiboDefaultCallActivity;
 import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity;
+import app.retvens.rown.viewAll.viewAllCommunities.OpenCommunityDetailsActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -113,6 +117,8 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         MesiboCall.getInstance().init(this);
 
         this.page = args.getString("page");
+
+
 
         /* set profile so that it is visible in call screen */
         MesiboProfile u = new MesiboProfile();
@@ -188,9 +194,21 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                             MesiboMessagingActivity.this.mMesiboUIHelperlistener.MesiboUI_onShowProfile(MesiboMessagingActivity.this, MesiboMessagingActivity.this.mUser);
                         }
                         if (groupId > 0) {
-                            Intent intent = new Intent(MesiboMessagingActivity.this, CommunityDetailsActivity.class);
-                            intent.putExtra("groupId",groupId);
-                            startActivity(intent);
+
+                            String admin = args.getString("admin");
+
+                            if (admin.equals("true")){
+                                Intent intent = new Intent(MesiboMessagingActivity.this, CommunityDetailsActivity.class);
+                                intent.putExtra("groupId",groupId);
+                                startActivity(intent);
+                            }else {
+                                Log.e("id",groupId.toString());
+                                Intent intent = new Intent(MesiboMessagingActivity.this, OpenCommunityDetailsActivity.class);
+                                intent.putExtra("groupId",groupId);
+                                startActivity(intent);
+                            }
+
+
                         }else{
                             String peer = args.getString(MesiboUI.PEER);
                             MesiboProfile profile = Mesibo.getProfile(peer);
@@ -540,12 +558,12 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             menu.clear();
             mode.getMenuInflater().inflate(R.menu.selected_menu, menu);
             menu.findItem(R.id.menu_reply).setShowAsAction(2);
-            menu.findItem(R.id.menu_star).setShowAsAction(2);
-            menu.findItem(R.id.menu_resend).setShowAsAction(2);
+//            menu.findItem(R.id.menu_star).setShowAsAction(2);
+//            menu.findItem(R.id.menu_resend).setShowAsAction(2);
             menu.findItem(R.id.menu_copy).setShowAsAction(2);
-            menu.findItem(R.id.menu_forward).setShowAsAction(2);
-            menu.findItem(R.id.menu_forward).setVisible(MesiboMessagingActivity.this.mMesiboUIOptions.enableForward);
-            menu.findItem(R.id.menu_forward).setEnabled(MesiboMessagingActivity.this.mMesiboUIOptions.enableForward);
+//            menu.findItem(R.id.menu_forward).setShowAsAction(2);
+//            menu.findItem(R.id.menu_forward).setVisible(MesiboMessagingActivity.this.mMesiboUIOptions.enableForward);
+//            menu.findItem(R.id.menu_forward).setEnabled(MesiboMessagingActivity.this.mMesiboUIOptions.enableForward);
             menu.findItem(R.id.menu_remove).setShowAsAction(2);
             return true;
         }
@@ -558,13 +576,13 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                 return false;
             }
             int enabled = MesiboMessagingActivity.this.mFragment.Mesibo_onGetEnabledActionItems();
-            MenuItem findItem = menu.findItem(R.id.menu_resend);
+//            MenuItem findItem = menu.findItem(R.id.menu_resend);
             if ((enabled & 4) > 0) {
                 z = true;
             } else {
                 z = false;
             }
-            findItem.setVisible(z);
+//            findItem.setVisible(z);
             MenuItem findItem2 = menu.findItem(R.id.menu_copy);
             if ((enabled & 16) > 0) {
                 z2 = true;
@@ -586,13 +604,15 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                 mesiboItemId = 8;
             } else if (item.getItemId() == R.id.menu_copy) {
                 mesiboItemId = 16;
-            } else if (item.getItemId() == R.id.menu_resend) {
-                mesiboItemId = 4;
-            } else if (item.getItemId() == R.id.menu_forward) {
-                mesiboItemId = 1;
-            } else if (item.getItemId() == R.id.menu_star) {
-                mesiboItemId = 32;
-            } else if (item.getItemId() == R.id.menu_reply) {
+            }
+//            else if (item.getItemId() == R.id.menu_resend) {
+//                mesiboItemId = 4;
+//            } else if (item.getItemId() == R.id.menu_forward) {
+//                mesiboItemId = 1;
+//            } else if (item.getItemId() == R.id.menu_star) {
+//                mesiboItemId = 32;
+//            }
+            else if (item.getItemId() == R.id.menu_reply) {
                 mesiboItemId = 2;
             }
             if (mesiboItemId <= 0) {

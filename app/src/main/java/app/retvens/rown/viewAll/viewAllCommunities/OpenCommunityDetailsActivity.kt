@@ -48,7 +48,8 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
         binding = ActivityOpenCommunityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val groupId = intent.getStringExtra("groupId")
+        val groupId = intent.getLongExtra("groupId",0)
+        val grpID:String = groupId.toString()
 
         val sharedPreferences1 = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
         val phone = sharedPreferences1?.getString("savePhoneNumber", "").toString()
@@ -59,16 +60,16 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
         number.add(phone)
         userId.add(user_id)
 
-        replaceFragment(CommunityUsersFragment(groupId!!))
+        replaceFragment(CommunityUsersFragment(grpID))
         binding.usersText.setOnClickListener {
             binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
             binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
-            replaceFragment(CommunityUsersFragment(groupId!!))
+            replaceFragment(CommunityUsersFragment(grpID))
         }
         binding.mediaText.setOnClickListener {
             binding.mediaText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
             binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
-            replaceFragment(CommunityMediaFragment(groupId))
+            replaceFragment(CommunityMediaFragment(grpID))
         }
 
         binding.joinCommunity.setOnClickListener {
@@ -87,7 +88,7 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
 
         }
 
-        getCommunityDetails(groupId)
+        getCommunityDetails(groupId.toString())
     }
 
     private fun getCommunityDetails(groupId: String?) {

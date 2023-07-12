@@ -7,6 +7,8 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.TextView
@@ -75,16 +77,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
         val sharedPreferences1 =getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
 
-        for (x in admin){
-            if (x == user_id){
-                val intent = Intent(this,OpenCommunityDetailsActivity::class.java)
-                intent.putExtra("groupId",grpID)
-                startActivity(intent)
-                Log.e("ok","okkk")
-            }else{
-                Log.e("ok","not okkk")
-            }
-        }
+
 
         Log.e("top","not okkk")
 
@@ -183,6 +176,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
             }
 
         })
+
 
         getCommunityDetails(grpID)
 

@@ -18,52 +18,42 @@ import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserInfoo
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.MediaDataClass
 import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelsName
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class EducationAdapter(val context: Context, val list:UserProfileRequestItem) : RecyclerView.Adapter<EducationAdapter.MediaViewHolder>() {
+class ProfessionalHotelAdapter(val context: Context, val list:List<HotelsName>) : RecyclerView.Adapter<ProfessionalHotelAdapter.MediaViewHolder>() {
 
 
-    var mListener: OnBottomSheetFilterCommunityClickListener? = null
-
-    fun setOnFilterClickListener(listener: OnBottomSheetFilterCommunityClickListener) {
-        mListener = listener
-    }
-
-    interface OnBottomSheetFilterCommunityClickListener {
-        fun onBottomSheetFilterCommunityClick(jonDetails: UserProfileRequestItem.StudentEducation, position: Int)
-    }
 
     class MediaViewHolder(itemView: View) : ViewHolder(itemView){
 
-        val collage = itemView.findViewById<TextView>(R.id.collageName)
-        val experience = itemView.findViewById<TextView>(R.id.experience)
-        val edit = itemView.findViewById<LinearLayout>(R.id.editEducation)
+        val name = itemView.findViewById<TextView>(R.id.hotelName)
+        val star = itemView.findViewById<TextView>(R.id.textExperience)
+        val location = itemView.findViewById<TextView>(R.id.location)
     }
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         val inflater : LayoutInflater = LayoutInflater.from(context)
-        val view : View = inflater.inflate(R.layout.item_education_card, parent, false)
+        val view : View = inflater.inflate(R.layout.item_property_card, parent, false)
         return MediaViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return list.studentEducation.size
+        return list.size
     }
 
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
 
-        val data = list.studentEducation[position]
-            holder.collage.text = data.educationPlace
-            holder.experience.text = "${data.education_session_start}-${data.education_session_end}"
+        val data = list[position]
+            holder.name.text = data.hotelName
+            holder.star.text = "${data.hotelRating} Star Hotel"
+            holder.location.text = data.hotelAddress
 
 
-        holder.edit.setOnClickListener {
-            mListener?.onBottomSheetFilterCommunityClick(data,position)
-        }
 
 
     }

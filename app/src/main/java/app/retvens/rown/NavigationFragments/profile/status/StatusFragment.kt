@@ -20,9 +20,6 @@ import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
-import app.retvens.rown.NavigationFragments.profile.polls.PollsAdapter
-import app.retvens.rown.NavigationFragments.profile.polls.PollsData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation

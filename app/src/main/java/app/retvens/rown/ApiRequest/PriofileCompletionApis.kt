@@ -7,6 +7,7 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.location.CityData
 import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.DataCollections.location.StateData
+import app.retvens.rown.bottomsheet.UpdateEducationDataClass
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -190,7 +191,13 @@ interface PriofileCompletionApis{
     @PATCH("update/{userId}")
     fun updateExperience(
         @Path("userId") user_id : String,
-        @Body updateData:AddExperienceDataClass
+        @Body updateData:UpdateExperienceDataClass
+    ):Call<UpdateResponse>
+
+    @PATCH("update/{userId}")
+    fun updateEducation(
+        @Path("userId") user_id : String,
+        @Body updateData:UpdateEducationDataClass
     ):Call<UpdateResponse>
 
     @PATCH("addmultiple/{userId}")

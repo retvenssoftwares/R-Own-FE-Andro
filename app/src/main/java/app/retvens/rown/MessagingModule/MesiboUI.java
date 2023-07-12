@@ -82,7 +82,7 @@ public class MesiboUI {
         public long mMaxVideoFileSize = 20971520;
         public int mMessagingFragmentLayout = 0;
         public int mStatusbarColor = 0;
-        public int mToolbarColor = -16742773;
+        public int mToolbarColor = 16777215;
         public int mToolbarTextColor = 0;
         public int mUserListFragmentLayout = 0;
         public int mUserListStatusColor = -7960954;

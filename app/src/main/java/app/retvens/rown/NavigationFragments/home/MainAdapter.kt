@@ -750,8 +750,10 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     PollsDetails(banner.post_id,banner.voted),total
                 )
                 binding.votesOptionsrecycler.adapter = adapter
+
+                adapter.setOnItemClickListener(this)
             }
-            adapter.setOnItemClickListener(this)
+
 
             banner.pollQuestion.forEach { item ->
                 binding.titlePoll.text = item.Question

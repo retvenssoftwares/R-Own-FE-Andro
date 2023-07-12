@@ -111,12 +111,19 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
             total = calculateTotalVotes(it.Options.toTypedArray())
         }
 
+        Log.e("total",total.toString())
 
-        val adapter = app.retvens.rown.NavigationFragments.home.PollsAdapter(context,option,
-            PollsDetails(poll.post_id,poll.voted),total
-        )
-        holder.recycler.adapter = adapter
-        adapter.notifyDataSetChanged()
+        try {
+            val adapter = app.retvens.rown.NavigationFragments.home.PollsAdapter(context,option,
+                PollsDetails(poll.post_id,poll.voted),total
+            )
+            holder.recycler.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }catch (e:NullPointerException){
+            Log.e("error",e.message.toString())
+        }
+
+
 
     }
     fun removePostsFromList(data: List<PostItem>){

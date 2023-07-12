@@ -62,7 +62,7 @@ public final class Utils {
 
         if (null != toolbar) {
             if (TOOLBAR_COLOR != 0) {
-//                toolbar.setBackgroundColor(TOOLBAR_COLOR);
+                toolbar.setBackgroundColor(TOOLBAR_COLOR);
             }
         }
 
