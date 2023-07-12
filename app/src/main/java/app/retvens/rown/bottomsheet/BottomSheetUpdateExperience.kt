@@ -11,9 +11,12 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -130,6 +133,71 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
         startLayout = view.findViewById(R.id.session_start)
         endLayout = view.findViewById(R.id.session_end)
 
+        val presentText = view.findViewById<TextView>(R.id.presentText)
+
+        presentText.setOnClickListener {
+            end.setText("Present")
+            endLayout.isErrorEnabled = false
+        }
+
+        start.addTextChangedListener {
+            if (start.text!!.length > 3 && end.length() > 3){
+                endLayout.isErrorEnabled = false
+                cardSave.isClickable = true
+                cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
+                if (end.text.toString().length == 4 && start.text.toString().length == 4){
+                    if (end.text.toString().toInt() < start.text.toString().toInt()){
+                        end.setText("")
+                        endLayout.error = "Please enter end year"
+                        cardSave.isClickable = false
+                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    }else{
+                        endLayout.isErrorEnabled = false
+                        cardSave.isClickable = true
+                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
+                    }
+                }
+            } else {
+                if (start.length() == 5 || start.length() == 6 || start.length() == 8) {
+                    start.setText("")
+                }
+                cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                cardSave.isClickable = false
+            }
+        }
+
+        end.addTextChangedListener {
+            if (end.length() > 3 && start.length() > 3){
+                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
+                    end.setText("")
+                    endLayout.error = "Please enter end year"
+                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    cardSave.isClickable = false
+                } else if (end.text.toString().length == 4 && start.text.toString().length == 4){
+                    if (end.text.toString().toInt() < start.text.toString().toInt()){
+                        end.setText("")
+                        endLayout.error = "Please enter end year"
+                        cardSave.isClickable = false
+                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    }else{
+                        endLayout.isErrorEnabled = false
+                        cardSave.isClickable = true
+                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
+                    }
+                } else{
+                    endLayout.isErrorEnabled = false
+                    cardSave.isClickable = true
+                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
+                }
+            } else {
+                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
+                    end.setText("")
+                    endLayout.error = "Please enter end year"
+                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    cardSave.isClickable = false
+                }
+            }
+        }
 
         jobTitle.setText(data.jobTitle)
         jobType.setText(data.jobType)
@@ -145,7 +213,22 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
         }
 
         cardSave.setOnClickListener {
-            updateExperience()
+            if(companyName.text.toString() == "Select one"){
+                Toast.makeText(requireContext(),  "Please Select Company", Toast.LENGTH_SHORT).show()
+            } else if(jobTitle.text.toString() == "Job Title"){
+                jobTitleLayout.error = "Please enter your Job Tittle"
+            } else if(eTypeET.text.toString() == "Select one"){
+                Toast.makeText(requireContext(),  "Please enter your Job Type", Toast.LENGTH_SHORT).show()
+            } else if(start.length() < 3){
+                jobTitleLayout.isErrorEnabled = false
+                startLayout.error = "Please enter start year"
+            } else if(end.length() < 3){
+                jobTitleLayout.isErrorEnabled = false
+                startLayout.isErrorEnabled = false
+                endLayout.error = "Please enter end year"
+            } else {
+                updateExperience()
+            }
 
             dismiss()
         }

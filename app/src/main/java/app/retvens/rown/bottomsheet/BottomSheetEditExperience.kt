@@ -12,9 +12,12 @@ import android.view.Window
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -85,7 +88,9 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
     lateinit var recentCoET : TextInputEditText
     private lateinit var jobTitle: TextInputEditText
     private lateinit var jobTitleLayout : TextInputLayout
+    private lateinit var companyNameLayout : TextInputLayout
     private lateinit var jobType: TextInputEditText
+    private lateinit var jobTypeLayout: TextInputLayout
     private lateinit var companyName: TextInputEditText
     private lateinit var start: TextInputEditText
     private lateinit var end: TextInputEditText
@@ -101,6 +106,7 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        companyNameLayout = view.findViewById(R.id.companyNameLayout)
         recentCoET = view.findViewById(R.id.recentComET)
         recentCoET.setOnClickListener {
             val bottomSheet = BottomSheetCompany()
@@ -110,6 +116,7 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
 //            openRecentCompanyBottom()
         }
 
+        jobTypeLayout = view.findViewById(R.id.jobTypeLayout)
         eTypeET = view.findViewById(R.id.eType_et)
         eTypeET.setOnClickListener {
             val bottomSheet = BottomSheetJobType()
@@ -120,6 +127,7 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
 
         val cardSave = view.findViewById<CardView>(R.id.cardSave)
         val cardAdd = view.findViewById<CardView>(R.id.cardAdd)
+        cardSave.isClickable = false
 
         jobTitle = view.findViewById(R.id.rJob_et)
         jobType = view.findViewById(R.id.eType_et)
@@ -130,6 +138,72 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
         startLayout = view.findViewById(R.id.session_start)
         endLayout = view.findViewById(R.id.session_end)
 
+        val presentText = view.findViewById<TextView>(R.id.presentText)
+
+        presentText.setOnClickListener {
+            end.setText("Present")
+            endLayout.isErrorEnabled = false
+        }
+
+        start.addTextChangedListener {
+            if (start.text!!.length > 3 && end.length() > 3){
+                endLayout.isErrorEnabled = false
+                cardSave.isClickable = true
+                cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
+                if (end.text.toString().length == 4 && start.text.toString().length == 4){
+                    if (end.text.toString().toInt() < start.text.toString().toInt()){
+                        end.setText("")
+                        endLayout.error = "Please enter end year"
+                        cardSave.isClickable = false
+                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    }else{
+                        endLayout.isErrorEnabled = false
+                        cardSave.isClickable = true
+                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
+                    }
+                }
+            } else {
+                if (start.length() == 5 || start.length() == 6 || start.length() == 8) {
+                    start.setText("")
+                }
+                cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                cardSave.isClickable = false
+            }
+        }
+
+        end.addTextChangedListener {
+            if (end.length() > 3 && start.length() > 3){
+                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
+                    end.setText("")
+                    endLayout.error = "Please enter end year"
+                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    cardSave.isClickable = false
+                } else if (end.text.toString().length == 4 && start.text.toString().length == 4){
+                    if (end.text.toString().toInt() < start.text.toString().toInt()){
+                        end.setText("")
+                        endLayout.error = "Please enter end year"
+                        cardSave.isClickable = false
+                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                      }else{
+                        endLayout.isErrorEnabled = false
+                        cardSave.isClickable = true
+                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
+                    }
+                } else{
+                    endLayout.isErrorEnabled = false
+                    cardSave.isClickable = true
+                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
+                }
+            } else {
+                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
+                    end.setText("")
+                    endLayout.error = "Please enter end year"
+                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
+                    cardSave.isClickable = false
+                }
+            }
+        }
+
         jobTitle.setOnClickListener {
             val bottomSheet = BottomSheetJobTitle()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
@@ -138,8 +212,12 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
         }
 
         cardSave.setOnClickListener {
-            if(jobTitle.length() < 3){
+            if(companyName.text.toString() == "Select one"){
+                companyNameLayout.error = "Please Select Company"
+            } else if(jobTitle.text.toString() == "Job Title"){
                 jobTitleLayout.error = "Please enter your Job Tittle"
+            } else if(eTypeET.text.toString() == "Select one"){
+                jobTypeLayout.error = "Please enter your Job Type"
             } else if(start.length() < 3){
                 jobTitleLayout.isErrorEnabled = false
                 startLayout.error = "Please enter start year"
@@ -158,8 +236,6 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
                 progressDialog.show()
                 updateExperience()
             }
-
-            dismiss()
         }
         cardAdd.setOnClickListener {
             dismiss()
@@ -190,6 +266,7 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
+                    dismiss()
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()

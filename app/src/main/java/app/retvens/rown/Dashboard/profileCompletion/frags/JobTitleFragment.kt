@@ -227,7 +227,7 @@ class JobTitleFragment : Fragment(), BackHandler,
         dialogRole.setContentView(R.layout.bottom_sheet_select_company)
         dialogRole.setCancelable(true)
 
-        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialogRole.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
         dialogRole.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogRole.window?.attributes?.windowAnimations = R.style.DailogAnimation
         dialogRole.window?.setGravity(Gravity.BOTTOM)

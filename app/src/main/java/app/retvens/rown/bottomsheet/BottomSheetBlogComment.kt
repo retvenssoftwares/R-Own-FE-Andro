@@ -12,6 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -102,6 +104,15 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
         cancelReply = view.findViewById(R.id.cancelReply)
 
         val post = view.findViewById<TextView>(R.id.postComment)
+        comment.addTextChangedListener {
+            if (comment.text.isNotEmpty()) {
+                post.isClickable = true
+                post.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+            } else {
+                post.isClickable = false
+                post.setTextColor(ContextCompat.getColor(requireContext(), R.color.grey_40))
+            }
+        }
 
         child = "0"
 

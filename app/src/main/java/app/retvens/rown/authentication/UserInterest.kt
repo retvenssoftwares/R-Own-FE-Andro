@@ -51,12 +51,13 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
         profileCompletionStatus = "50"
 
         username = intent.getStringExtra("user").toString()
-        if (username.isEmpty()){
+        if (username.isNullOrEmpty()){
             val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
-            username = sharedPreferencesName?.getString("full_name", "").toString()
+            val name = sharedPreferencesName?.getString("full_name", "").toString()
+            binding.userName.text = "Hello, $name!"
+        } else {
+            binding.userName.text = "Hello, $username!"
         }
-        binding.userName.text = "Hello, $username!"
-
         binding.interestGrid.layoutManager = GridLayoutManager(this,3)
         binding.interestGrid.setHasFixedSize(true)
 

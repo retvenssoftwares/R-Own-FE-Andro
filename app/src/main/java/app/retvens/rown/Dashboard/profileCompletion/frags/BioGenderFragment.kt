@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
@@ -68,6 +69,17 @@ class BioGenderFragment : Fragment() {
         name = view.findViewById(R.id.user_complete_name)
 
         bioEt = view.findViewById(R.id.bioEt)
+        card_complete_continue.isClickable = false
+
+        bioEt.addTextChangedListener {
+            if (bioEt.length() < 5){
+                card_complete_continue.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_40))
+                card_complete_continue.isClickable = false
+            } else {
+                card_complete_continue.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                card_complete_continue.isClickable = true
+            }
+        }
 
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()

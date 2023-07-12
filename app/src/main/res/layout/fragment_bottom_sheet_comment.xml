@@ -141,11 +141,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/comm"
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:orientation="horizontal"
         android:elevation="8dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -160,8 +160,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileOnComment"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             app:shapeAppearanceOverlay="@style/RoundedCornerImage"
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="10dp"
@@ -190,10 +190,11 @@
             android:id="@+id/postComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
             android:text="POST"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
+            android:textColor="@color/grey_40"
             android:fontFamily="@font/montserrat_bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

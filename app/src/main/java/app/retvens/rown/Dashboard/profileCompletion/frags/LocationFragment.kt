@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -93,12 +94,21 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
         etLocationState = view.findViewById(R.id.et_location_state)
         etLocationCity = view.findViewById(R.id.et_location_city)
 
+        val cardBtn = view.findViewById<CardView>(R.id.card_location_next)
+        cardBtn.isClickable = false
+
         etLocationCountry.setOnClickListener {
             val bottomSheet = BottomSheetCountryStateCity()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
             bottomSheet.setOnCountryStateCityClickListener(this)
         }
+
+        etLocationCountry.addTextChangedListener {
+            cardBtn.isClickable = true
+            cardBtn.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+        }
+
         etLocationState.setOnClickListener {
 //            openStateLocationSheet()
         }
@@ -118,7 +128,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
             checkLocationSettings()
         }
 
-        view.findViewById<CardView>(R.id.card_location_next).setOnClickListener {
+            cardBtn.setOnClickListener {
             if(etLocationCountry.text.toString() == "Select Your Location"){
                 userLocationCountry.error = "Select Your Location"
             } else {

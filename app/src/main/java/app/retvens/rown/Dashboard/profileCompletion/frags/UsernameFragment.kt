@@ -54,6 +54,7 @@ class UsernameFragment : Fragment() {
     private lateinit var cal:Calendar
     private lateinit var profile: ShapeableImageView
     private lateinit var name:TextView
+    private lateinit var complete:CardView
     private lateinit var usernameVerified:TextView
     private lateinit var editor:Editor
 
@@ -119,14 +120,20 @@ class UsernameFragment : Fragment() {
                 verifyUserName()
             }
         }
+
         userName.doAfterTextChanged {
+            if (userName.text.toString() == " "){
+                userName.setText("")
+            }
             isUsernameVerified = false
             userNameLayout.setEndIconDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.svg_verify))
             usernameVerified.text = ""
+            complete.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_40))
+            complete.isClickable = false
         }
 
-        val complete = view.findViewById<CardView>(R.id.card_complete_continue)
-
+        complete = view.findViewById<CardView>(R.id.card_complete_continue)
+        complete.isClickable = false
         complete.setOnClickListener {
             if(firstName.length() < 3){
                 firstNameLayout.error = "Please enter your first name"
@@ -223,9 +230,11 @@ class UsernameFragment : Fragment() {
                         userNameLayout.setEndIconDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.png_check))
                         usernameVerified.text = "Congratulations! $username username is available"
                         usernameVerified.setTextColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                        complete.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                        complete.isClickable = true
                     }
                 } else {
-                    usernameVerified.text = "Retry - ${response.code()}"
+                    usernameVerified.text = "Retry - ${response.body()!!.message}"
                 }
             }
 

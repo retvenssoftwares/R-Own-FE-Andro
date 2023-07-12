@@ -80,10 +80,14 @@ class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Contex
 
         if (data.connectionStatus == "Connected"){
             holder.connect.text = "Interact"
+            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
         } else if (data.connectionStatus == "Not connected"){
             holder.connect.text = "CONNECT"
         } else if (data.connectionStatus == "Requested"){
             holder.connect.text = "Requested"
+            holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+            holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
         } else if (data.connectionStatus == "Confirm request"){
             holder.connect.text = "Accept"
         }
@@ -92,18 +96,24 @@ class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Contex
 
                 removeConnection(userId,user_id, context){
                     holder.connect.text = "CONNECT"
+                    holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
+                    holder.connect.setTextColor(ContextCompat.getColor(context, R.color.black))
                 }
 
             } else if (holder.connect.text == "CONNECT") {
 
                 sendConnectionRequest(userId, context){
                     holder.connect.text = "Requested"
+                    holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+                    holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
                 }
 
             } else  if (holder.connect.text == "Requested") {
 
                 removeConnRequest(userId, context){
                     holder.connect.text = "CONNECT"
+                    holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
+                    holder.connect.setTextColor(ContextCompat.getColor(context, R.color.black))
                 }
 
             } else if (holder.connect.text == "Accept") {
