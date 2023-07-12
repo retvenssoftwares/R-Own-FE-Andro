@@ -273,27 +273,50 @@ class HomeFragment : Fragment() {
         val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
         if (pageCounter >= 1) {
+
+            val handler = Handler()
+
             Log.e("check","1")
-            if (pageCounter == 2) {
+            if (pageCounter == 1) {
+                Log.e("check","1")
+                handler.postDelayed({
+                    getHotels()
+                    getPost(user_id)
+                    progress.setVisibility(View.GONE)
+                }, 3000)
+
+            }else if (pageCounter == 2) {
                 Log.e("check","2")
-                getHotels()
+                handler.postDelayed({
+                    getOpenCommunites()
+                    getPost(user_id)
+                    progress.setVisibility(View.GONE)
+                }, 3000)
+
             }else if (pageCounter == 3) {
                 Log.e("check","3")
-                getOpenCommunites()
+                handler.postDelayed({
+                    getAllBlogs()
+                    getPost(user_id)
+                    progress.setVisibility(View.GONE)
+                }, 3000)
+
             }else if (pageCounter == 4) {
                 Log.e("check","4")
-                getAllBlogs()
-            }else if (pageCounter == 5) {
-                Log.e("check","5")
                 getServices()
+                handler.postDelayed({
+                    getPost(user_id)
+                    progress.setVisibility(View.GONE)
+                }, 3000)
+
+                pageCounter = 1
             }
 
 
-            val handler = Handler()
-            handler.postDelayed({
-                getPost(user_id)
-                progress.setVisibility(View.GONE)
-            }, 3000)
+//            handler.postDelayed({
+//                getPost(user_id)
+//                progress.setVisibility(View.GONE)
+//            }, 3000)
         }
     }
 
@@ -328,8 +351,8 @@ class HomeFragment : Fragment() {
 
                                 if (item.post_type == "share some media"){
                                     if (mList.contains(DataItem(DataItemType.BANNER, banner = item))){
-                                        mList.shuffle()
-                                        adapter.notifyDataSetChanged()
+//                                        mList.shuffle()
+//                                        adapter.notifyDataSetChanged()
                                     } else {
                                         mList.add(0, DataItem(DataItemType.BANNER, banner = item))
                                         postCounter += 1
@@ -337,8 +360,8 @@ class HomeFragment : Fragment() {
                                 }
                                 if (item.post_type == "Polls"){
                                     if (mList.contains(DataItem(DataItemType.POLL, banner = item))){
-                                        mList.shuffle()
-                                        adapter.notifyDataSetChanged()
+//                                        mList.shuffle()
+//                                        adapter.notifyDataSetChanged()
                                     } else {
                                         mList.add(0, DataItem(DataItemType.POLL, banner = item))
                                         postCounter += 1
@@ -346,8 +369,8 @@ class HomeFragment : Fragment() {
                                 }
                                 if (item.post_type == "normal status"){
                                     if (mList.contains(DataItem(DataItemType.Status, banner = item))){
-                                        mList.shuffle()
-                                        adapter.notifyDataSetChanged()
+//                                        mList.shuffle()
+//                                        adapter.notifyDataSetChanged()
                                     } else {
                                         mList.add(0, DataItem(DataItemType.Status, banner = item))
                                         postCounter += 1
@@ -366,8 +389,8 @@ class HomeFragment : Fragment() {
 
                                 if (item.post_type == "Check-in"){
                                     if (mList.contains(DataItem(DataItemType.CheckIn, banner = item))){
-                                        mList.shuffle()
-                                        adapter.notifyDataSetChanged()
+//                                        mList.shuffle()
+//                                        adapter.notifyDataSetChanged()
                                     } else {
                                         mList.add(0, DataItem(DataItemType.CheckIn, banner = item))
                                         postCounter += 1
@@ -376,7 +399,7 @@ class HomeFragment : Fragment() {
 
 
                                 if (postCounter >= 10) {
-                                    pageCounter++
+                                    pageCounter += 1
                                     postCounter = 0
                                 }
                             }

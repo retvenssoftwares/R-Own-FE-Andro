@@ -29,6 +29,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.Interest
@@ -99,6 +100,24 @@ class PersonalInformation : AppCompatActivity() {
         cameraImageUri = createImageUri()!!
 
 //        val user_id = intent.getStringExtra("user_id").toString()
+        binding.etName.addTextChangedListener {
+            if(binding.etName.length() < 3 && binding.etEmail.length() < 10) {
+                binding.cardSavePerson.isClickable=false
+                binding.cardSavePerson.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_40))
+            } else {
+                binding.cardSavePerson.isClickable=true
+                binding.cardSavePerson.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            }
+        }
+        binding.etEmail.addTextChangedListener {
+            if(binding.etName.length() < 3 && binding.etEmail.length() < 10) {
+                binding.cardSavePerson.isClickable=false
+                binding.cardSavePerson.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_40))
+            } else {
+                binding.cardSavePerson.isClickable=true
+                binding.cardSavePerson.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            }
+        }
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/grey_10"
     tools:context=".viewAll.communityDetails.CommunityUsersFragment">
 
     <LinearLayout
@@ -35,6 +35,15 @@
 
         </androidx.cardview.widget.CardView>
 
+        <LinearLayout
+            android:id="@+id/ownerLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:visibility="gone"
+            android:layout_marginHorizontal="12dp"
+            android:background="@color/white"
+            android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listOfOwners"
@@ -43,7 +52,31 @@
             android:visibility="visible"
             />
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewAllOwner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="4dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            app:cardBackgroundColor="@color/grey_5">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="View All"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="14dp"
+                android:padding="12dp"
+                android:textColor="@color/black"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/vendors"
@@ -51,10 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginHorizontal="10dp"
-            app:cardBackgroundColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lll2"
-            app:layout_constraintStart_toStartOf="parent">
+            app:cardBackgroundColor="@color/white">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,12 +97,47 @@
 
         </androidx.cardview.widget.CardView>
 
+        <LinearLayout
+            android:id="@+id/vendorLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:visibility="gone"
+            android:layout_marginHorizontal="12dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listOfVendors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
             />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewAllVendors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="4dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            app:cardBackgroundColor="@color/grey_5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="View All"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="14dp"
+                android:padding="12dp"
+                android:textColor="@color/black"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/hoteliers"
@@ -93,12 +158,49 @@
 
         </androidx.cardview.widget.CardView>
 
+        <LinearLayout
+            android:id="@+id/hoteliersLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:visibility="gone"
+            android:layout_marginHorizontal="12dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listOfExpert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
             />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewAllHoteliers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="4dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            app:cardBackgroundColor="@color/grey_5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="View All"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="14dp"
+                android:padding="12dp"
+                android:textColor="@color/black"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/others"
@@ -120,12 +222,47 @@
 
         </androidx.cardview.widget.CardView>
 
+        <LinearLayout
+            android:id="@+id/othersLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:visibility="gone"
+            android:layout_marginHorizontal="12dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listOfNormalUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewAllOthers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="4dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="20dp"
+            app:cardBackgroundColor="@color/grey_5">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="View All"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="14dp"
+                android:padding="12dp"
+                android:textColor="@color/black"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

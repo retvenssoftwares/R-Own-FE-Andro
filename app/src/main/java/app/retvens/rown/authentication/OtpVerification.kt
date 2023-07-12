@@ -277,6 +277,15 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                         otpET4.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
                         otpET5.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
                         otpET6.setBackgroundResource(R.drawable.wrong_otp_round_corner_)
+
+                        otpET1.text.clear()
+                        otpET2.text.clear()
+                        otpET3.text.clear()
+                        otpET4.text.clear()
+                        otpET5.text.clear()
+                        otpET6.text.clear()
+
+                        showKeyBoard(otpET1)
                     }
                 }
             }

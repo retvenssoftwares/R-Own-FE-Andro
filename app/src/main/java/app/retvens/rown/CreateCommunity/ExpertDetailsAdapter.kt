@@ -1,6 +1,7 @@
 package app.retvens.rown.CreateCommunity
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +15,9 @@ import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import java.util.*
+import kotlin.collections.ArrayList
 
-class ExpertDetailsAdapter(val context: Context, var userList:List<User>) :
+class ExpertDetailsAdapter(val context: Context, var userList:ArrayList<User>) :
     RecyclerView.Adapter<ExpertDetailsAdapter.ProfileViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
@@ -64,6 +66,20 @@ class ExpertDetailsAdapter(val context: Context, var userList:List<User>) :
 
     override fun getItemCount(): Int {
         return userList.size
+    }
+    fun reduceList(){
+        try {
+            if (userList.size > 2){
+                var size = userList.size - 1
+                while (size > 2){
+                    userList.remove(userList.get(size))
+                    size--
+                    notifyDataSetChanged()
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
     }
 
 

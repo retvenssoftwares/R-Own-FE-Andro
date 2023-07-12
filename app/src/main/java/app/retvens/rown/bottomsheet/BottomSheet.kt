@@ -237,7 +237,7 @@ class BottomSheet : BottomSheetDialogFragment() {
                                         ) {
                                             val original = response.matchedContacts.toList()
                                             val filter = original.filter { searchUser ->
-                                                searchUser.matchedNumber.Full_name.contains(s.toString(),ignoreCase = false)
+                                                searchUser.matchedNumber.Full_name.contains(s.toString(),ignoreCase = true)
                                             }
                                             usersProfileAdapter.searchConnection(filter)
                                         }

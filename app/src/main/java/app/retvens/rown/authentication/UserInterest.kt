@@ -60,6 +60,14 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
         binding.interestGrid.layoutManager = GridLayoutManager(this,3)
         binding.interestGrid.setHasFixedSize(true)
 
+        binding.cardSkipInterest.setOnClickListener {
+            moveTo(this,"MoveToUC")
+            val intent = Intent(applicationContext, UserContacts::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.putExtra("name",username)
+            startActivity(intent)
+        }
+
         binding.cardContinueInterest.setOnClickListener {
             
             if (addedIntersts.isNotEmpty()) {

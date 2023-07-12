@@ -33,6 +33,8 @@ class BlogsDetailsActivity : AppCompatActivity() {
         binding= ActivityBlogsDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.backBtn.setOnClickListener { onBackPressed() }
+
         val cover = intent.getStringExtra("cover")
         val title = intent.getStringExtra("title")
         val content = intent.getStringExtra("content")
@@ -105,11 +107,18 @@ class BlogsDetailsActivity : AppCompatActivity() {
                 Log.d("res", response.body().toString())
                 if (response.isSuccessful){
                     val res = response.body()!!
-                    if(res.get(0).saved != "not saved"){
-                        operatioin = "pop"
-                        isSaved = false
-                        binding.savePost.setImageResource(R.drawable.svg_saved)
-                    }
+
+                    Toast.makeText(applicationContext, res.get(0).saved, Toast.LENGTH_SHORT).show()
+//                    if(res.get(0).saved == "saved"){
+//                        operatioin = "pop"
+//                        isSaved = false
+//                        binding.savePost.setImageResource(R.drawable.svg_saved)
+//                    } else {
+//                        operatioin = "push"
+//                        isSaved = true
+//                        binding.savePost.setImageResource(R.drawable.svg_save_post)
+//                    }
+                    
                     if(res.get(0).like == "liked"){
                         isLiked = false
                         binding.likePost.setImageResource(R.drawable.likes)

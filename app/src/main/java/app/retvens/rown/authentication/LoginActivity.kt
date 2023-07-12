@@ -128,8 +128,17 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             val phoneNumber = telephonyManager.line1Number
 
             // Set the phone number to the EditText
-            if (phoneNumber.length > 10){
+            if (phoneNumber.length == 14){
+                phoneNum = phoneNumber.drop(4)
+                binding.editPhone.setText(phoneNum)
+            } else if (phoneNumber.length == 13){
+                phoneNum = phoneNumber.drop(3)
+                binding.editPhone.setText(phoneNum)
+            } else if (phoneNumber.length == 12){
                 phoneNum = phoneNumber.drop(2)
+                binding.editPhone.setText(phoneNum)
+            } else if (phoneNumber.length == 11){
+                phoneNum = phoneNumber.drop(1)
                 binding.editPhone.setText(phoneNum)
             }else{
                 binding.editPhone.setText(phoneNum)
@@ -149,6 +158,11 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             startActivity(intent)
         }
         binding.tnc.setOnClickListener{
+            val uri : Uri = Uri.parse("https://www.r-own.com/terms-and-conditions")
+            val intent = Intent(Intent.ACTION_VIEW,uri)
+            startActivity(intent)
+        }
+        binding.contentPolicies.setOnClickListener{
             val uri : Uri = Uri.parse("https://www.r-own.com/terms-and-conditions")
             val intent = Intent(Intent.ACTION_VIEW,uri)
             startActivity(intent)

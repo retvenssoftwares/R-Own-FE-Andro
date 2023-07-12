@@ -20,6 +20,9 @@ import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeopleAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.bottomSheetPeople.MatchedContact
 import app.retvens.rown.utils.acceptRequest
@@ -126,7 +129,20 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
         }
 
         holder.profile.setOnClickListener {
-            showBottomDialog(currentItem.matchedNumber.Profile_pic, currentItem.matchedNumber.User_id, currentItem.matchedNumber.Full_name, currentItem.matchedNumber.Role, currentItem.matchedNumber.userBio, currentItem.matchedNumber.verificationStatus, currentItem.connectionStatus)
+//            showBottomDialog(currentItem.matchedNumber.Profile_pic, currentItem.matchedNumber.User_id, currentItem.matchedNumber.Full_name, currentItem.matchedNumber.Role, currentItem.matchedNumber.userBio, currentItem.matchedNumber.verificationStatus, currentItem.connectionStatus)
+            if(data.matchedNumber.Role == "Business Vendor / Freelancer"){
+                val intent = Intent(context, VendorProfileActivity::class.java)
+                intent.putExtra("userId",data.matchedNumber.User_id)
+                context.startActivity(intent)
+            }else if (data.matchedNumber.Role == "Hotel Owner"){
+                val intent = Intent(context, OwnerProfileActivity::class.java)
+                intent.putExtra("userId",data.matchedNumber.User_id)
+                context.startActivity(intent)
+            } else {
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("userId",data.matchedNumber.User_id)
+                context.startActivity(intent)
+            }
         }
 
     }

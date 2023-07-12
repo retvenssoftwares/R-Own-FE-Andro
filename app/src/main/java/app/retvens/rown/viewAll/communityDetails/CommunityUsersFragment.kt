@@ -1,6 +1,7 @@
 package app.retvens.rown.viewAll.communityDetails
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
@@ -52,12 +54,21 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
     private var userList:ArrayList<User> = ArrayList()
     private var expertList:ArrayList<User> = ArrayList()
     lateinit var progressDialog: Dialog
-    private var click:Boolean = false
-    private var click1:Boolean = false
-    private var click2:Boolean = false
-    private var click3:Boolean = false
 
+    lateinit var viewAllOwner : CardView
+    lateinit var viewAllVendors : CardView
+    lateinit var viewAllHoteliers : CardView
+    lateinit var viewAllOthers : CardView
 
+    lateinit var ownerLL : LinearLayout
+    lateinit var vendorLL : LinearLayout
+    lateinit var hoteliersLL : LinearLayout
+    lateinit var othersLL : LinearLayout
+
+    private var click:Boolean = true
+    private var click1:Boolean = true
+    private var click2:Boolean = true
+    private var click3:Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,33 +95,67 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
         val others = view.findViewById<CardView>(R.id.others)
         val hoteliers = view.findViewById<CardView>(R.id.hoteliers)
 
+        viewAllOwner = view.findViewById(R.id.viewAllOwner)
+        viewAllVendors = view.findViewById(R.id.viewAllVendors)
+        viewAllHoteliers = view.findViewById(R.id.viewAllHoteliers)
+        viewAllOthers = view.findViewById(R.id.viewAllOthers)
+
+        ownerLL = view.findViewById(R.id.ownerLL)
+        vendorLL = view.findViewById(R.id.vendorLL)
+        hoteliersLL = view.findViewById(R.id.hoteliersLL)
+        othersLL = view.findViewById(R.id.othersLL)
+
+        viewAllOwner.setOnClickListener {
+            val intent = Intent(requireContext(), ViewAllUsersActivity::class.java)
+            intent.putExtra("groupID", groupID)
+            intent.putExtra("user", "All businesses")
+            startActivity(intent)
+        }
+        viewAllVendors.setOnClickListener {
+            val intent = Intent(requireContext(), ViewAllUsersActivity::class.java)
+            intent.putExtra("groupID", groupID)
+            intent.putExtra("user", "Vendors")
+            startActivity(intent)
+        }
+        viewAllHoteliers.setOnClickListener {
+            val intent = Intent(requireContext(), ViewAllUsersActivity::class.java)
+            intent.putExtra("groupID", groupID)
+            intent.putExtra("user", "Hoteliers")
+            startActivity(intent)
+        }
+        viewAllOthers.setOnClickListener {
+            val intent = Intent(requireContext(), ViewAllUsersActivity::class.java)
+            intent.putExtra("groupID", groupID)
+            intent.putExtra("user", "Others")
+            startActivity(intent)
+        }
+
         recyclerViewOwner = view.findViewById(R.id.listOfOwners)
         recyclerViewOwner.layoutManager = LinearLayoutManager(requireContext())
-        recyclerViewOwner.setHasFixedSize(true)
+//        recyclerViewOwner.setHasFixedSize(true)
+        recyclerViewOwner.setItemViewCacheSize(3)
 
         business.setOnClickListener {
-            click = !click
             if (click){
-                recyclerViewOwner.visibility = View.VISIBLE
+                ownerLL.visibility = View.VISIBLE
             }else{
-                recyclerViewOwner.visibility = View.GONE
+                ownerLL.visibility = View.GONE
             }
-
+            click = !click
         }
 
 
         recyclerViewVendor = view.findViewById(R.id.listOfVendors)
         recyclerViewVendor.layoutManager = LinearLayoutManager(requireContext())
-        recyclerViewVendor.setHasFixedSize(true)
+        recyclerViewVendor.setItemViewCacheSize(3)
 
         vendor.setOnClickListener {
-            click1 = !click1
             if (click1){
-                recyclerViewVendor.visibility = View.VISIBLE
+                vendorLL.visibility = View.VISIBLE
             }else{
-                recyclerViewVendor.visibility = View.GONE
+                vendorLL.visibility = View.GONE
             }
-
+            click1 = !click1
         }
 
 
@@ -119,12 +164,12 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
         recylerViewUser.setHasFixedSize(true)
 
         others.setOnClickListener {
-            click2 = !click2
             if (click2){
-                recylerViewUser.visibility = View.VISIBLE
+                othersLL.visibility = View.VISIBLE
             }else{
-                recylerViewUser.visibility = View.GONE
+                othersLL.visibility = View.GONE
             }
+            click2 = !click2
         }
 
         recyclerViewExpert = view.findViewById(R.id.listOfExpert)
@@ -132,12 +177,12 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
         recyclerViewExpert.setHasFixedSize(true)
 
         hoteliers.setOnClickListener {
-            click3 = !click3
             if (click3){
-                recyclerViewExpert.visibility = View.VISIBLE
+                hoteliersLL.visibility = View.VISIBLE
             }else{
-                recyclerViewExpert.visibility = View.GONE
+                hoteliersLL.visibility = View.GONE
             }
+            click3 = !click3
         }
 
         getCommunityDetails(groupID)
@@ -248,20 +293,36 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
                         }
                     }
 
+                    if (ownerList.size > 2){
+                        viewAllOwner.visibility = View.VISIBLE
+                    }
+                    if (vendorList.size > 2){
+                        viewAllVendors.visibility = View.VISIBLE
+                    }
+                    if (expertList.size > 2){
+                        viewAllHoteliers.visibility = View.VISIBLE
+                    }
+                    if (userList.size > 2){
+                        viewAllOthers.visibility = View.VISIBLE
+                    }
                     userDetailsAdapter = UserDetailsAdapter(requireContext(), ownerList)
                     recyclerViewOwner.adapter = userDetailsAdapter
+                    userDetailsAdapter.reduceList()
                     userDetailsAdapter.notifyDataSetChanged()
 
                     vendorDetailsAdapter = VendorDetailsAdapter(requireContext(), vendorList)
                     recyclerViewVendor.adapter = vendorDetailsAdapter
+                    vendorDetailsAdapter.reduceList()
                     vendorDetailsAdapter.notifyDataSetChanged()
 
                     normalUserDetailsAdapter = NormalUserDetailsAdapter(requireContext(), userList)
                     recylerViewUser.adapter = normalUserDetailsAdapter
+                    normalUserDetailsAdapter.reduceList()
                     normalUserDetailsAdapter.notifyDataSetChanged()
 
                     expertDetailsAdapter = ExpertDetailsAdapter(requireContext(), expertList)
                     recyclerViewExpert.adapter = expertDetailsAdapter
+                    expertDetailsAdapter.reduceList()
                     expertDetailsAdapter.notifyDataSetChanged()
 
 
