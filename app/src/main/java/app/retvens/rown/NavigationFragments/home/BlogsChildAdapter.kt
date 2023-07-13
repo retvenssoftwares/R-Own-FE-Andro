@@ -36,6 +36,8 @@ class BlogsChildAdapter(
             Glide.with(context).load(recyclerItem.Profile_pic).into(binding.bloggerProfile)
             binding.blogTitle.text = recyclerItem.blog_title
 
+            Log.e("totalBlogs",blogsRecyclerData.toString())
+
             var like = true
             var operatioin = "push"
 

@@ -25,6 +25,8 @@ class CommunityChildAdapter(private val context: Context, private val viewType: 
             binding.members.text = "${recyclerItem.Members.size.toString()}Members"
             binding.joinG.text = "Join"
 
+            Log.e("totalcomm",communityRecyclerData.toString())
+
 //            binding.joinG.setOnClickListener {
 //                if (recyclerItem.join == "Join"){
 //                    context.startActivity(Intent(context, OpenCommunityDetailsActivity::class.java))

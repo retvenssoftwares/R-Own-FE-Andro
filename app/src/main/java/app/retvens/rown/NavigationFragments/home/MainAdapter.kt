@@ -816,10 +816,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.constRecycler.visibility = View.GONE
         }
         fun bindCommunityRecyclerView(recyclerItemList : List<DataItem.CommunityRecyclerData>){
+
+            Log.e("funcomm",recyclerItemList.toString())
+
             val adapter = CommunityChildAdapter(context, DataItemType.COMMUNITY,
                 recyclerItemList as ArrayList<DataItem.CommunityRecyclerData>
             )
             adapter.removeCommunityFromList(recyclerItemList)
+            adapter.notifyDataSetChanged()
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Connect with the like-minded individuals"
             binding.viewAllItem.setOnClickListener {
@@ -827,40 +831,46 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
         }
         fun bindHotelSectionRecyclerView(recyclerItemList : List<HotelData>){
+            Log.e("funhotel",recyclerItemList.toString())
             val adapter = HotelSectionChildAdapter(context, DataItemType.HOTEL_SECTION, recyclerItemList as ArrayList<HotelData>)
             binding.childRecyclerView.adapter = adapter
             adapter.removeHotelFromList(recyclerItemList)
+            adapter.notifyDataSetChanged()
             binding.recyclerHeading.text = "Check into the most comfortable stays"
             binding.viewAllItem.setOnClickListener {
                 context.startActivity(Intent(context, AllHotelsActivity::class.java))
             }
         }
         fun bindBlogsRecyclerView(recyclerItemList : List<AllBlogsData>){
+            Log.e("funblog",recyclerItemList.toString())
             val adapter = BlogsChildAdapter(context, DataItemType.BLOGS,
                 recyclerItemList as ArrayList<AllBlogsData>
             )
             binding.childRecyclerView.adapter = adapter
             adapter.removeBlogsFromList(recyclerItemList)
+            adapter.notifyDataSetChanged()
             binding.recyclerHeading.text = "Popular blogs you must read."
 
             binding.viewAllItem.setOnClickListener {
                 context.startActivity(Intent(context, ViewAllBlogsActivity::class.java))
             }
         }
-        fun bindHotelAwardsRecyclerView(recyclerItemList : List<DataItem.AwardsRecyclerData>){
-            val adapter = AwardsChildAdapter(DataItemType.HOTEL_AWARDS, recyclerItemList)
-            binding.childRecyclerView.adapter = adapter
-            binding.recyclerHeading.text = "Check what's in store"
-            binding.viewAllItem.setOnClickListener {
-                Toast.makeText(context, "Hotel Awards", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        fun bindHotelAwardsRecyclerView(recyclerItemList : List<DataItem.AwardsRecyclerData>){
+//            val adapter = AwardsChildAdapter(DataItemType.HOTEL_AWARDS, recyclerItemList)
+//            binding.childRecyclerView.adapter = adapter
+//            binding.recyclerHeading.text = "Check what's in store"
+//            binding.viewAllItem.setOnClickListener {
+//                Toast.makeText(context, "Hotel Awards", Toast.LENGTH_SHORT).show()
+//            }
+//        }
         fun bindVendorsRecyclerView(recyclerItemList : List<ProfileServicesDataItem>){
+             Log.e("funservice",recyclerItemList.toString())
             val adapter = VendorsChildAdapter(context, DataItemType.VENDORS,
                 recyclerItemList as ArrayList<ProfileServicesDataItem>
             )
             adapter.removeVendorFromList(recyclerItemList)
             binding.childRecyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
             binding.recyclerHeading.text = "Avail the Best-in-class service for yourself."
 
             binding.viewAllItem.setOnClickListener {
@@ -921,7 +931,6 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 val hotel = ItemHotelPostBinding.inflate(LayoutInflater.from(parent.context),parent,false)
                 BannerItemViewHolderCheck(hotel)
             }
-
             else -> {
                 val binding =
                     EachItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -936,9 +945,6 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-
-
-
             is BannerItemViewHolder -> {
                 dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
             }
@@ -954,26 +960,20 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             is BannerItemViewHolderCheck -> {
                 dataItemList[position].banner?.let { holder.bindBannerView(it,position) }
             }
-
-
             else -> {
+                Log.e("position",dataItemList[position].viewType.toString())
                 when (dataItemList[position].viewType) {
-                    DataItemType.HOTEL_SECTION -> {
+                    3 -> {
                         dataItemList[position].hotelSectionList?.let {
+                            Log.e("finalHotel",it.toString())
                             (holder as RecyclerItemViewHolder).bindHotelSectionRecyclerView(it)
                         }
 
                     }
-
-
-                    DataItemType.BLOGS -> {
+                    0 -> {
                         dataItemList[position].blogsRecyclerDataList?.let {
+                            Log.e("finalBlog",it.toString())
                             (holder as RecyclerItemViewHolder).bindBlogsRecyclerView(it)
-                        }
-                    }
-                    DataItemType.HOTEL_AWARDS -> {
-                        dataItemList[position].hotelAwardsList?.let {
-                            (holder as RecyclerItemViewHolder).bindHotelAwardsRecyclerView(it)
                         }
                     }
                     DataItemType.VENDORS -> {

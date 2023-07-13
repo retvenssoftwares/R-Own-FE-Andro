@@ -86,14 +86,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         if (type == "message"){
 
-            MesiboApi.init(applicationContext)
-            MesiboApi.startMesibo(true)
-
             val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
             fullScreenIntent.putExtra(MesiboUI.PEER,address)
             fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+
         }else{
             val fullScreenIntent = Intent(this, DashBoardActivity::class.java)
             fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

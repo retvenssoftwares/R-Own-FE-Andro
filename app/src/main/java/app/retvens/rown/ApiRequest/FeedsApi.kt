@@ -202,6 +202,12 @@ interface FeedsApi {
     fun getPost(
         @Path("user_Id")user_Id:String
     ):Call<List<PostsDataClass>>
+
+    @GET("getfeed/{user_Id}")
+    fun getFeedPost(
+        @Path("user_Id")user_Id:String
+    ):Call<List<PostsDataClass>>
+
     @PATCH("saveid/{user_id}")
     fun savePost(
         @Path("user_id") user_id : String,

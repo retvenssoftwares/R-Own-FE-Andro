@@ -1,6 +1,9 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.people
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -10,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.ImageView
@@ -24,6 +28,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,6 +47,7 @@ class ExplorePeopleFragment : Fragment() {
     lateinit var errorImage : ImageView
     private lateinit var progress: ProgressBar
     private var peopleList:ArrayList<Post> = ArrayList()
+    private lateinit var progressDialog:Dialog
 
     private var lastPage = 1
 
@@ -68,6 +74,16 @@ class ExplorePeopleFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         searchBar = view.findViewById(R.id.search_explore_peoples)
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
+
 
         explorePeopleAdapter = ExplorePeopleAdapter(requireContext(), peopleList)
         recyclerView.adapter = explorePeopleAdapter
@@ -111,6 +127,21 @@ class ExplorePeopleFragment : Fragment() {
         })
 
         getAllProfiles()
+
+        val handler = Handler()
+        handler.postDelayed({
+            Log.e("postList",peopleList.toString())
+            val iterator = peopleList.iterator()
+            while (iterator.hasNext()) {
+                val element = iterator.next()
+                if (element.Full_name == ""){
+                    iterator.remove()
+                    explorePeopleAdapter.notifyDataSetChanged()
+                }
+            }
+            progressDialog.dismiss()
+        },500)
+
 
     }
 

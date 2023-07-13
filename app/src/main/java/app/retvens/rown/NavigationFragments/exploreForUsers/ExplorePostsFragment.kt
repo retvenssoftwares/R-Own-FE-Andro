@@ -148,7 +148,6 @@ class ExplorePostsFragment : Fragment() {
                         if (response.body()!!.isNotEmpty()) {
                             val response = response.body()!!
 
-
                             val originalData = response.toList()
                             response.forEach { postsDataClass ->
                         totalPages = postsDataClass.pageSize

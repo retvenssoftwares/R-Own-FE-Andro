@@ -37,6 +37,8 @@ class VendorsChildAdapter(private val context: Context, private val viewType: In
                 intent.putExtra("vendorImage", recyclerItem.vendorImage)
                 intent.putExtra("vendorName", recyclerItem.vendorName)
                 context.startActivity(intent)
+
+                Log.e("totalService",vendorsRecyclerData.toString())
             }
         }
     }

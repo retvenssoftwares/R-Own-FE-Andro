@@ -19,6 +19,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -41,6 +42,8 @@ import app.retvens.rown.R
 //import com.karan.multipleviewrecyclerview.Banner
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.home.DataItemType
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
+import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.utils.connectionCount
 import app.retvens.rown.utils.getProfileInfo
@@ -88,10 +91,10 @@ class HomeFragment : Fragment() {
     lateinit var shimmerFrameLayout2: ShimmerFrameLayout
     private lateinit var nestedScroll:NestedScrollView
     private var feedList:ArrayList<PostsDataClass> = ArrayList()
-    private var postList:ArrayList<PostItem> = ArrayList()
-    private var pollList:ArrayList<PostItem> = ArrayList()
-    private var statusList:ArrayList<PostItem> = ArrayList()
-    private var checkInList:ArrayList<PostItem> = ArrayList()
+    private var commList:ArrayList<DataItem.CommunityRecyclerData> = ArrayList()
+    private var blogList:ArrayList<AllBlogsData> = ArrayList()
+    private var serviceList:ArrayList<ProfileServicesDataItem> = ArrayList()
+    private var hotelList:ArrayList<HotelData> = ArrayList()
     lateinit var empty : TextView
     private  var count:Int = 0
     private  var postCounter:Int = 0
@@ -106,6 +109,7 @@ class HomeFragment : Fragment() {
 
 
     }
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -124,7 +128,7 @@ class HomeFragment : Fragment() {
             startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
         }
 
-        nestedScroll = view.findViewById(R.id.homeFragment)
+//        nestedScroll = view.findViewById(R.id.homeFragment)
 
         empty = view.findViewById(R.id.empty)
 
@@ -202,49 +206,73 @@ class HomeFragment : Fragment() {
         mainRecyclerView.setHasFixedSize(true)
         mainRecyclerView.layoutManager = LinearLayoutManager(context)
 
-
-
             getCommunities()
             getPost(user_id)
             getAllConnections(user_id)
-        prepareData()
 
         adapter = MainAdapter(requireContext(),mList)
         mainRecyclerView.adapter = adapter
         adapter.removePostsFromList(mList)
         adapter.notifyDataSetChanged()
 
-        val recyclerViewState:Parcelable
-        recyclerViewState = mainRecyclerView.layoutManager?.onSaveInstanceState()!!
-        mainRecyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
-
         view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {
             startActivity(Intent(context, CreateTextPost::class.java))
         }
 
-        val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
-        nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
-            override fun onScrollChange(
-                v: NestedScrollView,
-                scrollX: Int,
-                scrollY: Int,
-                oldScrollX: Int,
-                oldScrollY: Int
-            ) {
-                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()))  {
-                    val currentItem = layoutManager.childCount
-                    val totalItem = layoutManager.itemCount
-                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-//                    Toast.makeText(requireContext(), postCounter.toString(), Toast.LENGTH_SHORT).show()
+//        val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
+//        nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
+//            override fun onScrollChange(
+//                v: NestedScrollView,
+//                scrollX: Int,
+//                scrollY: Int,
+//                oldScrollX: Int,
+//                oldScrollY: Int
+//            ) {
+//                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()))  {
+//                    val currentItem = layoutManager.childCount
+//                    val totalItem = layoutManager.itemCount
+//                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+//
+//
+//                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
+//                            progress.setVisibility(View.VISIBLE)
+//                            getPost(user_id)
+//                    }
+//                }
+//            }
+//
+//        })
 
-                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
-                            progress.setVisibility(View.VISIBLE);
-                            getData()
-                    }
+
+        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
                 }
             }
 
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isLoading && (lastVisibleItemPosition == totalItem-2)){
+                        isLoading = false
+                        getPost(user_id)
+
+
+                    }
+                }
+
+
+            }
         })
+
 
 
     }
@@ -294,7 +322,7 @@ class HomeFragment : Fragment() {
             Log.e("check","1")
             if (pageCounter == 1) {
                 Log.e("check","1")
-                getHotels()
+//                getHotels()
 //                handler.postDelayed({
 //                    getPost(user_id)
 //                    progress.setVisibility(View.GONE)
@@ -302,7 +330,7 @@ class HomeFragment : Fragment() {
 
             }else if (pageCounter == 2) {
                 Log.e("check","2")
-                getOpenCommunites()
+//                getOpenCommunites()
 //                handler.postDelayed({
 //                    getPost(user_id)
 //                    progress.setVisibility(View.GONE)
@@ -310,7 +338,7 @@ class HomeFragment : Fragment() {
 
             }else if (pageCounter == 3) {
                 Log.e("check","3")
-                getAllBlogs()
+
 //                handler.postDelayed({
 //                    getPost(user_id)
 //                    progress.setVisibility(View.GONE)
@@ -318,7 +346,7 @@ class HomeFragment : Fragment() {
 
             }else if (pageCounter == 4) {
                 Log.e("check","4")
-                getServices()
+//                getServices()
 //                handler.postDelayed({
 //                    getPost(user_id)
 //                    progress.setVisibility(View.GONE)
@@ -333,8 +361,9 @@ class HomeFragment : Fragment() {
 //                progress.setVisibility(View.GONE)
 //            }, 3000)
         }
-
+//        getAllBlogs()
         getPost(user_id)
+
     }
 
     private fun getPost(userId: String) {
@@ -363,20 +392,14 @@ class HomeFragment : Fragment() {
                         response.forEach {
                             it.posts.forEach { item ->
                                 if (item.post_type == "share some media") {
-                                    postList.addAll(it.posts)
-                                    mList.add(0, DataItem(DataItemType.BANNER, banner = item))
-                                    postCounter += 1
+                                    mList.add( DataItem(DataItemType.BANNER, banner = item))
                                 }
                                 if (item.post_type == "Polls") {
-                                        postList.addAll(it.posts)
-                                    mList.add(0, DataItem(DataItemType.POLL, banner = item))
-                                        postCounter += 1
+                                    mList.add( DataItem(DataItemType.POLL, banner = item))
 
                                 }
                                 if (item.post_type == "normal status") {
-                                    statusList.addAll(it.posts)
-                                    mList.add(0, DataItem(DataItemType.Status, banner = item))
-                                        postCounter += 1
+                                    mList.add( DataItem(DataItemType.Status, banner = item))
                                 }
 
 //                                if (item.post_type == "Update about an event"){
@@ -391,18 +414,39 @@ class HomeFragment : Fragment() {
 
                                 if (item.post_type == "Check-in") {
                                     Log.e("hotel",item.toString())
-                                    checkInList.add(item)
-                                    mList.add(0, DataItem(DataItemType.CheckIn, banner = item))
-                                    postCounter += 1
+                                    mList.add( DataItem(DataItemType.CheckIn, banner = item))
                                 }
 
 
-                                if (postCounter >= 10) {
-                                    pageCounter += 1
-                                    postCounter = 0
-                                }
                             }
 
+//                            blogList.addAll(it.blogs)
+//                            serviceList.addAll(it.services)
+//                            hotelList.addAll(it.hotels)
+//                            commList.addAll(it.communities)
+//
+//
+                            try {
+                                mList.addAll(listOf(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = it.blogs)))
+                            }catch (e:Exception){
+                                Log.e("error",e.message.toString())
+                            }
+                            try {
+                                mList.addAll(listOf(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList = it.hotels)))
+                            }catch (e:Exception){
+                                Log.e("error",e.message.toString())
+                            }
+                            try {
+                                mList.addAll(listOf(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = it.services)))
+                            }catch (e:Exception){
+                                Log.e("error",e.message.toString())
+                            }
+                            try {
+                                Log.e("comm",commList.toString())
+                                mList.addAll(listOf(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = it.communities)))
+                            }catch (e:Exception){
+                                Log.e("error",e.message.toString())
+                            }
 //
                     }
                     adapter.notifyDataSetChanged()
@@ -595,12 +639,7 @@ class HomeFragment : Fragment() {
                                 mList.shuffle()
                                 adapter.notifyDataSetChanged()
                             } else {
-                                mList.add(
-                                    DataItem(
-                                        DataItemType.BLOGS,
-                                        blogsRecyclerDataList = response.body()
-                                    )
-                                )
+                                mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = response.body()))
                             }
                         }
                     }
@@ -697,50 +736,6 @@ class HomeFragment : Fragment() {
             }
         })
     }
-    private fun prepareData() {
-//        val communityList = ArrayList<DataItem.CommunityRecyclerData>()
-//        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12", "Join"))
-//        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34", "Request"))
-//        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3", "Join"))
-//        communityList.add(DataItem.CommunityRecyclerData(R.drawable.png_post,"Vendor 4","78", "Request"))
 
-        val createCommunityList = ArrayList<DataItem.CreateCommunityRecyclerData>()
-        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 1","12", "0"))
-        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_blog,"Vendor 2","34", "0"))
-        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_vendor,"Vendor 3","3", "1"))
-        createCommunityList.add(DataItem.CreateCommunityRecyclerData(R.drawable.png_post,"Vendor 4","78", "1"))
-
-        val blogsList = ArrayList<DataItem.BlogsRecyclerData>()
-        blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_blog,"Tom", R.drawable.png_profile))
-        blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_post,"Vendor", R.drawable.png_profile_post))
-        blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_vendor,"Holland", R.drawable.png_profile))
-        blogsList.add(DataItem.BlogsRecyclerData(R.drawable.png_blog,"Jason", R.drawable.png_profile_post))
-
-        val vendorsList = ArrayList<DataItem.VendorsRecyclerData>()
-        vendorsList.add(DataItem.VendorsRecyclerData(R.drawable.png_blog, R.drawable.png_profile,"Thailand in budget","Tom"))
-        vendorsList.add(DataItem.VendorsRecyclerData(R.drawable.png_post, R.drawable.png_profile_post,"Europe in budget","Vendor"))
-        vendorsList.add(DataItem.VendorsRecyclerData(R.drawable.png_vendor, R.drawable.png_profile,"Europe in budget","Holland"))
-        vendorsList.add(DataItem.VendorsRecyclerData(R.drawable.png_blog, R.drawable.png_profile_post,"China in budget","Jason"))
-
-
-        val hotelSectionList = ArrayList<DataItem.HotelSectionRecyclerData>()
-        hotelSectionList.add(DataItem.HotelSectionRecyclerData(R.drawable.png_blog, "Paradise in"))
-        hotelSectionList.add(DataItem.HotelSectionRecyclerData(R.drawable.png_post, "Hotel in Oman"))
-        hotelSectionList.add(DataItem.HotelSectionRecyclerData(R.drawable.png_vendor, "Hotel 1"))
-        hotelSectionList.add(DataItem.HotelSectionRecyclerData(R.drawable.png_blog, "Hotel 2"))
-
-        val hotelAwardsList = ArrayList<DataItem.AwardsRecyclerData>()
-        hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_events))
-        hotelAwardsList.add(DataItem.AwardsRecyclerData(R.drawable.png_awards))
-
-//        mList.add(DataItem(DataItemType.CREATE_COMMUNITY, createCommunityRecyclerDataList = createCommunityList))
-//        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
-//        mList.add(DataItem(DataItemType.HOTEL_AWARDS, hotelAwardsList =  hotelAwardsList))
-//        mList.add(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = communityList))
-//        mList.add(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  hotelSectionList))
-
-//        mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = blogsList))
-//        mList.add(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = vendorsList))
-    }
 
 }

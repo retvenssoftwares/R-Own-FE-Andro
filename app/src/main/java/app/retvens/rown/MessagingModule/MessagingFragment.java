@@ -117,6 +117,7 @@ import java.util.Objects;
 import app.retvens.rown.ApiRequest.ChatDataClass;
 import app.retvens.rown.ApiRequest.RetrofitBuilder;
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse;
+import app.retvens.rown.MesiboApi;
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
 import app.retvens.rown.MessagingModule.AllUtils.TextToEmoji;
 import app.retvens.rown.R;
@@ -254,6 +255,27 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 //
 //        Log.e("status",profiles.getStatus());
 
+        Bundle args = this.getArguments();
+        String peer = args.getString("peer");
+        try {
+            MesiboProfile profile = new MesiboProfile();
+            Log.e("perr",peer);
+            profile = Mesibo.getProfile(peer);
+            String Status = profile.getStatus();
+            Log.e("status",Status);
+            Log.e("name",profile.getName());
+            Map<String, String> decodedData = Decoder.decodeData(Status);
+
+            this.userID = decodedData.get("userID");
+            this.userRole = decodedData.get("userRole");
+
+            Log.e("id",this.userID);
+            Log.e("role",this.userRole);
+
+        }catch (NullPointerException e){
+            Log.e("error",e.toString());
+        }
+
         if (null == container) {
             return null;
         } else {
@@ -266,8 +288,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     this.mCustomViewListener = (MesiboRecycleViewHolder.Listener) this;
                 }
 
-                Bundle args = this.getArguments();
-                String peer = args.getString("peer");
+
                 long gid = args.getLong("groupid", 0L);
                 if (null == this.mMessageList || null != peer && null != this.mPeer && 0 != this.mPeer.compareToIgnoreCase(peer) || gid > 0L && this.mGroupId > 0L && gid != this.mGroupId) {
                     this.read_flag = false;
@@ -275,26 +296,6 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                         this.mMessageList = new ArrayList();
                     }
                 }
-                try {
-                    MesiboProfile profile = new MesiboProfile();
-                    Log.e("perr",peer);
-                    profile = Mesibo.getProfile(peer);
-                    String Status = profile.getStatus();
-                    Log.e("status",Status);
-                    Log.e("name",profile.getName());
-                    Map<String, String> decodedData = Decoder.decodeData(Status);
-
-                    this.userID = decodedData.get("userID");
-                    this.userRole = decodedData.get("userRole");
-
-                    Log.e("id",this.userID);
-                    Log.e("role",this.userRole);
-
-                }catch (NullPointerException e){
-                    Log.e("error",e.toString());
-                }
-
-
                 this.mPeer = peer;
                 this.mGroupId = gid;
                 long forwardid = args.getLong("mid", 0L);
@@ -527,6 +528,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     return view;
                 }
             }
+
 
         }
 
@@ -1553,7 +1555,13 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
              this.mEmojiEditText.getText().clear();
              MesiboProfile cc = Mesibo.getSelfProfile();
             try {
-                performChatNotification(this.userID, cc.getName(), msg.message);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        performChatNotification(userID, cc.getName(), msg.message);
+                    }
+                }, 500);
             }catch (NullPointerException e){
                 Log.e("error",e.getMessage().toString());
             }
@@ -1582,6 +1590,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     Log.e("success",updateResponse.getMessage());
                 } else {
                     Log.e("error",response.body().toString());
+
                 }
             }
 

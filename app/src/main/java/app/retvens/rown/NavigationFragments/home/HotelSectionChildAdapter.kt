@@ -33,6 +33,8 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
             var like = true
             var operatioin = "push"
 
+            Log.e("totalHotel",hotelSectionRecyclerData.toString())
+
             Glide.with(context).load(recyclerItem.hotelCoverpicUrl).into(binding.hotelSectionCover)
 
             binding.hotelSectionName.text= recyclerItem.hotelName

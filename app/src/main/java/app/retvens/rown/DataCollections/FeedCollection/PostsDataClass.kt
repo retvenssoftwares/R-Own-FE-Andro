@@ -1,5 +1,10 @@
 package app.retvens.rown.DataCollections.FeedCollection
 
+import app.retvens.rown.NavigationFragments.home.DataItem
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
+import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
+import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
+
 data class PostItem(
     val _id: String,
     val user_id: String,
@@ -73,6 +78,10 @@ data class Media(
 
 data class PostsDataClass(
     val posts: List<PostItem>,
+    val blogs: List<AllBlogsData>,
+    val hotels:List<HotelData>,
+    val communities:List<DataItem.CommunityRecyclerData>,
+    val services:List<ProfileServicesDataItem>,
     val page:Int,
     val message:String,
     val pageSize:Int
