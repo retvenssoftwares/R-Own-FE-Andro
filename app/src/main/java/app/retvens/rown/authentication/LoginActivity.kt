@@ -129,7 +129,7 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             }
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {
             // Get the TelephonyManager instance
             val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
@@ -152,9 +152,11 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             }else{
                 binding.editPhone.setText(phoneNum)
             }
+        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(applicationContext, "Notifications ON", Toast.LENGTH_SHORT).show()
         } else {
             // Permission has not been granted, request it
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_NUMBERS,Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE)
         }
 
         FirebaseApp.initializeApp(this)
