@@ -149,26 +149,31 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
             ) {
                 if (isAdded){
                     if (response.isSuccessful){
+
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
 
                         Log.d("res", response.body().toString())
                         val response = response.body()!!
                         if (response.isNotEmpty()) {
+                            try {
+                                list.addAll(response)
 
-                            list.addAll(response)
+                                if (response.size >= 10){
+                                    currentPage++
+                                }
 
-                            if (response.size >= 10){
-                                currentPage++
+                                isLoading = false
+
+                                profileServicesAdapter =
+                                    ProfileServicesAdapter(response, requireContext(), isOwner)
+                                servicesRecycler.adapter = profileServicesAdapter
+                                profileServicesAdapter.notifyDataSetChanged()
+                                Log.d("res", response.toString())
+                            }catch (e:NullPointerException){
+                                Log.e("error",e.message.toString())
                             }
 
-                            isLoading = false
-
-                            profileServicesAdapter =
-                                ProfileServicesAdapter(response, requireContext(), isOwner)
-                            servicesRecycler.adapter = profileServicesAdapter
-                            profileServicesAdapter.notifyDataSetChanged()
-                            Log.d("res", response.toString())
                         } else {
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE

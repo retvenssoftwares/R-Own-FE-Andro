@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.services
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -128,15 +129,20 @@ class ExploreServicesFragment : Fragment() {
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
                             if (response.body()!!.isNotEmpty()) {
-                                val data = response.body()!!
-                                data.forEach {
-                                    if (it.vendors.size >= 10){
-                                        currentPage++
-                                    }
-                                    hotelList.addAll(it.vendors)
-                                    exploreServicesAdapter.removeServicesFromList(hotelList)
-                                    exploreServicesAdapter.notifyDataSetChanged()
-                                }
+                               try {
+                                   val data = response.body()!!
+                                   data.forEach {
+                                       if (it.vendors.size >= 10){
+                                           currentPage++
+                                       }
+                                       hotelList.addAll(it.vendors)
+                                       exploreServicesAdapter.removeServicesFromList(hotelList)
+                                       exploreServicesAdapter.notifyDataSetChanged()
+                                   }
+                               } catch (e:NullPointerException){
+                                   Log.e("error",e.message.toString())
+                               }
+
                             } else {
 //                                errorImage.visibility = View.VISIBLE
                             }

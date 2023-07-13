@@ -39,19 +39,24 @@ class ExploreServicesAdapter(val listS : ArrayList<ProfileServicesDataItem>, val
     override fun onBindViewHolder(holder: ExploreServicesViewHolder, position: Int) {
         val recyclerItem = listS[position]
         holder.name.text = listS[position].vendorName
-        holder.vendors_id.text = "@${listS[position].User_name}"
-        if (listS[position].vendorServicePrice == ""){
-            holder.avg_price.text = "000 INR"
-        } else {
-            holder.avg_price.text = "${listS[position].vendorServicePrice}"
-        }
-        Glide.with(context).load(listS[position].vendorImage).into(holder.cover)
+        try {
+            holder.vendors_id.text = "@${listS[position].User_name}"
+            if (listS[position].vendorServicePrice == ""){
+                holder.avg_price.text = "000 INR"
+            } else {
+                holder.avg_price.text = "${listS[position].vendorServicePrice}"
+            }
+            Glide.with(context).load(listS[position].vendorImage).into(holder.cover)
 
-        if (listS[position].Profile_pic.isNotEmpty()) {
-            Glide.with(context).load(listS[position].Profile_pic).into(holder.profile)
-        } else {
-            holder.profile.setImageResource(R.drawable.svg_user)
+            if (listS[position].Profile_pic.isNotEmpty()) {
+                Glide.with(context).load(listS[position].Profile_pic).into(holder.profile)
+            } else {
+                holder.profile.setImageResource(R.drawable.svg_user)
+            }
+        }catch (e:NullPointerException){
+            Log.e("error",e.message.toString())
         }
+
         holder.itemView.setOnClickListener {
             val intent = Intent(context, VendorDetailsActivity::class.java)
             intent.putExtra("user_id", recyclerItem.user_id)
