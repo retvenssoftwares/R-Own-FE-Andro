@@ -25,6 +25,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.frags.BasicInformationFragment
@@ -107,6 +108,9 @@ class EditVendorInfoActivity : AppCompatActivity() {
 
     private var fileList : ArrayList<MultipartBody.Part> = ArrayList()
     private var imagesList : ArrayList<Uri> = ArrayList()
+
+    var description = ""
+    var website = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -205,6 +209,47 @@ class EditVendorInfoActivity : AppCompatActivity() {
             }
         }
 
+        binding.save.isClickable = false
+
+        binding.descriptionoEt.addTextChangedListener {
+            if (binding.descriptionoEt.text.toString() != description) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
+        binding.websiteLink.addTextChangedListener {
+            if (binding.websiteLink.text.toString() != website) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
+
         binding.save.setOnClickListener {
             if (logoOfImageUri == null){
                 Toast.makeText(applicationContext, "Please select an Logo", Toast.LENGTH_SHORT).show()
@@ -282,6 +327,10 @@ class EditVendorInfoActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     Glide.with(applicationContext).load(response.body()!!.vendorInfo.vendorImage).into(binding.brandLogo)
+
+                    description = (response.body()!!.vendorInfo.vendorDescription)
+                    website = (response.body()!!.vendorInfo.websiteLink)
+
                     binding.descriptionoEt.setText(response.body()!!.vendorInfo.vendorDescription)
                     binding.websiteLink.setText(response.body()!!.vendorInfo.websiteLink)
                     response.body()!!.vendorInfo.portfolioLink.forEach {
@@ -328,22 +377,50 @@ class EditVendorInfoActivity : AppCompatActivity() {
                         imgUri1 = compressImage(croppedImage)
                         binding.img1.setImageURI(imgUri1)
                         imagesList.add(imgUri1!!)
+                        binding.save.isClickable = true
+                        binding.save.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.green_own
+                            )
+                        )
                     }
                     2 -> {
                         binding.deleteImg2.visibility = View.VISIBLE
                         binding.img2.setImageURI(croppedImage)
                         imgUri2 = compressImage(croppedImage)
                         imagesList.add(imgUri2!!)
+                        binding.save.isClickable = true
+                        binding.save.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.green_own
+                            )
+                        )
                     }
                     3 -> {
                         binding.deleteImg3.visibility = View.VISIBLE
                         imgUri3 = compressImage(croppedImage)
                         binding.img3.setImageURI(imgUri3)
                         imagesList.add(imgUri3!!)
+                        binding.save.isClickable = true
+                        binding.save.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.green_own
+                            )
+                        )
                     }
                     4 -> {
                         logoOfImageUri = compressImage( croppedImage!!)
                         binding.brandLogo.setImageURI(logoOfImageUri)
+                        binding.save.isClickable = true
+                        binding.save.setCardBackgroundColor(
+                            ContextCompat.getColor(
+                                applicationContext,
+                                R.color.green_own
+                            )
+                        )
                     }
                 }
 

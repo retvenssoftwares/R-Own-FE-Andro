@@ -132,6 +132,8 @@
                 android:paddingVertical="5dp"
                 android:textAlignment="center"
                 android:text="Skip"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:fontFamily="@font/montserrat_regular"
                 android:textSize="18dp"
                 android:textColor="@color/green_own"/>
@@ -159,6 +161,8 @@
                 android:paddingVertical="5dp"
                 android:textAlignment="center"
                 android:text="@string/continu"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:fontFamily="@font/montserrat_regular"
                 android:textSize="18dp"
                 android:background="@color/green_own"

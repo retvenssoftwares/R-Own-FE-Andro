@@ -1,11 +1,13 @@
 package app.retvens.rown.bottomsheet
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -88,6 +90,8 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
@@ -97,7 +101,7 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         comments = view.findViewById(R.id.addThoughts)
-
+showKeyBoard(comments)
         profile = view.findViewById(R.id.profileOnComment)
         replying = view.findViewById(R.id.replying)
         replyingText = view.findViewById(R.id.replyingText)
@@ -239,5 +243,10 @@ class BottomSheetComment(val postID:String,val postprofile:String) : BottomSheet
 
     }
 
-
+    fun showKeyBoard(otpET: EditText) {
+        otpET.requestFocus()
+        val inputMethodManager: InputMethodManager =
+            activity?.baseContext?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(otpET, InputMethodManager.SHOW_IMPLICIT)
+    }
 }

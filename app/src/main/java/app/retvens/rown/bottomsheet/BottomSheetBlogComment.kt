@@ -1,11 +1,15 @@
 package app.retvens.rown.bottomsheet
 
 import android.app.Dialog
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,9 +26,9 @@ import app.retvens.rown.DataCollections.FeedCollection.PostCommentReplyClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.utils.setupFullHeight
-import app.retvens.rown.viewAll.viewAllBlogs.CommentData.BlogPostComment
 import app.retvens.rown.viewAll.viewAllBlogs.BlogsCommentAdapter
 import app.retvens.rown.viewAll.viewAllBlogs.Comment
+import app.retvens.rown.viewAll.viewAllBlogs.CommentData.BlogPostComment
 import app.retvens.rown.viewAll.viewAllBlogs.CommentData.CommentBlog
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -33,7 +38,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.NullPointerException
+
 
 class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : BottomSheetDialogFragment(){
 
@@ -89,6 +94,8 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
@@ -97,7 +104,7 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         comment = view.findViewById(R.id.addThoughts)
-
+        showKeyBoard(comment)
         profile = view.findViewById(R.id.profileOnComment)
         replying = view.findViewById(R.id.replying)
         replyingText = view.findViewById(R.id.replyingText)
@@ -244,5 +251,11 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
 
     }
 
+    fun showKeyBoard(otpET: EditText) {
+        otpET.requestFocus()
+        val inputMethodManager: InputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(otpET, InputMethodManager.SHOW_IMPLICIT)
+    }
 
 }

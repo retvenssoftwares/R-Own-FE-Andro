@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
@@ -63,6 +64,11 @@ class EditHotelProfileActivity : AppCompatActivity() {
 
     var user_id = ""
 
+    var name = ""
+    var bio = ""
+    var website = ""
+    var bookingText = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditHotelProfileBinding.inflate(layoutInflater)
@@ -93,6 +99,85 @@ class EditHotelProfileActivity : AppCompatActivity() {
                 )
             }
             openBottomSheet()
+        }
+
+        binding.save.isClickable = false
+
+        binding.etNameEdit.addTextChangedListener {
+            if (binding.etNameEdit.text.toString() != name) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
+        binding.bioEt.addTextChangedListener {
+            if (binding.bioEt.text.toString() != bio) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
+        binding.website.addTextChangedListener {
+            if (binding.website.text.toString() != website) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
+        binding.bookingText.addTextChangedListener {
+            if (binding.bookingText.text.toString() != bookingText) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
         }
 
         binding.save.setOnClickListener {
@@ -176,7 +261,10 @@ class EditHotelProfileActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
 //                    val image = response.body()?
-                    val name = response.body()?.hotelOwnerInfo?.hotelownerName
+                    name = response.body()?.hotelOwnerInfo?.hotelownerName.toString()
+                    bio = (response.body()!!.hotelOwnerInfo.hotelDescription)
+                    website = (response.body()!!.hotelOwnerInfo.websiteLink)
+                    bookingText = (response.body()!!.hotelOwnerInfo.bookingEngineLink)
 
 //                    Glide.with(applicationContext).load(image).into(binding.profileEdit)
                     binding.etNameEdit.setText(name)
@@ -306,10 +394,14 @@ class EditHotelProfileActivity : AppCompatActivity() {
         dialogRole.findViewById<RelativeLayout>(R.id.singleHotelRL).setOnClickListener {
             binding.hotelType.text = "Single Hotel"
             dialogRole.dismiss()
+            binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.save.isClickable = true
         }
         dialogRole.findViewById<RelativeLayout>(R.id.hotelChainRL).setOnClickListener {
             binding.hotelType.text = "Hotel Chain"
             dialogRole.dismiss()
+            binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.save.isClickable = true
         }
     }
 

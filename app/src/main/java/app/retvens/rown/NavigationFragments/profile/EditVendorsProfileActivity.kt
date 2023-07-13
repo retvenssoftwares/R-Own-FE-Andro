@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
@@ -59,6 +60,10 @@ class EditVendorsProfileActivity : AppCompatActivity() {
     lateinit var progressDialog: Dialog
 
     var user_id = ""
+
+    var name = ""
+    var bio = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditVendorsProfileBinding.inflate(layoutInflater)
@@ -82,6 +87,46 @@ class EditVendorsProfileActivity : AppCompatActivity() {
             openBottomSheet()
         }
 
+        binding.save.isClickable = false
+
+        binding.etNameEdit.addTextChangedListener {
+            if (binding.etNameEdit.text.toString() != name) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
+        binding.bioEt.addTextChangedListener {
+            if (binding.bioEt.text.toString() != bio) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
 
         binding.save.setOnClickListener {
 
@@ -252,6 +297,14 @@ class EditVendorsProfileActivity : AppCompatActivity() {
                 val croppedImage = UCrop.getOutput(data!!)!!
 
                 compressImage(croppedImage)
+
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
 
             }else if (resultCode == UCrop.RESULT_ERROR) {
                 Toast.makeText(applicationContext,"Try Again",Toast.LENGTH_SHORT).show()

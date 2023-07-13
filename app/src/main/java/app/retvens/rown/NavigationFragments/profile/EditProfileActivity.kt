@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.UserProfileRequestItem
@@ -75,6 +76,8 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
     var user_id = ""
 
     var Gender = ""
+    var name = ""
+    var bio = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +109,8 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
 
         binding.male.setOnClickListener {
             Gender = "Male"
+            binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.save.isClickable = true
             binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
             binding.female.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             binding.nonBinary.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -114,6 +119,8 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
 
         binding.female.setOnClickListener {
             Gender = "Female"
+            binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.save.isClickable = true
             binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             binding.female.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
             binding.nonBinary.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -122,6 +129,8 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
 
         binding.nonBinary.setOnClickListener {
             Gender = "Non Binary"
+            binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.save.isClickable = true
             binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             binding.female.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             binding.nonBinary.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
@@ -130,12 +139,54 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
 
         binding.preferNotSay.setOnClickListener {
             Gender = "Prefer not to say"
+            binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            binding.save.isClickable = true
             binding.male.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             binding.female.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             binding.nonBinary.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             binding.preferNotSay.setBackgroundColor(ContextCompat.getColor(this, R.color.green_own))
         }
 
+        binding.save.isClickable = false
+
+        binding.etNameEdit.addTextChangedListener {
+            if (binding.etNameEdit.text.toString() != name) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
+        binding.bioEt.addTextChangedListener {
+            if (binding.bioEt.text.toString() != bio) {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else {
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.grey_40
+                    )
+                )
+                binding.save.isClickable = false
+            }
+        }
 
         binding.save.setOnClickListener {
 
@@ -326,13 +377,14 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
 
                 if (response.isSuccessful) {
                     val image = response.body()?.Profile_pic
-                    val name = response.body()?.Full_name
+                    name = response.body()?.Full_name.toString()
                     saveFullName(applicationContext, name.toString())
                     saveProfileImage(applicationContext, "$image")
                     val mail = response.body()?.Email
                     Glide.with(applicationContext).load(image).into(binding.profileEdit)
                     binding.etNameEdit.setText(name)
                     binding.bioEt.setText(response.body()!!.userBio)
+                    bio = (response.body()!!.userBio)
                     response.body()!!.vendorInfo
                     try {
                         binding.dText.text = response.body()?.normalUserInfo!!.get(0).jobTitle
@@ -355,7 +407,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
                                 binding.preferNotSay.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
                             }
                         }
-                    } catch (e : NullPointerException){
+                    } catch (e : Exception){
                         Log.d("NullPointer", e.toString())
                     }
 
@@ -432,6 +484,13 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
         } else if (requestCode == PICK_PDF_REQUEST_CODE) {
             pdfUri = data?.data
             binding.uploadResume.text = (pdfUri.toString())
+            binding.save.isClickable = true
+            binding.save.setCardBackgroundColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.green_own
+                )
+            )
         }
     }
 
@@ -470,5 +529,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
 
     override fun bottomJobTitleClick(jobTitleFrBo: String) {
         binding.dText.text = jobTitleFrBo
+        binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+        binding.save.isClickable = true
     }
 }
