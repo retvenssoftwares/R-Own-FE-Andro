@@ -3,15 +3,18 @@ package app.retvens.rown.authentication
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.Gravity
@@ -23,6 +26,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.Dashboard.DashBoardActivity
@@ -46,6 +50,8 @@ import java.util.concurrent.TimeUnit
 class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLanguagelickListener{
     lateinit var binding: ActivityLoginBinding
 
+
+    private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
     val REQUEST_CODE = 102
     private var phoneNum: String = ""
     lateinit var dialog: Dialog
@@ -97,6 +103,9 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        requestNotificationPermission()
+
+
         binding.languageFromLogin.setOnClickListener {
             // mis-clicking prevention, using threshold of 1000 ms
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
@@ -120,7 +129,7 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             }
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             // Get the TelephonyManager instance
             val telephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
 
@@ -145,7 +154,7 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             }
         } else {
             // Permission has not been granted, request it
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_NUMBERS), REQUEST_CODE)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE)
         }
 
         FirebaseApp.initializeApp(this)
@@ -243,6 +252,53 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
                 showBottomDialog(phone)
             }
         }
+    }
+
+
+
+    private fun requestNotificationPermission() {
+        if (!isNotificationPermissionGranted()) {
+            Log.e("check","1")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // For Android Oreo and above, open the app's notification settings
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                startActivity(intent)
+            } else {
+                Log.e("check","2")
+                // For older Android versions, open the app's application settings
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivityForResult(intent, NOTIFICATION_PERMISSION_REQUEST_CODE)
+            }
+        }
+    }
+
+    private fun isNotificationPermissionGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.e("check","3")
+            // For Android Oreo and above, check if the notification channel is enabled
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.getNotificationChannel("YOUR_CHANNEL_ID")?.importance != NotificationManager.IMPORTANCE_NONE
+        } else {
+            Log.e("check","4")
+            // For older Android versions, check if the app has notification permission
+            NotificationManagerCompat.from(this).areNotificationsEnabled()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            if (isNotificationPermissionGranted()) {
+                Log.e("Notification", "Accepted")
+            } else {
+                Log.e("Notification", "Denied")
+            }
+        }
+
     }
 
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

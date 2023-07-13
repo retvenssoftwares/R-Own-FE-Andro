@@ -1,8 +1,11 @@
 package app.retvens.rown.NavigationFragments.profile
 
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserInfoo
@@ -31,6 +34,11 @@ class UserDetailsActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            window.statusBarColor = Color.TRANSPARENT
+        }
 
         binding.communityDetailBackBtn.setOnClickListener{ onBackPressed() }
 
@@ -70,7 +78,9 @@ class UserDetailsActivity : AppCompatActivity(),
             BottomSheetJobType.OnBottomJobTypeClickListener,
             BottomSheetCompany.OnBottomCompanyClickListener,
             BottomSheetJobTitle.OnBottomJobTitleClickListener,
-            EducationAdapter.OnBottomSheetFilterCommunityClickListener {
+            EducationAdapter.OnBottomSheetFilterCommunityClickListener,
+            BottomSheetUpdateExperience.OnBottomEditExClickListener,
+            BottomSheetUpdateEducation.OnBottomEditEdClickListener {
             override fun onResponse(
                 call: Call<UserProfileRequestItem?>,
                 response: Response<UserProfileRequestItem?>
@@ -111,7 +121,7 @@ class UserDetailsActivity : AppCompatActivity(),
                 val bottomSheet = BottomSheetUpdateExperience(jonDetails,position)
                 val fragManager = supportFragmentManager
                 fragManager.let{bottomSheet.show(it, BottomSheetUpdateExperience.Edit_TAG)}
-
+                bottomSheet.setOnEditExClickListener(this)
 
             }
 
@@ -134,6 +144,15 @@ class UserDetailsActivity : AppCompatActivity(),
                 val bottomSheet = BottomSheetUpdateEducation(jonDetails,position)
                 val fragManager = supportFragmentManager
                 fragManager.let{bottomSheet.show(it, BottomSheetUpdateEducation.Edit_TAG)}
+                bottomSheet.setOnEditEdClickListener(this)
+            }
+
+            override fun bottomEditClick() {
+                getProfile()
+            }
+
+            override fun bottomEditEdClick() {
+                getProfile()
             }
 
 
@@ -141,11 +160,14 @@ class UserDetailsActivity : AppCompatActivity(),
 
     }
 
-    override fun bottomEditClick(CTCFrBo: String) {
 
+
+
+    override fun bottomEditClick() {
+        getProfile()
     }
 
-    override fun bottomEditEdClick(EdFrBo: String) {
-
+    override fun bottomEditEdClick() {
+        getProfile()
     }
 }

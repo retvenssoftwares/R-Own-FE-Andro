@@ -384,7 +384,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 
 }

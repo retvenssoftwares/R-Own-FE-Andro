@@ -42,7 +42,7 @@ class BottomSheetUpdateEducation(val data:UserProfileRequestItem.StudentEducatio
         return BottomSheetUpdateEducation(data,position)
     }
     interface OnBottomEditEdClickListener{
-        fun bottomEditEdClick(EdFrBo : String)
+        fun bottomEditEdClick()
     }
 
     companion object {
@@ -207,6 +207,7 @@ class BottomSheetUpdateEducation(val data:UserProfileRequestItem.StudentEducatio
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    mListener?.bottomEditEdClick()
                 }else{
                     Log.e("error",response.code().toString())
                 }

@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.setting.discoverPeople
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.DataCollections.JobsCollection.AppliedJobData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
@@ -28,7 +30,7 @@ import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 
-class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Context) : RecyclerView.Adapter<DiscoverAdapter.DiscoverViewHolder>() {
+class DiscoverAdapter(var listS : ArrayList<MatchedContact>, val context: Context) : RecyclerView.Adapter<DiscoverAdapter.DiscoverViewHolder>() {
 
     val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
     val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -169,5 +171,11 @@ class DiscoverAdapter(val listS : ArrayList<MatchedContact>, val context: Contex
         } catch (e : ConcurrentModificationException){
             Log.d("EPA", e.toString())
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: ArrayList<MatchedContact>) {
+        listS = newItems
+        notifyDataSetChanged()
     }
 }

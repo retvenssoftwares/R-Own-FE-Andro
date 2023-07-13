@@ -2,6 +2,8 @@ package app.retvens.rown.NavigationFragments.profile.setting.discoverPeople
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -55,14 +57,44 @@ class DiscoverPeopleActivity : AppCompatActivity() {
             ) {
                     if (response.isSuccessful) {
                         val data = response.body()!!
+
                         if (data.message == "Matches found") {
 
                             try {
+                                val original = data.matchedContacts.toList()
                                 discoverAdapter = DiscoverAdapter(data.matchedContacts as ArrayList<MatchedContact>, this@DiscoverPeopleActivity)
                                 binding.discoverRecycler.adapter = discoverAdapter
                                 discoverAdapter.removeUser(data.matchedContacts)
                                 discoverAdapter.removeUsersFromList(data.matchedContacts)
                                 discoverAdapter.notifyDataSetChanged()
+
+                                binding.searchBar.addTextChangedListener(object : TextWatcher{
+                                    override fun beforeTextChanged(
+                                        p0: CharSequence?,
+                                        p1: Int,
+                                        p2: Int,
+                                        p3: Int
+                                    ) {
+
+                                    }
+
+                                    override fun onTextChanged(
+                                        p0: CharSequence?,
+                                        p1: Int,
+                                        p2: Int,
+                                        p3: Int
+                                    ) {
+
+                                    }
+
+                                    override fun afterTextChanged(p0: Editable?) {
+                                        val filterData = original.filter { item ->
+                                            item.matchedNumber.Full_name.contains(p0.toString(),ignoreCase = true)
+                                        }
+
+                                        discoverAdapter.updateData(filterData as ArrayList<MatchedContact>)
+                                    }
+                                })
 
                             }catch (e:NullPointerException){
 //                                getAllProfiles()
@@ -112,7 +144,10 @@ class DiscoverPeopleActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         if (response.body()!!.isNotEmpty()) {
                             val response = response.body()!!
-
+                            var original:List<Post> = emptyList()
+                            response.forEach {
+                                original = it.posts.toList()
+                            }
                             response.forEach { explorePeopleDataClass ->
                                 try {
                                     discoverAllAdapter = DiscoverAllAdapter(explorePeopleDataClass.posts as ArrayList<Post>, this@DiscoverPeopleActivity )
@@ -120,6 +155,34 @@ class DiscoverPeopleActivity : AppCompatActivity() {
                                     discoverAllAdapter.removeUser(explorePeopleDataClass.posts)
                                     discoverAllAdapter.removeUsersFromList(explorePeopleDataClass.posts)
                                     discoverAllAdapter.notifyDataSetChanged()
+
+                                    binding.searchBar.addTextChangedListener(object : TextWatcher {
+                                        override fun beforeTextChanged(
+                                            p0: CharSequence?,
+                                            p1: Int,
+                                            p2: Int,
+                                            p3: Int
+                                        ) {
+
+                                        }
+
+                                        override fun onTextChanged(
+                                            p0: CharSequence?,
+                                            p1: Int,
+                                            p2: Int,
+                                            p3: Int
+                                        ) {
+                                            val filterData = original.filter { item ->
+                                                item.Full_name.contains(p0.toString(),ignoreCase = true)
+                                            }
+
+                                            discoverAllAdapter.updateData(filterData as ArrayList<Post>)
+                                        }
+
+                                        override fun afterTextChanged(p0: Editable?) {
+
+                                        }
+                                    })
 
                                 }catch (e:NullPointerException){
 //                                getAllProfiles()

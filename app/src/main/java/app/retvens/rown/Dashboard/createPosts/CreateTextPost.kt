@@ -147,13 +147,17 @@ class CreateTextPost : AppCompatActivity(),
             val sharedPreferences =  getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
             val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+            val caption = binding.whatDYEt.text.toString().trim()
+
             if (binding.canSeeText.text == "Can See"){
                 Toast.makeText(applicationContext,"Select Post Seen Status",Toast.LENGTH_SHORT).show()
             }else if (binding.canCommentText.text == "Can comment"){
                 Toast.makeText(applicationContext,"Select Comment Status",Toast.LENGTH_SHORT).show()
-            }else if (binding.whatDYEt.text.toString() == ""){
-                Toast.makeText(applicationContext,"Please enter caption",Toast.LENGTH_SHORT).show()
-            }else{
+            }else if (caption.isEmpty()) {
+            Toast.makeText(applicationContext, "Please enter a Status", Toast.LENGTH_SHORT).show()
+        } else if (caption.equals("Living Space", ignoreCase = true) && !caption.matches(".*[a-zA-Z]+.*".toRegex())) {
+            Toast.makeText(applicationContext, "Caption should contain at least one letter", Toast.LENGTH_SHORT).show()
+        }else{
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 progressDialog.setCancelable(false)

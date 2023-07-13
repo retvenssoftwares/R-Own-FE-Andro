@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Rown" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+    <style name="Theme.Rown" parent="Theme.MaterialComponents.NoActionBar">
     
         <!-- Primary brand color. -->
         <item name="colorPrimary">#ADD134</item>
@@ -11,7 +11,7 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:layoutDirection">ltr</item>
         <item name="android:windowDisablePreview">true</item>

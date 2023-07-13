@@ -42,7 +42,7 @@ class BottomSheetEditEducation : BottomSheetDialogFragment() {
         return BottomSheetEditEducation()
     }
     interface OnBottomEditEdClickListener{
-        fun bottomEditEdClick(EdFrBo : String)
+        fun bottomEditEdClick()
     }
 
     companion object {
@@ -200,6 +200,7 @@ class BottomSheetEditEducation : BottomSheetDialogFragment() {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    mListener?.bottomEditEdClick()
                 }else{
                     Log.e("error",response.code().toString())
                 }

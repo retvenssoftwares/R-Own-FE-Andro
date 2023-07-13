@@ -86,8 +86,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         if (type == "message"){
 
-//            MesiboApi.init(applicationContext)
-//            MesiboApi.startMesibo(true)
+            MesiboApi.init(applicationContext)
+            MesiboApi.startMesibo(true)
 
             val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
             fullScreenIntent.putExtra(MesiboUI.PEER,address)

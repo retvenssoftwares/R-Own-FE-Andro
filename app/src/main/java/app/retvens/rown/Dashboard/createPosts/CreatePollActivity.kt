@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.ImageView
@@ -160,6 +161,12 @@ class CreatePollActivity : AppCompatActivity() {
         val opinion4 = binding.opinion4.text.toString()
         val opinion5 = binding.opinion5.text.toString()
 
+        Log.e("option1",opinion1)
+        Log.e("option2",opinion2)
+        Log.e("option3",opinion3)
+        Log.e("option4",opinion4)
+        Log.e("option5",opinion5)
+
         if (pollNumber == 2) {
             val sendPoll = RetrofitBuilder.feedsApi.createPoll(
                 userId,
@@ -177,6 +184,7 @@ class CreatePollActivity : AppCompatActivity() {
                 ) {
                     progressDialog.dismiss()
                     if (response.isSuccessful) {
+                        Log.e("check1","1")
                         val response = response.body()!!
                         val intent = Intent(applicationContext, DashBoardActivity::class.java)
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -212,6 +220,7 @@ class CreatePollActivity : AppCompatActivity() {
                 ) {
                     progressDialog.dismiss()
                     if (response.isSuccessful) {
+                        Log.e("check1","2")
                         val response = response.body()!!
                         val intent = Intent(applicationContext, DashBoardActivity::class.java)
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -248,6 +257,7 @@ class CreatePollActivity : AppCompatActivity() {
                 ) {
                     progressDialog.dismiss()
                     if (response.isSuccessful) {
+                        Log.e("check1","3")
                         val response = response.body()!!
                         val intent = Intent(applicationContext, DashBoardActivity::class.java)
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -285,6 +295,7 @@ class CreatePollActivity : AppCompatActivity() {
                 ) {
                     progressDialog.dismiss()
                     if (response.isSuccessful) {
+                        Log.e("check1","4")
                         val response = response.body()!!
                         val intent = Intent(applicationContext, DashBoardActivity::class.java)
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

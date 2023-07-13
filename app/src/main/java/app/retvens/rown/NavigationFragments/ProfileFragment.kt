@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -194,7 +195,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                 call: Call<NormalUserDataClass?>,
                 response: Response<NormalUserDataClass?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
 
                     profilePic = response.data.profile.Profile_pic
@@ -220,7 +221,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                         userName.text = response.data.profile.User_name
                     }
                 }else{
-                    Toast.makeText(requireContext(),response.code(),Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.code().toString())
                 }
             }
 

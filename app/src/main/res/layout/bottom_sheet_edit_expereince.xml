@@ -103,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Employment Type"
+            android:hint="Job Type"
             android:textColorHint="@color/black"
             app:hintTextColor="@color/black"
             app:boxStrokeColor="@color/black"

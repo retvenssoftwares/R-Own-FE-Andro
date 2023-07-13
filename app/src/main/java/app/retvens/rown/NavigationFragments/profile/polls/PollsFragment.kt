@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.profile.polls
 
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -135,6 +136,9 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
                         shimmerFrameLayout.visibility = View.GONE
 
                         val response = response.body()!!
+
+                        Log.e("polls",response.toString())
+
                         if (response.isNotEmpty()) {
 
                     response.forEach { postsDataClass ->

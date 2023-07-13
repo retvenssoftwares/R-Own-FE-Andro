@@ -44,15 +44,15 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
     BottomSheetJobTitle.OnBottomJobTitleClickListener,
     BottomSheetCompany.OnBottomCompanyClickListener  {
 
-//    var mListener: OnBottomEditExClickListener ? = null
-//    fun setOnEditExClickListener(listener: Callback<UserProfileRequestItem?>){
-//        mListener = listener
-//    }
+    var mListener: OnBottomEditExClickListener ? = null
+    fun setOnEditExClickListener(listener: OnBottomEditExClickListener){
+        mListener = listener
+    }
     fun newInstance(): BottomSheetUpdateExperience? {
         return BottomSheetUpdateExperience(data,position)
     }
     interface OnBottomEditExClickListener{
-        fun bottomEditClick(CTCFrBo : String)
+        fun bottomEditClick()
     }
 
     companion object {
@@ -264,6 +264,7 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    mListener?.bottomEditClick()
                 }else{
                     Log.e("error",response.code().toString())
                 }

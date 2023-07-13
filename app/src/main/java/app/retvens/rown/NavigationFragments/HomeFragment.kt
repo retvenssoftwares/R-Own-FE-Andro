@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -65,7 +66,6 @@ class HomeFragment : Fragment() {
     lateinit var mainRecyclerView : RecyclerView
     lateinit var mList : ArrayList<DataItem>
 
-
     lateinit var recyclerCommunity : RecyclerView
     lateinit var communityArrayList : ArrayList<GetCommunitiesData>
     private var opemcommunity:ArrayList<GetCommunitiesData> = ArrayList()
@@ -87,6 +87,11 @@ class HomeFragment : Fragment() {
     private lateinit var progress:ProgressBar
     lateinit var shimmerFrameLayout2: ShimmerFrameLayout
     private lateinit var nestedScroll:NestedScrollView
+    private var feedList:ArrayList<PostsDataClass> = ArrayList()
+    private var postList:ArrayList<PostItem> = ArrayList()
+    private var pollList:ArrayList<PostItem> = ArrayList()
+    private var statusList:ArrayList<PostItem> = ArrayList()
+    private var checkInList:ArrayList<PostItem> = ArrayList()
     lateinit var empty : TextView
     private  var count:Int = 0
     private  var postCounter:Int = 0
@@ -129,10 +134,15 @@ class HomeFragment : Fragment() {
 
         progress = view.findViewById(R.id.progress)
 
+//        private Parcelable recyclerViewState;
+//        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+//
+//// Restore state
+//        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState)
+//
 
-        view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {
-            startActivity(Intent(context, CreateTextPost::class.java))
-        }
+
+
 
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferences?.getString("profile_image", "").toString()
@@ -204,6 +214,13 @@ class HomeFragment : Fragment() {
         adapter.removePostsFromList(mList)
         adapter.notifyDataSetChanged()
 
+        val recyclerViewState:Parcelable
+        recyclerViewState = mainRecyclerView.layoutManager?.onSaveInstanceState()!!
+        mainRecyclerView.layoutManager!!.onRestoreInstanceState(recyclerViewState)
+
+        view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {
+            startActivity(Intent(context, CreateTextPost::class.java))
+        }
 
         val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
         nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
@@ -221,10 +238,8 @@ class HomeFragment : Fragment() {
 //                    Toast.makeText(requireContext(), postCounter.toString(), Toast.LENGTH_SHORT).show()
 
                     if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
-                        Log.e("working","okk")
-                        progress.setVisibility(View.VISIBLE);
-                        getData()
-
+                            progress.setVisibility(View.VISIBLE);
+                            getData()
                     }
                 }
             }
@@ -280,34 +295,34 @@ class HomeFragment : Fragment() {
             if (pageCounter == 1) {
                 Log.e("check","1")
                 getHotels()
-                handler.postDelayed({
-                    getPost(user_id)
-                    progress.setVisibility(View.GONE)
-                }, 3000)
+//                handler.postDelayed({
+//                    getPost(user_id)
+//                    progress.setVisibility(View.GONE)
+//                }, 3000)
 
             }else if (pageCounter == 2) {
                 Log.e("check","2")
                 getOpenCommunites()
-                handler.postDelayed({
-                    getPost(user_id)
-                    progress.setVisibility(View.GONE)
-                }, 3000)
+//                handler.postDelayed({
+//                    getPost(user_id)
+//                    progress.setVisibility(View.GONE)
+//                }, 3000)
 
             }else if (pageCounter == 3) {
                 Log.e("check","3")
                 getAllBlogs()
-                handler.postDelayed({
-                    getPost(user_id)
-                    progress.setVisibility(View.GONE)
-                }, 3000)
+//                handler.postDelayed({
+//                    getPost(user_id)
+//                    progress.setVisibility(View.GONE)
+//                }, 3000)
 
             }else if (pageCounter == 4) {
                 Log.e("check","4")
                 getServices()
-                handler.postDelayed({
-                    getPost(user_id)
-                    progress.setVisibility(View.GONE)
-                }, 3000)
+//                handler.postDelayed({
+//                    getPost(user_id)
+//                    progress.setVisibility(View.GONE)
+//                }, 3000)
 
                 pageCounter = 1
             }
@@ -318,6 +333,8 @@ class HomeFragment : Fragment() {
 //                progress.setVisibility(View.GONE)
 //            }, 3000)
         }
+
+        getPost(user_id)
     }
 
     private fun getPost(userId: String) {
@@ -342,39 +359,24 @@ class HomeFragment : Fragment() {
 
                     Log.e("response",response.toString())
 
-                    val postList = ArrayList<DataItem.Banner>()
-
-                    response.forEach { it ->
-
-
+                        Log.e("feedList",feedList.toString())
+                        response.forEach {
                             it.posts.forEach { item ->
+                                if (item.post_type == "share some media") {
+                                    postList.addAll(it.posts)
+                                    mList.add(0, DataItem(DataItemType.BANNER, banner = item))
+                                    postCounter += 1
+                                }
+                                if (item.post_type == "Polls") {
+                                        postList.addAll(it.posts)
+                                    mList.add(0, DataItem(DataItemType.POLL, banner = item))
+                                        postCounter += 1
 
-                                if (item.post_type == "share some media"){
-                                    if (mList.contains(DataItem(DataItemType.BANNER, banner = item))){
-//                                        mList.shuffle()
-//                                        adapter.notifyDataSetChanged()
-                                    } else {
-                                        mList.add(0, DataItem(DataItemType.BANNER, banner = item))
-                                        postCounter += 1
-                                    }
                                 }
-                                if (item.post_type == "Polls"){
-                                    if (mList.contains(DataItem(DataItemType.POLL, banner = item))){
-//                                        mList.shuffle()
-//                                        adapter.notifyDataSetChanged()
-                                    } else {
-                                        mList.add(0, DataItem(DataItemType.POLL, banner = item))
+                                if (item.post_type == "normal status") {
+                                    statusList.addAll(it.posts)
+                                    mList.add(0, DataItem(DataItemType.Status, banner = item))
                                         postCounter += 1
-                                    }
-                                }
-                                if (item.post_type == "normal status"){
-                                    if (mList.contains(DataItem(DataItemType.Status, banner = item))){
-//                                        mList.shuffle()
-//                                        adapter.notifyDataSetChanged()
-                                    } else {
-                                        mList.add(0, DataItem(DataItemType.Status, banner = item))
-                                        postCounter += 1
-                                    }
                                 }
 
 //                                if (item.post_type == "Update about an event"){
@@ -387,14 +389,11 @@ class HomeFragment : Fragment() {
 //                                    }
 //                                }
 
-                                if (item.post_type == "Check-in"){
-                                    if (mList.contains(DataItem(DataItemType.CheckIn, banner = item))){
-//                                        mList.shuffle()
-//                                        adapter.notifyDataSetChanged()
-                                    } else {
-                                        mList.add(0, DataItem(DataItemType.CheckIn, banner = item))
-                                        postCounter += 1
-                                    }
+                                if (item.post_type == "Check-in") {
+                                    Log.e("hotel",item.toString())
+                                    checkInList.add(item)
+                                    mList.add(0, DataItem(DataItemType.CheckIn, banner = item))
+                                    postCounter += 1
                                 }
 
 
@@ -405,13 +404,7 @@ class HomeFragment : Fragment() {
                             }
 
 //
-
-
-
-
                     }
-
-
                     adapter.notifyDataSetChanged()
 
                     adapter.setOnItemClickListener(object : MainAdapter.OnItemClickListener{

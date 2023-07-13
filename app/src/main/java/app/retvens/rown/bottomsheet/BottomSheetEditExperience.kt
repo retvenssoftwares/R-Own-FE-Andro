@@ -51,7 +51,7 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
         return BottomSheetEditExperience()
     }
     interface OnBottomEditExClickListener{
-        fun bottomEditClick(CTCFrBo : String)
+        fun bottomEditClick()
     }
 
     companion object {
@@ -270,6 +270,7 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
                     val response = response.body()!!
                     Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
+                    mListener?.bottomEditClick()
                 }else{
                     Log.e("error",response.code().toString())
                     progressDialog.dismiss()

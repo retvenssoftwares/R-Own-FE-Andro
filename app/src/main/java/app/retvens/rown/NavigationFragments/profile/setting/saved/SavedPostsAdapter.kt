@@ -82,8 +82,9 @@ class SavedPostsAdapter(val context: Context, val mediaList:ArrayList<PostItem>)
             val images:ArrayList<String> = ArrayList()
             media.media.forEach { item ->
                 images.add(item.post)
-                intent.putExtra("time",item.date_added)
+
             }
+            intent.putExtra("time",media.date_added)
             intent.putStringArrayListExtra("postPic",images)
             intent.putExtra("location",media.location)
             intent.putExtra("likeCount",media.likeCount)

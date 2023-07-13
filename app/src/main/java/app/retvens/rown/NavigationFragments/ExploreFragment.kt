@@ -1,14 +1,19 @@
 package app.retvens.rown.NavigationFragments
 
+
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentTransaction
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsFragment
@@ -76,7 +81,8 @@ class ExploreFragment : Fragment() {
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
             selectedFrag = 0
-
+            val event = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
+            view.dispatchKeyEvent(event)
             val childFragment: Fragment = ExplorePostsFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
@@ -92,7 +98,8 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
-
+            val event = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
+            view.dispatchKeyEvent(event)
             selectedFrag = 1
             val childFragment: Fragment = ExploreJobsFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -109,7 +116,8 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
-
+            val event = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
+            view.dispatchKeyEvent(event)
             selectedFrag = 2
             val childFragment: Fragment = ExploreBlogsFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()

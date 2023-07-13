@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.setting.discoverPeople
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -28,7 +29,7 @@ import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 
-class DiscoverAllAdapter(val listS : ArrayList<Post>, val context: Context) : RecyclerView.Adapter<DiscoverAllAdapter.DiscoverViewHolder>() {
+class DiscoverAllAdapter(var listS : ArrayList<Post>, val context: Context) : RecyclerView.Adapter<DiscoverAllAdapter.DiscoverViewHolder>() {
 
     val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
     val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -170,5 +171,11 @@ class DiscoverAllAdapter(val listS : ArrayList<Post>, val context: Context) : Re
         } catch (e : ConcurrentModificationException){
             Log.d("EPA", e.toString())
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: ArrayList<Post>) {
+        listS = newItems
+        notifyDataSetChanged()
     }
 }

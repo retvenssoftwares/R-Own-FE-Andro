@@ -78,6 +78,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             var save = true
             var like = true
             var operatioin = "push"
+
+
             var count = banner.Like_count.toInt()
 
             val post = banner
@@ -277,8 +279,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             val post = banner
 
-            if (banner.Profile_pic.isNotEmpty()) {
-                Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+            if (post.Profile_pic.isNotEmpty()) {
+                Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
             }else {
                 binding.postProfile.setImageResource(R.drawable.svg_user)
             }
@@ -339,17 +341,17 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.postProfile.setOnClickListener {
 
-                if(banner.Role == "Business Vendor/Freelancer"){
+                if(post.Role == "Business Vendor/Freelancer"){
                     val intent = Intent(context,VendorProfileActivity::class.java)
-                    intent.putExtra("userId",banner.user_id)
+                    intent.putExtra("userId",post.user_id)
                     context.startActivity(intent)
-                }else if (banner.Role == "Hotel Owner"){
+                }else if (post.Role == "Hotel Owner"){
                     val intent = Intent(context,OwnerProfileActivity::class.java)
-                    intent.putExtra("userId",banner.user_id)
+                    intent.putExtra("userId",post.user_id)
                     context.startActivity(intent)
                 } else {
                     val intent = Intent(context,UserProfileActivity::class.java)
-                    intent.putExtra("userId",banner.user_id)
+                    intent.putExtra("userId",post.user_id)
                     context.startActivity(intent)
 
                 }
@@ -358,11 +360,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.eventImage
 
             binding.likePost.setOnClickListener {
-                onItemClickListener?.onItemClick(banner)
+                onItemClickListener?.onItemClick(post)
             }
 
             binding.comment.setOnClickListener {
-                onItemClickListener?.onItemClickForComment(banner,position)
+                onItemClickListener?.onItemClickForComment(post,position)
             }
 
         }
@@ -479,17 +481,17 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.postProfile.setOnClickListener {
 
-                if(banner.Role == "Business Vendor/Freelancer"){
+                if(post.Role == "Business Vendor/Freelancer"){
                     val intent = Intent(context,VendorProfileActivity::class.java)
-                    intent.putExtra("userId",banner.user_id)
+                    intent.putExtra("userId",post.user_id)
                     context.startActivity(intent)
-                }else if (banner.Role == "Hotel Owner"){
+                }else if (post.Role == "Hotel Owner"){
                     val intent = Intent(context,OwnerProfileActivity::class.java)
-                    intent.putExtra("userId",banner.user_id)
+                    intent.putExtra("userId",post.user_id)
                     context.startActivity(intent)
                 } else {
                     val intent = Intent(context,UserProfileActivity::class.java)
-                    intent.putExtra("userId",banner.user_id)
+                    intent.putExtra("userId",post.user_id)
                     context.startActivity(intent)
 
                 }
@@ -501,7 +503,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.likePost.setOnClickListener {
 
                     if(like){
-                        postLike(banner.post_id, context) {
+                        postLike(post.post_id, context) {
                             post.like = "Liked"
                             like = false
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
@@ -512,7 +514,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //                        onItemClickListener?.onItemClick(banner)
                     } else{
 
-                        postLike(banner.post_id, context){
+                        postLike(post.post_id, context){
                             post.like = "Unliked"
                             like = true
                             binding.likePost.setImageResource(R.drawable.svg_like_post)
@@ -537,8 +539,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.likedAnimation.visibility = View.VISIBLE
 
                     if(like) {
-                        postLike(banner.post_id, context) {
-                            banner.like = "Liked"
+                        postLike(post.post_id, context) {
+                            post.like = "Liked"
                             like = false
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
                             count += 1
@@ -556,7 +558,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
 
             binding.comment.setOnClickListener {
-                onItemClickListener?.onItemClickForComment(banner,position)
+                onItemClickListener?.onItemClickForComment(post,position)
             }
 
         }
@@ -570,11 +572,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             var like = true
             var operatioin = "push"
 
-            if (banner.User_name.isNotEmpty()){
-                binding.userNamePost.text = banner.User_name
-            } else{
-                binding.userNamePost.text = banner.Full_name
-            }
+            val banner = banner
+
+            binding.userNamePost.text = banner.Full_name
 
             binding.titleStatus.text = banner.caption
             if (banner.Profile_pic.isNotEmpty()) {
@@ -698,6 +698,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.checkVotes.visibility = View.GONE
 
+            val banner = banner
 
             if (banner.Profile_pic.isNotEmpty()) {
                 Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
@@ -1158,7 +1159,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     fun removePostsFromList(data: List<DataItem>){
         try {
             data.forEach {
-                if (it.banner!!.display_status == "0"){
+                if (it.banner?.display_status == "0"){
 
                     if (dataItemList.contains(DataItem(DataItemType.BANNER, banner = it.banner))) {
                         dataItemList.remove(DataItem(DataItemType.BANNER, banner = it.banner))
@@ -1173,6 +1174,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         dataItemList.remove(DataItem(DataItemType.Event, banner = it.banner))
                     }
                 }
+
+
             }
         } catch (e : ConcurrentModificationException){
             Log.d("EPA", e.toString())

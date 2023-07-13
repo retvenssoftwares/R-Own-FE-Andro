@@ -135,10 +135,15 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         likeCountText.text = likeCount.toString()
         commentC.text = commentCount.toString()
 
-        val timeStamp = intent.getStringExtra("time")!!
+        try {
+            val timeStamp = intent.getStringExtra("time")!!
 
-        val extact = TimesStamp.convertTimeToText(timeStamp)
-        time.text = extact.toString()
+            val extact = TimesStamp.convertTimeToText(timeStamp)
+            time.text = extact.toString()
+        }catch (e:NullPointerException){
+            Log.e("error",e.message.toString())
+        }
+
 
 
 

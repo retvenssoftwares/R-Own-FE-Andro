@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:fitsSystemWindows="true"
+    android:theme="@style/Theme.Rown"
     tools:context=".NavigationFragments.profile.UserDetailsActivity">
 
     <RelativeLayout
         android:id="@+id/relative"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="80dp"
         android:background="#272A3D"
         android:paddingTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
