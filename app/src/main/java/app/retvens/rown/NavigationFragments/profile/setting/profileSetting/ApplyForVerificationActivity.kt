@@ -16,6 +16,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -75,6 +76,8 @@ class ApplyForVerificationActivity : AppCompatActivity() {
         val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
         binding.fullName.text = profileName
+
+        binding.save.isClickable = false
 
         binding.uploadDoc.setOnClickListener {
             val dialog = Dialog(this)
@@ -212,6 +215,8 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                 val croppedImage = UCrop.getOutput(data!!)!!
                 croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage, this)
                 binding.preview.setImageURI(croppedImageUri)
+                binding.save.isClickable = true
+                binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
             } else if (resultCode == UCrop.RESULT_ERROR) {
                 Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show()
             }

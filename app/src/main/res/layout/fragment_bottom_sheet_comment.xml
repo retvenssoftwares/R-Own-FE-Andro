@@ -145,7 +145,7 @@
         android:orientation="horizontal"
         android:elevation="8dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -180,6 +180,9 @@
             android:layout_marginTop="10dp"
             style="@style/TextAppearance.AppCompat.Body1"
             android:background="@null"
+            android:editable="true"
+            android:focusedByDefault="true"
+            android:focusable="true"
             android:layout_marginHorizontal="6dp"
             app:layout_constraintEnd_toStartOf="@id/postComment"
             app:layout_constraintTop_toTopOf="parent"

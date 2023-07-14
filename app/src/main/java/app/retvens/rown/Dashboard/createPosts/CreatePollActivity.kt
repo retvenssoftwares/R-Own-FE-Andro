@@ -12,6 +12,8 @@ import android.view.View
 import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -85,6 +87,25 @@ class CreatePollActivity : AppCompatActivity() {
 
         }
 
+        binding.sharePoll.isClickable = false
+
+        binding.opinion1.addTextChangedListener {
+            if (binding.opinion1.text!!.isNotEmpty()) {
+                binding.sharePoll.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+                binding.sharePoll.isClickable = true
+            }
+        }
+        binding.opinion2.addTextChangedListener {
+            if (binding.opinion2.text!!.isNotEmpty()) {
+                binding.sharePoll.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.sharePoll.isClickable = true
+            }
+        }
 
         binding.opinion3Layout.setEndIconOnClickListener {
             if (pollNumber == 5) {

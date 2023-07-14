@@ -260,7 +260,7 @@
         app:cardElevation="8dp"
         android:layout_marginVertical="30dp"
         android:layout_marginHorizontal="40dp"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/grey_40"
         app:layout_constraintTop_toBottomOf="@id/LL1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -275,7 +275,6 @@
             android:textAlignment="center"
             android:paddingVertical="14dp"
             android:paddingHorizontal="48dp"
-            android:background="@color/suggested_job_yellow"
             android:text="Done"/>
 
     </androidx.cardview.widget.CardView>
