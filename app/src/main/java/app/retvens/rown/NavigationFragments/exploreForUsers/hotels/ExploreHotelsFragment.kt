@@ -1,5 +1,8 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.hotels
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -9,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AbsListView
 import android.widget.EditText
 import android.widget.ImageView
@@ -28,6 +32,7 @@ import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEvents
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsAdapter
+import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -50,6 +55,8 @@ class ExploreHotelsFragment : Fragment() {
 
     private var lastPage = 1
 
+    private lateinit var progressDialog: Dialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,6 +77,15 @@ class ExploreHotelsFragment : Fragment() {
         empty = view.findViewById(R.id.empty)
         errorImage = view.findViewById(R.id.errorImage)
         progress = view.findViewById(R.id.progress)
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
 
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
 
@@ -130,6 +146,7 @@ class ExploreHotelsFragment : Fragment() {
                 call: Call<List<ExploreHotelData>?>,
                 response: Response<List<ExploreHotelData>?>
             ) {
+                progressDialog.dismiss()
                 try {
                     if (isAdded){
                         if (response.isSuccessful){
@@ -197,6 +214,7 @@ class ExploreHotelsFragment : Fragment() {
 
             override fun onFailure(call: Call<List<ExploreHotelData>?>, t: Throwable) {
                 shimmerFrameLayout.stopShimmer()
+                progressDialog.dismiss()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again - ${t.localizedMessage}"
                 errorImage.visibility = View.VISIBLE
