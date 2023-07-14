@@ -376,7 +376,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     this.ib_showattach = (ImageButton) view.findViewById(R.id.showAttachment);
                     this.ib_showattach.setOnClickListener(new OnClickListener() {
                         public void onClick(View view) {
-                            MessagingFragment.this.mEditLayout.setVisibility(View.GONE);
+                            //MessagingFragment.this.mEditLayout.setVisibility(View.GONE);
                             MessagingFragment.this.mAttachLayout.setVisibility(View.VISIBLE);
                             isSharingOptionsOpen = true;
                         }

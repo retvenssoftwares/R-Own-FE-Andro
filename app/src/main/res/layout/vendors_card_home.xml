@@ -5,7 +5,7 @@
     android:layout_height="300dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="25dp"
-    app:cardElevation="6dp"
+    app:cardElevation="3dp"
     android:layout_margin="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,13 +56,14 @@
         android:id="@+id/vendors_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@grafixpixel"
+        android:text="grafixpixel"
         android:textSize="8dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/green_own"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/vendor_name"
         app:layout_constraintTop_toBottomOf="@id/vendor_name"/>
+
     <ImageView
         android:layout_width="15dp"
         android:layout_height="15dp"

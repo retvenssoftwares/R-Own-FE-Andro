@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chat_layout"
-    android:background="#FFFFFF"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@mipmap/chat_bg_png">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/customLayout"
+        android:background="@mipmap/chat_bg_png"
         android:scrollbarStyle="outsideOverlay" />
 
     <!-- <include layout="@layout/attach_layout" /> -->
@@ -56,7 +58,6 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
         android:animateLayoutChanges="true"
-        android:background="@drawable/editchat_bg_rounded"
         android:orientation="vertical">
 
         <LinearLayout
@@ -66,9 +67,7 @@
             android:layout_gravity="center"
             android:animateLayoutChanges="true"
             android:orientation="vertical"
-            android:layout_marginHorizontal="10dp"
-            android:padding="1dp"
-            android:background="@drawable/editchat_bg_rounded"
+            android:padding="2dp"
             android:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,19 +75,14 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp">
 
-                <RelativeLayout
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:id="@+id/linearLayout5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
                 <LinearLayout
-                    android:id="@+id/linear1"
-                    android:layout_width="match_parent"
+                    android:id="@+id/linearLayout5"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="2dp"
-                    android:layout_marginStart="16dp"
+                    android:background="@drawable/qamp_outline"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout6"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -100,7 +94,7 @@
                         android:alpha="0.6"
                         android:background="@android:color/transparent"
                         android:clickable="true"
-                        android:src="@drawable/vector_chat_gallery"
+                        android:src="@drawable/photo_msg"
                         android:visibility="visible" />
 
                     <TextView
@@ -108,36 +102,22 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Gallery"
-                        android:textColor="@color/black"
+                        android:text="@string/gallery_text"
+                        android:textColor="@color/text_color17"
                         android:textSize="12sp" />
-
                 </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/linear1"
-                        android:layout_gravity="bottom"
-                        android:background="@color/grey"
-                        tools:ignore="MissingConstraints" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/linearLayout6"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
-                    >
 
                 <LinearLayout
-                    android:id="@+id/linear2"
-                    android:layout_width="match_parent"
+                    android:id="@+id/linearLayout6"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:orientation="horizontal"
-                    android:padding="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                   >
+                    android:background="@drawable/qamp_outline"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout7"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageButton
                         android:id="@+id/video"
@@ -146,7 +126,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.6"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/vector_chat_video"
+                        android:src="@drawable/video_msg"
                         android:visibility="visible" />
 
                     <TextView
@@ -154,68 +134,55 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Videos"
-                        android:textColor="@color/black"
+                        android:text="@string/video_text"
+                        android:textColor="@color/text_color17"
                         android:textSize="12sp" />
 
                 </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/linear2"
-                        android:layout_gravity="bottom"
-                        android:background="@color/grey"
-                        tools:ignore="MissingConstraints" />
-                </RelativeLayout>
-
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/linearLayout7"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="16dp"-->
-<!--                    android:background="@drawable/qamp_outline"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:padding="5dp"-->
-<!--                    app:layout_constraintEnd_toStartOf="@+id/linearLayout8"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/linearLayout6"-->
-<!--                    app:layout_constraintTop_toTopOf="parent">-->
-
-<!--                    <ImageButton-->
-<!--                        android:id="@+id/location"-->
-<!--                        android:layout_width="50dp"-->
-<!--                        android:layout_height="50dp"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:alpha="0.6"-->
-<!--                        android:background="@android:color/transparent"-->
-<!--                        android:src="@drawable/location_msg"-->
-<!--                        android:visibility="visible" />-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="location"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:textSize="12sp" />-->
-<!--                </LinearLayout>-->
-
-                <RelativeLayout
-                    android:id="@+id/linearLayout8"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout6"
-                    >
                 <LinearLayout
-                    android:id="@id/linear3"
+                    android:id="@+id/linearLayout7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:orientation="horizontal"
-                    android:padding="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    >
+                    android:background="@drawable/qamp_outline"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayout6"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/location"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:alpha="0.6"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/location_msg"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/location_text"
+                        android:textColor="@color/text_color17"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/qamp_outline"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayout7"
+                    app:layout_constraintTop_toTopOf="parent">
 
 
                     <ImageButton
@@ -225,7 +192,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.6"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/vector_chat_file"
+                        android:src="@drawable/doc_msg"
                         android:visibility="visible" />
 
 
@@ -234,19 +201,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Documents"
-                        android:textColor="@color/black"
+                        android:text="@string/document_text"
+                        android:textColor="@color/text_color17"
                         android:textSize="12sp" />
 
                 </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@+id/linear3"
-                        android:layout_gravity="bottom"
-                        android:background="@color/grey"
-                        tools:ignore="MissingConstraints" />
-                </RelativeLayout>
 
                 <ImageButton
                     android:id="@+id/audio"
@@ -267,11 +226,10 @@
             android:id="@+id/reply_layout_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
+            android:background="@color/transparent_color"
             android:orientation="vertical"
             android:padding="10dp"
             android:visibility="visible">
-
             <include layout="@layout/reply_layout">
 
             </include>
@@ -284,6 +242,7 @@
                 android:layout_weight="1"
                 android:animateLayoutChanges="true"
                 android:background="@drawable/qamp_outline"
+                android:backgroundTint="@color/white"
                 android:minHeight="50dp"
                 android:orientation="horizontal"
                 android:paddingLeft="5dp"
@@ -292,8 +251,8 @@
 
                 <ImageButton
                     android:id="@+id/mojiButton"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="0dp"
                     android:alpha="0.6"
@@ -321,25 +280,27 @@
                         android:layout_marginRight="4dp"
                         android:layout_marginBottom="3dp"
                         android:background="@null"
-                        android:hint="Type Your Message..."
+                        android:hint="@string/Message_hint"
                         android:inputType="textMultiLine"
                         android:paddingTop="2dp"
                         android:singleLine="false"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_color17"
                         android:textColorHint="#c4c0bd"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
 
 
                 </LinearLayout>
 
+
                 <ImageButton
                     android:id="@+id/showAttachment"
-                    android:layout_width="35dp"
+                    android:layout_width="40dp"
                     android:layout_height="35dp"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="0dp"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/vector_chat_attach" />
+                    android:src="@drawable/attach"
+                    android:tint="#828282"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -366,21 +327,11 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/vector_chat_cam"
+                        android:src="@drawable/ic_camera_light"
                         android:visibility="visible"
                         app:tint="#828282" />
 
                 </RelativeLayout>
-
-
-<!--                <ImageButton-->
-<!--                    android:id="@+id/voicenotes"-->
-<!--                    android:layout_width="35dp"-->
-<!--                    android:layout_height="35dp"-->
-<!--                    android:layout_gravity="bottom"-->
-<!--                    android:layout_marginBottom="0dp"-->
-<!--                    android:background="@android:color/transparent"-->
-<!--                    android:src="@drawable/mikeicon" />-->
 
 
             </LinearLayout>
