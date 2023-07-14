@@ -219,8 +219,7 @@ class HomeFragment : Fragment() {
 
 
                     if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
-                            progress.setVisibility(View.VISIBLE)
-                            getPost(user_id)
+                            getData()
                     }
                 }
             }
@@ -228,31 +227,31 @@ class HomeFragment : Fragment() {
         })
 
 
-        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    isLoading = true;
-                }
-            }
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0) {
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val currentItem = layoutManager.childCount
-                    val totalItem = layoutManager.itemCount
-                    val scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                    if (isLoading && (lastVisibleItemPosition == totalItem - 2)) {
-                        isLoading = false
-                        getData()
-                    }
-                }
-
-
-            }
-        })
+//        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+//                    isLoading = true;
+//                }
+//            }
+//
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                if (dy > 0) {
+//                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//                    val currentItem = layoutManager.childCount
+//                    val totalItem = layoutManager.itemCount
+//                    val scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+//                    if (isLoading && (lastVisibleItemPosition == totalItem - 2)) {
+//                        isLoading = false
+//                        getData()
+//                    }
+//                }
+//
+//
+//            }
+//        })
 
 
     }
@@ -265,8 +264,7 @@ class HomeFragment : Fragment() {
 
 
     private fun getData() {
-        val sharedPreferences1 =
-            context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val sharedPreferences1 = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
         val handler = Handler()
         when (pageCounter) {
@@ -347,7 +345,7 @@ class HomeFragment : Fragment() {
     private fun getPost(userId: String) {
 
 
-        val getData = RetrofitBuilder.feedsApi.getPost(userId)
+        val getData = RetrofitBuilder.feedsApi.getFeedPost(userId)
 
         getData.enqueue(object : Callback<List<PostsDataClass>?> {
             @SuppressLint("NotifyDataSetChanged")
