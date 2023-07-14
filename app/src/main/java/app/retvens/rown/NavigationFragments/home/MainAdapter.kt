@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.home
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.DataCollections.FeedCollection.Option
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.VoteCollection
@@ -902,19 +904,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 context.startActivity(Intent(context, ViewAllBlogsActivity::class.java))
             }
         }
-
-        //        fun bindHotelAwardsRecyclerView(recyclerItemList : List<DataItem.AwardsRecyclerData>){
-//            val adapter = AwardsChildAdapter(DataItemType.HOTEL_AWARDS, recyclerItemList)
-//            binding.childRecyclerView.adapter = adapter
-//            binding.recyclerHeading.text = "Check what's in store"
-//            binding.viewAllItem.setOnClickListener {
-//                Toast.makeText(context, "Hotel Awards", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-        fun bindVendorsRecyclerView(recyclerItemList: List<ProfileServicesDataItem>) {
-            Log.e("funservice", recyclerItemList.toString())
-            val adapter = VendorsChildAdapter(
-                context, DataItemType.VENDORS,
+        fun bindOurCommunityRecyclerView(recyclerItemList : List<GetCommunitiesData>){
+            binding.viewAllItem.visibility = View.GONE
+            val adapter = CommunityListAdapter(context,DataItemType.OURCOMMUNITY, recyclerItemList)
+            binding.childRecyclerView.adapter = adapter
+        }
+        fun bindVendorsRecyclerView(recyclerItemList : List<ProfileServicesDataItem>){
+             Log.e("funservice",recyclerItemList.toString())
+            val adapter = VendorsChildAdapter(context, DataItemType.VENDORS,
                 recyclerItemList as ArrayList<ProfileServicesDataItem>
             )
             adapter.removeVendorFromList(recyclerItemList)
@@ -926,6 +923,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 context.startActivity(Intent(context, ViewAllVendorsActivity::class.java))
             }
         }
+        fun creatPostRecyclerView(){
+            binding.viewAllItem.visibility = View.GONE
+            val adapter = CreatePostAdapter(context,DataItemType.CREATEPOST)
+            binding.childRecyclerView.adapter = adapter
+        }
+
+
 
     }
 
@@ -1023,14 +1027,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             else -> {
                 Log.e("position", dataItemList[position].viewType.toString())
                 when (dataItemList[position].viewType) {
-                    3 -> {
+                    DataItemType.HOTEL_SECTION -> {
                         dataItemList[position].hotelSectionList?.let {
                             Log.e("finalHotel", it.toString())
                             (holder as RecyclerItemViewHolder).bindHotelSectionRecyclerView(it)
                         }
 
                     }
-                    0 -> {
+                    DataItemType.BLOGS-> {
                         dataItemList[position].blogsRecyclerDataList?.let {
                             Log.e("finalBlog", it.toString())
                             (holder as RecyclerItemViewHolder).bindBlogsRecyclerView(it)
@@ -1045,6 +1049,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         dataItemList[position].createCommunityRecyclerDataList?.let {
                             (holder as RecyclerItemViewHolder).bindCreateCommunityRecyclerView(it)
                         }
+                    }
+                    DataItemType.OURCOMMUNITY ->{
+                        dataItemList[position].ourCommunityRecyclerList?.let {
+                            (holder as RecyclerItemViewHolder).bindOurCommunityRecyclerView(it)
+                        }
+                    }
+                    DataItemType.CREATEPOST ->{
+                        (holder as RecyclerItemViewHolder).creatPostRecyclerView()
                     }
                     else -> {
                         dataItemList[position].communityRecyclerDataList?.let {

@@ -5,8 +5,11 @@ import android.content.Intent
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -20,7 +23,9 @@ import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.R
+import okhttp3.internal.notify
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,6 +42,7 @@ class SelectMembers : AppCompatActivity() {
     private  var profile:ArrayList<String> = ArrayList()
     private  var userId:ArrayList<String> = ArrayList()
     private  var userList: List<Connections> = emptyList()
+    private lateinit var searchBar:EditText
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +53,7 @@ class SelectMembers : AppCompatActivity() {
 
         number.add(phone)
 
+        searchBar = findViewById(R.id.searchBar)
         findViewById<ImageButton>(R.id.createCommunity_backBtn_members).setOnClickListener { onBackPressed() }
 
         recycler = findViewById<RecyclerView>(R.id.listOfaddmembers)
@@ -91,24 +98,31 @@ class SelectMembers : AppCompatActivity() {
         receiverProfileAdapter.setOnItemClickListener(object :
             SelectMembersAdapter.OnItemClickListener {
             override fun onItemClick(member: Connections) {
-                next.visibility = View.VISIBLE
 
                 val index = selectedMembe.indexOfFirst { it.Full_name == member.Full_name }
+
                 if (index == -1) {
+                    if (number.size != 0 && number.size!=1){
+                        next.visibility = View.VISIBLE
+                    }
 
 
                     member.isSelected = !member.isSelected
 
                     if (member.isSelected){
                         number.add(member.Phone)
-                        names.add(member.Full_name!!)
-                        profile.add(member.Profile_pic!!)
+                        names.add(member.Full_name)
+                        profile.add(member.Profile_pic)
                         userId.add(member.User_id)
                     }else{
                         number.remove(member.Phone)
                         names.remove(member.Full_name)
                         profile.remove(member.Profile_pic)
                         userId.remove(member.User_id)
+                        Log.e("number",number.toString())
+                        if (number.size == 1){
+                            next.visibility = View.GONE
+                        }
                     }
 
                 } else {
@@ -121,7 +135,6 @@ class SelectMembers : AppCompatActivity() {
                 selectedMembersAdapter.addSelectedMember(member)
                 selectedMembersAdapter.notifyDataSetChanged()
 
-                Toast.makeText(applicationContext,number.toString(),Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -155,6 +168,32 @@ class SelectMembers : AppCompatActivity() {
                     // Update the adapter with the new data
                     receiverProfileAdapter.userList = userList ?: emptyList()
                     receiverProfileAdapter.notifyDataSetChanged()
+                    val original = userList.toList()
+
+                    searchBar.addTextChangedListener(object : TextWatcher{
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val filterData = original.filter { item ->
+                                item.Full_name.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            receiverProfileAdapter.updateData(filterData)
+                        }
+
+                        override fun afterTextChanged(p0: Editable?) {
+
+                        }
+
+                    })
+
                 }
             }
 

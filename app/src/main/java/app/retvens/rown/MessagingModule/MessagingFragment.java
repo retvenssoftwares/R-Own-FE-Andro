@@ -1555,15 +1555,10 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
              this.mEmojiEditText.getText().clear();
              MesiboProfile cc = Mesibo.getSelfProfile();
             try {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        performChatNotification(userID, cc.getName(), msg.message);
-                    }
-                }, 500);
+                performChatNotification(userID, cc.getName(), msg.message);
+
             }catch (NullPointerException e){
-                Log.e("error",e.getMessage().toString());
+                Log.e("error","e.getMessage().toString()");
             }
 
 

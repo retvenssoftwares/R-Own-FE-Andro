@@ -112,12 +112,7 @@ class HomeFragment : Fragment() {
             isBS = false
         }
 
-        viewAllCommunity = view.findViewById(R.id.view_all_bg)
-        viewAllCommunity.setOnClickListener {
-            startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
-        }
-
-        nestedScroll = view.findViewById(R.id.homeFragment)
+//        nestedScroll = view.findViewById(R.id.homeFragment)
 
         empty = view.findViewById(R.id.empty)
 
@@ -126,28 +121,7 @@ class HomeFragment : Fragment() {
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
 
         progress = view.findViewById(R.id.progress)
-
-
-        val sharedPreferences =
-            context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
-        val profilePic = sharedPreferences?.getString("profile_image", "").toString()
-        val homeProfile = view.findViewById<ShapeableImageView>(R.id.home_profile)
-        if (profilePic.isNotEmpty()) {
-            Glide.with(requireContext()).load(profilePic).into(homeProfile)
-        } else {
-            getProfileInfo(requireContext())
-            if (profileImage.isNotEmpty()) {
-                Glide.with(requireContext()).load(profileImage).into(homeProfile)
-            } else {
-                homeProfile.setImageResource(R.drawable.svg_user)
-            }
-        }
-
-        recyclerCommunity = view.findViewById(R.id.recyclerCommunity)
-        recyclerCommunity.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerCommunity.setHasFixedSize(true)
-
+        getProfileInfo(requireContext())
         communityArrayList = arrayListOf<GetCommunitiesData>()
         commentList = ArrayList()
 
@@ -158,11 +132,9 @@ class HomeFragment : Fragment() {
 
         mList = ArrayList()
 
-        refresh.setOnRefreshListener {
+        mList.add(0,DataItem(DataItemType.CREATEPOST))
 
-            Thread {
-                getCommunities()
-            }.start()
+        refresh.setOnRefreshListener {
             postCounter = 0
             pageCounter = 1
 
@@ -179,16 +151,9 @@ class HomeFragment : Fragment() {
             refresh.isRefreshing = false
         }
 
-
-        val btn = view.findViewById<ImageView>(R.id.community_btn)
-        btn.setOnClickListener {
-            startActivity(Intent(context, CreateCommunity::class.java))
-        }
-
         mainRecyclerView = view.findViewById(R.id.mainRecyclerView)
         mainRecyclerView.setHasFixedSize(true)
-        mainRecyclerView.layoutManager = context?.let { CustomLinearLayoutManager(it) }
-        mainRecyclerView.isNestedScrollingEnabled = false
+        mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         getCommunities()
         getPost(user_id)
@@ -199,105 +164,98 @@ class HomeFragment : Fragment() {
         adapter.removePostsFromList(mList)
         adapter.notifyDataSetChanged()
 
-        view.findViewById<RelativeLayout>(R.id.relative_create).setOnClickListener {
-            startActivity(Intent(context, CreateTextPost::class.java))
-        }
 
-        val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
-        nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
-            override fun onScrollChange(
-                v: NestedScrollView,
-                scrollX: Int,
-                scrollY: Int,
-                oldScrollX: Int,
-                oldScrollY: Int
-            ) {
-                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()))  {
-                    val currentItem = layoutManager.childCount
-                    val totalItem = layoutManager.itemCount
-                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-
-
-                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
-                            getData()
-                    }
-                }
-            }
-
-        })
-
-
-
-//        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-//                    isLoading = true;
-//                }
-//            }
-//
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//                if (dy > 0) {
-//                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//        val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
+//        nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
+//            override fun onScrollChange(
+//                v: NestedScrollView,
+//                scrollX: Int,
+//                scrollY: Int,
+//                oldScrollX: Int,
+//                oldScrollY: Int
+//            ) {
+//                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()))  {
 //                    val currentItem = layoutManager.childCount
 //                    val totalItem = layoutManager.itemCount
-//                    val scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-//                    if (isLoading && (lastVisibleItemPosition == totalItem - 2)) {
-//                        isLoading = false
-//                        getData()
+//                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+//
+//
+//                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
+//                            getData()
 //                    }
 //                }
-//
-//
 //            }
+//
 //        })
 
 
+        mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0) {
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isLoading && (lastVisibleItemPosition == totalItem - 2)) {
+                        isLoading = false
+                        getData()
+                    }
+                }
+
+
+            }
+        })
+
     }
-
-    class CustomLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
-        override fun canScrollVertically(): Boolean {
-            return false
-        }
-    }
-
-
     private fun getData() {
         val sharedPreferences1 = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences1?.getString("user_id", "").toString()
+//        progress.setVisibility(View.VISIBLE);
         val handler = Handler()
         when (pageCounter) {
             1 -> {
                 Log.e("check", "1")
 
-//                handler.postDelayed({
+                handler.postDelayed({
+                    getPost(user_id)
                     getHotels()
-//                }, 200)
+//                    progress.setVisibility(View.GONE);
+                }, 500)
 
-                getPost(user_id)
             }
             2 -> {
                 Log.e("check", "2")
-//                handler.postDelayed({
+                handler.postDelayed({
                     getOpenCommunites()
-//                }, 200)
-                getPost(user_id)
+                    getPost(user_id)
+//                    progress.setVisibility(View.GONE);
+                }, 500)
             }
             3 -> {
                 Log.e("check", "3")
-//                handler.postDelayed({
+                handler.postDelayed({
                     getAllBlogs()
-//                }, 200)
                 getPost(user_id)
+//                    progress.setVisibility(View.GONE);
+                }, 500)
+
             }
             else -> {
                 Log.e("check", "4")
-//                handler.postDelayed({
+                handler.postDelayed({
                     getServices()
-//                }, 200)
-                getPost(user_id)
+                    getPost(user_id)
+//                    progress.setVisibility(View.GONE);
+                }, 500)
                 pageCounter = 0
             }
         }
@@ -508,8 +466,7 @@ class HomeFragment : Fragment() {
 
     private fun getCommunities() {
 
-        val sharedPreferences =
-            requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val getCommunity = RetrofitBuilder.feedsApi.getCommunities(user_id)
@@ -521,20 +478,12 @@ class HomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful && isAdded) {
                     val response = response.body()!!
-                    Log.e("response", response.toString())
-                    val viewAllCommunities = view?.findViewById<CardView>(R.id.view_allCommunity)
-                    if (response.size <= 1) {
-                        viewAllCommunities?.visibility = View.GONE
+                    try {
+                        mList.addAll(1,listOf(DataItem(DataItemType.OURCOMMUNITY, ourCommunityRecyclerList = response)))
+                    }catch (e : NullPointerException){
+                        Log.e("error",e.message.toString())
                     }
 
-                    response.forEach { it ->
-
-                        if (!communityArrayList.contains(it)) {
-                            communityArrayList.add(it)
-                            recyclerCommunity.adapter =
-                                CommunityListAdapter(requireContext(), response)
-                        }
-                    }
                 } else {
                     if (isAdded) {
                         Toast.makeText(

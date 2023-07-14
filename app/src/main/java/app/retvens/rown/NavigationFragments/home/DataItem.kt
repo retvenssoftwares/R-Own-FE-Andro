@@ -16,6 +16,7 @@ data class DataItem(
     var vendorsRecyclerDataList: List<ProfileServicesDataItem>? = null,
     var communityRecyclerDataList: List<CommunityRecyclerData>? = null,
     var createCommunityRecyclerDataList: List<CreateCommunityRecyclerData>? = null,
+    var ourCommunityRecyclerList:List<GetCommunitiesData>? = null,
     var banner: PostItem? = null
 ){
 

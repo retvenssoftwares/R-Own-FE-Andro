@@ -237,9 +237,24 @@ class UploadIcon : AppCompatActivity() {
 
     private fun CreateGroup(name:String) {
 
-        val GroupName = GroupCreate(name)
+        val parcelFileDescriptor = contentResolver.openFileDescriptor(
+            communityUri!!,"r",null
+        )?:return
 
-        val data = RetrofitBuilder.retrofitBuilder.createGroup(GroupName)
+
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        val file =  File(cacheDir, "${app.retvens.rown.utils.getRandomString(6)}.jpg")
+        val outputStream = FileOutputStream(file)
+        inputStream.copyTo(outputStream)
+        val body = UploadRequestBody(file,"image")
+
+
+
+
+        val data = RetrofitBuilder.retrofitBuilder.createGroupNew(
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
+            MultipartBody.Part.createFormData("image", file.name, body)
+        )
 
         data.enqueue(object : Callback<ResponseGroup?> {
             override fun onResponse(
@@ -342,7 +357,7 @@ class UploadIcon : AppCompatActivity() {
                     addCommunityMember()
 
                     val profile = getProfile()
-                    profile.image = decodeSampledBitmapFromFile(file,200,150)
+                    profile.name = name
                     profile.save()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -375,6 +390,7 @@ class UploadIcon : AppCompatActivity() {
                         val response = response.body()!!
                         Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                         val intent = Intent(applicationContext,MesiboMessagingActivity::class.java)
+                        intent.putExtra("admin","true")
                         intent.putExtra(MesiboUI.GROUP_ID,groupId.toLong())
                         intent.putExtra("page","2")
                         startActivity(intent)

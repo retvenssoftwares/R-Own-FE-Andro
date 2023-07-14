@@ -7,13 +7,14 @@ class DataItemType {
         const val COMMUNITY = 1
         const val BANNER = 2
         const val HOTEL_SECTION = 3
-        const val HOTEL_AWARDS = 4
+        const val OURCOMMUNITY = 4
         const val VENDORS = 5
         const val CREATE_COMMUNITY = 6
         const val POLL = 7
         const val Status = 8
         const val Event = 9
         const val CheckIn = 10
+        const val CREATEPOST = 11
     }
 
 }

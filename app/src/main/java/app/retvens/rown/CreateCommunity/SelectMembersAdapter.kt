@@ -1,5 +1,6 @@
 package app.retvens.rown.CreateCommunity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
@@ -69,5 +71,10 @@ class SelectMembersAdapter(val context: Context, var userList:List<Connections>)
         return userList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<Connections>) {
+        userList = newItems
+        notifyDataSetChanged()
+    }
 
 }

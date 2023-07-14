@@ -74,6 +74,12 @@ interface RownUrl {
     fun createGroup(@Body create:GroupCreate):Call<ResponseGroup>
 
 
+    @Multipart
+    @POST("creategroup")
+    fun createGroupNew(
+        @Part("attribute")attribute:RequestBody,
+        @Part image: MultipartBody.Part
+    ):Call<ResponseGroup>
 
     @POST("addmember")
     fun addMember(@Body addMember:AddMemberData):Call<ResponseGroup>
