@@ -1,10 +1,14 @@
 package app.retvens.rown.NavigationFragments.profile.events
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -17,6 +21,7 @@ import app.retvens.rown.NavigationFragments.eventForUsers.onGoingEvents.OnGoingE
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsData
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,6 +38,9 @@ class EventsProfileFragment(val userId:String, val isOwner : Boolean) : Fragment
 
     lateinit var empty : TextView
     lateinit var notPosted : ImageView
+
+    private lateinit var progressDialog: Dialog
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +62,15 @@ class EventsProfileFragment(val userId:String, val isOwner : Boolean) : Fragment
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
+        progressDialog = Dialog(requireContext())
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
+
         getEvents()
 
     }
@@ -68,6 +85,7 @@ class EventsProfileFragment(val userId:String, val isOwner : Boolean) : Fragment
                 call: Call<List<OnGoingEventsData>?>,
                 response: Response<List<OnGoingEventsData>?>
             ) {
+                progressDialog.dismiss()
                 if (isAdded){
                     if (response.isSuccessful){
                         shimmerFrameLayout.stopShimmer()
@@ -98,6 +116,7 @@ class EventsProfileFragment(val userId:String, val isOwner : Boolean) : Fragment
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
                 empty.visibility = View.VISIBLE
+                progressDialog.dismiss()
             }
         })
     }

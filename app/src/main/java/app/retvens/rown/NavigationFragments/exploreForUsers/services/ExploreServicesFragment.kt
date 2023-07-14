@@ -1,5 +1,8 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.services
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -7,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AbsListView
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -21,6 +25,7 @@ import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotels
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,6 +46,8 @@ class ExploreServicesFragment : Fragment() {
     lateinit var errorImage : ImageView
 
     private var lastPage = 1
+
+    private lateinit var progressDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +74,15 @@ class ExploreServicesFragment : Fragment() {
         errorImage = view.findViewById(R.id.errorImage)
         progress = view.findViewById(R.id.progress)
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
 
 
         exploreBlogsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -123,6 +139,7 @@ class ExploreServicesFragment : Fragment() {
                 call: Call<List<ExploreServiceData>?>,
                 response: Response<List<ExploreServiceData>?>
             ) {
+                progressDialog.dismiss()
                 try {
                     if (isAdded){
                         if (response.isSuccessful){
@@ -164,6 +181,9 @@ class ExploreServicesFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<ExploreServiceData>?>, t: Throwable) {
+
+                progressDialog.dismiss()
+
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again - ${t.localizedMessage}"

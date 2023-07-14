@@ -285,6 +285,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                         otpET5.text.clear()
                         otpET6.text.clear()
 
+                        selectedETPosition = 0
                         showKeyBoard(otpET1)
                     }
                 }

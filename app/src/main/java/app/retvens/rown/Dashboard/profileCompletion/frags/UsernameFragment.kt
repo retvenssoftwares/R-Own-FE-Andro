@@ -35,6 +35,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -95,10 +96,14 @@ class UsernameFragment : Fragment() {
 
         }
         view.findViewById<TextInputEditText>(R.id.dob_et).setOnClickListener {
-            DatePickerDialog(requireContext(), dateSetListener,
+           val dpd = DatePickerDialog(requireContext(), dateSetListener,
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)).show()
+                cal.get(Calendar.DAY_OF_MONTH))
+
+            dpd.datePicker.maxDate = System.currentTimeMillis()
+               dpd.show()
+
         }
         /*-------------Calendar Setup--------------*/
 
@@ -234,7 +239,11 @@ class UsernameFragment : Fragment() {
                         complete.isClickable = true
                     }
                 } else {
-                    usernameVerified.text = "Retry - ${response.body()!!.message}"
+                    try {
+                        usernameVerified.text = "Retry - ${response.body()!!.message}"
+                    }catch(e : Exception){
+                        usernameVerified.text = "Try another Username"
+                    }
                 }
             }
 

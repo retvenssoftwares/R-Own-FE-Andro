@@ -1,5 +1,8 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.blogs
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -9,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,6 +23,7 @@ import app.retvens.rown.NavigationFragments.profile.events.EventsProfileAdapter
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsAdapter
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
+import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,6 +45,8 @@ class ExploreBlogsFragment : Fragment() {
 
     private var currentPage = 1
     private var lastPage = 1
+
+    private lateinit var progressDialog:Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +73,15 @@ class ExploreBlogsFragment : Fragment() {
 
         allBlogsAdapter = AllBlogsAdapter(blogList, requireContext(), true)
         exploreBlogsRecyclerView.adapter = allBlogsAdapter
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
 
 
         exploreBlogsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -126,6 +142,7 @@ class ExploreBlogsFragment : Fragment() {
                 call: Call<List<ExploreBlogData>?>,
                 response: Response<List<ExploreBlogData>?>
             ) {
+                progressDialog.dismiss()
                 if (isAdded){
                     if (response.isSuccessful){
                         shimmerFrameLayout.stopShimmer()
@@ -188,6 +205,7 @@ class ExploreBlogsFragment : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
+                progressDialog.dismiss()
 //                errorImage.visibility = View.VISIBLE
             }
         })

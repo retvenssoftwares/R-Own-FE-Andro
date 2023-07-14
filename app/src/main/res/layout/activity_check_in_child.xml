@@ -106,12 +106,6 @@
         app:layout_constraintTop_toBottomOf="@id/user_complete_name"
         app:layout_constraintStart_toEndOf="@id/user_complete_profile">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/svg_eye"
-            android:paddingEnd="3dp"
-            app:tint="@color/black"/>
         <TextView
             android:id="@+id/canSeeText"
             android:layout_width="wrap_content"
@@ -123,6 +117,13 @@
             android:fontFamily="@font/montserrat_bold"
             android:textColor="@color/black"
             android:textFontWeight="600"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/svg_eye"
+            android:paddingStart="5dp"
+            app:tint="@color/black"/>
 
         <ImageView
             android:layout_width="18dp"
@@ -147,12 +148,6 @@
         app:layout_constraintTop_toBottomOf="@id/user_complete_name"
         app:layout_constraintStart_toEndOf="@id/can_see">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/comment"
-            android:paddingEnd="3dp"
-            app:tint="@color/black"/>
         <TextView
             android:id="@+id/can_comment_text"
             android:layout_width="wrap_content"
@@ -165,6 +160,12 @@
             android:textColor="@color/black"
             android:textFontWeight="600"/>
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/comment"
+            android:paddingStart="5dp"
+            app:tint="@color/black"/>
         <ImageView
             android:layout_width="18dp"
             android:layout_height="16dp"

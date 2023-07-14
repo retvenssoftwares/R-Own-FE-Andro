@@ -144,7 +144,12 @@ class ApplyForVerificationActivity : AppCompatActivity() {
             ) {
 //                Toast.makeText(this@ApplyForVerificationActivity, "${response.body()!!.message} ", Toast.LENGTH_SHORT).show()
 
-//                Log.d("check------------------------", "${response.body()!!.message} ${response.code().toString()}")
+                try {
+                    Log.d("check------------------------", "${response.body()!!.message} ${response.code().toString()}"
+                    )
+                } catch (e:Exception){
+                    Log.d("check------------------------", "CRASHED__________")
+                }
                 if (response.isSuccessful){
                     if (response.body()!!.message == "applied"){
                         binding.layout.visibility = View.GONE
