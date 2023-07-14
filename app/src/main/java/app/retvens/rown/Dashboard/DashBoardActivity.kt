@@ -1,5 +1,9 @@
 package app.retvens.rown.Dashboard
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.NotificationChannel
@@ -12,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -19,6 +24,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -82,13 +88,19 @@ class DashBoardActivity : AppCompatActivity() {
     private lateinit var profile:ImageView
     private lateinit var name:TextView
 
+    private lateinit var imageView: ImageView
+    private lateinit var textView: TextView
+
+
     var connectionNo = 0
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        imageView = findViewById(R.id.imageView)
+        textView = findViewById(R.id.textView)
+        startAnimation()
         Thread {
             // Run whatever background code you want here.
             replaceFragment(HomeFragment())
@@ -464,6 +476,32 @@ class DashBoardActivity : AppCompatActivity() {
 
         })
     }
+
+    private fun startAnimation() {
+        val screenWidth = resources.displayMetrics.widthPixels.toFloat()
+
+        val anim = ObjectAnimator.ofFloat(imageView, "translationX", screenWidth, -imageView.width.toFloat())
+        anim.duration = 1000
+        anim.interpolator = LinearInterpolator()
+
+        val revealAnim = ValueAnimator.ofFloat(0f, 1f)
+        revealAnim.duration = 1500
+        revealAnim.addUpdateListener { animation ->
+            val alpha = animation.animatedValue as Float
+            textView.alpha = alpha
+        }
+
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator) {
+                textView.visibility = View.VISIBLE
+            }
+        })
+
+        anim.start()
+        revealAnim.startDelay = anim.duration
+        revealAnim.start()
+    }
+
 
     override fun onBackPressed() {
         super.onBackPressed()
