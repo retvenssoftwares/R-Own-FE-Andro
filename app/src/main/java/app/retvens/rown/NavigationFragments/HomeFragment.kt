@@ -271,31 +271,31 @@ class HomeFragment : Fragment() {
             1 -> {
                 Log.e("check", "1")
 
-                handler.postDelayed({
+//                handler.postDelayed({
                     getHotels()
-                }, 200)
+//                }, 200)
 
                 getPost(user_id)
             }
             2 -> {
                 Log.e("check", "2")
-                handler.postDelayed({
+//                handler.postDelayed({
                     getOpenCommunites()
-                }, 200)
+//                }, 200)
                 getPost(user_id)
             }
             3 -> {
                 Log.e("check", "3")
-                handler.postDelayed({
+//                handler.postDelayed({
                     getAllBlogs()
-                }, 200)
+//                }, 200)
                 getPost(user_id)
             }
             else -> {
                 Log.e("check", "4")
-                handler.postDelayed({
+//                handler.postDelayed({
                     getServices()
-                }, 200)
+//                }, 200)
                 getPost(user_id)
                 pageCounter = 0
             }
