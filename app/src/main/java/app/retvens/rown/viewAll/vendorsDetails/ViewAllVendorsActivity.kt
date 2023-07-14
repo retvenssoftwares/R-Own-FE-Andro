@@ -2,6 +2,7 @@ package app.retvens.rown.viewAll.vendorsDetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -75,10 +76,15 @@ class ViewAllVendorsActivity : AppCompatActivity(), BottomSheetFilterVendors.OnB
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
                             data.forEach {
-                                exploreServicesAdapter = ExploreServicesAdapter(it.events as ArrayList<ProfileServicesDataItem>, this@ViewAllVendorsActivity)
-                                binding.viewAllVendorsRecycler.adapter = exploreServicesAdapter
-                                exploreServicesAdapter.removeServicesFromList(it.events)
-                                exploreServicesAdapter.notifyDataSetChanged()
+                                try {
+                                    exploreServicesAdapter = ExploreServicesAdapter(it.events as ArrayList<ProfileServicesDataItem>, this@ViewAllVendorsActivity)
+                                    binding.viewAllVendorsRecycler.adapter = exploreServicesAdapter
+                                    exploreServicesAdapter.removeServicesFromList(it.events)
+                                    exploreServicesAdapter.notifyDataSetChanged()
+                                }catch (e:NullPointerException){
+                                    Log.e("error",e.message.toString())
+                                }
+
                             }
                         } else {
                             binding.empty.visibility = View.VISIBLE

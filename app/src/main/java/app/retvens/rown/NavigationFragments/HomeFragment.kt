@@ -145,9 +145,6 @@ class HomeFragment : Fragment() {
 //        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState)
 //
 
-
-
-
         val sharedPreferences = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
         val profilePic = sharedPreferences?.getString("profile_image", "").toString()
         val homeProfile = view.findViewById<ShapeableImageView>(R.id.home_profile)
@@ -263,7 +260,7 @@ class HomeFragment : Fragment() {
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isLoading && (lastVisibleItemPosition == totalItem-2)){
                         isLoading = false
-                        getPost(user_id)
+                        getData()
 
 
                     }
@@ -275,6 +272,46 @@ class HomeFragment : Fragment() {
 
 
 
+    }
+
+
+    private fun getData() {
+        val sharedPreferences1 = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
+        val handler = Handler()
+        when (pageCounter) {
+            1 -> {
+                Log.e("check", "1")
+
+                handler.postDelayed({
+                    getHotels()
+                },200)
+
+                getPost(user_id)
+            }
+            2 -> {
+                Log.e("check", "2")
+                handler.postDelayed({
+                    getOpenCommunites()
+                },200)
+                getPost(user_id)
+            }
+            3 -> {
+                Log.e("check", "3")
+                handler.postDelayed({
+                    getAllBlogs()
+                },200)
+                getPost(user_id)
+            }
+            else -> {
+                Log.e("check", "4")
+                handler.postDelayed({
+                   getServices()
+                },200)
+                getPost(user_id)
+                pageCounter = 0
+            }
+        }
     }
 
     private fun getOpenCommunites() {
@@ -290,16 +327,17 @@ class HomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    response.forEach { it ->
-                        if (!mList.contains(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = response))) {
-                            mList.add(
-                                DataItem(
-                                    DataItemType.COMMUNITY,
-                                    communityRecyclerDataList = response
+
+
+                            mList.addAll(
+                                listOf(
+                                    DataItem(
+                                        DataItemType.COMMUNITY,
+                                        communityRecyclerDataList = response
+                                    )
                                 )
                             )
-                        }
-                    }
+
                 }else{
                     Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -310,62 +348,6 @@ class HomeFragment : Fragment() {
             }
         })
     }
-
-    private fun getData() {
-
-        val sharedPreferences1 =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences1?.getString("user_id", "").toString()
-        if (pageCounter >= 1) {
-
-            val handler = Handler()
-
-            Log.e("check","1")
-            if (pageCounter == 1) {
-                Log.e("check","1")
-//                getHotels()
-//                handler.postDelayed({
-//                    getPost(user_id)
-//                    progress.setVisibility(View.GONE)
-//                }, 3000)
-
-            }else if (pageCounter == 2) {
-                Log.e("check","2")
-//                getOpenCommunites()
-//                handler.postDelayed({
-//                    getPost(user_id)
-//                    progress.setVisibility(View.GONE)
-//                }, 3000)
-
-            }else if (pageCounter == 3) {
-                Log.e("check","3")
-
-//                handler.postDelayed({
-//                    getPost(user_id)
-//                    progress.setVisibility(View.GONE)
-//                }, 3000)
-
-            }else if (pageCounter == 4) {
-                Log.e("check","4")
-//                getServices()
-//                handler.postDelayed({
-//                    getPost(user_id)
-//                    progress.setVisibility(View.GONE)
-//                }, 3000)
-
-                pageCounter = 1
-            }
-
-
-//            handler.postDelayed({
-//                getPost(user_id)
-//                progress.setVisibility(View.GONE)
-//            }, 3000)
-        }
-//        getAllBlogs()
-        getPost(user_id)
-
-    }
-
     private fun getPost(userId: String) {
 
 
@@ -393,13 +375,16 @@ class HomeFragment : Fragment() {
                             it.posts.forEach { item ->
                                 if (item.post_type == "share some media") {
                                     mList.add( DataItem(DataItemType.BANNER, banner = item))
+                                    postCounter += 1
                                 }
                                 if (item.post_type == "Polls") {
                                     mList.add( DataItem(DataItemType.POLL, banner = item))
+                                    postCounter += 1
 
                                 }
                                 if (item.post_type == "normal status") {
                                     mList.add( DataItem(DataItemType.Status, banner = item))
+                                    postCounter += 1
                                 }
 
 //                                if (item.post_type == "Update about an event"){
@@ -415,9 +400,13 @@ class HomeFragment : Fragment() {
                                 if (item.post_type == "Check-in") {
                                     Log.e("hotel",item.toString())
                                     mList.add( DataItem(DataItemType.CheckIn, banner = item))
+                                    postCounter += 1
                                 }
 
-
+                                if (postCounter >= 10) {
+                                    pageCounter += 1
+                                    postCounter = 0
+                                }
                             }
 
 //                            blogList.addAll(it.blogs)
@@ -426,27 +415,27 @@ class HomeFragment : Fragment() {
 //                            commList.addAll(it.communities)
 //
 //
-                            try {
-                                mList.addAll(listOf(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = it.blogs)))
-                            }catch (e:Exception){
-                                Log.e("error",e.message.toString())
-                            }
-                            try {
-                                mList.addAll(listOf(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList = it.hotels)))
-                            }catch (e:Exception){
-                                Log.e("error",e.message.toString())
-                            }
-                            try {
-                                mList.addAll(listOf(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = it.services)))
-                            }catch (e:Exception){
-                                Log.e("error",e.message.toString())
-                            }
-                            try {
-                                Log.e("comm",commList.toString())
-                                mList.addAll(listOf(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = it.communities)))
-                            }catch (e:Exception){
-                                Log.e("error",e.message.toString())
-                            }
+//                            try {
+//                                mList.addAll(listOf(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = it.blogs)))
+//                            }catch (e:Exception){
+//                                Log.e("error",e.message.toString())
+//                            }
+//                            try {
+//                                mList.addAll(listOf(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList = it.hotels)))
+//                            }catch (e:Exception){
+//                                Log.e("error",e.message.toString())
+//                            }
+//                            try {
+//                                mList.addAll(listOf(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = it.services)))
+//                            }catch (e:Exception){
+//                                Log.e("error",e.message.toString())
+//                            }
+//                            try {
+//                                Log.e("comm",commList.toString())
+//                                mList.addAll(listOf(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = it.communities)))
+//                            }catch (e:Exception){
+//                                Log.e("error",e.message.toString())
+//                            }
 //
                     }
                     adapter.notifyDataSetChanged()
@@ -632,15 +621,9 @@ class HomeFragment : Fragment() {
 
                         if (response.body()!!.isNotEmpty()) {
                             val blogsList = ArrayList<DataItem.BlogsRecyclerData>()
-                            if (mList.contains(DataItem(
-                                    DataItemType.BLOGS,
-                                    blogsRecyclerDataList = response.body()
-                                ))){
-                                mList.shuffle()
-                                adapter.notifyDataSetChanged()
-                            } else {
-                                mList.add(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = response.body()))
-                            }
+
+                                mList.addAll(listOf(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = response.body())))
+
                         }
                     }
                 }
@@ -672,17 +655,7 @@ class HomeFragment : Fragment() {
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
                             data.forEach {
-                                if (!mList.contains(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList =  it.posts))){
-                                    mList.add(
-                                        DataItem(
-                                            DataItemType.HOTEL_SECTION,
-                                            hotelSectionList = it.posts
-                                        )
-                                    )
-                                } else {
-                                    mList.shuffle()
-                                    adapter.notifyDataSetChanged()
-                                }
+                                    mList.addAll(listOf(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList = it.posts)))
                             }
                         }
                     } else {
@@ -711,21 +684,17 @@ class HomeFragment : Fragment() {
                         val data = response.body()!!
                         if (data.isNotEmpty()) {
                             data.forEach {
-                                if (mList.contains(DataItem(
-                                        DataItemType.VENDORS,
-                                        vendorsRecyclerDataList = it.vendors
-                                    ))){
-                                    mList.shuffle()
-                                    adapter.notifyDataSetChanged()
-                                } else {
-                                    mList.add(
-                                        DataItem(
-                                            DataItemType.VENDORS,
-                                            vendorsRecyclerDataList = it.vendors
+
+                                    mList.addAll(
+                                        listOf(
+                                            DataItem(
+                                                DataItemType.VENDORS,
+                                                vendorsRecyclerDataList = it.vendors
+                                            )
                                         )
                                     )
                                     Log.e("services", data.toString())
-                                }
+
                             }
                         }
                     }
