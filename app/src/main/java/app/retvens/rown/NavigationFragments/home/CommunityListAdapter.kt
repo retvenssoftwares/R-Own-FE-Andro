@@ -63,7 +63,7 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
     }
 
     override fun getItemCount(): Int {
-        return 7
+        return list.size+1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -76,14 +76,10 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
                 context.startActivity(intent)
             }
 
-//            viewAllCommunity.setOnClickListener {
-//                startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
-//            }
-
 
         }else if (holder is NormalCardViewHolder){
-            try {
-                val currentItem = list[position]
+                val currentItem = list[position-1]
+                Log.e("data",currentItem.toString())
                 Glide.with(context).load(currentItem.Profile_pic).into(holder.cImg)
                 holder.title.text = currentItem.group_name
                 holder.members.text = "${currentItem.Members.size.toString()} members"
@@ -107,9 +103,7 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
                     intent.putExtra(MesiboUI.GROUP_ID, currentItem.group_id.toLong())
                     context.startActivity(intent)
                 }
-            }catch (e:IndexOutOfBoundsException){
-                Log.e("error",e.message.toString())
-            }
+
 
         }else if (holder is LastCardViewHolder){
 
@@ -125,7 +119,7 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
         // Check if the position is 0
         return when (position) {
             0 -> VIEW_TYPE_STATIC_CARD
-            itemCount - 1 -> VIEW_TYPE_STATIC_Last // Check if the position is the last one
+            itemCount-1  -> VIEW_TYPE_STATIC_Last // Check if the position is the last one
             else -> VIEW_TYPE_NORMAL
         }
     }

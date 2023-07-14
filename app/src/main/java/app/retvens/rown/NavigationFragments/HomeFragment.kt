@@ -165,28 +165,6 @@ class HomeFragment : Fragment() {
         adapter.notifyDataSetChanged()
 
 
-//        val layoutManager = mainRecyclerView.layoutManager as LinearLayoutManager
-//        nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
-//            override fun onScrollChange(
-//                v: NestedScrollView,
-//                scrollX: Int,
-//                scrollY: Int,
-//                oldScrollX: Int,
-//                oldScrollY: Int
-//            ) {
-//                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()))  {
-//                    val currentItem = layoutManager.childCount
-//                    val totalItem = layoutManager.itemCount
-//                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-//
-//
-//                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
-//                            getData()
-//                    }
-//                }
-//            }
-//
-//        })
 
 
         mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -363,34 +341,6 @@ class HomeFragment : Fragment() {
                                         }
                                     }
 
-//                            blogList.addAll(it.blogs)
-//                            serviceList.addAll(it.services)
-//                            hotelList.addAll(it.hotels)
-//                            commList.addAll(it.communities)
-//
-//
-//                            try {
-//                                mList.addAll(listOf(DataItem(DataItemType.BLOGS, blogsRecyclerDataList = it.blogs)))
-//                            }catch (e:Exception){
-//                                Log.e("error",e.message.toString())
-//                            }
-//                            try {
-//                                mList.addAll(listOf(DataItem(DataItemType.HOTEL_SECTION, hotelSectionList = it.hotels)))
-//                            }catch (e:Exception){
-//                                Log.e("error",e.message.toString())
-//                            }
-//                            try {
-//                                mList.addAll(listOf(DataItem(DataItemType.VENDORS, vendorsRecyclerDataList = it.services)))
-//                            }catch (e:Exception){
-//                                Log.e("error",e.message.toString())
-//                            }
-//                            try {
-//                                Log.e("comm",commList.toString())
-//                                mList.addAll(listOf(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = it.communities)))
-//                            }catch (e:Exception){
-//                                Log.e("error",e.message.toString())
-//                            }
-//
                                 }
                                 adapter.notifyDataSetChanged()
 

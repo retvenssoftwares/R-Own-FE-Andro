@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="textStart"
             android:textSize="13dp"
+            android:visibility="gone"
             android:fontFamily="@font/montserrat_semibold"
             android:textColor="@color/black"
             android:layout_marginVertical="10dp"
