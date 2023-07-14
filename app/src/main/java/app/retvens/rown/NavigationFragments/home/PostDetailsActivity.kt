@@ -78,7 +78,23 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
         name.text = intent.getStringExtra("profileName").toString()
         username.text = intent.getStringExtra("userName").toString()
-        caption.text = intent.getStringExtra("caption").toString()
+
+        //caption.text = intent.getStringExtra("caption").toString()
+        val captionString: String = intent.getStringExtra("caption").toString()
+        val maxCharLimit: Int = 100
+        val readMoreText: String = "Read More"
+        val readLessText: String = "Read Less"
+        caption.text = getTrimmedText(captionString, maxCharLimit, readMoreText)
+        caption.setOnClickListener {
+            if (caption.text == getTrimmedText(captionString, maxCharLimit, readMoreText)) {
+                // Expand the TextView to show full text
+                caption.text = getTrimmedText(captionString, Int.MAX_VALUE, readLessText)
+            } else {
+                // Collapse the TextView to show trimmed text
+                caption.text = getTrimmedText(captionString, maxCharLimit, readMoreText)
+            }
+        }
+
 
         val postPic = intent.getStringArrayListExtra("postPic")
         val commentCount = intent.getStringExtra("commentCount")
@@ -215,6 +231,15 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
             savePosts(postId)
         }
     }
+
+    fun getTrimmedText(text: String, charLimit: Int, suffix: String): String {
+        return if (text.length > charLimit) {
+            text.substring(0, charLimit) + " $suffix"
+        } else {
+            text
+        }
+    }
+
     private fun savePosts(blogId: String) {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
