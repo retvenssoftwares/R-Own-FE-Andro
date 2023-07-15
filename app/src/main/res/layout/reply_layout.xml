@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:layout_marginLeft="10dp"
-        android:textColor="@color/md_green_900"/>
+        android:textColor="@color/green_own"/>
 
     <com.mesibo.emojiview.EmojiconTextView
         android:id="@+id/reply_text"
@@ -38,7 +38,7 @@
         android:textSize="14sp"
         android:text="Hi this is the reply chat message so find it check 1234  test message string can you tell me what is this testing nothing but waste of time"
         android:layout_below="@+id/reply_name"
-        android:textColorHint="#c4c0bd"
+        android:textColorHint="#272a3d"
         android:layout_toLeftOf="@+id/reply_image"
         android:background="@null"/>
 

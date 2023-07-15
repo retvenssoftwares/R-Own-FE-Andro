@@ -17,7 +17,7 @@ class CreateCommunity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_community)
 
-        findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener {onBackPressed()}
+        findViewById<ImageView>(R.id.createCommunity_backBtn).setOnClickListener {onBackPressed()}
 
         val nextBtn = findViewById<ImageView>(R.id.next)
         val communityName = findViewById<EditText>(R.id.community_name)

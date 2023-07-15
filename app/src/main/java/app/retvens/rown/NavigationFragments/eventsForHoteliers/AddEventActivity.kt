@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
@@ -27,7 +28,7 @@ class AddEventActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_event)
 
-        findViewById<ImageButton>(R.id.faq_backBtn).setOnClickListener { onBackPressed() }
+        findViewById<ImageView>(R.id.faq_backBtn).setOnClickListener { onBackPressed() }
 
         locationLayout = findViewById(R.id.user_location_post_event)
         et_location_event = findViewById(R.id.et_location_event)

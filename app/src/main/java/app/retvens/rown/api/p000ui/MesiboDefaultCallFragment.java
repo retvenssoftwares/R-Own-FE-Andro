@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboUtils;
 import com.mesibo.calls.api.R.raw;
@@ -40,94 +41,95 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
     protected MesiboCall.Call mCall = null;
     protected MesiboCall.CallProperties mCp = null;
     protected QampCallsActivity mActivity = null;
-    private boolean mConnected = false;
+    protected CallUserInterface ui = new CallUserInterface();
+    protected long autoHideVideoControlsTimeout = 7000L;
     boolean speakerFirst = true;
     boolean muteFirst = true;
-    protected CallUserInterface ui = new CallUserInterface();
+    private boolean mConnected = false;
     private boolean callControlFragmentVisible = true;
-    protected long autoHideVideoControlsTimeout = 7000L;
     private Thread mControlHidingThread = null;
+
     public MesiboDefaultCallFragment() {
     }
 
     public View onCreateView(LayoutInflater var1, ViewGroup var2, Bundle var3) {
-       /** //int var6 = layout.fragment_mesibocall;
-        int var6 = R.layout.audio_call_fragmentt;
-        if (this.mCp.f2ui.layout_id > 0) {
-            var6 = this.mCp.f2ui.layout_id;
-        }
+        /** //int var6 = layout.fragment_mesibocall;
+         int var6 = R.layout.audio_call_fragmentt;
+         if (this.mCp.f2ui.layout_id > 0) {
+         var6 = this.mCp.f2ui.layout_id;
+         }
 
-        View var4;
-        TextView var5 = (TextView)(var4 = var1.inflate(var6, var2, false)).findViewById(id.title);
-        String var7;
-        if (TextUtils.isEmpty(var7 = this.mCp.f2ui.title)) {
-            var7 = Mesibo.getAppName();
-        }
+         View var4;
+         TextView var5 = (TextView)(var4 = var1.inflate(var6, var2, false)).findViewById(id.title);
+         String var7;
+         if (TextUtils.isEmpty(var7 = this.mCp.f2ui.title)) {
+         var7 = Mesibo.getAppName();
+         }
 
-        var5.setText(var7);
-        this.ui.controlLayout = var4.findViewById(id.control_container);
-        this.ui.backgroundView = var4.findViewById(id.renderer_container);
-        this.ui.pipVideo = (MesiboVideoView)var4.findViewById(id.pip_video_view);
-        this.ui.fullscreenVideo = (MesiboVideoView)var4.findViewById(id.fullscreen_video_view);
-        this.ui.contactView = (TextView)var4.findViewById(id.call_name);
-        this.ui.status = (Chronometer)var4.findViewById(id.call_status);
-        this.ui.disconnectButton = (ImageButton)var4.findViewById(id.button_call_disconnect);
-        this.ui.cameraSwitchButton = (ImageButton)var4.findViewById(id.button_call_switch_camera);
-        this.ui.sourceSwitchButton = (ImageButton)var4.findViewById(id.button_call_switch_source);
-        this.ui.toggleSpeakerButton = (ImageButton)var4.findViewById(id.button_call_toggle_speaker);
-        this.ui.toggleCameraButton = (ImageButton)var4.findViewById(id.button_call_toggle_camera);
-        this.ui.toggleMuteButton = (ImageButton)var4.findViewById(id.button_call_toggle_mic);
-        this.ui.acceptButton = (ImageButton)var4.findViewById(id.incoming_call_connect);
-        this.ui.acceptAudioButton = (ImageButton)var4.findViewById(id.incoming_audio_call_connect);
-        this.ui.declineButton = (ImageButton)var4.findViewById(id.incoming_call_disconnect);
-        this.ui.cameraToggleLayout = var4.findViewById(id.layout_toggle_camera);
-        this.ui.sourceSwitchLayout = var4.findViewById(id.layout_switch_source);
-        this.ui.cameraSwitchLayout = var4.findViewById(id.layout_switch_camera);
-        this.ui.incomingView = var4.findViewById(id.incoming_call_container);
-        this.ui.inprogressView = var4.findViewById(id.outgoing_call_container);
-        this.ui.incomingAudioAcceptLayout = var4.findViewById(id.incoming_audio_accept_container);
-        this.ui.incomingVideoAcceptLayout = var4.findViewById(id.incoming_video_accept_container);
-        this.ui.remoteMute = (ImageView)var4.findViewById(id.remote_mute);
-        this.ui.remoteMute.setColorFilter(Color.argb(200, 200, 0, 0));
-        this.ui.disconnectButton.setOnClickListener(this);
-        this.ui.cameraSwitchButton.setOnClickListener(this);
-        this.ui.sourceSwitchButton.setOnClickListener(this);
-        this.ui.toggleSpeakerButton.setOnClickListener(this);
-        this.ui.toggleCameraButton.setOnClickListener(this);
-        this.ui.toggleMuteButton.setOnClickListener(this);
-        this.ui.acceptButton.setOnClickListener(this);
-        this.ui.acceptAudioButton.setOnClickListener(this);
-        this.ui.declineButton.setOnClickListener(this);
-        if (null != this.ui.pipVideo) {
-            this.ui.pipVideo.setOnClickListener(this);
-            this.ui.pipVideo.enablePip(true);
-            this.ui.pipVideo.setOnTouchListener(new ViewTouchListener());
-        }
+         var5.setText(var7);
+         this.ui.controlLayout = var4.findViewById(id.control_container);
+         this.ui.backgroundView = var4.findViewById(id.renderer_container);
+         this.ui.pipVideo = (MesiboVideoView)var4.findViewById(id.pip_video_view);
+         this.ui.fullscreenVideo = (MesiboVideoView)var4.findViewById(id.fullscreen_video_view);
+         this.ui.contactView = (TextView)var4.findViewById(id.call_name);
+         this.ui.status = (Chronometer)var4.findViewById(id.call_status);
+         this.ui.disconnectButton = (ImageButton)var4.findViewById(id.button_call_disconnect);
+         this.ui.cameraSwitchButton = (ImageButton)var4.findViewById(id.button_call_switch_camera);
+         this.ui.sourceSwitchButton = (ImageButton)var4.findViewById(id.button_call_switch_source);
+         this.ui.toggleSpeakerButton = (ImageButton)var4.findViewById(id.button_call_toggle_speaker);
+         this.ui.toggleCameraButton = (ImageButton)var4.findViewById(id.button_call_toggle_camera);
+         this.ui.toggleMuteButton = (ImageButton)var4.findViewById(id.button_call_toggle_mic);
+         this.ui.acceptButton = (ImageButton)var4.findViewById(id.incoming_call_connect);
+         this.ui.acceptAudioButton = (ImageButton)var4.findViewById(id.incoming_audio_call_connect);
+         this.ui.declineButton = (ImageButton)var4.findViewById(id.incoming_call_disconnect);
+         this.ui.cameraToggleLayout = var4.findViewById(id.layout_toggle_camera);
+         this.ui.sourceSwitchLayout = var4.findViewById(id.layout_switch_source);
+         this.ui.cameraSwitchLayout = var4.findViewById(id.layout_switch_camera);
+         this.ui.incomingView = var4.findViewById(id.incoming_call_container);
+         this.ui.inprogressView = var4.findViewById(id.outgoing_call_container);
+         this.ui.incomingAudioAcceptLayout = var4.findViewById(id.incoming_audio_accept_container);
+         this.ui.incomingVideoAcceptLayout = var4.findViewById(id.incoming_video_accept_container);
+         this.ui.remoteMute = (ImageView)var4.findViewById(id.remote_mute);
+         this.ui.remoteMute.setColorFilter(Color.argb(200, 200, 0, 0));
+         this.ui.disconnectButton.setOnClickListener(this);
+         this.ui.cameraSwitchButton.setOnClickListener(this);
+         this.ui.sourceSwitchButton.setOnClickListener(this);
+         this.ui.toggleSpeakerButton.setOnClickListener(this);
+         this.ui.toggleCameraButton.setOnClickListener(this);
+         this.ui.toggleMuteButton.setOnClickListener(this);
+         this.ui.acceptButton.setOnClickListener(this);
+         this.ui.acceptAudioButton.setOnClickListener(this);
+         this.ui.declineButton.setOnClickListener(this);
+         if (null != this.ui.pipVideo) {
+         this.ui.pipVideo.setOnClickListener(this);
+         this.ui.pipVideo.enablePip(true);
+         this.ui.pipVideo.setOnTouchListener(new ViewTouchListener());
+         }
 
-        if (null != this.ui.fullscreenVideo) {
-            this.ui.fullscreenVideo.setOnClickListener(this);
-            this.ui.fullscreenVideo.scaleToFill(true);
-            this.ui.fullscreenVideo.enableHardwareScaler(false);
-        }
+         if (null != this.ui.fullscreenVideo) {
+         this.ui.fullscreenVideo.setOnClickListener(this);
+         this.ui.fullscreenVideo.scaleToFill(true);
+         this.ui.fullscreenVideo.enableHardwareScaler(false);
+         }
 
-        this.ui.background = (ImageView)var4.findViewById(id.userImage);
-        if (!this.mCp.f2ui.showScreenSharing) {
-            this.ui.sourceSwitchLayout.setVisibility(View.GONE);
-        }
+         this.ui.background = (ImageView)var4.findViewById(id.userImage);
+         if (!this.mCp.f2ui.showScreenSharing) {
+         this.ui.sourceSwitchLayout.setVisibility(View.GONE);
+         }
 
-        this.ui.thumbnailLayout = var4.findViewById(id.photo_layout);
-        var5 = (TextView)var4.findViewById(id.call_name);
-        ImageView var8 = (ImageView)var4.findViewById(id.photo_image);
-        this.setUserDetails(var5, var8);
-        this.setStatusView(0);
-        this.setSwappedFeeds(this.mCall.isVideoViewsSwapped());
-        this.ui.pipVideo.setVisibility(this.mCall.isAnswered() ? View.VISIBLE : View.GONE);
-        if (this.mCp.f2ui.backgroundColor != 0) {
-            this.ui.backgroundView.setBackgroundColor(this.mCp.f2ui.backgroundColor);
-        }
+         this.ui.thumbnailLayout = var4.findViewById(id.photo_layout);
+         var5 = (TextView)var4.findViewById(id.call_name);
+         ImageView var8 = (ImageView)var4.findViewById(id.photo_image);
+         this.setUserDetails(var5, var8);
+         this.setStatusView(0);
+         this.setSwappedFeeds(this.mCall.isVideoViewsSwapped());
+         this.ui.pipVideo.setVisibility(this.mCall.isAnswered() ? View.VISIBLE : View.GONE);
+         if (this.mCp.f2ui.backgroundColor != 0) {
+         this.ui.backgroundView.setBackgroundColor(this.mCp.f2ui.backgroundColor);
+         }
 
-        this.mCall.start((QampCallsActivity) this.getActivity(), this);
-        return var4;*/
+         this.mCall.start((QampCallsActivity) this.getActivity(), this);
+         return var4;*/
 
         int var6 = R.layout.mesibo_qamp_call;
         if (this.mCp.f2ui.layout_id > 0) {
@@ -135,14 +137,14 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         }
 
         View var4;
-        TextView var5 = (TextView)(var4 = var1.inflate(var6, var2, false)).findViewById(R.id.titlee);
+        TextView var5 = (TextView) (var4 = var1.inflate(var6, var2, false)).findViewById(R.id.titlee);
         String var7;
         if (TextUtils.isEmpty(var7 = this.mCp.f2ui.title)) {
             var7 = Mesibo.getAppName();
         }
 
         //var5.setText(var7);
-        this.ui.backgroundRelative = var4 .findViewById(R.id.background);
+        this.ui.backgroundRelative = var4.findViewById(R.id.background);
         this.ui.callHold = var4.findViewById(R.id.textView23);
         this.ui.controlLayout = var4.findViewById(R.id.control_container);
         this.ui.contactOngoinName = var4.findViewById(R.id.textView4);
@@ -151,14 +153,14 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         this.ui.speaker = (ImageView) var4.findViewById(R.id.one);
         this.ui.mute = (ImageView) var4.findViewById(R.id.four);
         this.ui.switchS = (ImageView) var4.findViewById(R.id.two);
-        ui.pipVideo =  (MesiboVideoView) var4.findViewById(R.id.pip_video_view);
-        ui.fullscreenVideo =  (MesiboVideoView)var4.findViewById(R.id.fullscreen_video_view);
-        this.ui.contactView = (TextView)var4.findViewById(R.id.call_name);
-        this.ui.status = (Chronometer)var4.findViewById(R.id.call_status);
+        ui.pipVideo = (MesiboVideoView) var4.findViewById(R.id.pip_video_view);
+        ui.fullscreenVideo = (MesiboVideoView) var4.findViewById(R.id.fullscreen_video_view);
+        this.ui.contactView = (TextView) var4.findViewById(R.id.call_name);
+        this.ui.status = (Chronometer) var4.findViewById(R.id.call_status);
         //this.ui.switchSource = (ImageView) var4.findViewById(R.id.switch_source);
         this.ui.disconnectButton = (ImageView) var4.findViewById(R.id.button_call_disconnectt);
         this.ui.buttonDisconnect = (ImageView) var4.findViewById(R.id.three);
-        this.ui.cameraSwitchButton = (ImageView)var4.findViewById(R.id.button_call_switch_cameraa);
+        this.ui.cameraSwitchButton = (ImageView) var4.findViewById(R.id.button_call_switch_cameraa);
 //        this.ui.sourceSwitchButton = (ImageView)var4.findViewById(R.id.button_call_switch_source);
         this.ui.toggleSpeakerButton = (ImageView) var4.findViewById(R.id.button_call_toggle_speaker);
         this.ui.toggleCameraButton = (ImageView) var4.findViewById(R.id.button_call_toggle_camera);
@@ -173,8 +175,8 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         this.ui.inprogressView = var4.findViewById(R.id.outgoing_call_container);
         this.ui.incomingAudioAcceptLayout = var4.findViewById(R.id.incoming_audio_accept_container);
         this.ui.incomingVideoAcceptLayout = var4.findViewById(R.id.incoming_video_accept_container);
-        this.ui.star = (ImageView)var4.findViewById(R.id.switch_source);
-        this.ui.remoteMute = (ImageView)var4.findViewById(R.id.remote_mute);
+        this.ui.star = (ImageView) var4.findViewById(R.id.switch_source);
+        this.ui.remoteMute = (ImageView) var4.findViewById(R.id.remote_mute);
         //this.ui.remoteMute.setColorFilter(Color.argb(200, 200, 0, 0));
         this.ui.disconnectButton.setOnClickListener(this);
         this.ui.buttonDisconnect.setOnClickListener(this);
@@ -207,24 +209,24 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         }
 
 
-        this.ui.background = (ImageView)var4.findViewById(R.id.onGoing_image);
+        this.ui.background = (ImageView) var4.findViewById(R.id.onGoing_image);
         if (!this.mCp.f2ui.showScreenSharing) {
             this.ui.sourceSwitchLayout.setVisibility(View.GONE);
         }
 
 
         this.ui.thumbnailLayout = var4.findViewById(R.id.photo_layout);
-        var5 = (TextView)var4.findViewById(R.id.call_name);
-        ImageView var8 = (ImageView)var4.findViewById(R.id.photo_image);
-        ImageView var9 = (ImageView) var4.findViewById(R.id.onGoing_image);
+        var5 = (TextView) var4.findViewById(R.id.call_name);
+        ShapeableImageView var8 = (ShapeableImageView) var4.findViewById(R.id.photo_image);
+        ShapeableImageView var9 = (ShapeableImageView) var4.findViewById(R.id.onGoing_image);
         TextView var21 = var4.findViewById(R.id.textView4);
-        this.setUserOngoingDetails(var21,var9);
+        this.setUserOngoingDetails(var21, var9);
         this.setUserDetails(var5, var8);
         this.setStatusView(View.VISIBLE);
         this.setSwappedFeeds(this.mCall.isVideoViewsSwapped());
         this.ui.pipVideo.setVisibility(this.mCall.isAnswered() ? View.VISIBLE : View.GONE);
         this.mCall.start((QampCallsActivity) this.getActivity(), this);
-        if(this.mCall.isVideoCall()){
+        if (this.mCall.isVideoCall()) {
 
             this.ui.star.setVisibility(View.VISIBLE);
             this.ui.speaker.setVisibility(View.GONE);
@@ -242,45 +244,45 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
 
             }
 
-            this.setStatusView(5, (String)null);
+            this.setStatusView(5, (String) null);
         }
     }
 
     public void onClick(View var1) {
         /**int var2;
-        if ((var2 = var1.getId()) == id.pip_video_view) {
-            this.setSwappedFeeds(!this.mCall.isVideoViewsSwapped());
-        } else if (var2 == id.fullscreen_video_view) {
-            this.toggleCallControlsVisibility();
-        } else if (var2 != id.incoming_call_disconnect && var2 != id.button_call_disconnect) {
-            if (var2 == id.incoming_call_connect) {
-                this.answer(true);
-            } else if (var2 == id.incoming_audio_call_connect) {
-                this.answer(false);
-            } else if (var2 == id.button_call_toggle_speaker) {
-                this.mCall.toggleAudioDevice(AudioDevice.SPEAKER);
-            } else {
-                boolean var3;
-                if (var2 == id.button_call_toggle_mic) {
-                    var3 = this.mCall.toggleAudioMute();
-                    this.setButtonAlpha(this.ui.toggleMuteButton, var3);
-                } else if (var2 == id.button_call_switch_camera) {
-                    this.mCall.switchCamera();
-                } else if (var2 == id.button_call_switch_source) {
-                    this.mCall.switchSource();
-                } else {
-                    if (var2 == id.button_call_toggle_camera) {
-                        var3 = this.mCall.toggleVideoMute();
-                        this.setButtonAlpha(this.ui.toggleCameraButton, var3);
-                    }
+         if ((var2 = var1.getId()) == id.pip_video_view) {
+         this.setSwappedFeeds(!this.mCall.isVideoViewsSwapped());
+         } else if (var2 == id.fullscreen_video_view) {
+         this.toggleCallControlsVisibility();
+         } else if (var2 != id.incoming_call_disconnect && var2 != id.button_call_disconnect) {
+         if (var2 == id.incoming_call_connect) {
+         this.answer(true);
+         } else if (var2 == id.incoming_audio_call_connect) {
+         this.answer(false);
+         } else if (var2 == id.button_call_toggle_speaker) {
+         this.mCall.toggleAudioDevice(AudioDevice.SPEAKER);
+         } else {
+         boolean var3;
+         if (var2 == id.button_call_toggle_mic) {
+         var3 = this.mCall.toggleAudioMute();
+         this.setButtonAlpha(this.ui.toggleMuteButton, var3);
+         } else if (var2 == id.button_call_switch_camera) {
+         this.mCall.switchCamera();
+         } else if (var2 == id.button_call_switch_source) {
+         this.mCall.switchSource();
+         } else {
+         if (var2 == id.button_call_toggle_camera) {
+         var3 = this.mCall.toggleVideoMute();
+         this.setButtonAlpha(this.ui.toggleCameraButton, var3);
+         }
 
-                }
-            }
-        } else {
-            this.mCall.hangup();
-            this.setStatusView(64);
-            this.mActivity.delayedFinish(500L);
-        }*/
+         }
+         }
+         } else {
+         this.mCall.hangup();
+         this.setStatusView(64);
+         this.mActivity.delayedFinish(500L);
+         }*/
         int var2;
         if ((var2 = var1.getId()) == R.id.pip_video_view) {
             this.setSwappedFeeds(!this.mCall.isVideoViewsSwapped());
@@ -293,30 +295,28 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
                 this.answer(false);
             } else if (var2 == R.id.one) {
                 this.mCall.toggleAudioDevice(MesiboCall.AudioDevice.SPEAKER);
-                if(speakerFirst == true){
+                if (speakerFirst == true) {
                     this.ui.speaker.setImageResource(R.drawable.vector_speaker);
                     speakerFirst = false;
-                }else {
+                } else {
                     this.ui.speaker.setImageResource(R.drawable.vector_speaker);
-                    speakerFirst = true;}
+                    speakerFirst = true;
+                }
 
-            }
-
-            else {
+            } else {
                 boolean var3;
                 if (var2 == R.id.four) {
                     var3 = this.mCall.toggleAudioMute();
-                    if(muteFirst == true){
+                    if (muteFirst == true) {
                         this.ui.mute.setImageResource(R.drawable.mute);
                         muteFirst = false;
-                    }else {
+                    } else {
                         this.ui.mute.setImageResource(R.drawable.microphone_off__2_);
                         muteFirst = true;
                     }
 
                     this.setButtonAlpha(this.ui.toggleMuteButton, var3);
-                }
-                else if (var2 == R.id.switch_source) {
+                } else if (var2 == R.id.switch_source) {
                     this.mCall.switchCamera();
                 } else if (var2 == R.id.two) {
                     //this.mCall.switchSource();
@@ -359,7 +359,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
 
     }
 
-    public void setUserOngoingDetails(TextView textView, ImageView imageView){
+    public void setUserOngoingDetails(TextView textView, ImageView imageView) {
         if (!TextUtils.isEmpty(this.mCp.user.getName())) {
             textView.setText(this.mCp.user.getName());
         } else {
@@ -387,14 +387,14 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
     public void setStatusView(int var1, String var2) {
         if (this.mCall.isAnswered() && this.mCall.isCallInProgress() && this.mCall.isCallConnected()) {
 
-            this.ui.status.setFormat((String)null);
+            this.ui.status.setFormat((String) null);
             this.ui.status.setText("");
             this.ui.status.setBase(this.mCall.getAnswerTime());
             this.ui.status.start();
-            if(this.mCall.isVideoCall()){
+            if (this.mCall.isVideoCall()) {
                 this.ui.thumbnailLayout.setVisibility(View.GONE);
                 this.ui.contactView.setVisibility(View.GONE);
-            }else  {
+            } else {
                 //this.ui.background.setVisibility(View.VISIBLE);
             }
 
@@ -413,28 +413,30 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
     }
 
     public void setStatusView(int var1) {
-        this.setStatusView(var1, (String)null);
+        this.setStatusView(var1, (String) null);
     }
 
-    /**public void updateRemoteMuteButtons() {
-        boolean var1 = this.mCall.getMuteStatus(true, false, true);
-        boolean var2 = this.mCall.getMuteStatus(false, true, true);
-        if (!var1 && !var2) {
-            this.ui.remoteMute.setVisibility(View.GONE);
-        } else {
-            int var3 = drawable.ic_mesibo_mic_off;
-            if (var2) {
-                var3 = drawable.ic_mesibo_videocam_off;
-            }
-
-            if (var2 && var1) {
-                var3 = drawable.ic_mesibo_tv_off;
-            }
-
-            this.ui.remoteMute.setImageResource(var3);
-            this.ui.remoteMute.setVisibility(View.VISIBLE);
-        }
-    }*/
+    /**
+     * public void updateRemoteMuteButtons() {
+     * boolean var1 = this.mCall.getMuteStatus(true, false, true);
+     * boolean var2 = this.mCall.getMuteStatus(false, true, true);
+     * if (!var1 && !var2) {
+     * this.ui.remoteMute.setVisibility(View.GONE);
+     * } else {
+     * int var3 = drawable.ic_mesibo_mic_off;
+     * if (var2) {
+     * var3 = drawable.ic_mesibo_videocam_off;
+     * }
+     * <p>
+     * if (var2 && var1) {
+     * var3 = drawable.ic_mesibo_tv_off;
+     * }
+     * <p>
+     * this.ui.remoteMute.setImageResource(var3);
+     * this.ui.remoteMute.setVisibility(View.VISIBLE);
+     * }
+     * }
+     */
 
     private void callConnected() {
         if (!this.mConnected) {
@@ -469,32 +471,32 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
 
     public void MesiboCall_OnUpdateUserInterface(MesiboCall.CallProperties var1, int var2, boolean var3, boolean var4) {
         /**if (var2 == 3) {
-            if (var4 || this.mCp.f2ui.autoHideControls) {
-                this.setCallControlsVisibility(var4, false);
-            }
-        } else {
-            boolean var5 = var2 == 1;
-            this.ui.incomingView.setVisibility(var5 ? View.VISIBLE : View.GONE);
-            this.ui.inprogressView.setVisibility(var5 ? View.GONE : View.VISIBLE);
-            var2 = var3 ? View.GONE : View.VISIBLE;
-            int var7 = var3 ? View.VISIBLE : View.GONE;
-            int var6 = var5 && var3 ? View.VISIBLE : View.GONE;
-            this.ui.background.setVisibility(var2);
-            if (!var3) {
-                this.ui.background.setImageBitmap(this.mCp.f2ui.userImage);
-            }
+         if (var4 || this.mCp.f2ui.autoHideControls) {
+         this.setCallControlsVisibility(var4, false);
+         }
+         } else {
+         boolean var5 = var2 == 1;
+         this.ui.incomingView.setVisibility(var5 ? View.VISIBLE : View.GONE);
+         this.ui.inprogressView.setVisibility(var5 ? View.GONE : View.VISIBLE);
+         var2 = var3 ? View.GONE : View.VISIBLE;
+         int var7 = var3 ? View.VISIBLE : View.GONE;
+         int var6 = var5 && var3 ? View.VISIBLE : View.GONE;
+         this.ui.background.setVisibility(var2);
+         if (!var3) {
+         this.ui.background.setImageBitmap(this.mCp.f2ui.userImage);
+         }
 
-            this.ui.pipVideo.setVisibility(var7);
-            this.ui.fullscreenVideo.setVisibility(var7);
-            this.ui.cameraToggleLayout.setVisibility(var7);
-            this.ui.cameraSwitchLayout.setVisibility(var7);
-            if (this.mCp.f2ui.showScreenSharing) {
-                this.ui.sourceSwitchLayout.setVisibility(var7);
-            }
+         this.ui.pipVideo.setVisibility(var7);
+         this.ui.fullscreenVideo.setVisibility(var7);
+         this.ui.cameraToggleLayout.setVisibility(var7);
+         this.ui.cameraSwitchLayout.setVisibility(var7);
+         if (this.mCp.f2ui.showScreenSharing) {
+         this.ui.sourceSwitchLayout.setVisibility(var7);
+         }
 
-            this.ui.thumbnailLayout.setVisibility(var7);
-            this.ui.incomingVideoAcceptLayout.setVisibility(var6);
-        }*/
+         this.ui.thumbnailLayout.setVisibility(var7);
+         this.ui.incomingVideoAcceptLayout.setVisibility(var6);
+         }*/
 
         if (var2 == 3) {
             if (var4 || this.mCp.f2ui.autoHideControls) {
@@ -511,43 +513,42 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
             Log.e("Video Prop", var1.video.toString());
             boolean var5 = var2 == 1;
 
-                this.ui.thumbnailLayout.setVisibility(View.VISIBLE);
-                this.ui.incomingView.setVisibility(var5 ? View.VISIBLE : View.GONE);
+            this.ui.thumbnailLayout.setVisibility(View.VISIBLE);
+            this.ui.incomingView.setVisibility(var5 ? View.VISIBLE : View.GONE);
 
-                this.ui.inprogressView.setVisibility(var5 ? View.GONE : View.VISIBLE);
-                var2 = var3 ? View.GONE : View.VISIBLE;
-                int var7 = var3 ? View.VISIBLE : View.GONE;
-                int var6 = var5 && var3 ? View.VISIBLE : View.GONE;
-                this.ui.background.setVisibility(View.GONE);
-                //this.ui.speaker.setVisibility(View.GONE);
-                this.ui.speaker.setVisibility(View.VISIBLE);
-                if (var1.video != null) {
-                    this.ui.speaker.setVisibility(View.GONE);
-                    this.ui.star.setVisibility(View.VISIBLE);
-                    //this.ui.thumbnailLayout.setVisibility(View.GONE);
+            this.ui.inprogressView.setVisibility(var5 ? View.GONE : View.VISIBLE);
+            var2 = var3 ? View.GONE : View.VISIBLE;
+            int var7 = var3 ? View.VISIBLE : View.GONE;
+            int var6 = var5 && var3 ? View.VISIBLE : View.GONE;
+            this.ui.background.setVisibility(View.GONE);
+            //this.ui.speaker.setVisibility(View.GONE);
+            this.ui.speaker.setVisibility(View.VISIBLE);
+            if (var1.video != null) {
+                this.ui.speaker.setVisibility(View.GONE);
+                this.ui.star.setVisibility(View.VISIBLE);
+                //this.ui.thumbnailLayout.setVisibility(View.GONE);
 
-                }
-                this.ui.star.setVisibility(View.GONE);
-                this.ui.speaker.setVisibility(View.VISIBLE);
+            }
+            this.ui.star.setVisibility(View.GONE);
+            this.ui.speaker.setVisibility(View.VISIBLE);
 
-                if (!var3) {
-                    this.ui.background.setImageBitmap(this.mCp.f2ui.userImage);
-                }
+            if (!var3) {
+                this.ui.background.setImageBitmap(this.mCp.f2ui.userImage);
+            }
 
-                this.ui.pipVideo.setVisibility(var7);
-                this.ui.fullscreenVideo.setVisibility(var7);
-                this.ui.cameraToggleLayout.setVisibility(var7);
-                this.ui.cameraSwitchLayout.setVisibility(var7);
+            this.ui.pipVideo.setVisibility(var7);
+            this.ui.fullscreenVideo.setVisibility(var7);
+            this.ui.cameraToggleLayout.setVisibility(var7);
+            this.ui.cameraSwitchLayout.setVisibility(var7);
 //                if (this.mCp.f2ui.showScreenSharing) {
 //                    this.ui.sourceSwitchLayout.setVisibility(var7);
 //                }
 
-                //this.ui.thumbnailLayout.setVisibility(View.VISIBLE);
-                //this.ui.thumbnailLayout.setVisibility(var7);
-                this.ui.incomingVideoAcceptLayout.setVisibility(var6);
+            //this.ui.thumbnailLayout.setVisibility(View.VISIBLE);
+            //this.ui.thumbnailLayout.setVisibility(var7);
+            this.ui.incomingVideoAcceptLayout.setVisibility(var6);
 
-            }
-
+        }
 
 
     }
@@ -571,7 +572,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
                 this.mActivity.delayedFinish(3000L);
             }
         } else {
-            switch(var2) {
+            switch (var2) {
                 case 48:
                     this.callConnected();
                 default:
@@ -579,22 +580,27 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         }
     }
 
-    /**protected void setButtonAlpha(ImageButton var1, boolean var2) {
-        var1.setAlpha((float)(var2 ? this.ui.buttonAlphaOn : this.ui.buttonAlphaOff) / 255.0F);
-    }*/
+    /**
+     * protected void setButtonAlpha(ImageButton var1, boolean var2) {
+     * var1.setAlpha((float)(var2 ? this.ui.buttonAlphaOn : this.ui.buttonAlphaOff) / 255.0F);
+     * }
+     */
     protected void setButtonAlpha(ImageView var1, boolean var2) {
-        var1.setAlpha((float)(var2 ? this.ui.buttonAlphaOn : this.ui.buttonAlphaOff) / 255.0F);
+        var1.setAlpha((float) (var2 ? this.ui.buttonAlphaOn : this.ui.buttonAlphaOff) / 255.0F);
     }
-    /**public void MesiboCall_OnSetCall(QampCallsActivity var1, Call var2) {
-        this.mActivity = var1;
-        this.mCall = var2;
-        this.mCp = this.mCall.getCallProperties();
-        this.mCp.activity = var1;
-        if (null != this.mCp.f2ui.inProgressListener) {
-            this.mCp.ui.inProgressListener.MesiboCall_OnSetCall(var1, this.mCall);
-        }
 
-    }*/
+    /**
+     * public void MesiboCall_OnSetCall(QampCallsActivity var1, Call var2) {
+     * this.mActivity = var1;
+     * this.mCall = var2;
+     * this.mCp = this.mCall.getCallProperties();
+     * this.mCp.activity = var1;
+     * if (null != this.mCp.f2ui.inProgressListener) {
+     * this.mCp.ui.inProgressListener.MesiboCall_OnSetCall(var1, this.mCall);
+     * }
+     * <p>
+     * }
+     */
 
     public void MesiboCall_OnMute(MesiboCall.CallProperties var1, boolean var2, boolean var3, boolean var4) {
         if (null != this.mCp.f2ui.inProgressListener) {
@@ -602,7 +608,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         }
 
         if (var4) {
-           // this.updateRemoteMuteButtons();
+            // this.updateRemoteMuteButtons();
         } else {
             //this.setButtonAlpha(this.ui.toggleMuteButton, this.mCall.getMuteStatus(true, false, false));
             //this.setButtonAlpha(this.ui.toggleCameraButton, this.mCall.getMuteStatus(false, true, false));
@@ -646,11 +652,11 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
 
     public void MesiboCall_OnBatteryStatus(MesiboCall.CallProperties var1, boolean var2, boolean var3) {
         /**if (var3 && var2) {
-            this.ui.remoteMute.setImageResource(drawable.ic_mesibo_battery_1bar);
-            this.ui.remoteMute.setVisibility(View.VISIBLE);
-        } else {
-            this.updateRemoteMuteButtons();
-        }*/
+         this.ui.remoteMute.setImageResource(drawable.ic_mesibo_battery_1bar);
+         this.ui.remoteMute.setVisibility(View.VISIBLE);
+         } else {
+         this.updateRemoteMuteButtons();
+         }*/
     }
 
     public void MesiboCall_OnDTMF(MesiboCall.CallProperties var1, int var2) {
@@ -661,7 +667,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
     }
 
     public String statusToString(int var1, String var2) {
-        switch(var1) {
+        switch (var1) {
             case 0:
                 var2 = this.getStatusText(var1, "Initiating Call");
                 if (this.mCall.isIncoming()) {
@@ -769,35 +775,37 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
     }
 
     public static class CallUserInterface {
-        /**public Chronometer status = null;
-        public MesiboVideoView pipVideo;
-        public MesiboVideoView fullscreenVideo;
-        public TextView contactView;
-        public ImageButton cameraSwitchButton;
-        public ImageButton sourceSwitchButton;
-        public ImageButton toggleCameraButton;
-        public ImageButton toggleMuteButton;
-        public ImageButton toggleSpeakerButton;
-        public ImageView remoteMute;
-        public ImageButton acceptButton;
-        public ImageButton acceptAudioButton;
-        public ImageButton declineButton;
-        public ImageButton disconnectButton;
-        public ImageView background;
-        public View incomingView;
-        public View inprogressView;
-        public View controlLayout;
-        public View cameraToggleLayout;
-        public View cameraSwitchLayout;
-        public View thumbnailLayout;
-        public View sourceSwitchLayout;
-        public View incomingVideoAcceptLayout;
-        public View incomingAudioAcceptLayout;
-        public View backgroundView;
-        public String mStatusText = "";
-        public int buttonAlphaOff = 127;
-        public int buttonAlphaMid = 200;
-        public int buttonAlphaOn = 255;*/
+        /**
+         * public Chronometer status = null;
+         * public MesiboVideoView pipVideo;
+         * public MesiboVideoView fullscreenVideo;
+         * public TextView contactView;
+         * public ImageButton cameraSwitchButton;
+         * public ImageButton sourceSwitchButton;
+         * public ImageButton toggleCameraButton;
+         * public ImageButton toggleMuteButton;
+         * public ImageButton toggleSpeakerButton;
+         * public ImageView remoteMute;
+         * public ImageButton acceptButton;
+         * public ImageButton acceptAudioButton;
+         * public ImageButton declineButton;
+         * public ImageButton disconnectButton;
+         * public ImageView background;
+         * public View incomingView;
+         * public View inprogressView;
+         * public View controlLayout;
+         * public View cameraToggleLayout;
+         * public View cameraSwitchLayout;
+         * public View thumbnailLayout;
+         * public View sourceSwitchLayout;
+         * public View incomingVideoAcceptLayout;
+         * public View incomingAudioAcceptLayout;
+         * public View backgroundView;
+         * public String mStatusText = "";
+         * public int buttonAlphaOff = 127;
+         * public int buttonAlphaMid = 200;
+         * public int buttonAlphaOn = 255;
+         */
         public Chronometer status = null;
         public MesiboVideoView pipVideo;
         public MesiboVideoView fullscreenVideo;

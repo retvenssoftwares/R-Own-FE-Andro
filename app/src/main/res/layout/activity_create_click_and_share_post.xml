@@ -16,13 +16,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/createCommunity_backBtn"
-            android:layout_width="45dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="16dp"
             android:background="@color/white"
             android:src="@drawable/community_btn" />
 
@@ -38,18 +38,19 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="14dp"
+                android:layout_height="35dp"
+                android:gravity="center"
+                 android:paddingHorizontal="24dp"
                 android:textAlignment="center"
                 android:text="Share"
                 android:fontFamily="@font/montserrat_bold"
                 android:textFontWeight="600"
                 android:textSize="14dp"
                 android:background="@color/green_own"
-                android:textColor="@color/white"/>
+                android:textColor="@color/black"/>
 
         </androidx.cardview.widget.CardView>
+
 
     </RelativeLayout>
 
@@ -180,7 +181,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="6dp"
-        app:cardElevation="4dp"
+        app:cardElevation="3dp"
         android:layout_marginHorizontal="20dp"
         app:cardBackgroundColor="@color/white"
         android:layout_marginTop="20dp"
@@ -238,9 +239,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="30dp"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:src="@drawable/png_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/gps"
         />
 
 

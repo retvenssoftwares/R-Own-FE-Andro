@@ -111,7 +111,7 @@
                 android:text="Read More"
                 android:fontFamily="@font/montserrat_semibold"
                 android:textSize="10dp"
-                android:background="#EFF0F9"
+                android:background="@color/green_own"
                 android:textColor="@color/black"/>
 
         </androidx.cardview.widget.CardView>

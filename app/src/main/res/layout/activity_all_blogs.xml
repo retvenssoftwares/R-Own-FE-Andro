@@ -39,10 +39,10 @@
             android:textFontWeight="700"
             android:textSize="18dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/community_backBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
@@ -141,6 +141,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_search"
             tools:ignore="MissingConstraints">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

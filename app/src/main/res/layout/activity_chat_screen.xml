@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    android:fitsSystemWindows="true"
-    tools:context=".ChatSection.ChatScreen">
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/back_btn"
@@ -58,7 +57,7 @@
         app:layout_constraintStart_toEndOf="@+id/profileOfUser"
         android:layout_marginStart="15dp"
         android:text="status"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textColor="#31B303"
         android:fontFamily="@font/montserrat_alternates"
         android:textFontWeight="500"
@@ -145,6 +144,7 @@
                 android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
+                android:contentDescription="sd"
                 android:padding="13dp"
                 app:srcCompat="@drawable/emojisymbol" />
 
@@ -165,6 +165,7 @@
                 android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
+                android:contentDescription="sd"
                 android:padding="14dp"
                 app:srcCompat="@drawable/attach" />
 
@@ -174,7 +175,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:padding="14dp"
-
+                android:contentDescription="sd"
                 app:srcCompat="@drawable/camera_svg" />
 
             <ImageView
@@ -183,6 +184,7 @@
                 android:layout_height="50dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
+                android:contentDescription="sd"
                 android:padding="12dp"
                 app:srcCompat="@drawable/sendtext" />
 
