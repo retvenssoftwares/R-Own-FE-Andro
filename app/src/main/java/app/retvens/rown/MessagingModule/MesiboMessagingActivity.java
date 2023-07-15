@@ -270,7 +270,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                 String user_id = sharedPreferences1.getString("user_id", "");
                 Log.e("userID",userID);
                 Log.e("user_id",user_id);
-            backgroundCall(user_id,userID);
+            backgroundCall(user_id,userID,"call");
 
 /**
  //    if (view.getId() == R.id.imageView2) { // For Calling
@@ -301,6 +301,23 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             @Override
             public void onClick(View view) {
 
+
+                String peer = args.getString(MesiboUI.PEER);
+                MesiboProfile profile = new MesiboProfile();
+                profile = Mesibo.getProfile(peer);
+
+                String Status = profile.getStatus();
+
+                Map<String, String> decodedData = Decoder.decodeData(Status);
+
+                String userID = decodedData.get("userID");
+                String userRole = decodedData.get("userRole");
+                SharedPreferences sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE);
+                String user_id = sharedPreferences1.getString("user_id", "");
+                Log.e("userID",userID);
+                Log.e("user_id",user_id);
+                backgroundCall(user_id,userID,"video");
+
                 Log.e("Aditya", "reached1");
                 /**if (view.getId() == R.id.imageView4) {
                  //if(0 == mParameter.groupid) {
@@ -312,9 +329,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
 
                  }*/
 
-                if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, true))
-                    //MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
-                    launchCustomCallActivity(destination, true, false);
+
             }
         });
     }
@@ -634,7 +649,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
 
 
 
-    public void backgroundCall(String senderUserID, String receiverUserID) {
+    public void backgroundCall(String senderUserID, String receiverUserID,String type) {
 
         Log.e("sender",senderUserID.toString());
         Log.e("recierver",receiverUserID);
@@ -646,12 +661,17 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                 if (response.isSuccessful()) {
                     CallResponse callResponse = response.body();
                     Log.e("success",callResponse.getMessage());
-                    if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)) {
-
-                        Log.e("Arr", String.valueOf(MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)));
-                        MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
+                    if (Objects.equals(type, "call")){
+                        if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)) {
+                            Log.e("Arr", String.valueOf(MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)));
+                            MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
+                        }
+                        launchCustomCallActivity(destination, true, false);
+                    }else {
+                        if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, true))
+                            //MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
+                            launchCustomCallActivity(destination, true, false);
                     }
-                    launchCustomCallActivity(destination, true, false);
                 } else {
                     Log.e("success",response.message());
                 }

@@ -34,9 +34,10 @@ interface ProfileApis {
         @Path("user_id") user_id : String
     ) : Call<List<OnGoingEventsData>>
 
-    @GET("gethotel/{user_id}")
+    @GET("gethotel/{user_id}/{User_Id}")
     fun getProfileHotels(
-        @Path("user_id") user_id : String
+        @Path("user_id") user_id : String,
+        @Path("User_Id") User_id : String
     ) : Call<List<HotelsName>>
 
     @GET("getservice/{user_id}")

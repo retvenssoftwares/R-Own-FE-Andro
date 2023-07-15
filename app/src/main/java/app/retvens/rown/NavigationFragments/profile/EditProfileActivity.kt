@@ -211,6 +211,10 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
                 intent.type = "application/pdf"
                 startActivityForResult(intent,PICK_PDF_REQUEST_CODE)
             }
+
+        binding.profileBackBtn.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun uploadData(user_id: String) {

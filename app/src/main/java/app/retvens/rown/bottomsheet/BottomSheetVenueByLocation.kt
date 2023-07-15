@@ -64,73 +64,73 @@ class BottomSheetVenueByLocation(val location : String) : BottomSheetDialogFragm
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        getUserVenueLocation()
+//        getUserVenueLocation()
     }
 
-    private fun getUserVenueLocation() {
-        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        val getLocation = RetrofitBuilder.ProfileApis.getProfileHotels(user_id)
-        getLocation.enqueue(object : Callback<List<HotelsName>?>, BottomVenueByLocationAdapter.OnLocationClickListener {
-            override fun onResponse(
-                call: Call<List<HotelsName>?>,
-                response: Response<List<HotelsName>?>
-            ) {
-
-                if (response.isSuccessful && isAdded){
-                    val response = response.body()!!
-                    becA = BottomVenueByLocationAdapter(requireContext(),
-                        response as ArrayList<HotelsName>
-                    )
-                    becA.notifyDataSetChanged()
-                    recyclerView.adapter = becA
-                    becA.removeHotelFromList(response)
-                    becA.setOnLocationClickListener(this)
-
-                    ssearchLocation.addTextChangedListener(object : TextWatcher {
-                        override fun beforeTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            count: Int,
-                            after: Int
-                        ) {
-
-                        }
-                        override fun onTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            before: Int,
-                            count: Int
-                        ) {
-                            val original = response.toList()
-                            val filter = original.filter { searchUser ->
-                                searchUser.hotelName.contains(s.toString(),ignoreCase = true)
-                            }
-                            becA.search(filter as ArrayList<HotelsName>)
-                        }
-
-                        override fun afterTextChanged(s: Editable?) {
-
-                        }
-                    })
-                }
-                else{
-                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<HotelsName>?>, t: Throwable) {
-                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
-                Log.e("error",t.message.toString())
-            }
-
-            override fun onCountryClick(country: String, code: String) {
-                mListener?.bottomVBLCClick(country, code)
-                dismiss()
-            }
-        })
-    }
+//    private fun getUserVenueLocation() {
+//        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+//        val user_id = sharedPreferences?.getString("user_id", "").toString()
+//
+//        val getLocation = RetrofitBuilder.ProfileApis.getProfileHotels(user_id)
+//        getLocation.enqueue(object : Callback<List<HotelsName>?>, BottomVenueByLocationAdapter.OnLocationClickListener {
+//            override fun onResponse(
+//                call: Call<List<HotelsName>?>,
+//                response: Response<List<HotelsName>?>
+//            ) {
+//
+//                if (response.isSuccessful && isAdded){
+//                    val response = response.body()!!
+//                    becA = BottomVenueByLocationAdapter(requireContext(),
+//                        response as ArrayList<HotelsName>
+//                    )
+//                    becA.notifyDataSetChanged()
+//                    recyclerView.adapter = becA
+//                    becA.removeHotelFromList(response)
+//                    becA.setOnLocationClickListener(this)
+//
+//                    ssearchLocation.addTextChangedListener(object : TextWatcher {
+//                        override fun beforeTextChanged(
+//                            s: CharSequence?,
+//                            start: Int,
+//                            count: Int,
+//                            after: Int
+//                        ) {
+//
+//                        }
+//                        override fun onTextChanged(
+//                            s: CharSequence?,
+//                            start: Int,
+//                            before: Int,
+//                            count: Int
+//                        ) {
+//                            val original = response.toList()
+//                            val filter = original.filter { searchUser ->
+//                                searchUser.hotelName.contains(s.toString(),ignoreCase = true)
+//                            }
+//                            becA.search(filter as ArrayList<HotelsName>)
+//                        }
+//
+//                        override fun afterTextChanged(s: Editable?) {
+//
+//                        }
+//                    })
+//                }
+//                else{
+//                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<HotelsName>?>, t: Throwable) {
+//                Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
+//                Log.e("error",t.message.toString())
+//            }
+//
+//            override fun onCountryClick(country: String, code: String) {
+//                mListener?.bottomVBLCClick(country, code)
+//                dismiss()
+//            }
+//        })
+//    }
 
     override fun onDetach() {
         super.onDetach()

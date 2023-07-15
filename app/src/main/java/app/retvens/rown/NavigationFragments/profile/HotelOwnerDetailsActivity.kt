@@ -24,7 +24,6 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
 
         binding.communityDetailBackBtn.setOnClickListener { onBackPressed() }
 
-
         getProfile()
         getHotel()
 
@@ -36,7 +35,7 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getHotel = RetrofitBuilder.ProfileApis.getProfileHotels(user_id)
+        val getHotel = RetrofitBuilder.ProfileApis.getProfileHotels(user_id,user_id)
 
         getHotel.enqueue(object : Callback<List<HotelsName>?> {
             override fun onResponse(

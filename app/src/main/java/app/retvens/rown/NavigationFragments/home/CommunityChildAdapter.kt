@@ -36,7 +36,7 @@ class CommunityChildAdapter(private val context: Context, private val viewType: 
 //            }
             binding.joinG.setOnClickListener {
                 val intent = Intent(context,OpenCommunityDetailsActivity::class.java)
-                intent.putExtra("groupId",recyclerItem.group_id)
+                intent.putExtra("groupId",recyclerItem.group_id.toLong())
                 context.startActivity(intent)
             }
         }
