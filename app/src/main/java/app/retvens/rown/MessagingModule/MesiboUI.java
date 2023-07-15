@@ -149,9 +149,9 @@ public class MesiboUI {
         return mConfig;
     }
 
-//    public static void launch(Context context, int flag, boolean startInBackground, boolean keepRunnig) {
-//        MesiboUIManager.launchContactActivity(context, 0, MesiboUserListFragment.MODE_MESSAGELIST, flag, startInBackground, keepRunnig, (Bundle) null,"");
-//    }
+    public static void launch(Context context, int flag, boolean startInBackground, boolean keepRunnig) {
+        //MesiboUIManager.launchContactActivity(context, 0, MesiboUserListFragment.MODE_MESSAGELIST, flag, startInBackground, keepRunnig, (Bundle) null,"");
+    }
 
     public static void launchContacts(Context context, long forwardid, int selectionMode, int flag, Bundle bundle) {
         MesiboUIManager.launchContactActivity(context, forwardid, selectionMode, flag, false, false, bundle,"");

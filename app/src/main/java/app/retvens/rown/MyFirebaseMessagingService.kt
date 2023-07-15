@@ -60,12 +60,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 MesiboApi.init(applicationContext)
                 MesiboApi.startMesibo(true)
                 MesiboCall.getInstance().init(applicationContext)
-
             } catch (e: Exception) {
                 Log.e(TAG, "MesiboCall initialization failed: ${e.message}")
             }
-
-
         }
 
         super.onMessageReceived(message);
@@ -85,7 +82,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Create the full-screen intent
 
         if (type == "message"){
-
+            MesiboApi.init(applicationContext)
+            MesiboApi.startMesibo(true)
             val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
             fullScreenIntent.putExtra(MesiboUI.PEER,address)
             fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
