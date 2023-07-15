@@ -22,6 +22,7 @@ import app.retvens.rown.NavigationFragments.profile.EditHotelOwnerProfileActivit
 import app.retvens.rown.NavigationFragments.profile.EditHotelProfileActivity
 import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
 import app.retvens.rown.NavigationFragments.profile.HotelOwnerDetailsActivity
+import app.retvens.rown.NavigationFragments.profile.UserDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.events.EventsProfileFragment
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsFragmentProfile
@@ -107,9 +108,6 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             true
         }
 
-        profile.setOnClickListener {
-            startActivity(Intent(requireContext(),HotelOwnerDetailsActivity::class.java))
-        }
 
         val sharedPreferencesID = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesID?.getString("user_id", "").toString()
@@ -309,6 +307,9 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
             "settings" -> {
                 startActivity(Intent(context, OwnerSettingActivity::class.java))
+            }
+            "profileDetails" -> {
+                startActivity(Intent(requireContext(),HotelOwnerDetailsActivity::class.java))
             }
             "edit" -> {
                 startActivity(Intent(context, EditHotelOwnerProfileActivity::class.java))

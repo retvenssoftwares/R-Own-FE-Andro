@@ -11,6 +11,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserInfoo
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.profile.viewRequests.ExperienceAdapter
+import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.databinding.ActivityUserDetailsBinding
 import com.bumptech.glide.Glide
@@ -92,7 +93,14 @@ class UserDetailsActivity : AppCompatActivity(),
                         binding.recyclerExperience.adapter = experienceAdapter
                         experienceAdapter.notifyDataSetChanged()
                         experienceAdapter.setOnFilterClickListener(this)
-                        Glide.with(applicationContext).load(response.Profile_pic).into(binding.vendorProfile)
+
+                        if (response.Profile_pic!!.isNotEmpty()) {
+                            Glide.with(applicationContext).load(response.Profile_pic)
+                                .into(binding.vendorProfile)
+                        } else {
+                            binding.vendorProfile.setImageResource(R.drawable.svg_user)
+                        }
+
                         binding.vendorName.text = response.Full_name
                         binding.username.text = response.User_name
                         binding.bio.text = response.userBio

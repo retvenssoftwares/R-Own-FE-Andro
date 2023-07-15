@@ -137,9 +137,10 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
-                    android:hint="2020"
-                    android:textColorHint="@drawable/hint_selector"
-                    android:inputType="number"/>
+                    android:text="Select Year"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:editable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -168,9 +169,10 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
-                    android:hint="2024"
-                    android:textColorHint="@drawable/hint_selector"
-                    android:inputType="number"/>
+                    android:text="Select Year"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:editable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

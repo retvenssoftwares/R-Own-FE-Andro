@@ -32,14 +32,17 @@ import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.bottomsheet.BottomSheetJobType
+import app.retvens.rown.utils.endYearDialog
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
 
 class HospitalityExpertFragment : Fragment(), BackHandler,
     BottomSheetJobType.OnBottomJobTypeClickListener,
@@ -58,10 +61,14 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
     private var originalData: List<CompanyDatacClass> = emptyList()
 
     lateinit var jobTitleLayout : TextInputLayout
+    lateinit var e_type_layout : TextInputLayout
+    lateinit var recentComLayout : TextInputLayout
     lateinit var startLayout : TextInputLayout
     lateinit var endLayout : TextInputLayout
 
     lateinit var progressDialog : Dialog
+
+    private var selectedYear : Int = 1900
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +83,8 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
 
 
         eTypeET = view.findViewById(R.id.hos_expert_job_type)
+        e_type_layout = view.findViewById(R.id.e_type_layout)
+        recentComLayout = view.findViewById(R.id.recentComLayout)
         recentCoET = view.findViewById(R.id.hos_expert_company)
         recentCoET.setOnClickListener {
             openRecentCompanyBottom()
@@ -115,45 +124,45 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
             end.setText("Present")
         }
 
-        start.addTextChangedListener {
-            if (start.text!!.length > 3 && end.text!!.length > 3){
-                submit.isClickable = true
-                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.green_own))
-            } else {
-                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                submit.isClickable = false
-            }
+        start.setOnClickListener {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            val builder : MonthPickerDialog.Builder  = MonthPickerDialog.Builder(requireContext(),
+                MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYears ->
+                    start.setText("$selectedYears")
+                    selectedYear = selectedYears
+                    end.setText("")
+                }, Calendar.YEAR, Calendar.MONTH)
+
+            builder
+                .setActivatedYear(currentYear)
+//                .setMaxYear(2030)
+                .setTitle("Select Starting Year")
+                .setYearRange(1950, currentYear)
+                .showYearOnly()
+                .setOnYearChangedListener {
+                    start.setText("$it")
+                    selectedYear = it
+                    end.setText("")
+                }
+                .build()
+                .show()
         }
-        end.addTextChangedListener {
-            if (end.text!!.length > 3 && start.text!!.length > 3){
-                submit.isClickable = true
-                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.green_own))
-                if (end.text!!.length == 6 || end.text!!.length == 8){
-                    end.setText("")
-                    submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                    submit.isClickable = false
-                }
-            } else {
-                if (end.text!!.length == 6 || end.text!!.length == 8){
-                    end.setText("")
-                    submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                    submit.isClickable = false
-                }
-            }
+
+        end.setOnClickListener {
+            endYearDialog(requireContext(), end, selectedYear)
         }
 
         submit.setOnClickListener {
-            val startY = start.text.toString().toInt()
-            val endY =  if (end.text.toString() != "Present") {
-                end.text.toString().toInt()
-            } else { startY + 10 }
-
-            if(jobTitle.length() < 3){
-                jobTitleLayout.error = "Please enter your Job Tittle"
+            if(jobTitle.text.toString() == "Job Title"){
+                jobTitleLayout.error = "Please enter your Job Title"
+            } else if(eTypeET.text.toString() == "Select one"){
+                e_type_layout.error = "Please enter your Employment Type"
+            } else if(recentCoET.text.toString() == "Select one"){
+                recentComLayout.error = "Please enter recent Hotel"
             } else if(start.length() < 3){
                 jobTitleLayout.isErrorEnabled = false
                 startLayout.error = "Please enter start year"
-            } else if(end.length() < 3  && startY > endY){
+            } else if(end.length() < 3){
                 jobTitleLayout.isErrorEnabled = false
                 startLayout.isErrorEnabled = false
                 endLayout.error = "Please enter end year"

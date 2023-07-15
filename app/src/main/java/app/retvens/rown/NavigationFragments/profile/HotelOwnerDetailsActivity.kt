@@ -74,8 +74,20 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Glide.with(applicationContext).load(response.Profile_pic).into(binding.userProfile)
-                    Glide.with(applicationContext).load(response.Profile_pic).into(binding.vendorProfile)
+
+                    if (response.Profile_pic!!.isNotEmpty()) {
+                        Glide.with(applicationContext).load(response.Profile_pic).into(binding.userProfile)
+                    } else {
+                        binding.userProfile.setImageResource(R.drawable.svg_user)
+                    }
+
+                    if (response.Profile_pic!!.isNotEmpty()) {
+                        Glide.with(applicationContext).load(response.Profile_pic)
+                            .into(binding.vendorProfile)
+                    } else {
+                        binding.vendorProfile.setImageResource(R.drawable.svg_user)
+                    }
+
                     binding.name.text = response.Full_name
                     binding.vendorName.text = response.hotelOwnerInfo.hotelownerName
                     binding.username.text = response.User_name

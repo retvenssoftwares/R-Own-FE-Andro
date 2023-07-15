@@ -75,6 +75,8 @@ class DiscoverAllAdapter(var listS : ArrayList<Post>, val context: Context) : Re
 
         if(currentItem.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(currentItem.Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
         }
 
 

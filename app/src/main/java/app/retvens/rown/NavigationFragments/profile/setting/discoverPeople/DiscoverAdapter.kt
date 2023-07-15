@@ -77,6 +77,8 @@ class DiscoverAdapter(var listS : ArrayList<MatchedContact>, val context: Contex
 
         if(currentItem.matchedNumber!!.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(currentItem.matchedNumber.Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
         }
 
         val userId = data.matchedNumber.User_id

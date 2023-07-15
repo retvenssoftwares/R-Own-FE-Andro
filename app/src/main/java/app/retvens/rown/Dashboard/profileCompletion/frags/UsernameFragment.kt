@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -302,52 +303,6 @@ class UsernameFragment : Fragment() {
                 progressDialog.dismiss()
             }
         })
-
-
-//        send.enqueue(object : Callback<UpdateResponse?> {
-//            override fun onResponse(
-//                call: Call<UpdateResponse?>,
-//                response: Response<UpdateResponse?>
-//            ) {
-//                if (response.isSuccessful){
-//
-//                    val onboardingPrefs = requireContext().getSharedPreferences("onboarding_prefs", Context.MODE_PRIVATE)
-//
-//                    editor = onboardingPrefs.edit()
-//
-//                    editor.putBoolean("UsernameFragment", false)
-//                    Log.e("Onboarding", "UsernameFragment set to false")
-//                    editor.apply()
-//
-////                    DashBoardActivity.number.progress = "50"
-//                    saveProgress(requireContext(), "60")
-//
-//                    val prefValue = onboardingPrefs.getBoolean("UsernameFragment", false)
-//                    Log.e("PrefValue", "UsernameFragment preference value: $prefValue")
-//
-//                    val response = response.body()!!
-//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
-//                    progressDialog.dismiss()
-//                    val fragment = LocationFragment()
-//                    val transaction = activity?.supportFragmentManager?.beginTransaction()
-//                    transaction?.replace(R.id.fragment_username,fragment)
-//                    transaction?.commit()
-//                }else{
-//                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
-//                    progressDialog.dismiss()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-//                Toast.makeText(requireContext(),t.localizedMessage?.toString(),Toast.LENGTH_SHORT).show()
-//                progressDialog.dismiss()
-//            }
-//        })
-
-
-
-
-
 
 
     }

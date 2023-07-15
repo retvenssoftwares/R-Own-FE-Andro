@@ -54,7 +54,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:text="Reservation and Oprations"
+                android:text="Job Title"
                 android:clickable="true"
                 android:focusable="false"
                 android:editable="false"/>
@@ -62,6 +62,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/e_type_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -90,6 +91,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/recentComLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -149,9 +151,10 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
-                    android:hint="2020"
-                    android:textColorHint="@drawable/hint_selector"
-                    android:inputType="number"/>
+                    android:text="Select Year"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:editable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,9 +183,10 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
-                    android:hint="2024"
-                    android:textColorHint="@drawable/hint_selector"
-                    android:inputType="number"/>
+                    android:text="Select Year"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:editable="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

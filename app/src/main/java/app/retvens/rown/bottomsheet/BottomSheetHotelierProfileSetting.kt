@@ -53,6 +53,11 @@ class BottomSheetHotelierProfileSetting : BottomSheetDialogFragment() {
             mListener?.bottomSheetHotelierProfileSettingClick("settings")
             dismiss()
         }
+        val profileDetails= view.findViewById<LinearLayout>(R.id.profileDetails)
+        profileDetails.setOnClickListener {
+            mListener?.bottomSheetHotelierProfileSettingClick("profileDetails")
+            dismiss()
+        }
         val edit= view.findViewById<LinearLayout>(R.id.edit)
         edit.setOnClickListener {
             mListener?.bottomSheetHotelierProfileSettingClick("edit")
