@@ -5,8 +5,9 @@ data class ReportDataClass(
     val reporterUserId:String,
     val reportedUserId:String,
     val post_id:String,
-    val reasons:List<Reasons>
+    val Reason:String
 )
-data class Reasons(
-    val reason:String
+
+data class DeleteAccount(
+    val User_id:String
 )

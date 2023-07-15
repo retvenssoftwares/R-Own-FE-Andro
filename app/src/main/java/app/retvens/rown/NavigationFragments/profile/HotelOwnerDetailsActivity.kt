@@ -51,12 +51,10 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
                     }catch (e:NullPointerException){
                         Log.e("error",e.message.toString())
                     }
-
                 }else{
                     Log.e("error",response.code().toString())
                 }
             }
-
             override fun onFailure(call: Call<List<HotelsName>?>, t: Throwable) {
                 Log.e("error",t.message.toString())
             }

@@ -19,7 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BottomSheetReport(val userId:String) : BottomSheetDialogFragment() {
+class BottomSheetReportPost(val userId:String,val postId:String) : BottomSheetDialogFragment() {
 
     private lateinit var reportText:String
     var mListener: OnBottomRatingClickListener ? = null
@@ -27,8 +27,8 @@ class BottomSheetReport(val userId:String) : BottomSheetDialogFragment() {
     fun setOnRatingClickListener(listener: OnBottomRatingClickListener?){
         mListener = listener
     }
-    fun newInstance(): BottomSheetReport? {
-        return BottomSheetReport("")
+    fun newInstance(): BottomSheetReportPost? {
+        return BottomSheetReportPost(userId,postId)
     }
     interface OnBottomRatingClickListener{
         fun bottomRatingClick(ratingFrBo : String)
@@ -161,7 +161,7 @@ class BottomSheetReport(val userId:String) : BottomSheetDialogFragment() {
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val report = RetrofitBuilder.ProfileApis.addreport(ReportDataClass("Profile",user_id,userId,"",reportText))
+        val report = RetrofitBuilder.ProfileApis.addreport(ReportDataClass("Profile",user_id,userId,postId,reportText))
 
         report.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(

@@ -1,13 +1,18 @@
 package app.retvens.rown.NavigationFragments.profile.setting.discoverPeople
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.AbsListView
 import android.widget.Toast
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.MesiboUsersData
@@ -27,9 +32,13 @@ import retrofit2.Response
 
 class DiscoverPeopleActivity : AppCompatActivity() {
     lateinit var binding : ActivityDiscoverPeopleBinding
-
+    private var isLoading = false
     private lateinit var discoverAdapter: DiscoverAdapter
     private lateinit var discoverAllAdapter: DiscoverAllAdapter
+    private lateinit var progressDialog: Dialog
+    private var peopleList:ArrayList<Post> = ArrayList()
+    private var lastPage = 1
+    private var currentPage = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +51,56 @@ class DiscoverPeopleActivity : AppCompatActivity() {
         getContacts()
         binding.discoverRecycler2.layoutManager = LinearLayoutManager(this)
         binding.discoverRecycler2.setHasFixedSize(true)
+
+        ViewCompat.setNestedScrollingEnabled(binding.discoverRecycler2, false);
+
+        binding.discoverRecycler2.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+                        isLoading = false
+                        lastPage++
+                        getData()
+
+
+                    }
+                }
+
+
+            }
+        })
+
         getAllProfiles()
     }
+
+    private fun getData() {
+            val handler = Handler()
+
+            binding.progress.visibility = View.VISIBLE
+
+            handler.postDelayed({
+                getAllProfiles()
+                binding.progress.visibility = View.GONE
+            },
+                3000)
+        }
+
+
     fun getContacts(){
         val sharedPreferences =  getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
@@ -133,7 +190,7 @@ class DiscoverPeopleActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getProfiles = RetrofitBuilder.exploreApis.getPeople(user_id,"1")
+        val getProfiles = RetrofitBuilder.exploreApis.getPeople(user_id,currentPage.toString())
 
         getProfiles.enqueue(object : Callback<List<ExplorePeopleDataClass>?>,
             BottomSheetAdapterPeople.ConnectClickListener {
@@ -143,14 +200,16 @@ class DiscoverPeopleActivity : AppCompatActivity() {
             ) {
                     if (response.isSuccessful) {
                         if (response.body()!!.isNotEmpty()) {
+                            currentPage++
                             val response = response.body()!!
                             var original:List<Post> = emptyList()
                             response.forEach {
-                                original = it.posts.toList()
+                                original = peopleList.toList()
                             }
                             response.forEach { explorePeopleDataClass ->
                                 try {
-                                    discoverAllAdapter = DiscoverAllAdapter(explorePeopleDataClass.posts as ArrayList<Post>, this@DiscoverPeopleActivity )
+                                    peopleList.addAll(explorePeopleDataClass.posts)
+                                    discoverAllAdapter = DiscoverAllAdapter(peopleList as ArrayList<Post>, this@DiscoverPeopleActivity )
                                     binding.discoverRecycler2.adapter = discoverAllAdapter
                                     discoverAllAdapter.removeUser(explorePeopleDataClass.posts)
                                     discoverAllAdapter.removeUsersFromList(explorePeopleDataClass.posts)

@@ -8,14 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.DeleteAccount
+import app.retvens.rown.DataCollections.FeedCollection.DeletePost
 import app.retvens.rown.DataCollections.FeedCollection.EditPostClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
+import app.retvens.rown.authentication.LoginActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -24,17 +29,15 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class BottomSheetEditYourPost(val postId:String,val captiontext:String,val locationtext:String) : BottomSheetDialogFragment(),
-    BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
+class BottomSheetDeleteAccount() : BottomSheetDialogFragment(){
 
-    private lateinit var caption:TextInputEditText
-    private lateinit var location:TextInputEditText
+
     var mListener: OnBottomSheetHotelierProfileSettingClickListener ? = null
     fun setOnBottomSheetProfileSettingClickListener(listener: OnBottomSheetHotelierProfileSettingClickListener?){
         mListener = listener
     }
-    fun newInstance(): BottomSheetEditYourPost? {
-        return BottomSheetEditYourPost("","","")
+    fun newInstance(): BottomSheetDeleteAccount? {
+        return BottomSheetDeleteAccount()
     }
     interface OnBottomSheetHotelierProfileSettingClickListener{
         fun bottomSheetHotelierProfileSettingClick(bottomSheetHotelierProfileSettingFrBo : String)
@@ -51,57 +54,52 @@ class BottomSheetEditYourPost(val postId:String,val captiontext:String,val locat
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.bottom_edit_your_post, container, false)
+        return inflater.inflate(R.layout.fragment_bottom_delete_post, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        caption = view.findViewById(R.id.edit_caption)
-        location = view.findViewById(R.id.et_location_country)
+        val deletePost = view.findViewById<CardView>(R.id.card_yes)
+        val deleteNoPost = view.findViewById<CardView>(R.id.card_no)
+        val text = view.findViewById<TextView>(R.id.deleteText)
+        text.text = "Do you really want to      delete this Account?"
 
-        caption.setText(captiontext)
-        location.setText(locationtext)
-
-        view.findViewById<CardView>(R.id.save_changes).setOnClickListener {
-
-                saveChanges()
+        deletePost.setOnClickListener {
+            saveChanges()
         }
 
-        val selectLocation = view.findViewById<TextInputLayout>(R.id.user_location_country)
-
-        location.setOnClickListener {
-            val bottomSheet = BottomSheetCountryStateCity()
-            val fragManager = (activity as FragmentActivity).supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
-            bottomSheet.setOnCountryStateCityClickListener(this)
-
+        deleteNoPost.setOnClickListener {
+            dismiss()
         }
 
     }
 
     private fun saveChanges() {
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+       val delete = RetrofitBuilder.ProfileApis.deleteAccount(DeleteAccount(user_id))
 
-        val saveChange = RetrofitBuilder.feedsApi.editPost(postId, EditPostClass(caption.text.toString(),location.text.toString()))
-
-        saveChange.enqueue(object : Callback<UpdateResponse?> {
+        delete.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"Account Deleted",Toast.LENGTH_SHORT).show()
                     dismiss()
+                    startActivity(Intent(requireContext(),LoginActivity::class.java))
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.message().toString())
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-
+                Log.e("error",t.message.toString())
             }
         })
+
 
     }
 
@@ -110,11 +108,4 @@ class BottomSheetEditYourPost(val postId:String,val captiontext:String,val locat
         mListener = null
     }
 
-    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
-        location.setText(CountryStateCityFrBo)
-    }
-
-    override fun selectlocation(latitude: String, longitude: String) {
-
-    }
 }

@@ -25,10 +25,6 @@ class ReportProfileActivity : AppCompatActivity() {
         binding = ActivityReportProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.specificPost.setOnClickListener {
-            startActivity(Intent(this, SelectPostActivity::class.java))
-        }
-
         val userId = intent.getStringExtra("user_id")
 
         binding.wrongWith.setOnClickListener {

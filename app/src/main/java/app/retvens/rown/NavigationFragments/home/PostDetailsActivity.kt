@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
@@ -24,7 +26,11 @@ import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfil
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
+import app.retvens.rown.bottomsheet.BottomSheetEditYourPost
 import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.bottomsheet.BottomSheetPostEdit
+import app.retvens.rown.bottomsheet.BottomSheetReport
+import app.retvens.rown.bottomsheet.BottomSheetReportPost
 import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -53,6 +59,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
     var save = true
     var operatioin = "push"
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_details)
@@ -60,6 +67,8 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener { onBackPressed() }
 
         savedPost = findViewById(R.id.savePost)
+
+        val actionButton = findViewById<ImageView>(R.id.actionButton)
 
         val name = findViewById<TextView>(R.id.user_name_post)
         val profile = findViewById<ShapeableImageView>(R.id.post_profile)
@@ -163,6 +172,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
 
 
+
         Log.e("pic",postPic.toString())
 
         if (isSaved == "saved"){
@@ -220,6 +230,23 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         }
 
 
+        actionButton.setOnClickListener {
+
+            val sharedPreferences =  getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+            val User_id = sharedPreferences?.getString("user_id", "").toString()
+
+            if (User_id == user_id){
+                val bottomSheet = BottomSheetPostEdit(postId,captionString,location!!)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetPostEdit.Hotelier_TAG)}
+            }else{
+                val bottomSheet = BottomSheetReportPost(user_id!!,postId)
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetReportPost.RATING_TAG)}
+            }
+
+
+        }
 
         commentButtom.setOnClickListener {
             val bottomSheet = BottomSheetComment(postId,profilePic!!)

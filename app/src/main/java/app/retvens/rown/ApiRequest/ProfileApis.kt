@@ -1,5 +1,6 @@
 package app.retvens.rown.ApiRequest
 
+import app.retvens.rown.DataCollections.DeleteAccount
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ReportDataClass
@@ -241,5 +242,10 @@ interface ProfileApis {
     @POST("report")
     fun addreport(
         @Body report:ReportDataClass
+    ):Call<UpdateResponse>
+
+    @PATCH("deleteacc")
+    fun deleteAccount(
+        @Body delete:DeleteAccount
     ):Call<UpdateResponse>
 }

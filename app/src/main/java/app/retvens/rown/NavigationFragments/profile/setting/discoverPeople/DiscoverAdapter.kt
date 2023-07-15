@@ -35,6 +35,7 @@ class DiscoverAdapter(var listS : ArrayList<MatchedContact>, val context: Contex
     val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
     val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+
     class DiscoverViewHolder(itemView: View) : ViewHolder(itemView){
         val profile = itemView.findViewById<ImageView>(R.id.suggetions_notification_profile)
         val verification = itemView.findViewById<ImageView>(R.id.verification)
