@@ -864,6 +864,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.recyclerHeading.visibility = View.VISIBLE
             binding.childRecyclerView.adapter = adapter
             binding.recyclerHeading.text = "Connect with the like-minded individuals"
+            binding.viewAllItem.visibility = View.VISIBLE
             binding.viewAllItem.setOnClickListener {
                 context.startActivity(
                     Intent(
@@ -886,6 +887,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             adapter.notifyDataSetChanged()
             binding.recyclerHeading.visibility = View.VISIBLE
             binding.recyclerHeading.text = "Check into the most comfortable stays"
+            binding.viewAllItem.visibility = View.VISIBLE
             binding.viewAllItem.setOnClickListener {
                 context.startActivity(Intent(context, AllHotelsActivity::class.java))
             }
@@ -902,7 +904,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             adapter.notifyDataSetChanged()
             binding.recyclerHeading.visibility = View.VISIBLE
             binding.recyclerHeading.text = "Popular blogs you must read."
-
+            binding.viewAllItem.visibility = View.VISIBLE
             binding.viewAllItem.setOnClickListener {
                 context.startActivity(Intent(context, ViewAllBlogsActivity::class.java))
             }
@@ -921,6 +923,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.childRecyclerView.adapter = adapter
             adapter.notifyDataSetChanged()
             binding.recyclerHeading.visibility = View.VISIBLE
+            binding.viewAllItem.visibility = View.VISIBLE
             binding.recyclerHeading.text = "Avail the Best-in-class service for yourself."
 
             binding.viewAllItem.setOnClickListener {

@@ -199,12 +199,12 @@ class JobTitleFragment : Fragment(), BackHandler,
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful && isAdded){
-
+                    val response = response.body()!!
                     profileComStatus(context!!, "100")
                     profileCompletionStatus = "100"
 
                     progressDialog.dismiss()
-
+                    Toast.makeText(requireContext(),response.message.toString(),Toast.LENGTH_SHORT).show()
                     startActivity(Intent(context,DashBoardActivity::class.java))
                     activity?.finish()
                 }else{
