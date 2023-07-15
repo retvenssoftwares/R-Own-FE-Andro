@@ -18,9 +18,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/createCommunity_backBtn"
-            android:layout_width="45dp"
+            android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
@@ -32,7 +32,7 @@
             android:id="@+id/next_cumm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardElevation="6dp"
+            app:cardElevation="3dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="20dp"
@@ -40,16 +40,16 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingVertical="5dp"
-                android:paddingHorizontal="14dp"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:paddingHorizontal="24dp"
                 android:textAlignment="center"
                 android:text="Share"
                 android:fontFamily="@font/montserrat_bold"
                 android:textFontWeight="600"
                 android:textSize="14dp"
                 android:background="@color/green_own"
-                android:textColor="@color/white"/>
+                android:textColor="@color/black"/>
 
         </androidx.cardview.widget.CardView>
 
@@ -180,7 +180,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="6dp"
-        app:cardElevation="4dp"
+        app:cardElevation="3dp"
         android:layout_marginHorizontal="20dp"
         app:cardBackgroundColor="@color/white"
         android:layout_marginTop="18dp"
@@ -200,6 +200,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/syjh"/>
+
     </androidx.cardview.widget.CardView>
 
 
@@ -210,7 +211,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="25dp"
         android:visibility="visible"
-        app:cardElevation="6dp"
+        app:cardElevation="3dp"
         android:layout_margin="6dp"
         app:layout_constraintVertical_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
@@ -226,7 +227,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:scaleType="centerCrop"
-                android:elevation="8dp"
+                android:elevation="2dp"
                 android:layout_margin="8dp"
                 app:shapeAppearanceOverlay="@style/SquareCornerImageForCards"
                 android:src="@color/white"

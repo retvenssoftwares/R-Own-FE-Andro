@@ -300,7 +300,7 @@
                     android:layout_marginBottom="0dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/attach"
-                    android:tint="#828282"/>
+                    app:tint="#828282"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"

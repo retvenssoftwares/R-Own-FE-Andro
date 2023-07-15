@@ -28,13 +28,13 @@
             android:textFontWeight="700"
             android:textSize="20dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/createCommunity_backBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="16dp"
             android:background="@color/white"
             android:src="@drawable/community_btn" />
 
@@ -140,13 +140,13 @@
 
         <ImageView
             android:id="@+id/next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_below="@id/community_Description"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/nextbtn" />
+            android:src="@drawable/nextbtn"/>
 
 
     </RelativeLayout>

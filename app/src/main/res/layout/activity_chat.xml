@@ -28,13 +28,13 @@
             android:textFontWeight="700"
             android:textSize="20dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/notifications_backBtn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="16dp"
             android:background="@color/white"
             android:src="@drawable/community_btn" />
 
@@ -44,11 +44,10 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_below="@+id/relative_n"
-        />
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <FrameLayout
         android:id="@+id/fragment_container_chat"
@@ -56,11 +55,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/view"
         android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        >
-
-
+        app:layout_constraintStart_toStartOf="parent">
 
     </FrameLayout>
 

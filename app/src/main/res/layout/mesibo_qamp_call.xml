@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/chatbgdesign"
+    android:background="@drawable/chat_bg_new"
     tools:ignore="MergeRootFrame">
 
     <FrameLayout
@@ -84,12 +84,12 @@
                 android:gravity="center"
                 android:visibility="visible">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/photo_image"
                     android:layout_width="120sp"
                     android:layout_height="120sp"
                     android:layout_weight="1.4"
-
+                    app:shapeAppearanceOverlay="@style/SpecificCornerRounded"
                     android:src="@drawable/profile"
                     app:srcCompat="@drawable/default_user_image" />
 
@@ -140,7 +140,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/onGoing_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -148,6 +148,7 @@
                     android:layout_marginTop="120dp"
                     android:src="@drawable/profile"
                     android:visibility="gone"
+                    app:shapeAppearanceOverlay="@style/SpecificCornerRounded"
                     app:srcCompat="@drawable/default_user_image" />
 
                 <TextView

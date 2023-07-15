@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="#FFFFFF"
-
     tools:context=".NavigationFragments.jobforvendors.CandidateDetailsActivity">
 
     <ImageView

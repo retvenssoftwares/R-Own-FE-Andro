@@ -15,7 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/relative"
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="65dp"
             android:background="#272A3D"
             android:paddingTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
                 android:layout_height="30dp"
                 android:layout_margin="20dp"
                 android:src="@drawable/community_btn"
-                app:tint="@color/green_own"
+                app:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
