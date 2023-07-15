@@ -134,7 +134,6 @@ class ApplyForVerificationActivity : AppCompatActivity() {
         }
     }
     private fun checkVerification(user_id: String) {
-//                        Toast.makeText(this@ApplyForVerificationActivity, "User $user_id ", Toast.LENGTH_SHORT).show()
 
         val check = RetrofitBuilder.profileCompletion.appliedFor(user_id)
         check.enqueue(object : Callback<UpdateResponse?> {
@@ -142,13 +141,13 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-//                Toast.makeText(this@ApplyForVerificationActivity, "${response.body()!!.message} ", Toast.LENGTH_SHORT).show()
 
                 try {
-                    Log.d("check------------------------", "${response.body()!!.message} ${response.code().toString()}"
-                    )
+                    Log.d("check------------------------", "${response.body()!!.message} ${response.code().toString()}")
+                Toast.makeText(this@ApplyForVerificationActivity, "${response.body()!!.message} ", Toast.LENGTH_SHORT).show()
                 } catch (e:Exception){
                     Log.d("check------------------------", "CRASHED__________")
+                        Toast.makeText(this@ApplyForVerificationActivity, "Response $user_id Null", Toast.LENGTH_SHORT).show()
                 }
                 if (response.isSuccessful){
                     if (response.body()!!.message == "applied"){

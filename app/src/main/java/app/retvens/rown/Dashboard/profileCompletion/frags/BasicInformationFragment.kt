@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,17 +28,21 @@ import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformati
 import app.retvens.rown.DataCollections.ProfileCompletion.BasicInfoClass
 import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobTitle
+import app.retvens.rown.utils.endYearDialog
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mesibo.api.Mesibo
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
 
 
 class BasicInformationFragment : Fragment(),
@@ -48,12 +53,14 @@ class BasicInformationFragment : Fragment(),
     private var isHotelier : Boolean = true
 
     private var nextFrag : Int = 0
+    private var selectedYear : Int = 1900
 
     private lateinit var myRoleInHos : TextInputLayout
     lateinit var myRoleInHosET : TextInputEditText
     lateinit var myRecentJobET : TextInputEditText
 
     private lateinit var university:TextInputEditText
+    private lateinit var universityLayout:TextInputLayout
     private lateinit var start:TextInputEditText
     private lateinit var end:TextInputEditText
     lateinit var progressDialog : Dialog
@@ -86,6 +93,7 @@ class BasicInformationFragment : Fragment(),
 
         //Define Student Details
         university = view.findViewById(R.id.dob_et)
+        universityLayout = view.findViewById(R.id.university)
         start = view.findViewById(R.id.et_session_Start)
         end = view.findViewById(R.id.et_end)
         startLayout = view.findViewById(R.id.session_start)
@@ -97,38 +105,32 @@ class BasicInformationFragment : Fragment(),
             endLayout.isErrorEnabled = false
         }
 
-        start.addTextChangedListener {
-            if (start.text!!.length > 3 && end.length() > 3 ){
+        start.setOnClickListener {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            val builder : MonthPickerDialog.Builder  = MonthPickerDialog.Builder(requireContext(),
+                MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYears ->
+                    start.setText("$selectedYears")
+                    selectedYear = selectedYears
+                    end.setText("")
+                }, Calendar.YEAR, Calendar.MONTH)
 
-            } else {
-
-            }
+            builder
+                .setActivatedYear(currentYear)
+//                .setMaxYear(2030)
+                .setTitle("Select Starting Year")
+                .setYearRange(1950, currentYear)
+                .showYearOnly()
+                .setOnYearChangedListener {
+                    start.setText("$it")
+                    selectedYear = it
+                    end.setText("")
+                }
+                .build()
+                .show()
         }
 
-        end.addTextChangedListener {
-
-            if (end.length() > 3 && start.length() > 3) {
-
-                if (end.text.toString() == "Present" || end.text.toString() == "Presen" || end.text!!.length > 7 ) {
-                    endLayout.isErrorEnabled = false
-                } else{
-                    if (end.text.toString().toInt() < start.text.toString().toInt()) {
-                        end.setText("")
-                        endLayout.error = "Please enter end year"
-                    } else{
-                        endLayout.isErrorEnabled = false
-                    }
-                }
-
-            if (end.length() == 5 || end.length() == 6 || end.length() > 7){
-                    end.setText("")
-                }
-            } else {
-                if (end.length() == 5 || end.length() == 6 || end.length() > 8){
-                    end.setText("")
-                }
-            }
-
+        end.setOnClickListener {
+           endYearDialog(requireContext(), end, selectedYear)
         }
 
         val recentJob = view.findViewById<TextInputLayout>(R.id.recentJobLayout)
@@ -186,7 +188,7 @@ class BasicInformationFragment : Fragment(),
         }
 
         view.findViewById<CardView>(R.id.card_basic_next).setOnClickListener {
-            if (!isHotelier){
+            if (!isHotelier && !isStudent){
                 if (myRoleInHosET.text.toString() == "My Role in hospitality"){
                     myRoleInHos.error = "Select your Role in hospitality"
                 } else {
@@ -200,6 +202,44 @@ class BasicInformationFragment : Fragment(),
                     progressDialog.show()
 
                     setJobTitle(myRoleInHosET.text.toString())
+                    Toast.makeText(requireContext(), "S H", Toast.LENGTH_SHORT).show()
+                }
+            } else if (!isHotelier){
+                if (myRoleInHosET.text.toString() == "My Role in hospitality"){
+                    myRoleInHos.error = "Select your Role in hospitality"
+                } else {
+                    progressDialog = Dialog(requireContext())
+                    progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    progressDialog.setCancelable(false)
+                    progressDialog.setContentView(R.layout.progress_dialoge)
+                    progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                    Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                    progressDialog.show()
+
+                    setJobTitle(myRoleInHosET.text.toString())
+                    Toast.makeText(requireContext(), "H", Toast.LENGTH_SHORT).show()
+                }
+            } else if (!isStudent) {
+                if (university.text.toString() == ""){
+                    universityLayout.error = "Select your College"
+                } else if (start.text.toString() == "Select Year"){
+                    startLayout.error = "Select Year"
+                } else if (end.text.toString() == "Select Year"){
+                    endLayout.error = "Select Year"
+                } else  {
+                    progressDialog = Dialog(requireContext())
+                    progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    progressDialog.setCancelable(false)
+                    progressDialog.setContentView(R.layout.progress_dialoge)
+                    progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                    Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                    progressDialog.show()
+
+                    saveUniversity()
+                    setJobTitle("Normal User")
+                    Toast.makeText(requireContext(), "S", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 if (myRecentJobET.text.toString() == "Most Recent Job Title"){
@@ -215,9 +255,43 @@ class BasicInformationFragment : Fragment(),
                     progressDialog.show()
 
                     setJobTitle("Normal User")
+                    Toast.makeText(requireContext(), "Job Title", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
+
+    private fun saveUniversity() {
+
+        val university = university.text.toString()
+        val start = start.text.toString()
+        val end = end.text.toString()
+
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val data = UserProfileRequestItem.StudentEducation(university,start,end)
+
+        val updateEducation = RetrofitBuilder.profileCompletion.addEducation(user_id,data)
+
+        updateEducation.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                }else{
+                    Log.e("error",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
+
     }
 
     private fun setJobTitle(role : String) {

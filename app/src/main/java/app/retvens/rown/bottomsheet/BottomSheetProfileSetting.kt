@@ -52,6 +52,11 @@ class BottomSheetProfileSetting : BottomSheetDialogFragment() {
             mListener?.bottomSheetProfileSettingClick("settings")
             dismiss()
         }
+        val profileDetails= view.findViewById<LinearLayout>(R.id.profileDetails)
+        profileDetails.setOnClickListener {
+            mListener?.bottomSheetProfileSettingClick("profileDetails")
+            dismiss()
+        }
         val edit= view.findViewById<LinearLayout>(R.id.edit)
         edit.setOnClickListener {
             mListener?.bottomSheetProfileSettingClick("edit")

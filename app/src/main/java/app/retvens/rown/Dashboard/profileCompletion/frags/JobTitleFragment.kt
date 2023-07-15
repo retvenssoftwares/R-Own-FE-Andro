@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -29,26 +30,32 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.AddExperienceDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
 import app.retvens.rown.DataCollections.ProfileCompletion.JobData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.bottomsheet.BottomSheetJobType
+import app.retvens.rown.utils.endYearDialog
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
 
 class JobTitleFragment : Fragment(), BackHandler,
     BottomSheetJobType.OnBottomJobTypeClickListener, BottomSheetJobTitle.OnBottomJobTitleClickListener {
 
     lateinit var eTypeET : TextInputEditText
     lateinit var recentCoET : TextInputEditText
+    lateinit var e_type_layout : TextInputLayout
+    lateinit var recentComLayout : TextInputLayout
     private lateinit var jobTitle:TextInputEditText
     private lateinit var jobTitleLayout : TextInputLayout
     private lateinit var jobType:TextInputEditText
@@ -61,6 +68,8 @@ class JobTitleFragment : Fragment(), BackHandler,
     private lateinit var hospitalityExpertAdapter: HospitalityExpertAdapter
     private lateinit var dialogRole:Dialog
     private lateinit var searchBar:EditText
+
+    private var selectedYear : Int = 1900
 
     lateinit var progressDialog : Dialog
 
@@ -78,6 +87,8 @@ class JobTitleFragment : Fragment(), BackHandler,
 
         eTypeET = view.findViewById(R.id.eType_et)
         recentCoET = view.findViewById(R.id.recentComET)
+        e_type_layout = view.findViewById(R.id.e_type_layout)
+        recentComLayout = view.findViewById(R.id.recentComLayout)
         recentCoET.setOnClickListener {
             openRecentCompanyBottom()
         }
@@ -102,44 +113,44 @@ class JobTitleFragment : Fragment(), BackHandler,
         startLayout = view.findViewById(R.id.session_start)
         endLayout = view.findViewById(R.id.session_end)
 
+        start.setOnClickListener {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            val builder : MonthPickerDialog.Builder  = MonthPickerDialog.Builder(requireContext(),
+                MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYears ->
+                    start.setText("$selectedYears")
+                    selectedYear = selectedYears
+                    end.setText("")
+                }, Calendar.YEAR, Calendar.MONTH)
+
+            builder
+                .setActivatedYear(currentYear)
+//                .setMaxYear(2030)
+                .setTitle("Select Starting Year")
+                .setYearRange(1950, currentYear)
+                .showYearOnly()
+                .setOnYearChangedListener {
+                    start.setText("$it")
+                    selectedYear = it
+                    end.setText("")
+                }
+                .build()
+                .show()
+        }
+
+        end.setOnClickListener {
+            endYearDialog(requireContext(), end, selectedYear)
+        }
+
+        end.addTextChangedListener {
+            submit.isClickable = true
+            submit.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+        }
+
         val presentText = view.findViewById<TextView>(R.id.presentText)
 
         presentText.setOnClickListener {
             end.setText("Present")
             endLayout.isErrorEnabled = false
-        }
-
-        start.addTextChangedListener {
-            if (start.text!!.length > 3 && end.length() > 3){
-                endLayout.isErrorEnabled = false
-                submit.isClickable = true
-                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.green_own))
-            } else {
-                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                submit.isClickable = false
-            }
-        }
-
-        end.addTextChangedListener {
-            if (end.length() > 3 && start.length() > 3){
-                endLayout.isErrorEnabled = false
-                submit.isClickable = true
-                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.green_own))
-
-                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
-                    end.setText("")
-                    endLayout.error = "Please enter end year"
-                    submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                    submit.isClickable = false
-                }
-            } else {
-                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
-                    end.setText("")
-                    endLayout.error = "Please enter end year"
-                    submit.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                    submit.isClickable = false
-                }
-            }
         }
 
         jobTitle.setOnClickListener {
@@ -150,17 +161,16 @@ class JobTitleFragment : Fragment(), BackHandler,
         }
 
         submit.setOnClickListener {
-            val startY = start.text.toString().toInt()
-            val endY =  if (end.text.toString() != "Present") {
-                              end.text.toString().toInt()
-                           } else { startY + 10 }
-
-            if(jobTitle.text!!.length < 3){
+            if(jobTitle.text.toString() == "Job Title"){
                 jobTitleLayout.error = "Please enter your Job Tittle"
+            } else if(eTypeET.text.toString() == "Select one"){
+                e_type_layout.error = "Please enter your Employment Type"
+            } else if(recentCoET.text.toString() == "Select one"){
+                recentComLayout.error = "Please enter recent Company"
             } else if(start.text!!.length < 3){
                 jobTitleLayout.isErrorEnabled = false
                 startLayout.error = "Please enter start year"
-            } else if(end.text!!.length < 3 && startY > endY){
+            } else if(end.text!!.length < 3){
                 jobTitleLayout.isErrorEnabled = false
                 startLayout.isErrorEnabled = false
                 endLayout.error = "Please enter end year"
@@ -183,15 +193,16 @@ class JobTitleFragment : Fragment(), BackHandler,
         val title = jobTitle.text.toString()
         val type = jobType.text.toString()
         val company = companyName.text.toString()
-        val start = start.text.toString()
-        val end = end.text.toString()
+        val startY = start.text.toString()
+        val endY = end.text.toString()
 
-        val data = JobData(JobData.JobDetails(type,title,company,start,end))
+        val data = AddExperienceDataClass(type,company,startY,endY,title)
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val update = RetrofitBuilder.profileCompletion.setJobDetail(user_id,data)
+        val update = RetrofitBuilder.profileCompletion.addExperience(user_id,data)
+
 
         update.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -203,6 +214,7 @@ class JobTitleFragment : Fragment(), BackHandler,
                     profileComStatus(context!!, "100")
                     profileCompletionStatus = "100"
 
+                    Log.d("JobTitleFragment", "$title, $type, $company, $startY, $endY")
                     progressDialog.dismiss()
                     Toast.makeText(requireContext(),response.message.toString(),Toast.LENGTH_SHORT).show()
                     startActivity(Intent(context,DashBoardActivity::class.java))

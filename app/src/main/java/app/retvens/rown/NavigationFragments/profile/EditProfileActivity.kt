@@ -84,6 +84,8 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.profileBackBtn.setOnClickListener { onBackPressed() }
+
         cameraImageUri = createImageUri()!!
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)

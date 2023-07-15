@@ -27,6 +27,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateExperienceDataCl
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
+import app.retvens.rown.utils.endYearDialog
 import app.retvens.rown.utils.setupFullHeight
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -34,9 +35,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
 
 
 class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : BottomSheetDialogFragment(),
@@ -100,6 +103,8 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
     private lateinit var dialogRole: Dialog
     private lateinit var searchBar: EditText
 
+    private var selectedYear : Int = 1900
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -140,62 +145,39 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
             endLayout.isErrorEnabled = false
         }
 
-        start.addTextChangedListener {
-            if (start.text!!.length > 3 && end.length() > 3){
-                endLayout.isErrorEnabled = false
-                cardSave.isClickable = true
-                cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
-                if (end.text.toString().length == 4 && start.text.toString().length == 4){
-                    if (end.text.toString().toInt() < start.text.toString().toInt()){
-                        end.setText("")
-                        endLayout.error = "Please enter end year"
-                        cardSave.isClickable = false
-                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                    }else{
-                        endLayout.isErrorEnabled = false
-                        cardSave.isClickable = true
-                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
-                    }
+        start.setOnClickListener {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            val builder : MonthPickerDialog.Builder  = MonthPickerDialog.Builder(requireContext(),
+                MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYears ->
+                    start.setText("$selectedYears")
+                    selectedYear = selectedYears
+                    end.setText("")
+                }, Calendar.YEAR, Calendar.MONTH)
+
+            builder
+                .setActivatedYear(currentYear)
+//                .setMaxYear(2030)
+                .setTitle("Select Starting Year")
+                .setYearRange(1950, currentYear)
+                .showYearOnly()
+                .setOnYearChangedListener {
+                    start.setText("$it")
+                    selectedYear = it
+                    end.setText("")
                 }
-            } else {
-                if (start.length() == 5 || start.length() == 6 || start.length() == 8) {
-                    start.setText("")
-                }
-                cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                cardSave.isClickable = false
-            }
+                .build()
+                .show()
+        }
+
+        end.setOnClickListener {
+            endYearDialog(requireContext(), end, selectedYear)
         }
 
         end.addTextChangedListener {
             if (end.length() > 3 && start.length() > 3){
-                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
-                    end.setText("")
-                    endLayout.error = "Please enter end year"
-                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                    cardSave.isClickable = false
-                } else if (end.text.toString().length == 4 && start.text.toString().length == 4){
-                    if (end.text.toString().toInt() < start.text.toString().toInt()){
-                        end.setText("")
-                        endLayout.error = "Please enter end year"
-                        cardSave.isClickable = false
-                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                    }else{
-                        endLayout.isErrorEnabled = false
-                        cardSave.isClickable = true
-                        cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
-                    }
-                } else{
-                    endLayout.isErrorEnabled = false
-                    cardSave.isClickable = true
-                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
-                }
-            } else {
-                if (end.length() == 5 || end.length() == 6 || end.length() == 8){
-                    end.setText("")
-                    endLayout.error = "Please enter end year"
-                    cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.grey_20))
-                    cardSave.isClickable = false
-                }
+                endLayout.isErrorEnabled = false
+                cardSave.isClickable = true
+                cardSave.setCardBackgroundColor(ContextCompat.getColor(requireContext() ,R.color.black))
             }
         }
 

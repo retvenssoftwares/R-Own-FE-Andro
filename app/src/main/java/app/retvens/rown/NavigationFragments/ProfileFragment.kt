@@ -93,9 +93,6 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             true
         }
 
-        profile.setOnClickListener {
-            startActivity(Intent(requireContext(),UserDetailsActivity::class.java))
-        }
 
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
@@ -239,6 +236,9 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             }
             "settings" -> {
                 startActivity(Intent(context, OwnerSettingActivity::class.java))
+            }
+            "profileDetails" -> {
+                startActivity(Intent(context,UserDetailsActivity::class.java))
             }
             "edit" -> {
                 startActivity(Intent(context, EditProfileActivity::class.java))
