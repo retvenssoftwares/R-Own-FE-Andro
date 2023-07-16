@@ -160,6 +160,7 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
     override fun getItemCount(): Int {
        return peopleList.size
     }
+
     fun removeUsersFromList(data: List<Post>){
 
         try {
@@ -172,7 +173,6 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
             Log.d("EPA", e.toString())
         }
     }
-
     fun removeUser(data: List<Post>){
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -188,10 +188,21 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
             Log.d("EPA", e.toString())
         }
     }
+    fun removeEmptyNameUser(data: List<Post>){
+        try {
+            data.forEach {
+                if (it.Full_name.isEmpty()){
+                    peopleList.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
+
     fun setJobSavedClickListener(listener: ConnectClickListener) {
         connectClickListener = listener
     }
-
     fun cancelConnRequest(listener: ConnectClickListener){
         connectClickListener = listener
     }

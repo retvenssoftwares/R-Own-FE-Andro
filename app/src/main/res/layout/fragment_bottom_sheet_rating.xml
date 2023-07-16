@@ -250,6 +250,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:paddingVertical="10dp"
             android:paddingHorizontal="20dp">
@@ -277,6 +278,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="@color/grey_60"
             android:layout_marginHorizontal="30dp"/>
 
@@ -286,6 +288,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             android:paddingVertical="10dp"
             android:paddingHorizontal="20dp">
 
@@ -312,6 +315,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="@color/grey_60"
             android:layout_marginHorizontal="30dp"/>
 
@@ -320,6 +324,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:paddingVertical="10dp"
             android:paddingHorizontal="20dp">
@@ -347,6 +352,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="@color/grey_60"
             android:layout_marginHorizontal="30dp"/>
 
@@ -357,6 +363,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
             android:paddingVertical="10dp"
+            android:visibility="gone"
             android:paddingHorizontal="20dp">
 
             <TextView

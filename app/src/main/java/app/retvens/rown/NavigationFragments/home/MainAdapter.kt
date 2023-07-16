@@ -1343,4 +1343,17 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
         return totalVotes
     }
+
+//    fun removePostsFromList(data: List<DataItem>){
+//        try {
+//            data.forEach {
+//                if (it.banner.display_status == "0"){
+//                    dataItemList.remove(it)
+//                }
+//            }
+//        } catch (e : ConcurrentModificationException){
+//            Log.d("EPA", e.toString())
+//        }
+//    }
+
 }
