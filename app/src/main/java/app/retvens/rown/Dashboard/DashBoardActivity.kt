@@ -37,6 +37,7 @@ import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
+import app.retvens.rown.MesiboApi
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
@@ -120,11 +121,12 @@ class DashBoardActivity : AppCompatActivity() {
         val navView: NavigationView = findViewById(R.id.nav_view)
         mActivityTitle = title.toString()
 
-//        val backThread = Thread{
-//            MesiboCall.getInstance().init(this)
-//        }
-//
-//        backThread.start()
+        val backThread = Thread{
+            MesiboApi.init(applicationContext)
+            MesiboApi.startMesibo(true)
+        }
+
+        backThread.start()
 
 
 
