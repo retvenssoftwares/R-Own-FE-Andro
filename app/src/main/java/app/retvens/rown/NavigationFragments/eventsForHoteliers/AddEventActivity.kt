@@ -78,7 +78,7 @@ class AddEventActivity : AppCompatActivity(),
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun bottomVBLCClick(eventC: String, NumericCodeFrBo: String) {

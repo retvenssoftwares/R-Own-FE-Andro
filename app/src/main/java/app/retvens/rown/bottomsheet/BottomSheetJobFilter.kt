@@ -121,7 +121,7 @@ BottomSheetJobTitle.OnBottomJobTitleClickListener{
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun bottomLocationClick(LocationFrBo: String, NumericCodeFrBo: String) {

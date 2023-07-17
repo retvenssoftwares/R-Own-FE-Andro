@@ -212,6 +212,6 @@ class RequestForJobFragment : Fragment(),
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 }

@@ -531,6 +531,6 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 }

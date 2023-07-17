@@ -250,6 +250,6 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 }

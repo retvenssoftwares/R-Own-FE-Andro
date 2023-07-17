@@ -173,7 +173,7 @@ class JobPostActivity : AppCompatActivity(),
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun bottomJobTitleClick(jobTitleFrBo: String) {
