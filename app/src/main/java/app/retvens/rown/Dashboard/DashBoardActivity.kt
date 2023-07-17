@@ -6,10 +6,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,13 +21,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
-import androidx.core.animation.addListener
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import app.retvens.rown.ApiRequest.MesiboBackgroundService
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
@@ -41,11 +35,8 @@ import app.retvens.rown.MesiboApi
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
-import app.retvens.rown.NavigationFragments.profile.HotelOwnerDetailsActivity
-import app.retvens.rown.NavigationFragments.profile.UserDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
-import app.retvens.rown.api.MesiboCall
 import app.retvens.rown.bottomsheet.BottomSheet.Companion.TAG
 import app.retvens.rown.databinding.ActivityDashBoardBinding
 import app.retvens.rown.sideNavigation.*
@@ -59,8 +50,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
-import com.mesibo.api.Mesibo
-import com.mesibo.api.MesiboSelfProfile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -92,6 +81,9 @@ class DashBoardActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var textView: TextView
 
+    private lateinit var checkNetworkConnection: CheckNetworkConnection
+
+    var replace = true
 
     var connectionNo = 0
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "SuspiciousIndentation")
@@ -103,26 +95,55 @@ class DashBoardActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         startAnimation()
 
+        Thread {
+            // Run whatever background code you want here.
+            replaceFragment(HomeFragment())
+        }.start()
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        //setUp drawerLayout
+        drawerLayout = findViewById(R.id.drawerLayout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+
+        checkNetworkConnection = CheckNetworkConnection(application)
+        checkNetworkConnection.observe(this) { isConnected ->
+            if (isConnected) {
+                binding.noInternetImage.visibility = View.GONE
+                binding.noInternetLayout.visibility = View.GONE
+                binding.fragmentContainer.visibility = View.VISIBLE
+                binding.navView.visibility = View.VISIBLE
+                binding.navBottom.visibility = View.VISIBLE
+                toolbar.visibility = View.VISIBLE
+                if (replace){
+                    replace = false
+                    replaceFragment(HomeFragment())
+                }
+//                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.noInternetImage.visibility = View.VISIBLE
+                binding.noInternetLayout.visibility = View.VISIBLE
+                binding.navBottom.visibility = View.GONE
+                binding.navView.visibility = View.GONE
+                binding.fragmentContainer.visibility = View.GONE
+                toolbar.visibility = View.GONE
+//                Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         if (checkForInternet(this)) {
             binding.noInternetImage.visibility = View.GONE
             binding.noInternetLayout.visibility = View.GONE
             binding.fragmentContainer.visibility = View.VISIBLE
+            binding.navView.visibility = View.VISIBLE
             binding.navBottom.visibility = View.VISIBLE
             toolbar.visibility = View.VISIBLE
-            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
-            Thread {
-                // Run whatever background code you want here.
-                replaceFragment(HomeFragment())
-            }.start()
         } else {
             binding.noInternetImage.visibility = View.VISIBLE
             binding.noInternetLayout.visibility = View.VISIBLE
             binding.navBottom.visibility = View.GONE
+            binding.navView.visibility = View.GONE
             binding.fragmentContainer.visibility = View.GONE
             toolbar.visibility = View.GONE
-            Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
         }
 
         binding.retry.setOnClickListener {
@@ -131,16 +152,15 @@ class DashBoardActivity : AppCompatActivity() {
                 binding.noInternetLayout.visibility = View.GONE
                 binding.fragmentContainer.visibility = View.VISIBLE
                 binding.navBottom.visibility = View.VISIBLE
+                binding.navView.visibility = View.VISIBLE
                 toolbar.visibility = View.VISIBLE
-                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
-                replaceFragment(HomeFragment())
             } else {
                 binding.noInternetImage.visibility = View.VISIBLE
                 binding.noInternetLayout.visibility = View.VISIBLE
                 binding.fragmentContainer.visibility = View.GONE
                 toolbar.visibility = View.GONE
+                binding.navView.visibility = View.GONE
                 binding.navBottom.visibility = View.GONE
-                Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -153,9 +173,6 @@ class DashBoardActivity : AppCompatActivity() {
 
         devicetoken()
 
-        //setUp drawerLayout
-        drawerLayout = findViewById(R.id.drawerLayout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
         mActivityTitle = title.toString()
 
         val backThread = Thread{
@@ -201,6 +218,9 @@ class DashBoardActivity : AppCompatActivity() {
 
          header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
             if (profileCompletionStatus == "100"){
+                header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
+                progressBar.progress = profileCompletionStatus.toInt()
+                header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $profileCompletionStatus% Complete"
                 Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
             }else {
                 startActivity(Intent(this, UserName::class.java))

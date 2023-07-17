@@ -228,14 +228,14 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             response: Response<UpdateResponse?>
         ) {
             if (response.isSuccessful){
-                Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
                 onClick.invoke()
             } else {
-                Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
             }
         }
         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-            Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
         }
     })
 }
@@ -284,15 +284,15 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             if (response.isSuccessful){
                 val response = response.body()!!
                 onClick.invoke()
-                Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context,response.message,Toast.LENGTH_SHORT).show()
             }else{
-                Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context,response.code().toString(),Toast.LENGTH_SHORT).show()
             }
         }
 
         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
-                    .show()
+//                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
+//                    .show()
         }
     })
 }
@@ -319,7 +319,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
         }
 
         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-            Toast.makeText(context,t.message.toString(),Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context,t.message.toString(),Toast.LENGTH_SHORT).show()
         }
     })
 
@@ -340,14 +340,14 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             if (response.isSuccessful){
                 val response = response.body()!!
                 onClick.invoke()
-                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
             }else{
-                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
             }
         }
 
         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-            Toast.makeText(context,t.message.toString(),Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context,t.message.toString(),Toast.LENGTH_SHORT).show()
         }
     })
 }
@@ -385,17 +385,17 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
                         saveProfileImage(context, "${response.Profile_pic}")
                     }
                 } else {
-                    Toast.makeText(
-                        context,
-                        response.code().toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    Toast.makeText(
+//                        context,
+//                        response.code().toString(),
+//                        Toast.LENGTH_SHORT
+//                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
-                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
-                    .show()
+//                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
+//                    .show()
             }
         })
 

@@ -265,8 +265,8 @@ class HomeFragment : Fragment() {
                     )
 
                 } else {
-                    Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT)
+//                        .show()
                 }
             }
 
@@ -274,7 +274,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<DataItem.CommunityRecyclerData>?>,
                 t: Throwable
             ) {
-                Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -399,11 +399,11 @@ class HomeFragment : Fragment() {
                         empty.text = response.code().toString()
                         shimmerFrameLayout2.stopShimmer()
                         shimmerFrameLayout2.visibility = View.GONE
-                        Toast.makeText(
-                            requireContext(),
-                            " -> ${response.code().toString()}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            requireContext(),
+//                            " -> ${response.code().toString()}",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
                 }
             }
@@ -439,19 +439,19 @@ class HomeFragment : Fragment() {
                     }
                 } else {
                     if (isAdded) {
-                        Toast.makeText(
-                            requireContext(),
-                            response.code().toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            requireContext(),
+//                            response.code().toString(),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
                 }
             }
 
             override fun onFailure(call: Call<List<GetCommunitiesData>?>, t: Throwable) {
                 if (isAdded) {
-                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+//                        .show()
                 }
             }
         })
@@ -477,23 +477,23 @@ class HomeFragment : Fragment() {
                 if (isAdded) {
                     if (response.isSuccessful) {
                         val response = response.body()!!
-                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT)
-                            .show()
+//                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT)
+//                            .show()
 
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            response.message().toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            requireContext(),
+//                            response.message().toString(),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                 if (isAdded) {
-                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+//                        .show()
                 }
             }
         })
@@ -561,8 +561,8 @@ class HomeFragment : Fragment() {
 
             override fun onFailure(call: Call<List<AllBlogsData>?>, t: Throwable) {
                 if (isAdded) {
-                    Toast.makeText(context, "All Blogs ${t.localizedMessage}", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(context, "All Blogs ${t.localizedMessage}", Toast.LENGTH_SHORT)
+//                        .show()
                 }
             }
         })
@@ -604,8 +604,8 @@ class HomeFragment : Fragment() {
 
             override fun onFailure(call: Call<List<ExploreHotelData>?>, t: Throwable) {
                 if (isAdded) {
-                    Toast.makeText(context, "All Blogs ${t.localizedMessage}", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(context, "All Blogs ${t.localizedMessage}", Toast.LENGTH_SHORT)
+//                        .show()
                 }
             }
         })
