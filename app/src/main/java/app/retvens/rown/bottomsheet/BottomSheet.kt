@@ -216,6 +216,7 @@ class BottomSheet : BottomSheetDialogFragment() {
                                     )
                                     usersProfileAdapter.removeUser(response.matchedContacts)
                                     usersProfileAdapter.removeUsersFromList(response.matchedContacts)
+                                    usersProfileAdapter.removeEmptyNameUser(response.matchedContacts)
                                     usersProfileAdapter.notifyDataSetChanged()
                                     recycler.adapter = usersProfileAdapter
 
@@ -309,6 +310,7 @@ class BottomSheet : BottomSheetDialogFragment() {
                                     )
                                     explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
+                                    explorePeopleAdapter.removeEmptyNameUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.notifyDataSetChanged()
                                     recyclerAll.adapter = explorePeopleAdapter
 

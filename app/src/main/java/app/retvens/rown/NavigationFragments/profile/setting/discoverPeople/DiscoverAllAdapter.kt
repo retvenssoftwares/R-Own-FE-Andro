@@ -175,6 +175,18 @@ class DiscoverAllAdapter(var listS : ArrayList<Post>, val context: Context) : Re
         }
     }
 
+    fun removeEmptyNameUser(data: List<Post>){
+        try {
+            data.forEach {
+                if (it.Full_name.isEmpty()){
+                    listS.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: ArrayList<Post>) {
         listS = newItems

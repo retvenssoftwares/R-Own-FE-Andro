@@ -123,6 +123,7 @@ class DiscoverPeopleActivity : AppCompatActivity() {
                                 binding.discoverRecycler.adapter = discoverAdapter
                                 discoverAdapter.removeUser(data.matchedContacts)
                                 discoverAdapter.removeUsersFromList(data.matchedContacts)
+                                discoverAdapter.removeEmptyNameUser(data.matchedContacts)
                                 discoverAdapter.notifyDataSetChanged()
 
                                 binding.searchBar.addTextChangedListener(object : TextWatcher{
@@ -213,6 +214,7 @@ class DiscoverPeopleActivity : AppCompatActivity() {
                                     binding.discoverRecycler2.adapter = discoverAllAdapter
                                     discoverAllAdapter.removeUser(explorePeopleDataClass.posts)
                                     discoverAllAdapter.removeUsersFromList(explorePeopleDataClass.posts)
+                                    discoverAllAdapter.removeEmptyNameUser(explorePeopleDataClass.posts)
                                     discoverAllAdapter.notifyDataSetChanged()
 
                                     binding.searchBar.addTextChangedListener(object : TextWatcher {
