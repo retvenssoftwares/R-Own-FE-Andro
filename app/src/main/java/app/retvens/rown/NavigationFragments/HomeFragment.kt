@@ -161,7 +161,7 @@ class HomeFragment : Fragment() {
 
         adapter = MainAdapter(requireContext(), mList)
         mainRecyclerView.adapter = adapter
-        adapter.removePostsFromList(mList)
+//        adapter.removePostsFromList(mList)
         adapter.notifyDataSetChanged()
 
 
@@ -342,6 +342,7 @@ class HomeFragment : Fragment() {
                                     }
 
                                 }
+                                adapter.removePostsFromList(mList)
                                 adapter.notifyDataSetChanged()
 
                                 adapter.setOnItemClickListener(object :

@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+        <LinearLayout
                 android:id="@+id/l"
                 app:layout_constraintTop_toBottomOf="@id/use_text"
                 android:layout_width="match_parent"

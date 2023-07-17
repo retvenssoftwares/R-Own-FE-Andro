@@ -190,6 +190,7 @@ class ExplorePeopleFragment : Fragment() {
                                     peopleList.addAll(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
+                                    explorePeopleAdapter.removeEmptyNameUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.notifyDataSetChanged()
                                 }catch (e:NullPointerException){
 //                                    errorImage.visibility = View.VISIBLE
