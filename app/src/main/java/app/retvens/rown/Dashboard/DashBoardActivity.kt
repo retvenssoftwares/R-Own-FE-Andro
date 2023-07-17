@@ -102,10 +102,47 @@ class DashBoardActivity : AppCompatActivity() {
         imageView = findViewById(R.id.imageView)
         textView = findViewById(R.id.textView)
         startAnimation()
-        Thread {
-            // Run whatever background code you want here.
-            replaceFragment(HomeFragment())
-        }.start()
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+
+        if (checkForInternet(this)) {
+            binding.noInternetImage.visibility = View.GONE
+            binding.noInternetLayout.visibility = View.GONE
+            binding.fragmentContainer.visibility = View.VISIBLE
+            binding.navBottom.visibility = View.VISIBLE
+            toolbar.visibility = View.VISIBLE
+            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
+            Thread {
+                // Run whatever background code you want here.
+                replaceFragment(HomeFragment())
+            }.start()
+        } else {
+            binding.noInternetImage.visibility = View.VISIBLE
+            binding.noInternetLayout.visibility = View.VISIBLE
+            binding.navBottom.visibility = View.GONE
+            binding.fragmentContainer.visibility = View.GONE
+            toolbar.visibility = View.GONE
+            Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.retry.setOnClickListener {
+            if (checkForInternet(this)) {
+                binding.noInternetImage.visibility = View.GONE
+                binding.noInternetLayout.visibility = View.GONE
+                binding.fragmentContainer.visibility = View.VISIBLE
+                binding.navBottom.visibility = View.VISIBLE
+                toolbar.visibility = View.VISIBLE
+                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
+                replaceFragment(HomeFragment())
+            } else {
+                binding.noInternetImage.visibility = View.VISIBLE
+                binding.noInternetLayout.visibility = View.VISIBLE
+                binding.fragmentContainer.visibility = View.GONE
+                toolbar.visibility = View.GONE
+                binding.navBottom.visibility = View.GONE
+                Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         auth = FirebaseAuth.getInstance()
 
@@ -138,8 +175,6 @@ class DashBoardActivity : AppCompatActivity() {
         toggle = ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open,R.string.navigation_drawer_close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
 
         // Set the toolbar as the support action bar
         setSupportActionBar(toolbar)

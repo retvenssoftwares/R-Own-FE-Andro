@@ -257,6 +257,17 @@ class UsersProfileAdapter(val context: Context, var profileList : ArrayList<Matc
             Log.d("EPA", e.toString())
         }
     }
+    fun removeEmptyNameUser(data: List<MatchedContact>){
+        try {
+            data.forEach {
+                if (it.matchedNumber.Full_name.isEmpty()){
+                    profileList.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
 
     fun removeUser(data: List<MatchedContact>){
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)

@@ -179,6 +179,18 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
             Log.d("EPA", e.toString())
         }
     }
+    fun removeEmptyNameUser(data: List<Post>){
+        try {
+            data.forEach {
+                if (it.Full_name.isEmpty()){
+                    peopleList.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
+
     fun setJobSavedClickListener(listener: ConnectClickListener) {
         connectClickListener = listener
     }

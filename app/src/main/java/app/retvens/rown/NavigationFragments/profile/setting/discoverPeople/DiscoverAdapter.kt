@@ -175,6 +175,17 @@ class DiscoverAdapter(var listS : ArrayList<MatchedContact>, val context: Contex
             Log.d("EPA", e.toString())
         }
     }
+    fun removeEmptyNameUser(data: List<MatchedContact>){
+        try {
+            data.forEach {
+                if (it.matchedNumber.Full_name.isEmpty()){
+                    listS.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: ArrayList<MatchedContact>) {
