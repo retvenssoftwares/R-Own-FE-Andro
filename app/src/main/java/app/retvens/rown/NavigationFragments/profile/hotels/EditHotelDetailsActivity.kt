@@ -97,9 +97,13 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
         binding.locationText.text = location
         binding.profileUsername.text ="$hotelName Details"
         binding.etNameEdit.setText(hotelName)
-        Glide.with(this).load(img1).into(binding.img1)
-        Glide.with(this).load(img2).into(binding.img2)
-        Glide.with(this).load(img3).into(binding.img3)
+        try {
+            Glide.with(this).load(img1).into(binding.img1)
+            Glide.with(this).load(img2).into(binding.img2)
+            Glide.with(this).load(img3).into(binding.img3)
+        }catch (e:NullPointerException){
+            Log.e("error",e.message.toString())
+        }
 
         binding.hotelLocation.setOnClickListener {
             val bottomSheet = BottomSheetCountryStateCity()

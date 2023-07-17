@@ -8,5 +8,12 @@ data class HotelsName(
     val hotelRating: String,
     val hotelAddress: String,
     val hotelName: String,
-    val Hoteldescription:String
+    val Hoteldescription:String,
+    val gallery:GalleryHotel
+)
+
+data class GalleryHotel(
+    val Image1:String,
+    val Image2:String,
+    val Image3:String
 )

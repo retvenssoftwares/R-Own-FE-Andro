@@ -78,6 +78,9 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
             intent.putExtra("hotelId", listS[position].hotel_id)
             intent.putExtra("location", listS[position].hotelAddress)
             intent.putExtra("hotelDescription",listS[position].Hoteldescription)
+            intent.putExtra("img1",listS[position].gallery.Image1)
+            intent.putExtra("img2",listS[position].gallery.Image2)
+            intent.putExtra("img3",listS[position].gallery.Image3)
             context.startActivity(intent)
         }
 

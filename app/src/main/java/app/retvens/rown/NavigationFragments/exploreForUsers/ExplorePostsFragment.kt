@@ -124,8 +124,6 @@ class ExplorePostsFragment : Fragment() {
 
     private fun getExplorePost() {
 
-
-
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
@@ -249,7 +247,8 @@ class ExplorePostsFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-               Log.e("error",t.message.toString())
+                mediaAdapter = MediaAdapter(requireContext(), ArrayList())
+                mediaAdapter.notifyDataSetChanged()
             }
         })
 

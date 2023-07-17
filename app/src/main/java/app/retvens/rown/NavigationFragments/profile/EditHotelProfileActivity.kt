@@ -260,13 +260,13 @@ class EditHotelProfileActivity : AppCompatActivity() {
                 Log.d("fetch",response.body().toString())
 
                 if (response.isSuccessful) {
-//                    val image = response.body()?
+                    val image = response.body()!!
                     name = response.body()?.hotelOwnerInfo?.hotelownerName.toString()
                     bio = (response.body()!!.hotelOwnerInfo.hotelDescription)
                     website = (response.body()!!.hotelOwnerInfo.websiteLink)
                     bookingText = (response.body()!!.hotelOwnerInfo.bookingEngineLink)
 
-//                    Glide.with(applicationContext).load(image).into(binding.profileEdit)
+                    Glide.with(applicationContext).load(image.Profile_pic.toString()).into(binding.profileEdit)
                     binding.etNameEdit.setText(name)
                     binding.bioEt.setText(response.body()!!.hotelOwnerInfo.hotelDescription)
                     if(response.body()!!.hotelOwnerInfo.hotelType.isNotEmpty()) {

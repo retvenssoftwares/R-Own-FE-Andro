@@ -305,19 +305,20 @@ class HomeFragment : Fragment() {
                                 Log.e("feedList", feedList.toString())
                                 response.forEach {
                                     it.posts.forEach { item ->
-                                        if (item.post_type == "share some media") {
-                                            mList.add(DataItem(DataItemType.BANNER, banner = item))
-                                            postCounter += 1
-                                        }
-                                        if (item.post_type == "Polls") {
-                                            mList.add(DataItem(DataItemType.POLL, banner = item))
-                                            postCounter += 1
+                                        if (item.display_status == "1"){
+                                            if (item.post_type == "share some media") {
+                                                mList.add(DataItem(DataItemType.BANNER, banner = item))
+                                                postCounter += 1
+                                            }
+                                            if (item.post_type == "Polls") {
+                                                mList.add(DataItem(DataItemType.POLL, banner = item))
+                                                postCounter += 1
 
-                                        }
-                                        if (item.post_type == "normal status") {
-                                            mList.add(DataItem(DataItemType.Status, banner = item))
-                                            postCounter += 1
-                                        }
+                                            }
+                                            if (item.post_type == "normal status") {
+                                                mList.add(DataItem(DataItemType.Status, banner = item))
+                                                postCounter += 1
+                                            }
 
 //                                if (item.post_type == "Update about an event"){
 //                                    if (mList.contains(DataItem(DataItemType.Event, banner = item))){
@@ -329,11 +330,13 @@ class HomeFragment : Fragment() {
 //                                    }
 //                                }
 
-                                        if (item.post_type == "Check-in") {
-                                            Log.e("hotel", item.toString())
-                                            mList.add(DataItem(DataItemType.CheckIn, banner = item))
-                                            postCounter += 1
+                                            if (item.post_type == "Check-in") {
+                                                Log.e("hotel", item.toString())
+                                                mList.add(DataItem(DataItemType.CheckIn, banner = item))
+                                                postCounter += 1
+                                            }
                                         }
+
 
                                         if (postCounter >= 10) {
                                             pageCounter += 1
@@ -434,7 +437,6 @@ class HomeFragment : Fragment() {
                     }catch (e : NullPointerException){
                         Log.e("error",e.message.toString())
                     }
-
                 } else {
                     if (isAdded) {
                         Toast.makeText(
