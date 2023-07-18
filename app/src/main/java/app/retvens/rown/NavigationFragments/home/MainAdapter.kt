@@ -717,6 +717,407 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
         }
     }
 
+    inner class BannerItemViewHolderAdminAnnouncements(private val binding: ItemAdminAnnouncementsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bindBannerView(banner: PostItem, position: Int) {
+
+            var save = true
+            var like = true
+            var operatioin = "push"
+
+            val banner = banner
+
+            binding.userNamePost.text = banner.Full_name
+            binding.location.text = banner.User_name
+
+            binding.titleStatus.text = banner.caption
+
+//            if (banner.Profile_pic.isNotEmpty()) {
+//                Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+//            } else {
+                binding.postProfile.setImageResource(R.drawable.svg_user)
+//            }
+
+            if (banner.location.isNotEmpty()) {
+                binding.location.text = banner.location
+            } else {
+                binding.location.text = banner.Role
+            }
+
+//            if (banner.verificationStatus != "false") {
+//                binding.verification.visibility = View.VISIBLE
+//            }
+
+            binding.savePost.visibility = View.GONE
+            if (banner.isSaved == "saved") {
+                operatioin = "pop"
+                save = false
+                binding.savePost.setImageResource(R.drawable.svg_saved)
+            } else {
+                operatioin = "push"
+                save = true
+                binding.savePost.setImageResource(R.drawable.svg_save_post)
+            }
+
+            val time = TimesStamp.convertTimeToText(banner.date_added)
+            binding.postTime.text = time
+
+//            binding.savePost.setOnClickListener {
+//                if (banner.post_id != null) {
+//                    saveStatus(banner.post_id, binding, operatioin, save) {
+//                        if (it == 0) {
+//                            operatioin = "pop"
+//                            save = !save
+//                        } else {
+//                            operatioin = "push"
+//                            save = !save
+//                        }
+//                    }
+//                }
+//            }
+
+            binding.postProfile.setOnClickListener {
+
+//                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert") {
+//
+//                    val intent = Intent(context, UserProfileActivity::class.java)
+//                    intent.putExtra("userId", banner.user_id)
+//                    context.startActivity(intent)
+//
+//                } else if (banner.Role == "Business Vendor / Freelancer") {
+//                    val intent = Intent(context, VendorProfileActivity::class.java)
+//                    intent.putExtra("userId", banner.user_id)
+//                    context.startActivity(intent)
+//                } else if (banner.Role == "Hotel Owner") {
+//                    val intent = Intent(context, OwnerProfileActivity::class.java)
+//                    intent.putExtra("userId", banner.user_id)
+//                    context.startActivity(intent)
+//                }
+
+            }
+
+//            if (banner.Like_count != "") {
+//                binding.likeCount.text = banner.Like_count
+//            }
+//            if (banner.Comment_count != "") {
+//                binding.commentCount.text = banner.Comment_count
+//            }
+
+//            if (banner.like == "Liked") {
+//                like = false
+//                binding.likePost.setImageResource(R.drawable.liked_vectore)
+//            } else if (banner.like == "Unliked") {
+//                like = true
+//                binding.likePost.setImageResource(R.drawable.svg_like_post)
+//            }
+
+//            var count = banner.Like_count.toInt()
+
+//            binding.likePost.setOnClickListener {
+//
+//                if (like) {
+//                    postLike(banner.post_id, context) {
+//                        banner.like = "Liked"
+//                        like = false
+//                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+//                        count += 1
+////                            post.Like_count = count.toString()
+//                        binding.likeCount.text = count.toString()
+//                    }
+////                        onItemClickListener?.onItemClick(banner)
+//                } else {
+//
+//                    postLike(banner.post_id, context) {
+//                        banner.like = "Unliked"
+//                        like = true
+//                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+////                            count = post.Like_count.toInt()
+////                            post.Like_count = count.toString()
+//                        count -= 1
+//                        binding.likeCount.text = count.toString()
+//                    }
+//                }
+//            }
+//
+//            binding.comment.setOnClickListener {
+//                onItemClickListener?.onItemClickForComment(banner, position)
+//            }
+
+        }
+    }
+
+    inner class BannerItemViewHolderAdminAdvertisement
+        (private val binding: ItemAdminAdvertisementBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bindBannerView(banner: PostItem, position: Int) {
+
+            val post = banner
+
+            var save = true
+            var like = true
+            var operatioin = "push"
+
+//            if (post.Profile_pic.isNotEmpty()) {
+//                Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+//            } else {
+//                binding.postProfile.setImageResource(R.drawable.svg_user)
+//            }
+
+//            if (post.User_name.isNotEmpty()) {
+//                binding.userIdOnComment.text = post.User_name
+//            } else {
+//                binding.userIdOnComment.text = post.Full_name
+//            }
+
+//            if (post.location.isNotEmpty()) {
+            binding.userNamePost.text = post.Full_name
+            binding.postUserType.text = post.User_name
+            binding.titleStatus.text = post.caption
+//            } else {
+//            binding.postUserDominican.text = post.hotelAddress
+//            }
+
+//            if (post.verificationStatus != "false") {
+//                binding.verification.visibility = View.VISIBLE
+//            }
+
+//            Log.e("username",post.User_name)
+//            Log.e("caption",post.caption)
+
+            if (post.media.isNotEmpty()) {
+                Glide.with(context).load(post.media.get(0).post).into(binding.eventImage)
+            }
+
+//            binding.eventImage.setOnClickListener {
+//                val intent = Intent(context, HotelDetailsActivity::class.java)
+//                intent.putExtra("name", post.hotelName)
+//                intent.putExtra("logo", post.hotelCoverpicUrl)
+//                intent.putExtra("hotelId", post.hotel_id)
+//                intent.putExtra("hotelAddress", post.hotelAddress)
+//                context.startActivity(intent)
+//            }
+//
+//            binding.postUserType.setOnClickListener {
+//                val intent = Intent(context, HotelDetailsActivity::class.java)
+//                intent.putExtra("name", post.hotelName)
+//                intent.putExtra("logo", post.hotelCoverpicUrl)
+//                intent.putExtra("hotelId", post.hotel_id)
+//                intent.putExtra("hotelAddress", post.hotelAddress)
+//                context.startActivity(intent)
+//            }
+
+            val timestamp = convertTimeToText(post.date_added)
+
+            binding.postTime.text = timestamp
+
+            binding.book.setOnClickListener {
+                val uri: Uri = Uri.parse("https://${post.bookingengineLink}")
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                context.startActivity(intent)
+            }
+//            if (post.Like_count != "") {
+//                binding.likeCount.text = post.Like_count
+//            }
+//            if (post.Comment_count != "") {
+//                binding.commentCount.text = post.Comment_count
+//            }
+//
+//            if (post.like != "Unliked") {
+//                like = false
+//                binding.likePost.setImageResource(R.drawable.liked_vectore)
+//            } else {
+//                like = true
+//                binding.likePost.setImageResource(R.drawable.svg_like_post)
+//            }
+//
+//            if (post.isSaved == "saved") {
+//                operatioin = "pop"
+//                save = false
+//                binding.savePost.setImageResource(R.drawable.svg_saved)
+//            } else {
+//                operatioin = "push"
+//                save = true
+//                binding.savePost.setImageResource(R.drawable.svg_save_post)
+//            }
+
+
+//            binding.savePost.setOnClickListener {
+//                if (post.post_id != null) {
+//                    saveHotel(post.post_id, binding, operatioin, save) {
+//                        if (it == 0) {
+//                            operatioin = "pop"
+//                            save = !save
+//                        } else {
+//                            operatioin = "push"
+//                            save = !save
+//                        }
+//                    }
+//                }
+//            }
+
+
+            binding.postProfile.setOnClickListener {
+
+//                if (post.Role == "Business Vendor/Freelancer") {
+//                    val intent = Intent(context, VendorProfileActivity::class.java)
+//                    intent.putExtra("userId", post.user_id)
+//                    context.startActivity(intent)
+//                } else if (post.Role == "Hotel Owner") {
+//                    val intent = Intent(context, OwnerProfileActivity::class.java)
+//                    intent.putExtra("userId", post.user_id)
+//                    context.startActivity(intent)
+//                } else {
+//                    val intent = Intent(context, UserProfileActivity::class.java)
+//                    intent.putExtra("userId", post.user_id)
+//                    context.startActivity(intent)
+//
+//                }
+            }
+
+
+//            var count = post.Like_count.toInt()
+//
+//            binding.likePost.setOnClickListener {
+//
+//                if (like) {
+//                    postLike(post.post_id, context) {
+//                        post.like = "Liked"
+//                        like = false
+//                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+//                        count += 1
+////                            post.Like_count = count.toString()
+//                        binding.likeCount.text = count.toString()
+//                    }
+////                        onItemClickListener?.onItemClick(banner)
+//                } else {
+//
+//                    postLike(post.post_id, context) {
+//                        post.like = "Unliked"
+//                        like = true
+//                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+////                            count = post.Like_count.toInt()
+////                            post.Like_count = count.toString()
+//                        count -= 1
+//                        binding.likeCount.text = count.toString()
+//                    }
+//
+////                        onItemClickListener?.onItemClick(banner)
+//                }
+//            }
+//
+//            binding.eventImage.setOnClickListener(DoubleClick(object : DoubleClickListener {
+//                override fun onSingleClick(view: View?) {
+//
+//                }
+//
+//                override fun onDoubleClick(view: View?) {
+//                    val anim = AnimationUtils.loadAnimation(context, R.anim.slide_in_bottom)
+//                    binding.likedAnimation.startAnimation(anim)
+//                    binding.likedAnimation.visibility = View.VISIBLE
+//
+//                    if (like) {
+//                        postLike(post.post_id, context) {
+//                            post.like = "Liked"
+//                            like = false
+//                            binding.likePost.setImageResource(R.drawable.liked_vectore)
+//                            count += 1
+////                            post.Like_count = count.toString()
+//                            binding.likeCount.text = count.toString()
+//                        }
+//                    }
+//                    val handler = Handler(Looper.getMainLooper())
+//                    handler.postDelayed({
+//                        val anim = AnimationUtils.loadAnimation(context, R.anim.slide_out_bottom)
+//                        binding.likedAnimation.startAnimation(anim)
+//                        binding.likedAnimation.visibility = View.GONE
+//                    }, 500)
+//                }
+//            }))
+//
+//
+//            binding.comment.setOnClickListener {
+//                onItemClickListener?.onItemClickForComment(post, position)
+//            }
+
+        }
+    }
+
+    inner class BannerItemViewHolderAdminYoutubePromo
+        (private val binding: ItemAdminYoutubePromoBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bindBannerView(banner: PostItem, position: Int) {
+
+            val post = banner
+
+            var save = true
+            var like = true
+            var operatioin = "push"
+
+            binding.userNamePost.text = post.Full_name
+            binding.postUserType.text = post.User_name
+            binding.titleStatus.text = post.caption
+
+            if (post.media.isNotEmpty()) {
+                Glide.with(context).load(post.media.get(0).post).into(binding.eventImage)
+            }
+
+            val timestamp = convertTimeToText(post.date_added)
+
+            binding.postTime.text = timestamp
+
+            binding.book.setOnClickListener {
+                val uri: Uri = Uri.parse("https://${post.bookingengineLink}")
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                context.startActivity(intent)
+            }
+
+            binding.postProfile.setOnClickListener {
+
+//                if (post.Role == "Business Vendor/Freelancer") {
+//                    val intent = Intent(context, VendorProfileActivity::class.java)
+//                    intent.putExtra("userId", post.user_id)
+//                    context.startActivity(intent)
+//                } else if (post.Role == "Hotel Owner") {
+//                    val intent = Intent(context, OwnerProfileActivity::class.java)
+//                    intent.putExtra("userId", post.user_id)
+//                    context.startActivity(intent)
+//                } else {
+//                    val intent = Intent(context, UserProfileActivity::class.java)
+//                    intent.putExtra("userId", post.user_id)
+//                    context.startActivity(intent)
+//
+//                }
+            }
+
+        }
+    }
+
+    inner class BannerItemViewHolderAdminInformative
+        (private val binding: ItemAdminInformativeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bindBannerView(banner: PostItem, position: Int) {
+
+            val post = banner
+
+            var save = true
+            var like = true
+            var operatioin = "push"
+
+            binding.userNamePost.text = post.Full_name
+            binding.postUserType.text = post.User_name
+            binding.titleStatus.text = post.caption
+
+            if (post.media.isNotEmpty()) {
+                Glide.with(context).load(post.media.get(0).post).into(binding.eventImage)
+            }
+
+            val timestamp = convertTimeToText(post.date_added)
+
+            binding.postTime.text = timestamp
+
+        }
+    }
+
 
     inner class BannerItemViewHolderPoll(private val binding: ItemPollProfileBinding) :
         RecyclerView.ViewHolder(binding.root),
@@ -951,6 +1352,18 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             DataItemType.Status ->
                 R.layout.item_status
 
+            DataItemType.Admin_Announcements ->
+                R.layout.item_admin_announcements
+
+            DataItemType.Admin_Advertisement ->
+                R.layout.item_admin_advertisement
+
+            DataItemType.Admin_Informative ->
+                R.layout.item_admin_informative
+
+            DataItemType.Admin_Youtube_Promo ->
+                R.layout.item_admin_youtube_promo
+
             DataItemType.Event -> {
                 R.layout.item_event_post
             }
@@ -991,6 +1404,30 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 BannerItemViewHolderStatus(status)
             }
 
+            R.layout.item_admin_announcements -> {
+                val announce =
+                    ItemAdminAnnouncementsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                BannerItemViewHolderAdminAnnouncements(announce)
+            }
+
+            R.layout.item_admin_advertisement -> {
+                val announce =
+                    ItemAdminAdvertisementBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                BannerItemViewHolderAdminAdvertisement(announce)
+            }
+
+            R.layout.item_admin_youtube_promo -> {
+                val announce =
+                    ItemAdminYoutubePromoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                BannerItemViewHolderAdminYoutubePromo(announce)
+            }
+
+            R.layout.item_admin_informative -> {
+                val announce =
+                    ItemAdminInformativeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                BannerItemViewHolderAdminInformative(announce)
+            }
+
             R.layout.item_event_post -> {
                 val event =
                     ItemEventPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -1023,6 +1460,18 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 dataItemList[position].banner?.let { holder.bindBannerView(it, position) }
             }
             is BannerItemViewHolderStatus -> {
+                dataItemList[position].banner?.let { holder.bindBannerView(it, position) }
+            }
+            is BannerItemViewHolderAdminAnnouncements -> {
+                dataItemList[position].banner?.let { holder.bindBannerView(it, position) }
+            }
+            is BannerItemViewHolderAdminAdvertisement -> {
+                dataItemList[position].banner?.let { holder.bindBannerView(it, position) }
+            }
+            is BannerItemViewHolderAdminYoutubePromo -> {
+                dataItemList[position].banner?.let { holder.bindBannerView(it, position) }
+            }
+            is BannerItemViewHolderAdminInformative -> {
                 dataItemList[position].banner?.let { holder.bindBannerView(it, position) }
             }
             is BannerItemViewHolderEvent -> {

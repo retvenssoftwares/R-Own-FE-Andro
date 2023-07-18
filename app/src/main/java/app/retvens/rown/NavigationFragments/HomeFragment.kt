@@ -313,10 +313,26 @@ class HomeFragment : Fragment() {
                                             if (item.post_type == "Polls") {
                                                 mList.add(DataItem(DataItemType.POLL, banner = item))
                                                 postCounter += 1
-
                                             }
                                             if (item.post_type == "normal status") {
                                                 mList.add(DataItem(DataItemType.Status, banner = item))
+                                                postCounter += 1
+                                            }
+
+                                            if (item.post_type == "Admin Announcements") {
+                                                mList.add(DataItem(DataItemType.Admin_Announcements, banner = item))
+                                                postCounter += 1
+                                            }
+                                            if (item.post_type == "Admin Advertisement") {
+                                                mList.add(DataItem(DataItemType.Admin_Advertisement, banner = item))
+                                                postCounter += 1
+                                            }
+                                            if (item.post_type == "Admin Informative") {
+                                                mList.add(DataItem(DataItemType.Admin_Informative, banner = item))
+                                                postCounter += 1
+                                            }
+                                            if (item.post_type == "Admin Youtube Promo") {
+                                                mList.add(DataItem(DataItemType.Admin_Youtube_Promo, banner = item))
                                                 postCounter += 1
                                             }
 

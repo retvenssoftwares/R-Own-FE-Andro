@@ -15,6 +15,10 @@ class DataItemType {
         const val Event = 9
         const val CheckIn = 10
         const val CREATEPOST = 11
+        const val Admin_Announcements = 12
+        const val Admin_Advertisement = 13
+        const val Admin_Informative = 14
+        const val Admin_Youtube_Promo = 15
     }
 
 }
