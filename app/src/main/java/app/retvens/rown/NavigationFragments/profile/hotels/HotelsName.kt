@@ -9,7 +9,7 @@ data class HotelsName(
     val hotelAddress: String,
     val hotelName: String,
     val Hoteldescription:String,
-    val gallery:GalleryHotel
+    val gallery: List<GalleryHotel>,
 )
 
 data class GalleryHotel(

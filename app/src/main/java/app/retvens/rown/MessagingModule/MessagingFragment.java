@@ -263,7 +263,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
             profile = Mesibo.getProfile(peer);
             String Status = profile.getStatus();
             Log.e("status",Status);
-            Log.e("name",profile.getName());
+            Log.e("nam.e",profile.getName());
             Map<String, String> decodedData = Decoder.decodeData(Status);
 
             this.userID = decodedData.get("userID");

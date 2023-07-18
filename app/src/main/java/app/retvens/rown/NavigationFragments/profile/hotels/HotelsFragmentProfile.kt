@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.profile.hotels
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -64,8 +65,12 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
     }
     private fun getHotels() {
 
+
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val User_id = sharedPreferences.getString("user_id", "").toString()
+
+        Log.e("user",User_id)
+        Log.e("user",userId)
 
         val hotels = RetrofitBuilder.ProfileApis.getProfileHotels(userId,User_id)
         hotels.enqueue(object : Callback<List<HotelsName>?> {
@@ -80,6 +85,7 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
 
                         if (response.body()!!.isNotEmpty()) {
                             try {
+                                Log.e("res",response.body().toString())
                             profileHotelsAdapter = ProfileHotelsAdapter(response.body()!! as ArrayList<HotelsName>, requireContext(), isOwner)
                             recycler.adapter = profileHotelsAdapter
                             profileHotelsAdapter.removeHotelFromList(response.body()!!)
@@ -103,6 +109,7 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
                             }
                         }
                     } else {
+                        Log.e("error",response.code().toString())
                         addHotel.visibility = View.GONE
                         empty.visibility = View.VISIBLE
                         empty.text = response.code().toString()
@@ -112,6 +119,7 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
                 }
             }
             override fun onFailure(call: Call<List<HotelsName>?>, t: Throwable) {
+                Log.e("error",t.message.toString())
                 addHotel.visibility = View.GONE
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE

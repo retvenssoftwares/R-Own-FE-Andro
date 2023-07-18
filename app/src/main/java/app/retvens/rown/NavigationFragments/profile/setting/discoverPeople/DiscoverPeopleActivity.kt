@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.AbsListView
 import android.widget.Toast
 import androidx.core.view.ViewCompat
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -52,38 +53,61 @@ class DiscoverPeopleActivity : AppCompatActivity() {
         binding.discoverRecycler2.layoutManager = LinearLayoutManager(this)
         binding.discoverRecycler2.setHasFixedSize(true)
 
-        ViewCompat.setNestedScrollingEnabled(binding.discoverRecycler2, false);
+        binding.discoverRecycler2.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isLoading = true;
+                }
+            }
 
-//        binding.discoverRecycler2.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
-//                {
-//                    isLoading = true;
-//                }
-//            }
-//
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//
-//                if (dy > 0){
-//                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0){
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val currentItem = layoutManager.childCount
+                    val totalItem = layoutManager.itemCount
+                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+                        isLoading = false
+                        lastPage++
+                        getData()
+
+
+                    }
+                }
+
+
+            }
+        })
+
+
+//        val layoutManager = binding.discoverRecycler2.layoutManager as LinearLayoutManager
+//        binding.nestedScroll.setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener{
+//            override fun onScrollChange(
+//                v: NestedScrollView,
+//                scrollX: Int,
+//                scrollY: Int,
+//                oldScrollX: Int,
+//                oldScrollY: Int
+//            ) {
+//                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()))  {
 //                    val currentItem = layoutManager.childCount
 //                    val totalItem = layoutManager.itemCount
 //                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-//                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-//                        isLoading = false
-//                        lastPage++
+//                    Log.e("error","working")
+//
+//                    if(!isLoading && totalItem <= (scrollOutItems+currentItem)){
 //                        getData()
-//
-//
 //                    }
 //                }
-//
-//
 //            }
+//
 //        })
+
 
         getAllProfiles()
     }
@@ -142,15 +166,15 @@ class DiscoverPeopleActivity : AppCompatActivity() {
                                         p2: Int,
                                         p3: Int
                                     ) {
-
-                                    }
-
-                                    override fun afterTextChanged(p0: Editable?) {
                                         val filterData = original.filter { item ->
                                             item.matchedNumber.Full_name.contains(p0.toString(),ignoreCase = true)
                                         }
 
                                         discoverAdapter.updateData(filterData as ArrayList<MatchedContact>)
+                                    }
+
+                                    override fun afterTextChanged(p0: Editable?) {
+
                                     }
                                 })
 
