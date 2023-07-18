@@ -54,36 +54,36 @@ class DiscoverPeopleActivity : AppCompatActivity() {
 
         ViewCompat.setNestedScrollingEnabled(binding.discoverRecycler2, false);
 
-        binding.discoverRecycler2.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
-                {
-                    isLoading = true;
-                }
-            }
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                if (dy > 0){
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val currentItem = layoutManager.childCount
-                    val totalItem = layoutManager.itemCount
-                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        isLoading = false
-                        lastPage++
-                        getData()
-
-
-                    }
-                }
-
-
-            }
-        })
+//        binding.discoverRecycler2.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+//                {
+//                    isLoading = true;
+//                }
+//            }
+//
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//
+//                if (dy > 0){
+//                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//                    val currentItem = layoutManager.childCount
+//                    val totalItem = layoutManager.itemCount
+//                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+//                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+//                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+//                        isLoading = false
+//                        lastPage++
+//                        getData()
+//
+//
+//                    }
+//                }
+//
+//
+//            }
+//        })
 
         getAllProfiles()
     }
