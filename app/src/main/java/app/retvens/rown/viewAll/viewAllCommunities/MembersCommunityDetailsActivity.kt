@@ -38,7 +38,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
-class OpenCommunityDetailsActivity : AppCompatActivity() {
+class MembersCommunityDetailsActivity : AppCompatActivity() {
     lateinit var binding : ActivityOpenCommunityDetailsBinding
     private  var number:ArrayList<String> = ArrayList()
     private  var userId:ArrayList<String> = ArrayList()
@@ -62,6 +62,8 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
         number.add(phone)
         userId.add(user_id)
 
+        binding.switchToCommunity.text = "Joined"
+
         replaceFragment(CommunityUsersFragment(grpID))
         binding.usersText.setOnClickListener {
             binding.usersText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
@@ -74,21 +76,7 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
             replaceFragment(CommunityMediaFragment(grpID))
         }
 
-        binding.joinCommunity.setOnClickListener {
-            progressDialog = Dialog(this)
-            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            progressDialog.setCancelable(false)
-            progressDialog.setContentView(R.layout.progress_dialoge)
-            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-            Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
-            progressDialog.show()
 
-            addMembers()
-
-            binding.switchToCommunity.text = "Joined"
-
-        }
 
         binding.communityDetailBackBtn.setOnClickListener {
             onBackPressed()

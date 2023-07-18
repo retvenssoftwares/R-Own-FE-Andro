@@ -63,6 +63,7 @@ import app.retvens.rown.R;
 import app.retvens.rown.api.MesiboCall;
 import app.retvens.rown.api.p000ui.MesiboDefaultCallActivity;
 import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity;
+import app.retvens.rown.viewAll.viewAllCommunities.MembersCommunityDetailsActivity;
 import app.retvens.rown.viewAll.viewAllCommunities.OpenCommunityDetailsActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -203,7 +204,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                                 startActivity(intent);
                             }else {
                                 Log.e("id",groupId.toString());
-                                Intent intent = new Intent(MesiboMessagingActivity.this, OpenCommunityDetailsActivity.class);
+                                Intent intent = new Intent(MesiboMessagingActivity.this, MembersCommunityDetailsActivity.class);
                                 intent.putExtra("groupId",groupId);
                                 startActivity(intent);
                             }

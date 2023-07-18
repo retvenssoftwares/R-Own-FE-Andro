@@ -50,10 +50,8 @@ class ViewAllCommmunitiesActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val response = response.body()!!
                     response.forEach{ it ->
-
-                        cummunity = Community(it.Profile_pic,it.group_name,"${it.Members.size} members",it.group_id,it.location)
-                        communityArrayList.add(cummunity)
-                        viewAllCommunitiesAdapter = ViewAllCommunitiesAdapter(this@ViewAllCommmunitiesActivity,communityArrayList)
+                        val original = response.toList()
+                        viewAllCommunitiesAdapter = ViewAllCommunitiesAdapter(this@ViewAllCommmunitiesActivity,response)
                         binding.recyclerViewAllCommunity.adapter = viewAllCommunitiesAdapter
 
                         binding.searchCommunity.addTextChangedListener(object : TextWatcher {
@@ -72,11 +70,10 @@ class ViewAllCommmunitiesActivity : AppCompatActivity() {
                                 before: Int,
                                 count: Int
                             ) {
-                                val original = communityArrayList
                                 val filter = original.filter { searchUser ->
-                                    searchUser.title.contains(s.toString(),ignoreCase = false)
+                                    searchUser.group_name.contains(s.toString(),ignoreCase = false)
                                 }
-                                viewAllCommunitiesAdapter.searchCom(filter as ArrayList<Community>)
+                                viewAllCommunitiesAdapter.searchCom(filter)
                             }
 
                             override fun afterTextChanged(s: Editable?) {

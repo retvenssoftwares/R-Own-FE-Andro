@@ -56,6 +56,10 @@
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
+            android:name=".viewAll.viewAllCommunities.MembersCommunityDetailsActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
             android:name=".NavigationFragments.profile.UserDetailsActivity"
             android:exported="false"
             android:theme="@style/AppTheme.ActionBar.Transparent" />

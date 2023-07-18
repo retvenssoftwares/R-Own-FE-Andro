@@ -62,7 +62,7 @@ class ViewAllAvailableCommunitiesActivity : AppCompatActivity(),
            }
 
            override fun onFailure(call: Call<List<GetCommunitiesData>?>, t: Throwable) {
-               TODO("Not yet implemented")
+
            }
        })
     }

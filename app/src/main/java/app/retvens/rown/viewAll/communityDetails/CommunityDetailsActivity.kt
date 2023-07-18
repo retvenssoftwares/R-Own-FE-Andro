@@ -242,7 +242,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
                     }
 
                     val date = convertTimestampToFormattedDate(response.date_added)
-
+                    Log.e("date",response.date_added.toString())
                     binding.communityCreatedBy.text = "Created by ${response.creator_name} | $date"
 
                     response.Admin.forEach {

@@ -257,7 +257,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 ArrayList<MesiboProfile> filter = Search.stream()
-                        .filter(item -> item.getName().contains(s.toString()))
+                        .filter(item -> item.getName().toLowerCase().contains(s.toString().toLowerCase()))
                         .collect(Collectors.toCollection(ArrayList::new));
 
                 mAdapter.updateData(filter);

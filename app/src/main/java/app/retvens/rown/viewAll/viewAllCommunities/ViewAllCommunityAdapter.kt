@@ -62,7 +62,7 @@ class ViewAllCommunityAdapter(val listS : List<GetCommunitiesData>, val context:
 
         holder.viewGroup.setOnClickListener {
             val intent = Intent(context,OpenCommunityDetailsActivity::class.java)
-            intent.putExtra("groupId",listS[position].group_id)
+            intent.putExtra("groupId",listS[position].group_id.toLong())
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(intent)
         }

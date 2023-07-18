@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -39,7 +40,7 @@ class CreateCummVisibilitySetting : AppCompatActivity(), BottomSheetCountryState
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var settingsClient: SettingsClient
     private lateinit var locationRequest: LocationRequest
-    lateinit var task: CardView
+    lateinit var task: ImageView
     var selectedLayout : Int = 1
     private  var type = ""
 
@@ -66,7 +67,7 @@ class CreateCummVisibilitySetting : AppCompatActivity(), BottomSheetCountryState
             binding.openCummLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.grey_5))
         }
 
-        task = findViewById<CardView>(R.id.autofetch)
+        task = findViewById(R.id.autofetch)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         settingsClient = LocationServices.getSettingsClient(this)

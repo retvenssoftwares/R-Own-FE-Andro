@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.databinding.CreateCummunityItemBinding
 import app.retvens.rown.viewAll.viewAllCommunities.ClosedCommunityDetailsActivity
+import app.retvens.rown.viewAll.viewAllCommunities.MembersCommunityDetailsActivity
 import app.retvens.rown.viewAll.viewAllCommunities.OpenCommunityDetailsActivity
 import com.bumptech.glide.Glide
 

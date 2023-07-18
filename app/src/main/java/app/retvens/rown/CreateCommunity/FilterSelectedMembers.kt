@@ -8,9 +8,12 @@ import android.graphics.drawable.ColorDrawable
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.widget.EditText
 import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -47,6 +50,7 @@ class FilterSelectedMembers : AppCompatActivity() {
     private  var profile:ArrayList<String> = ArrayList()
     private  var userId:ArrayList<String> = ArrayList()
     private  var userList: List<Connections> = emptyList()
+    private lateinit var searchBar:EditText
     private lateinit var progressDialog:Dialog
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +76,8 @@ class FilterSelectedMembers : AppCompatActivity() {
         receiverProfileAdapter.notifyDataSetChanged()
 
         val next = findViewById<ImageView>(R.id.select_next)
+
+        searchBar = findViewById(R.id.searchBar)
 
         val name = intent.getStringExtra("name")
         val description = intent.getStringExtra("desc")
@@ -125,6 +131,8 @@ class FilterSelectedMembers : AppCompatActivity() {
 
                 selectedMembersAdapter.addSelectedMember(member)
                 selectedMembersAdapter.notifyDataSetChanged()
+                val original = userList.toList()
+
 
             }
         })
@@ -134,7 +142,7 @@ class FilterSelectedMembers : AppCompatActivity() {
         val backbtn = findViewById<ImageView>(R.id.createCommunity_backBtn_members)
 
         backbtn.setOnClickListener {
-            startActivity(Intent(this, CreateCommunity::class.java))
+            onBackPressed()
         }
 
     }
@@ -172,6 +180,29 @@ class FilterSelectedMembers : AppCompatActivity() {
                     // Update the adapter with the new data
                     receiverProfileAdapter.userList = uniqueItems ?: emptyList()
                     receiverProfileAdapter.notifyDataSetChanged()
+
+                    val original = userList.toList()
+
+                    searchBar.addTextChangedListener(object :TextWatcher{
+                        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val filterData = original.filter { item ->
+                                item.Full_name.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            receiverProfileAdapter.updateData(filterData)
+                        }
+
+                        override fun afterTextChanged(p0: Editable?) {
+
+                        }
+
+                    })
+
+
                 }
 
             }

@@ -50,6 +50,7 @@ class SelectMembersAdapter(val context: Context, var userList:List<Connections>)
         holder.nameTextView.text = data.Full_name
         Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
+        holder.bioText.text = data.Role
 
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(data)

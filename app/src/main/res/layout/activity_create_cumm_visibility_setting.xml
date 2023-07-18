@@ -205,7 +205,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="match_parent"
@@ -218,6 +218,10 @@
                 android:textFontWeight="700"
                 android:textSize="16dp"/>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/user_location_country"
                 android:layout_width="match_parent"
@@ -226,7 +230,6 @@
                 android:hint="Country"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
-                app:endIconDrawable="@drawable/png_location"
                 app:endIconMode="custom"
                 app:endIconTint="@color/black"
                 android:layout_marginTop="30dp"
@@ -245,48 +248,19 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/or"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/postsLayout"
-                android:layout_marginTop="15dp"
-                android:text="OR"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="17dp"
-                android:fontFamily="@font/montserrat_semibold"
+
+            <ImageView
+                android:id="@+id/autofetch"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:src="@drawable/png_location"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="45dp"
                 />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/autofetch"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                app:cardCornerRadius="10dp"
-                android:backgroundTint="@color/green_own"
-                android:layout_gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="15dp"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:text="location"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/black"
-                    android:textSize="20dp" />
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/vector_gps"
-                    android:layout_marginStart="5dp"
-                    />
-
-            </androidx.cardview.widget.CardView>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
