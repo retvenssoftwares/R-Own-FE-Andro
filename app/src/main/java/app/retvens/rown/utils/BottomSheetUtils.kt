@@ -76,15 +76,15 @@ fun postLike(postId:String, context : Context, onClick : () -> Unit) {
         ) {
                 if (response.isSuccessful) {
                     onClick.invoke()
-                    Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, response.message().toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, response.message().toString(), Toast.LENGTH_SHORT).show()
                 }
 
         }
         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
-                    .show()
+//                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT)
+//                    .show()
         }
     })
 
