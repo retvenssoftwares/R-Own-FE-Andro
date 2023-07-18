@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.NavigationFragments.profile.services.ProfileServicesDataItem
+import app.retvens.rown.R
 import app.retvens.rown.databinding.ItemExploreServicesCardBinding
 import app.retvens.rown.databinding.ItemServicesHomeCardBinding
 import app.retvens.rown.databinding.VendorsCardHomeBinding
@@ -30,8 +31,23 @@ class VendorsChildAdapter(private val context: Context, private val viewType: In
                 binding.avgPrice.text = "${recyclerItem.vendorServicePrice}"
             }
             Glide.with(context).load(recyclerItem.vendorImage).into(binding.vendorCover)
-            Glide.with(context).load(recyclerItem.Profile_pic).into(binding.vendorProfile)
+
+            if (recyclerItem.Profile_pic.isNotEmpty()) {
+                Glide.with(context).load(recyclerItem.Profile_pic).into(binding.vendorProfile)
+            } else {
+                binding.vendorProfile.setImageResource(R.drawable.svg_user)
+            }
+
             binding.vendorCover.setOnClickListener {
+                val intent = Intent(context, VendorDetailsActivity::class.java)
+                intent.putExtra("user_id", recyclerItem.user_id)
+                intent.putExtra("vendorImage", recyclerItem.vendorImage)
+                intent.putExtra("vendorName", recyclerItem.vendorName)
+                context.startActivity(intent)
+
+                Log.e("totalService",vendorsRecyclerData.toString())
+            }
+            binding.cardGetQuote.setOnClickListener {
                 val intent = Intent(context, VendorDetailsActivity::class.java)
                 intent.putExtra("user_id", recyclerItem.user_id)
                 intent.putExtra("vendorImage", recyclerItem.vendorImage)

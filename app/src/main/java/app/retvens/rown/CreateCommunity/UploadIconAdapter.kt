@@ -32,7 +32,13 @@ class UploadIconAdapter(val context: Context,private val number: ArrayList<Strin
         holder.image.visibility = View.VISIBLE
 
         val pic = profile?.get(position)
-        Glide.with(context).load(pic).into(holder.image)
+
+        if (pic!!.isNotEmpty()) {
+            Glide.with(context).load(pic).into(holder.image)
+        } else {
+            holder.image.setImageResource(R.drawable.svg_user)
+        }
+
     }
 
     override fun getItemCount(): Int {

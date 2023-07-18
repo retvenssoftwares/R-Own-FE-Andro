@@ -89,12 +89,12 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
                     val totalItem = layoutManager.itemCount
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                    if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        if (currentPage > lastPage) {
+                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+//                        if (currentPage > lastPage) {
                             isLoading = false
                             lastPage++
                             getData()
-                        }
+//                        }
                     }
                 }
             }
@@ -140,30 +140,29 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
                             val postsToDisplay = postsDataClass.posts.filter { it.display_status == "1" }
                             if (postsToDisplay.isEmpty()) {
                                 // No posts to display
-                                notPosted.visibility = View.VISIBLE
+//                                notPosted.visibility = View.VISIBLE
                             } else {
-                                if (postsToDisplay.size >= 10){
-                                    currentPage++
-                                }
+//                                if (postsToDisplay.size >= 10){
+//                                }
                                 isLoading = false
+                                currentPage++
                                 // Display posts using the MediaAdapter
                                 list.addAll(postsToDisplay)
-                                mediaAdapter = MediaAdapter(requireContext(),
-                                    postsToDisplay as ArrayList<PostItem>
-                                )
-                                mediaRecyclerView.adapter = mediaAdapter
+
                                 mediaAdapter.removePostsFromList(postsDataClass.posts)
                                 mediaAdapter.notifyDataSetChanged()
                                 mediaAdapter.setOnItemClickListener(this@MediaFragment)
                             }
                         } catch (e: NullPointerException) {
                             // Handle NullPointerException
-                            notPosted.visibility = View.VISIBLE
-                            empty.visibility = View.VISIBLE
-                            if (isOwner){
-                            empty.text = "You have not posted anything yet."
-                            } else {
-                                empty.text = "$username have not posted anything yet."
+                            if (currentPage == 1) {
+                                notPosted.visibility = View.VISIBLE
+                                empty.visibility = View.VISIBLE
+                                if (isOwner) {
+                                    empty.text = "You have not posted anything yet."
+                                } else {
+                                    empty.text = "$username have not posted anything yet."
+                                }
                             }
                         }
 
@@ -171,19 +170,23 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
 
                     }
                         } else {
+                            if (currentPage == 1) {
                             notPosted.visibility = View.VISIBLE
                             empty.visibility = View.VISIBLE
-                            if (isOwner){
-                                empty.text = "You have not posted anything yet."
-                            } else {
-                                empty.text = "$username have not posted anything yet."
+                                if (isOwner) {
+                                    empty.text = "You have not posted anything yet."
+                                } else {
+                                    empty.text = "$username have not posted anything yet."
+                                }
                             }
                         }
                     } else {
-                        empty.visibility = View.VISIBLE
-                        empty.text = response.code().toString()
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
+                        if (currentPage == 1) {
+                            empty.visibility = View.VISIBLE
+                            empty.text = response.code().toString()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -193,6 +196,7 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again"
                 empty.visibility = View.VISIBLE
+                isLoading = false
             }
 
 

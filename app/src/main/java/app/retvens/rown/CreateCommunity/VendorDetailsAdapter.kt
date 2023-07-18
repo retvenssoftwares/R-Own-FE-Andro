@@ -53,7 +53,12 @@ class VendorDetailsAdapter(val context: Context, var userList:ArrayList<User>) :
         val location = data.location
         val cityName = location.split(",")[0].trim()
             holder.location.text = cityName
+
+        if (data.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
+        }
 
         if (data.admin == "true"){
             holder.admin.text = "Admin"

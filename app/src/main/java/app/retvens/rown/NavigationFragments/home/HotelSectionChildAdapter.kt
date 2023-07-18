@@ -74,6 +74,16 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
                 intent.putExtra("saved", recyclerItem.saved)
                 context.startActivity(intent)
             }
+
+            binding.hotelSectionName.setOnClickListener {
+                val intent = Intent(context, HotelDetailsActivity::class.java)
+                intent.putExtra("name", recyclerItem.hotelName)
+                intent.putExtra("logo", recyclerItem.hotelCoverpicUrl)
+                intent.putExtra("hotelId", recyclerItem.hotel_id)
+                intent.putExtra("hotelAddress", recyclerItem.hotelAddress)
+                intent.putExtra("saved", recyclerItem.saved)
+                context.startActivity(intent)
+            }
         }
     }
 

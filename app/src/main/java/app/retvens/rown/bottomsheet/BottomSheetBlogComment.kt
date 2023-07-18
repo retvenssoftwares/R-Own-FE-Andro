@@ -222,6 +222,8 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
                     try {
                         if (response.get(0).isEmpty()){
                             empty.visibility = View.VISIBLE
+                        } else {
+                            empty.visibility = View.GONE
                         }
                         blogsCommentAdapter = BlogsCommentAdapter(requireContext(),response.get(0))
                         recyclerView.adapter = blogsCommentAdapter

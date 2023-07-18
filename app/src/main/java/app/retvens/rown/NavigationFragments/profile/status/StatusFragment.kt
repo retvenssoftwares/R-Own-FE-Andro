@@ -90,11 +90,11 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        if (currentPage > lastPage) {
+//                        if (currentPage > lastPage) {
                             isLoading = false
                             lastPage++
                             getData()
-                        }
+//                        }
                     }
                 }
             }
@@ -137,45 +137,62 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
                         if (response.isNotEmpty()) {
                         response.forEach { postsDataClass ->
                                 try {
-                                if (postsDataClass.posts.size >= 10){
-                                    currentPage++
+//                                if (postsDataClass.posts.size >= 10){
+//                                }
+                                    if (postsDataClass.posts.isNotEmpty()){
+                                        isLoading = false
+                                        currentPage++
+
+                                        list.addAll(postsDataClass.posts)
+
+                                        statusAdapter.removePostsFromList(postsDataClass.posts)
+                                        statusAdapter.notifyDataSetChanged()
+
+                                        statusAdapter.setOnItemClickListener(this)
+                                    } else {
+                                        if (currentPage == 1) {
+                                            notPosted.visibility = View.VISIBLE
+                                            empty.visibility = View.VISIBLE
+                                            if (isOwner) {
+                                                empty.text = "You have not posted anything yet."
+                                            } else {
+                                                empty.text = "$username have not posted anything yet."
+                                            }
+                                        }
+                                    }
+
+                        }catch (e:NullPointerException) {
+                                    if (currentPage == 1) {
+                                        notPosted.visibility = View.VISIBLE
+                                        empty.visibility = View.VISIBLE
+                                        if (isOwner) {
+                                            empty.text = "You have not posted anything yet."
+                                        } else {
+                                            empty.text = "$username have not posted anything yet."
+                                        }
+                                    }
                                 }
-                                isLoading = false
-
-                            list.addAll(postsDataClass.posts)
-                            statusAdapter = StatusAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext())
-                            statusRecycler.adapter = statusAdapter
-                            statusAdapter.removePostsFromList(postsDataClass.posts)
-                            statusAdapter.notifyDataSetChanged()
-
-                            statusAdapter.setOnItemClickListener(this)
-                        }catch (e:NullPointerException){
-                            notPosted.visibility = View.VISIBLE
-                            empty.visibility = View.VISIBLE
-                            if (isOwner){
-                                empty.text = "You have not posted anything yet."
-                            } else {
-                                empty.text = "$username have not posted anything yet."
-                            }
-                        }
-
 
 
                     }
                         } else {
-                            notPosted.visibility = View.VISIBLE
-                            empty.visibility = View.VISIBLE
-                            if (isOwner){
-                                empty.text = "You have not posted anything yet."
-                            } else {
-                                empty.text = "$username have not posted anything yet."
+                            if (currentPage == 1) {
+                                notPosted.visibility = View.VISIBLE
+                                empty.visibility = View.VISIBLE
+                                if (isOwner) {
+                                    empty.text = "You have not posted anything yet."
+                                } else {
+                                    empty.text = "$username have not posted anything yet."
+                                }
                             }
                         }
                     } else {
-                        empty.visibility = View.VISIBLE
-                        empty.text = response.code().toString()
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
+                        if (currentPage == 1) {
+                            empty.visibility = View.VISIBLE
+                            empty.text = response.code().toString()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -188,6 +205,7 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
                     shimmerFrameLayout.visibility = View.GONE
 //                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
 //                        .show()
+                    isLoading = false
                 }
             }
 

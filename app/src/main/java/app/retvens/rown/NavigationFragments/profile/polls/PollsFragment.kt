@@ -92,12 +92,12 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
                     val totalItem = layoutManager.itemCount
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                    if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        if (currentPage > lastPage) {
+                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
+//                        if (currentPage > lastPage) {
                             isLoading = false
                             lastPage++
                             getData()
-                        }
+//                        }
                     }
                 }
             }
@@ -144,42 +144,58 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
                     response.forEach { postsDataClass ->
 
                         try {
-                            if (postsDataClass.posts.size >= 10){
-                                currentPage++
-                            }
-                            isLoading = false
-                            list.addAll(postsDataClass.posts)
-                            pollsAdapter = PollsAdapter(postsDataClass.posts as ArrayList<PostItem>, requireContext(),userId)
-                            pollsRecyclerView.adapter = pollsAdapter
-                            pollsAdapter.removePostsFromList(postsDataClass.posts)
-                            pollsAdapter.notifyDataSetChanged()
-                        }catch (e:NullPointerException){
+//                            if (postsDataClass.posts.size >= 10){
+//                            }
+                           if( postsDataClass.posts.isNotEmpty() ){
+                               isLoading = false
+                               currentPage++
+                               list.addAll(postsDataClass.posts)
 
-                            notPosted.visibility = View.VISIBLE
-                            empty.visibility = View.VISIBLE
-                            if (isOwner){
-                                empty.text = "You have not posted anything yet."
+                               pollsAdapter.removePostsFromList(postsDataClass.posts)
+                               pollsAdapter.notifyDataSetChanged()
                             } else {
-                                empty.text = "$username have not posted anything yet."
+                               if (currentPage == 1) {
+                                   notPosted.visibility = View.VISIBLE
+                                   empty.visibility = View.VISIBLE
+                                   if (isOwner) {
+                                       empty.text = "You have not posted anything yet."
+                                   } else {
+                                       empty.text = "$username have not posted anything yet."
+                                   }
+                               }
+                           }
+                        }catch (e:NullPointerException){
+                            if (currentPage == 1) {
+                                notPosted.visibility = View.VISIBLE
+                                empty.visibility = View.VISIBLE
+                                if (isOwner) {
+                                    empty.text = "You have not posted anything yet."
+                                } else {
+                                    empty.text = "$username have not posted anything yet."
+                                }
                             }
                         }
 
 
                     }
                         } else {
-                            notPosted.visibility = View.VISIBLE
-                            empty.visibility = View.VISIBLE
-                            if (isOwner){
-                                empty.text = "You have not posted anything yet."
-                            } else {
-                                empty.text = "$username have not posted anything yet."
+                            if (currentPage == 1) {
+                                notPosted.visibility = View.VISIBLE
+                                empty.visibility = View.VISIBLE
+                                if (isOwner) {
+                                    empty.text = "You have not posted anything yet."
+                                } else {
+                                    empty.text = "$username have not posted anything yet."
+                                }
                             }
                         }
                     } else {
-                        empty.visibility = View.VISIBLE
-                        empty.text = response.code().toString()
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
+                        if (currentPage == 1) {
+                            empty.visibility = View.VISIBLE
+                            empty.text = response.code().toString()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -190,6 +206,7 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
                     empty.text = "${t.localizedMessage}"
                     shimmerFrameLayout.stopShimmer()
                     shimmerFrameLayout.visibility = View.GONE
+                    isLoading = false
                 }
             }
         })

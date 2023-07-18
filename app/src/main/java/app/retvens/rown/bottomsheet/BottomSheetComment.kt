@@ -219,6 +219,8 @@ showKeyBoard(comments)
                     val response = response.body()!!
                     if (response.post.comments.isEmpty()){
                         empty.visibility = View.VISIBLE
+                    } else {
+                        empty.visibility = View.GONE
                     }
                     commentAdapter = CommentAdapter(requireContext(),response)
                     recyclerView.adapter = commentAdapter

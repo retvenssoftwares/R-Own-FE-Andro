@@ -33,8 +33,11 @@ class SelectedMembersAdapter(private val context: Context) :
     override fun onBindViewHolder(holder: SelectedMemberViewHolder, position: Int) {
         val member = selectedMembersList[position]
 
-        Glide.with(context).load(member.Profile_pic).into(holder.profileImageView)
-
+        if (member.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(member.Profile_pic).into(holder.profileImageView)
+        } else {
+            holder.profileImageView.setImageResource(R.drawable.svg_user)
+        }
 
 
         // Load profile image here

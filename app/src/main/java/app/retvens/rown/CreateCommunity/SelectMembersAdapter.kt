@@ -48,7 +48,11 @@ class SelectMembersAdapter(val context: Context, var userList:List<Connections>)
 
         val data = userList[position]
         holder.nameTextView.text = data.Full_name
-        Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        if (data.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
+        }
 
         holder.bioText.text = data.Role
 

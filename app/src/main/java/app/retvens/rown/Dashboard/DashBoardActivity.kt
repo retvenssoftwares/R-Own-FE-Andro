@@ -108,59 +108,41 @@ class DashBoardActivity : AppCompatActivity() {
         checkNetworkConnection = CheckNetworkConnection(application)
         checkNetworkConnection.observe(this) { isConnected ->
             if (isConnected) {
-                binding.noInternetImage.visibility = View.GONE
-                binding.noInternetLayout.visibility = View.GONE
-                binding.fragmentContainer.visibility = View.VISIBLE
+                binding.noInternet.visibility = View.GONE
                 binding.navView.visibility = View.VISIBLE
-                binding.navBottom.visibility = View.VISIBLE
-                toolbar.visibility = View.VISIBLE
+                binding.dashboard.visibility = View.VISIBLE
                 if (replace){
                     replace = false
                     replaceFragment(HomeFragment())
                 }
 //                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
             } else {
-                binding.noInternetImage.visibility = View.VISIBLE
-                binding.noInternetLayout.visibility = View.VISIBLE
-                binding.navBottom.visibility = View.GONE
+                binding.noInternet.visibility = View.VISIBLE
                 binding.navView.visibility = View.GONE
-                binding.fragmentContainer.visibility = View.GONE
-                toolbar.visibility = View.GONE
+                binding.dashboard.visibility = View.GONE
 //                Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
             }
         }
 
         if (checkForInternet(this)) {
-            binding.noInternetImage.visibility = View.GONE
-            binding.noInternetLayout.visibility = View.GONE
-            binding.fragmentContainer.visibility = View.VISIBLE
+            binding.noInternet.visibility = View.GONE
             binding.navView.visibility = View.VISIBLE
-            binding.navBottom.visibility = View.VISIBLE
-            toolbar.visibility = View.VISIBLE
+            binding.dashboard.visibility = View.VISIBLE
         } else {
-            binding.noInternetImage.visibility = View.VISIBLE
-            binding.noInternetLayout.visibility = View.VISIBLE
-            binding.navBottom.visibility = View.GONE
+            binding.noInternet.visibility = View.VISIBLE
             binding.navView.visibility = View.GONE
-            binding.fragmentContainer.visibility = View.GONE
-            toolbar.visibility = View.GONE
+            binding.dashboard.visibility = View.GONE
         }
 
         binding.retry.setOnClickListener {
             if (checkForInternet(this)) {
-                binding.noInternetImage.visibility = View.GONE
-                binding.noInternetLayout.visibility = View.GONE
-                binding.fragmentContainer.visibility = View.VISIBLE
-                binding.navBottom.visibility = View.VISIBLE
+                binding.noInternet.visibility = View.GONE
                 binding.navView.visibility = View.VISIBLE
-                toolbar.visibility = View.VISIBLE
+                binding.dashboard.visibility = View.VISIBLE
             } else {
-                binding.noInternetImage.visibility = View.VISIBLE
-                binding.noInternetLayout.visibility = View.VISIBLE
-                binding.fragmentContainer.visibility = View.GONE
-                toolbar.visibility = View.GONE
+                binding.noInternet.visibility = View.VISIBLE
                 binding.navView.visibility = View.GONE
-                binding.navBottom.visibility = View.GONE
+                binding.dashboard.visibility = View.GONE
             }
         }
 

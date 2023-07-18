@@ -38,20 +38,21 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ServicesFragment(val userId:String, val isOwner : Boolean, val username : String) : Fragment(), BottomSheetServiceName.OnBottomSNClickListener {
+class ServicesFragment(val userId: String, val isOwner: Boolean, val username: String) : Fragment(),
+    BottomSheetServiceName.OnBottomSNClickListener {
 
-    lateinit var servicesRecycler : RecyclerView
+    lateinit var servicesRecycler: RecyclerView
     lateinit var profileServicesAdapter: ProfileServicesAdapter
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
-    lateinit var empty : TextView
-    lateinit var notPosted : ImageView
+    lateinit var empty: TextView
+    lateinit var notPosted: ImageView
 
     lateinit var addService: CardView
 
-    private var list:ArrayList<ProfileServicesDataItem> = ArrayList()
+    private var list: ArrayList<ProfileServicesDataItem> = ArrayList()
 
-    private var isLoading:Boolean = false
+    private var isLoading: Boolean = false
     private lateinit var progress: ProgressBar
     private var currentPage = 1
     var pageSize = 0
@@ -77,37 +78,37 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
         progress = view.findViewById(R.id.progress)
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
+
         profileServicesAdapter = ProfileServicesAdapter(list, requireContext(), isOwner)
         servicesRecycler.adapter = profileServicesAdapter
 
         addService = view.findViewById(R.id.addService)
-        if (!isOwner){
+        if (!isOwner) {
             addService.visibility = View.GONE
         }
 
-        servicesRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        servicesRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
-                {
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     isLoading = true;
                 }
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (dy > 0){
+                if (dy > 0) {
                     val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                     val currentItem = layoutManager.childCount
                     val totalItem = layoutManager.itemCount
-                    val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
+                    val scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                    if (isAdded && isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        if (currentPage > lastPage) {
-                            isLoading = false
-                            lastPage++
-                            getData()
-                        }
+                    if (isAdded && isLoading && (lastVisibleItemPosition == totalItem - 1)) {
+//                        if (currentPage > lastPage) {
+                        isLoading = false
+                        lastPage++
+                        getData()
+//                        }
                     }
                 }
             }
@@ -119,26 +120,30 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
         addService.setOnClickListener {
             val bottomSheet = BottomSheetServiceName()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetServiceName.SN_TAG)}
+            fragManager.let { bottomSheet.show(it, BottomSheetServiceName.SN_TAG) }
             bottomSheet.setOnSNclickListener(this)
         }
     }
+
     private fun getData() {
         val handler = Handler()
 
         progress.visibility = View.VISIBLE;
 
-        handler.postDelayed({
-            if (isAdded) {
-                getServices()
-                progress.visibility = View.GONE;
-            }
-        },
-            3000)
+        handler.postDelayed(
+            {
+                if (isAdded) {
+                    getServices()
+                    progress.visibility = View.GONE;
+                }
+            },
+            3000
+        )
     }
 
     private fun getServices() {
-        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
         val serviceG = RetrofitBuilder.ProfileApis.getProfileService(userId)
@@ -147,11 +152,11 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
                 call: Call<List<ProfileServicesDataItem>?>,
                 response: Response<List<ProfileServicesDataItem>?>
             ) {
-                if (isAdded){
-                    if (response.isSuccessful){
+                if (isAdded) {
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
 
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
+                    if (response.isSuccessful) {
 
                         Log.d("res", response.body().toString())
                         val response = response.body()!!
@@ -159,43 +164,52 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
                             try {
                                 list.addAll(response)
 
-                                if (response.size >= 10){
-                                    currentPage++
-                                }
+//                                if (response.size >= 10){
+                                currentPage++
+//                                }
 
                                 isLoading = false
 
-                                profileServicesAdapter =
-                                    ProfileServicesAdapter(response, requireContext(), isOwner)
-                                servicesRecycler.adapter = profileServicesAdapter
                                 profileServicesAdapter.notifyDataSetChanged()
                                 Log.d("res", response.toString())
-                            }catch (e:NullPointerException){
-                                Log.e("error",e.message.toString())
+                            } catch (e: NullPointerException) {
+                                if (currentPage == 1) {
+                                    Log.e("error", e.message.toString())
+                                    notPosted.visibility = View.VISIBLE
+                                    empty.visibility = View.VISIBLE
+                                    if (isOwner) {
+                                        empty.text = "You have not posted anything yet."
+                                    } else {
+                                        empty.text = "$username have not posted anything yet."
+                                    }
+                                }
                             }
 
                         } else {
-                            shimmerFrameLayout.stopShimmer()
-                            shimmerFrameLayout.visibility = View.GONE
-                            notPosted.visibility = View.VISIBLE
-                            empty.visibility = View.VISIBLE
-                            if (isOwner){
-                                empty.text = "You have not posted anything yet."
-                            } else {
-                                empty.text = "$username have not posted anything yet."
+                            if (currentPage == 1) {
+                                notPosted.visibility = View.VISIBLE
+                                empty.visibility = View.VISIBLE
+                                if (isOwner) {
+                                    empty.text = "You have not posted anything yet."
+                                } else {
+                                    empty.text = "$username have not posted anything yet."
+                                }
                             }
                         }
-                        } else {
-                        addService.visibility = View.GONE
-                        empty.visibility = View.VISIBLE
-                        empty.text = response.code().toString()
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
+                    } else {
+                        if (currentPage == 1) {
+                            addService.visibility = View.GONE
+                            empty.visibility = View.VISIBLE
+                            empty.text = response.code().toString()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                        }
                     }
-                    }
+                }
             }
+
             override fun onFailure(call: Call<List<ProfileServicesDataItem>?>, t: Throwable) {
-                if (isAdded){
+                if (isAdded) {
                     addService.visibility = View.GONE
                     empty.visibility = View.VISIBLE
                     empty.text = "${t.localizedMessage}"
@@ -205,6 +219,7 @@ class ServicesFragment(val userId:String, val isOwner : Boolean, val username : 
             }
         })
     }
+
     override fun bottomSNClick(serviceName: String) {
 
     }
