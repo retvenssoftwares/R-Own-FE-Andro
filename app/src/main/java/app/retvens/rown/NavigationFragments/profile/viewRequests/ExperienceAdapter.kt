@@ -14,7 +14,7 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import retrofit2.Callback
 
-class ExperienceAdapter(val context: Context, val list:UserProfileRequestItem) : RecyclerView.Adapter<ExperienceAdapter.MediaViewHolder>() {
+class ExperienceAdapter(val context: Context, val list:UserProfileRequestItem, val isOwner : Boolean) : RecyclerView.Adapter<ExperienceAdapter.MediaViewHolder>() {
 
     var mListener: OnBottomSheetFilterCommunityClickListener? = null
 
@@ -51,6 +51,9 @@ class ExperienceAdapter(val context: Context, val list:UserProfileRequestItem) :
 
        val data = list.normalUserInfo[position]
 
+        if (!isOwner){
+            holder.edit.visibility = View.GONE
+        }
 
         holder.company.text = data.jobCompany
         holder.timeLine.text = "${data.jobStartYear}-${data.jobEndYear}"

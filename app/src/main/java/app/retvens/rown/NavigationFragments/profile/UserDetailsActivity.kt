@@ -31,6 +31,9 @@ class UserDetailsActivity : AppCompatActivity(),
     private lateinit var company:TextInputEditText
     private lateinit var disignation:TextInputEditText
 
+    var isOwner = true
+    var user_id = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
@@ -39,6 +42,20 @@ class UserDetailsActivity : AppCompatActivity(),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             window.statusBarColor = Color.TRANSPARENT
+        }
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val isViewer = intent.getStringExtra("viewer")
+        val userID = intent.getStringExtra("userID")
+        if (isViewer == "viewer"){
+            binding.addExperience.visibility = View.GONE
+            binding.addEducation.visibility = View.GONE
+            isOwner = false
+            getProfile(userID!!)
+        } else {
+            getProfile(user_id)
         }
 
         binding.communityDetailBackBtn.setOnClickListener{ onBackPressed() }
@@ -63,14 +80,9 @@ class UserDetailsActivity : AppCompatActivity(),
         binding.recyclerEducation.layoutManager = LinearLayoutManager(this)
         binding.recyclerEducation.setHasFixedSize(true)
 
-        getProfile()
-
     }
 
-    private fun getProfile() {
-
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
+    private fun getProfile(user_id : String) {
 
         val fetchUser = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
 
@@ -89,7 +101,13 @@ class UserDetailsActivity : AppCompatActivity(),
                 if (response.isSuccessful){
                     try {
                         val response = response.body()!!
-                        experienceAdapter = ExperienceAdapter(applicationContext,response)
+                        if (response.normalUserInfo.isEmpty()){
+                            binding.expError.visibility = View.VISIBLE
+                        }
+                        if (response.studentEducation.isEmpty()){
+                            binding.eduError.visibility = View.VISIBLE
+                        }
+                        experienceAdapter = ExperienceAdapter(applicationContext,response, isOwner)
                         binding.recyclerExperience.adapter = experienceAdapter
                         experienceAdapter.notifyDataSetChanged()
                         experienceAdapter.setOnFilterClickListener(this)
@@ -105,7 +123,7 @@ class UserDetailsActivity : AppCompatActivity(),
                         binding.username.text = response.User_name
                         binding.bio.text = response.userBio
 
-                        educationAdapter = EducationAdapter(applicationContext,response)
+                        educationAdapter = EducationAdapter(applicationContext,response, isOwner)
                         binding.recyclerEducation.adapter = educationAdapter
                         educationAdapter.notifyDataSetChanged()
                         educationAdapter.setOnFilterClickListener(this)
@@ -156,11 +174,11 @@ class UserDetailsActivity : AppCompatActivity(),
             }
 
             override fun bottomEditClick() {
-                getProfile()
+                getProfile(user_id)
             }
 
             override fun bottomEditEdClick() {
-                getProfile()
+                getProfile(user_id)
             }
 
 
@@ -172,10 +190,10 @@ class UserDetailsActivity : AppCompatActivity(),
 
 
     override fun bottomEditClick() {
-        getProfile()
+        getProfile(user_id)
     }
 
     override fun bottomEditEdClick() {
-        getProfile()
+        getProfile(user_id)
     }
 }

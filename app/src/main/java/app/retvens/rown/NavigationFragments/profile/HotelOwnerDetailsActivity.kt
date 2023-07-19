@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.profile
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.UserProfileRequestItem
@@ -23,17 +24,24 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.communityDetailBackBtn.setOnClickListener { onBackPressed() }
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        getProfile()
-        getHotel()
+        val isViewer = intent.getStringExtra("viewer")
+        val userID = intent.getStringExtra("userID")
+        if (isViewer == "viewer"){
+            getProfile(userID!!)
+            getHotel(userID)
+        } else {
+            getProfile(user_id)
+            getHotel(user_id)
+        }
 
         binding.propertyRecycler.layoutManager = LinearLayoutManager(this)
         binding.propertyRecycler.setHasFixedSize(true)
     }
 
-    private fun getHotel() {
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
+    private fun getHotel(user_id : String) {
 
         val getHotel = RetrofitBuilder.ProfileApis.getProfileHotels(user_id,user_id)
 
@@ -61,9 +69,7 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
         })
     }
 
-    private fun getProfile() {
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
+    private fun getProfile(user_id: String) {
 
         val fetchUser = RetrofitBuilder.retrofitBuilder.fetchUser(user_id)
 

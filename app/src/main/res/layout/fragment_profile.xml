@@ -201,6 +201,34 @@
         app:layout_constraintTop_toBottomOf="@id/userName"
         app:layout_constraintStart_toStartOf="@id/profile"/>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/viewPP"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/bio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/lll2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textAlignment="center"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="10dp"
+                android:background="@drawable/border"
+                android:text="VIEW PROFESSIONAL PROFILE"/>
+
+        </androidx.cardview.widget.CardView>
+
         <LinearLayout
             android:id="@+id/lll2"
             android:layout_width="match_parent"
@@ -209,7 +237,7 @@
             android:weightSum="3"
             android:layout_marginTop="12dp"
             android:background="@color/grey_5"
-            app:layout_constraintTop_toBottomOf="@id/bio"
+            app:layout_constraintTop_toBottomOf="@id/viewPP"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 

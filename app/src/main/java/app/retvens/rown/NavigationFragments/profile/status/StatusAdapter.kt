@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.profile.status
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.text.Html
 import android.util.ArraySet
 import android.util.Log
 import android.view.LayoutInflater
@@ -124,7 +125,24 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 } else{
                     layoutOneViewHolder.name.text = item.Full_name
                 }
-                layoutOneViewHolder.status.text = item.caption
+
+                if (item.caption.lines().size > 4) {
+                    layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/4) + "..." + "<font color='blue'> <u>View More</u></font>")
+                } else {
+                    layoutOneViewHolder.status.text = item.caption
+                }
+                layoutOneViewHolder.status.setOnClickListener {
+                    if (layoutOneViewHolder.status.text.toString().endsWith("View More")) {
+                        layoutOneViewHolder.status.text = item.caption
+                    } else {
+                        if (item.caption.lines().size > 4) {
+                            layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/4) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        } else {
+                            layoutOneViewHolder.status.text = item.caption
+                        }
+                    }
+                }
+//                layoutOneViewHolder.status.text = item.caption
 
                 if (item.Profile_pic.isNotEmpty()) {
                     Glide.with(context).load(item.Profile_pic).into(layoutOneViewHolder.postProfile)
@@ -189,7 +207,23 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 } else{
                     layoutTwoViewHolder.username.text = item.Full_name
                 }
-                layoutTwoViewHolder.caption.text = item.caption
+
+                if (item.caption.lines().size > 3) {
+                    layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                } else {
+                    layoutTwoViewHolder.caption.text = item.caption
+                }
+                layoutTwoViewHolder.caption.setOnClickListener {
+                    if (layoutTwoViewHolder.caption.text.toString().endsWith("View More")) {
+                        layoutTwoViewHolder.caption.text = item.caption
+                    } else {
+                        if (item.caption.lines().size > 3) {
+                            layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        } else {
+                            layoutTwoViewHolder.caption.text = item.caption
+                        }
+                    }
+                }
                 try {
                     layoutTwoViewHolder.book.setOnClickListener {
                         val uri : Uri = Uri.parse("https://${item.bookingengineLink}")
