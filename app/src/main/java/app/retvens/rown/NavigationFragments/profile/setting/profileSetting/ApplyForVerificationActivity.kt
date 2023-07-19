@@ -135,13 +135,14 @@ class ApplyForVerificationActivity : AppCompatActivity() {
     }
     private fun checkVerification(user_id: String) {
 
+        Log.e("user",user_id)
+
         val check = RetrofitBuilder.profileCompletion.appliedFor(user_id)
         check.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-
                 try {
                     Log.d("check------------------------", "${response.body()!!.message} ${response.code().toString()}")
                 Toast.makeText(this@ApplyForVerificationActivity, "${response.body()!!.message} ", Toast.LENGTH_SHORT).show()
@@ -155,6 +156,8 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                         binding.alreadyApplied.visibility = View.VISIBLE
                     }
                     Toast.makeText(applicationContext, "${response.body()!!.message}", Toast.LENGTH_SHORT).show()
+                }else{
+                    Log.e("error",response.code().toString())
                 }
             }
 
@@ -162,6 +165,8 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "${t.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         })
+
+
     }
 
     private fun upload(user_id: String) {
