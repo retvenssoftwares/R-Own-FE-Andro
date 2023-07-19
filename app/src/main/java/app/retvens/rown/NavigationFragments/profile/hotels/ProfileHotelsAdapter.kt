@@ -73,15 +73,41 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
         }
 
         holder.edit.setOnClickListener {
-            val intent = Intent(context, EditHotelDetailsActivity::class.java)
-            intent.putExtra("name", listS[position].hotelName)
-            intent.putExtra("hotelId", listS[position].hotel_id)
-            intent.putExtra("location", listS[position].hotelAddress)
-            intent.putExtra("hotelDescription",listS[position].Hoteldescription)
-//            intent.putExtra("img1",listS[position].gallery[0].Image1)
-//            intent.putExtra("img2",listS[position].gallery[0].Image2)
-//            intent.putExtra("img3",listS[position].gallery[0].Image3)
-            context.startActivity(intent)
+            if (listS[position].gallery.size == 3){
+                val intent = Intent(context, EditHotelDetailsActivity::class.java)
+                intent.putExtra("name", listS[position].hotelName)
+                intent.putExtra("hotelId", listS[position].hotel_id)
+                intent.putExtra("location", listS[position].hotelAddress)
+                intent.putExtra("hotelDescription",listS[position].Hoteldescription)
+                intent.putExtra("img1",listS[position].gallery[0].Image1)
+                intent.putExtra("img2",listS[position].gallery[0].Image2)
+                intent.putExtra("img3",listS[position].gallery[0].Image3)
+                context.startActivity(intent)
+            } else if (listS[position].gallery.size == 2){
+                val intent = Intent(context, EditHotelDetailsActivity::class.java)
+                intent.putExtra("name", listS[position].hotelName)
+                intent.putExtra("hotelId", listS[position].hotel_id)
+                intent.putExtra("location", listS[position].hotelAddress)
+                intent.putExtra("hotelDescription",listS[position].Hoteldescription)
+                intent.putExtra("img1",listS[position].gallery[0].Image1)
+                intent.putExtra("img2",listS[position].gallery[0].Image2)
+                context.startActivity(intent)
+            }  else if (listS[position].gallery.size == 1){
+                val intent = Intent(context, EditHotelDetailsActivity::class.java)
+                intent.putExtra("name", listS[position].hotelName)
+                intent.putExtra("hotelId", listS[position].hotel_id)
+                intent.putExtra("location", listS[position].hotelAddress)
+                intent.putExtra("hotelDescription",listS[position].Hoteldescription)
+                intent.putExtra("img1",listS[position].gallery[0].Image1)
+                context.startActivity(intent)
+            }  else {
+                val intent = Intent(context, EditHotelDetailsActivity::class.java)
+                intent.putExtra("name", listS[position].hotelName)
+                intent.putExtra("hotelId", listS[position].hotel_id)
+                intent.putExtra("location", listS[position].hotelAddress)
+                intent.putExtra("hotelDescription",listS[position].Hoteldescription)
+                context.startActivity(intent)
+            }
         }
 
         holder.del.setOnClickListener {
