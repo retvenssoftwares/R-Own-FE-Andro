@@ -195,6 +195,8 @@
             android:hint="What do you want to share today ?"
             android:textColorHint="@color/grey_40"
             android:textColor="@color/black"
+            android:maxLines="8"
+            android:maxLength="2000"
             style="@style/TextAppearance.AppCompat.Body1"
             android:background="@null"
             android:padding="12dp"

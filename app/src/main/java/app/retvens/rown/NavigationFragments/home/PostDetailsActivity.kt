@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -261,7 +262,9 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
     fun getTrimmedText(text: String, charLimit: Int, suffix: String): String {
         return if (text.length > charLimit) {
-            text.substring(0, charLimit) + " $suffix"
+//           val txt = Html.fromHtml(text.substring(0, charLimit) + "..." + "<font color='blue'> <u>$suffix</u></font>")
+//            txt.toString()
+                text.substring(0, charLimit) + "... " + suffix
         } else {
             text
         }

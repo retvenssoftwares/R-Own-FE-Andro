@@ -54,6 +54,7 @@ var phone = ""
 var profileImage = ""
 var verificationStatus = ""
 var connectionCount = "1"
+var serverCode = 0
 var isBS:Boolean = true
 
 fun dateFormat(date : String) : String {
@@ -314,7 +315,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
                 val response = response.body()!!
                 onClick.invoke()
             }else{
-
+                serverCode = response.code()
             }
         }
 
@@ -342,6 +343,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
                 onClick.invoke()
 //                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
             }else{
+                serverCode = response.code()
 //                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
             }
         }
@@ -385,9 +387,10 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
                         saveProfileImage(context, "${response.Profile_pic}")
                     }
                 } else {
+                    serverCode = response.code()
 //                    Toast.makeText(
 //                        context,
-//                        response.code().toString(),
+//                        .toString(),
 //                        Toast.LENGTH_SHORT
 //                    ).show()
                 }
@@ -424,6 +427,7 @@ fun getSelfUserProfile(userId: String, userId1: String, context: Context) {
 //                    Toast.makeText(applicationContext, response.data.connCountLength.toString(), Toast.LENGTH_SHORT)
 //                        .show()
             }else{
+                serverCode = response.code()
 //                    Toast.makeText(requireContext(),response.code(),Toast.LENGTH_SHORT).show()
             }
         }

@@ -36,6 +36,7 @@ import app.retvens.rown.utils.connectionCount
 import app.retvens.rown.utils.getProfileInfo
 import app.retvens.rown.utils.isBS
 import app.retvens.rown.utils.profileImage
+import app.retvens.rown.utils.serverCode
 import app.retvens.rown.viewAll.communityDetails.ViewAllCommmunitiesActivity
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import com.bumptech.glide.Glide
@@ -411,6 +412,7 @@ class HomeFragment : Fragment() {
                             empty.visibility = View.VISIBLE
                         }
                     } else {
+                        serverCode = response.code()
                         empty.visibility = View.VISIBLE
                         empty.text = response.code().toString()
                         shimmerFrameLayout2.stopShimmer()
@@ -455,6 +457,7 @@ class HomeFragment : Fragment() {
                     }
                 } else {
                     if (isAdded) {
+                        serverCode = response.code()
 //                        Toast.makeText(
 //                            requireContext(),
 //                            response.code().toString(),

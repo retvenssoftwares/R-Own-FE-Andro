@@ -6,6 +6,7 @@ import android.net.Uri
 import android.opengl.Visibility
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -427,7 +428,24 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
 //            Log.e("username",post.User_name)
-            binding.recentCommentByUser.text = post.caption
+//            binding.recentCommentByUser.text = post.caption
+            if (banner.caption.length > 150) {
+                binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+            } else {
+                binding.recentCommentByUser.text = banner.caption
+            }
+            binding.recentCommentByUser.setOnClickListener {
+                if (binding.recentCommentByUser.text.toString().endsWith("View More")) {
+                    binding.recentCommentByUser.text = banner.caption
+                } else {
+                    if (banner.caption.length > 150) {
+                        binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    } else {
+                        binding.recentCommentByUser.text = banner.caption
+                    }
+                }
+            }
+
 //            Log.e("caption",post.caption)
             binding.userNamePost.text = post.Full_name
 
@@ -603,6 +621,24 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.userNamePost.text = banner.Full_name
 
             binding.titleStatus.text = banner.caption
+
+            if (banner.caption.lines().size > 3) {
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+            } else {
+                binding.titleStatus.text = banner.caption
+            }
+            binding.titleStatus.setOnClickListener {
+                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                    binding.titleStatus.text = banner.caption
+                } else {
+                    if (banner.caption.lines().size > 3) {
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    } else {
+                        binding.titleStatus.text = banner.caption
+                    }
+                }
+            }
+
             if (banner.Profile_pic.isNotEmpty()) {
                 Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
             } else {
@@ -730,7 +766,23 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.userNamePost.text = banner.Full_name
             binding.location.text = banner.User_name
 
-            binding.titleStatus.text = banner.caption
+            if (banner.caption.length > 150) {
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+            } else {
+                binding.titleStatus.text = banner.caption
+            }
+            binding.titleStatus.setOnClickListener {
+                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                    binding.titleStatus.text = banner.caption
+                } else {
+                    if (banner.caption.length > 150) {
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    } else {
+                        binding.titleStatus.text = banner.caption
+                    }
+                }
+            }
+
 
 //            if (banner.Profile_pic.isNotEmpty()) {
 //                Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
@@ -872,7 +924,24 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //            if (post.location.isNotEmpty()) {
             binding.userNamePost.text = post.Full_name
             binding.postUserType.text = post.User_name
-            binding.titleStatus.text = post.caption
+
+            if (banner.caption.length > 150) {
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+            } else {
+                binding.titleStatus.text = banner.caption
+            }
+            binding.titleStatus.setOnClickListener {
+                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                    binding.titleStatus.text = banner.caption
+                } else {
+                    if (banner.caption.length > 150) {
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    } else {
+                        binding.titleStatus.text = banner.caption
+                    }
+                }
+            }
+
 //            } else {
 //            binding.postUserDominican.text = post.hotelAddress
 //            }
@@ -1055,7 +1124,23 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.userNamePost.text = post.Full_name
             binding.postUserType.text = post.User_name
-            binding.titleStatus.text = post.caption
+
+            if (banner.caption.length > 150) {
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+            } else {
+                binding.titleStatus.text = banner.caption
+            }
+            binding.titleStatus.setOnClickListener {
+                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                    binding.titleStatus.text = banner.caption
+                } else {
+                    if (banner.caption.length > 150) {
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    } else {
+                        binding.titleStatus.text = banner.caption
+                    }
+                }
+            }
 
             if (post.media.isNotEmpty()) {
                 Glide.with(context).load(post.media.get(0).post).into(binding.eventImage)
@@ -1105,7 +1190,23 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.userNamePost.text = post.Full_name
             binding.postUserType.text = post.User_name
-            binding.titleStatus.text = post.caption
+
+            if (banner.caption.length > 150) {
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+            } else {
+                binding.titleStatus.text = banner.caption
+            }
+            binding.titleStatus.setOnClickListener {
+                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                    binding.titleStatus.text = banner.caption
+                } else {
+                    if (banner.caption.length > 150) {
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    } else {
+                        binding.titleStatus.text = banner.caption
+                    }
+                }
+            }
 
             if (post.media.isNotEmpty()) {
                 Glide.with(context).load(post.media.get(0).post).into(binding.eventImage)

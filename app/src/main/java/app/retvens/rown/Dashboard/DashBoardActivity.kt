@@ -95,18 +95,47 @@ class DashBoardActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         startAnimation()
 
-        Thread {
-            // Run whatever background code you want here.
-            replaceFragment(HomeFragment())
-        }.start()
+//        Thread {
+//            // Run whatever background code you want here.
+//            replaceFragment(HomeFragment())
+//        }.start()
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         //setUp drawerLayout
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
 
+        if (serverCode == 502){
+            binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
+            binding.noInternet.visibility = View.VISIBLE
+            binding.noInternetLayout.visibility = View.GONE
+            binding.navView.visibility = View.GONE
+            binding.dashboard.visibility = View.GONE
+        } else {
+            binding.noInternet.visibility = View.GONE
+            binding.navView.visibility = View.VISIBLE
+            binding.dashboard.visibility = View.VISIBLE
+            if (replace){
+                replaceFragment(HomeFragment())
+            }
+        }
+
         checkNetworkConnection = CheckNetworkConnection(application)
         checkNetworkConnection.observe(this) { isConnected ->
+            if (serverCode == 502){
+                binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
+                binding.noInternet.visibility = View.VISIBLE
+                binding.noInternetLayout.visibility = View.GONE
+                binding.navView.visibility = View.GONE
+                binding.dashboard.visibility = View.GONE
+            } else {
+                binding.noInternet.visibility = View.GONE
+                binding.navView.visibility = View.VISIBLE
+                binding.dashboard.visibility = View.VISIBLE
+                if (replace){
+                    replaceFragment(HomeFragment())
+                }
+            }
             if (isConnected) {
                 binding.noInternet.visibility = View.GONE
                 binding.navView.visibility = View.VISIBLE

@@ -27,6 +27,8 @@ import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataCla
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
+import app.retvens.rown.NavigationFragments.profile.HotelOwnerDetailsActivity
+import app.retvens.rown.NavigationFragments.profile.UserDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.events.EventsProfileFragment
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsFragmentProfile
 import app.retvens.rown.NavigationFragments.profile.jobs.JobsOnProfileFragment
@@ -39,6 +41,8 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRAct
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetSharePost
+import app.retvens.rown.utils.acceptRequest
+import app.retvens.rown.utils.rejectConnRequest
 import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
@@ -81,6 +85,10 @@ class OwnerProfileActivity : AppCompatActivity() {
     var userName = ""
     var role = ""
 
+    private lateinit var progressDialog:Dialog
+
+    lateinit var viewPP: CardView
+
     var selected = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +104,8 @@ class OwnerProfileActivity : AppCompatActivity() {
         reject = findViewById(R.id.reject)
         rejectCard = findViewById(R.id.openReview)
 
+        viewPP = findViewById(R.id.viewPP)
+
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
 
         postCount = findViewById(R.id.posts_count)
@@ -103,6 +113,14 @@ class OwnerProfileActivity : AppCompatActivity() {
         connStatus = findViewById(R.id.connStatus)
         card_message = findViewById(R.id.card_message)
 
+        progressDialog = Dialog(this)
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
 
         val userID = intent.getStringExtra("userId").toString()
 
@@ -151,26 +169,62 @@ class OwnerProfileActivity : AppCompatActivity() {
                 removeConnection(userID,user_id, applicationContext){
                     connStatus.text = "CONNECT"
                     card_message.visibility = View.GONE
+                    viewPP.visibility = View.GONE
+
+                    rejectCard.visibility = View.VISIBLE
+                    reject.text = "VIEW PROFESSIONAL PROFILE"
                 }
 
             } else if (connStatus.text == "CONNECT") {
 
                 sendConnectionRequest(userID, applicationContext){
                     connStatus.text = "Requested"
+                    viewPP.visibility = View.GONE
+
+                    rejectCard.visibility = View.VISIBLE
+                    reject.text = "VIEW PROFESSIONAL PROFILE"
                 }
 
             } else  if (connStatus.text == "Requested") {
 
                 removeConnRequest(userID, applicationContext){
                     connStatus.text = "CONNECT"
+                    viewPP.visibility = View.GONE
+
+                    rejectCard.visibility = View.VISIBLE
+                    reject.text = "VIEW PROFESSIONAL PROFILE"
                 }
 
-            } else if (connStatus.text == "Accept Connection") {
-                connStatus.text = "Remove"
+            } else if (connStatus.text == "Accept") {
+                acceptRequest(userID, applicationContext){
+                    connStatus.text = "Remove"
 
-                rejectCard.visibility = View.GONE
-                card_message.visibility = View.VISIBLE
+                    rejectCard.visibility = View.GONE
+                    card_message.visibility = View.VISIBLE
+                    viewPP.visibility = View.VISIBLE
+                }
             }
+        }
+
+        rejectCard.setOnClickListener {
+            if (reject.text == "REJECT") {
+                rejectConnRequest(userID, applicationContext) {
+                    rejectCard.visibility = View.GONE
+                    connStatus.text = "CONNECT"
+                }
+            } else {
+                val intent = Intent(this, HotelOwnerDetailsActivity::class.java)
+                intent.putExtra("viewer", "viewer")
+                intent.putExtra("userID", userID)
+                startActivity(intent)
+            }
+        }
+
+        viewPP.setOnClickListener {
+            val intent = Intent(this, HotelOwnerDetailsActivity::class.java)
+            intent.putExtra("viewer", "viewer")
+            intent.putExtra("userID", userID)
+            startActivity(intent)
         }
 
         websiteLink.setOnClickListener{
@@ -331,6 +385,7 @@ class OwnerProfileActivity : AppCompatActivity() {
                 call: Call<OwnerProfileDataClass?>,
                 response: Response<OwnerProfileDataClass?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     profilePic = response.profiledata.Profile_pic
@@ -372,20 +427,28 @@ class OwnerProfileActivity : AppCompatActivity() {
                     if (response.connectionStatus == "Connected"){
                         connStatus.text = "Remove"
                         card_message.visibility = View.VISIBLE
+                        viewPP.visibility = View.VISIBLE
                     }else if (response.connectionStatus == "Not connected"){
                         connStatus.text = "CONNECT"
+
+                        rejectCard.visibility = View.VISIBLE
+                        reject.text = "VIEW PROFESSIONAL PROFILE"
                     }else if (response.connectionStatus ==  "Confirm request"){
                         connStatus.text = "Accept"
+                        viewPP.visibility = View.VISIBLE
+
                         rejectCard.visibility = View.VISIBLE
                         reject.text = "REJECT"
                     } else{
                         connStatus.text = response.connectionStatus
+                        rejectCard.visibility = View.VISIBLE
+                        reject.text = "VIEW PROFESSIONAL PROFILE"
                     }
                 }
             }
 
             override fun onFailure(call: Call<OwnerProfileDataClass?>, t: Throwable) {
-
+                progressDialog.dismiss()
             }
         })
     }

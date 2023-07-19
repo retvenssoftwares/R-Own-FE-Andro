@@ -42,6 +42,7 @@ import app.retvens.rown.utils.removeConnRequest
 import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import app.retvens.rown.utils.showFullImage
+import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -70,6 +71,7 @@ class VendorProfileActivity : AppCompatActivity() {
     lateinit var reject:TextView
     lateinit var rejectCard: CardView
     lateinit var card_message: CardView
+    lateinit var viewPP: CardView
 
     var created = ""
     var location = ""
@@ -98,6 +100,7 @@ class VendorProfileActivity : AppCompatActivity() {
 
         reject = findViewById(R.id.reject)
         rejectCard = findViewById(R.id.openReview)
+        viewPP = findViewById(R.id.viewPP)
 
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
@@ -135,6 +138,12 @@ class VendorProfileActivity : AppCompatActivity() {
                 transaction.commit()
             }
             refresh.isRefreshing = false
+        }
+
+        viewPP.setOnClickListener {
+            val intent = Intent(applicationContext, VendorDetailsActivity::class.java)
+            intent.putExtra("user_id", userId)
+            startActivity(intent)
         }
 
         getUserPofile(userId,user_id)

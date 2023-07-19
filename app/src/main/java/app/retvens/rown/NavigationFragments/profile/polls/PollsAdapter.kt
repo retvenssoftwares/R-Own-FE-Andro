@@ -33,8 +33,6 @@ import java.lang.IndexOutOfBoundsException
 
 class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val UserID:String) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
 
-    private  var option:ArrayList<app.retvens.rown.DataCollections.FeedCollection.Option> = ArrayList()
-
     class PollsViewHolder(itemView: View) : ViewHolder(itemView){
         val checkVotes = itemView.findViewById<CardView>(R.id.checkVotes)
         val name = itemView.findViewById<TextView>(R.id.user_name_post)
@@ -57,6 +55,8 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
     }
 
     override fun onBindViewHolder(holder: PollsViewHolder, position: Int) {
+
+        var option:ArrayList<app.retvens.rown.DataCollections.FeedCollection.Option> = ArrayList()
 
         val poll = pollList[position]
 

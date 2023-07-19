@@ -27,6 +27,7 @@ import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
+import app.retvens.rown.NavigationFragments.profile.UserDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.AboutProfileActivity
@@ -65,6 +66,7 @@ class UserProfileActivity : AppCompatActivity() {
 
     lateinit var connStatus:TextView
     lateinit var reject:TextView
+    lateinit var viewPP: CardView
     lateinit var rejectCard: CardView
     lateinit var card_message: CardView
 
@@ -79,6 +81,8 @@ class UserProfileActivity : AppCompatActivity() {
     var userrole = ""
 
     var selected = 1
+
+    private lateinit var progressDialog:Dialog
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +99,7 @@ class UserProfileActivity : AppCompatActivity() {
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
+        viewPP = findViewById(R.id.viewPP)
         reject = findViewById(R.id.reject)
         rejectCard = findViewById(R.id.openReview)
 
@@ -109,6 +114,14 @@ class UserProfileActivity : AppCompatActivity() {
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
 
+        progressDialog = Dialog(this)
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
 
         val userID = intent.getStringExtra("userId").toString()
 //        connStat = intent.getStringExtra("status").toString()
@@ -157,18 +170,30 @@ class UserProfileActivity : AppCompatActivity() {
                 removeConnection(userID,user_id, applicationContext){
                     connStatus.text = "CONNECT"
                     card_message.visibility = View.GONE
+                    viewPP.visibility = View.GONE
+
+                    rejectCard.visibility = View.VISIBLE
+                    reject.text = "VIEW PROFESSIONAL PROFILE"
                 }
 
             } else if (connStatus.text == "CONNECT") {
 
                 sendConnectionRequest(userID, applicationContext){
                     connStatus.text = "Requested"
+                    viewPP.visibility = View.GONE
+
+                    rejectCard.visibility = View.VISIBLE
+                    reject.text = "VIEW PROFESSIONAL PROFILE"
                 }
 
             } else  if (connStatus.text == "Requested") {
 
                 removeConnRequest(userID, applicationContext){
                     connStatus.text = "CONNECT"
+                    viewPP.visibility = View.GONE
+
+                    rejectCard.visibility = View.VISIBLE
+                    reject.text = "VIEW PROFESSIONAL PROFILE"
                 }
 
             } else if (connStatus.text == "Accept") {
@@ -178,16 +203,31 @@ class UserProfileActivity : AppCompatActivity() {
 
                     rejectCard.visibility = View.GONE
                     card_message.visibility = View.VISIBLE
+                    viewPP.visibility = View.VISIBLE
                 }
 
             }
         }
 
         rejectCard.setOnClickListener {
-            rejectConnRequest(userID, applicationContext){
-                rejectCard.visibility = View.GONE
-                connStatus.text = "CONNECT"
+            if (reject.text == "REJECT") {
+                rejectConnRequest(userID, applicationContext) {
+                    rejectCard.visibility = View.GONE
+                    connStatus.text = "CONNECT"
+                }
+            } else {
+                val intent = Intent(this, UserDetailsActivity::class.java)
+                intent.putExtra("viewer", "viewer")
+                intent.putExtra("userID", userID)
+                startActivity(intent)
             }
+        }
+
+        viewPP.setOnClickListener {
+                val intent = Intent(this, UserDetailsActivity::class.java)
+                intent.putExtra("viewer", "viewer")
+                intent.putExtra("userID", userID)
+                startActivity(intent)
         }
 
         polls.setOnClickListener {
@@ -297,6 +337,8 @@ class UserProfileActivity : AppCompatActivity() {
                     val response = response.body()!!
                     profilePic = response.data.profile.Profile_pic
 
+                    progressDialog.dismiss()
+
                     if (profilePic.isNotEmpty()){
                         Glide.with(applicationContext).load(response.data.profile.Profile_pic).into(profile)
                     } else {
@@ -333,24 +375,33 @@ class UserProfileActivity : AppCompatActivity() {
                     if (verification != "false"){
                         verificationS.visibility = View.VISIBLE
                     }
-                    Toast.makeText(applicationContext,response.data.connectionStatus,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.data.connectionStatus,Toast.LENGTH_SHORT).show()
 
                     if (response.data.connectionStatus == "Connected"){
                         connStatus.text = "Remove"
                         card_message.visibility = View.VISIBLE
+                        viewPP.visibility = View.VISIBLE
                         connStat = "Connected"
                     }else if (response.data.connectionStatus == "Not connected"){
                         connStatus.text = "CONNECT"
                         connStat = "Not Connected"
+
+                        rejectCard.visibility = View.VISIBLE
+                        reject.text = "VIEW PROFESSIONAL PROFILE"
                     }else if (response.data.connectionStatus ==  "Confirm request"){
                         connStatus.text = "Accept"
                         connStat = "Confirm request"
+
+                        viewPP.visibility = View.VISIBLE
 
                         rejectCard.visibility = View.VISIBLE
                         reject.text = "REJECT"
                     } else{
                         connStat = response.data.connectionStatus
                         connStatus.text = response.data.connectionStatus
+
+                        rejectCard.visibility = View.VISIBLE
+                        reject.text = "VIEW PROFESSIONAL PROFILE"
                     }
                 }
             }

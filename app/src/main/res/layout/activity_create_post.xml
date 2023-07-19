@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="@color/white"
     tools:context=".Dashboard.createPosts.CreatePostActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/relative"
@@ -173,8 +178,6 @@
     </LinearLayout>
 
 
-
-
     <androidx.cardview.widget.CardView
         android:id="@+id/whatDY"
         android:layout_width="match_parent"
@@ -194,6 +197,8 @@
             android:hint="What do you want to share today ?"
             android:textColorHint="@color/grey_40"
             android:textColor="@color/black"
+            android:maxLines="8"
+            android:maxLength="2000"
             style="@style/TextAppearance.AppCompat.Body1"
             android:background="@null"
             android:padding="12dp"
@@ -443,4 +448,6 @@
 
 <!--    </androidx.cardview.widget.CardView>-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

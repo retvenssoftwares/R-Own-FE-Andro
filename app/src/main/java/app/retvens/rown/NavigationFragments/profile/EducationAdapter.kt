@@ -21,7 +21,7 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class EducationAdapter(val context: Context, val list:UserProfileRequestItem) : RecyclerView.Adapter<EducationAdapter.MediaViewHolder>() {
+class EducationAdapter(val context: Context, val list:UserProfileRequestItem, val isOwner : Boolean) : RecyclerView.Adapter<EducationAdapter.MediaViewHolder>() {
 
 
     var mListener: OnBottomSheetFilterCommunityClickListener? = null
@@ -60,6 +60,9 @@ class EducationAdapter(val context: Context, val list:UserProfileRequestItem) : 
             holder.collage.text = data.educationPlace
             holder.experience.text = "${data.education_session_start}-${data.education_session_end}"
 
+        if (!isOwner){
+            holder.edit.visibility = View.GONE
+        }
 
         holder.edit.setOnClickListener {
             mListener?.onBottomSheetFilterCommunityClick(data,position)
