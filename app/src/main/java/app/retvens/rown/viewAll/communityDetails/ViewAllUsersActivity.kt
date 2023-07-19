@@ -97,22 +97,22 @@ class ViewAllUsersActivity : AppCompatActivity() {
                     }
 
                     if (user == "All businesses"){
-                        userDetailsAdapter = UserDetailsAdapter(this@ViewAllUsersActivity, ownerList)
+                        userDetailsAdapter = UserDetailsAdapter(this@ViewAllUsersActivity, ownerList,response.Admin)
                         recycler.adapter = userDetailsAdapter
                         userDetailsAdapter.notifyDataSetChanged()
                         userDetailsAdapter.setOnItemClickListener(this)
                     } else if (user == "Vendors") {
-                        vendorDetailsAdapter = VendorDetailsAdapter(this@ViewAllUsersActivity, vendorList)
+                        vendorDetailsAdapter = VendorDetailsAdapter(this@ViewAllUsersActivity, vendorList,response.Admin)
                         recycler.adapter = vendorDetailsAdapter
                         vendorDetailsAdapter.notifyDataSetChanged()
                         vendorDetailsAdapter.setOnItemClickListener(this)
                     } else if (user == "Hoteliers") {
-                        expertDetailsAdapter = ExpertDetailsAdapter(this@ViewAllUsersActivity, expertList)
+                        expertDetailsAdapter = ExpertDetailsAdapter(this@ViewAllUsersActivity, expertList,response.Admin)
                         recycler.adapter = expertDetailsAdapter
                         expertDetailsAdapter.notifyDataSetChanged()
                         expertDetailsAdapter.setOnItemClickListener(this)
                     } else if (user == "Others") {
-                        normalUserDetailsAdapter = NormalUserDetailsAdapter(this@ViewAllUsersActivity, userList)
+                        normalUserDetailsAdapter = NormalUserDetailsAdapter(this@ViewAllUsersActivity, userList,response.Admin)
                         recycler.adapter = normalUserDetailsAdapter
                         normalUserDetailsAdapter.notifyDataSetChanged()
                         normalUserDetailsAdapter.setOnItemClickListener(this)
@@ -129,7 +129,7 @@ class ViewAllUsersActivity : AppCompatActivity() {
                 Log.e("error",t.message.toString())
             }
 
-            override fun onItemClick(member: User) {
+            override fun onItemClick(member: User,admin:String) {
                 Log.e("1","working")
                 openBottomSelectionCommunity(member.user_id,member.address)
 

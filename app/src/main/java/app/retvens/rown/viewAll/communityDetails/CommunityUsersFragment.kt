@@ -18,6 +18,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.view.size
@@ -31,7 +32,12 @@ import app.retvens.rown.CreateCommunity.VendorDetailsAdapter
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.DataCollections.FeedCollection.Member
 import app.retvens.rown.DataCollections.FeedCollection.User
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.DataCollections.removeMember
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import retrofit2.Call
@@ -214,32 +220,60 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
 
     }
 
-    private fun openBottomSelectionCommunity(userId:String,number:String) {
-        val dialogLanguage = Dialog(requireContext())
-        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialogLanguage.setContentView(R.layout.bottom_remove_from_community)
-        dialogLanguage.setCancelable(true)
+    private fun openBottomSelectionCommunity(userId:String,role:String,admin:String) {
+        if (admin == "true") {
+            val dialogLanguage = Dialog(requireContext())
+            dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialogLanguage.setContentView(R.layout.bottom_remove_from_community)
+            dialogLanguage.setCancelable(true)
 
-        dialogLanguage.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
-        dialogLanguage.window?.setGravity(Gravity.BOTTOM)
-        dialogLanguage.show()
+            dialogLanguage.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
+            dialogLanguage.window?.setGravity(Gravity.BOTTOM)
+            dialogLanguage.show()
+
+            dialogLanguage.findViewById<TextView>(R.id.remove).setOnClickListener {
+                openBottomSelectionCommunityRemove(dialogLanguage,userId)
+            }
+            dialogLanguage.findViewById<TextView>(R.id.view_profile).setOnClickListener {
+                if (role == "Business Vendor / Freelancer") {
+                    val intent = Intent(context, VendorProfileActivity::class.java)
+                    intent.putExtra("userId", userId)
+                    startActivity(intent)
+                } else if (role == "Hotel Owner") {
+                    val intent = Intent(context, OwnerProfileActivity::class.java)
+                    intent.putExtra("userId", userId)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(context, UserProfileActivity::class.java)
+                    intent.putExtra("userId", userId)
+                    startActivity(intent)
+                }
 
 
-
-        dialogLanguage.findViewById<TextView>(R.id.remove).setOnClickListener {
-            openBottomSelectionCommunityRemove(dialogLanguage)
-        }
-        dialogLanguage.findViewById<TextView>(R.id.message).setOnClickListener {
-            dialogLanguage.dismiss()
-        }
-        dialogLanguage.findViewById<TextView>(R.id.view_profile).setOnClickListener {
-            dialogLanguage.dismiss()
+            }
+        }else{
+            if (role == "Business Vendor / Freelancer") {
+                val intent = Intent(context, VendorProfileActivity::class.java)
+                intent.putExtra("userId", userId)
+                startActivity(intent)
+            } else if (role == "Hotel Owner") {
+                val intent = Intent(context, OwnerProfileActivity::class.java)
+                intent.putExtra("userId", userId)
+                startActivity(intent)
+            } else {
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("userId", userId)
+                startActivity(intent)
+            }
         }
     }
 
-    private fun openBottomSelectionCommunityRemove(dialogL: Dialog) {
+    private fun openBottomSelectionCommunityRemove(dialogL: Dialog,userId:String) {
         val dialogLanguage = Dialog(requireContext())
         dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogLanguage.setContentView(R.layout.bottom_remove_from_community_confermation)
@@ -252,12 +286,42 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
         dialogLanguage.show()
 
         dialogLanguage.findViewById<TextView>(R.id.yes).setOnClickListener {
+
+            removeUser(userId,groupID)
+
             dialogL.dismiss()
             dialogLanguage.dismiss()
         }
         dialogLanguage.findViewById<TextView>(R.id.not).setOnClickListener {
             dialogLanguage.dismiss()
         }
+    }
+
+    private fun removeUser(userId: String, groupId: String) {
+
+        Log.e("userid",userId)
+        Log.e("groupId",groupId)
+
+        val remove = RetrofitBuilder.retrofitBuilder.removeMember(groupId,removeMember(userId))
+
+        remove.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    getCommunityDetails(groupId)
+                }else{
+                    Log.e("error",response.message().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
     }
 
     private fun getCommunityDetails(groupId: String?) {
@@ -305,22 +369,22 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
                     if (userList.size > 2){
                         viewAllOthers.visibility = View.VISIBLE
                     }
-                    userDetailsAdapter = UserDetailsAdapter(requireContext(), ownerList)
+                    userDetailsAdapter = UserDetailsAdapter(requireContext(), ownerList,response.Admin)
                     recyclerViewOwner.adapter = userDetailsAdapter
                     userDetailsAdapter.reduceList()
                     userDetailsAdapter.notifyDataSetChanged()
 
-                    vendorDetailsAdapter = VendorDetailsAdapter(requireContext(), vendorList)
+                    vendorDetailsAdapter = VendorDetailsAdapter(requireContext(), vendorList,response.Admin)
                     recyclerViewVendor.adapter = vendorDetailsAdapter
                     vendorDetailsAdapter.reduceList()
                     vendorDetailsAdapter.notifyDataSetChanged()
 
-                    normalUserDetailsAdapter = NormalUserDetailsAdapter(requireContext(), userList)
+                    normalUserDetailsAdapter = NormalUserDetailsAdapter(requireContext(), userList,response.Admin)
                     recylerViewUser.adapter = normalUserDetailsAdapter
                     normalUserDetailsAdapter.reduceList()
                     normalUserDetailsAdapter.notifyDataSetChanged()
 
-                    expertDetailsAdapter = ExpertDetailsAdapter(requireContext(), expertList)
+                    expertDetailsAdapter = ExpertDetailsAdapter(requireContext(), expertList,response.Admin)
                     recyclerViewExpert.adapter = expertDetailsAdapter
                     expertDetailsAdapter.reduceList()
                     expertDetailsAdapter.notifyDataSetChanged()
@@ -341,9 +405,10 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
                 Log.e("error",t.message.toString())
             }
 
-            override fun onItemClick(member: User) {
+            override fun onItemClick(member: User,admin:String) {
                 Log.e("1","working")
-                openBottomSelectionCommunity(member.user_id,member.address)
+                Log.e("userid","${member.user_id}")
+                openBottomSelectionCommunity(member.user_id,member.Role,admin)
 
             }
 

@@ -70,16 +70,24 @@ interface RownUrl {
     @GET("users")
     fun getMesiboUsers(): Call<UsersList>
 
-    @POST("creategroup")
-    fun createGroup(@Body create:GroupCreate):Call<ResponseGroup>
-
-
-    @Multipart
-    @POST("creategroup")
-    fun createGroupNew(
-        @Part("attribute")attribute:RequestBody,
-        @Part image: MultipartBody.Part
+    @POST("creategroup/{userId}")
+    fun createGroup(
+        @Path("userId")userId:String,
+        @Body create:GroupCreate
     ):Call<ResponseGroup>
+
+    @PATCH("removemember/{groupId}")
+    fun removeMember(
+        @Path("groupId")groupId:String,
+        @Body remove:removeMember
+    ):Call<UpdateResponse>
+
+//    @Multipart
+//    @POST("creategroup")
+//    fun createGroupNew(
+//        @Part("attribute")attribute:RequestBody,
+//        @Part image: MultipartBody.Part
+//    ):Call<ResponseGroup>
 
     @POST("addmember")
     fun addMember(@Body addMember:AddMemberData):Call<ResponseGroup>

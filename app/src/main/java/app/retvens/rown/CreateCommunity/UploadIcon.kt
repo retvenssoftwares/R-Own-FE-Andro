@@ -237,31 +237,17 @@ class UploadIcon : AppCompatActivity() {
 
     private fun CreateGroup(name:String) {
 
-        val parcelFileDescriptor = contentResolver.openFileDescriptor(
-            communityUri!!,"r",null
-        )?:return
 
+        val sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
 
-        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-        val file =  File(cacheDir, "${app.retvens.rown.utils.getRandomString(6)}.jpg")
-        val outputStream = FileOutputStream(file)
-        inputStream.copyTo(outputStream)
-        val body = UploadRequestBody(file,"image")
-
-
-
-
-        val data = RetrofitBuilder.retrofitBuilder.createGroupNew(
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
-            MultipartBody.Part.createFormData("image", file.name, body)
-        )
+        val data = RetrofitBuilder.retrofitBuilder.createGroup(user_id, GroupCreate(name))
 
         data.enqueue(object : Callback<ResponseGroup?> {
             override fun onResponse(
                 call: Call<ResponseGroup?>,
                 response: Response<ResponseGroup?>
             ) {
-
                 if (response.isSuccessful){
                     val response = response.body()!!
                     groupId = response.group.gid.toString()
@@ -357,7 +343,7 @@ class UploadIcon : AppCompatActivity() {
                     addCommunityMember()
 
                     val profile = getProfile()
-                    profile.name = name
+                    profile.image = decodeSampledBitmapFromFile(file,200,150)
                     profile.save()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()

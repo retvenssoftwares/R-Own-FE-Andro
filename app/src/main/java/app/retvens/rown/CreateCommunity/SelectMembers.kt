@@ -48,10 +48,6 @@ class SelectMembers : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select_members)
 
-        val sharedPreferences1 = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
-        val phone = sharedPreferences1?.getString("savePhoneNumber", "").toString()
-
-        number.add(phone)
 
         searchBar = findViewById(R.id.searchBar)
         findViewById<ImageButton>(R.id.createCommunity_backBtn_members).setOnClickListener { onBackPressed() }

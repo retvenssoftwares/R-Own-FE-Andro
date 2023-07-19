@@ -6,3 +6,9 @@ data class GroupCreate(
     val attribute:String
 ) {
 }
+
+data class removeMember(
+    val user_id:String
+){
+
+}

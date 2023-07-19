@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.DataCollections.FeedCollection.Admin
 import app.retvens.rown.DataCollections.FeedCollection.Member
 import app.retvens.rown.DataCollections.FeedCollection.User
 import app.retvens.rown.DataCollections.UserProfileRequestItem
@@ -17,14 +19,14 @@ import com.google.android.material.imageview.ShapeableImageView
 import java.util.*
 import kotlin.collections.ArrayList
 
-class VendorDetailsAdapter(val context: Context, var userList:ArrayList<User>) :
+class VendorDetailsAdapter(val context: Context, var userList:ArrayList<User>,var admin:List<Admin>) :
     RecyclerView.Adapter<VendorDetailsAdapter.ProfileViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
 
     // Define an interface for the listener
     interface OnItemClickListener {
-        fun onItemClick(member: User)
+        fun onItemClick(member: User,admin:String)
     }
 
     // Define a function to set the listener
@@ -60,6 +62,7 @@ class VendorDetailsAdapter(val context: Context, var userList:ArrayList<User>) :
             holder.profile.setImageResource(R.drawable.svg_user)
         }
 
+        var isadmin = "false"
         if (data.admin == "true"){
             holder.admin.text = "Admin"
             Collections.swap(userList, position, 0)
@@ -68,6 +71,20 @@ class VendorDetailsAdapter(val context: Context, var userList:ArrayList<User>) :
         }
 
 
+        val sharedPreferences1 =context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
+
+        admin.forEach {
+            if (user_id == it.user_id){
+                isadmin = "true"
+            }else{
+                Log.e("error","not")
+            }
+        }
+
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.onItemClick(data,isadmin)
+        }
 
     }
 

@@ -123,7 +123,7 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
 
     private fun getPolls(userId: String) {
 
-        val getPoll = RetrofitBuilder.feedsApi.getNormalUserPoll(userId,userId,"1")
+        val getPoll = RetrofitBuilder.feedsApi.getNormalUserPoll(userId,userId,currentPage.toString())
 
         getPoll.enqueue(object : Callback<List<PostsDataClass>?> {
             override fun onResponse(
