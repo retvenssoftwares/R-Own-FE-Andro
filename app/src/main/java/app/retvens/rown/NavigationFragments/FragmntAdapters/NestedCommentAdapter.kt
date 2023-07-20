@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.FeedCollection.GetComments
 import app.retvens.rown.DataCollections.FeedCollection.Reply
 import app.retvens.rown.NavigationFragments.ProfileFragment
+import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.NavigationFragments.job.JobExploreFragment
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
@@ -73,6 +74,9 @@ class NestedCommentAdapter(val context: Context,private val nestedComments: List
 
         holder.relies.visibility = View.GONE
         holder.reply.visibility = View.GONE
+
+        val time = TimesStamp.convertTimeToText(data.date_added)
+        holder.time.text = time
     }
 
     override fun getItemCount(): Int {

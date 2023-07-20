@@ -288,17 +288,24 @@ class ExplorePeopleFragment : Fragment() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-
+                    Log.e("res",response.toString())
                     val searchList:ArrayList<Post> = ArrayList()
                     response.forEach {
                         try {
-                            searchList.addAll(it.posts)
+                            if (it.message == "You have reached the end"){
+                                explorePeopleAdapter = ExplorePeopleAdapter(requireContext(), ArrayList())
+                                recyclerView.adapter = explorePeopleAdapter
+                                explorePeopleAdapter.notifyDataSetChanged()
+                            }else{
+                                searchList.addAll(it.posts)
+                                explorePeopleAdapter = ExplorePeopleAdapter(requireContext(), searchList)
+                                recyclerView.adapter = explorePeopleAdapter
+                                explorePeopleAdapter.notifyDataSetChanged()
+                            }
+
                             explorePeopleAdapter.removeUser(it.posts)
                             explorePeopleAdapter.removeUsersFromList(it.posts)
-                            explorePeopleAdapter.notifyDataSetChanged()
 
-                            explorePeopleAdapter = ExplorePeopleAdapter(requireContext(), searchList)
-                            recyclerView.adapter = explorePeopleAdapter
                         }catch (e:NullPointerException){
                             Log.e("error",e.message.toString())
                         }

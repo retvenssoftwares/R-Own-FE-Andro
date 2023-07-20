@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,11 @@ class MesiboUsers : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mesibo_users)
 
+        val back = findViewById<ImageView>(R.id.notifications_backBtn)
+
+        back.setOnClickListener {
+            onBackPressed()
+        }
 
         recycler = findViewById<RecyclerView>(R.id.chatRecycler)
         recycler.layoutManager = LinearLayoutManager(this)

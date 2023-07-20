@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -32,7 +33,7 @@ class UserDetailsActivity : AppCompatActivity(),
     private lateinit var type:TextInputEditText
     private lateinit var company:TextInputEditText
     private lateinit var disignation:TextInputEditText
-
+    var role = ""
     var isOwner = true
     var user_id = ""
 
@@ -63,10 +64,18 @@ class UserDetailsActivity : AppCompatActivity(),
         binding.communityDetailBackBtn.setOnClickListener{ onBackPressed() }
 
         binding.addExperience.setOnClickListener {
-            val bottomSheet = BottomSheetEditExperience()
-            val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetEditExperience.Edit_TAG)}
-            bottomSheet.setOnEditExClickListener(this)
+            if (role =="Normal User" ){
+                val bottomSheet = BottomSheetEditExperience("Normal User")
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetEditExperience.Edit_TAG)}
+                bottomSheet.setOnEditExClickListener(this)
+            }else{
+                val bottomSheet = BottomSheetEditExperience("Hospitality Expert")
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetEditExperience.Edit_TAG)}
+                bottomSheet.setOnEditExClickListener(this)
+            }
+
         }
 
         binding.addEducation.setOnClickListener {
@@ -96,6 +105,7 @@ class UserDetailsActivity : AppCompatActivity(),
             EducationAdapter.OnBottomSheetFilterCommunityClickListener,
             BottomSheetUpdateExperience.OnBottomEditExClickListener,
             BottomSheetUpdateEducation.OnBottomEditEdClickListener {
+            @SuppressLint("SuspiciousIndentation")
             override fun onResponse(
                 call: Call<UserProfileRequestItem?>,
                 response: Response<UserProfileRequestItem?>
@@ -111,19 +121,18 @@ class UserDetailsActivity : AppCompatActivity(),
                             binding.vendorProfile.setImageResource(R.drawable.svg_user)
                         }
 
+                        role = response.Role
+
                         binding.vendorName.text = response.Full_name
                         binding.username.text = response.User_name
                         binding.bio.text = response.userBio
 
                             if (response.Role == "Normal User"){
-                                Toast.makeText(applicationContext, "hosDataRes - ${response.hospitalityExpertInfo}", Toast.LENGTH_SHORT).show()
-
+                                Log.e("res", response.normalUserInfo.toString())
                                 experienceAdapter = ExperienceAdapter(this@UserDetailsActivity,response, isOwner, "Normal User")
-
                                 experienceAdapter.setOnFilterClickListener(this)
                             } else if (response.Role == "Hospitality Expert"){
-                                Toast.makeText(applicationContext, "norDataRes - ${response.normalUserInfo}", Toast.LENGTH_SHORT).show()
-
+                                Log.e("res", response.hospitalityExpertInfo.toString())
                                 experienceAdapter = ExperienceAdapter(this@UserDetailsActivity,response, isOwner, "Hospitality Expert")
 //                                binding.recyclerExperience.adapter = experienceAdapter
 //                                experienceAdapter.notifyDataSetChanged()
@@ -164,7 +173,7 @@ class UserDetailsActivity : AppCompatActivity(),
                 hospitalityExpertInfo: hospitalityExpertInfo,
                 position: Int
             ) {
-                val bottomSheet = BottomSheetUpdateExperience(jonDetails,position)
+                val bottomSheet = BottomSheetUpdateExperience(jonDetails,hospitalityExpertInfo,position,role)
                 val fragManager = supportFragmentManager
                 fragManager.let{bottomSheet.show(it, BottomSheetUpdateExperience.Edit_TAG)}
                 bottomSheet.setOnEditExClickListener(this)

@@ -22,9 +22,11 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserInfoo
+import app.retvens.rown.DataCollections.ConnectionCollection.hospitalityExpertInfo
 import app.retvens.rown.DataCollections.ProfileCompletion.AddExperienceDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateExperienceDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.ProfileCompletion.updateExpertDetail
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.utils.endYearDialog
@@ -42,7 +44,7 @@ import retrofit2.Response
 import java.util.Calendar
 
 
-class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : BottomSheetDialogFragment(),
+class BottomSheetUpdateExperience(val data:NormalUserInfoo,val hos:hospitalityExpertInfo,val position:Int,val role:String) : BottomSheetDialogFragment(),
     BottomSheetJobType.OnBottomJobTypeClickListener,
     BottomSheetJobTitle.OnBottomJobTitleClickListener,
     BottomSheetCompany.OnBottomCompanyClickListener  {
@@ -52,7 +54,7 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
         mListener = listener
     }
     fun newInstance(): BottomSheetUpdateExperience? {
-        return BottomSheetUpdateExperience(data,position)
+        return BottomSheetUpdateExperience(data,hos,position,role)
     }
     interface OnBottomEditExClickListener{
         fun bottomEditClick()
@@ -181,11 +183,21 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
             }
         }
 
-        jobTitle.setText(data.jobTitle)
-        jobType.setText(data.jobType)
-        companyName.setText(data.jobCompany)
-        start.setText(data.jobStartYear)
-        end.setText(data.jobEndYear)
+
+        if (role == "Normal User"){
+            jobTitle.setText(data.jobTitle)
+            jobType.setText(data.jobType)
+            companyName.setText(data.jobCompany)
+            start.setText(data.jobStartYear)
+            end.setText(data.jobEndYear)
+        }else{
+            jobTitle.setText(hos.jobtitle)
+            jobType.setText(hos.jobtype)
+            companyName.setText(hos.hotelCompany)
+            start.setText(hos.jobstartYear)
+            end.setText(hos.jobendYear)
+        }
+
 
         jobTitle.setOnClickListener {
             val bottomSheet = BottomSheetJobTitle()
@@ -209,7 +221,12 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
                 startLayout.isErrorEnabled = false
                 endLayout.error = "Please enter end year"
             } else {
-                updateExperience()
+                if (role == "Normal User"){
+                    updateExperience()
+                }else{
+                    updateExperienceExpert()
+                }
+
             }
 
             dismiss()
@@ -218,8 +235,41 @@ class BottomSheetUpdateExperience(val data:NormalUserInfoo,val position:Int) : B
             dismiss()
         }
 
+    }
 
+    private fun updateExperienceExpert() {
+        val index = position
+        val title = jobTitle.text.toString()
+        val type = jobType.text.toString()
+        val company = companyName.text.toString()
+        val start = start.text.toString()
+        val end = end.text.toString()
 
+        val data = updateExpertDetail(index,type,title,company,start,end)
+
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val updateData = RetrofitBuilder.profileCompletion.updateExperienceExpert(user_id,data)
+
+        updateData.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    mListener?.bottomEditClick()
+                }else{
+                    Log.e("error",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
     }
 
     private fun updateExperience() {

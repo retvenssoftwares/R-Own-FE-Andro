@@ -231,12 +231,17 @@ class ExplorePostsFragment : Fragment() {
                     val response = response.body()!!
 
                     response.forEach { postsDataClass ->
-                        mediaAdapter = MediaAdapter(requireContext(),
-                            postsDataClass.posts as ArrayList<PostItem>
-                        , false)
-                        mediaRecyclerView.adapter = mediaAdapter
-                        mediaAdapter.removePostsFromList(postsDataClass.posts)
-                        mediaAdapter.notifyDataSetChanged()
+                        if (postsDataClass.message == "you have reached the end"){
+                            mediaAdapter = MediaAdapter(requireContext(), ArrayList(),false)
+                            mediaRecyclerView.adapter = mediaAdapter
+                            mediaAdapter.notifyDataSetChanged()
+                        }else{
+                            mediaAdapter = MediaAdapter(requireContext(), postsDataClass.posts as ArrayList<PostItem>,false)
+                            mediaRecyclerView.adapter = mediaAdapter
+                            mediaAdapter.removePostsFromList(postsDataClass.posts)
+                            mediaAdapter.notifyDataSetChanged()
+                        }
+
                     }
 
 

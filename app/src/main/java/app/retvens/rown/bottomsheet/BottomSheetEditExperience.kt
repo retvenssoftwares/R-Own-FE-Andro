@@ -24,6 +24,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.AddExperienceDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.JobData
+import app.retvens.rown.DataCollections.ProfileCompletion.JobDetail
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.utils.endYearDialog
@@ -41,7 +42,7 @@ import retrofit2.Response
 import java.util.Calendar
 
 
-class BottomSheetEditExperience : BottomSheetDialogFragment(),
+class BottomSheetEditExperience(val role:String) : BottomSheetDialogFragment(),
     BottomSheetJobType.OnBottomJobTypeClickListener,
     BottomSheetJobTitle.OnBottomJobTitleClickListener,
     BottomSheetCompany.OnBottomCompanyClickListener  {
@@ -51,7 +52,7 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
         mListener = listener
     }
     fun newInstance(): BottomSheetEditExperience? {
-        return BottomSheetEditExperience()
+        return BottomSheetEditExperience(role)
     }
     interface OnBottomEditExClickListener{
         fun bottomEditClick()
@@ -216,7 +217,11 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
                 val image = progressDialog.findViewById<ImageView>(R.id.imageview)
                 Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
                 progressDialog.show()
-                updateExperience()
+                if (role == "Hospitality Expert"){
+                    updateExperienceExpert()
+                }else{
+                    updateExperience()
+                }
             }
         }
         cardAdd.setOnClickListener {
@@ -225,6 +230,46 @@ class BottomSheetEditExperience : BottomSheetDialogFragment(),
 
 
 
+    }
+
+    private fun updateExperienceExpert() {
+        val title = jobTitle.text.toString()
+        val type = jobType.text.toString()
+        val company = companyName.text.toString()
+        val start = start.text.toString()
+        val end = end.text.toString()
+
+        val data = JobDetail("",type,title,company,start,end)
+
+        Log.e("data",data.toString())
+
+        val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val updateData = RetrofitBuilder.profileCompletion.addExperienceExpert(user_id,data)
+
+        updateData.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful && isAdded){
+                    dismiss()
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    progressDialog.dismiss()
+                    mListener?.bottomEditClick()
+                }else{
+                    Log.e("error",response.code().toString())
+                    progressDialog.dismiss()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+                progressDialog.dismiss()
+            }
+        })
     }
 
     private fun updateExperience() {

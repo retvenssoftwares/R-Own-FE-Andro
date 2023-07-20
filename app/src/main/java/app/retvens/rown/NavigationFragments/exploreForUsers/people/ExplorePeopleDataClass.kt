@@ -1,7 +1,8 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.people
 
 data class ExplorePeopleDataClass(
-    val posts: List<Post>
+    val posts: List<Post>,
+    val message:String
 )
 
 data class Post(

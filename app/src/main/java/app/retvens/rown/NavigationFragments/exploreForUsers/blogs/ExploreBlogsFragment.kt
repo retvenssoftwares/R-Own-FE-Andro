@@ -219,36 +219,42 @@ class ExploreBlogsFragment : Fragment() {
         Log.e("userid",user_id)
         Log.e("word",text)
 
-        val searchBlog = RetrofitBuilder.exploreApis.searchBlog(user_id,text,"1")
+        val searchBlog = RetrofitBuilder.exploreApis.searchBlog(text,user_id,"1")
 
-        searchBlog.enqueue(object : Callback<List<BlogData>?> {
+        searchBlog.enqueue(object : Callback<List<ExploreBlogData>?> {
             override fun onResponse(
-                call: Call<List<BlogData>?>,
-                response: Response<List<BlogData>?>
+                call: Call<List<ExploreBlogData>?>,
+                response: Response<List<ExploreBlogData>?>
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Log.e("res",response.toString())
-                    val searchList:ArrayList<Blog> = ArrayList()
-//                    try {
-//                        response.forEach {
-//                            searchList.addAll(it.blogs)
-//                            allBlogsAdapter = AllBlogsAdapter(searchList, requireContext())
-//                            exploreBlogsRecyclerView.adapter = allBlogsAdapter
-//                            allBlogsAdapter.notifyDataSetChanged()
-//                        }
-//                    }catch (e:NullPointerException){
-//                        allBlogsAdapter = AllBlogsAdapter(searchList, requireContext())
-//                        exploreBlogsRecyclerView.adapter = allBlogsAdapter
-//                        allBlogsAdapter.notifyDataSetChanged()
-//                    }
+                    val searchList:ArrayList<AllBlogsData> = ArrayList()
+                    try {
+                        response.forEach {
+                            if (it.message == "You have reached the end"){
+                                allBlogsAdapter = AllBlogsAdapter(ArrayList(), requireContext(),false)
+                                exploreBlogsRecyclerView.adapter = allBlogsAdapter
+                                allBlogsAdapter.notifyDataSetChanged()
+                            }else{
+                                searchList.addAll(it.blogs)
+                                allBlogsAdapter = AllBlogsAdapter(searchList, requireContext(),false)
+                                exploreBlogsRecyclerView.adapter = allBlogsAdapter
+                                allBlogsAdapter.notifyDataSetChanged()
+                            }
+
+                        }
+                    }catch (e:NullPointerException){
+                        Log.e("error",e.message.toString())
+                    }
 
                 }else{
                     Log.e("error",response.code().toString())
+                    getAllBlogs()
                 }
             }
 
-            override fun onFailure(call: Call<List<BlogData>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<ExploreBlogData>?>, t: Throwable) {
                 Log.e("error",t.message.toString())
             }
         })

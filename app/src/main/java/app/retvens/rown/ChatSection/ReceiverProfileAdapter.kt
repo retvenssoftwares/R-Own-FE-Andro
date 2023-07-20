@@ -44,8 +44,13 @@ class ReceiverProfileAdapter(val context: Context, var userList:List<Connections
         val data = userList[position]
 
         holder.nameTextView.text = data.Full_name
-        Glide.with(context).load(data.Profile_pic).into(holder.image)
         holder.lastSeen.text = data.Role
+
+        if (data.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(data.Profile_pic).into(holder.image)
+        } else {
+            holder.image.setImageResource(R.drawable.svg_user)
+        }
 
 
 //        val timestamp = lastSeen

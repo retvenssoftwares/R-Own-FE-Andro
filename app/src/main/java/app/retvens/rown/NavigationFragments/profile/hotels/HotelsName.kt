@@ -10,6 +10,7 @@ data class HotelsName(
     val hotelName: String,
     val Hoteldescription:String,
     val gallery: List<GalleryHotel>,
+    val saved:String
 )
 
 data class GalleryHotel(

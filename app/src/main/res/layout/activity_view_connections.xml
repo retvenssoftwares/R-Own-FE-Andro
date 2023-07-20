@@ -8,7 +8,7 @@
     android:background="@color/white"
     tools:context=".NavigationFragments.profile.viewConnections.ViewConnectionsActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,9 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:paddingTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        >
 
         <ImageView
             android:id="@+id/re_backBtn"
@@ -58,17 +59,36 @@
         android:background="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_below="@+id/relative"
         app:layout_constraintTop_toBottomOf="@id/relative"/>
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:hint="search people..."
+            android:textColorHint="@color/grey"
+            android:paddingStart="10dp"
+            android:textColor="@color/black"
+            android:drawableRight="@drawable/searchbar"
+            android:paddingRight="10dp"
+            android:textSize="13dp"
+            android:layout_below="@+id/relative"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/edit_search_bg"
+            />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/connectionsRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/relative"
+        android:layout_below="@+id/searchBar"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

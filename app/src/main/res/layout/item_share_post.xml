@@ -41,18 +41,18 @@
             app:layout_constraintStart_toEndOf="@+id/share_profile"
             app:layout_constraintTop_toTopOf="@id/share_profile" />
 
-        <TextView
-            android:id="@+id/share_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_alternates"
-            android:text="Hospitality Role"
-            android:textColor="@color/grey_60"
-            android:textSize="11dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@+id/share_profile"
-            app:layout_constraintTop_toBottomOf="@+id/share_fullname" />
+<!--        <TextView-->
+<!--            android:id="@+id/share_username"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="@font/montserrat_alternates"-->
+<!--            android:text="Hospitality Role"-->
+<!--            android:textColor="@color/grey_60"-->
+<!--            android:textSize="11dp"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/share_profile"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/share_fullname" />-->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/ca_connect"

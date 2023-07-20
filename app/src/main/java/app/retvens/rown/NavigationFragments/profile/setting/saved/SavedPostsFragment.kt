@@ -145,14 +145,14 @@ class SavedPostsFragment : Fragment() {
                             }
                             } else {
                                 empty.text = "You did'nt save post yet"
-//                                empty.visibility = View.VISIBLE
+                                empty.visibility = View.VISIBLE
                             if (currentPage == 1) {
                                 emptyImage.visibility = View.VISIBLE
                                 mediaRecyclerView.visibility = View.GONE
                             }
                             }
                     } else {
-//                        empty.visibility = View.VISIBLE
+                        empty.visibility = View.VISIBLE
                         if (currentPage == 1) {
                             emptyImage.visibility = View.VISIBLE
                             mediaRecyclerView.visibility = View.GONE
@@ -169,7 +169,10 @@ class SavedPostsFragment : Fragment() {
                 shimmerFrameLayout.visibility = View.GONE
                 empty.text = "Try Again ${t.localizedMessage}"
 //                empty.visibility = View.VISIBLE
-                emptyImage.visibility = View.VISIBLE
+                if (currentPage == 1) {
+                    emptyImage.visibility = View.VISIBLE
+                }
+
             }
         })
 

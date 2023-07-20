@@ -34,7 +34,7 @@ class SharePostAdapter(val context: Context, var userList:List<Connections>) :
     class ProfileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val name = itemView.findViewById<TextView>(R.id.share_fullname)
-        val username = itemView.findViewById<TextView>(R.id.share_username)
+
         val profile = itemView.findViewById<ShapeableImageView>(R.id.share_profile)
         val share = itemView.findViewById<CardView>(R.id.ca_connect)
         val text = itemView.findViewById<TextView>(R.id.shared)
@@ -50,7 +50,6 @@ class SharePostAdapter(val context: Context, var userList:List<Connections>) :
 
         val data = userList[position]
         holder.name.text = data.Full_name
-        holder.username.text = data.User_id
 
         if (data.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(data.Profile_pic).into(holder.profile)

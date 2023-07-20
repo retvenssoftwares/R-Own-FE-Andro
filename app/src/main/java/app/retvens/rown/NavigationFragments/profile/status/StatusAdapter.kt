@@ -276,6 +276,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     intent.putExtra("logo", item.hotelCoverpicUrl)
                     intent.putExtra("hotelId", item.hotel_id)
                     intent.putExtra("hotelAddress", item.hotelAddress)
+                    intent.putExtra("saved",item.saved)
                     context.startActivity(intent)
                 }
 

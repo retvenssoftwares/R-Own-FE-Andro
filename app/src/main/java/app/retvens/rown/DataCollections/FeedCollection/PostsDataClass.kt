@@ -33,6 +33,7 @@ data class PostItem(
     var Like_count:String,
     val Comment_count:String,
     val hotel_id:String,
+    val message:String,
     val hotelAddress:String,
     val hotelName:String,
     val hotelCoverpicUrl:String,

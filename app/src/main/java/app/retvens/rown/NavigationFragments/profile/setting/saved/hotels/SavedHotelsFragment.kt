@@ -156,7 +156,6 @@ class SavedHotelsFragment : Fragment() {
 //                empty.visibility = View.VISIBLE
                 Log.d("tag", t.localizedMessage.toString())
 //                Toast.makeText(requireContext(),t.localizedMessage, Toast.LENGTH_SHORT).show()
-                emptyImage.visibility = View.VISIBLE
             }
         })
     }

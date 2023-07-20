@@ -121,6 +121,7 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
                 intent.putExtra("logo", listS[position].hotelCoverpicUrl)
                 intent.putExtra("hotelId", listS[position].hotel_id)
                 intent.putExtra("hotelAddress", listS[position].hotelAddress)
+                intent.putExtra("saved",listS[position].saved)
                 context.startActivity(intent)
             } else {
                 val intent = Intent(context, HotelDetailsActivity::class.java)
@@ -128,6 +129,7 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
                 intent.putExtra("logo", listS[position].hotelCoverpicUrl)
                 intent.putExtra("hotelId", listS[position].hotel_id)
                 intent.putExtra("hotelAddress", listS[position].hotelAddress)
+                intent.putExtra("saved",listS[position].saved)
                 context.startActivity(intent)
             }
         }

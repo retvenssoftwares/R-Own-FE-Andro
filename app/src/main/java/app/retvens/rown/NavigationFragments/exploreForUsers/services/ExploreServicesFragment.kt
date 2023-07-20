@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.AbsListView
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -44,7 +47,7 @@ class ExploreServicesFragment : Fragment() {
     private var hotelList:ArrayList<ProfileServicesDataItem> = ArrayList()
     lateinit var empty : TextView
     lateinit var errorImage : ImageView
-
+    private lateinit var searchBar:EditText
     private var lastPage = 1
 
     private lateinit var progressDialog: Dialog
@@ -74,6 +77,8 @@ class ExploreServicesFragment : Fragment() {
         errorImage = view.findViewById(R.id.errorImage)
         progress = view.findViewById(R.id.progress)
         shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout)
+
+        searchBar = view.findViewById(R.id.search_explore_serices)
 
         progressDialog = Dialog(requireContext())
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -118,6 +123,74 @@ class ExploreServicesFragment : Fragment() {
 
 
         getServices()
+
+
+        searchBar.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0 == ""){
+                    getServices()
+                }else{
+                    val text = p0.toString()
+                    searchServices(text)
+                }
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+    }
+
+    private fun searchServices(text: String) {
+
+        val getServices = RetrofitBuilder.exploreApis.searchServices(text,"1")
+
+        getServices.enqueue(object : Callback<List<ExploreServiceData>?> {
+            override fun onResponse(
+                call: Call<List<ExploreServiceData>?>,
+                response: Response<List<ExploreServiceData>?>
+            ) {
+
+                val list:ArrayList<ProfileServicesDataItem> = ArrayList()
+                if(response.isSuccessful){
+                    val response = response.body()!!
+                    Log.e("res",response.toString())
+                    response.forEach {
+                    try {
+                        if (it.message == "You have reached the end"){
+                            exploreServicesAdapter = ExploreServicesAdapter(ArrayList(), requireContext())
+                            exploreBlogsRecyclerView.adapter = exploreServicesAdapter
+                            exploreServicesAdapter.notifyDataSetChanged()
+                        }else{
+                            list.addAll(it.posts)
+                            exploreServicesAdapter = ExploreServicesAdapter(list, requireContext())
+                            exploreBlogsRecyclerView.adapter = exploreServicesAdapter
+                            exploreServicesAdapter.notifyDataSetChanged()
+                        }
+
+                    }catch (e:NullPointerException){
+                        Log.e("error",e.message.toString())
+                    }
+
+
+                    }
+
+                }else{
+                    getServices()
+                }
+            }
+
+            override fun onFailure(call: Call<List<ExploreServiceData>?>, t: Throwable) {
+
+            }
+        })
+
     }
 
     private fun getData() {

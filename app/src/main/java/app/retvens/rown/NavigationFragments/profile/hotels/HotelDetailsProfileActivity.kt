@@ -23,6 +23,7 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
 
     var liked = true
     var operatioin = "push"
+    var saved = ""
 
     lateinit var hotelName : String
     lateinit var hotelId : String
@@ -56,18 +57,19 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
 
         binding.location.text = location
 
-//        val saved = intent.getStringExtra("saved")
+        saved = intent.getStringExtra("saved")!!
         getHotel()
 
-//        if (saved != "no"){
-//            operatioin = "pop"
-//            liked = false
-//            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
-//        } else {
-//            operatioin = "push"
-//            liked = true
-//            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
-//        }
+        if (saved != "not saved"){
+            operatioin = "pop"
+            liked = false
+            saved = "saved"
+            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
+        } else {
+            operatioin = "push"
+            liked = true
+            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
+        }
 
         binding.hotelName.text = hotelName
 
@@ -112,7 +114,7 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                     }
                     Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.code().toString())
                 }
             }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {

@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.profile.viewRequests
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,8 @@ import java.lang.Exception
 class ExperienceAdapter(val context: Context, val list:UserProfileRequestItem, val isOwner : Boolean, val role : String) : RecyclerView.Adapter<ExperienceAdapter.MediaViewHolder>() {
 
     var mListener: OnBottomSheetFilterCommunityClickListener? = null
+    private lateinit var data:NormalUserInfoo
+    private lateinit var hosData:hospitalityExpertInfo
 
     fun setOnFilterClickListener(listener: OnBottomSheetFilterCommunityClickListener) {
         mListener = listener
@@ -46,7 +49,11 @@ class ExperienceAdapter(val context: Context, val list:UserProfileRequestItem, v
     }
 
     override fun getItemCount(): Int {
-        return list.normalUserInfo.size
+        return if (role == "Hospitality Expert") {
+            list.hospitalityExpertInfo.size
+        } else {
+            list.normalUserInfo.size
+        }
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -56,29 +63,29 @@ class ExperienceAdapter(val context: Context, val list:UserProfileRequestItem, v
             holder.edit.visibility = View.GONE
         }
 
-        try {
-            val hosData = list.hospitalityExpertInfo[position]
-            val data = list.normalUserInfo[position]
+        Log.e("data",list.toString())
+
+
+
 
             if (role == "Hospitality Expert") {
-
+                hosData = list.hospitalityExpertInfo[position]
+                data = NormalUserInfoo("","","","","")
                 holder.company.text = hosData.hotelCompany
                 holder.timeLine.text = "${hosData.jobstartYear} - ${hosData.jobendYear}"
                 holder.experience.text = hosData.jobtitle
 
-                Toast.makeText(context, "hosData - ${hosData.jobstartYear}", Toast.LENGTH_SHORT).show()
             } else {
-
+                data = list.normalUserInfo[position]
+                hosData = hospitalityExpertInfo("","","","","")
                 holder.company.text = data.jobCompany
                 holder.timeLine.text = "${data.jobStartYear} - ${data.jobEndYear}"
                 holder.experience.text = data.jobTitle
-                Toast.makeText(context, "data - ${data.jobCompany}", Toast.LENGTH_SHORT).show()
             }
 
             holder.edit.setOnClickListener {
                 mListener?.onBottomSheetFilterCommunityClick(data, hosData,position)
             }
-        } catch (e:Exception){  }
 
     }
 

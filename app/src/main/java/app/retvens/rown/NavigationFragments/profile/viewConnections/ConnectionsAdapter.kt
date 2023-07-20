@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.viewConnections
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -24,7 +25,7 @@ import app.retvens.rown.utils.removeConnection
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class ConnectionsAdapter(val listS : ArrayList<Connections>, val context: Context) : RecyclerView.Adapter<ConnectionsAdapter.ConnectionsViewHolder>() {
+class ConnectionsAdapter(var listS : ArrayList<Connections>, val context: Context) : RecyclerView.Adapter<ConnectionsAdapter.ConnectionsViewHolder>() {
 
     class ConnectionsViewHolder(itemView: View) : ViewHolder(itemView){
         val title = itemView.findViewById<TextView>(R.id.suggetions_notification_name)
@@ -99,5 +100,11 @@ class ConnectionsAdapter(val listS : ArrayList<Connections>, val context: Contex
             }
         }
 
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: ArrayList<Connections>) {
+        listS = newItems
+        notifyDataSetChanged()
     }
 }

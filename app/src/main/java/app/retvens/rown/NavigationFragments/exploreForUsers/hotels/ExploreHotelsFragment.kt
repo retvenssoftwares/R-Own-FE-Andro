@@ -24,11 +24,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.DataCollections.FeedCollection.PostItem
-import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.BlogData
-import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogData
-import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsAdapter
-import app.retvens.rown.NavigationFragments.exploreForUsers.events.ExploreEventsData
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsAdapter
@@ -240,11 +235,18 @@ class ExploreHotelsFragment : Fragment() {
                     val searchHotel:ArrayList<HotelData> = ArrayList()
                     response.forEach {
                         try {
-                            searchHotel.addAll(it.posts)
-                            exploreHotelAdapter = ExploreHotelsAdapter(searchHotel, requireContext())
-                            exploreBlogsRecyclerView.adapter = exploreHotelAdapter
+                            if (it.message == "You have reached the end"){
+                                exploreHotelAdapter = ExploreHotelsAdapter(ArrayList(), requireContext())
+                                exploreBlogsRecyclerView.adapter = exploreHotelAdapter
+                                exploreHotelAdapter.notifyDataSetChanged()
+                            }else{
+                                searchHotel.addAll(it.posts)
+                                exploreHotelAdapter = ExploreHotelsAdapter(searchHotel, requireContext())
+                                exploreBlogsRecyclerView.adapter = exploreHotelAdapter
+                                exploreHotelAdapter.notifyDataSetChanged()
+                            }
+
                             exploreHotelAdapter.removeHotelFromList(it.posts)
-                            exploreHotelAdapter.notifyDataSetChanged()
                         }catch (e:NullPointerException){
                             Log.e("error",e.message.toString())
                         }

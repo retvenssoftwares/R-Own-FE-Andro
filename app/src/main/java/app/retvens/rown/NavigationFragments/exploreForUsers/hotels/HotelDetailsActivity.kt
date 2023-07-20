@@ -42,12 +42,13 @@ class HotelDetailsActivity : AppCompatActivity() {
         location = intent.getStringExtra("hotelAddress").toString()
         hotelLogo = intent.getStringExtra("logo").toString()
 
+        getHotel()
+
         Glide.with(this).load(hotelLogo).into(binding.vendorImage)
 
         val hotelId = intent.getStringExtra("hotelId").toString()
 
         val saved = intent.getStringExtra("saved")
-        getHotel()
 
         if (saved == "saved"){
             operatioin = "pop"
@@ -58,6 +59,7 @@ class HotelDetailsActivity : AppCompatActivity() {
             liked = true
             binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
         }
+
 
         binding.hotelName.text = hotelName
 
@@ -82,9 +84,13 @@ class HotelDetailsActivity : AppCompatActivity() {
             intent.putExtra("Hoteldescription",Hoteldescription)
             startActivity(intent)
         }
+
     }
 
     private fun saveHotel(hotelId: String?) {
+
+        Log.e("hotel",hotelId.toString())
+        Log.e("op",operatioin.toString())
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
@@ -105,7 +111,7 @@ class HotelDetailsActivity : AppCompatActivity() {
                     }
                     Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.code().toString())
                 }
             }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -146,15 +152,15 @@ class HotelDetailsActivity : AppCompatActivity() {
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
                     }
-                    if (data.saved == "saved") {
-                            operatioin = "pop"
-                            liked = false
-                            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
-                        } else {
-                            operatioin = "push"
-                            liked = true
-                            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
-                        }
+//                    if (data.saved == "saved") {
+//                            operatioin = "pop"
+//                            liked = false
+//                            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
+//                        } else {
+//                            operatioin = "push"
+//                            liked = true
+//                            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
+//                        }
 
                     if(data.gallery.size >= 3) {
                         img1 = data.gallery.get(0).Image1

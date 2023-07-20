@@ -2,6 +2,9 @@ package app.retvens.rown.NavigationFragments.profile.viewConnections
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -21,6 +24,7 @@ class ViewConnectionsActivity : AppCompatActivity() {
     lateinit var binding : ActivityViewConnectionsBinding
 
     lateinit var connectionsAdapter: ConnectionsAdapter
+    lateinit var searchBar:EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,7 @@ class ViewConnectionsActivity : AppCompatActivity() {
         binding.connectionsRecycler.layoutManager = LinearLayoutManager(applicationContext)
         binding.connectionsRecycler.setHasFixedSize(true)
 
+        searchBar = findViewById(R.id.searchBar)
 
 
 
@@ -58,11 +63,42 @@ class ViewConnectionsActivity : AppCompatActivity() {
                 try {
                     if (response.isSuccessful) {
                         val response = response.body()!!
+                            var original:List<Connections> = emptyList()
                         response.forEach {
+                            original = it.conns
                             connectionsAdapter = ConnectionsAdapter(it.conns as ArrayList<Connections>, this@ViewConnectionsActivity)
                             binding.connectionsRecycler.adapter = connectionsAdapter
                             connectionsAdapter.notifyDataSetChanged()
+
                         }
+
+                        searchBar.addTextChangedListener(object :TextWatcher{
+                            override fun beforeTextChanged(
+                                p0: CharSequence?,
+                                p1: Int,
+                                p2: Int,
+                                p3: Int
+                            ) {
+
+                            }
+
+                            override fun onTextChanged(
+                                p0: CharSequence?,
+                                p1: Int,
+                                p2: Int,
+                                p3: Int
+                            ) {
+                                val filterData = original.filter { item ->
+                                    item.Full_name.contains(p0.toString(),ignoreCase = true)
+                                }
+
+                                connectionsAdapter.updateData(filterData as ArrayList<Connections>)
+                            }
+
+                            override fun afterTextChanged(p0: Editable?) {
+
+                            }
+                        })
 
                     }
                 }catch (e:NullPointerException){
