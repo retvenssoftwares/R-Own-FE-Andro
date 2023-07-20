@@ -228,14 +228,14 @@ class DashBoardActivity : AppCompatActivity() {
         header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $profileCompletionStatus% Complete"
 
          header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
-            if (profileCompletionStatus == "100"){
-                header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
-                progressBar.progress = profileCompletionStatus.toInt()
-                header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $profileCompletionStatus% Complete"
-                Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
-            }else {
+//            if (profileCompletionStatus == "100"){
+//                header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
+//                progressBar.progress = profileCompletionStatus.toInt()
+//                header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $profileCompletionStatus% Complete"
+//                Toast.makeText(this, "You've already completed Your Profile", Toast.LENGTH_SHORT).show()
+//            }else {
                 startActivity(Intent(this, UserName::class.java))
-            }
+//            }
         }
 
             if (profileCompletionStatus == "100"){

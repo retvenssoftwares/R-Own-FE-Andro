@@ -71,8 +71,9 @@ class VendorProfileActivity : AppCompatActivity() {
     lateinit var reject:TextView
     lateinit var rejectCard: CardView
     lateinit var card_message: CardView
-    lateinit var viewPP: CardView
+    private lateinit var progressDialog:Dialog
 
+    lateinit var viewPP: CardView
     var created = ""
     var location = ""
     var verification = ""
@@ -100,7 +101,6 @@ class VendorProfileActivity : AppCompatActivity() {
 
         reject = findViewById(R.id.reject)
         rejectCard = findViewById(R.id.openReview)
-        viewPP = findViewById(R.id.viewPP)
 
         postCount = findViewById(R.id.posts_count)
         connCount = findViewById(R.id.connections_count)
@@ -112,6 +112,17 @@ class VendorProfileActivity : AppCompatActivity() {
         media = findViewById(R.id.media)
         status = findViewById(R.id.status)
         services = findViewById(R.id.services)
+
+        viewPP = findViewById(R.id.viewPP)
+
+        progressDialog = Dialog(this)
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
 
@@ -319,6 +330,7 @@ class VendorProfileActivity : AppCompatActivity() {
                 call: Call<VendorProfileDataClass?>,
                 response: Response<VendorProfileDataClass?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Log.e("response",response.toString())
@@ -393,6 +405,7 @@ class VendorProfileActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(applicationContext, t.localizedMessage, Toast.LENGTH_SHORT).show()
             }
         })

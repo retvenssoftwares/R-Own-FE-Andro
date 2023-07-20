@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserInfoo
+import app.retvens.rown.DataCollections.ConnectionCollection.hospitalityExpertInfo
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.profile.viewRequests.ExperienceAdapter
 import app.retvens.rown.R
@@ -101,16 +103,6 @@ class UserDetailsActivity : AppCompatActivity(),
                 if (response.isSuccessful){
                     try {
                         val response = response.body()!!
-                        if (response.normalUserInfo.isEmpty()){
-                            binding.expError.visibility = View.VISIBLE
-                        }
-                        if (response.studentEducation.isEmpty()){
-                            binding.eduError.visibility = View.VISIBLE
-                        }
-                        experienceAdapter = ExperienceAdapter(applicationContext,response, isOwner)
-                        binding.recyclerExperience.adapter = experienceAdapter
-                        experienceAdapter.notifyDataSetChanged()
-                        experienceAdapter.setOnFilterClickListener(this)
 
                         if (response.Profile_pic!!.isNotEmpty()) {
                             Glide.with(applicationContext).load(response.Profile_pic)
@@ -123,10 +115,38 @@ class UserDetailsActivity : AppCompatActivity(),
                         binding.username.text = response.User_name
                         binding.bio.text = response.userBio
 
-                        educationAdapter = EducationAdapter(applicationContext,response, isOwner)
-                        binding.recyclerEducation.adapter = educationAdapter
-                        educationAdapter.notifyDataSetChanged()
-                        educationAdapter.setOnFilterClickListener(this)
+                            if (response.Role == "Normal User"){
+                                Toast.makeText(applicationContext, "hosDataRes - ${response.hospitalityExpertInfo}", Toast.LENGTH_SHORT).show()
+
+                                experienceAdapter = ExperienceAdapter(this@UserDetailsActivity,response, isOwner, "Normal User")
+
+                                experienceAdapter.setOnFilterClickListener(this)
+                            } else if (response.Role == "Hospitality Expert"){
+                                Toast.makeText(applicationContext, "norDataRes - ${response.normalUserInfo}", Toast.LENGTH_SHORT).show()
+
+                                experienceAdapter = ExperienceAdapter(this@UserDetailsActivity,response, isOwner, "Hospitality Expert")
+//                                binding.recyclerExperience.adapter = experienceAdapter
+//                                experienceAdapter.notifyDataSetChanged()
+                                experienceAdapter.setOnFilterClickListener(this)
+                            }
+                        binding.recyclerExperience.adapter = experienceAdapter
+                        experienceAdapter.notifyDataSetChanged()
+//                            else {
+//                        binding.expError.visibility = View.VISIBLE
+//                                binding.expError.visibility = View.VISIBLE
+//                            }
+
+
+
+                        if (response.studentEducation.isEmpty()){
+                            binding.eduError.visibility = View.VISIBLE
+                        } else {
+                            educationAdapter = EducationAdapter(this@UserDetailsActivity,response, isOwner)
+                            binding.recyclerEducation.adapter = educationAdapter
+                            educationAdapter.notifyDataSetChanged()
+                            educationAdapter.setOnFilterClickListener(this)
+                        }
+
                     }catch (e:NullPointerException){
                         Log.e("error",e.message.toString())
                     }
@@ -141,6 +161,7 @@ class UserDetailsActivity : AppCompatActivity(),
 
             override fun onBottomSheetFilterCommunityClick(
                 jonDetails: NormalUserInfoo,
+                hospitalityExpertInfo: hospitalityExpertInfo,
                 position: Int
             ) {
 

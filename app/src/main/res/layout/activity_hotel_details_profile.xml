@@ -182,6 +182,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:src="@drawable/svg_heart"
+            android:visibility="gone"
             android:elevation="10dp"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="@id/hotelName"

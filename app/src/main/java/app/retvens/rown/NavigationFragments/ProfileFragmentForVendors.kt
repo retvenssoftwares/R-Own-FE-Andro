@@ -1,16 +1,21 @@
 package app.retvens.rown.NavigationFragments
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
@@ -35,6 +40,7 @@ import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetVendorsProfileSetting
 import app.retvens.rown.utils.showFullImage
 import app.retvens.rown.utils.websiteLinkV
+import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -61,6 +67,10 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
     lateinit var media : TextView
     lateinit var status : TextView
     lateinit var services : TextView
+
+    private lateinit var progressDialog: Dialog
+
+    lateinit var viewPP: CardView
 
     var profilePic = ""
 
@@ -98,6 +108,17 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         status = view.findViewById(R.id.status)
         services = view.findViewById(R.id.services)
 
+        viewPP = view.findViewById(R.id.viewPP)
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
+
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
 
@@ -120,6 +141,12 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
+
+        viewPP.setOnClickListener {
+            val intent = Intent(requireContext(), VendorDetailsActivity::class.java)
+            intent.putExtra("user_id", user_id)
+            startActivity(intent)
+        }
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
 

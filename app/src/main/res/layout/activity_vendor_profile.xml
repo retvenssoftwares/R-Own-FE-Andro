@@ -307,9 +307,11 @@
                 android:fontFamily="@font/montserrat_semibold"
                 android:textAlignment="center"
                 android:paddingVertical="8dp"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:paddingHorizontal="10dp"
                 android:background="@drawable/border"
-                android:text="VIEW PROFESSIONAL PROFILE"/>
+                android:text="VIEW VENDOR PROFILE"/>
 
         </androidx.cardview.widget.CardView>
 

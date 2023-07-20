@@ -333,11 +333,11 @@ class UserProfileActivity : AppCompatActivity() {
                 call: Call<NormalUserDataClass?>,
                 response: Response<NormalUserDataClass?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     profilePic = response.data.profile.Profile_pic
 
-                    progressDialog.dismiss()
 
                     if (profilePic.isNotEmpty()){
                         Glide.with(applicationContext).load(response.data.profile.Profile_pic).into(profile)
@@ -407,7 +407,7 @@ class UserProfileActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
-
+                progressDialog.dismiss()
             }
         })
     }

@@ -1,15 +1,20 @@
 package app.retvens.rown.NavigationFragments
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
@@ -41,6 +46,7 @@ import app.retvens.rown.bottomsheet.BottomSheetHotelierProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetVendorsProfileSetting
 import app.retvens.rown.utils.showFullImage
+import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
@@ -68,6 +74,10 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     lateinit var postCount:TextView
     lateinit var connCont:TextView
     lateinit var requestCont:TextView
+
+    private lateinit var progressDialog: Dialog
+
+    lateinit var viewPP: CardView
 
     var profilePic = ""
     var verificationStatus = ""
@@ -102,6 +112,16 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         postCount = view.findViewById(R.id.posts_count)
         connCont = view.findViewById(R.id.connections_count)
         requestCont = view.findViewById(R.id.requests_count)
+        viewPP = view.findViewById(R.id.viewPP)
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
 
         profile.setOnLongClickListener {
             showFullImage(profilePic, requireContext())
@@ -114,6 +134,10 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
+
+        viewPP.setOnClickListener {
+            startActivity(Intent(requireContext(),HotelOwnerDetailsActivity::class.java))
+        }
 
         linkText.setOnClickListener{
             val uri = Uri.parse("https://" + linkText.text.toString())
@@ -268,6 +292,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                 call: Call<OwnerProfileDataClass?>,
                 response: Response<OwnerProfileDataClass?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
 
@@ -294,7 +319,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             }
 
             override fun onFailure(call: Call<OwnerProfileDataClass?>, t: Throwable) {
-
+                progressDialog.dismiss()
             }
         })
 

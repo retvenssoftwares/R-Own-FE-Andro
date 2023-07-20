@@ -157,7 +157,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     holder.commentCount.text = item.commentCount
                 }
 
-                if (item.liked != "not liked"){
+                if (item.liked == "liked"){
                     holder.likeButton.setImageResource(R.drawable.liked_vectore)
                 }else if (item.liked == "not liked"){
                     holder.likeButton.setImageResource(R.drawable.svg_like_post)
@@ -273,7 +273,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     holder.commentCount.text = item.commentCount
                 }
 
-                if (item.liked != "not liked"){
+                if (item.liked == "liked"){
                     holder.likeButton.setImageResource(R.drawable.liked_vectore)
                 }else if (item.liked == "not liked"){
                     holder.likeButton.setImageResource(R.drawable.svg_like_post)

@@ -43,7 +43,7 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
 
             binding.hotelSectionLocation.text= firstN
 
-            if (recyclerItem.saved != "no"){
+            if (recyclerItem.saved == "saved"){
                 operatioin = "pop"
                 like = false
                 binding.cardLike.setImageResource(R.drawable.svg_heart_liked)

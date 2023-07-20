@@ -82,9 +82,9 @@ class PostsViewActivity : AppCompatActivity() {
         like = intent.getStringExtra("like").toString()
 
 //        Glide.with(applicationContext).load(image).into(postImage)
-        if (like == "Liked"){
+        if (like == "liked"){
             likeButton.setImageResource(R.drawable.liked_vectore)
-        }else if (like == "Unliked"){
+        }else if (like == "not liked"){
             likeButton.setImageResource(R.drawable.svg_like_post)
         }
 
@@ -121,7 +121,7 @@ class PostsViewActivity : AppCompatActivity() {
 
         likeButton.setOnClickListener {
 
-            if (like == "Unliked") {
+            if (like == "not liked") {
                 likeButton.setImageResource(R.drawable.liked_vectore)
                 likePost(postId)
             } else {

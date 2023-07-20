@@ -64,7 +64,7 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
 
         Glide.with(context).load(listS[position].hotelCoverpicUrl).into(holder.cover)
 
-        if (listS[position].saved != "no"){
+        if (listS[position].saved == "saved"){
             operatioin = "pop"
             like = false
             holder.like.setImageResource(R.drawable.svg_heart_liked)

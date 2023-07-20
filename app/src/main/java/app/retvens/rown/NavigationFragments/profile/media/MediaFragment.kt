@@ -119,8 +119,10 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
     }
 
     private fun getMedia(userId: String) {
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val User_id = sharedPreferences.getString("user_id", "").toString()
 
-        val getMedia = RetrofitBuilder.feedsApi.getUserProfileMedia(userId,userId,"$currentPage")
+        val getMedia = RetrofitBuilder.feedsApi.getUserProfileMedia(userId,User_id,"$currentPage")
 
         getMedia.enqueue(object : Callback<List<PostsDataClass>?>{
             override fun onResponse(

@@ -118,8 +118,10 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
     }
 
     private fun getMedia(userId: String) {
+        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val User_id = sharedPreferences.getString("user_id", "").toString()
 
-        val getMedia = RetrofitBuilder.feedsApi.getNormalUserStatus(userId,userId, "$currentPage")
+        val getMedia = RetrofitBuilder.feedsApi.getNormalUserStatus(userId,User_id, "$currentPage")
 
         getMedia.enqueue(object : Callback<List<PostsDataClass>?>,
             StatusAdapter.OnItemClickListener {

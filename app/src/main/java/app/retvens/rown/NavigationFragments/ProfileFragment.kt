@@ -65,6 +65,10 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
     var selected = 1
 
+    private lateinit var progressDialog:Dialog
+
+    lateinit var viewPP: CardView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -88,6 +92,17 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         connCont = view.findViewById(R.id.connections_count)
         requestCont = view.findViewById(R.id.requests_count)
 
+        viewPP = view.findViewById(R.id.viewPP)
+
+        progressDialog = Dialog(requireContext())
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
+
         profile.setOnLongClickListener {
             showFullImage(profilePic, requireContext())
             true
@@ -96,6 +111,9 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
+        viewPP.setOnClickListener {
+            startActivity(Intent(context,UserDetailsActivity::class.java))
+        }
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
 
@@ -192,6 +210,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                 call: Call<NormalUserDataClass?>,
                 response: Response<NormalUserDataClass?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
 
@@ -223,6 +242,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             }
 
             override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })

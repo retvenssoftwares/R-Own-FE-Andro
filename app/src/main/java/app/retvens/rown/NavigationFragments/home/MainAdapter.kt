@@ -172,11 +172,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
 //
 
-            if (post.like == "Liked") {
+            if (post.like == "liked") {
                 like = false
                 banner.islike = false
                 binding.likePost.setImageResource(R.drawable.liked_vectore)
-            } else if (post.like == "Unliked") {
+            } else if (post.like == "not liked") {
                 like = true
                 banner.islike = true
                 binding.likePost.setImageResource(R.drawable.svg_like_post)
@@ -264,7 +264,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
                 if (like) {
                     postLike(banner.post_id, context) {
-                        banner.like = "Liked"
+                        banner.like = "liked"
                         like = false
                         banner.islike = false
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
@@ -275,7 +275,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //                        onItemClickListener?.onItemClick(banner)
                 } else {
                     postLike(banner.post_id, context) {
-                        banner.like = "Unliked"
+                        banner.like = "not liked"
                         like = true
                         banner.islike = true
                         binding.likePost.setImageResource(R.drawable.svg_like_post)
@@ -483,7 +483,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.commentCount.text = post.Comment_count
             }
 
-            if (post.like != "Unliked") {
+            if (post.like != "not liked") {
                 like = false
                 binding.likePost.setImageResource(R.drawable.liked_vectore)
             } else {
@@ -546,7 +546,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
                 if (like) {
                     postLike(post.post_id, context) {
-                        post.like = "Liked"
+                        post.like = "liked"
                         like = false
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
                         count += 1
@@ -557,7 +557,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 } else {
 
                     postLike(post.post_id, context) {
-                        post.like = "Unliked"
+                        post.like = "not liked"
                         like = true
                         binding.likePost.setImageResource(R.drawable.svg_like_post)
 //                            count = post.Like_count.toInt()
@@ -582,7 +582,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
                     if (like) {
                         postLike(post.post_id, context) {
-                            post.like = "Liked"
+                            post.like = "liked"
                             like = false
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
                             count += 1
@@ -710,10 +710,10 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.commentCount.text = banner.Comment_count
             }
 
-            if (banner.like == "Liked") {
+            if (banner.like == "liked") {
                 like = false
                 binding.likePost.setImageResource(R.drawable.liked_vectore)
-            } else if (banner.like == "Unliked") {
+            } else if (banner.like == "not liked") {
                 like = true
                 binding.likePost.setImageResource(R.drawable.svg_like_post)
             }
@@ -724,7 +724,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
                 if (like) {
                     postLike(banner.post_id, context) {
-                        banner.like = "Liked"
+                        banner.like = "liked"
                         like = false
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
                         count += 1
@@ -735,7 +735,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 } else {
 
                     postLike(banner.post_id, context) {
-                        banner.like = "Unliked"
+                        banner.like = "not liked"
                         like = true
                         binding.likePost.setImageResource(R.drawable.svg_like_post)
 //                            count = post.Like_count.toInt()

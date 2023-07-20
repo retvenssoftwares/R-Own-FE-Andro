@@ -225,6 +225,8 @@
                     android:text="CONNECT"
                     android:textSize="14dp"
                     android:fontFamily="@font/montserrat_bold"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textAlignment="center"
                     android:paddingVertical="8dp"
                     android:paddingHorizontal="10dp"
@@ -253,6 +255,8 @@
                     android:textSize="14dp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:textAlignment="center"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:paddingVertical="8dp"
                     android:paddingHorizontal="10dp"
                     android:background="@drawable/border"
@@ -305,10 +309,12 @@
                 android:textSize="14dp"
                 android:fontFamily="@font/montserrat_semibold"
                 android:textAlignment="center"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:paddingVertical="8dp"
                 android:paddingHorizontal="10dp"
                 android:background="@drawable/border"
-                android:text="VIEW PROFESSIONAL PROFILE"/>
+                android:text="VIEW OWNER PROFILE"/>
 
         </androidx.cardview.widget.CardView>
 

@@ -37,3 +37,11 @@ data class NormalUserInfoo(
     val jobTitle:String
 )
 
+data class hospitalityExpertInfo(
+    val jobtype:String,
+    val hotelCompany:String,
+    val jobstartYear:String,
+    val jobendYear:String,
+    val jobtitle:String
+)
+

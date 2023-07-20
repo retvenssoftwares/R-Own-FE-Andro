@@ -152,6 +152,25 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
             endYearDialog(requireContext(), end, selectedYear)
         }
 
+        start.addTextChangedListener {
+            if (start.text!!.isNotEmpty() && end.text!!.isNotEmpty()){
+                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                submit.isClickable = true
+            } else {
+                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_20))
+                submit.isClickable = false
+            }
+        }
+         end.addTextChangedListener {
+            if (start.text!!.isNotEmpty() && end.text!!.isNotEmpty()){
+                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                submit.isClickable = true
+            } else {
+                submit.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_20))
+                submit.isClickable = false
+            }
+         }
+
         submit.setOnClickListener {
             if(jobTitle.text.toString() == "Job Title"){
                 jobTitleLayout.error = "Please enter your Job Title"

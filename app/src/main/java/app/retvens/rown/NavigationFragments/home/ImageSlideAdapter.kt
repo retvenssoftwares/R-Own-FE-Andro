@@ -73,7 +73,7 @@ class ImageSlideAdapter(private val context: Context, private var imageList: Lis
                     var count:Int =  banner.Like_count.toInt()
                     if(banner.islike){
                         app.retvens.rown.utils.postLike(banner.post_id, context) {
-                            banner.like = "Liked"
+                            banner.like = "liked"
                             banner.islike = false
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
                             count += 1

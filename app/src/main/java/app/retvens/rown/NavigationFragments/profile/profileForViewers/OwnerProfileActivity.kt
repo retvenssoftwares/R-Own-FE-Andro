@@ -104,7 +104,6 @@ class OwnerProfileActivity : AppCompatActivity() {
         reject = findViewById(R.id.reject)
         rejectCard = findViewById(R.id.openReview)
 
-        viewPP = findViewById(R.id.viewPP)
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
 
@@ -112,6 +111,8 @@ class OwnerProfileActivity : AppCompatActivity() {
         connCount = findViewById(R.id.connections_count)
         connStatus = findViewById(R.id.connStatus)
         card_message = findViewById(R.id.card_message)
+
+        viewPP = findViewById(R.id.viewPP)
 
         progressDialog = Dialog(this)
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -172,7 +173,7 @@ class OwnerProfileActivity : AppCompatActivity() {
                     viewPP.visibility = View.GONE
 
                     rejectCard.visibility = View.VISIBLE
-                    reject.text = "VIEW PROFESSIONAL PROFILE"
+                    reject.text = "VIEW OWNER PROFILE"
                 }
 
             } else if (connStatus.text == "CONNECT") {
@@ -182,7 +183,7 @@ class OwnerProfileActivity : AppCompatActivity() {
                     viewPP.visibility = View.GONE
 
                     rejectCard.visibility = View.VISIBLE
-                    reject.text = "VIEW PROFESSIONAL PROFILE"
+                    reject.text = "VIEW OWNER PROFILE"
                 }
 
             } else  if (connStatus.text == "Requested") {
@@ -192,7 +193,7 @@ class OwnerProfileActivity : AppCompatActivity() {
                     viewPP.visibility = View.GONE
 
                     rejectCard.visibility = View.VISIBLE
-                    reject.text = "VIEW PROFESSIONAL PROFILE"
+                    reject.text = "VIEW OWNER PROFILE"
                 }
 
             } else if (connStatus.text == "Accept") {
@@ -432,7 +433,7 @@ class OwnerProfileActivity : AppCompatActivity() {
                         connStatus.text = "CONNECT"
 
                         rejectCard.visibility = View.VISIBLE
-                        reject.text = "VIEW PROFESSIONAL PROFILE"
+                        reject.text = "VIEW OWNER PROFILE"
                     }else if (response.connectionStatus ==  "Confirm request"){
                         connStatus.text = "Accept"
                         viewPP.visibility = View.VISIBLE
@@ -442,7 +443,7 @@ class OwnerProfileActivity : AppCompatActivity() {
                     } else{
                         connStatus.text = response.connectionStatus
                         rejectCard.visibility = View.VISIBLE
-                        reject.text = "VIEW PROFESSIONAL PROFILE"
+                        reject.text = "VIEW OWNER PROFILE"
                     }
                 }
             }

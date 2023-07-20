@@ -49,7 +49,7 @@ class HotelDetailsActivity : AppCompatActivity() {
         val saved = intent.getStringExtra("saved")
         getHotel()
 
-        if (saved != "no"){
+        if (saved == "saved"){
             operatioin = "pop"
             liked = false
             binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
