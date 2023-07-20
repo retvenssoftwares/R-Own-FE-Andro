@@ -126,8 +126,8 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     layoutOneViewHolder.name.text = item.Full_name
                 }
 
-                if (item.caption.lines().size > 4) {
-                    layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/4) + "..." + "<font color='blue'> <u>View More</u></font>")
+                if (item.caption.lines().size > 4 || item.caption.length > 150) {
+                    layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
                 } else {
                     layoutOneViewHolder.status.text = item.caption
                 }
@@ -135,8 +135,8 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     if (layoutOneViewHolder.status.text.toString().endsWith("View More")) {
                         layoutOneViewHolder.status.text = item.caption
                     } else {
-                        if (item.caption.lines().size > 4) {
-                            layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/4) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        if (item.caption.lines().size > 4  || item.caption.length > 150) {
+                            layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
                         } else {
                             layoutOneViewHolder.status.text = item.caption
                         }
@@ -208,8 +208,8 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     layoutTwoViewHolder.username.text = item.Full_name
                 }
 
-                if (item.caption.lines().size > 3) {
-                    layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                if (item.caption.lines().size > 3 || item.caption.length > 150) {
+                    layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
                 } else {
                     layoutTwoViewHolder.caption.text = item.caption
                 }
@@ -217,8 +217,8 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     if (layoutTwoViewHolder.caption.text.toString().endsWith("View More")) {
                         layoutTwoViewHolder.caption.text = item.caption
                     } else {
-                        if (item.caption.lines().size > 3) {
-                            layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        if (item.caption.lines().size > 3 || item.caption.length > 150) {
+                            layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
                         } else {
                             layoutTwoViewHolder.caption.text = item.caption
                         }

@@ -95,6 +95,15 @@ class DashBoardActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         startAnimation()
 
+//        getProfileInfo(this){
+//            if (it == 502){
+//                binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
+//                binding.noInternet.visibility = View.VISIBLE
+//                binding.noInternetLayout.visibility = View.GONE
+//                binding.navView.visibility = View.GONE
+//                binding.dashboard.visibility = View.GONE
+//            }
+//        }
         Thread {
             // Run whatever background code you want here.
             replaceFragment(HomeFragment())
@@ -107,38 +116,25 @@ class DashBoardActivity : AppCompatActivity() {
 
         val server = intent.getStringExtra("server")
 
-        Toast.makeText(this, "$serverCode", Toast.LENGTH_SHORT).show()
-        if (serverCode == 502 || server == "502"){
+        Toast.makeText(this, "server - $server", Toast.LENGTH_SHORT).show()
+        if (server == "502"){
             binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
             binding.noInternet.visibility = View.VISIBLE
             binding.noInternetLayout.visibility = View.GONE
             binding.navView.visibility = View.GONE
             binding.dashboard.visibility = View.GONE
-        } else {
-            binding.noInternet.visibility = View.GONE
-            binding.navView.visibility = View.VISIBLE
-            binding.dashboard.visibility = View.VISIBLE
-            if (replace){
-                replaceFragment(HomeFragment())
-            }
         }
+//        else {
+//            binding.noInternet.visibility = View.GONE
+//            binding.navView.visibility = View.VISIBLE
+//            binding.dashboard.visibility = View.VISIBLE
+//            if (replace){
+//                replaceFragment(HomeFragment())
+//            }
+//        }
 
         checkNetworkConnection = CheckNetworkConnection(application)
         checkNetworkConnection.observe(this) { isConnected ->
-            if (serverCode == 502){
-                binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
-                binding.noInternet.visibility = View.VISIBLE
-                binding.noInternetLayout.visibility = View.GONE
-                binding.navView.visibility = View.GONE
-                binding.dashboard.visibility = View.GONE
-            } else {
-                binding.noInternet.visibility = View.GONE
-                binding.navView.visibility = View.VISIBLE
-                binding.dashboard.visibility = View.VISIBLE
-                if (replace){
-                    replaceFragment(HomeFragment())
-                }
-            }
             if (isConnected) {
                 binding.noInternet.visibility = View.GONE
                 binding.navView.visibility = View.VISIBLE

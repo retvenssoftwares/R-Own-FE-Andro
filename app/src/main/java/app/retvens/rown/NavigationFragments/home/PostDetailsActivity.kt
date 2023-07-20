@@ -276,7 +276,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        val savePost = RetrofitBuilder.feedsApi.savePost(user_id, SavePost(operatioin,blogId!!))
+        val savePost = RetrofitBuilder.feedsApi.savePost(user_id, SavePost(operatioin,blogId))
         savePost.enqueue(object : Callback<UserProfileResponse?> {
             override fun onResponse(
                 call: Call<UserProfileResponse?>,

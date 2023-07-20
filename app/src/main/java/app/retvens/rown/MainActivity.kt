@@ -34,7 +34,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getProfileInfo(this){}
+        var server = 0
+        getProfileInfo(this){
+            server = it
+        }
 
         auth = FirebaseAuth.getInstance()
 
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                 MesiboApi.init(applicationContext)
                 MesiboApi.startMesibo(true)
                 val intent = Intent(this, DashBoardActivity::class.java)
+                intent.putExtra("server", "$server")
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             } else{

@@ -51,7 +51,12 @@ class SharePostAdapter(val context: Context, var userList:List<Connections>) :
         val data = userList[position]
         holder.name.text = data.Full_name
         holder.username.text = data.User_id
-        Glide.with(context).load(data.Profile_pic).into(holder.profile)
+
+        if (data.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
+        }
 
         var state = "send"
         holder.share.setOnClickListener {

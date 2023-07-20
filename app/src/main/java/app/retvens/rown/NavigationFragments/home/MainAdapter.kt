@@ -120,7 +120,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
 
-            if (post.verificationStatus != "false") {
+            if (post.verificationStatus == "true") {
+                binding.verification.visibility = View.VISIBLE
+            } else if (post.verificationStatus == "false") {
                 binding.verification.visibility = View.VISIBLE
             }
 
@@ -622,8 +624,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.titleStatus.text = banner.caption
 
-            if (banner.caption.lines().size > 3) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+            if (banner.caption.lines().size > 3 || banner.caption.length > 150) {
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
@@ -631,8 +633,8 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 if (binding.titleStatus.text.toString().endsWith("View More")) {
                     binding.titleStatus.text = banner.caption
                 } else {
-                    if (banner.caption.lines().size > 3) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    if (banner.caption.lines().size > 3 || banner.caption.length > 150) {
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -1246,8 +1248,10 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 binding.location.text = banner.Role
             }
 
-            if (banner.verificationStatus != "false") {
+            if (banner.verificationStatus == "true") {
                 binding.verification.visibility = View.VISIBLE
+            } else if (banner.verificationStatus == "false") {
+                binding.verification.visibility = View.GONE
             }
 //            val total = calculateTotalVotes(banner.pollQuestion[0].Options.toTypedArray())
 //            Log.e("totel",total.toString())
