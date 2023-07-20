@@ -60,7 +60,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
 
         if (like == "liked"){
             isLiked = false
-            binding.likePost.setImageResource(R.drawable.likes)
+            binding.likePost.setImageResource(R.drawable.liked_vectore)
         } else {
             isLiked = true
             binding.likePost.setImageResource(R.drawable.svg_like_post)
@@ -186,7 +186,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     if (isLiked) {
                         isLiked = !isLiked
-                        binding.likePost.setImageResource(R.drawable.likes)
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
                     }else {
                         isLiked = !isLiked
                         binding.likePost.setImageResource(R.drawable.svg_like_post)

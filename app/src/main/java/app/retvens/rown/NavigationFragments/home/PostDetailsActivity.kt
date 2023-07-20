@@ -116,7 +116,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         val user_id = intent.getStringExtra("user_id")
         val isSaved = intent.getStringExtra("isSaved")
         val savedFrag = intent.getStringExtra("savedFrag")
-        Toast.makeText(applicationContext, "$savedFrag", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext, "$savedFrag", Toast.LENGTH_SHORT).show()
 
         postId = intent.getStringExtra("postId").toString()
         postid = intent.getStringExtra("postid").toString()

@@ -146,6 +146,15 @@ class HotelDetailsActivity : AppCompatActivity() {
                         val intent = Intent(Intent.ACTION_VIEW, uri)
                         startActivity(intent)
                     }
+                    if (data.saved == "saved") {
+                            operatioin = "pop"
+                            liked = false
+                            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
+                        } else {
+                            operatioin = "push"
+                            liked = true
+                            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
+                        }
 
                     if(data.gallery.size >= 3) {
                         img1 = data.gallery.get(0).Image1

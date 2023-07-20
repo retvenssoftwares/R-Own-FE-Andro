@@ -19,6 +19,7 @@ import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
 import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.R
+import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -113,6 +114,8 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
             VIEW_TYPE_LAYOUT_ONE -> {
                 val layoutOneViewHolder = holder as LayoutOneViewHolder
 
+                var like = true
+
                 val time = TimesStamp.convertTimeToText(item.date_added)
                 layoutOneViewHolder.time.text = time
 
@@ -127,7 +130,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 }
 
                 if (item.caption.lines().size > 4 || item.caption.length > 150) {
-                    layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
                 } else {
                     layoutOneViewHolder.status.text = item.caption
                 }
@@ -136,7 +139,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                         layoutOneViewHolder.status.text = item.caption
                     } else {
                         if (item.caption.lines().size > 4  || item.caption.length > 150) {
-                            layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                            layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
                         } else {
                             layoutOneViewHolder.status.text = item.caption
                         }
@@ -158,29 +161,37 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 }
 
                 if (item.liked == "liked"){
+                    like = false
                     holder.likeButton.setImageResource(R.drawable.liked_vectore)
                 }else if (item.liked == "not liked"){
+                    like = true
                     holder.likeButton.setImageResource(R.drawable.svg_like_post)
                 }
 
+                var count = item.likeCount.toInt()
 
                 holder.likeButton.setOnClickListener {
-                    item.islike = !item.islike
+                    if (like) {
+                        postLike(item.post_id, context) {
+                            item.like = "liked"
+                            like = false
+                            holder.likeButton.setImageResource(R.drawable.liked_vectore)
+                            count += 1
+//                            post.Like_count = count.toString()
+                            holder.likeCount.text = count.toString()
+                        }
+                    } else {
 
-                    val count:Int
-                    if(item.islike){
-                        holder.likeButton.setImageResource(R.drawable.liked_vectore)
-                        val like = item.likeCount.toInt()
-                        count = like + 1
-                        holder.likeCount.text = count.toString()
-                    }else{
-                        holder.likeButton.setImageResource(R.drawable.svg_like_post)
-                        val like = item.likeCount.toInt()
-                        count = like
-                        holder.likeCount.text = count.toString()
+                        postLike(item.post_id, context) {
+                            item.like = "not liked"
+                            like = true
+                            holder.likeButton.setImageResource(R.drawable.svg_like_post)
+//                            count = post.Like_count.toInt()
+//                            post.Like_count = count.toString()
+                            count -= 1
+                            holder.likeCount.text = count.toString()
+                        }
                     }
-
-                    onItemClickListener?.onItemClick(item)
                 }
 
                 holder.commentButton.setOnClickListener {
@@ -194,6 +205,8 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
 
             VIEW_TYPE_LAYOUT_TWO -> {
                 val layoutTwoViewHolder = holder as LayoutTwoViewHolder
+
+                var like = true
 
                 val time = TimesStamp.convertTimeToText(item.date_added)
                 layoutTwoViewHolder.time.text = time
@@ -209,7 +222,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 }
 
                 if (item.caption.lines().size > 3 || item.caption.length > 150) {
-                    layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
                 } else {
                     layoutTwoViewHolder.caption.text = item.caption
                 }
@@ -218,7 +231,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                         layoutTwoViewHolder.caption.text = item.caption
                     } else {
                         if (item.caption.lines().size > 3 || item.caption.length > 150) {
-                            layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                            layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
                         } else {
                             layoutTwoViewHolder.caption.text = item.caption
                         }
@@ -274,29 +287,36 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 }
 
                 if (item.liked == "liked"){
+                    like = false
                     holder.likeButton.setImageResource(R.drawable.liked_vectore)
                 }else if (item.liked == "not liked"){
+                    like = true
                     holder.likeButton.setImageResource(R.drawable.svg_like_post)
                 }
 
+                var count = item.likeCount.toInt()
 
                 holder.likeButton.setOnClickListener {
-                    item.islike = !item.islike
-
-                    val count:Int
-                    if(item.islike){
-                        holder.likeButton.setImageResource(R.drawable.liked_vectore)
-                        val like = item.likeCount.toInt()
-                        count = like + 1
-                        holder.likeCount.text = count.toString()
-                    }else{
-                        holder.likeButton.setImageResource(R.drawable.svg_like_post)
-                        val like = item.likeCount.toInt()
-                        count = like
-                        holder.likeCount.text = count.toString()
+                    if (like) {
+                        postLike(item.post_id, context) {
+                            item.like = "liked"
+                            like = false
+                            holder.likeButton.setImageResource(R.drawable.liked_vectore)
+                            count += 1
+//                            post.Like_count = count.toString()
+                            holder.likeCount.text = count.toString()
+                        }
+                    } else {
+                        postLike(item.post_id, context) {
+                            item.like = "not liked"
+                            like = true
+                            holder.likeButton.setImageResource(R.drawable.svg_like_post)
+//                            count = post.Like_count.toInt()
+//                            post.Like_count = count.toString()
+                            count -= 1
+                            holder.likeCount.text = count.toString()
+                        }
                     }
-
-                    onItemClickListener?.onItemClick(item)
                 }
 
                 holder.commentButton.setOnClickListener {
