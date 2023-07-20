@@ -28,7 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PollsFragment(val userId: String, val isOwner : Boolean, val username : String) : Fragment() {
+class PollsFragment(val user_Id: String, val isOwner : Boolean, val username : String) : Fragment() {
 
     lateinit var pollsRecyclerView: RecyclerView
     lateinit var pollsAdapter: PollsAdapter
@@ -71,7 +71,7 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
 
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
-        pollsAdapter = PollsAdapter(list, requireContext(), userId)
+        pollsAdapter = PollsAdapter(list, requireContext(), user_Id)
         pollsRecyclerView.adapter = pollsAdapter
 
 
@@ -83,7 +83,6 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
                     isLoading = true;
                 }
             }
-
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0){
@@ -103,7 +102,7 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
             }
         })
 
-        getPolls(userId)
+        getPolls(user_id)
 
     }
 
@@ -114,7 +113,7 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
 
         handler.postDelayed({
             if (isAdded) {
-                getPolls(userId)
+                getPolls(user_Id)
                 progress.visibility = View.GONE
             }
         },
@@ -123,7 +122,7 @@ class PollsFragment(val userId: String, val isOwner : Boolean, val username : St
 
     private fun getPolls(userId: String) {
 
-        val getPoll = RetrofitBuilder.feedsApi.getNormalUserPoll(userId,userId,"$currentPage")
+        val getPoll = RetrofitBuilder.feedsApi.getNormalUserPoll(user_Id,userId,"$currentPage")
 
         getPoll.enqueue(object : Callback<List<PostsDataClass>?> {
             override fun onResponse(

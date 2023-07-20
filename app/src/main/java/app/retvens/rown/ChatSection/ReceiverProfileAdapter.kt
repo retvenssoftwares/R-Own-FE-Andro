@@ -1,5 +1,6 @@
 package app.retvens.rown.ChatSection
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.text.format.DateUtils
@@ -17,6 +18,7 @@ import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
+import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.mesibo.api.MesiboProfile
@@ -69,5 +71,11 @@ class ReceiverProfileAdapter(val context: Context, var userList:List<Connections
 
     override fun getItemCount(): Int {
         return userList.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<Connections>) {
+        userList = newItems
+        notifyDataSetChanged()
     }
 }

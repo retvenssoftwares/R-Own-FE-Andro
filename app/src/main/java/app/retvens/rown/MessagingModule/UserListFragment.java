@@ -62,11 +62,15 @@ import com.mesibo.messaging.MesiboImages;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -244,7 +248,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         this.mAdapter = new MessageContactAdapter(getActivity(), this, this.mUserProfiles, this.mSearchResultList);
         this.mRecyclerView.setAdapter(this.mAdapter);
         this.fabadd = view.findViewById(R.id.fab_add);
-        this.searchBar = view.findViewById(R.id.search_bar);
+        this.searchBar = view.findViewById(R.id.searchBar);
 
         ArrayList<MesiboProfile> Search = this.mUserProfiles;
 
@@ -855,7 +859,22 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                 }
                 holder.mContactsMessage.setCompoundDrawablePadding(padding);
                 if (!typing) {
-                    holder.mContactsMessage.setText(userdata.getLastMessage());
+
+                    DecodeDataHelper decodeDataHelper = new DecodeDataHelper();
+                    Map<String, String> decodedData = decodeDataHelper.decodeData(userdata.getLastMessage());
+                    Decoder decoder = new Decoder();
+                    Map<String, String> decode = decoder.decodeProfileData(userdata.getLastMessage());
+
+                    String messageType = decodedData.get("messageType");
+                    String profileType = decode.get("messageType");
+
+                    if (Objects.equals(messageType, "Post")){
+                        holder.mContactsMessage.setText("Shared a Post");
+                    }else if(Objects.equals(profileType, "Profile")){
+                        holder.mContactsMessage.setText("Shared a Profile");
+                    }else {
+                        holder.mContactsMessage.setText(userdata.getLastMessage());
+                    }
                     holder.mContactsMessage.setTextColor(UserListFragment.this.mMesiboUIOptions.mUserListStatusColor);
                 } else {
                     MesiboProfile typingProfile = data.getTypingProfile();
@@ -1089,6 +1108,177 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                 }
                 UserListFragment.this.getActivity().finish();
                 UserListFragment.this.mForwardId = 0;
+            }
+        }
+
+        public  class DecodeDataHelper {
+            public  String decodeString(String input, int shift) {
+                StringBuilder decodedData = new StringBuilder();
+                for (char ch : input.toCharArray()) {
+                    int asciiValue = (int) ch;
+                    if (Character.isLetter(ch)) {
+                        boolean isUpperCase = Character.isUpperCase(ch);
+                        int base = isUpperCase ? 65 : 97;
+                        int decodedAscii = (asciiValue - base - shift + 26) % 26;
+                        char decodedChar = (char) (decodedAscii + base);
+                        decodedData.append(decodedChar);
+                    } else {
+                        decodedData.append(ch);
+                    }
+                }
+                return decodedData.toString();
+            }
+
+            public  Map<String, String> decodeData(String encodedData) {
+                List<String> values = Arrays.asList(encodedData.split("\\|"));
+                List<String> keys = Arrays.asList(
+                        "messageType",
+                        "userId",
+                        "postId",
+                        "profilePictureLink",
+                        "firstImageLink",
+                        "username",
+                        "caption",
+                        "verificationStatus",
+                        "fullName"
+                );
+
+                List<String> decodedValues = new ArrayList<>();
+                for (int index = 0; index < values.size(); index++) {
+                    String value = values.get(index);
+                    int shift;
+                    switch (index) {
+                        case 0:
+                            shift = 3;
+                            break;
+                        case 1:
+                            shift = 5;
+                            break;
+                        case 2:
+                            shift = 2;
+                            break;
+                        case 3:
+                            shift = 4;
+                            break;
+                        case 4:
+                            shift = 1;
+                            break;
+                        case 5:
+                            shift = 6;
+                            break;
+                        case 6:
+                            shift = 7;
+                            break;
+                        case 7:
+                            shift = 8;
+                            break;
+                        case 8:
+                            shift = 9;
+                            break;
+                        default:
+                            shift = 0;
+                    }
+                    decodedValues.add(decodeString(value, shift));
+                }
+
+                Map<String, String> decodedData = new HashMap<>();
+                int minSize = Math.min(keys.size(), decodedValues.size()); // Ensure iterating over the smaller size
+
+                try {
+                    for (int i = 0; i < minSize; i++) {
+                        String key = keys.get(i);
+                        String value = decodedValues.get(i);
+                        decodedData.put(key, value);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    // Handle the exception here
+                    // You can log an error message, provide a default value, or take appropriate action
+                    System.err.println("Index out of bounds: " + e.getMessage());
+                    // Perform fallback behavior or recovery steps if needed
+                }
+
+                return decodedData;
+            }
+        }
+
+
+        public  class Decoder {
+            public  Map<String, String> decodeProfileData(String encodedData) {
+                List<String> keys = Arrays.asList(
+                        "messageType",
+                        "userID",
+                        "verificationStatus",
+                        "fullName",
+                        "userName",
+                        "userRole",
+                        "profilePictureLink"
+                );
+                List<String> values = new ArrayList<>(Arrays.asList(encodedData.split("\\|")));
+
+                List<String> decodedValues = new ArrayList<>();
+                for (int index = 0; index < values.size(); index++) {
+                    String value = values.get(index);
+                    int shift;
+                    switch (index) {
+                        case 0:
+                            shift = 3;
+                            break;
+                        case 1:
+                            shift = 5;
+                            break;
+                        case 2:
+                            shift = 2;
+                            break;
+                        case 3:
+                            shift = 4;
+                            break;
+                        case 4:
+                            shift = 1;
+                            break;
+                        case 5:
+                            shift = 6;
+                            break;
+                        case 6:
+                            shift = 7;
+                            break;
+                        default:
+                            shift = 0;
+                    }
+                    decodedValues.add(decodeString(value, shift));
+                }
+
+                Map<String, String> decodedData = new HashMap<>();
+                int minSize = Math.min(keys.size(), decodedValues.size()); // Ensure iterating over the smaller size
+
+                try {
+                    for (int i = 0; i < minSize; i++) {
+                        String key = keys.get(i);
+                        String value = decodedValues.get(i);
+                        decodedData.put(key, value);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    // Handle the exception here
+                    // You can log an error message, provide a default value, or take appropriate action
+                    System.err.println("Index out of bounds: " + e.getMessage());
+                    // Perform fallback behavior or recovery steps if needed
+                }
+
+                return decodedData;
+            }
+
+            public  String decodeString(String input, int shift) {
+                StringBuilder decodedData = new StringBuilder();
+                for (char ch : input.toCharArray()) {
+                    if (Character.isLetter(ch)) {
+                        char base = Character.isLowerCase(ch) ? 'a' : 'A';
+                        int decodedAscii = (ch - base - shift + 26) % 26;
+                        char decodedChar = (char) (decodedAscii + base);
+                        decodedData.append(decodedChar);
+                    } else {
+                        decodedData.append(ch);
+                    }
+                }
+                return decodedData.toString();
             }
         }
 

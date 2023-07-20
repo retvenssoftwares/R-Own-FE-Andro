@@ -51,7 +51,9 @@ import javax.microedition.khronos.opengles.GL;
 import app.retvens.rown.Dashboard.DashBoardActivity;
 import app.retvens.rown.NavigationFragments.home.PostDetailsActivity;
 import app.retvens.rown.NavigationFragments.home.PostsViewActivity;
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity;
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity;
 import app.retvens.rown.R;
 
 public class MessageView extends RelativeLayout {
@@ -352,9 +354,19 @@ public class MessageView extends RelativeLayout {
                     this.profileCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, UserProfileActivity.class);
-                            intent.putExtra("userId", userID);
-                            context.startActivity(intent);
+                            if (Objects.equals(userRole, "Business Vendor/Freelancer")) {
+                                Intent intent = new Intent(context, VendorProfileActivity.class);
+                                intent.putExtra("userId", userID);
+                                context.startActivity(intent);
+                            }else if (Objects.equals(userRole, "Hotel Owner")){
+                                Intent intent = new Intent(context, OwnerProfileActivity.class);
+                                intent.putExtra("userId", userID);
+                                context.startActivity(intent);
+                            }else {
+                                Intent intent = new Intent(context, UserProfileActivity.class);
+                                intent.putExtra("userId", userID);
+                                context.startActivity(intent);
+                            }
                         }
                     });
 
@@ -419,9 +431,19 @@ public class MessageView extends RelativeLayout {
                     this.profileCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, UserProfileActivity.class);
-                            intent.putExtra("userId", userID);
-                            context.startActivity(intent);
+                            if (Objects.equals(userRole, "Business Vendor/Freelancer")) {
+                                Intent intent = new Intent(context, VendorProfileActivity.class);
+                                intent.putExtra("userId", userID);
+                                context.startActivity(intent);
+                            }else if (Objects.equals(userRole, "Hotel Owner")){
+                                Intent intent = new Intent(context, OwnerProfileActivity.class);
+                                intent.putExtra("userId", userID);
+                                context.startActivity(intent);
+                            }else {
+                                Intent intent = new Intent(context, UserProfileActivity.class);
+                                intent.putExtra("userId", userID);
+                                context.startActivity(intent);
+                            }
                         }
                     });
 

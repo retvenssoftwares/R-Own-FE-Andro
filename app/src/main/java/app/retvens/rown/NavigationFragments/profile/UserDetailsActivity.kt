@@ -164,7 +164,6 @@ class UserDetailsActivity : AppCompatActivity(),
                 hospitalityExpertInfo: hospitalityExpertInfo,
                 position: Int
             ) {
-
                 val bottomSheet = BottomSheetUpdateExperience(jonDetails,position)
                 val fragManager = supportFragmentManager
                 fragManager.let{bottomSheet.show(it, BottomSheetUpdateExperience.Edit_TAG)}

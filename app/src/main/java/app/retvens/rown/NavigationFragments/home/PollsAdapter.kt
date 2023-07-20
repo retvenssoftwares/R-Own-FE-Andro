@@ -105,12 +105,6 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
         }
 
 
-
-
-
-
-
-
     }
 
 

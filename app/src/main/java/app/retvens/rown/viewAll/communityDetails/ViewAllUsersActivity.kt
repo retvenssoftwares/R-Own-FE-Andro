@@ -1,6 +1,7 @@
 package app.retvens.rown.viewAll.communityDetails
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +25,11 @@ import app.retvens.rown.CreateCommunity.UserDetailsAdapter
 import app.retvens.rown.CreateCommunity.VendorDetailsAdapter
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.DataCollections.FeedCollection.User
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.removeMember
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
+import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,7 +46,7 @@ class ViewAllUsersActivity : AppCompatActivity() {
     lateinit var userDetailsAdapter: UserDetailsAdapter
     lateinit var vendorDetailsAdapter: VendorDetailsAdapter
     lateinit var normalUserDetailsAdapter: NormalUserDetailsAdapter
-
+    private var group_Id: String = ""
     lateinit var progressDialog: Dialog
     lateinit var recycler: RecyclerView
     lateinit var topTitle: TextView
@@ -56,6 +63,7 @@ class ViewAllUsersActivity : AppCompatActivity() {
         recycler.setHasFixedSize(true)
 
         val groupID = intent.getStringExtra("groupID")
+        group_Id = groupID!!
 
         getCommunityDetails(groupID)
 
@@ -118,7 +126,6 @@ class ViewAllUsersActivity : AppCompatActivity() {
                         normalUserDetailsAdapter.setOnItemClickListener(this)
                     }
 
-
                 } else{
                     Log.e("error",response.message().toString())
                 }
@@ -129,15 +136,15 @@ class ViewAllUsersActivity : AppCompatActivity() {
                 Log.e("error",t.message.toString())
             }
 
-            override fun onItemClick(member: User,admin:String) {
-                Log.e("1","working")
-                openBottomSelectionCommunity(member.user_id,member.address)
-
+            override fun onItemClick(member: User, admin: String) {
+                openBottomSelectionCommunity(member.user_id,member.Role,admin)
             }
+
+
         })
     }
 
-    private fun openBottomSelectionCommunity(userId:String,number:String) {
+    private fun openBottomSelectionCommunity(userId:String,role:String,admin:String) {
         val dialogLanguage = Dialog(this)
         dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogLanguage.setContentView(R.layout.bottom_remove_from_community)
@@ -152,17 +159,28 @@ class ViewAllUsersActivity : AppCompatActivity() {
 
 
         dialogLanguage.findViewById<TextView>(R.id.remove).setOnClickListener {
-            openBottomSelectionCommunityRemove(dialogLanguage)
-        }
-        dialogLanguage.findViewById<TextView>(R.id.message).setOnClickListener {
-            dialogLanguage.dismiss()
+            openBottomSelectionCommunityRemove(dialogLanguage,userId)
         }
         dialogLanguage.findViewById<TextView>(R.id.view_profile).setOnClickListener {
+            if (role == "Business Vendor / Freelancer") {
+                val intent = Intent(applicationContext, VendorProfileActivity::class.java)
+                intent.putExtra("userId", userId)
+                startActivity(intent)
+            } else if (role == "Hotel Owner") {
+                val intent = Intent(applicationContext, OwnerProfileActivity::class.java)
+                intent.putExtra("userId", userId)
+                startActivity(intent)
+            } else {
+                val intent = Intent(applicationContext, UserProfileActivity::class.java)
+                intent.putExtra("userId", userId)
+                startActivity(intent)
+            }
             dialogLanguage.dismiss()
         }
+
     }
 
-    private fun openBottomSelectionCommunityRemove(dialogL: Dialog) {
+    private fun openBottomSelectionCommunityRemove(dialogL: Dialog,userId:String) {
         val dialogLanguage = Dialog(this)
         dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogLanguage.setContentView(R.layout.bottom_remove_from_community_confermation)
@@ -175,12 +193,36 @@ class ViewAllUsersActivity : AppCompatActivity() {
         dialogLanguage.show()
 
         dialogLanguage.findViewById<TextView>(R.id.yes).setOnClickListener {
+            removeUser(userId,group_Id)
+
             dialogL.dismiss()
             dialogLanguage.dismiss()
         }
         dialogLanguage.findViewById<TextView>(R.id.not).setOnClickListener {
             dialogLanguage.dismiss()
         }
+    }
+
+    private fun removeUser(userId: String, groupId: String) {
+        val remove = RetrofitBuilder.retrofitBuilder.removeMember(groupId, removeMember(userId))
+
+        remove.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,response.message, Toast.LENGTH_SHORT).show()
+                }else{
+                    Log.e("error",response.message().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
     }
 
 }

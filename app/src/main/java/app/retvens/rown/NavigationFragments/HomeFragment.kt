@@ -256,14 +256,7 @@ class HomeFragment : Fragment() {
                     val response = response.body()!!
 
 
-                    mList.addAll(
-                        listOf(
-                            DataItem(
-                                DataItemType.COMMUNITY,
-                                communityRecyclerDataList = response
-                            )
-                        )
-                    )
+                    mList.addAll(listOf(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = response)))
 
                 } else {
 //                    Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT)
@@ -449,32 +442,30 @@ class HomeFragment : Fragment() {
                 response: Response<List<GetCommunitiesData>?>
             ) {
                 if (response.isSuccessful && isAdded) {
-                    val response = response.body()!!
+                    val responseList = response.body() ?: emptyList()
+
+                    // Add only the first 5 elements from the response to mList
+                    val dataList = responseList.take(4)
                     try {
-                        mList.addAll(1,listOf(DataItem(DataItemType.OURCOMMUNITY, ourCommunityRecyclerList = response)))
-                    }catch (e : NullPointerException){
+                        mList.addAll(1, listOf(DataItem(DataItemType.OURCOMMUNITY, ourCommunityRecyclerList = dataList)))
+                    } catch (e : NullPointerException) {
                         Log.e("error",e.message.toString())
                     }
                 } else {
                     if (isAdded) {
                         serverCode = response.code()
-//                        Toast.makeText(
-//                            requireContext(),
-//                            response.code().toString(),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
+                        // Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
 
             override fun onFailure(call: Call<List<GetCommunitiesData>?>, t: Throwable) {
-                if (isAdded) {
-//                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
-//                        .show()
-                }
+                Log.e("error",t.message.toString())
             }
         })
     }
+
+
 
 
     private fun postLike(postId: String) {

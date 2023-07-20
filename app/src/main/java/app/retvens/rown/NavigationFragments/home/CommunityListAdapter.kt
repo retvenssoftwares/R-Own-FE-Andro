@@ -63,7 +63,7 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
     }
 
     override fun getItemCount(): Int {
-        return list.size+1
+        return  list.size + 1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -106,9 +106,15 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
 
 
         }else if (holder is LastCardViewHolder){
+            Log.e("last","okkk")
 
-            holder.lastCard.setOnClickListener {
-                context.startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
+            if (list.size in 3..4) {
+                holder.lastCard.visibility = View.VISIBLE
+                holder.lastCard.setOnClickListener {
+                    context.startActivity(Intent(context, ViewAllCommmunitiesActivity::class.java))
+                }
+            } else {
+                holder.lastCard.visibility = View.GONE
             }
 
         }
@@ -116,11 +122,18 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
     }
 
     override fun getItemViewType(position: Int): Int {
-        // Check if the position is 0
-        return when (position) {
-            0 -> VIEW_TYPE_STATIC_CARD
-            itemCount-1  -> VIEW_TYPE_STATIC_Last // Check if the position is the last one
-            else -> VIEW_TYPE_NORMAL
+        // Check if the list size is 3 or 4 and handle the position accordingly
+        return if (list.size in 4..5) {
+            when (position) {
+                0 -> VIEW_TYPE_STATIC_CARD
+                4 -> VIEW_TYPE_STATIC_Last
+                else -> VIEW_TYPE_NORMAL
+            }
+        } else {
+            when (position) {
+                0 -> VIEW_TYPE_STATIC_CARD
+                else -> VIEW_TYPE_NORMAL
+            }
         }
     }
 }

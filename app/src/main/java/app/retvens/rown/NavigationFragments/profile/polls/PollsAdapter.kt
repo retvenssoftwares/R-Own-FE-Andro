@@ -9,13 +9,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.Option
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
+import app.retvens.rown.DataCollections.FeedCollection.VoteCollection
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.NavigationFragments.TimesStamp.convertTimeToText
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity
@@ -29,9 +33,13 @@ import app.retvens.rown.utils.verificationStatus
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.mackhartley.roundedprogressbar.RoundedProgressBar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.lang.IndexOutOfBoundsException
 
-class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val UserID:String) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>() {
+class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val UserID:String) : RecyclerView.Adapter<PollsAdapter.PollsViewHolder>(),
+    app.retvens.rown.NavigationFragments.home.PollsAdapter.OnItemClickListener {
 
     class PollsViewHolder(itemView: View) : ViewHolder(itemView){
         val checkVotes = itemView.findViewById<CardView>(R.id.checkVotes)
@@ -119,9 +127,12 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
             )
             holder.recycler.adapter = adapter
             adapter.notifyDataSetChanged()
+
+            adapter.setOnItemClickListener(this)
         }catch (e:NullPointerException){
             Log.e("error",e.message.toString())
         }
+
 
 
 
@@ -147,5 +158,37 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
         }
 
         return totalVotes
+    }
+
+    override fun onItemClick(optionId: String, postId: String) {
+        voteOption(postId, optionId)
+    }
+
+    private fun voteOption(postId: String, optionId: String) {
+        val sharedPreferences =
+            context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val postVote =
+            RetrofitBuilder.feedsApi.votePost(postId, optionId, VoteCollection(user_id))
+
+        postVote.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful) {
+                    val response = response.body()!!
+                    Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

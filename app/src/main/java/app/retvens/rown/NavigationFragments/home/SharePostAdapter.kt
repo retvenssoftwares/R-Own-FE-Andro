@@ -53,10 +53,13 @@ class SharePostAdapter(val context: Context, var userList:List<Connections>) :
         holder.username.text = data.User_id
         Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
+        var state = "send"
         holder.share.setOnClickListener {
-            onItemClickListener?.onItemClick(data)
-
-            holder.text.text = "sent"
+            if (state == "send") {
+                onItemClickListener?.onItemClick(data)
+                state = "sent"
+                holder.text.text = "sent"
+            }
         }
 
 
