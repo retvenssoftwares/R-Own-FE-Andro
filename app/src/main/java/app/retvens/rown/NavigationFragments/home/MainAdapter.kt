@@ -253,7 +253,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 intent.putExtra("time", post.date_added)
                 intent.putExtra("commentCount", banner.Comment_count)
                 intent.putExtra("like", banner.like)
-                intent.putExtra("isSaved", banner.isSaved)
+                intent.putExtra("isSaved", post.isSaved)
                 intent.putExtra("postId", banner.post_id)
                 intent.putExtra("role", banner.Role)
                 intent.putExtra("user_id", banner.user_id)

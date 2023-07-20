@@ -61,6 +61,9 @@ class SavedPostsFragment : Fragment() {
         mediaRecyclerView.layoutManager = GridLayoutManager(context,3)
         mediaRecyclerView.setHasFixedSize(true)
 
+        mediaAdapter = MediaAdapter(requireContext(),postList, true)
+        mediaRecyclerView.adapter = mediaAdapter
+
         progress = view.findViewById(R.id.progress)
 
         mediaRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -135,8 +138,7 @@ class SavedPostsFragment : Fragment() {
 
                                 currentPage++
                                 postList.addAll(it.posts)
-                                mediaAdapter = MediaAdapter(requireContext(),postList)
-                                mediaRecyclerView.adapter = mediaAdapter
+
                                 mediaAdapter.removePostsFromList(postList)
                                 mediaAdapter.notifyDataSetChanged()
 

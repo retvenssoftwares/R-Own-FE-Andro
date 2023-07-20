@@ -61,7 +61,7 @@ class ExplorePostsFragment : Fragment() {
 
         mediaRecyclerView.setNestedScrollingEnabled(true)
 
-        mediaAdapter = MediaAdapter(requireContext(),postList)
+        mediaAdapter = MediaAdapter(requireContext(),postList, false)
         mediaRecyclerView.adapter = mediaAdapter
         mediaAdapter.removePostsFromList(postList)
         mediaAdapter.notifyDataSetChanged()
@@ -233,7 +233,7 @@ class ExplorePostsFragment : Fragment() {
                     response.forEach { postsDataClass ->
                         mediaAdapter = MediaAdapter(requireContext(),
                             postsDataClass.posts as ArrayList<PostItem>
-                        )
+                        , false)
                         mediaRecyclerView.adapter = mediaAdapter
                         mediaAdapter.removePostsFromList(postsDataClass.posts)
                         mediaAdapter.notifyDataSetChanged()
@@ -247,7 +247,7 @@ class ExplorePostsFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-                mediaAdapter = MediaAdapter(requireContext(), ArrayList())
+                mediaAdapter = MediaAdapter(requireContext(), ArrayList(), false)
                 mediaAdapter.notifyDataSetChanged()
             }
         })

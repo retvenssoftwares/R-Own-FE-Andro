@@ -79,7 +79,7 @@ class SavedBlogsAdapter(val listS : ArrayList<AllBlogsData>, val context: Contex
             intent.putExtra("userName", listS[position].User_name)
             intent.putExtra("userProfile", listS[position].Profile_pic)
             intent.putExtra("blogId", listS[position].blogid)
-            intent.putExtra("saved", listS[position].saved)
+            intent.putExtra("saved", "saved")
             intent.putExtra("like", listS[position].like)
             context.startActivity(intent)
         }

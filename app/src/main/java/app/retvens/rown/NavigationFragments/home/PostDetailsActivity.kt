@@ -112,7 +112,9 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         val profilePic = intent.getStringExtra("profilePic")
         val role = intent.getStringExtra("role")
         val user_id = intent.getStringExtra("user_id")
-        val isSaved = intent.getStringExtra("saved").toString()
+        val isSaved = intent.getStringExtra("isSaved")
+        val savedFrag = intent.getStringExtra("savedFrag")
+        Toast.makeText(applicationContext, "$isSaved", Toast.LENGTH_SHORT).show()
 
         postId = intent.getStringExtra("postId").toString()
         like = intent.getStringExtra("like").toString()
@@ -176,7 +178,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
         Log.e("pic",postPic.toString())
 
-        if (isSaved == "saved"){
+        if (isSaved == "saved" || savedFrag == "saved"){
             operatioin = "pop"
             save = false
             savedPost.setImageResource(R.drawable.svg_saved)

@@ -122,7 +122,7 @@ class HomeFragment : Fragment() {
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
 
         progress = view.findViewById(R.id.progress)
-        getProfileInfo(requireContext())
+        getProfileInfo(requireContext()){}
         communityArrayList = arrayListOf<GetCommunitiesData>()
         commentList = ArrayList()
 

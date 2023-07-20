@@ -193,7 +193,9 @@ class ExplorePeopleFragment : Fragment() {
                                     explorePeopleAdapter.removeEmptyNameUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.notifyDataSetChanged()
                                 }catch (e:NullPointerException){
-//                                    errorImage.visibility = View.VISIBLE
+                                    if (currentPage == 1) {
+                                        errorImage.visibility = View.VISIBLE
+                                    }
                                     Log.e("error",e.message.toString())
                                 }
 
@@ -229,24 +231,29 @@ class ExplorePeopleFragment : Fragment() {
                             })
 
                 } else {
-                            empty.text = "You did'nt post yet"
-                            errorImage.visibility = View.VISIBLE
+                            if (currentPage == 1) {
+                                empty.text = "You did'nt post yet"
+                                errorImage.visibility = View.VISIBLE
+                            }
                         }
                     } else {
-                        errorImage.visibility = View.VISIBLE
-                        empty.text = response.code().toString()
-                        shimmerFrameLayout.stopShimmer()
-                        shimmerFrameLayout.visibility = View.GONE
+                        if (currentPage == 1) {
+                            errorImage.visibility = View.VISIBLE
+                            empty.text = response.code().toString()
+                            shimmerFrameLayout.stopShimmer()
+                            shimmerFrameLayout.visibility = View.GONE
+                        }
                     }
                 }
             }
 
             override fun onFailure(call: Call<List<ExplorePeopleDataClass>?>, t: Throwable) {
-                shimmerFrameLayout.stopShimmer()
-                shimmerFrameLayout.visibility = View.GONE
-                empty.text = "Try Again"
-                errorImage.visibility = View.VISIBLE
-
+                if (currentPage == 1) {
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
+                    empty.text = "Try Again"
+                    errorImage.visibility = View.VISIBLE
+                }
                 isLoading = false
             }
 

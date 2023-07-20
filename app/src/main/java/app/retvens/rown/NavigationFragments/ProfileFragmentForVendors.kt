@@ -252,6 +252,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                 call: Call<VendorProfileDataClass?>,
                 response: Response<VendorProfileDataClass?>
             ) {
+                progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
 
@@ -283,6 +284,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             }
 
             override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {
+                progressDialog.dismiss()
                 Toast.makeText(requireContext(),t.message.toString(), Toast.LENGTH_SHORT).show()
             }
         })

@@ -95,17 +95,20 @@ class DashBoardActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         startAnimation()
 
-//        Thread {
-//            // Run whatever background code you want here.
-//            replaceFragment(HomeFragment())
-//        }.start()
+        Thread {
+            // Run whatever background code you want here.
+            replaceFragment(HomeFragment())
+        }.start()
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         //setUp drawerLayout
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
 
-        if (serverCode == 502){
+        val server = intent.getStringExtra("server")
+
+        Toast.makeText(this, "$serverCode", Toast.LENGTH_SHORT).show()
+        if (serverCode == 502 || server == "502"){
             binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
             binding.noInternet.visibility = View.VISIBLE
             binding.noInternetLayout.visibility = View.GONE
@@ -264,7 +267,15 @@ class DashBoardActivity : AppCompatActivity() {
             if (profileImage.isNotEmpty()) {
                 Glide.with(this).load(profileImage).into(profile)
             } else{
-            getProfileInfo(this)
+            getProfileInfo(this){
+                if (it == 502){
+                    binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
+                    binding.noInternet.visibility = View.VISIBLE
+                    binding.noInternetLayout.visibility = View.GONE
+                    binding.navView.visibility = View.GONE
+                    binding.dashboard.visibility = View.GONE
+                }
+            }
                 if (profileImage.isNotEmpty()) {
                     Glide.with(this).load(profileImage).into(profile)
                 } else {

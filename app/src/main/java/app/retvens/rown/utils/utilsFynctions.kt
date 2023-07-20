@@ -354,7 +354,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
     })
 }
 
- fun getProfileInfo(context: Context) {
+ fun getProfileInfo(context: Context, onClick: (Int) -> Unit) {
 
     val sharedPreferences =
         context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -387,6 +387,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
                         saveProfileImage(context, "${response.Profile_pic}")
                     }
                 } else {
+                    onClick.invoke(response.code())
                     serverCode = response.code()
 //                    Toast.makeText(
 //                        context,

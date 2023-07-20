@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getProfileInfo(this)
+        getProfileInfo(this){}
 
         auth = FirebaseAuth.getInstance()
 

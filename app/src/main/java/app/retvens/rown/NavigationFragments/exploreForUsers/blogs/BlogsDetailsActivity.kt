@@ -108,7 +108,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val res = response.body()!!
 
-                    Toast.makeText(applicationContext, res.get(0).saved, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext, res.get(0).saved, Toast.LENGTH_SHORT).show()
 //                    if(res.get(0).saved == "saved"){
 //                        operatioin = "pop"
 //                        isSaved = false

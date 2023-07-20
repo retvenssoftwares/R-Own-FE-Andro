@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -63,10 +64,15 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         val data = peopleList[position]
 
         val verificationStatus = data.verificationStatus
-        if (verificationStatus != "false"){
+        if (verificationStatus == "true"){
             holder.verification.visibility = View.VISIBLE
+        } else if (verificationStatus == "false"){
+            holder.verification.visibility = View.GONE
         }
 
+        holder.itemView.setOnClickListener {
+            Toast.makeText(context, verificationStatus, Toast.LENGTH_SHORT).show()
+        }
 
         if (data.Profile_pic.isNotEmpty()){
             Glide.with(context).load(data.Profile_pic).into(holder.profile)

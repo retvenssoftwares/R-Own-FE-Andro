@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
-import app.retvens.rown.NavigationFragments.profile.media.MediaAdapter
 import app.retvens.rown.NavigationFragments.profile.media.MediaData
 import app.retvens.rown.R
 import com.facebook.shimmer.ShimmerFrameLayout
