@@ -20,7 +20,7 @@ import app.retvens.rown.NavigationFragments.profile.status.StatusAdapter
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>, val savedFrag : Boolean) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
+class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>, private val savedFrag : Boolean) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
 
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -70,8 +70,10 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>, val s
             true
         }
 
-        if (savedFrag){
+        if (savedFrag == true){
             media.isSaved = "saved"
+        } else {
+            media.isSaved = "not saved"
         }
 
 
@@ -91,8 +93,10 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>, val s
             intent.putExtra("likeCount",media.likeCount)
             intent.putExtra("commentCount",media.commentCount)
             intent.putExtra("like",media.liked)
+            intent.putExtra("likeSaved",media.like)
 //            intent.putExtra("islike",media.islike)
             intent.putExtra("postId",media.post_id)
+            intent.putExtra("postid",media.postid)
             intent.putExtra("isSaved",media.saved)
             intent.putExtra("savedFrag",media.isSaved)
             intent.putExtra("role",media.Role)

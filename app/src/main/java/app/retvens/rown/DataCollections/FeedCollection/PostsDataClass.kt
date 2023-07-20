@@ -40,6 +40,7 @@ data class PostItem(
     val likeCount:String,
     val commentCount:String,
     val Role:String,
+    val postid: String,
     val post_id: String,
     val voted:String,
     val saved_post: List<Any>,

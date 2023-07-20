@@ -55,7 +55,9 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
     lateinit var likeCountText : TextView
     private  var likeCount = 0
     private  var postId = ""
+    private  var postid = ""
     private  var like = ""
+    private  var likeSaved = ""
     private var isLike = true
     var save = true
     var operatioin = "push"
@@ -114,11 +116,20 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         val user_id = intent.getStringExtra("user_id")
         val isSaved = intent.getStringExtra("isSaved")
         val savedFrag = intent.getStringExtra("savedFrag")
-        Toast.makeText(applicationContext, "$isSaved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(applicationContext, "$savedFrag", Toast.LENGTH_SHORT).show()
 
         postId = intent.getStringExtra("postId").toString()
+        postid = intent.getStringExtra("postid").toString()
         like = intent.getStringExtra("like").toString()
+        likeSaved = intent.getStringExtra("likeSaved").toString()
         likeCount = intent.getStringExtra("likeCount")?.toInt()!!
+
+        if (postId == "null"){
+            postId = postid
+        }
+        if(like == "null"){
+            like = likeSaved
+        }
 
         if (postPic!!.isNotEmpty()) {
             Glide.with(applicationContext).load(profilePic).into(profile)
@@ -182,7 +193,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
             operatioin = "pop"
             save = false
             savedPost.setImageResource(R.drawable.svg_saved)
-        } else {
+        } else if (isSaved == "not saved" || savedFrag == "not saved") {
             operatioin = "push"
             save = true
             savedPost.setImageResource(R.drawable.svg_save_post)

@@ -116,7 +116,7 @@ class DashBoardActivity : AppCompatActivity() {
 
         val server = intent.getStringExtra("server")
 
-        Toast.makeText(this, "server - $server", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "server - $server", Toast.LENGTH_SHORT).show()
         if (server == "502"){
             binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
             binding.noInternet.visibility = View.VISIBLE
