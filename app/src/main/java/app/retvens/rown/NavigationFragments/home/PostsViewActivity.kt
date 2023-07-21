@@ -78,6 +78,7 @@ class PostsViewActivity : AppCompatActivity() {
         indicator = findViewById<CircleIndicator>(R.id.indicator)
 
         val likeCount = intent.getStringExtra("likeCount").toString()
+        val commentCount = intent.getStringExtra("commentCount").toString()
         postId = intent.getStringExtra("postId").toString()
         val postIds = intent.getStringExtra("postId").toString()
         try {
@@ -85,11 +86,17 @@ class PostsViewActivity : AppCompatActivity() {
             image = intent.getStringArrayListExtra("postPic")!!
             profilePic = intent.getStringExtra("profilePic").toString()
             like_count.text = likeCount
-            comment_count.text = intent.getStringExtra("commentCount").toString()
+            comment_count.text = commentCount
         }catch (e:NullPointerException){
             getPost(postIds)
         }
 
+        if (likeCount == "0"){
+            like_count.visibility = View.GONE
+        }
+        if (commentCount == "0"){
+            comment_count.visibility = View.GONE
+        }
 
 
 
@@ -144,6 +151,7 @@ class PostsViewActivity : AppCompatActivity() {
                     likeButton.setImageResource(R.drawable.liked_vectore)
                     count += 1
                     like_count.text = count.toString()
+                    like_count.visibility = View.VISIBLE
                 }
             } else {
                 postLike(postIds, this) {
@@ -151,6 +159,9 @@ class PostsViewActivity : AppCompatActivity() {
                     isLike = true
                     likeButton.setImageResource(R.drawable.svg_like_post)
                     count -= 1
+                    if (count == 0){
+                        like_count.visibility = View.GONE
+                    }
                     like_count.text = count.toString()
                 }
             }

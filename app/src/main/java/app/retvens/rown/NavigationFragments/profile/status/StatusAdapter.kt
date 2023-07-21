@@ -130,16 +130,16 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 }
 
                 if (item.caption.lines().size > 4 || item.caption.length > 150) {
-                    layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='black'> <b>Read More</b></font>")
                 } else {
                     layoutOneViewHolder.status.text = item.caption
                 }
                 layoutOneViewHolder.status.setOnClickListener {
-                    if (layoutOneViewHolder.status.text.toString().endsWith("View More")) {
+                    if (layoutOneViewHolder.status.text.toString().endsWith("Read More")) {
                         layoutOneViewHolder.status.text = item.caption
                     } else {
                         if (item.caption.lines().size > 4  || item.caption.length > 150) {
-                            layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                            layoutOneViewHolder.status.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='black'> <b>Read More</b></font>")
                         } else {
                             layoutOneViewHolder.status.text = item.caption
                         }
@@ -153,11 +153,22 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     layoutOneViewHolder.postProfile.setImageResource(R.drawable.svg_user)
                 }
 
+                if (item.likeCount == "0"){
+                    holder.likeCount.visibility = View.GONE
+                }
+                if (item.commentCount == "0"){
+                    holder.commentCount.visibility = View.GONE
+                }
+
                 if (item.likeCount != ""){
                     holder.likeCount.text = item.likeCount
+                } else {
+                    holder.likeCount.visibility = View.GONE
                 }
                 if (item.commentCount != ""){
                     holder.commentCount.text = item.commentCount
+                } else {
+                    holder.commentCount.visibility = View.GONE
                 }
 
                 if (item.liked == "liked"){
@@ -177,6 +188,9 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                             like = false
                             holder.likeButton.setImageResource(R.drawable.liked_vectore)
                             count += 1
+
+                                holder.likeCount.visibility = View.VISIBLE
+
 //                            post.Like_count = count.toString()
                             holder.likeCount.text = count.toString()
                         }
@@ -189,6 +203,9 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
 //                            count = post.Like_count.toInt()
 //                            post.Like_count = count.toString()
                             count -= 1
+                            if (count == 0){
+                                holder.likeCount.visibility = View.GONE
+                            }
                             holder.likeCount.text = count.toString()
                         }
                     }
@@ -222,16 +239,16 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                 }
 
                 if (item.caption.lines().size > 3 || item.caption.length > 150) {
-                    layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                    layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='black'> <b>Read More</b></font>")
                 } else {
                     layoutTwoViewHolder.caption.text = item.caption
                 }
                 layoutTwoViewHolder.caption.setOnClickListener {
-                    if (layoutTwoViewHolder.caption.text.toString().endsWith("View More")) {
+                    if (layoutTwoViewHolder.caption.text.toString().endsWith("Read More")) {
                         layoutTwoViewHolder.caption.text = item.caption
                     } else {
                         if (item.caption.lines().size > 3 || item.caption.length > 150) {
-                            layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                            layoutTwoViewHolder.caption.text = Html.fromHtml(item.caption.substring(0, item.caption.length/3) + "..." + "<font color='black'> <b>Read More</b></font>")
                         } else {
                             layoutTwoViewHolder.caption.text = item.caption
                         }
@@ -280,11 +297,22 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                     context.startActivity(intent)
                 }
 
+                if (item.likeCount == "0"){
+                    holder.likeCount.visibility = View.GONE
+                }
+                if (item.commentCount == "0"){
+                    holder.commentCount.visibility = View.GONE
+                }
+
                 if (item.likeCount != ""){
                     holder.likeCount.text = item.likeCount
+                }  else {
+                    holder.likeCount.visibility = View.GONE
                 }
                 if (item.commentCount != ""){
                     holder.commentCount.text = item.commentCount
+                } else {
+                    holder.commentCount.visibility = View.GONE
                 }
 
                 if (item.liked == "liked"){
@@ -304,6 +332,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
                             like = false
                             holder.likeButton.setImageResource(R.drawable.liked_vectore)
                             count += 1
+                            holder.likeCount.visibility = View.VISIBLE
 //                            post.Like_count = count.toString()
                             holder.likeCount.text = count.toString()
                         }
@@ -315,6 +344,9 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
 //                            count = post.Like_count.toInt()
 //                            post.Like_count = count.toString()
                             count -= 1
+                            if (count == 0) {
+                                holder.likeCount.visibility = View.GONE
+                            }
                             holder.likeCount.text = count.toString()
                         }
                     }

@@ -518,8 +518,15 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             if (imageUri != null) {
 //                compressImage(imageUri)
                 cropImage(imageUri, this)
+//                if (selectedImg == 1) {
+//                    binding.img1.setImageURI(imageUri)
+//                } else if (selectedImg == 2) {
+//                    binding.img2.setImageURI(imageUri)
+//                } else if (selectedImg == 3) {
+//                    binding.img3.setImageURI(imageUri)
+//                }
             }
-        }  else if (requestCode == UCrop.REQUEST_CROP) {
+        } else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = UCrop.getOutput(data!!)!!
 
@@ -527,33 +534,26 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                     1 -> {
                         binding.deleteImg1.visibility = View.VISIBLE
                         imgUri1 = compressImage(croppedImage)
-                        binding.img1.setImageURI(imgUri1)
                         imagesList.add(imgUri1!!)
+                        binding.img1.setImageURI(imgUri1!!)
                     }
                     2 -> {
                         binding.deleteImg2.visibility = View.VISIBLE
-                        binding.img2.setImageURI(croppedImage)
                         imgUri2 = compressImage(croppedImage)
                         imagesList.add(imgUri2!!)
+                        binding.img2.setImageURI(imgUri2!!)
                     }
                     3 -> {
                         binding.deleteImg3.visibility = View.VISIBLE
                         imgUri3 = compressImage(croppedImage)
-                        binding.img3.setImageURI(imgUri3)
                         imagesList.add(imgUri3!!)
+                        binding.img3.setImageURI(imgUri3!!)
                     }
                 }
             } else if (resultCode == UCrop.RESULT_ERROR) {
                 Toast.makeText(applicationContext,"Try Again",Toast.LENGTH_SHORT).show()
             }
         }
-    }
-    private fun createImageUri(): Uri? {
-        val image = File(applicationContext.filesDir,"camera_photo.png")
-        return FileProvider.getUriForFile(applicationContext,
-            "app.retvens.rown.fileProvider",
-            image
-        )
     }
 
     fun compressImage(imageUri: Uri): Uri {
@@ -569,6 +569,13 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             fileOutputStream.close()
 
             compressed = Uri.fromFile(finalFile)
+//            if (selectedImg == 1) {
+//                binding.img1.setImageURI(imageUri)
+//            } else if (selectedImg == 2) {
+//                binding.img2.setImageURI(imageUri)
+//            } else if (selectedImg == 3) {
+//                binding.img3.setImageURI(imageUri)
+//            }
 
             croppedImageUri = compressed
             val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)

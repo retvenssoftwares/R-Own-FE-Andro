@@ -97,18 +97,35 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 //                        Log.e("username",post.toString())
             val MAX_CAPTION_LENGTH = 100
-            val captions = post.caption
-            val truncatedCaption = if (captions.length > MAX_CAPTION_LENGTH) {
-                captions.substring(0, MAX_CAPTION_LENGTH) + " Read More"
+//            val captions = post.caption
+//            val truncatedCaption = if (captions.length > MAX_CAPTION_LENGTH) {
+//                captions.substring(0, MAX_CAPTION_LENGTH) + " Read More"
+//            } else {
+//                captions
+//            }
+//            binding.recentCommentByUser.text = truncatedCaption
+//            if (captions.length > MAX_CAPTION_LENGTH) {
+//                binding.recentCommentByUser.setOnClickListener {
+//                    binding.recentCommentByUser.text = captions
+//                }
+//            }
+            if (banner.caption.length > 150) {
+                binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
-                captions
+                binding.recentCommentByUser.text = banner.caption
             }
-            binding.recentCommentByUser.text = truncatedCaption
-            if (captions.length > MAX_CAPTION_LENGTH) {
-                binding.recentCommentByUser.setOnClickListener {
-                    binding.recentCommentByUser.text = captions
+            binding.recentCommentByUser.setOnClickListener {
+                if (binding.recentCommentByUser.text.toString().endsWith("Read More")) {
+                    binding.recentCommentByUser.text = banner.caption
+                } else {
+                    if (banner.caption.length > 150) {
+                        binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
+                    } else {
+                        binding.recentCommentByUser.text = banner.caption
+                    }
                 }
             }
+
 //                        Log.e("caption",post.caption)
             binding.userNamePost.text = post.Full_name
 
@@ -151,9 +168,21 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 }
             }
 
+            if (banner.Like_count == "0"){
+                binding.likeCount.visibility = View.GONE
+            } else {
+                binding.likeCount.visibility = View.VISIBLE
+            }
+            if (banner.Comment_count == "0"){
+                binding.commentCount.visibility = View.GONE
+            } else {
+                binding.commentCount.visibility = View.VISIBLE
+            }
+
             if (post.Like_count != "") {
                 binding.likeCount.text = post.Like_count
             }
+
             if (post.Comment_count != "") {
                 binding.commentCount.text = post.Comment_count
             }
@@ -271,6 +300,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         banner.islike = false
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
                         count += 1
+                        binding.likeCount.visibility = View.VISIBLE
                         post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }
@@ -283,6 +313,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         binding.likePost.setImageResource(R.drawable.svg_like_post)
 //                            count = post.Like_count.toInt()
                         count -= 1
+                        if (count == 0){
+                            binding.likeCount.visibility = View.GONE
+                        }
                         post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }
@@ -432,7 +465,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //            Log.e("username",post.User_name)
 //            binding.recentCommentByUser.text = post.caption
             if (banner.caption.length > 150) {
-                binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
+                binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
                 binding.recentCommentByUser.text = banner.caption
             }
@@ -441,7 +474,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.recentCommentByUser.text = banner.caption
                 } else {
                     if (banner.caption.length > 150) {
-                        binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
+                        binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
                     } else {
                         binding.recentCommentByUser.text = banner.caption
                     }
@@ -478,6 +511,18 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 context.startActivity(intent)
             }
+
+            if (banner.Like_count == "0"){
+                binding.likeCount.visibility = View.GONE
+            } else {
+                binding.likeCount.visibility = View.VISIBLE
+            }
+            if (banner.Comment_count == "0"){
+                binding.commentCount.visibility = View.GONE
+            } else {
+                binding.commentCount.visibility = View.VISIBLE
+            }
+
             if (post.Like_count != "") {
                 binding.likeCount.text = post.Like_count
             }
@@ -552,6 +597,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         like = false
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
                         count += 1
+                        binding.likeCount.visibility = View.VISIBLE
 //                            post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }
@@ -565,6 +611,10 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //                            count = post.Like_count.toInt()
 //                            post.Like_count = count.toString()
                         count -= 1
+
+                        if (count == 0){
+                            binding.likeCount.visibility = View.GONE
+                        }
                         binding.likeCount.text = count.toString()
                     }
 
@@ -588,6 +638,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                             like = false
                             binding.likePost.setImageResource(R.drawable.liked_vectore)
                             count += 1
+                            binding.likeCount.visibility = View.VISIBLE
 //                            post.Like_count = count.toString()
                             binding.likeCount.text = count.toString()
                         }
@@ -625,7 +676,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.titleStatus.text = banner.caption
 
             if (banner.caption.lines().size > 3 || banner.caption.length > 150) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='black'> <u>Read More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
@@ -634,7 +685,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.lines().size > 3 || banner.caption.length > 150) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='black'> <u>Read More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='black'> <b>Read More</b></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -705,6 +756,17 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             }
 
+            if (banner.Like_count == "0"){
+                binding.likeCount.visibility = View.GONE
+            } else {
+                binding.likeCount.visibility = View.VISIBLE
+            }
+            if (banner.Comment_count == "0"){
+                binding.commentCount.visibility = View.GONE
+            } else {
+                binding.commentCount.visibility = View.VISIBLE
+            }
+
             if (banner.Like_count != "") {
                 binding.likeCount.text = banner.Like_count
             }
@@ -730,6 +792,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         like = false
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
                         count += 1
+                        binding.likeCount.visibility = View.VISIBLE
 //                            post.Like_count = count.toString()
                         binding.likeCount.text = count.toString()
                     }
@@ -743,6 +806,9 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //                            count = post.Like_count.toInt()
 //                            post.Like_count = count.toString()
                         count -= 1
+                        if (count == 0){
+                            binding.likeCount.visibility = View.GONE
+                        }
                         binding.likeCount.text = count.toString()
                     }
                 }
@@ -769,7 +835,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.location.text = banner.User_name
 
             if (banner.caption.length > 150) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
@@ -778,7 +844,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.length > 150) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -928,7 +994,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.postUserType.text = post.User_name
 
             if (banner.caption.length > 150) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
@@ -937,7 +1003,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.length > 150) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -1128,7 +1194,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.postUserType.text = post.User_name
 
             if (banner.caption.length > 150) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
@@ -1137,7 +1203,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.length > 150) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -1194,7 +1260,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.postUserType.text = post.User_name
 
             if (banner.caption.length > 100) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='black'> <u>Read More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
@@ -1203,7 +1269,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.length > 100) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='black'> <u>Read More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='black'> <b>Read More</b></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }

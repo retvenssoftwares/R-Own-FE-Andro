@@ -81,6 +81,7 @@ class ImageSlideAdapter(private val context: Context, private var imageList: Lis
                             count += 1
                             banner.Like_count = count.toString()
                             binding.likeCount.text = count.toString()
+                            binding.likeCount.visibility = View.VISIBLE
                         }
                     }
                 val handler = Handler(Looper.getMainLooper())

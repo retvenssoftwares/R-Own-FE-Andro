@@ -171,6 +171,14 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
         postLocation.text = location
 
+        if (likeCount == 0){
+            likeCountText.visibility = View.GONE
+        }
+
+        if (commentCount == "0"){
+            commentC.visibility = View.GONE
+        }
+
         likeCountText.text = likeCount.toString()
         commentC.text = commentCount.toString()
 
@@ -231,12 +239,17 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
                     likeCount += 1
 //                    post.Like_count = count.toString()
                     likeCountText.text = likeCount.toString()
+                    likeCountText.visibility = View.VISIBLE
+
                 }
             } else {
                 postLike(postId, applicationContext) {
                     isLike = true
                     likeButton.setImageResource(R.drawable.svg_like_post)
                     likeCount -= 1
+                    if (likeCount == 0){
+                        likeCountText.visibility = View.GONE
+                    }
 //                    post.Like_count = count.toString()
                     likeCountText.text = likeCount.toString()
                 }
@@ -407,6 +420,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
                     likeButton.setImageResource(R.drawable.liked_vectore)
                     count += 1
                     likeCountText.text = count.toString()
+                    likeCountText.visibility = View.VISIBLE
                 }
             }
 

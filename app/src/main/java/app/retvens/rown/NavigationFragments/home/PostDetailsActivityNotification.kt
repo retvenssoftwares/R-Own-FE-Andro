@@ -59,27 +59,28 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
     lateinit var likeButton : ImageView
     lateinit var likedAnimation : ImageView
     lateinit var likeCountText : TextView
-    private  var likeCount = 0
-    private  var postId = ""
-    private  var postid = ""
-    private  var like = ""
-    private  var likeSaved = ""
-    private var isLike = true
-    var save = true
-    var operatioin = "push"
-    var captionString:String = ""
     private lateinit var name:TextView
     private lateinit var profile:ShapeableImageView
     private lateinit var username:TextView
     private lateinit var time:TextView
     private lateinit var postLocation:TextView
+
+    private  var likeCount = 0
+    private var commentCount = ""
+    private  var postId = ""
+    private  var like = ""
+    private var isSaved = ""
+
+    private var isLike = true
+    var save = true
+    var operatioin = "push"
+    var captionString:String = ""
+
     private var profilePic = ""
     private var user_id = ""
     private var location = ""
     private var postPic:ArrayList<String> = ArrayList()
     private var role = ""
-    private var commentCount = ""
-    private var isSaved = ""
 
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -110,7 +111,7 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
 
 
         postId = intent.getStringExtra("postId").toString()
-        getProfiles(postId)
+        getPost(postId)
 
         val handler = Handler()
 
@@ -133,54 +134,49 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
 
 
 
-
-        if (postId == "null"){
-            postId = postid
-        }
-        if(like == "null"){
-            like = likeSaved
-        }
-
-        if (postPic!!.isNotEmpty()) {
+       if (postPic.isNotEmpty()) {
             Glide.with(applicationContext).load(profilePic).into(profile)
         } else {
             profile.setImageResource(R.drawable.svg_user)
         }
 
-        profile.setOnClickListener {
-            if(role == "Business Vendor / Freelancer"){
-                val intent = Intent(this, VendorProfileActivity::class.java)
-                intent.putExtra("userId",user_id)
-                startActivity(intent)
-            }else if (role == "Hotel Owner"){
-                val intent = Intent(this, OwnerProfileActivity::class.java)
-                intent.putExtra("userId",user_id)
-                startActivity(intent)
-            } else {
-                val intent = Intent(this, UserProfileActivity::class.java)
-                intent.putExtra("userId",user_id)
-                startActivity(intent)
+//        profile.setOnClickListener {
+//            if(role == "Business Vendor / Freelancer"){
+//                val intent = Intent(this, VendorProfileActivity::class.java)
+//                intent.putExtra("userId",user_id)
+//                startActivity(intent)
+//            }else if (role == "Hotel Owner"){
+//                val intent = Intent(this, OwnerProfileActivity::class.java)
+//                intent.putExtra("userId",user_id)
+//                startActivity(intent)
+//            } else {
+//                val intent = Intent(this, UserProfileActivity::class.java)
+//                intent.putExtra("userId",user_id)
+//                startActivity(intent)
+//            }
+//        }
+
+//        name.setOnClickListener {
+//            if(role == "Business Vendor / Freelancer"){
+//                val intent = Intent(this, VendorProfileActivity::class.java)
+//                intent.putExtra("userId",user_id)
+//                startActivity(intent)
+//            }else if (role == "Hotel Owner"){
+//                val intent = Intent(this, OwnerProfileActivity::class.java)
+//                intent.putExtra("userId",user_id)
+//                startActivity(intent)
+//            } else {
+//                val intent = Intent(this, UserProfileActivity::class.java)
+//                intent.putExtra("userId",user_id)
+//                startActivity(intent)
+//            }
+//        }
+
+
+
+            if (commentCount == "0"){
+                commentC.visibility = View.GONE
             }
-        }
-
-        name.setOnClickListener {
-            if(role == "Business Vendor / Freelancer"){
-                val intent = Intent(this, VendorProfileActivity::class.java)
-                intent.putExtra("userId",user_id)
-                startActivity(intent)
-            }else if (role == "Hotel Owner"){
-                val intent = Intent(this, OwnerProfileActivity::class.java)
-                intent.putExtra("userId",user_id)
-                startActivity(intent)
-            } else {
-                val intent = Intent(this, UserProfileActivity::class.java)
-                intent.putExtra("userId",user_id)
-                startActivity(intent)
-            }
-        }
-
-
-
         likeCountText.text = likeCount.toString()
         commentC.text = commentCount.toString()
 
@@ -231,6 +227,7 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
                     likeCount += 1
 //                    post.Like_count = count.toString()
                     likeCountText.text = likeCount.toString()
+                    likeCountText.visibility = View.VISIBLE
                 }
             } else {
                 postLike(postId, applicationContext) {
@@ -239,6 +236,9 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
                     likeCount -= 1
 //                    post.Like_count = count.toString()
                     likeCountText.text = likeCount.toString()
+                    if (likeCount == 0){
+                        likeCountText.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -275,8 +275,11 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
         },200)
     }
 
-    private fun getProfiles(postId: String) {
-        val getpost = RetrofitBuilder.feedsApi.getPosts(postId)
+    private fun getPost(postId: String) {
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("user_id", "").toString()
+
+        val getpost = RetrofitBuilder.feedsApi.getPostData(userId ,postId)
 
         getpost.enqueue(object : Callback<PostItem?> {
             override fun onResponse(call: Call<PostItem?>, response: Response<PostItem?>) {
@@ -294,10 +297,15 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
                     }
                     role = response.Role
 
-                    like = response.like
-                    likeSaved = response.isSaved
-                    val count = response.likeCount
+                    like = response.liked
                     isSaved = response.saved
+
+                    likeCount = response.likeCount.toInt()
+                    commentCount = response.commentCount
+
+                    if (likeCount == 0){
+                        likeCountText.visibility = View.GONE
+                    }
                 }else{
 
                 }
@@ -443,6 +451,7 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
                     likeButton.setImageResource(R.drawable.liked_vectore)
                     count += 1
                     likeCountText.text = count.toString()
+                    likeCountText.visibility = View.VISIBLE
                 }
             }
 

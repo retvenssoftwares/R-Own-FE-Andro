@@ -33,6 +33,12 @@ interface FeedsApi {
         @Path("postId")postId : String
     ):Call<PostItem>
 
+    @GET("getpost/{User_id}/{postId}")
+    fun getPostData(
+        @Path("User_id")User_id : String,
+        @Path("postId")postId : String
+    ):Call<PostItem>
+
     @Multipart
     @POST("usergroup")
     fun createCommunities(

@@ -185,10 +185,12 @@ class EditHotelProfileActivity : AppCompatActivity() {
             if (binding.etNameEdit.length() < 3) {
                 Toast.makeText(applicationContext, "Please enter your hotel name", Toast.LENGTH_SHORT)
                     .show()
-            } else if (binding.hotelType.text.toString() == "Hotel Type") {
-                Toast.makeText(applicationContext, "Please select Hotel Type", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
+            }
+//            else if (binding.hotelType.text.toString() == "Hotel Type") {
+//                Toast.makeText(applicationContext, "Please select Hotel Type", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+            else {
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 progressDialog.setContentView(R.layout.progress_dialoge)
