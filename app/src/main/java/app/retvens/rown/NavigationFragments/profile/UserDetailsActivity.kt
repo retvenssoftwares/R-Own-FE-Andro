@@ -125,7 +125,11 @@ class UserDetailsActivity : AppCompatActivity(),
 
                         binding.vendorName.text = response.Full_name
                         binding.username.text = response.User_name
-                        binding.bio.text = response.userBio
+                        if (response.userBio.isNotEmpty()) {
+                            binding.bio.text = response.userBio
+                        }else{
+                            binding.bio.text = "Bio not added"
+                        }
 
                             if (response.Role == "Normal User"){
                                 Log.e("res", response.normalUserInfo.toString())
@@ -140,10 +144,10 @@ class UserDetailsActivity : AppCompatActivity(),
                             }
                         binding.recyclerExperience.adapter = experienceAdapter
                         experienceAdapter.notifyDataSetChanged()
-//                            else {
-//                        binding.expError.visibility = View.VISIBLE
-//                                binding.expError.visibility = View.VISIBLE
-//                            }
+
+                            if (response.normalUserInfo.isEmpty() && response.hospitalityExpertInfo.isEmpty()) {
+                                binding.expError.visibility = View.VISIBLE
+                            }
 
 
 

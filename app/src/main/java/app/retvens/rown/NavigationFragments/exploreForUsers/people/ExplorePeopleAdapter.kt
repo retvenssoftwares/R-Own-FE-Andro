@@ -71,7 +71,7 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         }
 
         holder.itemView.setOnClickListener {
-            Toast.makeText(context, verificationStatus, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, verificationStatus, Toast.LENGTH_SHORT).show()
         }
 
         if (data.Profile_pic.isNotEmpty()){
@@ -165,6 +165,14 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
 
     override fun getItemCount(): Int {
        return peopleList.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 
     fun removeUsersFromList(data: List<Post>){

@@ -36,6 +36,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetRemoveConnection
 import app.retvens.rown.bottomsheet.BottomSheetSharePost
 import app.retvens.rown.utils.acceptRequest
 import app.retvens.rown.utils.removeConnRequest
@@ -50,7 +51,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.NullPointerException
 
-class VendorProfileActivity : AppCompatActivity() {
+class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnBottomSheetRemoveConnectionClickListener  {
 
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
@@ -81,6 +82,9 @@ class VendorProfileActivity : AppCompatActivity() {
     var address =  ""
     var fullName = ""
     var userName =  ""
+
+    var userId = ""
+    var user_id = ""
 
     var selected = 1
 
@@ -126,10 +130,10 @@ class VendorProfileActivity : AppCompatActivity() {
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
 
-        val userId = intent.getStringExtra("userId").toString()
+        userId = intent.getStringExtra("userId").toString()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
+        user_id = sharedPreferences?.getString("user_id", "").toString()
 
         refresh.setOnRefreshListener {
             if (selected == 1) {
@@ -179,11 +183,10 @@ class VendorProfileActivity : AppCompatActivity() {
 
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
-
-                removeConnection(userId,user_id, applicationContext){
-                    connStatus.text = "CONNECT"
-                }
-
+                val bottomSheet = BottomSheetRemoveConnection()
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetRemoveConnection.Remove_TAG)}
+                bottomSheet.setOnBottomSheetRemoveConnectionClickListener(this)
             } else if (connStatus.text == "CONNECT") {
 
                 sendConnectionRequest(userId, applicationContext){
@@ -470,4 +473,18 @@ class VendorProfileActivity : AppCompatActivity() {
         }
         return encodedData.toString()
     }
+
+    override fun bottomSheetRemoveConnectionClick(removeConnection: String) {
+        if (removeConnection == "Yes") {
+            removeConnection(userId,user_id, applicationContext){
+                connStatus.text = "CONNECT"
+                card_message.visibility = View.GONE
+                viewPP.visibility = View.GONE
+
+                rejectCard.visibility = View.VISIBLE
+                reject.text = "VIEW PROFESSIONAL PROFILE"
+            }
+        }
+    }
+
 }

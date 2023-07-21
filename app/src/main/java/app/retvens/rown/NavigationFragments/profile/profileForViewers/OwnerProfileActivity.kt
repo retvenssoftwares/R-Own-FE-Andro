@@ -40,6 +40,7 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
+import app.retvens.rown.bottomsheet.BottomSheetRemoveConnection
 import app.retvens.rown.bottomsheet.BottomSheetSharePost
 import app.retvens.rown.utils.acceptRequest
 import app.retvens.rown.utils.rejectConnRequest
@@ -53,7 +54,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class OwnerProfileActivity : AppCompatActivity() {
+class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnBottomSheetRemoveConnectionClickListener  {
     private lateinit var setting : ImageView
     lateinit var profile : ShapeableImageView
     lateinit var verificationS : ImageView
@@ -84,6 +85,9 @@ class OwnerProfileActivity : AppCompatActivity() {
     var address =  ""
     var userName = ""
     var role = ""
+
+    var userID = ""
+    var user_id = ""
 
     private lateinit var progressDialog:Dialog
 
@@ -123,10 +127,10 @@ class OwnerProfileActivity : AppCompatActivity() {
         Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
         progressDialog.show()
 
-        val userID = intent.getStringExtra("userId").toString()
+        userID = intent.getStringExtra("userId").toString()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
+        user_id = sharedPreferences?.getString("user_id", "").toString()
 
         if (user_id == userID){
             connStatus.visibility = View.GONE
@@ -166,16 +170,10 @@ class OwnerProfileActivity : AppCompatActivity() {
         }
         connStatus.setOnClickListener {
             if (connStatus.text == "Remove"){
-
-                removeConnection(userID,user_id, applicationContext){
-                    connStatus.text = "CONNECT"
-                    card_message.visibility = View.GONE
-                    viewPP.visibility = View.GONE
-
-                    rejectCard.visibility = View.VISIBLE
-                    reject.text = "VIEW OWNER PROFILE"
-                }
-
+                val bottomSheet = BottomSheetRemoveConnection()
+                val fragManager = supportFragmentManager
+                fragManager.let{bottomSheet.show(it, BottomSheetRemoveConnection.Remove_TAG)}
+                bottomSheet.setOnBottomSheetRemoveConnectionClickListener(this)
             } else if (connStatus.text == "CONNECT") {
 
                 sendConnectionRequest(userID, applicationContext){
@@ -514,4 +512,18 @@ class OwnerProfileActivity : AppCompatActivity() {
         }
         return encodedData.toString()
     }
+
+    override fun bottomSheetRemoveConnectionClick(removeConnection: String) {
+        if (removeConnection == "Yes") {
+            removeConnection(userID,user_id, applicationContext){
+                connStatus.text = "CONNECT"
+                card_message.visibility = View.GONE
+                viewPP.visibility = View.GONE
+
+                rejectCard.visibility = View.VISIBLE
+                reject.text = "VIEW PROFESSIONAL PROFILE"
+            }
+        }
+    }
+
 }
