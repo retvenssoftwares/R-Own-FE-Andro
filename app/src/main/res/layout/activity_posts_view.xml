@@ -86,39 +86,100 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:weightSum="7"
         android:layout_marginBottom="25dp"
         android:background="@drawable/transparent_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/like_post"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_weight="1"
-            android:src="@drawable/svg_like_post"/>
-        <ImageView
-            android:id="@+id/comment"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_weight="1"
-            android:src="@drawable/svg_post_comment"/>
-        <ImageView
-            android:id="@+id/share_post"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:visibility="gone"
-            android:layout_weight="1"
-            android:src="@drawable/svg_share_post"/>
-        <ImageView
-            android:id="@+id/savedPost"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_weight="1"
-            android:src="@drawable/svg_save_post"/>
+        <LinearLayout
+            android:id="@+id/postaction"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            app:layout_constraintStart_toStartOf="@id/viewPager"
+            app:layout_constraintTop_toBottomOf="@+id/recentCommentByUser">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/like_post"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/svg_like_post"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/like_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/comment"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/svg_post_comment"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/comment_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/share_post"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:visibility="gone"
+                android:src="@drawable/svg_share_post"/>
+            <ImageView
+                android:id="@+id/savedPost"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/svg_save_post"/>
+
+
+        </LinearLayout>
     </LinearLayout>
 
 

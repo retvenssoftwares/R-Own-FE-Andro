@@ -101,6 +101,7 @@
                 android:src="@drawable/svg_filter_in_search"
                 android:layout_marginEnd="12dp"
                 app:tint="@color/black"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -149,15 +150,26 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/viewAllVendorsRecycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         app:layout_goneMarginTop="8dp"
         tools:listitem="@layout/vendors_card_home"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_h"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/green_own"
+            android:paddingBottom="60dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerFrameLayout"

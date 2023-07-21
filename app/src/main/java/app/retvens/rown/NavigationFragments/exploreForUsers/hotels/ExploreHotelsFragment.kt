@@ -115,7 +115,7 @@ class ExploreHotelsFragment : Fragment() {
             }
         })
 
-        getBlogs()
+        getHotels()
     }
 
     private fun getData() {
@@ -124,13 +124,13 @@ class ExploreHotelsFragment : Fragment() {
         progress.setVisibility(View.VISIBLE);
 
         handler.postDelayed({
-            getBlogs()
+            getHotels()
             progress.setVisibility(View.GONE);
         },
             3000)
     }
 
-    private fun getBlogs() {
+    private fun getHotels() {
 
         val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -253,7 +253,7 @@ class ExploreHotelsFragment : Fragment() {
 
                     }
                 }else{
-                    getBlogs()
+                    getHotels()
                 }
             }
 

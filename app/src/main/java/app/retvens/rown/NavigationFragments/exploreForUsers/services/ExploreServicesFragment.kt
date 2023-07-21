@@ -109,11 +109,11 @@ class ExploreServicesFragment : Fragment() {
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        if (currentPage > lastPage) {
+//                        if (currentPage > lastPage) {
                             isLoading = false
                             lastPage++
                             getData()
-                        }
+//                        }
                     }
                 }
 
@@ -222,9 +222,9 @@ class ExploreServicesFragment : Fragment() {
                                try {
                                    val data = response.body()!!
                                    data.forEach {
-                                       if (it.vendors.size >= 10){
+//                                       if (it.vendors.size >= 10){
                                            currentPage++
-                                       }
+//                                       }
                                        hotelList.addAll(it.vendors)
                                        exploreServicesAdapter.removeServicesFromList(hotelList)
                                        exploreServicesAdapter.notifyDataSetChanged()

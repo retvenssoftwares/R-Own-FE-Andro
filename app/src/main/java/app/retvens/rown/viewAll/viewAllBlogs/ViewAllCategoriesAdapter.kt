@@ -2,6 +2,7 @@ package app.retvens.rown.viewAll.viewAllBlogs
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class ViewAllCategoriesAdapter(val listS : List<ViewAllCategoriesData>, val context: Context) : RecyclerView.Adapter<ViewAllCategoriesAdapter.ViewAllVendorsViewHolder>() {
+class ViewAllCategoriesAdapter(var listS : ArrayList<ViewAllCategoriesData>, val context: Context) : RecyclerView.Adapter<ViewAllCategoriesAdapter.ViewAllVendorsViewHolder>() {
 
     class ViewAllVendorsViewHolder(itemView: View) : ViewHolder(itemView){
         val categoryName = itemView.findViewById<TextView>(R.id.personal_notification_name)
@@ -49,4 +50,21 @@ class ViewAllCategoriesAdapter(val listS : List<ViewAllCategoriesData>, val cont
         }
 
     }
+
+    fun searchView(searchText : ArrayList<ViewAllCategoriesData>){
+        listS = searchText
+        notifyDataSetChanged()
+    }
+    fun removeEmptyCategoryFromList(data: List<ViewAllCategoriesData>){
+        try {
+            data.forEach {
+                if (it.blog_count < 1){
+                    listS.remove(it)
+                }
+            }
+        } catch (e : ConcurrentModificationException){
+            Log.d("EPA", e.toString())
+        }
+    }
+
 }

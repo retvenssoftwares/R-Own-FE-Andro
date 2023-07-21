@@ -15,7 +15,7 @@ import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class ViewAllCommunityAdapter(val listS : List<GetCommunitiesData>, val context: Context) : RecyclerView.Adapter<ViewAllCommunityAdapter.ViewAllCommunityViewHolder>() {
+class ViewAllCommunityAdapter(var listS : ArrayList<GetCommunitiesData>, val context: Context) : RecyclerView.Adapter<ViewAllCommunityAdapter.ViewAllCommunityViewHolder>() {
 
     class ViewAllCommunityViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.personal_notification_name)
@@ -63,9 +63,13 @@ class ViewAllCommunityAdapter(val listS : List<GetCommunitiesData>, val context:
         holder.viewGroup.setOnClickListener {
             val intent = Intent(context,OpenCommunityDetailsActivity::class.java)
             intent.putExtra("groupId",listS[position].group_id.toLong())
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(intent)
         }
 
+    }
+
+    fun searchView(searchText : ArrayList<GetCommunitiesData>){
+        listS = searchText
+        notifyDataSetChanged()
     }
 }

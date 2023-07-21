@@ -397,7 +397,7 @@
         <activity
             android:name=".NavigationFragments.exploreForUsers.blogs.BlogsDetailsActivity"
             android:exported="false"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.exploreForUsers.events.EventDetailsActivity"
             android:exported="false"

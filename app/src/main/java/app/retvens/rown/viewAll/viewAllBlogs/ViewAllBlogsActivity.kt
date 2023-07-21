@@ -147,9 +147,10 @@ class ViewAllBlogsActivity : AppCompatActivity() {
                     binding.shimmerFrameLayout.visibility = View.GONE
 
                     if (response.body()!!.isNotEmpty()) {
-                    viewAllCategoriesAdapter = ViewAllCategoriesAdapter(response.body()!!, this@ViewAllBlogsActivity)
+                    viewAllCategoriesAdapter = ViewAllCategoriesAdapter(response.body()!! as ArrayList<ViewAllCategoriesData>, this@ViewAllBlogsActivity)
                     binding.categoryRecyclerView.adapter = viewAllCategoriesAdapter
-                    viewAllCategoriesAdapter.notifyDataSetChanged()
+                        viewAllCategoriesAdapter.removeEmptyCategoryFromList(response.body()!!)
+                        viewAllCategoriesAdapter.notifyDataSetChanged()
                     } else {
                         binding.shimmerFrameLayout.stopShimmer()
                         binding.shimmerFrameLayout.visibility = View.GONE

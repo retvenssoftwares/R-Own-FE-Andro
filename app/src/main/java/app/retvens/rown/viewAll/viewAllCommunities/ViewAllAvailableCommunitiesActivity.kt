@@ -2,6 +2,8 @@ package app.retvens.rown.viewAll.viewAllCommunities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -55,9 +57,40 @@ class ViewAllAvailableCommunitiesActivity : AppCompatActivity(),
            ) {
                if (response.isSuccessful){
                    val response = response.body()!!
-                   viewAllCommunityAdapter = ViewAllCommunityAdapter(response, applicationContext)
+                   viewAllCommunityAdapter = ViewAllCommunityAdapter(response as ArrayList<GetCommunitiesData>, applicationContext)
                    binding.viewAllCommRecycler.adapter = viewAllCommunityAdapter
                    viewAllCommunityAdapter.notifyDataSetChanged()
+
+
+                   binding.searchCommunity.addTextChangedListener(object : TextWatcher {
+                       override fun beforeTextChanged(
+                           s: CharSequence?,
+                           start: Int,
+                           count: Int,
+                           after: Int
+                       ) {
+
+                       }
+
+                       override fun onTextChanged(
+                           s: CharSequence?,
+                           start: Int,
+                           before: Int,
+                           count: Int
+                       ) {
+                           val original = response.toList()
+                           val filter = original.filter { searchUser ->
+                               searchUser.group_name.contains(s.toString(), ignoreCase = true)
+//                                searchUser.blog_content.contains(s.toString(),ignoreCase = true)
+//                                searchUser.User_name.contains(s.toString(),ignoreCase = true)
+                           }
+                           viewAllCommunityAdapter.searchView(filter as ArrayList<GetCommunitiesData>)
+                       }
+
+                       override fun afterTextChanged(s: Editable?) {
+
+                       }
+                   })
                }
            }
 

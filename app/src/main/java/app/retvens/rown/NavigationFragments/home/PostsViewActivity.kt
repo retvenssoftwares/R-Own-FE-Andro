@@ -25,6 +25,7 @@ import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
@@ -42,10 +43,16 @@ class PostsViewActivity : AppCompatActivity() {
     private var image:ArrayList<String> = ArrayList()
     lateinit var caption:String
     private lateinit var captions:TextView
+
+    private lateinit var like_count:TextView
+    private lateinit var comment_count:TextView
+
     lateinit var progressDialog:Dialog
     lateinit var savedPost : ImageView
     var save = true
     var operatioin = "push"
+
+    var isLike = true
 
     var like = ""
 
@@ -61,18 +68,25 @@ class PostsViewActivity : AppCompatActivity() {
         savedPost = findViewById(R.id.savedPost)
 
         val likeButton = findViewById<ImageView>(R.id.like_post)
+
+        like_count = findViewById(R.id.like_count)
+        comment_count = findViewById(R.id.comment_count)
+
         val likedAnimation = findViewById<ImageView>(R.id.likedAnimation)
         val commentButton = findViewById<ImageView>(R.id.comment)
         val viewPager = findViewById<ViewPager>(R.id.post_pic)
         indicator = findViewById<CircleIndicator>(R.id.indicator)
 
+        val likeCount = intent.getStringExtra("likeCount").toString()
+        postId = intent.getStringExtra("postId").toString()
+        val postIds = intent.getStringExtra("postId").toString()
         try {
             captions.text = intent.getStringExtra("caption")
             image = intent.getStringArrayListExtra("postPic")!!
-            postId = intent.getStringExtra("postId").toString()
             profilePic = intent.getStringExtra("profilePic").toString()
+            like_count.text = likeCount
+            comment_count.text = intent.getStringExtra("commentCount").toString()
         }catch (e:NullPointerException){
-            val postIds = intent.getStringExtra("postId").toString()
             getPost(postIds)
         }
 
@@ -80,13 +94,6 @@ class PostsViewActivity : AppCompatActivity() {
 
 
         like = intent.getStringExtra("like").toString()
-
-//        Glide.with(applicationContext).load(image).into(postImage)
-        if (like == "liked"){
-            likeButton.setImageResource(R.drawable.liked_vectore)
-        }else if (like == "not liked"){
-            likeButton.setImageResource(R.drawable.svg_like_post)
-        }
 
         val handler = Handler(Looper.getMainLooper())
 
@@ -113,20 +120,34 @@ class PostsViewActivity : AppCompatActivity() {
 
         indicator.setViewPager(viewPager)
 
+        var count = likeCount.toInt()
+
         if (like == "Liked" || like == "liked"){
+            isLike = false
             likeButton.setImageResource(R.drawable.liked_vectore)
         }else if (like == "Unliked" || like == "not liked"){
+            isLike = true
             likeButton.setImageResource(R.drawable.svg_like_post)
         }
 
         likeButton.setOnClickListener {
 
-            if (like == "not liked") {
-                likeButton.setImageResource(R.drawable.liked_vectore)
-                likePost(postId)
+            if (isLike) {
+                postLike(postIds, this) {
+                    like = "liked"
+                    isLike = false
+                    likeButton.setImageResource(R.drawable.liked_vectore)
+                    count += 1
+                    like_count.text = count.toString()
+                }
             } else {
-                likeButton.setImageResource(R.drawable.svg_like_post)
-                likePost(postId)
+                postLike(postIds, this) {
+                    like = "not liked"
+                    isLike = true
+                    likeButton.setImageResource(R.drawable.svg_like_post)
+                    count -= 1
+                    like_count.text = count.toString()
+                }
             }
         }
 

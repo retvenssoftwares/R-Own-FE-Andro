@@ -432,16 +432,16 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //            Log.e("username",post.User_name)
 //            binding.recentCommentByUser.text = post.caption
             if (banner.caption.length > 150) {
-                binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
             } else {
                 binding.recentCommentByUser.text = banner.caption
             }
             binding.recentCommentByUser.setOnClickListener {
-                if (binding.recentCommentByUser.text.toString().endsWith("View More")) {
+                if (binding.recentCommentByUser.text.toString().endsWith("Read More")) {
                     binding.recentCommentByUser.text = banner.caption
                 } else {
                     if (banner.caption.length > 150) {
-                        binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
                     } else {
                         binding.recentCommentByUser.text = banner.caption
                     }
@@ -625,16 +625,16 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.titleStatus.text = banner.caption
 
             if (banner.caption.lines().size > 3 || banner.caption.length > 150) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='black'> <u>Read More</u></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
             binding.titleStatus.setOnClickListener {
-                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                if (binding.titleStatus.text.toString().endsWith("Read More")) {
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.lines().size > 3 || banner.caption.length > 150) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, banner.caption.length/3) + "..." + "<font color='black'> <u>Read More</u></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -769,16 +769,16 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.location.text = banner.User_name
 
             if (banner.caption.length > 150) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
             binding.titleStatus.setOnClickListener {
-                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                if (binding.titleStatus.text.toString().endsWith("Read More")) {
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.length > 150) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -928,16 +928,16 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.postUserType.text = post.User_name
 
             if (banner.caption.length > 150) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
             binding.titleStatus.setOnClickListener {
-                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                if (binding.titleStatus.text.toString().endsWith("Read More")) {
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.length > 150) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -1128,16 +1128,16 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.postUserType.text = post.User_name
 
             if (banner.caption.length > 150) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
             binding.titleStatus.setOnClickListener {
-                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                if (binding.titleStatus.text.toString().endsWith("Read More")) {
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.length > 150) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <u>Read More</u></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }
@@ -1194,16 +1194,16 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.postUserType.text = post.User_name
 
             if (banner.caption.length > 100) {
-                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='blue'> <u>View More</u></font>")
+                binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='black'> <u>Read More</u></font>")
             } else {
                 binding.titleStatus.text = banner.caption
             }
             binding.titleStatus.setOnClickListener {
-                if (binding.titleStatus.text.toString().endsWith("View More")) {
+                if (binding.titleStatus.text.toString().endsWith("Read More")) {
                     binding.titleStatus.text = banner.caption
                 } else {
                     if (banner.caption.length > 100) {
-                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='blue'> <u>View More</u></font>")
+                        binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='black'> <u>Read More</u></font>")
                     } else {
                         binding.titleStatus.text = banner.caption
                     }

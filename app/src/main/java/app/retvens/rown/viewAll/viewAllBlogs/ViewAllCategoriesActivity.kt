@@ -2,6 +2,8 @@ package app.retvens.rown.viewAll.viewAllBlogs
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,9 +50,40 @@ class ViewAllCategoriesActivity : AppCompatActivity() {
 
                     if (response.body()!!.isNotEmpty()) {
                     viewAllCategoriesAdapter =
-                        ViewAllCategoriesAdapter(response.body()!!, this@ViewAllCategoriesActivity)
+                        ViewAllCategoriesAdapter(response.body()!! as ArrayList<ViewAllCategoriesData>, this@ViewAllCategoriesActivity)
                         binding.categoriesRecyclerView.adapter = viewAllCategoriesAdapter
+                        viewAllCategoriesAdapter.removeEmptyCategoryFromList(response.body()!!)
                     viewAllCategoriesAdapter.notifyDataSetChanged()
+
+                        binding.searchCommunity.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                count: Int,
+                                after: Int
+                            ) {
+
+                            }
+
+                            override fun onTextChanged(
+                                s: CharSequence?,
+                                start: Int,
+                                before: Int,
+                                count: Int
+                            ) {
+                                val original = response.body()!!.toList()
+                                val filter = original.filter { searchUser ->
+                                    searchUser.category_name.contains(s.toString(), ignoreCase = true)
+//                                searchUser.blog_content.contains(s.toString(),ignoreCase = true)
+//                                searchUser.User_name.contains(s.toString(),ignoreCase = true)
+                                }
+                                viewAllCategoriesAdapter.searchView(filter as ArrayList<ViewAllCategoriesData>)
+                            }
+
+                            override fun afterTextChanged(s: Editable?) {
+
+                            }
+                        })
                     } else {
                         binding.shimmerFrameLayout.stopShimmer()
                         binding.shimmerFrameLayout.visibility = View.GONE
