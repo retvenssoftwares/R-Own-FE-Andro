@@ -358,6 +358,12 @@
             android:name=".NavigationFragments.profile.vendorsReview.ReviewsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
+
+        <activity
+            android:name=".NavigationFragments.home.PostDetailsActivityNotification"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+
         <activity
             android:name=".NavigationFragments.profile.EditVendorsProfileActivity"
             android:exported="false"

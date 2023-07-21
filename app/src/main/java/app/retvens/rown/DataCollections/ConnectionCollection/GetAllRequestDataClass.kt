@@ -3,7 +3,7 @@ package app.retvens.rown.DataCollections.ConnectionCollection
 import app.retvens.rown.DataCollections.MesiboAccount
 
 data class GetAllRequestDataClass(
-    val conns: ArrayList<Connection>
+    var conns: ArrayList<Connection>
 )
 
 data class Connection(

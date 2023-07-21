@@ -156,6 +156,10 @@ class ProfileHotelsAdapter(val listS : ArrayList<HotelsName>, val context: Conte
     }
 
     private fun removeHotel(id: String) {
+
+        Log.e("id",id)
+
+
         val respo = RetrofitBuilder.ProfileApis.removeHotel(
             id,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(), "0")

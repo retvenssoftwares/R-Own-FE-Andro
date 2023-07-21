@@ -2,12 +2,16 @@ package app.retvens.rown.NavigationFragments.profile.viewRequests
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.Connection
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
+import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
@@ -18,7 +22,7 @@ import retrofit2.Response
 
 class ViewRequestsActivity : AppCompatActivity() {
     lateinit var binding : ActivityViewRequestsBinding
-
+    lateinit var searchBar: EditText
     lateinit var requestsAdapter: RequestsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +33,7 @@ class ViewRequestsActivity : AppCompatActivity() {
         binding.requestsRecycler.layoutManager = LinearLayoutManager(applicationContext)
         binding.requestsRecycler.setHasFixedSize(true)
 
-
+        searchBar = findViewById(R.id.searchBar)
         binding.reBackBtn.setOnClickListener { onBackPressed() }
 
 
@@ -56,11 +60,41 @@ class ViewRequestsActivity : AppCompatActivity() {
            ) {
                if (response.isSuccessful){
                    val response = response.body()!!
+                   val original = response.conns.toList()
                    requestsAdapter = RequestsAdapter(response, this@ViewRequestsActivity)
                    binding.requestsRecycler.adapter = requestsAdapter
                    requestsAdapter.notifyDataSetChanged()
 
                    requestsAdapter.setJobSavedClickListener(this)
+
+
+                   searchBar.addTextChangedListener(object : TextWatcher {
+                       override fun beforeTextChanged(
+                           p0: CharSequence?,
+                           p1: Int,
+                           p2: Int,
+                           p3: Int
+                       ) {
+
+                       }
+
+                       override fun onTextChanged(
+                           p0: CharSequence?,
+                           p1: Int,
+                           p2: Int,
+                           p3: Int
+                       ) {
+                           val filterData = original.filter { item ->
+                               item.Full_name.contains(p0.toString(),ignoreCase = true)
+                           }
+
+                           requestsAdapter.updateData(filterData as ArrayList<Connection>)
+                       }
+
+                       override fun afterTextChanged(p0: Editable?) {
+
+                       }
+                   })
                }else{
                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                }

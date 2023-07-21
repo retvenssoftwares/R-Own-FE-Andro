@@ -4,6 +4,7 @@ data class PersonalNotificationDataItem(
     val Full_name: String,
     val Profile_pic: String,
     val Role: String,
+    val post_type:String,
     val verificationStatus: String,
     val User_name: String,
     val _id: String,

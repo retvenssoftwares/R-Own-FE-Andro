@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.viewRequests
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.ConnectionCollection.Connection
+import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeopleAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
@@ -23,7 +25,7 @@ import app.retvens.rown.utils.removeConnRequest
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class RequestsAdapter(val listS : GetAllRequestDataClass, val context: Context) : RecyclerView.Adapter<RequestsAdapter.RequestsViewHolder>() {
+class RequestsAdapter(var listS : GetAllRequestDataClass, val context: Context) : RecyclerView.Adapter<RequestsAdapter.RequestsViewHolder>() {
 
 
     interface ConnectClickListener {
@@ -105,5 +107,11 @@ class RequestsAdapter(val listS : GetAllRequestDataClass, val context: Context) 
     fun setJobSavedClickListener(listener: ConnectClickListener) {
 
         connectClickListener = listener
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: ArrayList<Connection>) {
+        listS.conns = newItems
+        notifyDataSetChanged()
     }
 }

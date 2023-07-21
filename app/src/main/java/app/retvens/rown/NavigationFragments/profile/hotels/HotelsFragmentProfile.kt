@@ -26,7 +26,7 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
 
     lateinit var recycler : RecyclerView
     lateinit var profileHotelsAdapter: ProfileHotelsAdapter
-
+    private var hotelList:ArrayList<HotelsName> = ArrayList()
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
     lateinit var empty : TextView
@@ -84,10 +84,16 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
 
                         if (response.body()!!.isNotEmpty()) {
                             try {
-                                Log.e("res",response.body().toString())
-                            profileHotelsAdapter = ProfileHotelsAdapter(response.body()!! as ArrayList<HotelsName>, requireContext(), isOwner)
+                            val response = response.body()!!
+                            response.forEach {
+                                if (it.display_status == "1"){
+                                    hotelList.add(it)
+                                }
+
+                            }
+                            profileHotelsAdapter = ProfileHotelsAdapter(hotelList, requireContext(), isOwner)
                             recycler.adapter = profileHotelsAdapter
-                            profileHotelsAdapter.removeHotelFromList(response.body()!!)
+                            profileHotelsAdapter.removeHotelFromList(hotelList)
                             profileHotelsAdapter.notifyDataSetChanged()
                                } catch ( e : NullPointerException){
                                 notPosted.visibility = View.VISIBLE

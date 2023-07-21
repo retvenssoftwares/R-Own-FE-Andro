@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import app.retvens.rown.NavigationFragments.home.PostDetailsActivityNotification
 import app.retvens.rown.R
 import app.retvens.rown.utils.dateFormat
 import com.bumptech.glide.Glide
@@ -57,11 +58,16 @@ class PersonalNotificationAdapter(val listS : List<PersonalNotificationDataItem>
         holder.categoryName.text = listS[position].body
 
         holder.itemView.setOnClickListener {
-//            val intent = Intent(context, AllBlogsActivity::class.java)
-//            intent.putExtra("id", listS[position].category_id)
-//            intent.putExtra("name", listS[position].category_name)
-//            context.startActivity(intent)
+            if (listS[position].post_type == "share some media"){
+
+                val intent = Intent(context,PostDetailsActivityNotification::class.java)
+                intent.putExtra("postId",listS[position].post_id)
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent)
+
+            }
         }
+
 
     }
 }
