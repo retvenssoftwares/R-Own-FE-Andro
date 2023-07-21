@@ -29,7 +29,8 @@
     <color name="grey_20">#cccccc</color>
     <color name="grey_40">#999999</color>
     <color name="grey_60">#666666</color>
-
+    <color name="badge_background_color">#FF4081</color>
+    <dimen name="badge_text_size">12sp</dimen>
 
     <color name="suggested_job_black">#272A3D</color>
     <color name="suggested_job_yellow">#ACD037</color>

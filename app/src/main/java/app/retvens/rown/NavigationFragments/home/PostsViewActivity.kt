@@ -119,8 +119,13 @@ class PostsViewActivity : AppCompatActivity() {
         }))
 
         indicator.setViewPager(viewPager)
+        var count:Int = 0
+        try {
+            count = likeCount.toInt()
+        }catch (e:NumberFormatException){
+            Log.e("error",e.message.toString())
+        }
 
-        var count = likeCount.toInt()
 
         if (like == "Liked" || like == "liked"){
             isLike = false

@@ -7,6 +7,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,11 +22,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.BadgeDrawable
 import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
@@ -37,6 +40,7 @@ import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivi
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
+import app.retvens.rown.api.CallStateReceiver.context
 import app.retvens.rown.bottomsheet.BottomSheet.Companion.TAG
 import app.retvens.rown.databinding.ActivityDashBoardBinding
 import app.retvens.rown.sideNavigation.*
@@ -521,6 +525,26 @@ class DashBoardActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        val chatsItem = item
+        val badgeCount = 5 // Replace this with your actual message count
+
+        val iconDrawable = ContextCompat.getDrawable(this, R.drawable.chats)
+        if (iconDrawable != null) {
+            val badgeDrawable = BadgeDrawable(this, badgeCount)
+            Log.e("check",badgeDrawable.toString())
+            val layers = arrayOf(iconDrawable, badgeDrawable)
+            val layerDrawable = LayerDrawable(layers)
+
+            // Adjust the position of the badge count on the chats icon
+            val badgeOffset = resources.getDimensionPixelOffset(R.dimen.badge_text_size)
+            layerDrawable.setLayerInset(1, badgeOffset, badgeOffset, badgeOffset, badgeOffset)
+
+            // Set the badge drawable to the chats item
+            chatsItem.icon = layerDrawable
+
+        }
+
         when (item.itemId) {
            /* R.id.action_settings -> {
                 Toast.makeText(applicationContext,"Setting",Toast.LENGTH_SHORT).show()
