@@ -144,10 +144,13 @@ class DashBoardActivity : AppCompatActivity() {
                     replaceFragment(HomeFragment())
                 }
 //                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
-            } else {
+            } else if (!isConnected || server == "502") {
                 binding.noInternet.visibility = View.VISIBLE
                 binding.navView.visibility = View.GONE
                 binding.dashboard.visibility = View.GONE
+                if (server == "502") {
+                    binding.noInternetLayout.visibility = View.GONE
+                }
 //                Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
             }
         }

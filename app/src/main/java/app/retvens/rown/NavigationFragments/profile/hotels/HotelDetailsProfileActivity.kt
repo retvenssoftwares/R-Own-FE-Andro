@@ -58,6 +58,12 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
         binding.location.text = location
 
 //        saved = intent.getStringExtra("saved")!!
+
+        binding.refreshLayout.setOnRefreshListener {
+            getHotel()
+            binding.refreshLayout.isRefreshing = false
+        }
+
         getHotel()
 
 //        if (saved != "not saved"){
@@ -143,33 +149,69 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                     binding.location.text = data.hotelAddress
                     try {
                         Hoteldescription = data.Hoteldescription
-                        if(data.gallery.get(0).Image1 != "" && data.gallery.get(0).Image2 != "" && data.gallery.get(0).Image3 != "" ) {
+
+                        if (data.gallery.get(0).Image1.isNotEmpty()){
                             img1 = data.gallery.get(0).Image1
-                            img2 = data.gallery.get(0).Image2
-                            img3 = data.gallery.get(0).Image3
                             Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
                             Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
-                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
-                            Glide.with(applicationContext).load(data.gallery.get(0).Image3).into(binding.img3)
-                        } else if (data.gallery.get(0).Image1 != "" && data.gallery.get(0).Image2 != "" ) {
-                            img1 = data.gallery.get(0).Image1
-                            img2 = data.gallery.get(0).Image2
-                            binding.img3.visibility = View.GONE
-                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
-                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
-                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
-                        } else if (data.gallery.get(0).Image1 != "") {
-                            binding.img2.visibility = View.GONE
-                            binding.img3.visibility = View.GONE
-                            img1 = data.gallery.get(0).Image1
-                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
-                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+                            binding.img1.visibility = View.VISIBLE
                         } else {
+                            binding.img1.visibility = View.GONE
+                        }
+                        if (data.gallery.get(0).Image2.isNotEmpty()){
+                            img2 = data.gallery.get(0).Image2
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.vendorImage)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
+
+                            binding.img2.visibility = View.VISIBLE
+                        } else {
+                            binding.img2.visibility = View.GONE
+                        }
+                        if (data.gallery.get(0).Image3.isNotEmpty()){
+                            img3 = data.gallery.get(0).Image3
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image3).into(binding.vendorImage)
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image3).into(binding.img3)
+
+                            binding.img3.visibility = View.VISIBLE
+                        } else {
+                            binding.img3.visibility = View.GONE
+                        }
+
+                        if (data.gallery.get(0).Image1.isEmpty() && data.gallery.get(0).Image2.isEmpty() && data.gallery.get(0).Image3.isEmpty()) {
+                            Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
+
                             binding.img1.visibility = View.GONE
                             binding.img2.visibility = View.GONE
                             binding.img3.visibility = View.GONE
-                            Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
                         }
+
+//                        if(data.gallery.get(0).Image1 != "" && data.gallery.get(0).Image2 != "" && data.gallery.get(0).Image3 != "" ) {
+//                            img1 = data.gallery.get(0).Image1
+//                            img2 = data.gallery.get(0).Image2
+//                            img3 = data.gallery.get(0).Image3
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image3).into(binding.img3)
+//                        } else if (data.gallery.get(0).Image1 != "" && data.gallery.get(0).Image2 != "" ) {
+//                            img1 = data.gallery.get(0).Image1
+//                            img2 = data.gallery.get(0).Image2
+//                            binding.img3.visibility = View.GONE
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
+//                        } else if (data.gallery.get(0).Image1 != "") {
+//                            binding.img2.visibility = View.GONE
+//                            binding.img3.visibility = View.GONE
+//                            img1 = data.gallery.get(0).Image1
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+//                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.vendorImage)
+//                        } else {
+//                            binding.img1.visibility = View.GONE
+//                            binding.img2.visibility = View.GONE
+//                            binding.img3.visibility = View.GONE
+//                            Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
+//                        }
                     }catch (e:IndexOutOfBoundsException){
                         Log.e("error",e.message.toString())
                         binding.img1.visibility = View.GONE
