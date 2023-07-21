@@ -57,19 +57,19 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
 
         binding.location.text = location
 
-        saved = intent.getStringExtra("saved")!!
+//        saved = intent.getStringExtra("saved")!!
         getHotel()
 
-        if (saved != "not saved"){
-            operatioin = "pop"
-            liked = false
-            saved = "saved"
-            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
-        } else {
-            operatioin = "push"
-            liked = true
-            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
-        }
+//        if (saved != "not saved"){
+//            operatioin = "pop"
+//            liked = false
+//            saved = "saved"
+//            binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
+//        } else {
+//            operatioin = "push"
+//            liked = true
+//            binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
+//        }
 
         binding.hotelName.text = hotelName
 
@@ -140,7 +140,7 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
 //                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
 
                     binding.hotelRating.text = "${data.hotelRating} Hotel"
-
+                    binding.location.text = data.hotelAddress
                     try {
                         Hoteldescription = data.Hoteldescription
                         if(data.gallery.get(0).Image1 != "" && data.gallery.get(0).Image2 != "" && data.gallery.get(0).Image3 != "" ) {

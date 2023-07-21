@@ -21,7 +21,7 @@ class ViewAllBlogsActivity : AppCompatActivity() {
 
     lateinit var blogsRecyclerView: RecyclerView
     lateinit var allBlogsAdapter: AllBlogsAdapter
-
+    private var blogList:ArrayList<ViewAllCategoriesData> = ArrayList()
     lateinit var viewAllCategoriesAdapter : ViewAllCategoriesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,6 @@ class ViewAllBlogsActivity : AppCompatActivity() {
 
             getAllBlogs()
 
-            getCategories()
 
             binding.refreshLayout.isRefreshing = false
         }
@@ -147,9 +146,15 @@ class ViewAllBlogsActivity : AppCompatActivity() {
                     binding.shimmerFrameLayout.visibility = View.GONE
 
                     if (response.body()!!.isNotEmpty()) {
-                    viewAllCategoriesAdapter = ViewAllCategoriesAdapter(response.body()!! as ArrayList<ViewAllCategoriesData>, this@ViewAllBlogsActivity)
+                    val response = response.body()!!
+                    response.forEach {
+                    if (it.blog_count != 0){
+                        blogList.add(it)
+                    }
+                    }
+                    viewAllCategoriesAdapter = ViewAllCategoriesAdapter(blogList, this@ViewAllBlogsActivity)
                     binding.categoryRecyclerView.adapter = viewAllCategoriesAdapter
-                        viewAllCategoriesAdapter.removeEmptyCategoryFromList(response.body()!!)
+                        viewAllCategoriesAdapter.removeEmptyCategoryFromList(blogList)
                         viewAllCategoriesAdapter.notifyDataSetChanged()
                     } else {
                         binding.shimmerFrameLayout.stopShimmer()

@@ -330,7 +330,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response.body()?.message.toString(),
                         Toast.LENGTH_SHORT
                     ).show()
-                    startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                    onBackPressed()
                 }
 
                 override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -367,7 +367,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                                 response.body()?.message.toString(),
                                 Toast.LENGTH_SHORT
                             ).show()
-                            startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                            onBackPressed()
                         }
 
                         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -403,7 +403,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                             response.body()?.message.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
-                        startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                       onBackPressed()
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -436,7 +436,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                             response.body()?.message.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
-                        startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                        onBackPressed()
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -468,7 +468,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                             response.body()?.message.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
-                        startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                        onBackPressed()
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {

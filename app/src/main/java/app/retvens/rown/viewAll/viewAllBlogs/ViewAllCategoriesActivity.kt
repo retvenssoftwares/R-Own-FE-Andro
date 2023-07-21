@@ -20,7 +20,7 @@ import retrofit2.Response
 
 class ViewAllCategoriesActivity : AppCompatActivity() {
     lateinit var binding:ActivityViewAllCategoriesBinding
-
+    private var blogList:ArrayList<ViewAllCategoriesData> = ArrayList()
     lateinit var viewAllCategoriesAdapter: ViewAllCategoriesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,12 +47,16 @@ class ViewAllCategoriesActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     binding.shimmerFrameLayout.stopShimmer()
                     binding.shimmerFrameLayout.visibility = View.GONE
-
                     if (response.body()!!.isNotEmpty()) {
-                    viewAllCategoriesAdapter =
-                        ViewAllCategoriesAdapter(response.body()!! as ArrayList<ViewAllCategoriesData>, this@ViewAllCategoriesActivity)
+                        val response = response.body()!!
+                        response.forEach {
+                            if (it.blog_count != 0){
+                                blogList.add(it)
+                            }
+                        }
+                    viewAllCategoriesAdapter = ViewAllCategoriesAdapter(blogList as ArrayList<ViewAllCategoriesData>, this@ViewAllCategoriesActivity)
                         binding.categoriesRecyclerView.adapter = viewAllCategoriesAdapter
-                        viewAllCategoriesAdapter.removeEmptyCategoryFromList(response.body()!!)
+                        viewAllCategoriesAdapter.removeEmptyCategoryFromList(blogList)
                     viewAllCategoriesAdapter.notifyDataSetChanged()
 
                         binding.searchCommunity.addTextChangedListener(object : TextWatcher {
@@ -71,7 +75,7 @@ class ViewAllCategoriesActivity : AppCompatActivity() {
                                 before: Int,
                                 count: Int
                             ) {
-                                val original = response.body()!!.toList()
+                                val original = blogList.toList()
                                 val filter = original.filter { searchUser ->
                                     searchUser.category_name.contains(s.toString(), ignoreCase = true)
 //                                searchUser.blog_content.contains(s.toString(),ignoreCase = true)
