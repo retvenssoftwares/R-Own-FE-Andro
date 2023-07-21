@@ -17,7 +17,8 @@ import retrofit2.Response
 
 class HotelOwnerDetailsActivity : AppCompatActivity() {
     lateinit var binding : ActivityHotelOwnerDetailsBinding
-
+    private var hotelList:ArrayList<HotelsName> = ArrayList()
+    private lateinit var adpater:ProfessionalHotelAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHotelOwnerDetailsBinding.inflate(layoutInflater)
@@ -39,6 +40,10 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
 
         binding.propertyRecycler.layoutManager = LinearLayoutManager(this)
         binding.propertyRecycler.setHasFixedSize(true)
+
+        adpater = ProfessionalHotelAdapter(applicationContext,hotelList)
+        binding.propertyRecycler.adapter = adpater
+        adpater.notifyDataSetChanged()
     }
 
     private fun getHotel(user_id : String) {
@@ -53,9 +58,13 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     try {
                         val response = response.body()!!
-                        val adpater = ProfessionalHotelAdapter(applicationContext,response)
-                        binding.propertyRecycler.adapter = adpater
-                        adpater.notifyDataSetChanged()
+                        response.forEach {
+                            if (it.display_status == "1"){
+                                hotelList.add(it)
+                                adpater.notifyDataSetChanged()
+                            }
+
+                        }
                     }catch (e:NullPointerException){
                         Log.e("error",e.message.toString())
                     }
@@ -96,6 +105,7 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
                         }
 
                         binding.name.text = response.Full_name
+                        binding.bio.text = response.userBio
                         binding.vendorName.text = response.hotelOwnerInfo.hotelownerName
                         binding.username.text = response.User_name
                         binding.location.text = response.location
@@ -103,7 +113,8 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
 
                         val location = response.location
                         val city = location.split(",")[0].trim()
-                        binding.listed.text = city
+                        Log.e("city",city.toString())
+                        binding.city.text = city
 
                     }catch (e:NullPointerException){
                         Log.e("error",e.message.toString())

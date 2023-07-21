@@ -77,13 +77,23 @@ interface ProfileApis {
 
     @Multipart
     @PATCH("updatehoteldata/{hotel_id}")
+    fun updateAllHotels(
+        @Path("hotel_id") hotel_id:String,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
+        @Part("hotelName") hotelName: RequestBody,
+        @Part("hotelAddress") hotelAddress: RequestBody,
+        @Part galleryImages1 : MultipartBody.Part,
+        @Part galleryImages2 : MultipartBody.Part,
+        @Part galleryImages3 : MultipartBody.Part
+    ):Call<UpdateResponse>
+    @Multipart
+    @PATCH("updatehoteldata/{hotel_id}")
     fun updateHotels3(
         @Path("hotel_id") hotel_id:String,
         @Part("Hoteldescription") Hoteldescription: RequestBody,
         @Part("hotelName") hotelName: RequestBody,
         @Part("hotelAddress") hotelAddress: RequestBody,
         @Part galleryImages3 : MultipartBody.Part
-
     ):Call<UpdateResponse>
 
     @Multipart

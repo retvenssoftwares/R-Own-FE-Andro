@@ -241,9 +241,9 @@
                             app:layout_constraintStart_toStartOf="parent"/>
 
                         <TextView
+                            android:id="@+id/city"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Kanpur"
                             android:fontFamily="@font/montserrat_regular"
                             android:textSize="13dp"
                             android:textColor="@color/black"

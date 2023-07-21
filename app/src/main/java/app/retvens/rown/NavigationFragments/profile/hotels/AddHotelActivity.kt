@@ -1,19 +1,25 @@
 package app.retvens.rown.NavigationFragments.profile.hotels
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
@@ -34,10 +40,22 @@ import app.retvens.rown.bottomsheet.BottomSheetRating
 import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
+import com.google.android.gms.tasks.Task
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -66,17 +84,38 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
     lateinit var nameTIL : TextInputLayout
     lateinit var locationTIL : TextInputLayout
     lateinit var ratingTIL : TextInputLayout
-
+    private val REQUEST_CHECK_SETTINGS = 1001
+    private val LOCATION_PERMISSION_REQUEST_CODE = 100
+    lateinit var task:ImageView
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var settingsClient: SettingsClient
+    private lateinit var locationRequest: LocationRequest
     lateinit var chainCover : ShapeableImageView
 
     lateinit var next :CardView
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_hotel)
 
         findViewById<ImageView>(R.id.profile_backBtn).setOnClickListener {
             onBackPressed()
+        }
+
+        task = findViewById(R.id.autofetch)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        settingsClient = LocationServices.getSettingsClient(this)
+
+        locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        task.setOnClickListener {
+            checkLocationSettings()
         }
 
         next = findViewById(R.id.next)
@@ -131,6 +170,93 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
                 Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
                 progressDialog.show()
                 uploadData()
+            }
+        }
+    }
+
+    private fun checkLocationSettings() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            // Location services enabled, proceed to fetch location
+            fetchLocation()
+            Log.e("click","1")
+        }
+
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                try {
+                    exception.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.e("error",sendEx.toString())
+                }
+            }
+        }
+    }
+
+    private fun fetchLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            Log.e("click","2")
+        } else {
+            Log.e("click","3")
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    Log.e("latitude",latitude.toString())
+                    Log.e("longitude",longitude.toString())
+
+                    reverseGeocode(latitude, longitude)
+                    Log.e("click","4")
+                }else{
+                    Log.e("click","5")
+                }
+            }.addOnFailureListener { exception: Exception ->
+                Log.e("error",exception.toString())
+                Toast.makeText(applicationContext,"Permission Required",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun reverseGeocode(latitude: Double, longitude: Double) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val geocoder = Geocoder(this@AddHotelActivity)
+            try {
+                val addresses = withContext(Dispatchers.IO) {
+                    geocoder.getFromLocation(latitude, longitude, 1)
+                }
+                if (addresses!!.isNotEmpty()) {
+                    val address = addresses[0]
+
+                    val city = address.locality
+                    val state = address.adminArea
+                    val country = address.countryName
+
+
+                    location.setText("$city,$state,$country")
+                }
+            } catch (e: Exception) {
+                    Log.e("error",e.message.toString())
             }
         }
     }

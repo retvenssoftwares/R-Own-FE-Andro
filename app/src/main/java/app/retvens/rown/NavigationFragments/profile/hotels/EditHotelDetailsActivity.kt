@@ -89,9 +89,9 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
         val imageUri2 = main(img2.toString())
         val imageUri3 = main(img3.toString())
 
-        imgUri1 = image1Uri
-        imgUri2 = imageUri2
-        imgUri3 = imageUri3
+//        imgUri1 = image1Uri
+//        imgUri2 = imageUri2
+//        imgUri3 = imageUri3
 
         binding.overviewEt.setText(Hoteldescription)
         binding.locationText.text = location
@@ -308,156 +308,15 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
         Log.e("image1", imgUri1.toString())
         Log.e("image2", imgUri2.toString())
         Log.e("image3", imgUri3.toString())
-        if (imagesList.isNotEmpty()) {
-            var count = 1
-            imagesList.forEach {
-                fileList.add(prepareFilePart(it, "Arjun", count)!!)
-                count += 1
-            }
 
-            fileList.forEach {
-                val respo = RetrofitBuilder.ProfileApis.updateHotels1(
-                    hotelId!!,
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
-                    it
-                )
-                respo.enqueue(object : Callback<UpdateResponse?> {
-                    override fun onResponse(
-                        call: Call<UpdateResponse?>,
-                        response: Response<UpdateResponse?>
-                    ) {
-                        progressDialog.dismiss()
-                        Toast.makeText(
-                            applicationContext,
-                            response.body()?.message.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        onBackPressed()
-                    }
-
-                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                        progressDialog.dismiss()
-                        Toast.makeText(
-                            applicationContext,
-                            t.localizedMessage?.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                })
-            }
-
-        } else {
-
-            val respo = RetrofitBuilder.ProfileApis.updateHotels(
+        if (imgUri1.toString() != "null" && imgUri2.toString() != "null" && imgUri3.toString() != "null"){
+            val respo = RetrofitBuilder.ProfileApis.updateAllHotels(
                 hotelId!!,
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
-            )
-            respo.enqueue(object : Callback<UpdateResponse?> {
-                override fun onResponse(
-                    call: Call<UpdateResponse?>,
-                    response: Response<UpdateResponse?>
-                ) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        response.body()?.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    onBackPressed()
-                }
-
-                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        t.localizedMessage?.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-    }
-
-/*
-        if (imgUri1.toString() != "null"){
-            try {
-                val respo = RetrofitBuilder.ProfileApis.updateHotels1(
-                    hotelId!!,
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
-                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
-                    MultipartBody.Part.createFormData(
-                        "galleryImages1",
-                        fileImage1!!.name.toString(),
-                        bodyImage1
-                    )
-                )
-                respo.enqueue(object : Callback<UpdateResponse?> {
-                    override fun onResponse(
-                        call: Call<UpdateResponse?>,
-                        response: Response<UpdateResponse?>
-                    ) {
-                        progressDialog.dismiss()
-                        Toast.makeText(
-                            applicationContext,
-                            response.body()?.message.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        onBackPressed()
-                    }
-
-                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                        progressDialog.dismiss()
-                        Toast.makeText(
-                            applicationContext,
-                            t.localizedMessage?.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                })
-            } catch (e : java.lang.Exception){
-                Toast.makeText(applicationContext, "$e", Toast.LENGTH_SHORT).show()
-            }
-        }else if (imgUri2.toString() != "null"){
-            val respo = RetrofitBuilder.ProfileApis.updateHotels2(
-                hotelId!!,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                MultipartBody.Part.createFormData("galleryImages1", fileImage1!!.name.toString(), bodyImage1),
                 MultipartBody.Part.createFormData("galleryImages2", fileImage2.name, bodyImage2),
-            )
-            respo.enqueue(object : Callback<UpdateResponse?> {
-                override fun onResponse(
-                    call: Call<UpdateResponse?>,
-                    response: Response<UpdateResponse?>
-                ) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        response.body()?.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    onBackPressed()
-                }
-
-                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        t.localizedMessage?.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-        }else if (imgUri3.toString() != "null"){
-            val respo = RetrofitBuilder.ProfileApis.updateHotels3(
-                hotelId!!,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
                 MultipartBody.Part.createFormData("galleryImages3", fileImage3.name, bodyImage3)
             )
             respo.enqueue(object : Callback<UpdateResponse?> {
@@ -471,7 +330,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response.body()?.message.toString(),
                         Toast.LENGTH_SHORT
                     ).show()
-                    onBackPressed()
+                    startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
                 }
 
                 override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -483,38 +342,147 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                     ).show()
                 }
             })
-        }else{
-            val respo = RetrofitBuilder.ProfileApis.updateHotels(
-                hotelId!!,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
-            )
-            respo.enqueue(object : Callback<UpdateResponse?> {
-                override fun onResponse(
-                    call: Call<UpdateResponse?>,
-                    response: Response<UpdateResponse?>
-                ) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        response.body()?.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    onBackPressed()
-                }
+        }else {
+            if (imgUri1.toString() != "null") {
+                try {
+                    val respo = RetrofitBuilder.ProfileApis.updateHotels1(
+                        hotelId!!,
+                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                        MultipartBody.Part.createFormData(
+                            "galleryImages1",
+                            fileImage1!!.name.toString(),
+                            bodyImage1
+                        )
+                    )
+                    respo.enqueue(object : Callback<UpdateResponse?> {
+                        override fun onResponse(
+                            call: Call<UpdateResponse?>,
+                            response: Response<UpdateResponse?>
+                        ) {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                applicationContext,
+                                response.body()?.message.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                        }
 
-                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        t.localizedMessage?.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                applicationContext,
+                                t.localizedMessage?.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+                } catch (e: java.lang.Exception) {
+                    Toast.makeText(applicationContext, "$e", Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
+
+            if (imgUri2.toString() != "null") {
+                val respo = RetrofitBuilder.ProfileApis.updateHotels2(
+                    hotelId!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                    MultipartBody.Part.createFormData("galleryImages2", fileImage2.name, bodyImage2)
+                )
+                respo.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            response.body()?.message.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            t.localizedMessage?.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            }
+
+            if (imgUri3.toString() != "null") {
+                val respo = RetrofitBuilder.ProfileApis.updateHotels3(
+                    hotelId!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                    MultipartBody.Part.createFormData("galleryImages3", fileImage3.name, bodyImage3)
+                )
+                respo.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            response.body()?.message.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            t.localizedMessage?.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            }
+
+            if (imgUri1.toString() == "null" && imgUri2.toString() == "null" && imgUri3.toString() == "null") {
+                val respo = RetrofitBuilder.ProfileApis.updateHotels(
+                    hotelId!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                )
+                respo.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            response.body()?.message.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        startActivity(Intent(applicationContext,HotelDetailsProfileActivity::class.java))
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            t.localizedMessage?.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            }
         }
-*/
+
 
 
 

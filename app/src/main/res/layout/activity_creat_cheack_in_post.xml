@@ -222,31 +222,31 @@
             android:textSize="18dp"
             android:layout_marginTop="25dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/user_location_post"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Location"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/black"
-            app:endIconDrawable="@drawable/gps"
-            app:endIconMode="custom"
-            app:endIconTint="@color/black"
-            android:layout_marginTop="30dp">
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/user_location_post"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:hint="Location"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            app:boxStrokeColor="@color/black"-->
+<!--            app:endIconDrawable="@drawable/gps"-->
+<!--            app:endIconMode="custom"-->
+<!--            app:endIconTint="@color/black"-->
+<!--            android:layout_marginTop="30dp">-->
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_location_post"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/montserrat_regular"
-                android:textColor="@color/black"
-                android:clickable="true"
-                android:focusable="false"
-                android:text="Select Your Location"
-                android:editable="false"/>
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/et_location_post"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:fontFamily="@font/montserrat_regular"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="false"-->
+<!--                android:text="Select Your Location"-->
+<!--                android:editable="false"/>-->
 
-        </com.google.android.material.textfield.TextInputLayout>
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/venue_post"
@@ -256,7 +256,7 @@
             android:hint="Venue"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/black"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="30dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_venue_post"

@@ -61,26 +61,17 @@ class CreatCheackInPostActivity : AppCompatActivity(),
 
     }
     private fun checkIn() {
-        binding.etLocationPost.setOnClickListener {
-            val bottomSheet = BottomSheetCountryStateCity()
-            val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
-            bottomSheet.setOnCountryStateCityClickListener(this)
-        }
+//        binding.etLocationPost.setOnClickListener {
+//            val bottomSheet = BottomSheetCountryStateCity()
+//            val fragManager = supportFragmentManager
+//            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+//            bottomSheet.setOnCountryStateCityClickListener(this)
+//        }
         binding.etVenuePost.setOnClickListener {
-            if (location != "") {
                 val bottomSheet = BottomSheetHotelByLocation(location)
                 val fragManager = supportFragmentManager
-                fragManager.let {
-                    bottomSheet.show(
-                        it,
-                        BottomSheetHotelByLocation.CountryStateCity_TAG
-                    )
-                }
+                fragManager.let { bottomSheet.show(it, BottomSheetHotelByLocation.CountryStateCity_TAG) }
                 bottomSheet.setOnCountryStateCityClickListener(this)
-            }else{
-                Toast.makeText(applicationContext,"Select Location First",Toast.LENGTH_SHORT).show()
-            }
         }
 
         binding.nextCheckIn.setOnClickListener {
@@ -91,7 +82,7 @@ class CreatCheackInPostActivity : AppCompatActivity(),
     }
 
     override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
-        binding.etLocationPost.setText(CountryStateCityFrBo)
+//        binding.etLocationPost.setText(CountryStateCityFrBo)
         location = CountryStateCityFrBo
     }
 

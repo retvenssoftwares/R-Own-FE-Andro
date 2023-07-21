@@ -9,11 +9,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.Dashboard.createPosts.CheckInChildActivity
+import app.retvens.rown.NavigationFragments.profile.hotels.HotelData
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class BottomSheetHotelAdapter(val context: Context,val mList:List<GetHotelDataClass>,val location:String):RecyclerView.Adapter<BottomSheetHotelAdapter.HotelViewHolder> (){
+class BottomSheetHotelAdapter(val context: Context, val mList:List<HotelData>):RecyclerView.Adapter<BottomSheetHotelAdapter.HotelViewHolder> (){
 
     class HotelViewHolder(itemview: View): RecyclerView.ViewHolder(itemview){
 
@@ -33,20 +34,20 @@ class BottomSheetHotelAdapter(val context: Context,val mList:List<GetHotelDataCl
         val data = mList[position]
         Log.e("data",data.toString())
         holder.name.text = data.hotelName
-        holder.location.text = location
+        holder.location.text = data.hotelAddress
 
         try {
-            Glide.with(context).load(data.hotelLogoUrl).into(holder.hotelPic)
+            Glide.with(context).load(data.hotelCoverpicUrl).into(holder.hotelPic)
         }catch (e:NullPointerException){
             Log.e("error",e.message.toString())
         }
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context,CheckInChildActivity::class.java)
-            intent.putExtra("hotelPic",data.hotelLogoUrl)
+            intent.putExtra("hotelPic",data.hotelCoverpicUrl)
             intent.putExtra("hotelId",data.hotel_id)
             intent.putExtra("hotelName",data.hotelName)
-            intent.putExtra("location",location)
+            intent.putExtra("location",data.hotelAddress)
             context.startActivity(intent)
         }
     }

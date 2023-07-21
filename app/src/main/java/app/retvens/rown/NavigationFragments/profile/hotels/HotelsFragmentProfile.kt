@@ -25,7 +25,6 @@ import retrofit2.Response
 class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val username : String) : Fragment() {
 
     lateinit var recycler : RecyclerView
-
     lateinit var profileHotelsAdapter: ProfileHotelsAdapter
 
     lateinit var shimmerFrameLayout: ShimmerFrameLayout
