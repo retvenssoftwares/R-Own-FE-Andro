@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:background="#FFFFFF"
+    android:gravity="center">
+
+    <!-- Your icon drawable -->
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/chats"
+        android:layout_marginLeft="15dp"
+        android:layout_centerInParent="true"/>
+
+    <!-- Badge count TextView -->
+    <TextView
+        android:id="@+id/badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="15dp"
+        android:textColor="@color/green_own"
+        android:background="@color/white"
+        android:layout_alignTop="@id/icon"
+        android:layout_alignRight="@id/icon"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="5dp"
+        android:visibility="gone" />
+
+</RelativeLayout>

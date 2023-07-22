@@ -7,28 +7,26 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.BadgeDrawable
 import app.retvens.rown.Dashboard.notificationScreen.NotificationActivity
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.MesiboUsersData
@@ -40,7 +38,6 @@ import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivi
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
 import app.retvens.rown.NavigationFragments.profile.viewConnections.ViewConnectionsActivity
 import app.retvens.rown.R
-import app.retvens.rown.api.CallStateReceiver.context
 import app.retvens.rown.bottomsheet.BottomSheet.Companion.TAG
 import app.retvens.rown.databinding.ActivityDashBoardBinding
 import app.retvens.rown.sideNavigation.*
@@ -54,12 +51,18 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
+import com.mesibo.api.Mesibo
+import com.mesibo.api.MesiboMessage
+import com.mesibo.api.MesiboProfile
+import com.mesibo.api.MesiboReadSession
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Timer
+import java.util.TimerTask
 
 
-class DashBoardActivity : AppCompatActivity() {
+class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
 
     companion object number{
         var progress = ""
@@ -73,7 +76,7 @@ class DashBoardActivity : AppCompatActivity() {
     lateinit var mActivityTitle : String
     var isPLVisible : Boolean? = false
     var isHLVisible : Boolean? = false
-
+    private var count = 0
     private lateinit var auth:FirebaseAuth
     private lateinit var viewPager:ViewPager
     lateinit var dialog: Dialog
@@ -81,10 +84,12 @@ class DashBoardActivity : AppCompatActivity() {
     private  var userList: List<MesiboUsersData> = emptyList()
     private lateinit var profile:ImageView
     private lateinit var name:TextView
-
+    private var updateTimer: Timer? = null
+    private val UPDATE_INTERVAL_MS: Long = 3000
     private lateinit var imageView: ImageView
     private lateinit var textView: TextView
-
+    private  var mprofile:ArrayList<MesiboProfile> = ArrayList()
+    private  var unReadprofile:ArrayList<MesiboProfile> = ArrayList()
     private lateinit var checkNetworkConnection: CheckNetworkConnection
 
     var replace = true
@@ -187,6 +192,10 @@ class DashBoardActivity : AppCompatActivity() {
         val phone2 = sharedPreferences2?.getString("savePhoneNumber", "").toString()
 
 
+        val list:ArrayList<MesiboProfile> = ArrayList()
+
+
+        Log.e("list",list.size.toString())
 
         devicetoken()
 
@@ -195,10 +204,19 @@ class DashBoardActivity : AppCompatActivity() {
         val backThread = Thread{
             MesiboApi.init(applicationContext)
             MesiboApi.startMesibo(true)
+
         }
 
         backThread.start()
 
+        val mReadSession = MesiboReadSession(this)
+        mReadSession.enableSummary(true)
+        mReadSession.enableReadReceipt(false)
+        mReadSession.enableMissedCalls(false)
+        mReadSession.read(100)
+
+        // Update your UI or do any other processing with the unread message count
+        Log.e("Unread Count", count.toString())
 
 
 //        val foregroundServiceIntent = Intent(applicationContext, MyForegroundService::class.java)
@@ -415,6 +433,60 @@ class DashBoardActivity : AppCompatActivity() {
             finish()
         }
 
+        val handler = Handler()
+        handler.postDelayed({
+
+            mprofile.forEach {
+                if (it.unreadMessageCount != 0){
+                    unReadprofile.add(it)
+                }
+            }
+
+            Log.e("size",mprofile.size.toString())
+            count = unReadprofile.size.toInt()
+        },200)
+
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Start the timer to update the unread message count
+        startUpdateTimer()
+    }
+
+    private fun startUpdateTimer() {
+        stopUpdateTimer() // Make sure any existing timer is stopped before starting a new one
+
+        updateTimer = Timer()
+        val updateTask = object : TimerTask() {
+            override fun run() {
+                // Call your update function here
+                updateUnreadMessageCount()
+            }
+        }
+
+        // Schedule the update task to run periodically
+        updateTimer?.scheduleAtFixedRate(updateTask, UPDATE_INTERVAL_MS, UPDATE_INTERVAL_MS)
+    }
+
+    private fun stopUpdateTimer() {
+        updateTimer?.cancel()
+        updateTimer = null
+    }
+
+    private fun updateUnreadMessageCount() {
+//        val mReadSession = MesiboReadSession(this)
+//        mReadSession.enableSummary(true)
+//        mReadSession.enableReadReceipt(false)
+//        mReadSession.enableMissedCalls(false)
+//        mReadSession.read(100)
+//
+//        // Update your UI or do any other processing with the unread message count
+//        count = mReadSession.unreadMessageCount
+//        Log.e("Unread Count", count.toString())
 
     }
 
@@ -510,6 +582,8 @@ class DashBoardActivity : AppCompatActivity() {
         })
     }
 
+
+
     private fun replaceFragment(fragment: Fragment) {
         if (fragment !=null){
             val transaction = supportFragmentManager.beginTransaction()
@@ -518,49 +592,87 @@ class DashBoardActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+//    override fun onOptionsItemSelected(item: Menu): Boolean {
+//        menuInflater.inflate(R.menu.menu_main, item)
+//
+//
+//
+////            R.id.action_notify -> {
+////                startActivity(Intent(this, NotificationActivity::class.java))
+////                return true
+////            }
+////            else -> return super.onOptionsItemSelected(item)
+//
+//        return super.onOptionsItemSelected(item)
+//    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        // Find the "Settings" (chats) menu item
+        val chatsItem = menu.findItem(R.id.action_chats)
+
+        // Inflate the custom view for the badge count
+        val badgeView = layoutInflater.inflate(R.layout.layout_unread_count, null) as RelativeLayout
+
+        // Find the ImageView and set the icon drawable
+        val iconImageView = badgeView.findViewById<ImageView>(R.id.icon)
+        iconImageView.setImageResource(R.drawable.chats) // Replace with the appropriate icon drawable
+
+        // Set the custom view as the action view for the menu item
+        chatsItem?.actionView = badgeView
+
+        // Set click listener if needed
+        chatsItem?.actionView?.setOnClickListener {
+            // Handle clicks on the custom view (if necessary)
+            // For example, to open the ChatActivity
+            startActivity(Intent(this, ChatActivity::class.java))
+        }
+
+        // Update the badge count
+        val handler = Handler()
+        handler.postDelayed({
+            val badgeCount = count // Replace this with your actual message count
+            updateBadgeCount(badgeView,badgeCount)
+        },300)
+
+
+        val notificationItem = menu.findItem(R.id.action_notify)
+
+        val notificationBadgeView = layoutInflater.inflate(R.layout.layout_unread_count, null) as RelativeLayout
+
+        // Find the ImageView and set the icon drawable for "Notifications" menu item
+        val notificationIconImageView = notificationBadgeView.findViewById<ImageView>(R.id.icon)
+        notificationIconImageView.setImageResource(R.drawable.notification) // Replace with the appropriate icon drawable
+
+        // Set the custom view as the action view for the "Notifications" menu item
+        notificationItem?.actionView = notificationBadgeView
+
+        // Set click listener for the "Notifications" menu item
+        notificationItem?.actionView?.setOnClickListener {
+            startActivity(Intent(this, NotificationActivity::class.java))
+        }
+
 
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    private fun updateBadgeCount(badgeView: RelativeLayout?, count: Int) {
+        if (badgeView != null) {
+            // Find the badge TextView in the custom view
+            val badgeTextView = badgeView.findViewById<TextView>(R.id.badge)
 
-        val chatsItem = item
-        val badgeCount = 5 // Replace this with your actual message count
-
-        val iconDrawable = ContextCompat.getDrawable(this, R.drawable.chats)
-        if (iconDrawable != null) {
-            val badgeDrawable = BadgeDrawable(this, badgeCount)
-            Log.e("check",badgeDrawable.toString())
-            val layers = arrayOf(iconDrawable, badgeDrawable)
-            val layerDrawable = LayerDrawable(layers)
-
-            // Adjust the position of the badge count on the chats icon
-            val badgeOffset = resources.getDimensionPixelOffset(R.dimen.badge_text_size)
-            layerDrawable.setLayerInset(1, badgeOffset, badgeOffset, badgeOffset, badgeOffset)
-
-            // Set the badge drawable to the chats item
-            chatsItem.icon = layerDrawable
-
-        }
-
-        when (item.itemId) {
-           /* R.id.action_settings -> {
-                Toast.makeText(applicationContext,"Setting",Toast.LENGTH_SHORT).show()
-                return true
-            }*/
-            R.id.action_chats -> {
-               startActivity(Intent(this,ChatActivity::class.java))
-                return true
+            // Update the badge count
+            if (count > 0) {
+                badgeTextView.text = count.toString()
+                badgeTextView.visibility = View.VISIBLE
+            } else {
+                badgeTextView.visibility = View.GONE
             }
-            R.id.action_notify -> {
-                startActivity(Intent(this,NotificationActivity::class.java))
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
         }
     }
+
 
     fun devicetoken(){
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
@@ -610,8 +722,19 @@ class DashBoardActivity : AppCompatActivity() {
         finishAffinity()
     }
 
+    override fun Mesibo_onMessage(p0: MesiboMessage) {
 
+        mprofile.addAll(listOf(p0.profile))
 
+    }
+
+    override fun Mesibo_onMessageStatus(p0: MesiboMessage) {
+
+    }
+
+    override fun Mesibo_onMessageUpdate(p0: MesiboMessage) {
+
+    }
 
 
 }

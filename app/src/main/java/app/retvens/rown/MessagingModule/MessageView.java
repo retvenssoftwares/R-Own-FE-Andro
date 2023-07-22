@@ -421,9 +421,6 @@ public class MessageView extends RelativeLayout {
                     String userRole = decodedprofile.get("userRole");
                     String pic = decodedprofile.get("profilePictureLink");
 
-                    Log.e("55",fullName);
-                    Log.e("66",pic);
-                    Log.e("77",userRole);
 
                     this.profileName.setText(fullName);
                     this.profileRole.setText(userRole);

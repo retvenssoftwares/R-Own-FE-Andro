@@ -85,7 +85,9 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         Mesibo.PresenceListener, Mesibo.ConnectionListener, Mesibo.ProfileListener, Mesibo.SyncListener, Mesibo.GroupListener {
     public static MesiboGroupProfile.Member[] mExistingMembers = null;
     public static ArrayList<MesiboProfile> mMemberProfiles = new ArrayList<>();
+    public static ArrayList<MesiboProfile> member = new ArrayList<>();
     public static ArrayList<MesiboProfile> mMemberGroup = new ArrayList<>();
+
     public static boolean isSheetOpen = false;
     /* access modifiers changed from: private */
     public boolean mCloseAfterForward = false;
@@ -252,6 +254,8 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
         ArrayList<MesiboProfile> Search = this.mUserProfiles;
 
+
+
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -284,7 +288,8 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         });
         this.isOnlineDot = (ImageView) view.findViewById(R.id.isOnlineDot);
 
-
+        ArrayList<MesiboProfile> messagedUsers = mAdapter.getActiveUserlist();
+        Log.e("mem", String.valueOf(mUserProfiles.size()));
 
         name_tite_layout = getActivity().findViewById(R.id.name_tite_layout);
 
@@ -317,11 +322,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             this.mEmptyView.setText(MesiboUI.getConfig().emptyUserListMessage);
         }
     }
-
-
-
-
-
 
     public void filterUsersByName(String newText) {
         if (this.mAdapter != null) {
@@ -772,6 +772,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
         public void updateData(ArrayList<MesiboProfile> newItems) {
             this.mDataList = newItems;
+            Log.e("check", String.valueOf(mDataList.size()));
             notifyDataSetChanged();
         }
 
@@ -807,6 +808,8 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             final SectionCellsViewHolder holder = (SectionCellsViewHolder) vh;
             holder.position = position;
             UserData userdata = UserData.getUserData(user);
+            member.add(user);
+            Log.e("check", String.valueOf(member.size()));
             userdata.setUser(user);
             userdata.setUserListPosition(position);
             UserData data = userdata;
@@ -888,6 +891,9 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             } else {
                 holder.mContactsMessage.setText(user.getStatus() != null ? user.getStatus() : "");
             }
+
+
+
             Bitmap b = data.getThumbnail(UserListFragment.this.mLetterTileProvider);
             new RoundImageDrawable(b);
             holder.mContactsProfile.setImageDrawable(new RoundImageDrawable(b));
@@ -1026,9 +1032,22 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         public void notifyChangeInData() {
             long unused = UserListFragment.this.mUiUpdateTimestamp = Mesibo.getTimestamp();
             this.mDataList = getActiveUserlist();
+            Log.e("123", String.valueOf(this.mDataList.size()));
             notifyDataSetChanged();
         }
 
+        public ArrayList<MesiboProfile> getMessagedUsers() {
+            ArrayList<MesiboProfile> messagedUsers = new ArrayList<>();
+
+            for (MesiboProfile user : mAdapter.mDataList) {
+                Integer lastMessage = user.getUnreadMessageCount();
+
+                messagedUsers.add(user);
+
+            }
+
+            return messagedUsers;
+        }
         public void onResumeAdapter() {
             this.mSearchResults.clear();
             Boolean unused = UserListFragment.this.mIsMessageSearching = false;
