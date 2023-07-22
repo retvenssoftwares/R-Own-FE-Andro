@@ -246,7 +246,6 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
 
             binding.postProfile.setOnClickListener {
-
                 if (banner.Role == "Business Vendor / Freelancer") {
                     val intent = Intent(context, VendorProfileActivity::class.java)
                     intent.putExtra("userId", banner.user_id)
@@ -260,8 +259,22 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     intent.putExtra("userId", banner.user_id)
                     context.startActivity(intent)
                 }
+            }
 
-
+            binding.userNamePost.setOnClickListener {
+                if (banner.Role == "Business Vendor / Freelancer") {
+                    val intent = Intent(context, VendorProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
+                } else if (banner.Role == "Hotel Owner") {
+                    val intent = Intent(context, OwnerProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
+                } else {
+                    val intent = Intent(context, UserProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
+                }
             }
 
             binding.postCard.setOnClickListener {
@@ -569,7 +582,6 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
 
             binding.postProfile.setOnClickListener {
-
                 if (post.Role == "Business Vendor/Freelancer") {
                     val intent = Intent(context, VendorProfileActivity::class.java)
                     intent.putExtra("userId", post.user_id)
@@ -582,7 +594,21 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     val intent = Intent(context, UserProfileActivity::class.java)
                     intent.putExtra("userId", post.user_id)
                     context.startActivity(intent)
-
+                }
+            }
+            binding.userNamePost.setOnClickListener {
+                if (post.Role == "Business Vendor/Freelancer") {
+                    val intent = Intent(context, VendorProfileActivity::class.java)
+                    intent.putExtra("userId", post.user_id)
+                    context.startActivity(intent)
+                } else if (post.Role == "Hotel Owner") {
+                    val intent = Intent(context, OwnerProfileActivity::class.java)
+                    intent.putExtra("userId", post.user_id)
+                    context.startActivity(intent)
+                } else {
+                    val intent = Intent(context, UserProfileActivity::class.java)
+                    intent.putExtra("userId", post.user_id)
+                    context.startActivity(intent)
                 }
             }
 
@@ -736,13 +762,10 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
             binding.postProfile.setOnClickListener {
-
                 if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert") {
-
                     val intent = Intent(context, UserProfileActivity::class.java)
                     intent.putExtra("userId", banner.user_id)
                     context.startActivity(intent)
-
                 } else if (banner.Role == "Business Vendor / Freelancer") {
                     val intent = Intent(context, VendorProfileActivity::class.java)
                     intent.putExtra("userId", banner.user_id)
@@ -752,8 +775,21 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     intent.putExtra("userId", banner.user_id)
                     context.startActivity(intent)
                 }
-
-
+            }
+            binding.userNamePost.setOnClickListener {
+                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert") {
+                    val intent = Intent(context, UserProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
+                } else if (banner.Role == "Business Vendor / Freelancer") {
+                    val intent = Intent(context, VendorProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
+                } else if (banner.Role == "Hotel Owner") {
+                    val intent = Intent(context, OwnerProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
+                }
             }
 
             if (banner.Like_count == "0"){
@@ -1328,11 +1364,24 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.postProfile.setOnClickListener {
                 if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert") {
-
                     val intent = Intent(context, UserProfileActivity::class.java)
                     intent.putExtra("userId", banner.user_id)
                     context.startActivity(intent)
-
+                } else if (banner.Role == "Business Vendor/Freelancer") {
+                    val intent = Intent(context, VendorProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
+                } else if (banner.Role == "Hotel Owner") {
+                    val intent = Intent(context, OwnerProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
+                }
+            }
+            binding.userNamePost.setOnClickListener {
+                if (banner.Role == "Normal User" || banner.Role == "Hospitality Expert") {
+                    val intent = Intent(context, UserProfileActivity::class.java)
+                    intent.putExtra("userId", banner.user_id)
+                    context.startActivity(intent)
                 } else if (banner.Role == "Business Vendor/Freelancer") {
                     val intent = Intent(context, VendorProfileActivity::class.java)
                     intent.putExtra("userId", banner.user_id)
