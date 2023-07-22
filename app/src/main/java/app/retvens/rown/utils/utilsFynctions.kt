@@ -228,6 +228,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             call: Call<UpdateResponse?>,
             response: Response<UpdateResponse?>
         ) {
+            serverCode = response.code()
             if (response.isSuccessful){
 //                Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
                 onClick.invoke()
@@ -254,6 +255,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             call: Call<UpdateResponse?>,
             response: Response<UpdateResponse?>
         ) {
+            serverCode = response.code()
             if (response.isSuccessful){
                 val response = response.body()!!
                 onClick.invoke()
@@ -282,6 +284,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             call: Call<UpdateResponse?>,
             response: Response<UpdateResponse?>
         ) {
+            serverCode = response.code()
             if (response.isSuccessful){
                 val response = response.body()!!
                 onClick.invoke()
@@ -311,11 +314,11 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             call: Call<UpdateResponse?>,
             response: Response<UpdateResponse?>
         ) {
+            serverCode = response.code()
             if (response.isSuccessful){
                 val response = response.body()!!
                 onClick.invoke()
             }else{
-                serverCode = response.code()
             }
         }
 
@@ -338,12 +341,12 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             call: Call<UpdateResponse?>,
             response: Response<UpdateResponse?>
         ) {
+            serverCode = response.code()
             if (response.isSuccessful){
                 val response = response.body()!!
                 onClick.invoke()
 //                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
             }else{
-                serverCode = response.code()
 //                Toast.makeText(context,"Request Accepted",Toast.LENGTH_SHORT).show()
             }
         }
@@ -368,6 +371,7 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
                 call: Call<UserProfileRequestItem?>,
                 response: Response<UserProfileRequestItem?>
             ) {
+                serverCode = response.code()
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         val response = response.body()!!
@@ -388,7 +392,6 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
                     }
                 } else {
                     onClick.invoke(response.code())
-                    serverCode = response.code()
 //                    Toast.makeText(
 //                        context,
 //                        .toString(),
@@ -415,6 +418,7 @@ fun getSelfUserProfile(userId: String, userId1: String, context: Context) {
             call: Call<NormalUserDataClass?>,
             response: Response<NormalUserDataClass?>
         ) {
+            serverCode = response.code()
             if (response.isSuccessful){
                 val response = response.body()!!
 
@@ -428,7 +432,6 @@ fun getSelfUserProfile(userId: String, userId1: String, context: Context) {
 //                    Toast.makeText(applicationContext, response.data.connCountLength.toString(), Toast.LENGTH_SHORT)
 //                        .show()
             }else{
-                serverCode = response.code()
 //                    Toast.makeText(requireContext(),response.code(),Toast.LENGTH_SHORT).show()
             }
         }

@@ -125,34 +125,24 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
 
         val server = intent.getStringExtra("server")
 
-//        Toast.makeText(this, "server - $server", Toast.LENGTH_SHORT).show()
-        if (server == "502"){
-            binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
-            binding.noInternet.visibility = View.VISIBLE
-            binding.noInternetLayout.visibility = View.GONE
-            binding.navView.visibility = View.GONE
-            binding.dashboard.visibility = View.GONE
-        }
-//        else {
-//            binding.noInternet.visibility = View.GONE
-//            binding.navView.visibility = View.VISIBLE
-//            binding.dashboard.visibility = View.VISIBLE
-//            if (replace){
-//                replaceFragment(HomeFragment())
-//            }
-//        }
-
         checkNetworkConnection = CheckNetworkConnection(application)
         checkNetworkConnection.observe(this) { isConnected ->
             if (isConnected) {
-                binding.noInternet.visibility = View.GONE
-                binding.navView.visibility = View.VISIBLE
-                binding.dashboard.visibility = View.VISIBLE
-                if (replace){
-                    replace = false
-                    replaceFragment(HomeFragment())
-                }
+                if (server == "502" || serverCode == 502) {
+                    binding.noInternet.visibility = View.VISIBLE
+                    binding.navView.visibility = View.GONE
+                    binding.dashboard.visibility = View.GONE
+                    binding.noInternetLayout.visibility = View.GONE
+                } else {
+                    binding.noInternet.visibility = View.GONE
+                    binding.navView.visibility = View.VISIBLE
+                    binding.dashboard.visibility = View.VISIBLE
+                    if (replace) {
+                        replace = false
+                        replaceFragment(HomeFragment())
+                    }
 //                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
+                }
             } else if (!isConnected || server == "502") {
                 binding.noInternet.visibility = View.VISIBLE
                 binding.navView.visibility = View.GONE

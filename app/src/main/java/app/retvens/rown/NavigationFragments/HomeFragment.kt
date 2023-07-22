@@ -252,6 +252,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<DataItem.CommunityRecyclerData>?>,
                 response: Response<List<DataItem.CommunityRecyclerData>?>
             ) {
+                serverCode = response.code()
                 if (response.isSuccessful) {
                     val response = response.body()!!
                     val dataList = response.take(4)
@@ -288,6 +289,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
             ) {
+                serverCode = response.code()
                 if (isAdded) {
                     if (response.isSuccessful) {
                         shimmerFrameLayout2.stopShimmer()
@@ -445,6 +447,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<GetCommunitiesData>?>,
                 response: Response<List<GetCommunitiesData>?>
             ) {
+                serverCode = response.code()
                 if (response.isSuccessful && isAdded) {
                     val responseList = response.body() ?: emptyList()
 
@@ -524,6 +527,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<ConnectionListDataClass>?>,
                 response: Response<List<ConnectionListDataClass>?>
             ) {
+                serverCode = response.code()
                 if (response.isSuccessful) {
                     val response = response.body()!!
 
@@ -553,6 +557,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<AllBlogsData>?>,
                 response: Response<List<AllBlogsData>?>
             ) {
+                serverCode = response.code()
                 if (isAdded) {
                     if (response.isSuccessful) {
 
@@ -597,6 +602,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<ExploreHotelData>?>,
                 response: Response<List<ExploreHotelData>?>
             ) {
+                serverCode = response.code()
 
                 if (isAdded) {
                     if (response.isSuccessful) {
@@ -636,6 +642,7 @@ class HomeFragment : Fragment() {
                 call: Call<List<ExploreServiceData>?>,
                 response: Response<List<ExploreServiceData>?>
             ) {
+                serverCode = response.code()
                 if (response.isSuccessful) {
                     val data = response.body()!!
                     val dataList = data.take(4)
