@@ -892,8 +892,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                 holder.mContactsMessage.setText(user.getStatus() != null ? user.getStatus() : "");
             }
 
-
-
             Bitmap b = data.getThumbnail(UserListFragment.this.mLetterTileProvider);
             new RoundImageDrawable(b);
             holder.mContactsProfile.setImageDrawable(new RoundImageDrawable(b));

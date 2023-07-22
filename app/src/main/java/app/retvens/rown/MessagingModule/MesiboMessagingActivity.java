@@ -197,17 +197,21 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                         if (groupId > 0) {
 
                             String admin = args.getString("admin");
-
-                            if (admin.equals("true")){
-                                Intent intent = new Intent(MesiboMessagingActivity.this, CommunityDetailsActivity.class);
-                                intent.putExtra("groupId",groupId);
-                                startActivity(intent);
-                            }else {
-                                Log.e("id",groupId.toString());
-                                Intent intent = new Intent(MesiboMessagingActivity.this, MembersCommunityDetailsActivity.class);
-                                intent.putExtra("groupId",groupId);
-                                startActivity(intent);
+                            try {
+                                if (admin.equals("true")){
+                                    Intent intent = new Intent(MesiboMessagingActivity.this, CommunityDetailsActivity.class);
+                                    intent.putExtra("groupId",groupId);
+                                    startActivity(intent);
+                                }else {
+                                    Log.e("id",groupId.toString());
+                                    Intent intent = new Intent(MesiboMessagingActivity.this, MembersCommunityDetailsActivity.class);
+                                    intent.putExtra("groupId",groupId);
+                                    startActivity(intent);
+                                }
+                            }catch (NullPointerException e){
+                                Log.e("error",e.getMessage().toString());
                             }
+
 
 
                         }else{
@@ -221,11 +225,13 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                             String userID = decodedData.get("userID");
                             String userRole = decodedData.get("userRole");
 
-                            if (userRole == "Hotel Owner"){
+                            Log.e("role",userRole.toString());
+
+                            if (Objects.equals(userRole, "Hotel Owner")){
                                 Intent intent = new Intent(MesiboMessagingActivity.this, OwnerProfileActivity.class);
                                 intent.putExtra("userId",userID);
                                 startActivity(intent);
-                            }else if (userRole == "Business Vendor / Freelancer"){
+                            }else if (Objects.equals(userRole, "Business Vendor / Freelancer")){
                                 Intent intent = new Intent(MesiboMessagingActivity.this, VendorProfileActivity.class);
                                 intent.putExtra("userId",userID);
                                 startActivity(intent);

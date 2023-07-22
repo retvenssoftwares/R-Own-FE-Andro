@@ -1,12 +1,17 @@
 package app.retvens.rown.NavigationFragments.profile
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -33,6 +38,7 @@ class UserDetailsActivity : AppCompatActivity(),
     private lateinit var type:TextInputEditText
     private lateinit var company:TextInputEditText
     private lateinit var disignation:TextInputEditText
+    private lateinit var progressDialog:Dialog
     var role = ""
     var isOwner = true
     var user_id = ""
@@ -47,18 +53,36 @@ class UserDetailsActivity : AppCompatActivity(),
             window.statusBarColor = Color.TRANSPARENT
         }
 
+        progressDialog = Dialog(this)
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
+
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val isViewer = intent.getStringExtra("viewer")
         val userID = intent.getStringExtra("userID")
+        val handler = Handler()
         if (isViewer == "viewer"){
             binding.addExperience.visibility = View.GONE
             binding.addEducation.visibility = View.GONE
             isOwner = false
-            getProfile(userID!!)
+            handler.postDelayed({
+                getProfile(userID!!)
+                progressDialog.dismiss()
+            },200)
+
         } else {
-            getProfile(user_id)
+            handler.postDelayed({
+                getProfile(user_id)
+                progressDialog.dismiss()
+            },200)
+
         }
 
         binding.communityDetailBackBtn.setOnClickListener{ onBackPressed() }
@@ -138,12 +162,12 @@ class UserDetailsActivity : AppCompatActivity(),
                             } else if (response.Role == "Hospitality Expert"){
                                 Log.e("res", response.hospitalityExpertInfo.toString())
                                 experienceAdapter = ExperienceAdapter(this@UserDetailsActivity,response, isOwner, "Hospitality Expert")
-//                                binding.recyclerExperience.adapter = experienceAdapter
-//                                experienceAdapter.notifyDataSetChanged()
+                                binding.recyclerExperience.adapter = experienceAdapter
+                                experienceAdapter.notifyDataSetChanged()
                                 experienceAdapter.setOnFilterClickListener(this)
                             }
-                        binding.recyclerExperience.adapter = experienceAdapter
-                        experienceAdapter.notifyDataSetChanged()
+//                        binding.recyclerExperience.adapter = experienceAdapter
+//                        experienceAdapter.notifyDataSetChanged()
 
                             if (response.normalUserInfo.isEmpty() && response.hospitalityExpertInfo.isEmpty()) {
                                 binding.expError.visibility = View.VISIBLE
