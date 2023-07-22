@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.NavigationFragments.profile.events.EventsProfileAdapter
 import app.retvens.rown.R
+import app.retvens.rown.utils.serverCode
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsAdapter
 import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import com.bumptech.glide.Glide
@@ -226,6 +227,7 @@ class ExploreBlogsFragment : Fragment() {
                 call: Call<List<ExploreBlogData>?>,
                 response: Response<List<ExploreBlogData>?>
             ) {
+                serverCode = response.code()
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Log.e("res",response.toString())

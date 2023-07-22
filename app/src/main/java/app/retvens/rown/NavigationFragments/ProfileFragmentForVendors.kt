@@ -38,6 +38,7 @@ import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetVendorsProfileSetting
+import app.retvens.rown.utils.serverCode
 import app.retvens.rown.utils.showFullImage
 import app.retvens.rown.utils.websiteLinkV
 import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
@@ -110,14 +111,16 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
         viewPP = view.findViewById(R.id.viewPP)
 
-        progressDialog = Dialog(requireContext())
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        progressDialog.setContentView(R.layout.progress_dialoge)
-        progressDialog.setCancelable(false)
-        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
-        progressDialog.show()
+        if (isAdded) {
+            progressDialog = Dialog(requireContext())
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.setCancelable(false)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
+        }
 
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
@@ -252,6 +255,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                 call: Call<VendorProfileDataClass?>,
                 response: Response<VendorProfileDataClass?>
             ) {
+                serverCode = response.code()
                 progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!

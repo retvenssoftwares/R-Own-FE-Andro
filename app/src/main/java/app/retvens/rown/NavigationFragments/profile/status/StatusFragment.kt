@@ -23,6 +23,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
 import app.retvens.rown.bottomsheet.BottomSheetLocation
+import app.retvens.rown.utils.serverCode
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -130,6 +131,7 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
                 response: Response<List<PostsDataClass>?>
             ) {
                 if (isAdded) {
+                    serverCode = response.code()
                     if (response.isSuccessful) {
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE

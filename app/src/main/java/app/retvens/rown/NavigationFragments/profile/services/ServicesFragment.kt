@@ -32,6 +32,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.VendorServicesData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetEventCategory
 import app.retvens.rown.bottomsheet.BottomSheetServiceName
+import app.retvens.rown.utils.serverCode
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -153,6 +154,7 @@ class ServicesFragment(val userId: String, val isOwner: Boolean, val username: S
                 response: Response<List<ProfileServicesDataItem>?>
             ) {
                 if (isAdded) {
+                    serverCode = response.code()
                     shimmerFrameLayout.stopShimmer()
                     shimmerFrameLayout.visibility = View.GONE
 

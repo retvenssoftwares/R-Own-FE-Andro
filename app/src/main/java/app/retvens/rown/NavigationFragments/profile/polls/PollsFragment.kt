@@ -21,6 +21,7 @@ import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.NavigationFragments.profile.media.MediaData
 import app.retvens.rown.R
+import app.retvens.rown.utils.serverCode
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -128,6 +129,7 @@ class PollsFragment(val user_Id: String, val isOwner : Boolean, val username : S
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
             ) {
+                serverCode = response.code()
                 if (isAdded) {
                     if (response.isSuccessful) {
                         shimmerFrameLayout.stopShimmer()

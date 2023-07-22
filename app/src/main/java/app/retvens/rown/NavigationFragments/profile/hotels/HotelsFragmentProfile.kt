@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.R
+import app.retvens.rown.utils.serverCode
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -78,6 +79,7 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
                 response: Response<List<HotelsName>?>
             ) {
                 if (isAdded) {
+                    serverCode = response.code()
                     if (response.isSuccessful) {
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE

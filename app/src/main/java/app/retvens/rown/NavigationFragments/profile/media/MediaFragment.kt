@@ -24,6 +24,7 @@ import app.retvens.rown.NavigationFragments.profile.status.StatusAdapter
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetHotelierProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetPostEdit
+import app.retvens.rown.utils.serverCode
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -129,6 +130,7 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
             ) {
+                serverCode = response.code()
                 if (isAdded) {
                     if (response.isSuccessful) {
                         shimmerFrameLayout.stopShimmer()

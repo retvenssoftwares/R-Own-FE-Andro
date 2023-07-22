@@ -36,6 +36,7 @@ import app.retvens.rown.NavigationFragments.profile.viewRequests.ViewRequestsAct
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
+import app.retvens.rown.utils.serverCode
 import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -94,15 +95,16 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
         viewPP = view.findViewById(R.id.viewPP)
 
-        progressDialog = Dialog(requireContext())
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        progressDialog.setContentView(R.layout.progress_dialoge)
-        progressDialog.setCancelable(false)
-        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
-        progressDialog.show()
-
+        if (isAdded) {
+            progressDialog = Dialog(requireContext())
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.setCancelable(false)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
+        }
         profile.setOnLongClickListener {
             showFullImage(profilePic, requireContext())
             true
@@ -210,6 +212,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                 call: Call<NormalUserDataClass?>,
                 response: Response<NormalUserDataClass?>
             ) {
+                serverCode = response.code()
                 progressDialog.dismiss()
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!

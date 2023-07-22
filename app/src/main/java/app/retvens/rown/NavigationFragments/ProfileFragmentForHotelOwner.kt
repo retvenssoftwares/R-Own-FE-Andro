@@ -45,6 +45,7 @@ import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetHotelierProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetVendorsProfileSetting
+import app.retvens.rown.utils.serverCode
 import app.retvens.rown.utils.showFullImage
 import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
@@ -114,15 +115,16 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         requestCont = view.findViewById(R.id.requests_count)
         viewPP = view.findViewById(R.id.viewPP)
 
-        progressDialog = Dialog(requireContext())
-        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        progressDialog.setContentView(R.layout.progress_dialoge)
-        progressDialog.setCancelable(false)
-        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
-        progressDialog.show()
-
+        if (isAdded) {
+            progressDialog = Dialog(requireContext())
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.setCancelable(false)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
+        }
         profile.setOnLongClickListener {
             showFullImage(profilePic, requireContext())
             true
@@ -292,6 +294,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                 call: Call<OwnerProfileDataClass?>,
                 response: Response<OwnerProfileDataClass?>
             ) {
+                serverCode = response.code()
                 progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
