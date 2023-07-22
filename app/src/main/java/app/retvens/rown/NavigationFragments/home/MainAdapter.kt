@@ -1426,25 +1426,29 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
         fun bindCommunityRecyclerView(recyclerItemList: List<DataItem.CommunityRecyclerData>) {
 
             Log.e("funcomm", recyclerItemList.toString())
-
-            val adapter = CommunityChildAdapter(
-                context, DataItemType.COMMUNITY,
-                recyclerItemList as ArrayList<DataItem.CommunityRecyclerData>
-            )
-            adapter.removeCommunityFromList(recyclerItemList)
-            adapter.notifyDataSetChanged()
-            binding.recyclerHeading.visibility = View.VISIBLE
-            binding.childRecyclerView.adapter = adapter
-            binding.recyclerHeading.text = "Connect with the like-minded individuals"
-            binding.viewAllItem.visibility = View.VISIBLE
-            binding.viewAllItem.setOnClickListener {
-                context.startActivity(
-                    Intent(
-                        context,
-                        ViewAllAvailableCommunitiesActivity::class.java
-                    )
+            try {
+                val adapter = CommunityChildAdapter(
+                    context, DataItemType.COMMUNITY,
+                    recyclerItemList as ArrayList<DataItem.CommunityRecyclerData>
                 )
+                adapter.removeCommunityFromList(recyclerItemList)
+                adapter.notifyDataSetChanged()
+                binding.recyclerHeading.visibility = View.VISIBLE
+                binding.childRecyclerView.adapter = adapter
+                binding.recyclerHeading.text = "Connect with the like-minded individuals"
+                binding.viewAllItem.visibility = View.VISIBLE
+                binding.viewAllItem.setOnClickListener {
+                    context.startActivity(
+                        Intent(
+                            context,
+                            ViewAllAvailableCommunitiesActivity::class.java
+                        )
+                    )
+                }
+            }catch (e:ClassCastException){
+                Log.e("error",e.message.toString())
             }
+
         }
 
         fun bindHotelSectionRecyclerView(recyclerItemList: List<HotelData>) {

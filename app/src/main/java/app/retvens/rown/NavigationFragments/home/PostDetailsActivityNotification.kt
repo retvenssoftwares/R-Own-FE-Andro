@@ -281,37 +281,43 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
 
         val getpost = RetrofitBuilder.feedsApi.getPostData(userId ,postId)
 
-        getpost.enqueue(object : Callback<PostItem?> {
-            override fun onResponse(call: Call<PostItem?>, response: Response<PostItem?>) {
+        getpost.enqueue(object : Callback<List<PostItem>?> {
+            override fun onResponse(
+                call: Call<List<PostItem>?>,
+                response: Response<List<PostItem>?>
+            ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    captionString = response.caption
-                    name.text = response.Full_name
-                    username.text = response.User_name
-                    profilePic = response.Profile_pic
-                    time.text = TimesStamp.convertTimeToText(response.date_added)
-                    postLocation.text = response.location
-                    user_id = response.user_id
-                    response.media.forEach {
-                        postPic.add(it.post)
+                    response.forEach { response->
+
+                        Log.e("res",response.toString())
+                        captionString = response.caption
+                        name.text = response.Full_name
+                        username.text = response.User_name
+                        profilePic = response.Profile_pic
+                        time.text = TimesStamp.convertTimeToText(response.date_added)
+                        postLocation.text = response.location
+                        user_id = response.user_id
+                        response.media.forEach {
+                            postPic.add(it.post)
+                        }
+                        role = response.Role
+
+                        like = response.liked
+                        isSaved = response.saved
+
+                        likeCount = response.likeCount.toInt()
+                        commentCount = response.commentCount
+
+                        if (likeCount == 0){
+                            likeCountText.visibility = View.GONE
+                        }
+
                     }
-                    role = response.Role
-
-                    like = response.liked
-                    isSaved = response.saved
-
-                    likeCount = response.likeCount.toInt()
-                    commentCount = response.commentCount
-
-                    if (likeCount == 0){
-                        likeCountText.visibility = View.GONE
-                    }
-                }else{
-
                 }
             }
 
-            override fun onFailure(call: Call<PostItem?>, t: Throwable) {
+            override fun onFailure(call: Call<List<PostItem>?>, t: Throwable) {
 
             }
         })

@@ -107,7 +107,7 @@ class ServicesFragment(val userId: String, val isOwner: Boolean, val username: S
 //                        if (currentPage > lastPage) {
                         isLoading = false
                         lastPage++
-                        getData()
+//                        getData()
 //                        }
                     }
                 }
@@ -165,7 +165,7 @@ class ServicesFragment(val userId: String, val isOwner: Boolean, val username: S
                                 list.addAll(response)
 
 //                                if (response.size >= 10){
-                                currentPage++
+
 //                                }
 
                                 isLoading = false

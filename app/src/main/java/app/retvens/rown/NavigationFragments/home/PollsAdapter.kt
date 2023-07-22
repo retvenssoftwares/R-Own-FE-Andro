@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.FeedCollection.Comments
 import app.retvens.rown.DataCollections.FeedCollection.Option
@@ -74,6 +76,7 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
                         Log.e("task", completedTasks2.toString())
                         val completedPercentage2 = (completedTasks2.toDouble() / total) * 100.0
                         if (!completedPercentage2.isNaN()) {
+
                             holder.progress.setProgressPercentage(completedPercentage2)
                             holder.percentage.text = "${completedPercentage2.toInt()}%"
 //                            Log.e("check", "3")
@@ -90,15 +93,26 @@ class PollsAdapter(val context: Context, var pollList:List<Option>,var datas:Pol
             Log.e("nit", voted)
         }
 
-
+        val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
 
         if (voted == "yes"){
             holder.count.text = "${vote.size} votes"
             val completedTasks2 = vote.size
             val completedPercentage2 = (completedTasks2.toDouble() / totelVotes) * 100.0
             if (!completedPercentage2.isNaN()) {
-                holder.progress.setProgressPercentage(completedPercentage2)
-                holder.percentage.text = "${completedPercentage2.toInt()}%"
+                data.votes.forEach {
+                    if (it.user_id == user_id){
+                        holder.progress.setProgressDrawableColor(ContextCompat.getColor(context, R.color.green_own))
+                        holder.progress.setProgressPercentage(completedPercentage2)
+                        holder.percentage.text = "${completedPercentage2.toInt()}%"
+                    }else{
+                        holder.progress.setProgressDrawableColor(ContextCompat.getColor(context, R.color.black))
+                        holder.progress.setProgressPercentage(completedPercentage2)
+                        holder.percentage.text = "${completedPercentage2.toInt()}%"
+                    }
+                }
+
 //                Log.e("check","1")
             }
 

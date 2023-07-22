@@ -37,7 +37,7 @@ interface FeedsApi {
     fun getPostData(
         @Path("User_id")User_id : String,
         @Path("postId")postId : String
-    ):Call<PostItem>
+    ):Call<List<PostItem>>
 
     @Multipart
     @POST("usergroup")

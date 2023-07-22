@@ -50,6 +50,7 @@ import javax.microedition.khronos.opengles.GL;
 
 import app.retvens.rown.Dashboard.DashBoardActivity;
 import app.retvens.rown.NavigationFragments.home.PostDetailsActivity;
+import app.retvens.rown.NavigationFragments.home.PostDetailsActivityNotification;
 import app.retvens.rown.NavigationFragments.home.PostsViewActivity;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity;
@@ -326,7 +327,7 @@ public class MessageView extends RelativeLayout {
                     this.postCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, PostsViewActivity.class);
+                            Intent intent = new Intent(context, PostDetailsActivityNotification.class);
                             intent.putExtra("postId", postId);
                             context.startActivity(intent);
                         }
@@ -405,7 +406,7 @@ public class MessageView extends RelativeLayout {
                     this.postCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(context, PostsViewActivity.class);
+                            Intent intent = new Intent(context, PostDetailsActivityNotification.class);
                             intent.putExtra("postId", postId);
                             context.startActivity(intent);
                         }

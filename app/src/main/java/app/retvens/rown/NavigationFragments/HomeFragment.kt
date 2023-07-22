@@ -254,9 +254,13 @@ class HomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val response = response.body()!!
+                    val dataList = response.take(4)
+                    try {
+                        mList.addAll(listOf(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = dataList)))
+                    }catch (e:NullPointerException){
+                        Log.e("error",e.message.toString())
+                    }
 
-
-                    mList.addAll(listOf(DataItem(DataItemType.COMMUNITY, communityRecyclerDataList = response)))
 
                 } else {
 //                    Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT)
@@ -554,12 +558,14 @@ class HomeFragment : Fragment() {
 
                         if (response.body()!!.isNotEmpty()) {
                             val blogsList = ArrayList<DataItem.BlogsRecyclerData>()
+                            val responseList = response.body()!!
+                            val dataList = responseList.take(4)
 
                             mList.addAll(
                                 listOf(
                                     DataItem(
                                         DataItemType.BLOGS,
-                                        blogsRecyclerDataList = response.body()
+                                        blogsRecyclerDataList = dataList
                                     )
                                 )
                             )
@@ -596,7 +602,8 @@ class HomeFragment : Fragment() {
                     if (response.isSuccessful) {
                         if (response.body()!!.isNotEmpty()) {
                             val data = response.body()!!
-                            data.forEach {
+                            val dataList = data.take(4)
+                            dataList.forEach {
                                 mList.addAll(
                                     listOf(
                                         DataItem(
@@ -631,8 +638,9 @@ class HomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val data = response.body()!!
+                    val dataList = data.take(4)
                     if (data.isNotEmpty()) {
-                        data.forEach {
+                        dataList.forEach {
 
                             mList.addAll(
                                 listOf(
