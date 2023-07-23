@@ -64,7 +64,12 @@ class VotesAdapter(val listS : List<Vote>, val context: Context) : RecyclerView.
             holder.verification.visibility = View.VISIBLE
         }
 
-        holder.role.text = data.user_id
+        try {
+            holder.role.text = data.job_title
+        }catch (e:NullPointerException){
+            Log.e("error",e.message.toString())
+        }
+
 
 //        holder.interact.setOnClickListener {
 //            val intent = Intent(context,MesiboMessagingActivity::class.java)

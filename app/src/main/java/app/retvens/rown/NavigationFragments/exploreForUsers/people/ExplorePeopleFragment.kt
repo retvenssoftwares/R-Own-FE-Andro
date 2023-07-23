@@ -184,13 +184,15 @@ class ExplorePeopleFragment : Fragment() {
 
                             response.forEach { explorePeopleDataClass ->
                                 try {
-//                                    if (explorePeopleDataClass.posts.size >= 10){
-                                        currentPage++
-//                                    }
-                                    peopleList.addAll(explorePeopleDataClass.posts)
-                                    explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)
-                                    explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
-                                    explorePeopleAdapter.removeEmptyNameUser(explorePeopleDataClass.posts)
+                                    currentPage++
+                                    explorePeopleDataClass.posts.forEach {
+                                        if (it.Blocked == "no" && it.blockbyuser == "no"){
+                                            peopleList.add(it)
+                                        }
+                                    }
+                                    explorePeopleAdapter.removeUser(peopleList)
+                                    explorePeopleAdapter.removeUsersFromList(peopleList)
+                                    explorePeopleAdapter.removeEmptyNameUser(peopleList)
                                     explorePeopleAdapter.notifyDataSetChanged()
                                 }catch (e:NullPointerException){
                                     if (currentPage == 1) {
@@ -297,7 +299,11 @@ class ExplorePeopleFragment : Fragment() {
                                 recyclerView.adapter = explorePeopleAdapter
                                 explorePeopleAdapter.notifyDataSetChanged()
                             }else{
-                                searchList.addAll(it.posts)
+                                it.posts.forEach {item ->
+                                    if (item.blockbyuser == "no" && item.Blocked == "no"){
+                                        searchList.add(item)
+                                    }
+                                }
                                 explorePeopleAdapter = ExplorePeopleAdapter(requireContext(), searchList)
                                 recyclerView.adapter = explorePeopleAdapter
                                 explorePeopleAdapter.notifyDataSetChanged()

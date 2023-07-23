@@ -218,28 +218,32 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                             String peer = args.getString(MesiboUI.PEER);
                             MesiboProfile profile = Mesibo.getProfile(peer);
 
-                            String status = profile.getStatus();
+
+                            if (!profile.isBlocked()){
+                                String status = profile.getStatus();
 
                             Map<String, String> decodedData = Decoder.decodeData(status);
 
                             String userID = decodedData.get("userID");
                             String userRole = decodedData.get("userRole");
 
-                            Log.e("role",userRole.toString());
-
-                            if (Objects.equals(userRole, "Hotel Owner")){
-                                Intent intent = new Intent(MesiboMessagingActivity.this, OwnerProfileActivity.class);
-                                intent.putExtra("userId",userID);
-                                startActivity(intent);
-                            }else if (Objects.equals(userRole, "Business Vendor / Freelancer")){
-                                Intent intent = new Intent(MesiboMessagingActivity.this, VendorProfileActivity.class);
-                                intent.putExtra("userId",userID);
-                                startActivity(intent);
+                                if (Objects.equals(userRole, "Hotel Owner")){
+                                    Intent intent = new Intent(MesiboMessagingActivity.this, OwnerProfileActivity.class);
+                                    intent.putExtra("userId",userID);
+                                    startActivity(intent);
+                                }else if (Objects.equals(userRole, "Business Vendor / Freelancer")){
+                                    Intent intent = new Intent(MesiboMessagingActivity.this, VendorProfileActivity.class);
+                                    intent.putExtra("userId",userID);
+                                    startActivity(intent);
+                                }else {
+                                    Intent intent = new Intent(MesiboMessagingActivity.this, UserProfileActivity.class);
+                                    intent.putExtra("userId",userID);
+                                    startActivity(intent);
+                                }
                             }else {
-                                Intent intent = new Intent(MesiboMessagingActivity.this, UserProfileActivity.class);
-                                intent.putExtra("userId",userID);
-                                startActivity(intent);
+                                Log.e("not","blocked");
                             }
+
 
 
                         }

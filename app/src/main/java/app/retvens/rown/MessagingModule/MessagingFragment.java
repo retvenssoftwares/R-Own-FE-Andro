@@ -1584,7 +1584,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                     UpdateResponse updateResponse = response.body();
                     Log.e("success",updateResponse.getMessage());
                 } else {
-                    Log.e("error",response.body().toString());
+                    Log.e("error",response.message().toString());
 
                 }
             }

@@ -16,6 +16,8 @@ data class Post(
     val userBio: String,
     val Profile_pic: String,
     val display_status: String,
+    val Blocked:String,
+    val blockbyuser:String,
     var connectionStatus: String,
     val userID:String
 )

@@ -233,7 +233,12 @@ class DiscoverPeopleActivity : AppCompatActivity() {
                             }
                             response.forEach { explorePeopleDataClass ->
                                 try {
-                                    peopleList.addAll(explorePeopleDataClass.posts)
+                                    explorePeopleDataClass.posts.forEach {
+                                        if (it.blockbyuser == "no" && it.Blocked == "no"){
+                                            peopleList.add(it)
+                                        }
+                                    }
+
                                     discoverAllAdapter = DiscoverAllAdapter(peopleList as ArrayList<Post>, this@DiscoverPeopleActivity )
                                     binding.discoverRecycler2.adapter = discoverAllAdapter
                                     discoverAllAdapter.removeUser(explorePeopleDataClass.posts)

@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:fontFamily="@font/montserrat_alternates"
-            android:text="Active 7 hours ago"
+            android:text=""
             android:textColor="#828282"
             android:textFontWeight="400"
             android:textSize="14dp"

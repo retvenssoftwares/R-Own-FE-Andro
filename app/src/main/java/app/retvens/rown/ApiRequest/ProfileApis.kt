@@ -1,6 +1,7 @@
 package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.BlockAccount
+import app.retvens.rown.DataCollections.ConnectionCollection.BlockUserDataClass
 import app.retvens.rown.DataCollections.DeleteAccount
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -262,6 +263,17 @@ interface ProfileApis {
 
     @PATCH("block/{user_id}")
     fun blockAccount(
+        @Path("user_id")user_id:String,
+        @Body block:BlockAccount
+    ):Call<UpdateResponse>
+
+    @GET("userlist/{user_id}")
+    fun getBlockList(
+        @Path("user_id")user_id:String
+    ):Call<BlockUserDataClass>
+
+    @PATCH("unblock/{user_id}")
+    fun unblockAccount(
         @Path("user_id")user_id:String,
         @Body block:BlockAccount
     ):Call<UpdateResponse>

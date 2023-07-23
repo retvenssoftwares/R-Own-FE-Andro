@@ -1,5 +1,6 @@
 package app.retvens.rown.bottomsheet
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import app.retvens.rown.NavigationFragments.profile.BlockUserActivity
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -70,6 +72,12 @@ class BottomSheetProfileSetting : BottomSheetDialogFragment() {
         val discover= view.findViewById<LinearLayout>(R.id.discover)
         discover.setOnClickListener {
             mListener?.bottomSheetProfileSettingClick("discover")
+            dismiss()
+        }
+
+        val block= view.findViewById<LinearLayout>(R.id.block)
+        block.setOnClickListener {
+            startActivity(Intent(requireContext(),BlockUserActivity::class.java))
             dismiss()
         }
     }
