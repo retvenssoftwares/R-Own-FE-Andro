@@ -1,5 +1,6 @@
 package app.retvens.rown.ApiRequest
 
+import app.retvens.rown.DataCollections.BlockAccount
 import app.retvens.rown.DataCollections.DeleteAccount
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -257,5 +258,11 @@ interface ProfileApis {
     @PATCH("deleteacc")
     fun deleteAccount(
         @Body delete:DeleteAccount
+    ):Call<UpdateResponse>
+
+    @PATCH("block/{user_id}")
+    fun blockAccount(
+        @Path("user_id")user_id:String,
+        @Body block:BlockAccount
     ):Call<UpdateResponse>
 }

@@ -109,22 +109,32 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 //                    binding.recentCommentByUser.text = captions
 //                }
 //            }
-            if (banner.caption.length > 150) {
-                binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
-            } else {
-                binding.recentCommentByUser.text = banner.caption
-            }
-            binding.recentCommentByUser.setOnClickListener {
-                if (binding.recentCommentByUser.text.toString().endsWith("Read More")) {
-                    binding.recentCommentByUser.text = banner.caption
-                } else {
+            try {
+                if (banner.caption != null) {
                     if (banner.caption.length > 150) {
                         binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
                     } else {
                         binding.recentCommentByUser.text = banner.caption
                     }
+                } else {
+                    binding.recentCommentByUser.text = "" // or any default text you prefer when caption is null
                 }
+
+                binding.recentCommentByUser.setOnClickListener {
+                    if (binding.recentCommentByUser.text.toString().endsWith("Read More") && banner.caption != null) {
+                        binding.recentCommentByUser.text = banner.caption
+                    } else {
+                        if (banner.caption != null && banner.caption.length > 150) {
+                            binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
+                        } else {
+                            binding.recentCommentByUser.text = banner.caption
+                        }
+                    }
+                }
+            }catch (e:NullPointerException){
+                Log.e("error",e.message.toString())
             }
+
 
 //                        Log.e("caption",post.caption)
             binding.userNamePost.text = post.Full_name
@@ -219,7 +229,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             val profilePictureLink = post.Profile_pic
             val firstImageLink = post.media.get(0).post
             val username = post.User_name
-            val caption = post.caption
+            val caption = post.caption ?: ""
             val fullName = post.Full_name
             val verificationStatus = post.verificationStatus
             val encodedData = encodeData(

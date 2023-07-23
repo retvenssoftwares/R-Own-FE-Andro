@@ -195,4 +195,32 @@
         android:layout_height="1dp"
         android:background="@color/grey_40" />
 
+    <LinearLayout
+        android:id="@+id/block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/vector_block"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Block"
+            android:layout_marginStart="9dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="14dp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
+
 </LinearLayout>

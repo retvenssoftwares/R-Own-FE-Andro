@@ -11,3 +11,6 @@ data class ReportDataClass(
 data class DeleteAccount(
     val User_id:String
 )
+data class BlockAccount(
+    val user_id:String
+)

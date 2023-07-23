@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.BlockAccount
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -50,6 +51,7 @@ import app.retvens.rown.utils.sendConnectionRequest
 import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import com.mesibo.api.Mesibo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -368,11 +370,46 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                 dialogLanguage.dismiss()
             }
 
+            dialogLanguage.findViewById<LinearLayout>(R.id.block).setOnClickListener {
+                blockUser(userID)
+                dialogLanguage.dismiss()
+            }
+
 //            val bottomSheet = BottomSheetProfileSetting()
 //            val fragManager = supportFragmentManager
 //            fragManager.let{bottomSheet.show(it, BottomSheetProfileSetting.WTP_TAG)}
 //            bottomSheet.setOnBottomSheetProfileSettingClickListener(this)
         }
+    }
+
+    private fun blockUser(userID: String) {
+
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val User_id = sharedPreferences?.getString("user_id", "").toString()
+
+        val block = RetrofitBuilder.ProfileApis.blockAccount(User_id, BlockAccount(userID))
+
+        block.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,response.message.toString(),Toast.LENGTH_SHORT).show()
+                    val profile = Mesibo.getProfile(address)
+                    profile.block(true)
+                    profile.save()
+                }else{
+                    Log.e("error",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
+
     }
 
     private fun getUserPofile(userID: String, userId: String) {
@@ -411,7 +448,6 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                     val transaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
                     transaction.commit()
-
                     connCount.text = response.connection_Count.toString()
                     postCount.text = response.post_count.toString()
                     address = response.profiledata.Mesibo_account.get(0).address
