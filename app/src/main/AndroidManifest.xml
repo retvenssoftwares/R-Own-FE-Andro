@@ -33,7 +33,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name="app.retvens.rown.MainApplication"
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -48,9 +48,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.home.postDetails.CheckInDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.home.postDetails.StatusDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
             android:name=".viewAll.communityDetails.ViewAllUsersActivity"
             android:exported="false"
-            android:theme="@style/Theme.Rown_Splash"/>
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.HotelOwnerDetailsActivity"
             android:exported="false"
@@ -358,12 +366,10 @@
             android:name=".NavigationFragments.profile.vendorsReview.ReviewsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
-
         <activity
-            android:name=".NavigationFragments.home.PostDetailsActivityNotification"
+            android:name=".NavigationFragments.home.postDetails.PostDetailsActivityNotification"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
-
         <activity
             android:name=".NavigationFragments.profile.EditVendorsProfileActivity"
             android:exported="false"
@@ -648,8 +654,6 @@
                 android:value="" />
         </activity>
 
-
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -666,7 +670,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider> <!-- <service -->
-
         <!-- android:name=".ApiRequest.MesiboBackgroundService" -->
         <!-- android:enabled="true" -->
         <!-- android:exported="false" /> -->

@@ -143,7 +143,11 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
             }
         }
 
-        Glide.with(requireContext()).load(blogProfile).into(profile)
+        if (blogProfile.isNotEmpty()) {
+            Glide.with(requireContext()).load(blogProfile).into(profile)
+        } else {
+            profile.setImageResource(R.drawable.svg_user)
+        }
 
         getCommentList(blog_id)
     }
@@ -245,7 +249,11 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
             }
 
             override fun onItemClick(dataItem: Comment) {
-                Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
+                if (dataItem.Profile_pic.isNotEmpty()) {
+                    Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
+                } else {
+                    profile.setImageResource(R.drawable.svg_user)
+                }
                 child = "1"
                 replyingText.text = " You are replying to ${dataItem.User_name}"
                 replying.visibility = View.VISIBLE

@@ -1,23 +1,19 @@
-package app.retvens.rown.NavigationFragments.home
+package app.retvens.rown.NavigationFragments.home.postDetails
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Html
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
@@ -26,20 +22,15 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.saveId.SavePost
 import app.retvens.rown.NavigationFragments.TimesStamp
-import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
-import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
-import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
+import app.retvens.rown.NavigationFragments.home.ImageSlideActivityAdapter
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetComment
-import app.retvens.rown.bottomsheet.BottomSheetEditYourPost
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetPostEdit
-import app.retvens.rown.bottomsheet.BottomSheetReport
 import app.retvens.rown.bottomsheet.BottomSheetReportPost
 import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
-import com.mesibo.api.Mesibo.getProfile
 import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
 import retrofit2.Callback
@@ -50,7 +41,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityAdapter.OnImageClickListener {
+class PostDetailsActivityNotification : AppCompatActivity(),
+    ImageSlideActivityAdapter.OnImageClickListener {
 
     lateinit var viewPagerAdapter: ImageSlideActivityAdapter
     lateinit var indicator: CircleIndicator
@@ -134,7 +126,7 @@ class PostDetailsActivityNotification : AppCompatActivity(), ImageSlideActivityA
 
 
 
-       if (postPic.isNotEmpty()) {
+       if (profilePic.isNotEmpty()) {
             Glide.with(applicationContext).load(profilePic).into(profile)
         } else {
             profile.setImageResource(R.drawable.svg_user)

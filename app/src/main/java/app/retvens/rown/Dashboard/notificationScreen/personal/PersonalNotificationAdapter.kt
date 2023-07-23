@@ -10,7 +10,9 @@ import android.widget.TextView
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import app.retvens.rown.NavigationFragments.home.PostDetailsActivityNotification
+import app.retvens.rown.NavigationFragments.home.postDetails.CheckInDetailsActivity
+import app.retvens.rown.NavigationFragments.home.postDetails.PostDetailsActivityNotification
+import app.retvens.rown.NavigationFragments.home.postDetails.StatusDetailsActivity
 import app.retvens.rown.R
 import app.retvens.rown.utils.dateFormat
 import com.bumptech.glide.Glide
@@ -59,12 +61,20 @@ class PersonalNotificationAdapter(val listS : List<PersonalNotificationDataItem>
 
         holder.itemView.setOnClickListener {
             if (listS[position].post_type == "share some media"){
-
-                val intent = Intent(context,PostDetailsActivityNotification::class.java)
+                val intent = Intent(context, PostDetailsActivityNotification::class.java)
                 intent.putExtra("postId",listS[position].post_id)
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent)
-
+            } else if (listS[position].post_type == "Check-in"){
+                val intent = Intent(context, CheckInDetailsActivity::class.java)
+                intent.putExtra("postId",listS[position].post_id)
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent)
+            } else if (listS[position].post_type == "normal status"){
+                val intent = Intent(context, StatusDetailsActivity::class.java)
+                intent.putExtra("postId",listS[position].post_id)
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent)
             }
         }
 

@@ -70,7 +70,11 @@ class NestedCommentAdapter(val context: Context,private val nestedComments: List
         }
 
         holder.comment.text = data.comment
-        Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        if (data.Profile_pic.isNotEmpty()) {
+            Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        } else {
+            holder.profile.setImageResource(R.drawable.svg_user)
+        }
 
         holder.relies.visibility = View.GONE
         holder.reply.visibility = View.GONE

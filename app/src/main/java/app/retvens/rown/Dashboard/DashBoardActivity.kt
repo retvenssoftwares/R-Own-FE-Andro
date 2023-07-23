@@ -104,15 +104,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
         textView = findViewById(R.id.textView)
         startAnimation()
 
-//        getProfileInfo(this){
-//            if (it == 502){
-//                binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
-//                binding.noInternet.visibility = View.VISIBLE
-//                binding.noInternetLayout.visibility = View.GONE
-//                binding.navView.visibility = View.GONE
-//                binding.dashboard.visibility = View.GONE
-//            }
-//        }
+
         Thread {
             // Run whatever background code you want here.
             replaceFragment(HomeFragment())
@@ -123,12 +115,22 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
 
-        val server = intent.getStringExtra("server")
-
+        var server = intent.getStringExtra("server")
+        getProfileInfo(this){
+            if (it == 502){
+                server = it.toString()
+                binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
+                binding.noInternet.visibility = View.VISIBLE
+                binding.noInternetLayout.visibility = View.GONE
+                binding.navView.visibility = View.GONE
+                binding.dashboard.visibility = View.GONE
+            }
+        }
         checkNetworkConnection = CheckNetworkConnection(application)
         checkNetworkConnection.observe(this) { isConnected ->
             if (isConnected) {
                 if (server == "502" || serverCode == 502) {
+                    binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
                     binding.noInternet.visibility = View.VISIBLE
                     binding.navView.visibility = View.GONE
                     binding.dashboard.visibility = View.GONE
@@ -147,9 +149,10 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
                 binding.noInternet.visibility = View.VISIBLE
                 binding.navView.visibility = View.GONE
                 binding.dashboard.visibility = View.GONE
-//                if (server == "502") {
-//                    binding.noInternetLayout.visibility = View.GONE
-//                }
+                if (server == "502") {
+                    binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
+                    binding.noInternetLayout.visibility = View.GONE
+                }
 //                Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
             }
         }

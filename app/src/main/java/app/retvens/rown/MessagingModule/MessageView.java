@@ -11,7 +11,6 @@ package app.retvens.rown.MessagingModule;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.text.TextUtils;
@@ -25,9 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
@@ -40,18 +37,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import javax.microedition.khronos.opengles.GL;
-
-import app.retvens.rown.Dashboard.DashBoardActivity;
-import app.retvens.rown.NavigationFragments.home.PostDetailsActivity;
-import app.retvens.rown.NavigationFragments.home.PostDetailsActivityNotification;
-import app.retvens.rown.NavigationFragments.home.PostsViewActivity;
+import app.retvens.rown.NavigationFragments.home.postDetails.PostDetailsActivityNotification;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity;

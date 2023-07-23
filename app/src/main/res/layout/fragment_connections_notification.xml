@@ -13,6 +13,15 @@
         android:layout_height="wrap_content"
         tools:listitem="@layout/item_connections_notification"/>
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/green_own"
+        android:paddingBottom="20dp"
+        android:visibility="gone"/>
+
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerFrameLayoutBlog"
         android:layout_width="match_parent"

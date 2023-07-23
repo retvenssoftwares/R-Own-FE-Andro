@@ -116,7 +116,11 @@ showKeyBoard(comments)
         cancelReply.setOnClickListener {
             child = "0"
             replying.visibility = View.GONE
-            Glide.with(requireContext()).load(postprofile).into(profile)
+            if (postprofile.isNotEmpty()) {
+                Glide.with(requireContext()).load(postprofile).into(profile)
+            } else {
+                profile.setImageResource(R.drawable.svg_user)
+            }
         }
 
         comments.addTextChangedListener {
@@ -142,7 +146,11 @@ showKeyBoard(comments)
             }
         }
 
-        Glide.with(requireContext()).load(postprofile).into(profile)
+        if (postprofile.isNotEmpty()) {
+            Glide.with(requireContext()).load(postprofile).into(profile)
+        } else {
+            profile.setImageResource(R.drawable.svg_user)
+        }
 
         getCommentList(postID)
     }
@@ -237,7 +245,11 @@ showKeyBoard(comments)
             }
 
             override fun onItemClick(dataItem: Comments) {
-                Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
+                if (dataItem.Profile_pic.isNotEmpty()) {
+                    Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
+                } else {
+                    profile.setImageResource(R.drawable.svg_user)
+                }
                 child = "1"
                 replyingText.text = " You are replying to ${dataItem.User_name}"
                 replying.visibility = View.VISIBLE
