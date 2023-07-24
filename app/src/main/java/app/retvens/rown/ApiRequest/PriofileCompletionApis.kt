@@ -73,7 +73,7 @@ interface PriofileCompletionApis{
     @PATCH("/update/{user_id}")
     fun setHospitalityExpertDetails(
         @Path("user_id") user_id : String,
-        @Body details: JobDetail
+        @Body details: HospitalityexpertData
     ):Call<UpdateResponse>
 
     @PATCH("/hotelowner/{user_id}")
@@ -215,7 +215,7 @@ interface PriofileCompletionApis{
     @PATCH("addmultiple/{userId}")
     fun addExperienceExpert(
         @Path("userId") user_id : String,
-        @Body updateData:JobDetail
+        @Body updateData:HospitalityexpertData
     ):Call<UpdateResponse>
 
     @PATCH("addmultiple/{userId}")

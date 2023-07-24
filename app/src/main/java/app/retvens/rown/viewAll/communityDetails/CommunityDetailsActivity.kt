@@ -35,6 +35,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -138,6 +140,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
                 yes.setOnClickListener {
                     binding.switchToCommunity.text = "Switch to Open Community"
                     isSwitchToCloseCommunity = false
+                    updateCommunity(groupId,"Closed Community")
                     dialogL.dismiss()
                 }
                 val no = dialogL.findViewById<TextView>(R.id.text_no)
@@ -151,6 +154,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
                 yes.setOnClickListener {
                     binding.switchToCommunity.text = "Switch to Close Community"
                     isSwitchToCloseCommunity = true
+                    updateCommunity(groupId,"Open Community")
                     dialogL.dismiss()
                 }
                 val no = dialogL.findViewById<TextView>(R.id.text_no)
@@ -185,6 +189,32 @@ class CommunityDetailsActivity : AppCompatActivity(){
 
         getCommunityDetails(grpID)
 
+
+    }
+
+    private fun updateCommunity(groupId: Long, s: String) {
+
+        val update = RetrofitBuilder.feedsApi.updateGroupStatus(groupId.toString(),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),s)
+        )
+
+        update.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+                }else{
+                    Log.e("error",response.message().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
 
     }
 
@@ -251,9 +281,9 @@ class CommunityDetailsActivity : AppCompatActivity(){
                     }
 
                     if (type == "Open Community"){
-                        isSwitchToCloseCommunity = false
-                    }else{
                         isSwitchToCloseCommunity = true
+                    }else{
+                        isSwitchToCloseCommunity = false
                     }
                     Log.e("checking",isSwitchToCloseCommunity.toString())
 

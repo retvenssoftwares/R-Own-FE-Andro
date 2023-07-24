@@ -137,7 +137,7 @@ class ApplyForVerificationActivity : AppCompatActivity() {
 
         Log.e("user",user_id)
 
-        val check = RetrofitBuilder.profileCompletion.appliedFor("-zkP5Nee73")
+        val check = RetrofitBuilder.profileCompletion.appliedFor(user_id)
         check.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
