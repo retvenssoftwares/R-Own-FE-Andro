@@ -33,6 +33,8 @@ import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
 import app.retvens.rown.MesiboApi
+import app.retvens.rown.MessagingModule.UserData
+import app.retvens.rown.MessagingModule.Utils
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
@@ -52,17 +54,17 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.mesibo.api.Mesibo
+import com.mesibo.api.Mesibo.ConnectionListener
 import com.mesibo.api.MesiboMessage
 import com.mesibo.api.MesiboProfile
 import com.mesibo.api.MesiboReadSession
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Timer
-import java.util.TimerTask
+import java.util.*
 
 
-class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
+class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener, Mesibo.ConnectionListener {
 
     companion object number{
         var progress = ""
@@ -70,7 +72,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
 
 
     lateinit var binding: ActivityDashBoardBinding
-
+    private lateinit var badgeView : RelativeLayout
     private lateinit var drawerLayout:DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     lateinit var mActivityTitle : String
@@ -103,9 +105,8 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
         imageView = findViewById(R.id.imageView)
         textView = findViewById(R.id.textView)
         startAnimation()
-
-
-        Thread {
+        Mesibo.addListener(this)
+         Thread {
             // Run whatever background code you want here.
             replaceFragment(HomeFragment())
         }.start()
@@ -607,7 +608,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
         val chatsItem = menu.findItem(R.id.action_chats)
 
         // Inflate the custom view for the badge count
-        val badgeView = layoutInflater.inflate(R.layout.layout_unread_count, null) as RelativeLayout
+        badgeView = layoutInflater.inflate(R.layout.layout_unread_count, null) as RelativeLayout
 
         // Find the ImageView and set the icon drawable
         val iconImageView = badgeView.findViewById<ImageView>(R.id.icon)
@@ -716,16 +717,28 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
     }
 
     override fun Mesibo_onMessage(p0: MesiboMessage) {
-
-        mprofile.addAll(listOf(p0.profile))
-
-    }
+       // mprofile.addAll(listOf(p0.profile))
+        var counter = 0
+        val mesiboProfiles = Mesibo.getSortedUserProfiles()
+        for (i in 0 until mesiboProfiles.size) {
+            val data = UserData.getUserData(mesiboProfiles[i])
+            data.unreadCount
+            if (data.unreadCount > 0) {
+                counter++
+            }
+        }
+        updateBadgeCount(badgeView,counter)
+     }
 
     override fun Mesibo_onMessageStatus(p0: MesiboMessage) {
 
     }
 
     override fun Mesibo_onMessageUpdate(p0: MesiboMessage) {
+
+    }
+
+    override fun Mesibo_onConnectionStatus(p0: Int) {
 
     }
 

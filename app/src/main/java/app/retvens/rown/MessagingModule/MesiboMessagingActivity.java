@@ -8,15 +8,11 @@
 
 package app.retvens.rown.MessagingModule;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,16 +23,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboMessage;
@@ -46,16 +38,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 import app.retvens.rown.ApiRequest.CallDataClass;
 import app.retvens.rown.ApiRequest.CallResponse;
 import app.retvens.rown.ApiRequest.RetrofitBuilder;
-import app.retvens.rown.Dashboard.ChatActivity;
 import app.retvens.rown.Dashboard.DashBoardActivity;
-import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity;
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity;
@@ -64,7 +53,6 @@ import app.retvens.rown.api.MesiboCall;
 import app.retvens.rown.api.p000ui.MesiboDefaultCallActivity;
 import app.retvens.rown.viewAll.communityDetails.CommunityDetailsActivity;
 import app.retvens.rown.viewAll.viewAllCommunities.MembersCommunityDetailsActivity;
-import app.retvens.rown.viewAll.viewAllCommunities.OpenCommunityDetailsActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,10 +61,10 @@ import retrofit2.Response;
 public class MesiboMessagingActivity extends AppCompatActivity implements MesiboMessagingFragment.FragmentListener, Mesibo.ConnectionListener {
 
     private static final int REQUEST_CAMERA_PERMISSION = 0;
+    private static final int PERMISSION_REQUEST_CODE = 123;
     static int FROM_MESSAGING_ACTIVITY = 1;
     /* access modifiers changed from: private */
     public ActionMode mActionMode = null;
-    private static final int PERMISSION_REQUEST_CODE = 123;
     /* access modifiers changed from: private */
     public MesiboUI.Listener mMesiboUIHelperlistener = null;
     /* access modifiers changed from: private */
@@ -97,6 +85,24 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
     private ImageView isOnlineDot;
     private Long groupId;
     private String page = "0";
+
+    public static boolean isNetWorkAvailable(Context context) {
+        if (context == null) {
+            return false;
+        }
+
+        ConnectivityManager connMgr = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            if (connMgr == null) {
+                return false;
+            } else return connMgr.getActiveNetworkInfo() != null
+                    && connMgr.getActiveNetworkInfo().isAvailable()
+                    && connMgr.getActiveNetworkInfo().isConnected();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     /* access modifiers changed from: protected */
     @SuppressLint("MissingInflatedId")
@@ -198,52 +204,50 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
 
                             String admin = args.getString("admin");
                             try {
-                                if (admin.equals("true")){
+                                if (admin.equals("true")) {
                                     Intent intent = new Intent(MesiboMessagingActivity.this, CommunityDetailsActivity.class);
-                                    intent.putExtra("groupId",groupId);
+                                    intent.putExtra("groupId", groupId);
                                     startActivity(intent);
-                                }else {
-                                    Log.e("id",groupId.toString());
+                                } else {
+                                    Log.e("id", groupId.toString());
                                     Intent intent = new Intent(MesiboMessagingActivity.this, MembersCommunityDetailsActivity.class);
-                                    intent.putExtra("groupId",groupId);
+                                    intent.putExtra("groupId", groupId);
                                     startActivity(intent);
                                 }
-                            }catch (NullPointerException e){
-                                Log.e("error",e.getMessage().toString());
+                            } catch (NullPointerException e) {
+                                Log.e("error", e.getMessage().toString());
                             }
 
 
-
-                        }else{
+                        } else {
                             String peer = args.getString(MesiboUI.PEER);
                             MesiboProfile profile = Mesibo.getProfile(peer);
 
 
-                            if (!profile.isBlocked()){
+                            if (!profile.isBlocked()) {
                                 String status = profile.getStatus();
 
-                            Map<String, String> decodedData = Decoder.decodeData(status);
+                                Map<String, String> decodedData = Decoder.decodeData(status);
 
-                            String userID = decodedData.get("userID");
-                            String userRole = decodedData.get("userRole");
+                                String userID = decodedData.get("userID");
+                                String userRole = decodedData.get("userRole");
 
-                                if (Objects.equals(userRole, "Hotel Owner")){
+                                if (Objects.equals(userRole, "Hotel Owner")) {
                                     Intent intent = new Intent(MesiboMessagingActivity.this, OwnerProfileActivity.class);
-                                    intent.putExtra("userId",userID);
+                                    intent.putExtra("userId", userID);
                                     startActivity(intent);
-                                }else if (Objects.equals(userRole, "Business Vendor / Freelancer")){
+                                } else if (Objects.equals(userRole, "Business Vendor / Freelancer")) {
                                     Intent intent = new Intent(MesiboMessagingActivity.this, VendorProfileActivity.class);
-                                    intent.putExtra("userId",userID);
+                                    intent.putExtra("userId", userID);
                                     startActivity(intent);
-                                }else {
+                                } else {
                                     Intent intent = new Intent(MesiboMessagingActivity.this, UserProfileActivity.class);
-                                    intent.putExtra("userId",userID);
+                                    intent.putExtra("userId", userID);
                                     startActivity(intent);
                                 }
-                            }else {
-                                Log.e("not","blocked");
+                            } else {
+                                Log.e("not", "blocked");
                             }
-
 
 
                         }
@@ -279,29 +283,9 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                 String userRole = decodedData.get("userRole");
                 SharedPreferences sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE);
                 String user_id = sharedPreferences1.getString("user_id", "");
-                Log.e("userID",userID);
-                Log.e("user_id",user_id);
-            backgroundCall(user_id,userID,"call");
-
-/**
- //    if (view.getId() == R.id.imageView2) { // For Calling
- // if (0 == mParameter.groupid) {
- if (!MesiboCall.getInstance().callUi(MesiboMessagingActivity.this, mUser.address, false))
- //    MesiboCall.getInstance().callUiForExistingCall(MesiboMessagingActivity.this);
- //launchCustomCallActivity(destination, true, false);
- //} else {
- //  MesiboCall.getInstance().groupCallUi(MesiboMessagingActivity.this, Mesibo.getProfile(mParameter.groupid), false, true);
- Log.e("Aditya","Aditya");
-
- Intent intent = new Intent(MesiboMessagingActivity.this, QampDefaultCallActivity.class);
- intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
- intent.putExtra("video", true);
- intent.putExtra("address", destination);
- intent.putExtra("incoming", false);
- startActivity(intent);*/
-//                Log.e("Aditya", "reached");
-
-
+                Log.e("userID", userID);
+                Log.e("user_id", user_id);
+                backgroundCall(user_id, userID, "call");
             }
 
 
@@ -325,9 +309,9 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                 String userRole = decodedData.get("userRole");
                 SharedPreferences sharedPreferences1 = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE);
                 String user_id = sharedPreferences1.getString("user_id", "");
-                Log.e("userID",userID);
-                Log.e("user_id",user_id);
-                backgroundCall(user_id,userID,"video");
+                Log.e("userID", userID);
+                Log.e("user_id", user_id);
+                backgroundCall(user_id, userID, "video");
 
                 Log.e("Aditya", "reached1");
                 /**if (view.getId() == R.id.imageView4) {
@@ -346,6 +330,184 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
     }
 
     private void setProfilePicture() {
+    }
+
+    protected void launchCustomCallActivity(String destination, boolean video, boolean incoming) {
+        Intent intent = new Intent(this, MesiboDefaultCallActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra("video", video);
+        intent.putExtra("address", destination);
+        intent.putExtra("incoming", incoming);
+        startActivity(intent);
+    }
+
+
+    private void startFragment(Bundle savedInstanceState) {
+        if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
+            this.mFragment = new MessagingFragment();
+            this.mFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, this.mFragment).commit();
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onStart() {
+        MesiboMessagingActivity.super.onStart();
+    }
+
+    /* JADX WARNING: type inference failed for: r4v0, types: [android.content.Context, com.qamp.app.MessagingModule.MesiboMessagingActivity] */
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (this.mMesiboUIHelperlistener != null) {
+            this.mMesiboUIHelperlistener.MesiboUI_onGetMenuResourceId(this, FROM_MESSAGING_ACTIVITY, this.mUser, menu);
+        }
+        return true;
+    }
+
+    /* JADX WARNING: type inference failed for: r4v0, types: [android.content.Context, com.qamp.app.MessagingModule.MesiboMessagingActivity, androidx.appcompat.app.AppCompatActivity] */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == 16908332) {
+            finish();
+            return true;
+        }
+        this.mMesiboUIHelperlistener.MesiboUI_onMenuItemSelected(this, FROM_MESSAGING_ACTIVITY, this.mUser, id);
+        return MesiboMessagingActivity.super.onOptionsItemSelected(item);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDestroy() {
+        MesiboMessagingActivity.super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        MessagingFragment f = this.mFragment;
+
+        if (f == null || !f.Mesibo_onBackPressed()) {
+            if (Objects.equals(this.page, "2")) {
+                Intent intent = new Intent(this, DashBoardActivity.class);
+                startActivity(intent);
+            } else {
+                super.onBackPressed();
+            }
+
+        }
+    }
+
+
+    public void Mesibo_onUpdateUserPicture(MesiboProfile profile, Bitmap thumbnail, String picturePath) {
+        this.mProfileThumbnail = thumbnail;
+        this.mProfileImagePath = picturePath;
+        this.mProfileImage.setImageDrawable(new RoundImageDrawable(this.mProfileThumbnail));
+        String name = this.mUser.getName();
+        if (TextUtils.isEmpty(name)) {
+            name = this.mUser.address;
+        }
+        if (name.length() > 16) {
+            name = name.substring(0, 14) + "...";
+        }
+        this.mTitle.setText(name);
+    }
+
+    public void Mesibo_onUpdateUserOnlineStatus(MesiboProfile profile, String status) {
+        if (status == null) {
+            this.mUserStatus.setVisibility(View.GONE);
+            this.isOnlineDot.setVisibility(View.GONE);
+            return;
+        }
+        if (!profile.isGroup() && (status.equals(getResources().getString(R.string.online_text)) ||
+                status.equals(getResources().getString(R.string.online_text))) &&
+                (isNetWorkAvailable(MesiboMessagingActivity.this))) {
+            this.isOnlineDot.setVisibility(View.VISIBLE);
+        }
+        this.mUserStatus.setVisibility(View.VISIBLE);
+        this.mUserStatus.setText(status);
+    }
+
+    public void Mesibo_onShowInContextUserInterface() {
+        this.mActionMode = startSupportActionMode(this.mActionModeCallback);
+    }
+
+    public void Mesibo_onHideInContextUserInterface() {
+        this.mActionMode.finish();
+    }
+
+    public void Mesibo_onContextUserInterfaceCount(int count) {
+        if (this.mActionMode != null) {
+            this.mActionMode.setTitle(String.valueOf(count));
+            this.mActionMode.invalidate();
+        }
+    }
+
+    /* JADX WARNING: type inference failed for: r0v0, types: [android.content.Context, com.qamp.app.MessagingModule.MesiboMessagingActivity] */
+    public void Mesibo_onError(int type, String title, String message) {
+        Utils.showAlert(this, title, message);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        this.mFragment.Mesibo_onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.e("code", String.valueOf(requestCode));
+    }
+
+    /* access modifiers changed from: protected */
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        MesiboMessagingActivity.super.onActivityResult(requestCode, resultCode, data);
+        if (this.mFragment != null) {
+            this.mFragment.Mesibo_onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onResume() {
+        MesiboMessagingActivity.super.onResume();
+        MesiboUIManager.setMessagingActivity(this);
+        setProfilePicture();
+    }
+
+    @Override
+    public void Mesibo_onConnectionStatus(int i) {
+        Log.d("Mesibo", "Connection status: " + i);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
+
+    public void backgroundCall(String senderUserID, String receiverUserID, String type) {
+        Log.e("sender", senderUserID.toString());
+        Log.e("recierver", receiverUserID);
+        String destination = "destination";
+        Call<CallResponse> call = RetrofitBuilder.INSTANCE.getCalling().calling(receiverUserID, new CallDataClass(senderUserID));
+        call.enqueue(new Callback<CallResponse>() {
+            @Override
+            public void onResponse(Call<CallResponse> call, Response<CallResponse> response) {
+                if (response.isSuccessful()) {
+                    CallResponse callResponse = response.body();
+                    Log.e("success", callResponse.getMessage());
+                    if (Objects.equals(type, "call")) {
+                        if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)) {
+                            Log.e("Arr", String.valueOf(MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)));
+                            MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
+                        }
+                        launchCustomCallActivity(destination, true, false);
+                    } else {
+                        if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, true))
+                            //MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
+                            launchCustomCallActivity(destination, true, false);
+                    }
+                } else {
+                    Log.e("success", response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CallResponse> call, Throwable t) {
+                Log.e("success", t.getMessage().toString());
+            }
+        });
     }
 
     public static class Decoder {
@@ -405,173 +567,6 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             return decodedData.toString();
         }
     }
-
-    protected void launchCustomCallActivity(String destination, boolean video, boolean incoming) {
-        Intent intent = new Intent(this, MesiboDefaultCallActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        intent.putExtra("video", video);
-        intent.putExtra("address", destination);
-        intent.putExtra("incoming", incoming);
-        startActivity(intent);
-    }
-
-
-    private void startFragment(Bundle savedInstanceState) {
-        if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
-            this.mFragment = new MessagingFragment();
-            this.mFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, this.mFragment).commit();
-        }
-    }
-
-    /* access modifiers changed from: protected */
-    public void onStart() {
-        MesiboMessagingActivity.super.onStart();
-    }
-
-    /* JADX WARNING: type inference failed for: r4v0, types: [android.content.Context, com.qamp.app.MessagingModule.MesiboMessagingActivity] */
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (this.mMesiboUIHelperlistener != null) {
-            this.mMesiboUIHelperlistener.MesiboUI_onGetMenuResourceId(this, FROM_MESSAGING_ACTIVITY, this.mUser, menu);
-        }
-        return true;
-    }
-
-    /* JADX WARNING: type inference failed for: r4v0, types: [android.content.Context, com.qamp.app.MessagingModule.MesiboMessagingActivity, androidx.appcompat.app.AppCompatActivity] */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == 16908332) {
-            finish();
-            return true;
-        }
-        this.mMesiboUIHelperlistener.MesiboUI_onMenuItemSelected(this, FROM_MESSAGING_ACTIVITY, this.mUser, id);
-        return MesiboMessagingActivity.super.onOptionsItemSelected(item);
-    }
-
-    /* access modifiers changed from: protected */
-    public void onDestroy() {
-        MesiboMessagingActivity.super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        MessagingFragment f = this.mFragment;
-
-        if (f == null || !f.Mesibo_onBackPressed()) {
-            if (Objects.equals(this.page, "2")){
-                Intent intent = new Intent(this, DashBoardActivity.class);
-                startActivity(intent);
-            }else {
-                super.onBackPressed();
-            }
-
-        }
-    }
-
-
-    public void Mesibo_onUpdateUserPicture(MesiboProfile profile, Bitmap thumbnail, String picturePath) {
-        this.mProfileThumbnail = thumbnail;
-        this.mProfileImagePath = picturePath;
-        this.mProfileImage.setImageDrawable(new RoundImageDrawable(this.mProfileThumbnail));
-        String name = this.mUser.getName();
-        if (TextUtils.isEmpty(name)) {
-            name = this.mUser.address;
-        }
-        if (name.length() > 16) {
-            name = name.substring(0, 14) + "...";
-        }
-        this.mTitle.setText(name);
-    }
-
-    public void Mesibo_onUpdateUserOnlineStatus(MesiboProfile profile, String status) {
-        if (status == null) {
-            this.mUserStatus.setVisibility(View.GONE);
-            this.isOnlineDot.setVisibility(View.GONE);
-            return;
-        }
-        if (!profile.isGroup() && (status.equals(getResources().getString(R.string.online_text)) ||
-                status.equals(getResources().getString(R.string.online_text))) &&
-                (isNetWorkAvailable(MesiboMessagingActivity.this))) {
-            this.isOnlineDot.setVisibility(View.VISIBLE);
-        }
-        this.mUserStatus.setVisibility(View.VISIBLE);
-        this.mUserStatus.setText(status);
-    }
-
-
-    public static boolean isNetWorkAvailable(Context context) {
-        if (context == null) {
-            return false;
-        }
-
-        ConnectivityManager connMgr = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        try {
-            if (connMgr == null) {
-                return false;
-            } else return connMgr.getActiveNetworkInfo() != null
-                    && connMgr.getActiveNetworkInfo().isAvailable()
-                    && connMgr.getActiveNetworkInfo().isConnected();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-
-    public void Mesibo_onShowInContextUserInterface() {
-        this.mActionMode = startSupportActionMode(this.mActionModeCallback);
-    }
-
-    public void Mesibo_onHideInContextUserInterface() {
-        this.mActionMode.finish();
-    }
-
-    public void Mesibo_onContextUserInterfaceCount(int count) {
-        if (this.mActionMode != null) {
-            this.mActionMode.setTitle(String.valueOf(count));
-            this.mActionMode.invalidate();
-        }
-    }
-
-    /* JADX WARNING: type inference failed for: r0v0, types: [android.content.Context, com.qamp.app.MessagingModule.MesiboMessagingActivity] */
-    public void Mesibo_onError(int type, String title, String message) {
-        Utils.showAlert(this, title, message);
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        this.mFragment.Mesibo_onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.e("code", String.valueOf(requestCode));
-    }
-
-    /* access modifiers changed from: protected */
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        MesiboMessagingActivity.super.onActivityResult(requestCode, resultCode, data);
-        if (this.mFragment != null) {
-            this.mFragment.Mesibo_onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    /* access modifiers changed from: protected */
-    public void onResume() {
-        MesiboMessagingActivity.super.onResume();
-        MesiboUIManager.setMessagingActivity(this);
-        setProfilePicture();
-    }
-
-    @Override
-    public void Mesibo_onConnectionStatus(int i) {
-        Log.d("Mesibo", "Connection status: " + i);
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
-    }
-
-
 
     private class ActionModeCallback implements ActionMode.Callback {
         private final String TAG;
@@ -655,47 +650,6 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             ActionMode unused = MesiboMessagingActivity.this.mActionMode = null;
         }
     }
-
-
-
-
-
-    public void backgroundCall(String senderUserID, String receiverUserID,String type) {
-
-        Log.e("sender",senderUserID.toString());
-        Log.e("recierver",receiverUserID);
-        String destination = "destination";
-        Call<CallResponse> call = RetrofitBuilder.INSTANCE.getCalling().calling(receiverUserID, new CallDataClass(senderUserID));
-        call.enqueue(new Callback<CallResponse>() {
-            @Override
-            public void onResponse(Call<CallResponse> call, Response<CallResponse> response) {
-                if (response.isSuccessful()) {
-                    CallResponse callResponse = response.body();
-                    Log.e("success",callResponse.getMessage());
-                    if (Objects.equals(type, "call")){
-                        if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)) {
-                            Log.e("Arr", String.valueOf(MesiboCall.getInstance().callUi(getApplicationContext(), mUser, false)));
-                            MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
-                        }
-                        launchCustomCallActivity(destination, true, false);
-                    }else {
-                        if (!MesiboCall.getInstance().callUi(getApplicationContext(), mUser, true))
-                            //MesiboCall.getInstance().callUiForExistingCall(getApplicationContext());
-                            launchCustomCallActivity(destination, true, false);
-                    }
-                } else {
-                    Log.e("success",response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CallResponse> call, Throwable t) {
-                Log.e("success",t.getMessage().toString());
-            }
-        });
-    }
-
-
 
 
 }

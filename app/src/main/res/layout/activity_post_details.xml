@@ -411,7 +411,7 @@
             android:id="@+id/addThoughts"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Add your thoughts about dobrev_karsten..."
+            android:hint="Add your thoughts..."
             android:textColorHint="@color/grey_60"
             android:textColor="@color/black"
             style="@style/TextAppearance.AppCompat.Body1"

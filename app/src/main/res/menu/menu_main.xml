@@ -9,19 +9,19 @@
         android:title="Search"
         android:icon="@drawable/notification"
         app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/action_chats"
         android:title="Settings"
         android:icon="@drawable/chats"
         app:showAsAction="ifRoom"
         />
+
     <!--<item
         android:id="@+id/action_settings"
         android:title="Settings"
         android:icon="@drawable/setting"
         app:showAsAction="ifRoom"
         />-->
-
-
 
 </menu>

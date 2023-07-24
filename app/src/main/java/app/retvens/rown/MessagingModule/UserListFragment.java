@@ -494,6 +494,17 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         } else {
             updateUiIfLastMessage(msg);
         }
+        int counter = 0;
+        ArrayList<MesiboProfile> mesiboProfiles = Mesibo.getSortedUserProfiles();
+        for (int i=0; i<mesiboProfiles.size(); i++){
+            UserData data = UserData.getUserData(mesiboProfiles.get(i));
+            data.getUnreadCount();
+            if (data.getUnreadCount()>0){
+                counter++;
+            }
+        }
+        //Toast.makeText(getContext(), ""+counter, Toast.LENGTH_SHORT).show();
+        Utils.unReadCount = counter;
     }
 
     public void Mesibo_onMessageStatus(MesiboMessage msg) {
@@ -508,7 +519,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                 this.mAdapter.notifyItemChanged(i);
             }
         }
-    }
+       }
 
     public void Mesibo_onMessageUpdate(MesiboMessage msg) {
         Mesibo_onMessageStatus(msg);
@@ -1036,16 +1047,14 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
         public ArrayList<MesiboProfile> getMessagedUsers() {
             ArrayList<MesiboProfile> messagedUsers = new ArrayList<>();
-
             for (MesiboProfile user : mAdapter.mDataList) {
                 Integer lastMessage = user.getUnreadMessageCount();
-
                 messagedUsers.add(user);
-
             }
 
             return messagedUsers;
         }
+
         public void onResumeAdapter() {
             this.mSearchResults.clear();
             Boolean unused = UserListFragment.this.mIsMessageSearching = false;
@@ -1064,69 +1073,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             return retValue;
         }
 
-        public void createNewGroup() {
-            UserListFragment.mMemberProfiles.clear();
-            Iterator<MesiboProfile> it = this.mDataList.iterator();
-            while (it.hasNext()) {
-                MesiboProfile d = it.next();
-                if ((d.uiFlags & 16777216) == 16777216 && !UserListFragment.mMemberProfiles.contains(d)) {
-                    UserListFragment.mMemberProfiles.add(d);
-                }
-            }
-            MesiboUIManager.launchGroupActivity(UserListFragment.this.getActivity(), (Bundle) null);
-            UserListFragment.this.getActivity().finish();
-        }
-
-        public void modifyGroupDetail() {
-            UserListFragment.mMemberProfiles.clear();
-            Iterator<MesiboProfile> it = this.mDataList.iterator();
-            while (it.hasNext()) {
-                MesiboProfile d = it.next();
-                if ((d.uiFlags & 16777216) == 16777216 && !UserListFragment.mMemberProfiles.contains(d)) {
-                    UserListFragment.mMemberProfiles.add(d);
-                }
-            }
-            MesiboUIManager.launchGroupActivity(UserListFragment.this.getActivity(), UserListFragment.this.mGroupEditBundle);
-            UserListFragment.this.getActivity().finish();
-
-        }
-
-        public void forwardMessageToContacts() {
-            UserListFragment.mMemberProfiles.clear();
-            Iterator<MesiboProfile> it = this.mDataList.iterator();
-            while (it.hasNext()) {
-                MesiboProfile d = it.next();
-                if ((d.uiFlags & 16777216) == 16777216) {
-                    d.uiFlags &= -16777217;
-                    if (!UserListFragment.mMemberProfiles.contains(d)) {
-                        UserListFragment.mMemberProfiles.add(d);
-                    }
-                }
-            }
-            if (UserListFragment.mMemberProfiles.size() != 0) {
-                for (int i = 0; i < UserListFragment.mMemberProfiles.size(); i++) {
-                    MesiboProfile user = UserListFragment.mMemberProfiles.get(i);
-                    UserData userData = (UserData) user.other;
-                    MesiboMessage msg = user.newMessage();
-                    if (UserListFragment.this.mForwardMessageIds != null) {
-                        msg.setForwarded(UserListFragment.this.mForwardMessageIds);
-                        msg.send();
-                    } else if (!TextUtils.isEmpty(UserListFragment.this.mForwardedMessage)) {
-                        msg.message = UserListFragment.this.mForwardedMessage;
-                        msg.send();
-                    }
-                }
-                if (!UserListFragment.this.mCloseAfterForward && UserListFragment.mMemberProfiles.size() == 1) {
-                    MesiboProfile user2 = UserListFragment.mMemberProfiles.get(0);
-                    UserData userData2 = (UserData) user2.other;
-                    if (!UserListFragment.this.onClickUser(user2.address, user2.groupid, 0)) {
-                        MesiboUIManager.launchMessagingActivity(UserListFragment.this.getActivity(), 0, user2.address, user2.groupid);
-                    }
-                }
-                UserListFragment.this.getActivity().finish();
-                UserListFragment.this.mForwardId = 0;
-            }
-        }
 
         public  class DecodeDataHelper {
             public  String decodeString(String input, int shift) {

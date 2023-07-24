@@ -51,6 +51,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+//import java.util.concurrent.TimeUnit
+
 
 class MainAdapter(val context: Context, private val dataItemList: ArrayList<DataItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -487,7 +489,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
 //            Log.e("username",post.User_name)
 //            binding.recentCommentByUser.text = post.caption
-            if (banner.caption.length > 150) {
+            if (banner.caption!=null && banner.caption.length !=null && banner.caption.length > 150 ) {
                 binding.recentCommentByUser.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
                 binding.recentCommentByUser.text = banner.caption
