@@ -21,9 +21,9 @@ class OwnerSettingActivity : AppCompatActivity() {
        binding.notification.setOnClickListener {
             startActivity(Intent(this, NotificationSettingActivity::class.java))
         }
-       binding.language.setOnClickListener {
-            startActivity(Intent(this, LanguageSettingActivity::class.java))
-        }
+//       binding.language.setOnClickListener {
+//            startActivity(Intent(this, LanguageSettingActivity::class.java))
+//        }
        binding.verification.setOnClickListener {
             startActivity(Intent(this, ApplyForVerificationActivity::class.java))
         }

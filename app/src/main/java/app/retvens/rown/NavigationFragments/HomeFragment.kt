@@ -24,6 +24,7 @@ import app.retvens.rown.Dashboard.createPosts.CreateTextPost
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.MessagingModule.UserData
 import app.retvens.rown.NavigationFragments.FragmntAdapters.CommentAdapter
 import app.retvens.rown.NavigationFragments.exploreForUsers.hotels.ExploreHotelData
 import app.retvens.rown.NavigationFragments.exploreForUsers.services.ExploreServiceData
@@ -42,6 +43,8 @@ import app.retvens.rown.viewAll.viewAllBlogs.AllBlogsData
 import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
+import com.mesibo.api.Mesibo
+import com.mesibo.api.MesiboMessage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,7 +52,7 @@ import retrofit2.Response
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment() , Mesibo.MessageListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -414,6 +417,9 @@ class HomeFragment : Fragment() {
                         serverCode = response.code()
                         empty.visibility = View.VISIBLE
                         empty.text = response.code().toString()
+//                        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+//                        val user_id = sharedPreferences?.getString("user_id", "").toString()
+//                        getPost(user_id);
                         shimmerFrameLayout2.stopShimmer()
                         shimmerFrameLayout2.visibility = View.GONE
 //                        Toast.makeText(
@@ -668,6 +674,27 @@ class HomeFragment : Fragment() {
 
             }
         })
+    }
+
+    override fun Mesibo_onMessage(p0: MesiboMessage) {
+        var counter = 0
+        val mesiboProfiles = Mesibo.getSortedUserProfiles()
+        for (i in 0 until mesiboProfiles.size) {
+            val data = UserData.getUserData(mesiboProfiles[i])
+            data.unreadCount
+            if (data.unreadCount > 0) {
+                counter++
+            }
+        }
+        Toast.makeText(requireContext(), "$counter", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun Mesibo_onMessageStatus(p0: MesiboMessage) {
+        TODO("Not yet implemented")
+    }
+
+    override fun Mesibo_onMessageUpdate(p0: MesiboMessage) {
+        TODO("Not yet implemented")
     }
 
 

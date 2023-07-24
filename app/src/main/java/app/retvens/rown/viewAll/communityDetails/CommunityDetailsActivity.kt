@@ -62,6 +62,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
     private lateinit var mMapFragment: SupportMapFragment
     private var isSwitchToCloseCommunity = true
     var isBusinessVisible = true
+    private var type = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,7 +130,10 @@ class CommunityDetailsActivity : AppCompatActivity(){
             dialogL.window?.setGravity(Gravity.BOTTOM)
             dialogL.show()
 
+
+
             if (isSwitchToCloseCommunity){
+                Log.e("check",isSwitchToCloseCommunity.toString())
                 val yes = dialogL.findViewById<TextView>(R.id.text_yes)
                 yes.setOnClickListener {
                     binding.switchToCommunity.text = "Switch to Open Community"
@@ -141,6 +145,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
                     dialogL.dismiss()
                 }
             } else {
+                Log.e("check2",isSwitchToCloseCommunity.toString())
                 dialogL.findViewById<TextView>(R.id.ttt).text = "Anyone can request to join your community, do you really want to proceed ?"
                 val yes = dialogL.findViewById<TextView>(R.id.text_yes)
                 yes.setOnClickListener {
@@ -229,17 +234,28 @@ class CommunityDetailsActivity : AppCompatActivity(){
                     binding.communityDetailName.text = response.group_name
                     binding.communityDetailMembers.text = "${response.Totalmember.toString()} members"
                     binding.communityDescription.text = response.description
-
+                    type = response.community_type
                     image = response.Profile_pic
                     name = response.group_name
                     description = response.description
                     location = response.location
                     latitude = response.latitude.toDouble()
                     longitude = response.longitude.toDouble()
-
+                    if (type == "Open Community"){
+                        binding.switchToCommunity.text = "Switch to Close Community"
+                    }else{
+                        binding.switchToCommunity.text = "Switch to Open Community"
+                    }
                     response.Members.forEach {
                         members.add(it.user_id)
                     }
+
+                    if (type == "Open Community"){
+                        isSwitchToCloseCommunity = false
+                    }else{
+                        isSwitchToCloseCommunity = true
+                    }
+                    Log.e("checking",isSwitchToCloseCommunity.toString())
 
                     val date = convertTimestampToFormattedDate(response.date_added)
                     Log.e("date",response.date_added.toString())

@@ -56,7 +56,7 @@ class CreateCummVisibilitySetting : AppCompatActivity(), BottomSheetCountryState
 
         binding.closedCummLayout.setOnClickListener {
 
-            type = "close"
+            type = "Closed Community"
 
             selectedLayout = 1
             binding.layVisibility.visibility = View.VISIBLE

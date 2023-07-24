@@ -50,6 +50,8 @@ import java.util.List;
 import app.retvens.rown.R;
 
 public final class Utils {
+
+    public static int unReadCount = 0;
     public static void setActivityStyle(AppCompatActivity context, Toolbar toolbar) {
 //        if (!(toolbar == null || MesiboUI.getConfig().mToolbarColor == 0)) {
 //            toolbar.setBackgroundColor(context.getResources().getColor(R.color.white));
