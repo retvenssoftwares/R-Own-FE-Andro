@@ -23,8 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HospitalityExpertAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.AddExperienceDataClass
-import app.retvens.rown.DataCollections.ProfileCompletion.JobData
-import app.retvens.rown.DataCollections.ProfileCompletion.JobDetail
+import app.retvens.rown.DataCollections.ProfileCompletion.HospitalityexpertData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.utils.endYearDialog
@@ -239,13 +238,13 @@ class BottomSheetEditExperience(val role:String) : BottomSheetDialogFragment(),
         val start = start.text.toString()
         val end = end.text.toString()
 
-        val data = JobDetail("",type,title,company,start,end)
+        val data = HospitalityexpertData("",type,title,company,start,end)
 
         Log.e("data",data.toString())
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
-
+        Log.e("user",user_id)
         val updateData = RetrofitBuilder.profileCompletion.addExperienceExpert(user_id,data)
 
         updateData.enqueue(object : Callback<UpdateResponse?> {

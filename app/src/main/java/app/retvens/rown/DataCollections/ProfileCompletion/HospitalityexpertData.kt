@@ -1,6 +1,6 @@
 package app.retvens.rown.DataCollections.ProfileCompletion
 
-    data class JobDetail(
+    data class HospitalityexpertData(
         val userDescription:String,
         val jobtype:String,
         val jobtitle:String,

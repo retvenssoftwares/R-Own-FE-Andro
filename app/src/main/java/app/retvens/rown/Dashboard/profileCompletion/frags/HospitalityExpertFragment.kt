@@ -207,7 +207,7 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
         val start = start.text.toString()
         val end = end.text.toString()
 
-        val data = JobDetail("",type,title,company,start,end)
+        val data = HospitalityexpertData("",type,title,company,start,end)
 
         val sharedPreferences = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
