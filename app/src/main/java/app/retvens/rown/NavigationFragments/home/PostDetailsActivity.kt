@@ -131,7 +131,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
             like = likeSaved
         }
 
-        if (postPic!!.isNotEmpty()) {
+        if (profilePic!!.isNotEmpty()) {
             Glide.with(applicationContext).load(profilePic).into(profile)
         } else {
             profile.setImageResource(R.drawable.svg_user)
