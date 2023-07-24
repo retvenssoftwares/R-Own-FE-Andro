@@ -135,7 +135,7 @@
                 android:paddingVertical="12dp"
                 android:paddingHorizontal="12dp"
                 android:background="@color/black"
-                android:text="Switch to Closed Community"/>
+                android:text=""/>
 
         </androidx.cardview.widget.CardView>
 

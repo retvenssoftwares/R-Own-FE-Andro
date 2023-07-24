@@ -88,6 +88,13 @@ interface FeedsApi {
         @Part("description")description:RequestBody,
     ):Call<UpdateResponse>
 
+    @Multipart
+    @PATCH("updategroup/{groupId}")
+    fun updateGroupStatus(
+        @Path("groupId")groupId:String,
+        @Part("community_type")community_type:RequestBody
+    ):Call<UpdateResponse>
+
 
     @Multipart
     @POST("post/{user_id}")

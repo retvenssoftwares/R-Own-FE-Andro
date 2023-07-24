@@ -130,33 +130,33 @@
                 android:visibility="gone"
                 android:background="@color/grey_40" />
 
-            <LinearLayout
-                android:id="@+id/language"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/language"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_marginHorizontal="20dp"-->
+<!--                android:layout_marginBottom="10dp"-->
+<!--                android:layout_marginTop="10dp">-->
 
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/svg_language_setting"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+<!--                <ImageView-->
+<!--                    android:layout_width="35dp"-->
+<!--                    android:layout_height="35dp"-->
+<!--                    android:src="@drawable/svg_language_setting"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"/>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Language"
-                    android:layout_marginStart="9dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textSize="14dp"
-                    android:textColor="@color/black"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Language"-->
+<!--                    android:layout_marginStart="9dp"-->
+<!--                    android:fontFamily="@font/montserrat_semibold"-->
+<!--                    android:textSize="14dp"-->
+<!--                    android:textColor="@color/black"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

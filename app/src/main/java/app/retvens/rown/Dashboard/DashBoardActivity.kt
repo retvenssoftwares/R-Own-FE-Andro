@@ -34,7 +34,6 @@ import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.MainActivity
 import app.retvens.rown.MesiboApi
 import app.retvens.rown.MessagingModule.UserData
-import app.retvens.rown.MessagingModule.Utils
 import app.retvens.rown.NavigationFragments.*
 import app.retvens.rown.NavigationFragments.eventForUsers.AllEventCategoryActivity
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsPostedByUser
@@ -64,7 +63,7 @@ import retrofit2.Response
 import java.util.*
 
 
-class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener, Mesibo.ConnectionListener {
+class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
 
     companion object number{
         var progress = ""
@@ -72,7 +71,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener, Mesibo.Co
 
 
     lateinit var binding: ActivityDashBoardBinding
-    private lateinit var badgeView : RelativeLayout
+    private lateinit var badgeView:RelativeLayout
     private lateinit var drawerLayout:DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     lateinit var mActivityTitle : String
@@ -105,8 +104,9 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener, Mesibo.Co
         imageView = findViewById(R.id.imageView)
         textView = findViewById(R.id.textView)
         startAnimation()
-        Mesibo.addListener(this)
-         Thread {
+
+
+        Thread {
             // Run whatever background code you want here.
             replaceFragment(HomeFragment())
         }.start()
@@ -195,6 +195,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener, Mesibo.Co
 
         mActivityTitle = title.toString()
 
+        Mesibo.addListener(this)
         val backThread = Thread{
             MesiboApi.init(applicationContext)
             MesiboApi.startMesibo(true)
@@ -727,7 +728,11 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener, Mesibo.Co
                 counter++
             }
         }
-        updateBadgeCount(badgeView,counter)
+        val handler = Handler()
+        handler.postDelayed({
+            updateBadgeCount(badgeView,counter)
+        },200)
+
      }
 
     override fun Mesibo_onMessageStatus(p0: MesiboMessage) {
@@ -735,10 +740,6 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener, Mesibo.Co
     }
 
     override fun Mesibo_onMessageUpdate(p0: MesiboMessage) {
-
-    }
-
-    override fun Mesibo_onConnectionStatus(p0: Int) {
 
     }
 

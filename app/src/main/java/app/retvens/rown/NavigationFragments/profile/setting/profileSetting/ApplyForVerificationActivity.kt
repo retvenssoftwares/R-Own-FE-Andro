@@ -137,25 +137,19 @@ class ApplyForVerificationActivity : AppCompatActivity() {
 
         Log.e("user",user_id)
 
-        val check = RetrofitBuilder.profileCompletion.appliedFor(user_id)
+        val check = RetrofitBuilder.profileCompletion.appliedFor("-zkP5Nee73")
         check.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
-                try {
-                    Log.d("check------------------------", "${response.body()!!.message} ${response.code().toString()}")
-                Toast.makeText(this@ApplyForVerificationActivity, "${response.body()!!.message} ", Toast.LENGTH_SHORT).show()
-                } catch (e:Exception){
-                    Log.d("check------------------------", "CRASHED__________")
-                        Toast.makeText(this@ApplyForVerificationActivity, "Response $user_id Null", Toast.LENGTH_SHORT).show()
-                }
                 if (response.isSuccessful){
-                    if (response.body()!!.message == "applied"){
+                    val response = response.body()!!
+                    Log.e("res",response.message.toString())
+                    if (response.message == "applied"){
                         binding.layout.visibility = View.GONE
                         binding.alreadyApplied.visibility = View.VISIBLE
                     }
-                    Toast.makeText(applicationContext, "${response.body()!!.message}", Toast.LENGTH_SHORT).show()
                 }else{
                     Log.e("error",response.code().toString())
                 }
