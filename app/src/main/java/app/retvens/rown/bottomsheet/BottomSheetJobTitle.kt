@@ -114,7 +114,7 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
 
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                             val filterData = originalData.filter { item ->
-                                item.job_title.contains(p0.toString(),ignoreCase = true)
+                                item.designation_name.contains(p0.toString(),ignoreCase = true)
                             }
 
                             basicInformationAdapter.updateData(filterData)
@@ -137,7 +137,7 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
             }
 
             override fun onJobClick(job: GetJobDataClass) {
-                mListener?.bottomJobTitleClick(job.job_title)
+                mListener?.bottomJobTitleClick(job.designation_name)
                 dismiss()
             }
         })

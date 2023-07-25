@@ -28,7 +28,7 @@ class BasicInformationAdapter(val context: Context, var jobList:List<GetJobDataC
 
     override fun onBindViewHolder(holder: MyViewHolderClass, position: Int) {
        val data = jobList[position]
-        holder.name.text = data.job_title
+        holder.name.text = data.designation_name
 
         holder.itemView.setOnClickListener {
             jobClickListener?.onJobClick(jobList[position])

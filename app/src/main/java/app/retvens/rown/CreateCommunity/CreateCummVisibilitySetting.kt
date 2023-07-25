@@ -224,7 +224,9 @@ class CreateCummVisibilitySetting : AppCompatActivity(), BottomSheetCountryState
     }
 
     override fun selectlocation(latitude: String, longitude: String) {
-        latitudes = longitude
+        latitudes = latitude
         longitudes = longitude
+        Log.e("lat",latitude.toString())
+        Log.e("lat",longitude.toString())
     }
 }

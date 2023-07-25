@@ -180,6 +180,8 @@ class CommunityDetailsActivity : AppCompatActivity(){
 
                 googleMap = p0
                 val location = LatLng( latitude, longitude)
+                Log.e("lat",latitude.toString())
+                Log.e("long",longitude.toString())
                 googleMap.addMarker(MarkerOptions().position(location).title("location"))
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15f))
             }

@@ -196,7 +196,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                     android.Manifest.permission.CAMERA
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                openGallery()
+                openBottomCameraSheet()
             } else {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
@@ -209,7 +209,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                     android.Manifest.permission.CAMERA
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                openGallery()
+                openBottomCameraSheet()
             } else {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
@@ -222,7 +222,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                     android.Manifest.permission.CAMERA
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                openGallery()
+                openBottomCameraSheet()
             } else {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
@@ -282,7 +282,8 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                 websiteLayout.error = "Please enter an valid website link"
             } else if(imagesList.isEmpty()){
                 Toast.makeText(context, "Please select at least one portfolio image", Toast.LENGTH_SHORT).show()
-            } else {
+            }
+            else {
                 brandNameLayout.isErrorEnabled = false
                 brandDescriptionLayout.isErrorEnabled = false
                 portfolioLayout.isErrorEnabled = false
@@ -296,8 +297,12 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                 val image = progressDialog.findViewById<ImageView>(R.id.imageview)
                 Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
                 progressDialog.show()
+                  if (imgUri1 == null && imgUri2 == null && imgUri3 == null){
+                    Toast.makeText(requireContext(),"Add All Gallery Images",Toast.LENGTH_SHORT).show()
+                      progressDialog.dismiss()
+                     uploadData()
+                }
 
-                uploadData()
             }
         }
     }

@@ -29,6 +29,12 @@ import app.retvens.rown.databinding.ActivityOpenCommunityDetailsBinding
 import app.retvens.rown.viewAll.communityDetails.CommunityMediaFragment
 import app.retvens.rown.viewAll.communityDetails.CommunityUsersFragment
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,6 +48,10 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
     lateinit var binding : ActivityOpenCommunityDetailsBinding
     private  var number:ArrayList<String> = ArrayList()
     private  var userId:ArrayList<String> = ArrayList()
+    private var latitude:Double = 0.0
+    var longitude:Double = 0.0
+    private lateinit var googleMap: GoogleMap
+    private lateinit var mMapFragment: SupportMapFragment
     var isBusinessVisible = true
     private lateinit var progressDialog:Dialog
 
@@ -94,6 +104,25 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        mMapFragment = SupportMapFragment.newInstance()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.map_show, mMapFragment)
+            .commit()
+
+        mMapFragment.getMapAsync(object : OnMapReadyCallback{
+            override fun onMapReady(p0: GoogleMap) {
+                googleMap = p0
+                val location = LatLng( latitude, longitude)
+                Log.e("lat",latitude.toString())
+                Log.e("long",longitude.toString())
+                googleMap.addMarker(MarkerOptions().position(location).title("location"))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15f))
+            }
+
+        })
+
+
+
         getCommunityDetails(groupId.toString())
     }
 
@@ -120,7 +149,8 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
                     val date = convertTimestampToFormattedDate(response.date_added)
 
                     binding.communityCreatedBy.text = "Created by ${response.creator_name} | $date"
-
+                    latitude = response.latitude.toDouble()
+                    longitude = response.longitude.toDouble()
 
                 }
 

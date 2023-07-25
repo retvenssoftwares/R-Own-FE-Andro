@@ -171,9 +171,8 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
 
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                             val filterData = originalData.filter { item ->
-                                item.service_name.contains(p0.toString(),ignoreCase = true)
+                                (item.service_name ?: "").contains(p0.toString(), ignoreCase = true)
                             }
-
                             vendorServicesAdapter.updateData(filterData)
                         }
 

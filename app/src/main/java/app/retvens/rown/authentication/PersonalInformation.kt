@@ -588,8 +588,14 @@ class PersonalInformation : AppCompatActivity() {
             if (resultCode == RESULT_OK) {
                 val croppedImage = UCrop.getOutput(data!!)
                 Log.e("error",croppedImage.toString())
-                croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage!!, this)
-                binding.profile.setImageURI(croppedImageUri)
+                try {
+                    croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage!!, this)
+                    binding.profile.setImageURI(croppedImageUri)
+                }catch (e:NullPointerException){
+                    binding.profile.setImageURI(data.data)
+                    cameraImageUri = data.data!!
+                }
+
 
             } else if (resultCode == UCrop.RESULT_ERROR) {
                 Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show()

@@ -152,7 +152,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             if (post.verificationStatus == "true") {
                 binding.verification.visibility = View.VISIBLE
             } else if (post.verificationStatus == "false") {
-                binding.verification.visibility = View.VISIBLE
+                binding.verification.visibility = View.GONE
             }
 
             if (post.isSaved == "saved") {

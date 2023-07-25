@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
@@ -185,22 +186,28 @@ fun cropProfileImage(imageUri: Uri, context: Context) {
 fun compressImage(imageUri: Uri, context: Context): Uri {
     var compressed : Uri? = null
     try {
-        val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver,imageUri)
-        val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-        val fileName = String.format("%d.jpg",System.currentTimeMillis())
-        val finalFile = File(path,fileName)
-        val fileOutputStream = FileOutputStream(finalFile)
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
-        fileOutputStream.flush()
-        fileOutputStream.close()
+        try {
+            val imageBitmap: Bitmap =
+                MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
+            val path: File =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val fileName = String.format("%d.jpg", System.currentTimeMillis())
+            val finalFile = File(path, fileName)
+            val fileOutputStream = FileOutputStream(finalFile)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 30, fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
 
-        compressed = Uri.fromFile(finalFile)
+            compressed = Uri.fromFile(finalFile)
 
-        val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-        intent.setData(compressed)
-        context.sendBroadcast(intent)
-    }catch (e: IOException){
-        e.printStackTrace()
+            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            intent.setData(compressed)
+            context.sendBroadcast(intent)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }catch (e:NullPointerException){
+        Log.e("error",e.message.toString())
     }
     return compressed!!
 }
