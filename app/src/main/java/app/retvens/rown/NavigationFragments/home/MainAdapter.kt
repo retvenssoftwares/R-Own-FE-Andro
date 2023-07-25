@@ -314,6 +314,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 intent.putExtra("role", banner.Role)
                 intent.putExtra("user_id", banner.user_id)
                 intent.putExtra("commentStatus", "Connected")
+                intent.putExtra("Can_comment", "Anyone")
                 context.startActivity(intent)
             }
 

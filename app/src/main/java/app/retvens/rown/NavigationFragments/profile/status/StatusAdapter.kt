@@ -123,7 +123,10 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context,val co
                     layoutOneViewHolder.verification.visibility = View.VISIBLE
                 }
 
-                if (commentStatus == "Connected"){
+                if (item.Can_comment == "Anyone") {
+                    layoutOneViewHolder.commentButton.visibility = View.VISIBLE
+                    layoutOneViewHolder.commentCount.visibility = View.VISIBLE
+                } else if (commentStatus == "Connected" && item.Can_comment == "Connections"){
                     layoutOneViewHolder.commentButton.visibility = View.VISIBLE
                     layoutOneViewHolder.commentCount.visibility = View.VISIBLE
                 } else {
@@ -240,7 +243,10 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context,val co
                     layoutTwoViewHolder.verification.visibility = View.VISIBLE
                 }
 
-                if (commentStatus == "Connected"){
+                if (item.Can_comment == "Anyone") {
+                    layoutTwoViewHolder.commentButton.visibility = View.VISIBLE
+                    layoutTwoViewHolder.commentCount.visibility = View.VISIBLE
+                } else if (commentStatus == "Connected" && item.Can_comment == "Connections"){
                     layoutTwoViewHolder.commentButton.visibility = View.VISIBLE
                     layoutTwoViewHolder.commentCount.visibility = View.VISIBLE
                 } else {

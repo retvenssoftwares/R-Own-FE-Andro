@@ -118,9 +118,13 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         val savedFrag = intent.getStringExtra("savedFrag")
 
         val commentStatus = intent.getStringExtra("commentStatus")
+        val Can_comment = intent.getStringExtra("Can_comment")
 //        Toast.makeText(applicationContext, "$savedFrag", Toast.LENGTH_SHORT).show()
 
-        if (commentStatus == "Connected") {
+        if (Can_comment == "Anyone") {
+            commentButtom.visibility = View.VISIBLE
+            commentC.visibility = View.VISIBLE
+        } else if (commentStatus == "Connected" && Can_comment == "Connections"){
             commentButtom.visibility = View.VISIBLE
             commentC.visibility = View.VISIBLE
         } else {

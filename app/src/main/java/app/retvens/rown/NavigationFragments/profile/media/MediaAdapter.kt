@@ -102,6 +102,7 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>, priva
             intent.putExtra("role",media.Role)
             intent.putExtra("user_id",media.user_id)
             intent.putExtra("commentStatus",commentStatus)
+            intent.putExtra("Can_comment",media.Can_comment)
             context.startActivity(intent)
         }
     }
