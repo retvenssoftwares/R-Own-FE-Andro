@@ -87,7 +87,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
     var address =  ""
     var userName = ""
     var role = ""
-
+    var seeStatus = ""
     var userID = ""
     var user_id = ""
 
@@ -265,7 +265,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
 
             selected = 1
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userID, false, nameProfile))
+            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userID, false, nameProfile,seeStatus))
             transaction.commit()
         }
         polls.setOnClickListener {
@@ -438,7 +438,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                     bio.text = response.profiledata.userBio
                     websiteLink.text = response.profile.hotelOwnerInfo.websiteLink
                     userName = response.profiledata.User_name
-
+                    seeStatus = response.connectionStatus
                     media.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
                     polls.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
                     status.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
@@ -446,7 +446,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
 
                     selected = 1
                     val transaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
+                    transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile,seeStatus))
                     transaction.commit()
                     connCount.text = response.connection_Count.toString()
                     postCount.text = response.post_count.toString()

@@ -263,7 +263,6 @@ class BottomSheetEditExperience(val role:String) : BottomSheetDialogFragment(),
                     progressDialog.dismiss()
                 }
             }
-
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                 Log.e("error",t.message.toString())
                 progressDialog.dismiss()

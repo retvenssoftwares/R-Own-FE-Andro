@@ -60,7 +60,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
     lateinit var postCount:TextView
     lateinit var connCont:TextView
     lateinit var requestCont:TextView
-
+    var seeStatus = ""
     var profilePic = ""
     var verificationStatus = ""
 
@@ -122,7 +122,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         refresh.setOnRefreshListener {
             if (selected == 1) {
                 getSelfUserProfile(user_id,user_id)
-                val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
+                val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString(),seeStatus)
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             } else if (selected == 2){
@@ -150,7 +150,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         }
         name.text = profileName
 
-        val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
+        val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString(),seeStatus)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -179,7 +179,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
 
             selected = 1
-            val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
+            val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString(),seeStatus)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -218,7 +218,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                     val response = response.body()!!
 
                     profilePic = response.data.profile.Profile_pic
-
+                    seeStatus = response.data.connectionStatus
                     if (profilePic.isNotEmpty()) {
                         Glide.with(requireContext()).load(profilePic).into(profile)
                     } else{

@@ -30,7 +30,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MediaFragment(val userId: String, val isOwner : Boolean, val username : String) : Fragment(), MediaAdapter.OnItemClickListener {
+class MediaFragment(val userId: String, val isOwner : Boolean, val username : String,val status:String) : Fragment(), MediaAdapter.OnItemClickListener {
 
     lateinit var mediaRecyclerView: RecyclerView
     lateinit var mediaAdapter: MediaAdapter
@@ -141,22 +141,30 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
 
                     response.forEach { postsDataClass ->
                         try {
-                            val postsToDisplay = postsDataClass.posts.filter { it.display_status == "1" }
-                            if (postsToDisplay.isEmpty()) {
-                                // No posts to display
-//                                notPosted.visibility = View.VISIBLE
-                            } else {
-//                                if (postsToDisplay.size >= 10){
-//                                }
-                                isLoading = false
-                                currentPage++
-                                // Display posts using the MediaAdapter
-                                list.addAll(postsToDisplay)
-
-                                mediaAdapter.removePostsFromList(postsDataClass.posts)
-                                mediaAdapter.notifyDataSetChanged()
-                                mediaAdapter.setOnItemClickListener(this@MediaFragment)
+                            if (status == "Connected"){
+                                postsDataClass.posts.forEach {
+                                    if (it.display_status == "1"){
+                                        list.add(it)
+                                    }
+                                }
+                            }else{
+                                postsDataClass.posts.forEach {
+                                    if (it.display_status == "1" && it.Can_See == "Anyone"){
+                                        list.add(it)
+                                    }
+                                }
                             }
+
+
+                            isLoading = false
+                            currentPage++
+                            // Display posts using the MediaAdapter
+
+
+                            mediaAdapter.removePostsFromList(postsDataClass.posts)
+                            mediaAdapter.notifyDataSetChanged()
+                            mediaAdapter.setOnItemClickListener(this@MediaFragment)
+
                         } catch (e: NullPointerException) {
                             // Handle NullPointerException
                             if (currentPage == 1) {

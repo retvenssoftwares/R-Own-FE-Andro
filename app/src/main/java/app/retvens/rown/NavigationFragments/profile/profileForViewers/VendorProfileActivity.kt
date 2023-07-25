@@ -87,7 +87,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
 
     var userId = ""
     var user_id = ""
-
+    var seeStatus = ""
     var selected = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -231,7 +231,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
             selected = 1
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userId, false, name.text.toString()))
+            transaction.replace(R.id.child_profile_fragments_container, MediaFragment(userId, false, name.text.toString(),seeStatus))
             transaction.commit()
         }
         services.setOnClickListener {
@@ -399,11 +399,11 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
                         polls.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
                         status.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
                         services.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
-
+                        seeStatus = response.connectionStatus
                         selected = 1
 
                         val transaction = supportFragmentManager.beginTransaction()
-                        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, name.text.toString()))
+                        transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, name.text.toString(),seeStatus))
                         transaction.commit()
 
                         connCount.text = response.connectioncount.toString()

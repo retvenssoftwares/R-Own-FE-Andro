@@ -74,7 +74,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
     lateinit var viewPP: CardView
 
     var profilePic = ""
-
+    var seeStatus = ""
     var selected = 1
 
     override fun onCreateView(
@@ -156,7 +156,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         refresh.setOnRefreshListener {
             if (selected == 1) {
                 getSelfUserProfile(user_id,user_id)
-                val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
+                val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString(),seeStatus)
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             } else if (selected == 2){
@@ -177,7 +177,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
         getSelfUserProfile(user_id,user_id)
 
-        val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
+        val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString(),seeStatus)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -209,7 +209,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
             selected = 1
 
-            val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString())
+            val childFragment: Fragment = MediaFragment(user_id, true, userName.text.toString(),seeStatus)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -265,7 +265,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                     if (verificationStatus != "false"){
                         verification.visibility = View.VISIBLE
                     }
-
+                    seeStatus = response.connectionStatus
                     postCount.text = response.postcount.toString()
                     connCont.text = response.connectioncount.toString()
                     requestCont.text = response.requestcount.toString()

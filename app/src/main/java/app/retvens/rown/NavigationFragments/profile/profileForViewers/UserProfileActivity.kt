@@ -83,7 +83,7 @@ class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnB
     var address =  ""
     var username = ""
     var userrole = ""
-
+    var seeStatus = ""
     var userID = ""
     var user_id = ""
 
@@ -248,7 +248,7 @@ class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnB
 
             selected = 1
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
+            transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile,seeStatus))
             transaction.commit()
         }
         status.setOnClickListener {
@@ -393,10 +393,10 @@ class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnB
                     media.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
                     polls.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
                     status.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.grey_5))
-
+                    seeStatus = response.data.connectionStatus
                     selected = 1
                     val transaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile))
+                    transaction.replace(R.id.child_profile_fragments_container,MediaFragment(userID, false, nameProfile,seeStatus))
                     transaction.commit()
 
                     connCount.text = response.data.connCountLength.toString()

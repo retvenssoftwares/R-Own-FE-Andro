@@ -79,7 +79,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     private lateinit var progressDialog: Dialog
 
     lateinit var viewPP: CardView
-
+    var seeStatus = ""
     var profilePic = ""
     var verificationStatus = ""
 
@@ -152,7 +152,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         refresh.setOnRefreshListener {
             if (selected == 1) {
                 getOwnerProfile(user_id,user_id)
-                val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString())
+                val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString(),seeStatus)
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             } else if (selected == 2){
@@ -185,7 +185,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
 
 
-        val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString())
+        val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString(),seeStatus)
         val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
 
@@ -219,7 +219,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
             selected = 1
 
-            val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString())
+            val childFragment: Fragment = MediaFragment(user_id, true, username.text.toString(),seeStatus)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -298,7 +298,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                 progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
-
+                    seeStatus = response.connectionStatus
                     profilePic = response.profiledata.Profile_pic
                     if (profilePic.isNotEmpty()) {
                         Glide.with(requireContext()).load(profilePic).into(profile)

@@ -136,7 +136,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
             }
         }
 
-        generateDeviceToken(phone)
+
 
 
         binding.textResendOtp.setOnClickListener {
@@ -337,7 +337,6 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
             }
         })
 
-
     }
     private fun searchUser() {
 //        val p = "+91" +phoneNumber.toString()
@@ -348,14 +347,13 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                 response: Response<UserProfileResponse?>
             ) {
                 if (response.isSuccessful) {
-
-
                 val user_id = response.body()?.user_id.toString()
                 val message = response.body()?.message.toString()
                 saveUserId(applicationContext, user_id)
                 savePhoneNo(applicationContext, phone)
 //                Toast.makeText(applicationContext,response.body().toString(),Toast.LENGTH_SHORT).show()
                 Log.e("search", response.body().toString())
+                Log.e("message",response.body()!!.message.toString())
                 moveTo(applicationContext, "MoveToPI")
                 val intent = Intent(applicationContext, PersonalInformation::class.java)
                 intent.putExtra("phone", phone)
@@ -364,6 +362,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
                 finish()
+                    generateDeviceToken(phone)
             }else{
                         Log.e("error",response.message().toString())
                 }
