@@ -151,7 +151,7 @@ class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnB
                 transaction.commit()
             } else if (selected == 3){
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID, false, nameProfile))
+                transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID, false, nameProfile, seeStatus))
                 transaction.commit()
             }
             refresh.isRefreshing = false
@@ -258,7 +258,7 @@ class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnB
 
             selected = 3
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID, false, nameProfile))
+            transaction.replace(R.id.child_profile_fragments_container,StatusFragment(userID, false, nameProfile, seeStatus))
             transaction.commit()
         }
 

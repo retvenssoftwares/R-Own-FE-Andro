@@ -23,7 +23,7 @@ import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context,val commentStatus:String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_LAYOUT_ONE = 1
     private val VIEW_TYPE_LAYOUT_TWO = 2
@@ -121,6 +121,14 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
 
                 if (item.verificationStatus != "false"){
                     layoutOneViewHolder.verification.visibility = View.VISIBLE
+                }
+
+                if (commentStatus == "Connected"){
+                    layoutOneViewHolder.commentButton.visibility = View.VISIBLE
+                    layoutOneViewHolder.commentCount.visibility = View.VISIBLE
+                } else {
+                    layoutOneViewHolder.commentButton.visibility = View.GONE
+                    layoutOneViewHolder.commentCount.visibility = View.GONE
                 }
 
                 if (item.User_name.isNotEmpty()){
@@ -230,6 +238,14 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context) : Rec
 
                 if (item.verificationStatus != "false"){
                     layoutTwoViewHolder.verification.visibility = View.VISIBLE
+                }
+
+                if (commentStatus == "Connected"){
+                    layoutTwoViewHolder.commentButton.visibility = View.VISIBLE
+                    layoutTwoViewHolder.commentCount.visibility = View.VISIBLE
+                } else {
+                    layoutTwoViewHolder.commentButton.visibility = View.GONE
+                    layoutTwoViewHolder.commentCount.visibility = View.GONE
                 }
 
                 if (item.User_name.isNotEmpty()){

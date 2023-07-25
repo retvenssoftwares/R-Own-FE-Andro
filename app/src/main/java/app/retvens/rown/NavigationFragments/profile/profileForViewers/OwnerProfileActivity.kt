@@ -148,7 +148,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                 transaction.commit()
         } else if (selected == 3){
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID, false, nameProfile))
+                transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID, false, nameProfile, seeStatus))
                 transaction.commit()
         } else if (selected == 4){
                 val transaction = supportFragmentManager.beginTransaction()
@@ -287,7 +287,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
 
             selected = 3
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID, false, nameProfile))
+            transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userID, false, nameProfile, seeStatus))
             transaction.commit()
         }
         hotels.setOnClickListener {

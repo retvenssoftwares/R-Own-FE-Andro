@@ -164,7 +164,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             } else if (selected == 3){
-                val childFragment: Fragment = StatusFragment(user_id, true, "")
+                val childFragment: Fragment = StatusFragment(user_id, true, "", "Connected")
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             } else if (selected == 4){
@@ -233,7 +233,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
             selected = 3
 
-            val childFragment: Fragment = StatusFragment(user_id, true, "")
+            val childFragment: Fragment = StatusFragment(user_id, true, "", "Connected")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

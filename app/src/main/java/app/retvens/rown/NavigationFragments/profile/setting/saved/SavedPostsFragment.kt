@@ -61,7 +61,7 @@ class SavedPostsFragment : Fragment() {
         mediaRecyclerView.layoutManager = GridLayoutManager(context,3)
         mediaRecyclerView.setHasFixedSize(true)
 
-        mediaAdapter = MediaAdapter(requireContext(),postList, true)
+        mediaAdapter = MediaAdapter(requireContext(),postList, true, "Connected")
         mediaRecyclerView.adapter = mediaAdapter
 
         progress = view.findViewById(R.id.progress)

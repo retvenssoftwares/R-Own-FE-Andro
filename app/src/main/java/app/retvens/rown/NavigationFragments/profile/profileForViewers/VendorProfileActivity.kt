@@ -147,7 +147,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
             } else if (selected == 3){
 
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId, false, name.text.toString()))
+                transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId, false, name.text.toString(), seeStatus))
                 transaction.commit()
             } else if (selected == 4){
                 val transaction = supportFragmentManager.beginTransaction()
@@ -255,7 +255,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
             selected = 3
 
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId, false, name.text.toString()))
+            transaction.replace(R.id.child_profile_fragments_container, StatusFragment(userId, false, name.text.toString(), seeStatus))
             transaction.commit()
         }
 

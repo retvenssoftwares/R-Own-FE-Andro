@@ -61,7 +61,7 @@ class ExplorePostsFragment : Fragment() {
 
         mediaRecyclerView.setNestedScrollingEnabled(true)
 
-        mediaAdapter = MediaAdapter(requireContext(),postList, false)
+        mediaAdapter = MediaAdapter(requireContext(),postList, false, "Connected")
         mediaRecyclerView.adapter = mediaAdapter
         mediaAdapter.removePostsFromList(postList)
         mediaAdapter.notifyDataSetChanged()
@@ -232,11 +232,11 @@ class ExplorePostsFragment : Fragment() {
 
                     response.forEach { postsDataClass ->
                         if (postsDataClass.message == "you have reached the end"){
-                            mediaAdapter = MediaAdapter(requireContext(), ArrayList(),false)
+                            mediaAdapter = MediaAdapter(requireContext(), ArrayList(),false, "Connected")
                             mediaRecyclerView.adapter = mediaAdapter
                             mediaAdapter.notifyDataSetChanged()
                         }else{
-                            mediaAdapter = MediaAdapter(requireContext(), postsDataClass.posts as ArrayList<PostItem>,false)
+                            mediaAdapter = MediaAdapter(requireContext(), postsDataClass.posts as ArrayList<PostItem>,false, "Connected")
                             mediaRecyclerView.adapter = mediaAdapter
                             mediaAdapter.removePostsFromList(postsDataClass.posts)
                             mediaAdapter.notifyDataSetChanged()
@@ -252,7 +252,7 @@ class ExplorePostsFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<PostsDataClass>?>, t: Throwable) {
-                mediaAdapter = MediaAdapter(requireContext(), ArrayList(), false)
+                mediaAdapter = MediaAdapter(requireContext(), ArrayList(), false, "Connected")
                 mediaAdapter.notifyDataSetChanged()
             }
         })

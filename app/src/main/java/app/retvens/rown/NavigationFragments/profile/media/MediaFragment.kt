@@ -70,7 +70,7 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
 
-        mediaAdapter = MediaAdapter(requireContext(), list, false)
+        mediaAdapter = MediaAdapter(requireContext(), list, false, status)
         mediaRecyclerView.adapter = mediaAdapter
 
         mediaRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){

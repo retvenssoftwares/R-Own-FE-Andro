@@ -29,7 +29,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StatusFragment(val userId: String, val isOwner : Boolean, val username : String) : Fragment() {
+class StatusFragment(val userId: String, val isOwner : Boolean, val username : String,val status:String) : Fragment() {
 
     lateinit var statusRecycler : RecyclerView
     lateinit var statusAdapter: StatusAdapter
@@ -69,7 +69,7 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
         progress = view.findViewById(R.id.progress)
         shimmerFrameLayout = view.findViewById(R.id.shimmer_tasks_view_container)
 
-        statusAdapter = StatusAdapter(list, requireContext())
+        statusAdapter = StatusAdapter(list, requireContext(), status)
         statusRecycler.adapter = statusAdapter
 
 

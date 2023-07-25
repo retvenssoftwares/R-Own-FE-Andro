@@ -130,7 +130,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             } else if (selected == 3){
-                val childFragment: Fragment = StatusFragment(user_id, true, "")
+                val childFragment: Fragment = StatusFragment(user_id, true, "", "Connected")
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             }
@@ -189,7 +189,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
 
             selected = 3
-            val childFragment: Fragment = StatusFragment(user_id, true, "")
+            val childFragment: Fragment = StatusFragment(user_id, true, "", "Connected")
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
