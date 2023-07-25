@@ -902,11 +902,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             }
 
 
-//            if (banner.Profile_pic.isNotEmpty()) {
-//                Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
-//            } else {
-                binding.postProfile.setImageResource(R.drawable.svg_user)
-//            }
+            try {
+                if (banner.Profile_pic.isNotEmpty()) {
+                    Glide.with(context).load(banner.Profile_pic).into(binding.postProfile)
+                } else {
+                    binding.postProfile.setImageResource(R.drawable.svg_user)
+                }
+            } catch (e:NullPointerException){}
 
             if (banner.location.isNotEmpty()) {
                 binding.location.text = banner.location
@@ -1027,11 +1029,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             var like = true
             var operatioin = "push"
 
-//            if (post.Profile_pic.isNotEmpty()) {
-//                Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
-//            } else {
-//                binding.postProfile.setImageResource(R.drawable.svg_user)
-//            }
+            try {
+                if (post.Profile_pic.isNotEmpty()) {
+                    Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+                } else {
+                    binding.postProfile.setImageResource(R.drawable.svg_user)
+                }
+            } catch (e:NullPointerException){}
 
 //            if (post.User_name.isNotEmpty()) {
 //                binding.userIdOnComment.text = post.User_name
@@ -1243,6 +1247,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.userNamePost.text = post.Full_name
             binding.postUserType.text = post.User_name
 
+            try {
+                if (post.Profile_pic.isNotEmpty()) {
+                    Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+                } else {
+                    binding.postProfile.setImageResource(R.drawable.svg_user)
+                }
+            } catch (e:NullPointerException){}
+
             if (banner.caption.length > 150) {
                 binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 150) + "..." + "<font color='black'> <b>Read More</b></font>")
             } else {
@@ -1308,6 +1320,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.userNamePost.text = post.Full_name
             binding.postUserType.text = post.User_name
+
+            try {
+                if (post.Profile_pic.isNotEmpty()) {
+                    Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
+                } else {
+                    binding.postProfile.setImageResource(R.drawable.svg_user)
+                }
+            } catch (e:NullPointerException){}
 
             if (banner.caption.length > 100) {
                 binding.titleStatus.text = Html.fromHtml(banner.caption.substring(0, 100) + "..." + "<font color='black'> <b>Read More</b></font>")

@@ -155,6 +155,15 @@ class MediaFragment(val userId: String, val isOwner : Boolean, val username : St
                                 }
                             }
 
+                            if (list.isEmpty()){
+                                notPosted.visibility = View.VISIBLE
+                                empty.visibility = View.VISIBLE
+                                if (isOwner) {
+                                    empty.text = "You have not posted anything yet."
+                                } else {
+                                    empty.text = "$username have not posted anything yet."
+                                }
+                            }
 
                             isLoading = false
                             currentPage++

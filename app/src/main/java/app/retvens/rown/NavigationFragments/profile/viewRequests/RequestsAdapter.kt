@@ -38,6 +38,7 @@ class RequestsAdapter(var listS : GetAllRequestDataClass, val context: Context) 
         val title = itemView.findViewById<TextView>(R.id.suggetions_notification_name)
         val accept = itemView.findViewById<TextView>(R.id.suggetions_notification_connect)
         val reject = itemView.findViewById<TextView>(R.id.suggetions_notification_view)
+        val role = itemView.findViewById<TextView>(R.id.suggetions_notification_role)
         val profile = itemView.findViewById<ShapeableImageView>(R.id.suggetions_notification_profile)
         val verification = itemView.findViewById<ImageView>(R.id.verification)
     }
@@ -57,6 +58,7 @@ class RequestsAdapter(var listS : GetAllRequestDataClass, val context: Context) 
         val data = listS.conns[position]
 
         holder.title.text = data.Full_name
+        holder.role.text = data.Role
         holder.accept.text = "Accept"
         holder.reject.text = "Reject"
 

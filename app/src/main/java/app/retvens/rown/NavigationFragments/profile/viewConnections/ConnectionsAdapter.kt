@@ -29,6 +29,7 @@ class ConnectionsAdapter(var listS : ArrayList<Connections>, val context: Contex
 
     class ConnectionsViewHolder(itemView: View) : ViewHolder(itemView){
         val title = itemView.findViewById<TextView>(R.id.suggetions_notification_name)
+        val role = itemView.findViewById<TextView>(R.id.suggetions_notification_role)
         val interact = itemView.findViewById<TextView>(R.id.suggetions_notification_connect)
         val remove = itemView.findViewById<TextView>(R.id.suggetions_notification_view)
         val profile = itemView.findViewById<ShapeableImageView>(R.id.suggetions_notification_profile)
@@ -56,6 +57,7 @@ class ConnectionsAdapter(var listS : ArrayList<Connections>, val context: Contex
         }
 
         holder.title.text = data.Full_name
+        holder.role.text = data.Role
         holder.interact.text = "INTERACT"
         holder.remove.text = "REMOVE"
 

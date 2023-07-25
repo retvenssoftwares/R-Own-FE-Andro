@@ -158,6 +158,8 @@ class UserDetailsActivity : AppCompatActivity(),
                             if (response.Role == "Normal User"){
                                 Log.e("res", response.normalUserInfo.toString())
                                 experienceAdapter = ExperienceAdapter(this@UserDetailsActivity,response, isOwner, "Normal User")
+                                binding.recyclerExperience.adapter = experienceAdapter
+                                experienceAdapter.notifyDataSetChanged()
                                 experienceAdapter.setOnFilterClickListener(this)
                             } else if (response.Role == "Hospitality Expert"){
                                 Log.e("res", response.hospitalityExpertInfo.toString())
@@ -166,9 +168,6 @@ class UserDetailsActivity : AppCompatActivity(),
                                 experienceAdapter.notifyDataSetChanged()
                                 experienceAdapter.setOnFilterClickListener(this)
                             }
-//                        binding.recyclerExperience.adapter = experienceAdapter
-//                        experienceAdapter.notifyDataSetChanged()
-
                             if (response.normalUserInfo.isEmpty() && response.hospitalityExpertInfo.isEmpty()) {
                                 binding.expError.visibility = View.VISIBLE
                             }
