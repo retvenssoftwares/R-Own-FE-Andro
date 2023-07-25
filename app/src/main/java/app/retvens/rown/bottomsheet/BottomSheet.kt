@@ -43,6 +43,9 @@ class BottomSheet : BottomSheetDialogFragment() {
     private lateinit var popularUsersAdapter: PopularUsersAdapter
     private  var userList: List<MesiboUsersData> = emptyList()
 
+    lateinit var contactList : ArrayList<MatchedContact>
+    lateinit var allProfiles : ArrayList<Post>
+
     private lateinit var usersProfileAdapter: UsersProfileAdapter
 
     lateinit var recycler : RecyclerView
@@ -80,6 +83,9 @@ class BottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        contactList = ArrayList()
+        allProfiles = ArrayList()
+
         connectionsSerch = view.findViewById(R.id.connections_search)
         empty = view.findViewById(R.id.empty)
 
@@ -88,6 +94,13 @@ class BottomSheet : BottomSheetDialogFragment() {
 
         recyclerAll = view.findViewById<RecyclerView>(R.id.popularUsers_recycler2)
             recyclerAll.layoutManager = GridLayoutManager(context,2)
+
+
+        usersProfileAdapter = UsersProfileAdapter(requireContext(), contactList)
+        recycler.adapter = usersProfileAdapter
+
+        explorePeopleAdapter = BottomSheetAdapterPeople(requireContext(), allProfiles)
+        recyclerAll.adapter = explorePeopleAdapter
 
 //            popularUsersAdapter = PopularUsersAdapter(requireContext(), emptyList())
 //            recycler.adapter = popularUsersAdapter
@@ -208,17 +221,18 @@ class BottomSheet : BottomSheetDialogFragment() {
                         val response = response.body()!!
                         if (response.message == "Matches found") {
 
-                            response.matchedContacts
+                           val data = response.matchedContacts
 
                                 try {
-                                    usersProfileAdapter = UsersProfileAdapter(requireContext(),
-                                        response.matchedContacts as ArrayList<MatchedContact>
-                                    )
+                                    data.forEach {
+                                        if (it.matchedNumber.Full_name.isNotEmpty()){
+                                            contactList.add(it)
+                                        }
+                                    }
                                     usersProfileAdapter.removeUser(response.matchedContacts)
                                     usersProfileAdapter.removeUsersFromList(response.matchedContacts)
                                     usersProfileAdapter.removeEmptyNameUser(response.matchedContacts)
                                     usersProfileAdapter.notifyDataSetChanged()
-                                    recycler.adapter = usersProfileAdapter
 
                                     connectionsSerch.addTextChangedListener(object : TextWatcher {
                                         override fun beforeTextChanged(
@@ -305,14 +319,15 @@ class BottomSheet : BottomSheetDialogFragment() {
                             response.forEach { explorePeopleDataClass ->
 
                                 try {
-                                    explorePeopleAdapter = BottomSheetAdapterPeople(requireContext(),
-                                        explorePeopleDataClass.posts as ArrayList<Post>
-                                    )
+                                    explorePeopleDataClass.posts.forEach {
+                                        if (it.Full_name.isNotEmpty()){
+                                            allProfiles.add(it)
+                                        }
+                                    }
                                     explorePeopleAdapter.removeUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeUsersFromList(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.removeEmptyNameUser(explorePeopleDataClass.posts)
                                     explorePeopleAdapter.notifyDataSetChanged()
-                                    recyclerAll.adapter = explorePeopleAdapter
 
                                     connectionsSerch.addTextChangedListener(object : TextWatcher {
                                         override fun beforeTextChanged(

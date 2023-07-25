@@ -18,6 +18,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.utils.profileComStatus
@@ -31,7 +32,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BioGenderFragment : Fragment() {
+class BioGenderFragment : Fragment(), BackHandler {
 
     private lateinit var profile: ShapeableImageView
     private lateinit var name: TextView
@@ -185,5 +186,14 @@ class BioGenderFragment : Fragment() {
             }
         })
 
+    }
+    override fun handleBackPressed(): Boolean {
+
+        val fragment = UsernameFragment()
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        transaction?.replace(R.id.fragment_username,fragment)
+        transaction?.commit()
+
+        return true
     }
 }

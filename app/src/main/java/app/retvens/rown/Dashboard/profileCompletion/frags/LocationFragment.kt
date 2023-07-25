@@ -371,7 +371,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
 
     override fun handleBackPressed(): Boolean {
 
-        val fragment = UsernameFragment()
+        val fragment = BioGenderFragment()
         val transaction = activity?.supportFragmentManager?.beginTransaction()
         transaction?.replace(R.id.fragment_username,fragment)
         transaction?.commit()
