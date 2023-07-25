@@ -69,9 +69,11 @@ class UserName : AppCompatActivity() {
     override fun onBackPressed() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_username)
         if (currentFragment is BackHandler) {
-            val intent = Intent(this, DashBoardActivity::class.java)
-            startActivity(intent)
-            finish()
+//            val intent = Intent(this, DashBoardActivity::class.java)
+//            startActivity(intent)
+//            finish()
+
+            (currentFragment as BackHandler).handleBackPressed()
         } else {
             super.onBackPressed()
         }

@@ -227,25 +227,28 @@ class VendorDetailsActivity : AppCompatActivity() {
                                 image1 = ""
                                 image2 = ""
                                 image3 = ""
-                                binding.img3.visibility = View.GONE
+                                binding.img1.visibility = View.GONE
                                 binding.img2.visibility = View.GONE
                                 binding.img3.visibility = View.GONE
+                                binding.portfolioImageError.visibility = View.VISIBLE
                             }
                         } catch (e: NullPointerException) {
                             image1 = ""
                             image2 = ""
                             image3 = ""
-                            binding.img3.visibility = View.GONE
+                            binding.img1.visibility = View.GONE
                             binding.img2.visibility = View.GONE
                             binding.img3.visibility = View.GONE
+                            binding.portfolioImageError.visibility = View.VISIBLE
                         }
                     } else {
                         image1 = ""
                         image2 = ""
                         image3 = ""
-                        binding.img3.visibility = View.GONE
+                        binding.img1.visibility = View.GONE
                         binding.img2.visibility = View.GONE
                         binding.img3.visibility = View.GONE
+                        binding.portfolioImageError.visibility = View.VISIBLE
                     }
                 }
             }

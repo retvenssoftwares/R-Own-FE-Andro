@@ -2,11 +2,13 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.Intent
 import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +19,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
 import app.retvens.rown.R
@@ -42,7 +47,7 @@ import java.util.Calendar
 import java.util.Locale
 
 
-class UsernameFragment : Fragment() {
+class UsernameFragment : Fragment(), BackHandler {
 
     lateinit var dobEt : TextInputEditText
     private lateinit var firstName:TextInputEditText
@@ -303,7 +308,36 @@ class UsernameFragment : Fragment() {
                 progressDialog.dismiss()
             }
         })
-
-
     }
+    override fun handleBackPressed(): Boolean {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.bottom_sheet_going_back)
+
+        val yesStatement = dialog.findViewById<TextView>(R.id.syjh)
+        yesStatement.text = "Keep editing and complete your profile"
+
+        val noStatement = dialog.findViewById<TextView>(R.id.syh)
+        noStatement.text = "You will not be availble to edit these changes again"
+
+        val goBack = dialog.findViewById<TextView>(R.id.sjt)
+        goBack.text = "Go Back"
+
+        dialog.findViewById<ConstraintLayout>(R.id.keep_edit).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.findViewById<ConstraintLayout>(R.id.discard).setOnClickListener {
+            val intent = Intent(requireContext(), DashBoardActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+            dialog.dismiss()
+        }
+        dialog.show()
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialog.window?.setGravity(Gravity.BOTTOM)
+        return true
+    }
+
 }
