@@ -53,11 +53,10 @@ class ApplyForVerificationActivity : AppCompatActivity() {
             binding.layout.visibility = View.GONE
             binding.alreadyApplied.visibility = View.GONE
             binding.profileCompletion.visibility = View.VISIBLE
-        }
-
-        if (verificationStatus != "false"){
+        } else if (verificationStatus == "true"){
             binding.layout.visibility = View.GONE
             binding.alreadyApplied.visibility = View.VISIBLE
+            binding.profileCompletion.visibility = View.GONE
         }
 
         binding.complete.setOnClickListener {
@@ -149,6 +148,9 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                     if (response.message == "applied"){
                         binding.layout.visibility = View.GONE
                         binding.alreadyApplied.visibility = View.VISIBLE
+                        binding.profileCompletion.visibility = View.GONE
+                    } else if (response.message == " not applied"){
+                        Toast.makeText(applicationContext, response.message.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }else{
                     Log.e("error",response.code().toString())
