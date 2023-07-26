@@ -27,6 +27,7 @@ data class UserProfileRequestItem(
     val Gender: String,
     val display_status: String,
     val verificationStatus: String,
+    val DOB:String,
     val profileCompletionStatus: String,
     val __v: Int,
     val _id: String,

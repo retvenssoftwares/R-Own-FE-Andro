@@ -166,6 +166,11 @@ class HotelOwnerFragment : Fragment(), BackHandler,
             bottomSheet.setOnCountryStateCityClickListener(this)
         }
 
+        val decline = view.findViewById<ImageView>(R.id.decline)
+        decline.setOnClickListener {
+            startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+        }
+
         hotelOwnerStarET.setOnClickListener {
             val bottomSheet = BottomSheetRating()
             val fragManager = (activity as FragmentActivity).supportFragmentManager

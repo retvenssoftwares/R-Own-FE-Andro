@@ -113,6 +113,11 @@ class JobTitleFragment : Fragment(), BackHandler,
         startLayout = view.findViewById(R.id.session_start)
         endLayout = view.findViewById(R.id.session_end)
 
+        val decline = view.findViewById<ImageView>(R.id.decline)
+        decline.setOnClickListener {
+            startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+        }
+
         start.setOnClickListener {
             val currentYear = Calendar.getInstance().get(Calendar.YEAR)
             val builder : MonthPickerDialog.Builder  = MonthPickerDialog.Builder(requireContext(),

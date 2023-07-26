@@ -2,6 +2,7 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -23,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.BasicInfoClass
@@ -105,6 +107,11 @@ class BasicInformationFragment : Fragment(),
             endLayout.isErrorEnabled = false
         }
 
+        val decline = view.findViewById<ImageView>(R.id.decline)
+        decline.setOnClickListener {
+            startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+        }
+
         start.setOnClickListener {
             val currentYear = Calendar.getInstance().get(Calendar.YEAR)
             val builder : MonthPickerDialog.Builder  = MonthPickerDialog.Builder(requireContext(),
@@ -136,7 +143,6 @@ class BasicInformationFragment : Fragment(),
         val recentJob = view.findViewById<TextInputLayout>(R.id.recentJobLayout)
 
         view.findViewById<RelativeLayout>(R.id.student).setOnClickListener {
-
             if (isStudent){
                 switchStudent.setImageResource(R.drawable.switch_yes)
                 switchStudentText.text = "Yes"
@@ -144,6 +150,13 @@ class BasicInformationFragment : Fragment(),
                 studentInfo.visibility = View.VISIBLE
                 recentJob.visibility = View.GONE
                 isStudent = false
+
+
+
+                switchHotelier.setImageResource(R.drawable.switch_no)
+                switchHotelText.text = "No"
+                myRoleInHos.visibility = View.GONE
+                isHotelier = true
             }else{
                 switchStudent.setImageResource(R.drawable.switch_no)
                 switchStudentText.text = "No"
@@ -166,6 +179,11 @@ class BasicInformationFragment : Fragment(),
                 myRoleInHos.visibility = View.VISIBLE
                 recentJob.visibility = View.GONE
                 isHotelier = false
+
+                switchStudent.setImageResource(R.drawable.switch_no)
+                switchStudentText.text = "No"
+                studentInfo.visibility = View.GONE
+                isStudent = true
             }else{
                 switchHotelier.setImageResource(R.drawable.switch_no)
                 switchHotelText.text = "No"
@@ -178,6 +196,8 @@ class BasicInformationFragment : Fragment(),
             recentJob.visibility = View.VISIBLE
             }
         }
+
+
 
         myRecentJobET.setOnClickListener {
             nextFrag = 0
@@ -329,8 +349,6 @@ class BasicInformationFragment : Fragment(),
                             val transaction = activity?.supportFragmentManager?.beginTransaction()
                             transaction?.replace(R.id.fragment_username,fragment)
                             transaction?.commit()
-
-
 
 
                             val setStatus = encodeData(user_id1,"Normal User")

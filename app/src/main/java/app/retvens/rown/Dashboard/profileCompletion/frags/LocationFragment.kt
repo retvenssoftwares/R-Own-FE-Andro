@@ -20,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,9 +32,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.location.CountryData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
@@ -93,6 +96,11 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
         etLocationCountry = view.findViewById(R.id.et_location_country)
         etLocationState = view.findViewById(R.id.et_location_state)
         etLocationCity = view.findViewById(R.id.et_location_city)
+
+        val decline = view.findViewById<ImageView>(R.id.decline)
+        decline.setOnClickListener {
+            startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+        }
 
         val cardBtn = view.findViewById<CardView>(R.id.card_location_next)
         cardBtn.isClickable = false
@@ -157,6 +165,9 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
             profile.setImageResource(R.drawable.svg_user)
         }
         name.setText("Hi $profileName")
+        val sharedPreferences1 = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences1?.getString("user_id", "").toString()
+        fetchUser(user_id)
     }
 
     private fun checkLocationSettings() {
@@ -299,6 +310,30 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
         })
 
 
+
+
+
+    }
+
+    private fun fetchUser(userId: String) {
+        val getUser = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
+
+        getUser.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    etLocationCountry.setText(response.location)
+                    Log.e("res",response.location.toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+
+            }
+        })
     }
 
     private fun openStateLocationSheet() {

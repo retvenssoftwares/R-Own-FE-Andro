@@ -80,4 +80,47 @@
         android:paddingBottom="130dp"
         />
 
+
+
+    <ImageView
+        android:id="@+id/noConn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:src="@drawable/vector_chats_no"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/noConn"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Rahul"
+        android:visibility="gone"
+        android:textColor="#272A3D"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:layout_marginTop="178dp"
+        android:layout_marginStart="91dp"
+        />
+
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="258dp"
+        android:text="Peoples are using R-Own and interacting with community. "
+        android:textColor="#272A3D"
+        android:visibility="gone"
+        android:textSize="14dp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

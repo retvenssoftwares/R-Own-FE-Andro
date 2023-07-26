@@ -517,11 +517,12 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
         val bottom_Nav = findViewById<BottomNavigationView>(R.id.nav_Bottom)
 
         header.findViewById<CardView>(R.id.my_account).setOnClickListener {
+            Log.e("role", role.toString())
             drawerLayout.closeDrawer(GravityCompat.START)
-            if (role =="Hotel Owner" && profileCompletionStatus == "100"){
+            if (role =="Hotel Owner"){
             replaceFragment(ProfileFragmentForHotelOwner())
             toolbar.visibility = View.GONE
-        }else if (role == "Business Vendor / Freelancer" && profileCompletionStatus == "100"){
+        }else if (role == "Business Vendor / Freelancer"){
             replaceFragment(ProfileFragmentForVendors())
             toolbar.visibility = View.GONE
         }else {
@@ -559,10 +560,11 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
                         toolbar.visibility = View.GONE
                     }
                 R.id.profile -> {
-                    if (role =="Hotel Owner" && profileCompletionStatus == "100"){
+                    Log.e("role", role)
+                    if (role =="Hotel Owner" || profileCompletionStatus == "100"){
                         replaceFragment(ProfileFragmentForHotelOwner())
                         toolbar.visibility = View.GONE
-                    }else if (role == "Business Vendor / Freelancer" && profileCompletionStatus == "100"){
+                    }else if (role == "Business Vendor / Freelancer" || profileCompletionStatus == "100"){
                         replaceFragment(ProfileFragmentForVendors())
                         toolbar.visibility = View.GONE
                     }else {

@@ -28,6 +28,7 @@ import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateUserName
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
@@ -113,6 +114,10 @@ class UsernameFragment : Fragment(), BackHandler {
         }
         /*-------------Calendar Setup--------------*/
 
+        val decline = view.findViewById<ImageView>(R.id.decline)
+        decline.setOnClickListener {
+            startActivity(Intent(requireContext(),DashBoardActivity::class.java))
+        }
 
         //Define Fields
         firstName = view.findViewById(R.id.first_name)
@@ -217,7 +222,33 @@ class UsernameFragment : Fragment(), BackHandler {
         firstName.setText(firstN)
         lastName.setText(lastN)
 
+        fetchUser(user_id!!)
+
     }
+
+    private fun fetchUser(userId: String) {
+
+        val getUser = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
+
+        getUser.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    dobEt.setText(response.DOB)
+                    userName.setText(response.User_name)
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+
+            }
+        })
+
+    }
+
     private fun verifyUserName() {
 
         val username = userName.text.toString()

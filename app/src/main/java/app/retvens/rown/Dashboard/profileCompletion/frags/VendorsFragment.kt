@@ -229,6 +229,11 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
             }
         }
 
+        val decline = view.findViewById<ImageView>(R.id.decline)
+        decline.setOnClickListener {
+            startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+        }
+
         deleteImg1.setOnClickListener {
             imagesList.remove(imgUri1)
             imgUri1 = null

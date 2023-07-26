@@ -1,6 +1,7 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,8 +19,10 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.profileCompletion.BackHandler
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
@@ -71,6 +74,11 @@ class BioGenderFragment : Fragment(), BackHandler {
 
         bioEt = view.findViewById(R.id.bioEt)
         card_complete_continue.isClickable = false
+
+        val decline = view.findViewById<ImageView>(R.id.decline)
+        decline.setOnClickListener {
+            startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+        }
 
         bioEt.addTextChangedListener {
             if (bioEt.length() < 5){
@@ -139,6 +147,56 @@ class BioGenderFragment : Fragment(), BackHandler {
             progressDialog.show()
             sendData()
         }
+
+        val sharedPreferencesU = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferencesU?.getString("user_id", "").toString()
+
+        fetchUser(user_id)
+
+    }
+
+    private fun fetchUser(userId: String) {
+
+        val getUser = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
+
+        getUser.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    bioEt.setText(response.userBio)
+
+                    if (response.Gender == "Male"){
+                        male.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                        female.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        nonBinary.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        preferNotSay.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    }else if (response.Gender == "Female"){
+                        male.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        female.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                        nonBinary.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        preferNotSay.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    }else if (response.Gender == "Non Binary"){
+                        male.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        female.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        nonBinary.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                        preferNotSay.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    }else if (response.Gender == "Prefer not to say"){
+                        male.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        female.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        nonBinary.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        preferNotSay.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+
+            }
+        })
 
     }
 

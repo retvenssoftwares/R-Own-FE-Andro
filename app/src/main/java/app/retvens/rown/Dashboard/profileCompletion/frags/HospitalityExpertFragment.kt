@@ -98,6 +98,11 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
 //            showBottomJobType()
         }
 
+        val decline = view.findViewById<ImageView>(R.id.decline)
+        decline.setOnClickListener {
+            startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+        }
+
 
         jobTitle = view.findViewById(R.id.dob_et)
         start = view.findViewById(R.id.et_session_Start)

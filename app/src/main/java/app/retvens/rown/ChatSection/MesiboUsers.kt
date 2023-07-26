@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +32,9 @@ class MesiboUsers : AppCompatActivity() {
     private lateinit var recycler:RecyclerView
     private  var userList: List<MesiboUsersData> = emptyList()
     private lateinit var searchBar:EditText
+    private lateinit var noConn:ImageView
+    private lateinit var name:TextView
+    private lateinit var count:TextView
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +45,10 @@ class MesiboUsers : AppCompatActivity() {
         back.setOnClickListener {
             onBackPressed()
         }
+
+        noConn = findViewById(R.id.noConn)
+        name = findViewById(R.id.name)
+        count = findViewById(R.id.count)
 
         recycler = findViewById<RecyclerView>(R.id.chatRecycler)
         recycler.layoutManager = LinearLayoutManager(this)
@@ -63,44 +72,75 @@ class MesiboUsers : AppCompatActivity() {
                 call: Call<List<ConnectionListDataClass>?>,
                 response: Response<List<ConnectionListDataClass>?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
+                if (response.isSuccessful) {
+                    if (response.body()!!.isNotEmpty()) {
 
-                    var original = emptyList<Connections>()
-                    response.forEach {
-                        receiverProfileAdapter = ReceiverProfileAdapter(baseContext,it.conns)
-                        recycler.adapter = receiverProfileAdapter
-                        receiverProfileAdapter.notifyDataSetChanged()
+                        val response = response.body()!!
+                        Log.e("res",response.toString())
+                        var original = emptyList<Connections>()
+                        try {
+                                original = emptyList<Connections>()
+                                response.forEach {
+                                    if (it.conns.isNotEmpty()){
+                                        receiverProfileAdapter = ReceiverProfileAdapter(baseContext, it.conns)
+                                        recycler.adapter = receiverProfileAdapter
+                                        receiverProfileAdapter.notifyDataSetChanged()
 
-                        original = it.conns.toList()
-                    }
+                                        original = it.conns.toList()
+                                    }else{
+                                        count.visibility = View.VISIBLE
+                                        name.visibility = View.VISIBLE
+                                        noConn.visibility = View.VISIBLE
+                                    }
 
-                    searchBar.addTextChangedListener(object : TextWatcher{
-                        override fun beforeTextChanged(
-                            p0: CharSequence?,
-                            p1: Int,
-                            p2: Int,
-                            p3: Int
-                        ) {
-
-                        }
-
-                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            val filterData = original.filter { item ->
-                                item.Full_name.contains(p0.toString(),ignoreCase = true)
+                                }
+                            }catch (e:NullPointerException){
+                                count.visibility = View.VISIBLE
+                                name.visibility = View.VISIBLE
+                                noConn.visibility = View.VISIBLE
                             }
 
-                            receiverProfileAdapter.updateData(filterData)
-                        }
 
-                        override fun afterTextChanged(p0: Editable?) {
+                        searchBar.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                p0: CharSequence?,
+                                p1: Int,
+                                p2: Int,
+                                p3: Int
+                            ) {
 
-                        }
+                            }
 
-                    })
+                            override fun onTextChanged(
+                                p0: CharSequence?,
+                                p1: Int,
+                                p2: Int,
+                                p3: Int
+                            ) {
+                                val filterData = original.filter { item ->
+                                    item.Full_name.contains(p0.toString(), ignoreCase = true)
+                                }
 
+                                receiverProfileAdapter.updateData(filterData)
+                            }
+
+                            override fun afterTextChanged(p0: Editable?) {
+
+                            }
+
+                        })
+
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }else{
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                    count.visibility = View.VISIBLE
+                    name.visibility = View.VISIBLE
+                    noConn.visibility = View.VISIBLE
                 }
             }
 
