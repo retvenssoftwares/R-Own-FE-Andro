@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +28,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val context: Context, val isOwner : Boolean) : RecyclerView.Adapter<ProfileServicesAdapter.PollsViewHolder>() {
+class ProfileServicesAdapter(val listS : ArrayList<ProfileServicesDataItem>, val context: Context, val isOwner : Boolean) : RecyclerView.Adapter<ProfileServicesAdapter.PollsViewHolder>() {
 
     class PollsViewHolder(itemView: View) : ViewHolder(itemView){
         val vendor_name = itemView.findViewById<TextView>(R.id.vendor_name)
@@ -71,7 +72,7 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
         }
 
         holder.del.setOnClickListener {
-            openBottomForDel(listS[position].vendorServiceId)
+            openBottomForDel(listS[position])
         }
         holder.edit.setOnClickListener {
             openBottomEdit(listS[position].vendorServiceId)
@@ -85,7 +86,7 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
         }
 
     }
-    private fun openBottomForDel(vendorServiceId: String) {
+    private fun openBottomForDel(vendorService: ProfileServicesDataItem) {
         val dialogLanguage = Dialog(context)
         dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogLanguage.setContentView(R.layout.bottom_delete_service)
@@ -98,20 +99,25 @@ class ProfileServicesAdapter(val listS : List<ProfileServicesDataItem>, val cont
         dialogLanguage.show()
 
         dialogLanguage.findViewById<TextView>(R.id.yes).setOnClickListener {
-            deleteService(vendorServiceId)
+            deleteService(vendorService)
             dialogLanguage.dismiss()
         }
         dialogLanguage.findViewById<TextView>(R.id.not).setOnClickListener { dialogLanguage.dismiss() }
     }
 
-    private fun deleteService(vendorServiceId: String) {
-        val del = RetrofitBuilder.ProfileApis.deleteService(vendorServiceId)
+    private fun deleteService(vendorService: ProfileServicesDataItem) {
+        val del = RetrofitBuilder.ProfileApis.deleteService(vendorService.vendorServiceId)
         del.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
                 response: Response<UpdateResponse?>
             ) {
 
+//                try {
+//                    listS.remove(vendorService)
+//                } catch (e : ConcurrentModificationException){
+//                    Log.d("EPA", e.toString())
+//                }
             }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                 Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()

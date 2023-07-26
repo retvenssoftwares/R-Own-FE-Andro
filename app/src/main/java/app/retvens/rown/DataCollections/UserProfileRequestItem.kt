@@ -39,6 +39,7 @@ data class UserProfileRequestItem(
 ){
     data class Details(
         val vendorImage:String,
+        val vendorName:String,
         val vendorDescription:String,
         val websiteLink:String,
         val vendorServices:List<ProfileServicesDataItem>,

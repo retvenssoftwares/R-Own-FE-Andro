@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -233,7 +234,33 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                     postCount.text = response.data.postCountLength.toString()
                     connCont.text = response.data.connCountLength.toString()
                     requestCont.text = response.data.reqsCountLength.toString()
-                    bio.text = response.data.profile.userBio
+                    val getBio = response.data.profile.userBio
+                    try {
+                        if (getBio != null) {
+                            if (getBio.length > 50) {
+                                bio.text = Html.fromHtml(getBio.substring(0, 50) + "..." + "<font color='black'> <b>Read More</b></font>")
+                            } else {
+                                bio.text = getBio
+                            }
+                        } else {
+                            bio.text = "" // or any default text you prefer when caption is null
+                        }
+
+                        bio.setOnClickListener {
+                            if (bio.text.toString().endsWith("Read More") && getBio != null) {
+                                bio.text = getBio
+                            } else {
+                                if (getBio != null && getBio.length > 50) {
+                                    bio.text = Html.fromHtml(getBio.substring(0, 50) + "..." + "<font color='black'> <b>Read More</b></font>")
+                                } else {
+                                    bio.text = getBio
+                                }
+                            }
+                        }
+                    }catch (e:NullPointerException){
+                        Log.e("error",e.message.toString())
+                    }
+
                     if (response.data.profile.User_name == ""){
                         userName.text = "Complete Your Profile"
                     } else {

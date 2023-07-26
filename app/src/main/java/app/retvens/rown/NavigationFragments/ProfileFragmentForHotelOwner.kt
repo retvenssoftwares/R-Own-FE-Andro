@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.Html
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -315,7 +317,34 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                     requestCont.text = response.requests_count.toString()
                     postCount.text = response.post_count.toString()
                     username.text = response.profiledata.User_name.toString()
-                    bio.text = response.profiledata.userBio.toString()
+//                    bio.text = response.profiledata.userBio.toString()
+                    val getBio = response.profiledata.userBio
+                    try {
+                        if (getBio != null) {
+                            if (getBio.length > 50) {
+                                bio.text = Html.fromHtml(getBio.substring(0, 50) + "..." + "<font color='black'> <b>Read More</b></font>")
+                            } else {
+                                bio.text = getBio
+                            }
+                        } else {
+                            bio.text = "" // or any default text you prefer when caption is null
+                        }
+
+                        bio.setOnClickListener {
+                            if (bio.text.toString().endsWith("Read More") && getBio != null) {
+                                bio.text = getBio
+                            } else {
+                                if (getBio != null && getBio.length > 50) {
+                                    bio.text = Html.fromHtml(getBio.substring(0, 50) + "..." + "<font color='black'> <b>Read More</b></font>")
+                                } else {
+                                    bio.text = getBio
+                                }
+                            }
+                        }
+                    }catch (e:NullPointerException){
+                        Log.e("error",e.message.toString())
+                    }
+
                     linkText.text = response.profile.hotelOwnerInfo.websiteLink
                 }
 

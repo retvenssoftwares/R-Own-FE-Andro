@@ -58,12 +58,16 @@ class UserName : AppCompatActivity() {
             transaction.commit()
         }else{
 
-           val fragment = UsernameFragment()
-           val transaction = supportFragmentManager.beginTransaction()
-           transaction.replace(R.id.fragment_username, fragment)
-           transaction.commit()
+//           val fragment = UsernameFragment()
+//           val transaction = supportFragmentManager.beginTransaction()
+//           transaction.replace(R.id.fragment_username, fragment)
+//           transaction.commit()
 
         }
+        val fragment = BasicInformationFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_username, fragment)
+        transaction.commit()
     }
 
     override fun onBackPressed() {

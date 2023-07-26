@@ -17,6 +17,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -209,7 +210,11 @@ class EditVendorInfoActivity : AppCompatActivity() {
             }
         }
 
-        binding.save.isClickable = false
+        binding.save.isClickable = true
+
+        binding.vendorNameEt.addTextChangedListener {
+            binding.save.isClickable = true
+        }
 
         binding.descriptionoEt.addTextChangedListener {
             if (binding.descriptionoEt.text.toString() != description) {
@@ -251,12 +256,14 @@ class EditVendorInfoActivity : AppCompatActivity() {
         }
 
         binding.save.setOnClickListener {
-            if (logoOfImageUri == null){
-                Toast.makeText(applicationContext, "Please select an Logo", Toast.LENGTH_SHORT).show()
+            if (binding.vendorNameEt.text.isEmpty()){
+                Toast.makeText(applicationContext, "Please Enter Vendor Name", Toast.LENGTH_SHORT).show()
+//            } else if (binding.websiteLink.text.isEmpty()){
+//                Toast.makeText(applicationContext, "Please Enter website", Toast.LENGTH_SHORT).show()
             } else if(binding.descriptionoEt.length() < 3){
                 Toast.makeText(applicationContext, "Please enter Description", Toast.LENGTH_SHORT).show()
-            } else if(imagesList.isEmpty()){
-                Toast.makeText(applicationContext, "Please select at least one portfolio image", Toast.LENGTH_SHORT).show()
+//            } else if(imagesList.isEmpty()){
+//                Toast.makeText(applicationContext, "Please select at least one portfolio image", Toast.LENGTH_SHORT).show()
             } else {
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -272,46 +279,353 @@ class EditVendorInfoActivity : AppCompatActivity() {
         }
     }
     private fun uploadData() {
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences.getString("user_id", "").toString()
-
+        val name = binding.vendorNameEt.text.toString()
         val description = binding.descriptionoEt.text.toString()
         val website = binding.websiteLink.text.toString()
 
-        val Vendorimg = prepareFilePart(logoOfImageUri!!, "Vendorimg", applicationContext)
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
 
-        imagesList.forEach {
-            fileList.add(prepareFilePart(it, "portfolioLinkdata", applicationContext)!!)
-        }
 
-        val send = RetrofitBuilder.profileCompletion.updateVendorData(user_id,
-            Vendorimg!!,
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),website),
-            fileList
-        )
+//        imagesList.forEach {
+//            fileList.add(prepareFilePart(it, "portfolioLinkdata", applicationContext)!!)
+//        }
 
-        send.enqueue(object : Callback<UpdateResponse?> {
-            override fun onResponse(
-                call: Call<UpdateResponse?>,
-                response: Response<UpdateResponse?>
-            ) {
-                if (response.isSuccessful){
-                    progressDialog.dismiss()
-                    onBackPressed()
-                }else{
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+        if (logoOfImageUri != null && imagesList.isNotEmpty()) {
+            val vendorImg = prepareFilePart(logoOfImageUri!!, "Vendorimg", applicationContext)
+
+            if (imagesList.size == 3) {
+                val file1 = prepareFilePart(imgUri1!!, "portfolioImages1", applicationContext)
+                val file2 = prepareFilePart(imgUri1!!, "portfolioImages2", applicationContext)
+                val file3 = prepareFilePart(imgUri1!!, "portfolioImages3", applicationContext)
+                val send = RetrofitBuilder.profileCompletion.uploadVendorData(
+                    user_id,
+                    vendorImg!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    file1!!,
+                    file2!!,
+                    file3!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+                )
+
+                send.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        if (response.isSuccessful) {
+//                            profileComStatus(applicationContext, "100")
+//                            profileCompletionStatus = "100"
+
+                            progressDialog.dismiss()
+                            startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                            finish()
+                        } else {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                applicationContext,
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+            } else if (imagesList.size == 2) {
+                val file1 =
+                    prepareFilePart(imagesList.get(0), "portfolioImages1", applicationContext)
+                val file2 =
+                    prepareFilePart(imagesList.get(1), "portfolioImages2", applicationContext)
+                val send = RetrofitBuilder.profileCompletion.uploadVendorData2(
+                    user_id,
+                    vendorImg!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    file1!!,
+                    file2!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+                )
+                send.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        if (response.isSuccessful) {
+//                            profileComStatus(applicationContext, "100")
+//                            profileCompletionStatus = "100"
+
+                            progressDialog.dismiss()
+                            startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                            finish()
+                        } else {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                applicationContext,
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+
+            } else if (imagesList.size == 1) {
+                val file1 =
+                    prepareFilePart(imagesList.get(0), "portfolioImages1", applicationContext)
+                val send = RetrofitBuilder.profileCompletion.uploadVendorData1(
+                    user_id,
+                    vendorImg!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    file1!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+                )
+
+                send.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        if (response.isSuccessful) {
+//                            profileComStatus(applicationContext, "100")
+//                            profileCompletionStatus = "100"
+
+                            progressDialog.dismiss()
+                            startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                            finish()
+                        } else {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                applicationContext,
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+            }
+
+        } else if (logoOfImageUri == null && imagesList.isNotEmpty()) {
+
+            if (imagesList.size == 3) {
+                val file1 = prepareFilePart(imgUri1!!, "portfolioImages1", applicationContext)
+                val file2 = prepareFilePart(imgUri1!!, "portfolioImages2", applicationContext)
+                val file3 = prepareFilePart(imgUri1!!, "portfolioImages3", applicationContext)
+                val send = RetrofitBuilder.profileCompletion.uploadVendorDataWithoutLogo(
+                    user_id,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    file1!!,
+                    file2!!,
+                    file3!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+                )
+
+                send.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        if (response.isSuccessful) {
+//                            profileComStatus(applicationContext, "100")
+//                            profileCompletionStatus = "100"
+
+                            progressDialog.dismiss()
+                            startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                            finish()
+                        } else {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                applicationContext,
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+            } else if (imagesList.size == 2) {
+                val file1 =
+                    prepareFilePart(imagesList.get(0), "portfolioImages1", applicationContext)
+                val file2 =
+                    prepareFilePart(imagesList.get(1), "portfolioImages2", applicationContext)
+                val send = RetrofitBuilder.profileCompletion.uploadVendorDataWithoutLogo2(
+                    user_id,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    file1!!,
+                    file2!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+                )
+                send.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        if (response.isSuccessful) {
+//                            profileComStatus(applicationContext, "100")
+//                            profileCompletionStatus = "100"
+
+                            progressDialog.dismiss()
+                            startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                            finish()
+                        } else {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                applicationContext,
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+
+            } else if (imagesList.size == 1) {
+                val file1 =
+                    prepareFilePart(imagesList.get(0), "portfolioImages1", applicationContext)
+                val send = RetrofitBuilder.profileCompletion.uploadVendorDataWithoutLogo1(
+                    user_id,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    file1!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+                )
+
+                send.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        if (response.isSuccessful) {
+//                            profileComStatus(applicationContext, "100")
+//                            profileCompletionStatus = "100"
+
+                            progressDialog.dismiss()
+                            startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                            finish()
+                        } else {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                applicationContext,
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
+            }
+
+        } else if(logoOfImageUri != null && imagesList.isEmpty()) {
+            val vendorImg = prepareFilePart(logoOfImageUri!!, "Vendorimg", applicationContext)
+
+            val send = RetrofitBuilder.profileCompletion.updateVendorDataWithoutGallery(
+                user_id,
+                vendorImg!!,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+            )
+            send.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    if (response.isSuccessful) {
+//                        profileComStatus(applicationContext, "100")
+//                        profileCompletionStatus = "100"
+
+                        progressDialog.dismiss()
+                        startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                        finish()
+                    } else {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                progressDialog.dismiss()
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+
+        } else {
+            val send = RetrofitBuilder.profileCompletion.updateVendorData(
+                user_id,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+            )
+            send.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    if (response.isSuccessful) {
+//                        profileComStatus(applicationContext, "100")
+//                        profileCompletionStatus = "100"
+
+                        progressDialog.dismiss()
+                        startActivity(Intent(applicationContext, DashBoardActivity::class.java))
+                        finish()
+                    } else {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            response.code().toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+
+        }
     }
-
     private fun fetchUser() {
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -326,26 +640,29 @@ class EditVendorInfoActivity : AppCompatActivity() {
                 Log.d("fetch",response.body().toString())
 
                 if (response.isSuccessful) {
-                    Glide.with(applicationContext).load(response.body()!!.vendorInfo.vendorImage).into(binding.brandLogo)
-
+                    if (response.body()!!.vendorInfo.vendorImage.isNotEmpty()) {
+                        Glide.with(applicationContext)
+                            .load(response.body()!!.vendorInfo.vendorImage).into(binding.brandLogo)
+                    }
                     description = (response.body()!!.vendorInfo.vendorDescription)
                     website = (response.body()!!.vendorInfo.websiteLink)
 
+                    binding.vendorNameEt.setText(response.body()!!.vendorInfo.vendorName)
                     binding.descriptionoEt.setText(response.body()!!.vendorInfo.vendorDescription)
                     binding.websiteLink.setText(response.body()!!.vendorInfo.websiteLink)
-                    response.body()!!.vendorInfo.portfolioLink.forEach {
-                        if(response.body()!!.vendorInfo.portfolioLink.size >= 3) {
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image1).into(binding.img1)
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image2).into(binding.img2)
+
+//                    response.body()!!.vendorInfo.portfolioLink.forEach {
+                        if(response.body()!!.vendorInfo.portfolioLink.get(0).Image3.isNotEmpty()) {
                             Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image3).into(binding.img3)
-                        } else if (response.body()!!.vendorInfo.portfolioLink.size >= 2) {
-                            Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image1).into(binding.img1)
+                        }
+                        if (response.body()!!.vendorInfo.portfolioLink.get(0).Image2.isNotEmpty()) {
                             Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image2).into(binding.img2)
-                        } else if (response.body()!!.vendorInfo.portfolioLink.size > 0) {
+                        }
+                        if (response.body()!!.vendorInfo.portfolioLink.get(0).Image1.isNotEmpty()) {
                             Glide.with(applicationContext).load(response.body()!!.vendorInfo.portfolioLink.get(0).Image1).into(binding.img1)
                         }
 
-                    }
+//                    }
 
                 }
             }
@@ -442,7 +759,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
         }
 
         dialog.findViewById<LinearLayout>(R.id.pick_from_gallery).setOnClickListener {
-            openGallery()
+            openGalleryP()
         }
         dialog.findViewById<LinearLayout>(R.id.pick_from_camera).setOnClickListener {
             openCamera()
@@ -464,6 +781,10 @@ class EditVendorInfoActivity : AppCompatActivity() {
         dialog.dismiss()
     }
     private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
+    }
+    private fun openGalleryP() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
         dialog.dismiss()

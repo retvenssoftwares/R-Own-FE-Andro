@@ -288,8 +288,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                 websiteLayout.error = "Please enter an valid website link"
             } else if(imagesList.isEmpty()){
                 Toast.makeText(context, "Please select portfolio image", Toast.LENGTH_SHORT).show()
-            }
-            else {
+            } else {
                 brandNameLayout.isErrorEnabled = false
                 brandDescriptionLayout.isErrorEnabled = false
                 portfolioLayout.isErrorEnabled = false
@@ -306,16 +305,15 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                 Log.e("img2",imgUri2.toString())
                 Log.e("img3",imgUri3.toString())
                 progressDialog.show()
-                  if (imgUri1 == null || imgUri2 == null || imgUri3 == null){
-                    Toast.makeText(requireContext(),"Add All Gallery Images",Toast.LENGTH_SHORT).show()
-                      progressDialog.dismiss()
-                }else{
-                      progressDialog.dismiss()
+//                  if (imgUri1 == null || imgUri2 == null || imgUri3 == null){
+//                    Toast.makeText(requireContext(),"Add All Gallery Images",Toast.LENGTH_SHORT).show()
+//                      progressDialog.dismiss()
+//                }else{
+//                      progressDialog.dismiss()
                       uploadData()
                   }
 
             }
-        }
     }
     private fun uploadData() {
         val name = brandName.text.toString()
@@ -335,70 +333,139 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         inputStream.copyTo(outputStream)
         val body = UploadRequestBody(file,"image")
 
-        val parcelFileDescriptorimage1 = requireContext().contentResolver.openFileDescriptor(
-            imgUri1!!,"r",null
-        )?:return
-        val inputStreamImage1 = FileInputStream(parcelFileDescriptorimage1.fileDescriptor)
-        val fileImage1 =  File(requireContext().cacheDir, "cropped_${getRandomString(6)}.jpg")
-        val outputStreamImage1 = FileOutputStream(fileImage1)
-        inputStreamImage1.copyTo(outputStreamImage1)
-        val bodyImage1 = UploadRequestBody(fileImage1,"image")
+        if (imagesList.size == 3) {
+            val file1 = prepareFilePart(imgUri1!!, "portfolioImages1", requireContext())
+            val file2 = prepareFilePart(imgUri1!!, "portfolioImages2", requireContext())
+            val file3 = prepareFilePart(imgUri1!!, "portfolioImages3", requireContext())
+            val send = RetrofitBuilder.profileCompletion.uploadVendorData(
+                user_id,
+                MultipartBody.Part.createFormData("Vendorimg", file.name, body),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                file1!!,
+                file2!!,
+                file3!!,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+            )
 
-        val parcelFileDescriptorImage2 = requireContext().contentResolver.openFileDescriptor(
-            imgUri2!!,"r",null
-        )?:return
-        val inputStreamImage2 = FileInputStream(parcelFileDescriptorImage2.fileDescriptor)
-        val fileImage2 =  File(requireContext().cacheDir, "cropped_${getRandomString(6)}.jpg")
-        val outputStreamImage2 = FileOutputStream(fileImage2)
-        inputStreamImage2.copyTo(outputStreamImage2)
-        val bodyImage2 = UploadRequestBody(fileImage2,"image")
+            send.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    if (response.isSuccessful && isAdded) {
+                        profileComStatus(context!!, "100")
+                        profileCompletionStatus = "100"
 
-        val parcelFileDescriptorImage3 = requireContext().contentResolver.openFileDescriptor(
-            imgUri3!!,"r",null
-        )?:return
-        val inputStreamImage3 = FileInputStream(parcelFileDescriptorImage3.fileDescriptor)
-        val fileImage3 =  File(requireContext().cacheDir, "cropped_${getRandomString(6)}.jpg")
-        val outputStreamImage3 = FileOutputStream(fileImage3)
-        inputStreamImage3.copyTo(outputStreamImage3)
-        val bodyImage3 = UploadRequestBody(fileImage3,"image")
-
-
-        val send = RetrofitBuilder.profileCompletion.uploadVendorData(user_id,
-            MultipartBody.Part.createFormData("Vendorimg", file.name, body),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
-            MultipartBody.Part.createFormData("portfolioImages1", fileImage1.name, bodyImage1),
-            MultipartBody.Part.createFormData("portfolioImages2", fileImage2.name, bodyImage2),
-            MultipartBody.Part.createFormData("portfolioImages3", fileImage3.name, bodyImage3),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),website)
-        )
-
-        send.enqueue(object : Callback<UpdateResponse?> {
-            override fun onResponse(
-                call: Call<UpdateResponse?>,
-                response: Response<UpdateResponse?>
-            ) {
-                if (response.isSuccessful && isAdded){
-                    profileComStatus(context!!, "100")
-                    profileCompletionStatus = "100"
-
-                    progressDialog.dismiss()
-                    startActivity(Intent(requireContext(),DashBoardActivity::class.java))
-                    activity?.finish()
-                }else{
-                    if (isAdded){
                         progressDialog.dismiss()
-                        Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+                        activity?.finish()
+                    } else {
+                        if (isAdded) {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                requireContext(),
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
                     }
-
                 }
-            }
 
-            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                progressDialog.dismiss()
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+        } else if (imagesList.size == 2) {
+            val file1 = prepareFilePart(imagesList.get(0), "portfolioImages1", requireContext())
+            val file2 = prepareFilePart(imagesList.get(1), "portfolioImages2", requireContext())
+            val send = RetrofitBuilder.profileCompletion.uploadVendorData2(
+                user_id,
+                MultipartBody.Part.createFormData("Vendorimg", file.name, body),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                file1!!,
+                file2!!,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+            )
+
+            send.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    if (response.isSuccessful && isAdded) {
+                        profileComStatus(context!!, "100")
+                        profileCompletionStatus = "100"
+
+                        progressDialog.dismiss()
+                        startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+                        activity?.finish()
+                    } else {
+                        if (isAdded) {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                requireContext(),
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+        } else if (imagesList.size == 1) {
+            val file1 = prepareFilePart(imagesList.get(0), "portfolioImages1", requireContext())
+            val send = RetrofitBuilder.profileCompletion.uploadVendorData1(
+                user_id,
+                MultipartBody.Part.createFormData("Vendorimg", file.name, body),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                file1!!,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), website)
+            )
+
+            send.enqueue(object : Callback<UpdateResponse?> {
+                override fun onResponse(
+                    call: Call<UpdateResponse?>,
+                    response: Response<UpdateResponse?>
+                ) {
+                    if (response.isSuccessful && isAdded) {
+                        profileComStatus(context!!, "100")
+                        profileCompletionStatus = "100"
+
+                        progressDialog.dismiss()
+                        startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+                        activity?.finish()
+                    } else {
+                        if (isAdded) {
+                            progressDialog.dismiss()
+                            Toast.makeText(
+                                requireContext(),
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

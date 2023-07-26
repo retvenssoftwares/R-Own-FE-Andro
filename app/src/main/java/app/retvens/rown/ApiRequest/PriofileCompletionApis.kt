@@ -150,12 +150,77 @@ interface PriofileCompletionApis{
 
     @Multipart
     @PATCH("/vendor/{user_id}")
-    fun updateVendorData(
+    fun uploadVendorData2(
         @Path("user_id") user_id : String,
         @Part Vendorimg: MultipartBody.Part,
+        @Part("vendorName") vendorName: RequestBody,
         @Part("vendorDescription") vendorDescription: RequestBody,
-        @Part("websiteLink") websiteLink: RequestBody,
-        @Part portfolioLinkdata: List<MultipartBody.Part>
+        @Part portfolioImages1:MultipartBody.Part,
+        @Part portfolioImages2:MultipartBody.Part,
+        @Part("websiteLink") websiteLink: RequestBody
+    ): Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("/vendor/{user_id}")
+    fun uploadVendorData1(
+        @Path("user_id") user_id : String,
+        @Part Vendorimg: MultipartBody.Part,
+        @Part("vendorName") vendorName: RequestBody,
+        @Part("vendorDescription") vendorDescription: RequestBody,
+        @Part portfolioImages1:MultipartBody.Part,
+        @Part("websiteLink") websiteLink: RequestBody
+    ): Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("/vendor/{user_id}")
+    fun uploadVendorDataWithoutLogo(
+        @Path("user_id") user_id : String,
+        @Part("vendorName") vendorName: RequestBody,
+        @Part("vendorDescription") vendorDescription: RequestBody,
+        @Part portfolioImages1:MultipartBody.Part,
+        @Part portfolioImages2:MultipartBody.Part,
+        @Part portfolioImages3:MultipartBody.Part,
+        @Part("websiteLink") websiteLink: RequestBody
+    ): Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("/vendor/{user_id}")
+    fun uploadVendorDataWithoutLogo2(
+        @Path("user_id") user_id : String,
+        @Part("vendorName") vendorName: RequestBody,
+        @Part("vendorDescription") vendorDescription: RequestBody,
+        @Part portfolioImages1:MultipartBody.Part,
+        @Part portfolioImages2:MultipartBody.Part,
+        @Part("websiteLink") websiteLink: RequestBody
+    ): Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("/vendor/{user_id}")
+    fun uploadVendorDataWithoutLogo1(
+        @Path("user_id") user_id : String,
+        @Part("vendorName") vendorName: RequestBody,
+        @Part("vendorDescription") vendorDescription: RequestBody,
+        @Part portfolioImages1:MultipartBody.Part,
+        @Part("websiteLink") websiteLink: RequestBody
+    ): Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("/vendor/{user_id}")
+    fun updateVendorData(
+        @Path("user_id") user_id : String,
+        @Part("vendorName") vendorName: RequestBody,
+        @Part("vendorDescription") vendorDescription: RequestBody,
+        @Part("websiteLink") websiteLink: RequestBody
+    ): Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("/vendor/{user_id}")
+    fun updateVendorDataWithoutGallery(
+        @Path("user_id") user_id : String,
+        @Part Vendorimg: MultipartBody.Part,
+        @Part("vendorName") vendorName: RequestBody,
+        @Part("vendorDescription") vendorDescription: RequestBody,
+        @Part("websiteLink") websiteLink: RequestBody
     ): Call<UpdateResponse>
 
     @GET("getservicename")
