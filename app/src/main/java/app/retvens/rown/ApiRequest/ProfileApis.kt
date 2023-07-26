@@ -184,6 +184,7 @@ interface ProfileApis {
         @Part("userBio") userBio: RequestBody,
         @Part("Gender") Gender: RequestBody,
         @Part("normalUserInfo[jobTitle]") designation : RequestBody,
+        @Part("location")location:RequestBody
     ) : Call<UserProfileResponse>
 
     @Multipart

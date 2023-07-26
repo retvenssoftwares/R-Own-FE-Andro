@@ -1,12 +1,16 @@
 package app.retvens.rown.NavigationFragments.profile
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -31,6 +35,7 @@ import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.authentication.UserInterest
+import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetJobDesignation
 import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.databinding.ActivityEditProfileBinding
@@ -40,8 +45,20 @@ import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
+import com.google.android.gms.tasks.Task
 import com.mesibo.api.Mesibo
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -55,7 +72,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.NullPointerException
 
-class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJobTitleClickListener {
+class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJobTitleClickListener,
+    BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener {
     lateinit var binding:ActivityEditProfileBinding
     var PICK_IMAGE_REQUEST_CODE : Int = 0
     //Cropped image uri
@@ -69,7 +87,12 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
     }
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
-
+    lateinit var task:ImageView
+    private val REQUEST_CHECK_SETTINGS = 1001
+    private val LOCATION_PERMISSION_REQUEST_CODE = 100
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var settingsClient: SettingsClient
+    private lateinit var locationRequest: LocationRequest
     private  var pdfUri:Uri? = null
     var PICK_PDF_REQUEST_CODE : Int = 1
 
@@ -100,6 +123,26 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
                 )
             }
             openBottomSheet()
+        }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        settingsClient = LocationServices.getSettingsClient(this)
+
+        locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        binding.autofetch.setOnClickListener {
+            checkLocationSettings()
+        }
+
+        binding.location0.setOnClickListener {
+            val bottomSheet = BottomSheetCountryStateCity()
+            val fragManager = supportFragmentManager
+            fragManager.let{bottomSheet.show(it, BottomSheetCountryStateCity.CountryStateCity_TAG)}
+            bottomSheet.setOnCountryStateCityClickListener(this)
         }
 
         binding.Designation.setOnClickListener {
@@ -216,6 +259,94 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
 
         binding.profileBackBtn.setOnClickListener {
             onBackPressed()
+        }
+    }
+
+    private fun checkLocationSettings() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(this)
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            // Location services enabled, proceed to fetch location
+            fetchLocation()
+            Log.e("click","1")
+        }
+
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                try {
+                    exception.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.e("error",sendEx.toString())
+                }
+            }
+        }
+
+    }
+
+    private fun fetchLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            Log.e("click","2")
+        } else {
+            Log.e("click","3")
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    Log.e("latitude",latitude.toString())
+                    Log.e("longitude",longitude.toString())
+
+                    reverseGeocode(latitude, longitude)
+                    Log.e("click","4")
+                }else{
+                    Log.e("click","5")
+                }
+            }.addOnFailureListener { exception: Exception ->
+                Log.e("error",exception.toString())
+                Toast.makeText(applicationContext,"Permission Required",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun reverseGeocode(latitude: Double, longitude: Double) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val geocoder = Geocoder(this@EditProfileActivity)
+            try {
+                val addresses = withContext(Dispatchers.IO) {
+                    geocoder.getFromLocation(latitude, longitude, 1)
+                }
+                if (addresses!!.isNotEmpty()) {
+                    val address = addresses[0]
+
+                    val city = address.locality
+                    val state = address.adminArea
+                    val country = address.countryName
+
+
+                    binding.location0.setText("$city,$state,$country")
+                }
+            } catch (e: Exception) {
+
+            }
         }
     }
 
@@ -350,7 +481,8 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.etNameEdit.text.toString()),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.bioEt.text.toString()),
                 RequestBody.create("multipart/form-data".toMediaTypeOrNull(),Gender),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.dText.text.toString())
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.dText.text.toString()),
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.location0.text.toString()),
             )
             pWithoutImg.enqueue(object : Callback<UserProfileResponse?> {
                 override fun onResponse(
@@ -391,6 +523,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
                     binding.etNameEdit.setText(name)
                     binding.bioEt.setText(response.body()!!.userBio)
                     bio = (response.body()!!.userBio)
+                    binding.location0.setText(response.body()!!.location)
                     response.body()!!.vendorInfo
                     try {
                         binding.dText.text = response.body()?.normalUserInfo!!.get(0).jobTitle
@@ -537,5 +670,13 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
         binding.dText.text = jobTitleFrBo
         binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
         binding.save.isClickable = true
+    }
+
+    override fun bottomCountryStateCityClick(CountryStateCityFrBo: String) {
+        binding.location0.setText(CountryStateCityFrBo)
+    }
+
+    override fun selectlocation(latitude: String, longitude: String) {
+
     }
 }

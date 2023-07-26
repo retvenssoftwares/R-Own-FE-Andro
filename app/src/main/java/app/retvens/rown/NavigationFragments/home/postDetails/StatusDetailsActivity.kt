@@ -1,11 +1,13 @@
 package app.retvens.rown.NavigationFragments.home.postDetails
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import android.view.View
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.R
@@ -39,7 +41,9 @@ class StatusDetailsActivity : AppCompatActivity() {
         binding = ActivityStatusDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.createCommunityBackBtn.setOnClickListener { onBackPressed() }
+        binding.createCommunityBackBtn.setOnClickListener {
+            startActivity(Intent(this, DashBoardActivity::class.java))
+        }
 
         postId = intent.getStringExtra("postId").toString()
         getPost(postId)

@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments.home.postDetails
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.FeedCollection.LikesCollection
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -81,7 +83,9 @@ class PostDetailsActivityNotification : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_details)
 
-        findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener { onBackPressed() }
+        findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener {
+            startActivity(Intent(this,DashBoardActivity::class.java))
+        }
 
         savedPost = findViewById(R.id.savePost)
 

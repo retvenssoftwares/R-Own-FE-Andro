@@ -50,8 +50,7 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
     private  var userId:ArrayList<String> = ArrayList()
     private var latitude:Double = 0.0
     var longitude:Double = 0.0
-    private lateinit var googleMap: GoogleMap
-    private lateinit var mMapFragment: SupportMapFragment
+
     var isBusinessVisible = true
     private lateinit var progressDialog:Dialog
 
@@ -104,22 +103,7 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        mMapFragment = SupportMapFragment.newInstance()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.map_show, mMapFragment)
-            .commit()
 
-        mMapFragment.getMapAsync(object : OnMapReadyCallback{
-            override fun onMapReady(p0: GoogleMap) {
-                googleMap = p0
-                val location = LatLng( latitude, longitude)
-                Log.e("lat",latitude.toString())
-                Log.e("long",longitude.toString())
-                googleMap.addMarker(MarkerOptions().position(location).title("location"))
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15f))
-            }
-
-        })
 
 
 
