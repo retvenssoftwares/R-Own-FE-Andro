@@ -1,9 +1,12 @@
 package app.retvens.rown.bottomsheet
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -35,7 +38,7 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
 
 
     lateinit var recyclerView : RecyclerView
-
+    lateinit var searchBar:EditText
 
     override fun getTheme(): Int = R.style.Theme_AppBottomSheetDialogTheme
 
@@ -54,6 +57,7 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
+        searchBar = view.findViewById(R.id.search_company)
         val getCompany = RetrofitBuilder.profileCompletion.getCompany()
 
         getCompany.enqueue(object : Callback<List<CompanyDatacClass>?>, CompanyAdapter.OnLocationClickListener {
@@ -66,6 +70,31 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
                     val adapter = CompanyAdapter(requireContext(),response)
                     recyclerView.adapter = adapter
                     adapter.setOnLocationClickListener(this)
+                    val originalData = response.toList()
+                    searchBar.addTextChangedListener(object : TextWatcher{
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+
+                        }
+
+                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                            val filterData = originalData.filter { item ->
+                                item.company_name.contains(p0.toString(),ignoreCase = true)
+                            }
+
+                            adapter.updateData(filterData)
+                        }
+
+                        override fun afterTextChanged(p0: Editable?) {
+
+                        }
+
+                    })
+
                 }
             }
 

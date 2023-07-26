@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -281,7 +282,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                 servicesLayout.isErrorEnabled = false
                 websiteLayout.error = "Please enter an valid website link"
             } else if(imagesList.isEmpty()){
-                Toast.makeText(context, "Please select at least one portfolio image", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please select portfolio image", Toast.LENGTH_SHORT).show()
             }
             else {
                 brandNameLayout.isErrorEnabled = false
@@ -296,12 +297,17 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                 progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 val image = progressDialog.findViewById<ImageView>(R.id.imageview)
                 Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                Log.e("img",imgUri1.toString())
+                Log.e("img2",imgUri2.toString())
+                Log.e("img3",imgUri3.toString())
                 progressDialog.show()
-                  if (imgUri1 == null && imgUri2 == null && imgUri3 == null){
+                  if (imgUri1 == null || imgUri2 == null || imgUri3 == null){
                     Toast.makeText(requireContext(),"Add All Gallery Images",Toast.LENGTH_SHORT).show()
                       progressDialog.dismiss()
-                     uploadData()
-                }
+                }else{
+                      progressDialog.dismiss()
+                      uploadData()
+                  }
 
             }
         }
@@ -375,8 +381,11 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                     activity?.finish()
                 }else{
-                    progressDialog.dismiss()
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    if (isAdded){
+                        progressDialog.dismiss()
+                        Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
 

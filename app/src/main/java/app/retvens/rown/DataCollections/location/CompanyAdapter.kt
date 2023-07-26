@@ -1,5 +1,6 @@
 package app.retvens.rown.DataCollections.location
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -59,4 +60,9 @@ class CompanyAdapter(val context: Context, var cityList:List<CompanyDatacClass>)
         return cityList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<CompanyDatacClass>) {
+        cityList = newItems
+        notifyDataSetChanged()
+    }
 }

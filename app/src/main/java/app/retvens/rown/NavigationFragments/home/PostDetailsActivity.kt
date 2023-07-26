@@ -232,7 +232,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
             indicator.visibility = View.GONE
         }
 
-        var isLike = intent.getStringExtra("islike").toBoolean()
+        isLike = intent.getStringExtra("islike").toBoolean()
 
         if (like == "Liked" || like == "liked"){
             isLike = false
