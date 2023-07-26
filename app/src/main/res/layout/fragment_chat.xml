@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="#FFFFFF"
     android:layout_height="match_parent">
@@ -51,17 +52,62 @@
 
             </LinearLayout>
 
-        <TextView
-            android:id="@+id/emptyview_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:gravity="center"
-            android:text="You do not have contacts to show instead add contacts from new contacts list"
-            android:textColor="@color/md_grey_500"
-            android:textSize="20sp"
-            android:textStyle="italic" />
+            >
+
+
+            <ImageView
+                android:id="@+id/emptyview_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:src="@drawable/vector_chats_no"
+                android:textColor="@color/md_grey_500"
+                android:textSize="20sp"
+                android:textStyle="italic"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="68dp"
+                android:gravity="center_vertical"
+                android:text="Hi, Rahul"
+                android:textColor="#272A3D"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/emptyview_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/emptyview_text"
+                app:layout_constraintVertical_bias="0.298" />
+
+            <TextView
+                android:id="@+id/count"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="63dp"
+                android:layout_marginTop="258dp"
+                android:text="Peoples are using R-Own and interacting with community. "
+                android:textColor="#272A3D"
+                android:textSize="14dp"
+                android:textStyle="normal"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/emptyview_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/emptyview_text"
+                app:layout_constraintVertical_bias="0.009" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/message_contact_frag_rv"
@@ -70,6 +116,7 @@
             android:background="@color/md_white_1000"
             app:layout_anchor="@+id/emptyview_text"
             android:layout_marginTop="60dp"
+            android:visibility="visible"
             app:layout_anchorGravity="center" />
 
         <LinearLayout

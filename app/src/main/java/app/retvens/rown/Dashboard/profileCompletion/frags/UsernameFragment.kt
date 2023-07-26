@@ -90,6 +90,8 @@ class UsernameFragment : Fragment(), BackHandler {
         dobEt = view.findViewById(R.id.dob_et)
         dobEtLayout = view.findViewById(R.id.dob)
 
+
+
         cal = Calendar.getInstance()
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
@@ -102,6 +104,11 @@ class UsernameFragment : Fragment(), BackHandler {
 
 
         }
+
+        val myFormat = "dd/MM/yyyy" // mention the format you need
+        sdf = SimpleDateFormat(myFormat, Locale.US)
+        dobEt.setText(sdf.format(cal.time))
+
         view.findViewById<TextInputEditText>(R.id.dob_et).setOnClickListener {
            val dpd = DatePickerDialog(requireContext(), dateSetListener,
                 cal.get(Calendar.YEAR),

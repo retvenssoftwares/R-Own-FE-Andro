@@ -561,10 +561,10 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
                     }
                 R.id.profile -> {
                     Log.e("role", role)
-                    if (role =="Hotel Owner" && profileCompletionStatus == "100"){
+                    if (role =="Hotel Owner"){
                         replaceFragment(ProfileFragmentForHotelOwner())
                         toolbar.visibility = View.GONE
-                    }else if (role == "Business Vendor / Freelancer" && profileCompletionStatus == "100"){
+                    }else if (role == "Business Vendor / Freelancer"){
                         replaceFragment(ProfileFragmentForVendors())
                         toolbar.visibility = View.GONE
                     }else {

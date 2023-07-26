@@ -59,6 +59,9 @@ interface RownUrl {
     @GET("profile")
     fun getProfile() : Call<List<UserProfileRequestItem>>
 
+    @GET("count")
+    fun getCount() : Call<Count>
+
     @GET("details_of/{user_id}")
     fun getContactsProfile(
         @Path("user_id") user_id: String

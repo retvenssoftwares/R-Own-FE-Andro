@@ -14,3 +14,7 @@ data class DeleteAccount(
 data class BlockAccount(
     val user_id:String
 )
+
+data class Count(
+    val count:String
+)

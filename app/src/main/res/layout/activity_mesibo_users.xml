@@ -81,46 +81,50 @@
         />
 
 
-
     <ImageView
         android:id="@+id/noConn"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="center"
         android:src="@drawable/vector_chats_no"
-        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.577" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/noConn"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Rahul"
-        android:visibility="gone"
+        android:layout_marginStart="68dp"
+        android:gravity="center_vertical"
+        android:text="Hi, Rahul"
         android:textColor="#272A3D"
         android:textSize="16dp"
         android:textStyle="bold"
-        android:layout_marginTop="178dp"
-        android:layout_marginStart="91dp"
-        />
-
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/noConn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/noConn"
+        app:layout_constraintVertical_bias="0.291" />
 
     <TextView
         android:id="@+id/count"
-        android:layout_width="280dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="63dp"
         android:layout_marginTop="258dp"
         android:text="Peoples are using R-Own and interacting with community. "
         android:textColor="#272A3D"
-        android:visibility="gone"
         android:textSize="14dp"
         android:textStyle="normal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/noConn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+        app:layout_constraintTop_toTopOf="@+id/noConn"
+        app:layout_constraintVertical_bias="0.009" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

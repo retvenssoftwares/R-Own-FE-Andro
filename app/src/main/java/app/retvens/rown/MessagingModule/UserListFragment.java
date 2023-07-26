@@ -14,6 +14,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -26,7 +27,6 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,20 +36,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboGroupProfile;
 import com.mesibo.api.MesiboMessage;
@@ -76,10 +72,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Collectors;
 
+import app.retvens.rown.ApiRequest.RetrofitBuilder;
 import app.retvens.rown.ChatSection.MesiboUsers;
+import app.retvens.rown.DataCollections.Count;
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
 import app.retvens.rown.R;
-import app.retvens.rown.api.MesiboCall;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserListFragment extends Fragment implements Mesibo.MessageListener,
         Mesibo.PresenceListener, Mesibo.ConnectionListener, Mesibo.ProfileListener, Mesibo.SyncListener, Mesibo.GroupListener {
@@ -92,7 +92,10 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
     /* access modifiers changed from: private */
     public boolean mCloseAfterForward = false;
     public boolean mContactView = false;
-    public TextView mEmptyView;
+    public ImageView mEmptyView;
+    public TextView count;
+    public TextView name;
+    public String num;
     public long mForwardId = 0;
     /* access modifiers changed from: private */
     public long[] mForwardMessageIds = null;
@@ -242,7 +245,9 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 //                }
 //            }
 //        });
-        this.mEmptyView = (TextView) view.findViewById(R.id.emptyview_text);
+        this.mEmptyView = (ImageView) view.findViewById(R.id.emptyview_text);
+        this.count = view.findViewById(R.id.count);
+        this.name = view.findViewById(R.id.name);
         setEmptyViewText();
         this.mUserProfiles = new ArrayList<>();
         this.mRecyclerView = view.findViewById(R.id.message_contact_frag_rv);
@@ -252,6 +257,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         this.fabadd = view.findViewById(R.id.fab_add);
         this.searchBar = view.findViewById(R.id.searchBar);
 
+        getCount();
         ArrayList<MesiboProfile> Search = this.mUserProfiles;
 
 
@@ -317,9 +323,13 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
     public void setEmptyViewText() {
         if (this.mSelectionMode == MesiboUserListFragment.MODE_MESSAGELIST) {
-            this.mEmptyView.setText(getActivity().getResources().getString(R.string.not_having_messages));
+            this.mEmptyView.setVisibility(0);
+            this.name.setVisibility(0);
+            this.count.setVisibility(0);
         } else {
-            this.mEmptyView.setText(MesiboUI.getConfig().emptyUserListMessage);
+            this.mEmptyView.setVisibility(8);
+            this.name.setVisibility(8);
+            this.count.setVisibility(8);
         }
     }
 
@@ -338,10 +348,21 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         if (userListsize == 0) {
             this.mRecyclerView.setVisibility(View.INVISIBLE);
             this.mEmptyView.setVisibility(View.VISIBLE);
+            this.count.setVisibility(View.VISIBLE);
+            this.name.setVisibility(View.VISIBLE);
+
+            SharedPreferences sharedPreferencesName = getContext().getSharedPreferences("SaveFullName", Context.MODE_PRIVATE);
+            String profileName = sharedPreferencesName.getString("full_name", "");
+            this.name.setText("Hi, "+profileName);
+
+            this.count.setText(num+" Peoples are using R-Own and interacting with community. ");
+
             return;
         }
         this.mRecyclerView.setVisibility(View.VISIBLE);
         this.mEmptyView.setVisibility(View.GONE);
+        this.count.setVisibility(View.GONE);
+        this.name.setVisibility(View.GONE);
     }
 
     public void hideForwardLayout() {
@@ -351,6 +372,32 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
     private void updateNotificationBadge() {
         if (!this.mMesiboUIOptions.mEnableNotificationBadge) {
         }
+    }
+
+    private void getCount() {
+        // Create a Retrofit service instance
+        Call<Count> service = RetrofitBuilder.INSTANCE.getRetrofitBuilder().getCount();
+
+        // Call the API method to get the count
+
+        service.enqueue(new Callback<Count>() {
+            @Override
+            public void onResponse(Call<Count> call, Response<Count> response) {
+                if (response.isSuccessful()) {
+                    Count countResponse = response.body();
+                    if (countResponse != null) {
+                        num = countResponse.getCount();
+                    }
+                } else {
+                    Log.e("error", String.valueOf(response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Count> call, Throwable t) {
+                Log.e("error", t.getMessage());
+            }
+        });
     }
 
     public synchronized void addNewMessage(MesiboMessage params) {
@@ -1272,7 +1319,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             this.mDataList = this.mSearchResults;
             UserListFragment.this.setEmptyViewText();
             if (UserListFragment.this.mSelectionMode == MesiboUserListFragment.MODE_MESSAGELIST) {
-                UserListFragment.this.mEmptyView.setText(MesiboUI.getConfig().emptySearchListMessage);
                 if (!TextUtils.isEmpty(text2)) {
                     Boolean unused3 = UserListFragment.this.mIsMessageSearching = true;
                     MesiboReadSession rbd = new MesiboReadSession(UserListFragment.this);

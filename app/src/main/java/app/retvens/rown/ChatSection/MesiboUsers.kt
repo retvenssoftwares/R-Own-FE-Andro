@@ -3,6 +3,7 @@ package app.retvens.rown.ChatSection
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -17,6 +18,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.Connection
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.Connections
+import app.retvens.rown.DataCollections.Count
 import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
@@ -35,6 +37,8 @@ class MesiboUsers : AppCompatActivity() {
     private lateinit var noConn:ImageView
     private lateinit var name:TextView
     private lateinit var count:TextView
+    private lateinit var profileName:String
+    private lateinit var num:String
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +59,33 @@ class MesiboUsers : AppCompatActivity() {
 
         searchBar = findViewById(R.id.searchBar)
 
+        val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
+        profileName = sharedPreferencesName?.getString("full_name", "").toString()
+
 
         getMesiboUsers()
+        getCount()
 
+    }
+
+    private fun getCount() {
+
+        val count = RetrofitBuilder.retrofitBuilder.getCount()
+
+        count.enqueue(object : Callback<Count?> {
+            override fun onResponse(call: Call<Count?>, response: Response<Count?>) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    num = response.count
+                }else{
+                    Log.e("error",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<Count?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
     }
 
     private fun getMesiboUsers() {
@@ -89,15 +117,25 @@ class MesiboUsers : AppCompatActivity() {
                                         original = it.conns.toList()
                                     }else{
                                         count.visibility = View.VISIBLE
+                                        val handler = Handler()
+                                        handler.postDelayed({
+                                            count.text = "$num Peoples are using R-Own and interacting with community."
+                                        },100)
                                         name.visibility = View.VISIBLE
+                                        name.text = "Hi, $profileName"
                                         noConn.visibility = View.VISIBLE
                                     }
 
                                 }
                             }catch (e:NullPointerException){
-                                count.visibility = View.VISIBLE
-                                name.visibility = View.VISIBLE
-                                noConn.visibility = View.VISIBLE
+                            count.visibility = View.VISIBLE
+                            val handler = Handler()
+                            handler.postDelayed({
+                                count.text = "$num Peoples are using R-Own and interacting with community."
+                            },100)
+                            name.visibility = View.VISIBLE
+                            name.text = "Hi, $profileName"
+                            noConn.visibility = View.VISIBLE
                             }
 
 
@@ -139,7 +177,9 @@ class MesiboUsers : AppCompatActivity() {
                     }
                 }else{
                     count.visibility = View.VISIBLE
+                    count.text = "$num Peoples are using R-Own and interacting with community."
                     name.visibility = View.VISIBLE
+                    name.text = "Hi, $profileName"
                     noConn.visibility = View.VISIBLE
                 }
             }
