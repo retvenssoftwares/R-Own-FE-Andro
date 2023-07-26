@@ -60,6 +60,7 @@ import com.mesibo.api.MesiboReadSession
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 import java.util.*
 
 
@@ -105,13 +106,24 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
         textView = findViewById(R.id.textView)
         startAnimation()
 
-
-        Thread {
-            // Run whatever background code you want here.
-            replaceFragment(HomeFragment())
-        }.start()
-
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val frag = intent.getStringExtra("frag")
+
+        if (frag == "profile"){
+            replaceFragment(ProfileFragment())
+            toolbar.visibility = View.GONE
+        } else if (frag == "ownerProfile"){
+            replaceFragment(ProfileFragmentForHotelOwner())
+            toolbar.visibility = View.GONE
+        } else if (frag == "vendorProfile"){
+            replaceFragment(ProfileFragmentForVendors())
+            toolbar.visibility = View.GONE
+        } else {
+            Thread {
+                // Run whatever background code you want here.
+                replaceFragment(HomeFragment())
+            }.start()
+        }
         //setUp drawerLayout
         drawerLayout = findViewById(R.id.drawerLayout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -142,7 +154,21 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
                     binding.dashboard.visibility = View.VISIBLE
                     if (replace) {
                         replace = false
-                        replaceFragment(HomeFragment())
+                        if (frag == "profile"){
+                            replaceFragment(ProfileFragment())
+                            toolbar.visibility = View.GONE
+                        } else if (frag == "ownerProfile"){
+                            replaceFragment(ProfileFragmentForHotelOwner())
+                            toolbar.visibility = View.GONE
+                        } else if (frag == "vendorProfile"){
+                            replaceFragment(ProfileFragmentForVendors())
+                            toolbar.visibility = View.GONE
+                        } else {
+                            Thread {
+                                // Run whatever background code you want here.
+                                replaceFragment(HomeFragment())
+                            }.start()
+                        }
                     }
 //                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
                 }

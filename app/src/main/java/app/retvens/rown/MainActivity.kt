@@ -1,15 +1,20 @@
 package app.retvens.rown
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.DataCollections.onboarding.VersionUpdate
 import app.retvens.rown.authentication.*
 import app.retvens.rown.utils.connectionCount
 import app.retvens.rown.utils.getProfileInfo
@@ -29,16 +34,29 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var appVersion : TextView
+    private lateinit var updateYourApp : TextView
     private lateinit var auth:FirebaseAuth
+
+    var versionName = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        appVersion = findViewById(R.id.appVersion)
+        updateYourApp = findViewById(R.id.updateYourApp)
+
         var server = 0
+        val manager = this.packageManager
+        val info = manager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
+        versionName = info.versionName.toString()
+        appVersion.text = versionName
+        getAppVersion()
+
         getProfileInfo(this){
             server = it
         }
-
         auth = FirebaseAuth.getInstance()
 
         val handler = Handler(Looper.getMainLooper())
@@ -87,5 +105,26 @@ class MainActivity : AppCompatActivity() {
 
 
         },2000)
+    }
+
+    private fun getAppVersion() {
+        val version = RetrofitBuilder.retrofitBuilder.getAppUpdate()
+        version.enqueue(object : Callback<VersionUpdate?> {
+            override fun onResponse(
+                call: Call<VersionUpdate?>,
+                response: Response<VersionUpdate?>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("appUpdate", response.body()!!.get(0).Android_version.toString())
+//                    appVersion.text = response.body()!!.get(0).Android_version.toString()
+                    if (versionName != response.body()!!.get(0).Android_version.toString()){
+                        updateYourApp.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onFailure(call: Call<VersionUpdate?>, t: Throwable) {
+
+            }
+        })
     }
 }

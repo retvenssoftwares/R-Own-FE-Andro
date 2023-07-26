@@ -159,6 +159,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:focusable="true"
+            android:maxLength="100"
             android:imeOptions="actionNext"
             android:textColor="@color/black"
             style="@style/TextAppearance.AppCompat.Body1"
@@ -225,6 +226,7 @@
             style="@style/TextAppearance.AppCompat.Body1"
             android:background="@null"
             android:padding="12dp"
+            android:maxLength="150"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/syjh"/>

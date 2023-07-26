@@ -26,6 +26,7 @@ import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
@@ -40,6 +41,7 @@ import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.model.Dash
 import com.mesibo.api.Mesibo
 import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -537,5 +539,13 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
         binding.dText.text = jobTitleFrBo
         binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
         binding.save.isClickable = true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(applicationContext, DashBoardActivity :: class.java)
+        intent.putExtra("frag", "profile")
+        startActivity(intent)
+        finish()
     }
 }

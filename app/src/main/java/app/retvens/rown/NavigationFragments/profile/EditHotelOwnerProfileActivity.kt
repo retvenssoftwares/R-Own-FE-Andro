@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
@@ -342,5 +343,13 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         return compressed
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(applicationContext, DashBoardActivity :: class.java)
+        intent.putExtra("frag", "ownerProfile")
+        startActivity(intent)
+        finish()
     }
 }

@@ -306,6 +306,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             }
             "edit" -> {
                 startActivity(Intent(context, EditVendorsProfileActivity::class.java))
+                activity?.finish()
             }
             "saved" -> {
                 startActivity(Intent(context, SavedActivity::class.java))

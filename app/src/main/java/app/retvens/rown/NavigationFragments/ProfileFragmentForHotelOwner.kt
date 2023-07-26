@@ -341,9 +341,11 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             }
             "edit" -> {
                 startActivity(Intent(context, EditHotelOwnerProfileActivity::class.java))
+                activity?.finish()
             }
             "editHotelier" -> {
                 startActivity(Intent(context, EditHotelProfileActivity::class.java))
+                activity?.finish()
             }
             "saved" -> {
                 startActivity(Intent(context, SavedActivity::class.java))

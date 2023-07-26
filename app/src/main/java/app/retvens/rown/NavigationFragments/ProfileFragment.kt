@@ -265,6 +265,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             }
             "edit" -> {
                 startActivity(Intent(context, EditProfileActivity::class.java))
+                activity?.finish()
             }
             "saved" -> {
                 startActivity(Intent(context, SavedActivity::class.java))

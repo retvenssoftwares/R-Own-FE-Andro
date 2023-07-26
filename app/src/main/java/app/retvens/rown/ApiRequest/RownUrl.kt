@@ -116,5 +116,8 @@ interface RownUrl {
     fun deviceToken(
         @Body devicetoken:DeviceTokenClass
     ):Call<UpdateResponse>
+
+    @GET("getappupdate")
+    fun getAppUpdate() : Call<VersionUpdate>
 }
 
