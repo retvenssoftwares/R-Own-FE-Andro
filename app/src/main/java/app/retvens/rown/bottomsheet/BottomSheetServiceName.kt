@@ -104,18 +104,24 @@ class BottomSheetServiceName : BottomSheetDialogFragment() {
         getBottomServices()
         addService = view.findViewById(R.id.addService)
         addService.setOnClickListener {
-            mListener?.bottomSNClick(selectedServicesName.toString())
-            progressDialog = Dialog(requireContext())
-            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            progressDialog.setContentView(R.layout.progress_dialoge)
-            progressDialog.setCancelable(false)
-            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
-            Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
-            progressDialog.show()
+            if (selectedServicesName.isNotEmpty()) {
+                mListener?.bottomSNClick(selectedServicesName.toString())
+                progressDialog = Dialog(requireContext())
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.setCancelable(false)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
 
-            selectedServices.forEach {
-                setServices(it)
+                selectedServices.forEach {
+                    setServices(it)
+                }
+            } else {
+                if (isAdded){
+                    Toast.makeText(requireContext(), "Please select any service", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
