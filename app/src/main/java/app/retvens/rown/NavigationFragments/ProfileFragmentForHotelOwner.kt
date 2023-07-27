@@ -298,7 +298,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             ) {
                 serverCode = response.code()
                 progressDialog.dismiss()
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     seeStatus = response.connectionStatus
                     profilePic = response.profiledata.Profile_pic

@@ -259,7 +259,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             ) {
                 serverCode = response.code()
                 progressDialog.dismiss()
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
 
                     val verificationStatus = response.roleDetails.verificationStatus
