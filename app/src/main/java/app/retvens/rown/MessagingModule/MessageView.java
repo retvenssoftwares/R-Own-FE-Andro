@@ -12,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -310,7 +311,14 @@ public class MessageView extends RelativeLayout {
                     this.fullName.setText(fullName);
                     this.caption.setText(caption);
                     this.userName.setText(username);
-                    Glide.with(this).load(profilePictureLink).into(this.profile);
+
+                    if (Objects.equals(profilePictureLink, "")){
+                        this.mprofile.setImageResource(R.drawable.svg_user);
+                    }else {
+                        Glide.with(this).load(profilePictureLink).into(this.profile);
+                    }
+
+
                     Glide.with(this).load(firstImageLink).into(this.postImage);
                     this.postCard.setVisibility(0);
                     this.postCard.setOnClickListener(new View.OnClickListener() {
@@ -339,7 +347,12 @@ public class MessageView extends RelativeLayout {
 
                     this.profileName.setText(fullName);
                     this.profileRole.setText(userRole);
-                    Glide.with(this).load(pic).into(this.mprofile);
+                    if (Objects.equals(pic, "")){
+                        this.mprofile.setImageResource(R.drawable.svg_user);
+                    }else {
+                        Glide.with(this).load(pic).into(this.mprofile);
+                    }
+
 
                     this.profileCard.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -387,7 +400,12 @@ public class MessageView extends RelativeLayout {
                     this.fullName.setText(fullName);
                     this.caption.setText(caption);
                     this.userName.setText(username);
-                    Glide.with(this).load(profilePictureLink).into(this.profile);
+                    if (Objects.equals(profilePictureLink, "")){
+                        this.mprofile.setImageResource(R.drawable.svg_user);
+                    }else {
+                        Glide.with(this).load(profilePictureLink).into(this.profile);
+                    }
+
                     Glide.with(this).load(firstImageLink).into(this.postImage);
                     this.postCard.setVisibility(0);
                     Log.e("4","working");
@@ -414,7 +432,15 @@ public class MessageView extends RelativeLayout {
 
                     this.profileName.setText(fullName);
                     this.profileRole.setText(userRole);
-                    Glide.with(this).load(pic).into(this.mprofile);
+                    if (Objects.equals(pic, "")){
+                        Glide.with(this)
+                                .load(pic)
+                                .placeholder(R.drawable.svg_user) // Use the vector drawable as a placeholder while loading the image
+                                .into(mprofile);
+                    }else {
+                        Glide.with(this).load(pic).into(this.mprofile);
+                    }
+
                     this.profileCard.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

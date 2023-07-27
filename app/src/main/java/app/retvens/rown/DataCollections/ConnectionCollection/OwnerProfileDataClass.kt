@@ -16,6 +16,7 @@ data class ProfileOwnerData(
     val _id: String,
     val Profile_pic: String,
     val userBio: String,
+    val profileCompletionStatus:String,
     val Mesibo_account: List<MesiboAccount>,
     val User_name: String,
     val post_count: List<Any>,

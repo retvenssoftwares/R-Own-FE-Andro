@@ -25,7 +25,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.VendorProfileDataClass
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.profile.EditVendorsProfileActivity
+import app.retvens.rown.NavigationFragments.profile.HotelOwnerDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
@@ -78,6 +80,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
     var profilePic = ""
     var seeStatus = ""
     var selected = 1
+    var completion = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -247,7 +250,30 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             fragManager.let{bottomSheet.show(it, BottomSheetVendorsProfileSetting.WTP_TAG)}
             bottomSheet.setOnBottomSheetProfileSettingClickListener(this)
         }
+        fetchProfile(user_id)
     }
+
+    private fun fetchProfile(userId: String) {
+
+        val getData = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
+
+        getData.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    completion = response.body()!!.profileCompletionStatus
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+
+            }
+        })
+
+    }
+
     private fun getSelfUserProfile(userId: String, userId1: String) {
 
         val getProfile = RetrofitBuilder.connectionApi.getVendorProfile(userId,userId1)
@@ -334,8 +360,13 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
             }
             "edit" -> {
-                startActivity(Intent(context, EditVendorsProfileActivity::class.java))
-                activity?.finish()
+                if (completion == "100"){
+                    startActivity(Intent(context, EditVendorsProfileActivity::class.java))
+                    activity?.finish()
+                }else{
+                    Toast.makeText(requireContext(),"Complete Your Profile First!!", Toast.LENGTH_SHORT).show()
+                }
+
             }
             "saved" -> {
                 startActivity(Intent(context, SavedActivity::class.java))
