@@ -79,6 +79,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     lateinit var postCount:TextView
     lateinit var connCont:TextView
     lateinit var requestCont:TextView
+    lateinit var link:TextView
 
     private lateinit var progressDialog: Dialog
 
@@ -105,6 +106,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         username = view.findViewById(R.id.profile_username)
         bio = view.findViewById(R.id.bio)
         name = view.findViewById(R.id.profile_name)
+        link = view.findViewById(R.id.link)
         linkText = view.findViewById(R.id.linkText)
 
         polls = view.findViewById(R.id.polls)
@@ -353,7 +355,11 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                         Log.e("error",e.message.toString())
                     }
 
-                    linkText.text = response.profile.hotelOwnerInfo.websiteLink
+                    if (response.profile.hotelOwnerInfo.websiteLink.isNotEmpty()) {
+                        linkText.text = response.profile.hotelOwnerInfo.websiteLink
+                    } else {
+                        link.visibility = View.GONE
+                    }
                 }
 
             }

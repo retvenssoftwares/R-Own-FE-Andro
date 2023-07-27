@@ -67,6 +67,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
     lateinit var postCount:TextView
     lateinit var connCont:TextView
     lateinit var requestCont:TextView
+    lateinit var link : TextView
 
     lateinit var polls : TextView
     lateinit var media : TextView
@@ -98,6 +99,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         name = view.findViewById(R.id.profile_name)
         userName = view.findViewById(R.id.profile_username)
         bio = view.findViewById(R.id.bio)
+        link = view.findViewById(R.id.link)
         websiteLink = view.findViewById(R.id.websiteLink)
         websiteLink.setOnClickListener{
             val uri = Uri.parse("https://" + websiteLink.text.toString())
@@ -325,7 +327,12 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                         Log.e("error",e.message.toString())
                     }
 
-                    websiteLinkV = response.roleDetails.vendorInfo.websiteLink
+                    if (response.roleDetails.vendorInfo.websiteLink.isNotEmpty()) {
+                        websiteLinkV = response.roleDetails.vendorInfo.websiteLink
+                    } else {
+                        link.visibility = View.GONE
+                    }
+
                     if (response.roleDetails.User_name == ""){
                         userName.text = "Complete Your Profile"
                     } else {

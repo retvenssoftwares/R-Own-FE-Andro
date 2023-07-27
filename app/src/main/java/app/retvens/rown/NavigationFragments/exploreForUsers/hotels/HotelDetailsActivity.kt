@@ -184,7 +184,7 @@ class HotelDetailsActivity : AppCompatActivity() {
                             binding.img3.visibility = View.GONE
                         }
 
-                        if (data.gallery.get(0).Image1.isEmpty() && data.gallery.get(0).Image2.isEmpty() && data.gallery.get(0).Image3.isEmpty()) {
+                        if (data.gallery.isEmpty()) {
                             Glide.with(applicationContext).load(data.hotelCoverpicUrl)
                                 .into(binding.vendorImage)
 
@@ -192,7 +192,14 @@ class HotelDetailsActivity : AppCompatActivity() {
                             binding.img2.visibility = View.GONE
                             binding.img3.visibility = View.GONE
                         }
-                    } catch (e : IndexOutOfBoundsException) {}
+                    } catch (e : IndexOutOfBoundsException) {
+                        Glide.with(applicationContext).load(data.hotelCoverpicUrl)
+                            .into(binding.vendorImage)
+
+                        binding.img1.visibility = View.GONE
+                        binding.img2.visibility = View.GONE
+                        binding.img3.visibility = View.GONE
+                    }
 
                     binding.descriptionHotel.text = data.Hoteldescription
                 } else {

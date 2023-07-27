@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -206,6 +207,9 @@ class ExploreServicesFragment : Fragment() {
     }
 
     private fun getServices() {
+        val sharedPreferences =  context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences?.getString("user_id", "").toString()
+
         val serv = RetrofitBuilder.exploreApis.getExploreService(currentPage.toString())
         serv.enqueue(object : Callback<List<ExploreServiceData>?> {
             override fun onResponse(
@@ -223,9 +227,13 @@ class ExploreServicesFragment : Fragment() {
                                    val data = response.body()!!
                                    data.forEach {
 //                                       if (it.vendors.size >= 10){
+                                       it.vendors.forEach { services ->
+                                           if (services.user_id != user_id){
+                                               hotelList.add(services)
+                                           }
+                                       }
                                            currentPage++
 //                                       }
-                                       hotelList.addAll(it.vendors)
                                        exploreServicesAdapter.removeServicesFromList(hotelList)
                                        exploreServicesAdapter.notifyDataSetChanged()
                                    }
