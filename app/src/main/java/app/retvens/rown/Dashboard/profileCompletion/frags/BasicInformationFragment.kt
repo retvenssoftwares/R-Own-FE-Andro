@@ -243,9 +243,9 @@ class BasicInformationFragment : Fragment(),
             } else if (!isStudent) {
                 if (university.text.toString() == ""){
                     universityLayout.error = "Select your College"
-                } else if (start.text.toString() == "Select Year"){
+                } else if (start.length() < 3){
                     startLayout.error = "Select Year"
-                } else if (end.text.toString() == "Select Year"){
+                } else if (end.length() < 3){
                     endLayout.error = "Select Year"
                 } else  {
                     progressDialog = Dialog(requireContext())

@@ -134,7 +134,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -142,7 +142,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Session Start"
+                android:hint="Start Year"
                 android:textColorHint="@color/black"
                 app:hintTextColor="@color/black"
                 app:boxStrokeColor="@color/black"
@@ -163,7 +163,6 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
-                    android:text="Select Year"
                     android:clickable="true"
                     android:focusable="false"
                     android:editable="false"/>
@@ -175,7 +174,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Session End"
+                android:hint="End Year"
                 android:textColorHint="@color/black"
                 app:boxStrokeColor="@color/black"
                 app:boxStrokeWidthFocused="2dp"
@@ -195,7 +194,6 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
-                    android:text="Select Year"
                     android:clickable="true"
                     android:focusable="false"
                     android:editable="false"/>
