@@ -230,6 +230,7 @@
                 android:textColor="@color/black"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:background="@null"
+                android:maxLines="3"
                 android:maxLength="150"
                 android:padding="12dp"
                 app:layout_constraintStart_toStartOf="parent"

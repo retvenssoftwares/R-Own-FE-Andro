@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  *  on 20/05/23, 3:30 AM
+  ~  * Copyright (c) 2023 . All rights reserved.
+  ~  * Last modified 15/05/23, 6:12 AM
+  ~  */
+  -->
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/chat_bg_new"
+    android:paddingRight="5sp"
     tools:ignore="MergeRootFrame">
 
     <FrameLayout
@@ -17,16 +26,16 @@
             android:id="@+id/fullscreen_video_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleX="-1"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:scaleX="-1" />
 
         <app.retvens.rown.api.MesiboVideoView
             android:id="@+id/pip_video_view"
             android:layout_width="wrap_content"
             android:layout_height="120dp"
-            android:scaleX="-1"
             android:layout_gravity="bottom"
-            android:layout_margin="16dp" />
+            android:layout_margin="16dp"
+            android:scaleX="-1" />
 
     </FrameLayout>
 
@@ -41,28 +50,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-<!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal">-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/imageView4"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:visibility="gone"-->
-<!--                    app:srcCompat="@drawable/ic_arrow_left" />-->
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_arrow_left" />
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/imageView5"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentRight="true"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:layout_marginRight="10dp"-->
-<!--                    android:visibility="gone"-->
-<!--                    app:srcCompat="@drawable/chat_feed_icons" />-->
-<!--            </RelativeLayout>-->
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/chat_feed_icons" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/titlee"
@@ -86,12 +95,11 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/photo_image"
-                    android:layout_width="120sp"
-                    android:layout_height="120sp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_weight="1.4"
                     app:shapeAppearanceOverlay="@style/SpecificCornerRounded"
-                    android:src="@drawable/profile"
-                    app:srcCompat="@drawable/default_user_image" />
+                    app:srcCompat="@drawable/svg_user" />
 
             </LinearLayout>
 
@@ -116,13 +124,13 @@
                 android:text="+18885550001 | USA"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15sdp"
-                android:visibility="gone" />
+                android:visibility="invisible" />
 
             <Chronometer
                 android:id="@+id/call_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/call_address"
+                android:layout_below="@+id/call_name"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="00:00"
@@ -142,14 +150,14 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/onGoing_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="120dp"
-                    android:src="@drawable/profile"
+                    android:src="@drawable/svg_user"
                     android:visibility="gone"
                     app:shapeAppearanceOverlay="@style/SpecificCornerRounded"
-                    app:srcCompat="@drawable/default_user_image" />
+                    app:srcCompat="@drawable/default_user_image"/>
 
                 <TextView
                     android:id="@+id/textView4"
@@ -174,74 +182,114 @@
                 android:orientation="horizontal"
                 android:visibility="visible">
 
-                <RelativeLayout
-                    android:id="@+id/button_elements"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="#FFFFFF"
-                    android:gravity="center"
-                    android:padding="0dp"
-                    android:visibility="visible">
+                    app:cardCornerRadius="14dp"
+                    android:layout_marginBottom="-10dp"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="4dp">
 
-                    <ImageView
-                        android:id="@+id/switch_source"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30sp"
-                        android:layout_toStartOf="@id/two"
-                        android:paddingTop="34sp"
-                        android:paddingRight="32sp"
-                        android:paddingBottom="32sp"
-                        android:visibility="visible"
-                        app:srcCompat="@drawable/vector_revese_cam" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:background="#272a3d"
+                        android:layout_height="100dp">
 
-                    <ImageView
-                        android:id="@+id/one"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginLeft="10sp"
-                        android:paddingTop="32sp"
-                        android:paddingRight="20sp"
-                        android:paddingBottom="20sp"
-                        app:srcCompat="@drawable/vector_speaker" />
+                        <ImageView
+                            android:id="@+id/switch_source"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginEnd="24dp"
+                            android:layout_marginBottom="24dp"
+                            android:src="@drawable/ic_camerarotate"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/three"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
 
-                    <ImageView
-                        android:id="@+id/two"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/one"
-                        android:paddingLeft="10sp"
-                        android:paddingTop="32sp"
-                        android:paddingRight="20sp"
-                        android:visibility="visible"
-                        android:paddingBottom="20sp"
-                        app:srcCompat="@drawable/vector_onvideocall" />
+                        <ImageView
+                            android:id="@+id/one"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginEnd="24dp"
+                            android:layout_marginBottom="24dp"
+                            android:src="@drawable/ic_speakerhigh"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/three"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
 
-                    <ImageView
-                        android:id="@+id/three"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/two"
-                        android:paddingLeft="10sp"
-                        android:paddingTop="32sp"
-                        android:paddingRight="20sp"
-                        android:paddingBottom="32sp"
-                        app:srcCompat="@drawable/vector_endcall" />
+                        <ImageView
+                            android:id="@+id/two"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@id/one"
+                            android:paddingLeft="10sp"
+                            android:paddingTop="32sp"
+                            android:visibility="gone"
+                            android:paddingRight="30sp"
+                            android:paddingBottom="32sp"
+                            app:srcCompat="@drawable/ic_video_off"
+                            tools:ignore="MissingConstraints" />
 
-                    <ImageView
-                        android:id="@+id/four"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/three"
-                        android:paddingTop="34sp"
-                        android:paddingBottom="32sp"
-                        app:srcCompat="@drawable/vector_mutemike" />
+                        <ImageView
+                            android:id="@+id/three"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginEnd="24dp"
+                            android:layout_marginBottom="24dp"
+                            android:src="@drawable/ic_frame_512245"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/four"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginEnd="24dp"
+                            android:layout_marginBottom="24dp"
+                            android:src="@drawable/microphone_off__2_"
+                            app:tint="@color/white"
+                            android:visibility="visible"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/three"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@id/four"
+                            android:paddingTop="32sp"
+                            android:paddingRight="32sp"
+                            android:paddingBottom="32sp"
+                            app:tint="@color/white"
+                            android:visibility="gone"
+                            app:srcCompat="@drawable/ic_more_option_verical"
+                            tools:ignore="MissingConstraints" />
 
 
-                </RelativeLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -267,7 +315,7 @@
                             android:layout_width="@dimen/outgoing_video_call_icon_size"
                             android:layout_height="@dimen/outgoing_video_call_icon_size"
                             android:layout_gravity="left"
-                            android:background="@drawable/vector_speaker"
+                            android:background="@drawable/ic_mesibo_volume_up"
                             android:contentDescription="@string/toggle_speaker" />
 
                     </LinearLayout>
@@ -284,33 +332,33 @@
 
                         <ImageButton
                             android:id="@+id/button_call_switch_cameraa"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
+                            android:layout_width="@dimen/outgoing_video_call_icon_size"
+                            android:layout_height="@dimen/outgoing_video_call_icon_size"
                             android:layout_gravity="left"
-                            android:background="@drawable/vector_revese_cam"
+                            android:background="@drawable/ic_mesibo_switch_camera"
                             android:contentDescription="@string/switch_camera" />
 
                     </LinearLayout>
 
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/layout_switch_source"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_margin="@dimen/outgoing_video_call_icon_margin"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:background="@drawable/drawable_background_circle"-->
-<!--                        android:gravity="center"-->
-<!--                        android:padding="@dimen/outgoing_video_call_icon_padding">-->
+                    <LinearLayout
+                        android:id="@+id/layout_switch_source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/outgoing_video_call_icon_margin"
+                        android:layout_weight="1"
+                        android:background="@drawable/drawable_background_circle"
+                        android:gravity="center"
+                        android:padding="@dimen/outgoing_video_call_icon_padding">
 
-<!--                        <ImageButton-->
-<!--                            android:id="@+id/button_call_switch_source"-->
-<!--                            android:layout_width="@dimen/outgoing_video_call_icon_size"-->
-<!--                            android:layout_height="@dimen/outgoing_video_call_icon_size"-->
-<!--                            android:layout_gravity="left"-->
-<!--                            android:background="@drawable/ic_mesibo_screen_sharing"-->
-<!--                            android:contentDescription="@string/switch_source" />-->
+                        <ImageButton
+                            android:id="@+id/button_call_switch_source"
+                            android:layout_width="@dimen/outgoing_video_call_icon_size"
+                            android:layout_height="@dimen/outgoing_video_call_icon_size"
+                            android:layout_gravity="left"
+                            android:background="@drawable/ic_mesibo_screen_sharing"
+                            android:contentDescription="@string/switch_source" />
 
-<!--                    </LinearLayout>-->
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/layout_toggle_camera"
@@ -345,7 +393,7 @@
                             android:layout_width="@dimen/outgoing_video_call_icon_size"
                             android:layout_height="@dimen/outgoing_video_call_icon_size"
                             android:layout_gravity="right"
-                            android:background="@drawable/vector_mutemike"
+                            android:background="@drawable/ic_mesibo_mic_off"
                             android:contentDescription="@string/toggle_mic" />
                     </LinearLayout>
 

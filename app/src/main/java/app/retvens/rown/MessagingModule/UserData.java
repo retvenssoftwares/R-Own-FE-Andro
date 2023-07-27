@@ -8,6 +8,7 @@
 
 package app.retvens.rown.MessagingModule;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -178,7 +179,7 @@ public class UserData {
         this.mUserImage = b;
     }
 
-    public Bitmap getThumbnail(LetterTileProvider tileProvider) {
+    public Bitmap getThumbnail(LetterTileProvider tileProvider, Context context) {
         Bitmap tn = this.mUser.getThumbnail();
         if (tn != null) {
             return tn;
@@ -187,7 +188,7 @@ public class UserData {
             return this.mUserImageThumbnail;
         }
         if (MesiboUI.getConfig().useLetterTitleImage && tileProvider != null) {
-            this.mUserImageThumbnail = tileProvider.getLetterTile(getUserName(), true);
+            this.mUserImageThumbnail = tileProvider.getLetterTile(getUserName(), true , context);
         } else if (this.mUser.groupid > 0) {
             this.mUserImageThumbnail = MesiboImages.getDefaultGroupBitmap();
         } else {
@@ -196,9 +197,7 @@ public class UserData {
         return this.mUserImageThumbnail;
     }
 
-    public Bitmap getThumbnail() {
-        return getThumbnail((LetterTileProvider) null);
-    }
+
 
     public String getImagePath() {
         return this.mUser.getImageOrThumbnailPath();

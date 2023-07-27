@@ -642,15 +642,15 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
         )
     }
 
-    fun compressImage(imageUri: Uri): Uri {
-        lateinit var compressed : Uri
+    fun compressImage(imageUri: Uri): Uri? {
+        var compressed: Uri? = null
         try {
-            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
-            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            val fileName = String.format("%d.jpg",System.currentTimeMillis())
-            val finalFile = File(path,fileName)
+            val imageBitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+            val path: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val fileName = String.format("%d.jpg", System.currentTimeMillis())
+            val finalFile = File(path, fileName)
             val fileOutputStream = FileOutputStream(finalFile)
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 30, fileOutputStream)
             fileOutputStream.flush()
             fileOutputStream.close()
 
@@ -661,11 +661,12 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
             val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             intent.setData(compressed)
             sendBroadcast(intent)
-        }catch (e: IOException){
+        } catch (e: IOException) {
             e.printStackTrace()
         }
         return compressed
     }
+
 
     override fun bottomJobTitleClick(jobTitleFrBo: String) {
         binding.dText.text = jobTitleFrBo

@@ -355,7 +355,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             String profileName = sharedPreferencesName.getString("full_name", "");
             this.name.setText("Hi, "+profileName);
 
-            this.count.setText(num+" Peoples are using R-Own and interacting with community. ");
+            this.count.setText("Connect with "+num+" Hoteliers on R-Own and Engage with a Vibrant Community!");
 
             return;
         }
@@ -386,7 +386,8 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                 if (response.isSuccessful()) {
                     Count countResponse = response.body();
                     if (countResponse != null) {
-                        num = countResponse.getCount();
+                        String formattedCount = formatCount(countResponse.getCount());
+                        num = formattedCount;
                     }
                 } else {
                     Log.e("error", String.valueOf(response.code()));
@@ -399,6 +400,32 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             }
         });
     }
+
+    public static String formatCount(String count) {
+        try {
+            int countValue = Integer.parseInt(count);
+            if (countValue < 1000) {
+                return count;
+            } else if (countValue < 1500) {
+                return "1k+";
+            } else if (countValue < 2000) {
+                return "1.5k+";
+            } else if (countValue < 1_000_000) {
+                return (countValue / 1000) + "k+";
+            } else if (countValue < 1_500_000) {
+                return "1M+";
+            } else if (countValue < 2_000_000) {
+                return "1.5M+";
+            } else if (countValue < 1_000_000_000) {
+                return (countValue / 1_000_000) + "M+";
+            } else {
+                return "1B+";
+            }
+        } catch (NumberFormatException e) {
+            return count;
+        }
+    }
+
 
     public synchronized void addNewMessage(MesiboMessage params) {
         if (params.groupid <= 0 || params.groupProfile != null) {
@@ -950,7 +977,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                 holder.mContactsMessage.setText(user.getStatus() != null ? user.getStatus() : "");
             }
 
-            Bitmap b = data.getThumbnail(UserListFragment.this.mLetterTileProvider);
+            Bitmap b = data.getThumbnail(UserListFragment.this.mLetterTileProvider , getContext());
             new RoundImageDrawable(b);
             holder.mContactsProfile.setImageDrawable(new RoundImageDrawable(b));
             if (this.mHost.mSelectionMode != MesiboUserListFragment.MODE_MESSAGELIST || data.getUnreadCount().intValue() <= 0) {

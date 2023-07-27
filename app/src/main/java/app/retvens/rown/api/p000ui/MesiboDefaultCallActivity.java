@@ -32,7 +32,6 @@ public class MesiboDefaultCallActivity extends QampCallsActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_mesibocalll);
-        Log.e("Aditya","reached22");
         int var1 = this.checkPermissions(this.mCp.video.enabled);
         if (var1 < 0) {
             finish();

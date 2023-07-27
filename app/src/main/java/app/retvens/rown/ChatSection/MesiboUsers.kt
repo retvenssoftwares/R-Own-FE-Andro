@@ -1,6 +1,7 @@
 package app.retvens.rown.ChatSection
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +25,7 @@ import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UsersList
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
+import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
 import app.retvens.rown.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,6 +39,7 @@ class MesiboUsers : AppCompatActivity() {
     private lateinit var searchBar:EditText
     private lateinit var noConn:ImageView
     private lateinit var name:TextView
+    private lateinit var discover_people:LinearLayout
     private lateinit var count:TextView
     private lateinit var profileName:String
     private lateinit var num:String
@@ -51,6 +55,7 @@ class MesiboUsers : AppCompatActivity() {
         }
 
         noConn = findViewById(R.id.noConn)
+        discover_people = findViewById(R.id.discover_people)
         name = findViewById(R.id.name)
         count = findViewById(R.id.count)
 
@@ -65,7 +70,9 @@ class MesiboUsers : AppCompatActivity() {
 
         getMesiboUsers()
         getCount()
-
+        discover_people.setOnClickListener {
+            startActivity(Intent(applicationContext, DiscoverPeopleActivity::class.java))
+        }
     }
 
     private fun getCount() {
@@ -76,7 +83,8 @@ class MesiboUsers : AppCompatActivity() {
             override fun onResponse(call: Call<Count?>, response: Response<Count?>) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    num = response.count
+                    val formattedCount = formatCount(response.count)
+                    num = formattedCount
                 }else{
                     Log.e("error",response.code().toString())
                 }
@@ -87,6 +95,23 @@ class MesiboUsers : AppCompatActivity() {
             }
         })
     }
+
+    fun formatCount(count: String): String {
+        val countValue = count.toIntOrNull()
+        return countValue?.let {
+            when {
+                it < 1000 -> count
+                it < 1500 -> "1k+"
+                it < 2000 -> "1.5k+"
+                it < 1_000_000 -> "${it / 1000}k+"
+                it < 1_500_000 -> "1M+"
+                it < 2_000_000 -> "1.5M+"
+                it < 1_000_000_000 -> "${it / 1_000_000}M+"
+                else -> "1B+"
+            }
+        } ?: count
+    }
+
 
     private fun getMesiboUsers() {
 
@@ -119,11 +144,13 @@ class MesiboUsers : AppCompatActivity() {
                                         count.visibility = View.VISIBLE
                                         val handler = Handler()
                                         handler.postDelayed({
-                                            count.text = "$num Peoples are using R-Own and interacting with community."
+
+                                            count.text = "Connect with $num Hoteliers on R-Own and Engage with a Vibrant Community!"
                                         },100)
                                         name.visibility = View.VISIBLE
                                         name.text = "Hi, $profileName"
                                         noConn.visibility = View.VISIBLE
+                                        discover_people.visibility = View.VISIBLE
                                     }
 
                                 }
@@ -131,12 +158,13 @@ class MesiboUsers : AppCompatActivity() {
                             count.visibility = View.VISIBLE
                             val handler = Handler()
                             handler.postDelayed({
-                                count.text = "$num Peoples are using R-Own and interacting with community."
+                                count.text = "Connect with $num Hoteliers on R-Own and Engage with a Vibrant Community!"
                             },100)
                             name.visibility = View.VISIBLE
                             name.text = "Hi, $profileName"
                             noConn.visibility = View.VISIBLE
-                            }
+                            discover_people.visibility = View.VISIBLE
+                        }
 
 
                         searchBar.addTextChangedListener(object : TextWatcher {
@@ -177,10 +205,11 @@ class MesiboUsers : AppCompatActivity() {
                     }
                 }else{
                     count.visibility = View.VISIBLE
-                    count.text = "$num Peoples are using R-Own and interacting with community."
+                    count.text = "Connect with $num Hoteliers on R-Own and Engage with a Vibrant Community!"
                     name.visibility = View.VISIBLE
                     name.text = "Hi, $profileName"
                     noConn.visibility = View.VISIBLE
+                    discover_people.visibility = View.VISIBLE
                 }
             }
 

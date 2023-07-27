@@ -8,14 +8,19 @@
 
 package app.retvens.rown.MessagingModule.AllUtils;
 
+import static app.retvens.rown.api.CallStateReceiver.context;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.text.TextUtils;
+
+import app.retvens.rown.R;
 
 public class LetterTileProvider {
     private final Bitmap mBitmap;
@@ -40,7 +45,7 @@ public class LetterTileProvider {
         this.mBitmap = Bitmap.createBitmap(this.mTileSize, this.mTileSize, Bitmap.Config.ARGB_8888);
     }
 
-    public Bitmap getLetterTile(String displayName, boolean newBitmap) {
+    public Bitmap getLetterTile(String displayName, boolean newBitmap, Context context) {
         int width = this.mTileSize;
         int height = this.mTileSize;
         Bitmap bmp = this.mBitmap;
@@ -62,7 +67,24 @@ public class LetterTileProvider {
         this.mPaint.setTextSize((float) this.mTileLetterFontSize);
         this.mPaint.getTextBounds(this.mFirstChar, 0, 1, this.mBounds);
         c.drawText(this.mFirstChar, 0, 1, (float) ((width / 2) + 0), (float) ((height / 2) + 0 + ((this.mBounds.bottom - this.mBounds.top) / 2)), this.mPaint);
-        return bmp;
+        Drawable drawable = context.getResources().getDrawable(R.drawable.svg_user);
+
+        // Step 2: Convert the Drawable to a Bitmap using BitmapFactory.
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        // Create a canvas to draw the Drawable onto the Bitmap.
+        // Note: If your drawable does not have a transparent background, you can use Bitmap.Config.RGB_565 for better memory efficiency.
+        // Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.RGB_565);
+        // However, using ARGB_8888 is recommended for images with transparency.
+
+        // Create a canvas using the bitmap.
+        android.graphics.Canvas canvas = new android.graphics.Canvas(bitmap);
+
+        // Set the bounds of the Drawable.
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        // Draw the Drawable onto the canvas.
+        drawable.draw(canvas);
+        return bitmap;
     }
 
     private static boolean isEnglishLetterOrDigit(char c) {

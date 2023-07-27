@@ -77,8 +77,7 @@
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingBottom="130dp"
-        />
+        android:paddingBottom="130dp"/>
 
 
     <ImageView
@@ -88,6 +87,7 @@
         android:layout_gravity="center"
         android:src="@drawable/vector_chats_no"
         android:visibility="gone"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -99,7 +99,7 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
+        android:layout_marginStart="72dp"
         android:gravity="center_vertical"
         android:text="Hi, Rahul"
         android:textColor="#272A3D"
@@ -115,9 +115,9 @@
         android:id="@+id/count"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="63dp"
+        android:layout_marginStart="72dp"
         android:layout_marginTop="258dp"
-        android:text="Peoples are using R-Own and interacting with community. "
+        android:text="Connect with $num Hoteliers on R-Own and Engage with a Vibrant Community!"
         android:textColor="#272A3D"
         android:textSize="14dp"
         android:textStyle="normal"
@@ -126,5 +126,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/noConn"
         app:layout_constraintVertical_bias="0.009" />
+
+    <LinearLayout
+        android:id="@+id/discover_people"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="220dp"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/corner_radius_button"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/count">
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/svg_user" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:text="Discover People"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

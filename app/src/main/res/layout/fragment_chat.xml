@@ -29,8 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginHorizontal="20dp"
-            android:background="@drawable/edit_search_bg"
-            />
+            android:background="@drawable/edit_search_bg"/>
         
 
         <LinearLayout
@@ -55,8 +54,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            >
+            android:layout_gravity="center">
 
 
             <ImageView
@@ -76,9 +74,9 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="68dp"
+                android:layout_marginStart="72dp"
                 android:gravity="center_vertical"
-                android:text="Hi, Rahul"
+                android:text="Hi, "
                 android:textColor="#272A3D"
                 android:textSize="16dp"
                 android:textStyle="bold"
@@ -92,9 +90,9 @@
                 android:id="@+id/count"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="63dp"
+                android:layout_marginStart="72dp"
                 android:layout_marginTop="258dp"
-                android:text="Peoples are using R-Own and interacting with community. "
+                android:maxLines="2"
                 android:textColor="#272A3D"
                 android:textSize="14dp"
                 android:textStyle="normal"
@@ -105,8 +103,6 @@
                 app:layout_constraintVertical_bias="0.009" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
         <androidx.recyclerview.widget.RecyclerView

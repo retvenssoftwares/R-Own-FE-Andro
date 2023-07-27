@@ -983,7 +983,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 
     private void setProfilePicture() {
         LetterTileProvider tileProvider = new LetterTileProvider(this.myActivity(), 60, this.mMesiboUIOptions.mLetterTitleColors);
-        Bitmap thumbnail = this.mUserData.getThumbnail(tileProvider);
+        Bitmap thumbnail = this.mUserData.getThumbnail(tileProvider, getContext());
         MesiboMessagingFragment.FragmentListener l = this.getListener();
         if (null != l) {
             l.Mesibo_onUpdateUserPicture(this.mUser, thumbnail, this.mUserData.getImagePath());
