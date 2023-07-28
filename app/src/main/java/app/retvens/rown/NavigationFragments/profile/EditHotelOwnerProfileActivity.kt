@@ -23,8 +23,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
@@ -62,8 +64,11 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
     lateinit var progressDialog: Dialog
 
     var user_id = ""
+    var username = ""
     var name = ""
     var bio = ""
+
+    var isUsernameVerified = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +99,46 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
         }
 
         binding.save.isClickable = false
+
+        binding.verify.setOnClickListener {
+            if(binding.etUsernameEdit.length() < 4) {
+                Toast.makeText(applicationContext, "Please enter a valid username", Toast.LENGTH_SHORT).show()
+            } else if (!isUsernameVerified) {
+                verifyUserName()
+            }
+        }
+
+        binding.etUsernameEdit.doAfterTextChanged {
+            if (binding.etUsernameEdit.text.toString() == " "){
+                binding.etUsernameEdit.setText("")
+                isUsernameVerified = false
+                binding.verify.setImageResource(R.drawable.svg_verify)
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            } else if (binding.etUsernameEdit.text.toString() == username) {
+                isUsernameVerified = true
+                binding.verify.setImageResource(R.drawable.png_check)
+            } else {
+                isUsernameVerified = false
+                binding.verify.setImageResource(R.drawable.svg_verify)
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
+            }
+//            userNameLayout.setEndIconDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.svg_verify))
+//            usernameVerified.text = ""
+//            complete.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_40))
+//            complete.isClickable = false
+        }
 
         binding.etNameEdit.addTextChangedListener {
             if (binding.etNameEdit.text.toString() != name) {
@@ -153,6 +198,47 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
                 uploadData(user_id)
             }
         }
+    }
+    private fun verifyUserName() {
+
+        val usernameText = binding.etUsernameEdit.text.toString()
+        val sharedPreferencesU = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        user_id = sharedPreferencesU.getString("user_id", "").toString()
+        val verify = RetrofitBuilder.profileCompletion.verifyUsername(user_id,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),usernameText))
+
+        verify.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    if (response.body()?.message == "user_name already exist"){
+                        isUsernameVerified = false
+                        binding.verify.setImageResource(R.drawable.svg_verify)
+                        binding.usernameError.setTextColor(ContextCompat.getColor(applicationContext, R.color.error))
+                        binding.usernameError.text = "Username already exist, Please enter another username"
+                    } else {
+                        isUsernameVerified = true
+                        binding.verify.setImageResource( R.drawable.png_check )
+                        binding.usernameError.text = "Congratulations! $usernameText username updated"
+                        binding.usernameError.setTextColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+                        username = usernameText
+                    }
+                } else {
+                    try {
+                        binding.usernameError.text = "Retry - ${response.body()!!.message}"
+                    }catch(e : java.lang.Exception){
+                        binding.usernameError.text = "Try another Username"
+                    }
+                }
+            }
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
     }
 
     private fun uploadData(userId: String) {
@@ -232,12 +318,14 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val image = response.body()?.Profile_pic
+                    username = response.body()?.User_name.toString()
                     name = response.body()?.Full_name.toString()
                     bio = response.body()?.userBio.toString()
                     saveFullName(applicationContext, name.toString())
                     saveProfileImage(applicationContext, "$image")
 
                     Glide.with(applicationContext).load(image).into(binding.profileEdit)
+                    binding.etUsernameEdit.setText(username)
                     binding.etNameEdit.setText(name)
                     binding.bioEt.setText(response.body()!!.userBio)
                 }

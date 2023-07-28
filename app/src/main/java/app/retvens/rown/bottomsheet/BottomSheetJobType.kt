@@ -39,10 +39,10 @@ class BottomSheetJobType : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            mListener?.bottomJobTypeClick("Select one -")
-            dismiss()
-        }
+//        view.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
+//            mListener?.bottomJobTypeClick("Select one -")
+//            dismiss()
+//        }
         view.findViewById<RelativeLayout>(R.id.fullTime).setOnClickListener {
             mListener?.bottomJobTypeClick("Full-Time")
             dismiss()

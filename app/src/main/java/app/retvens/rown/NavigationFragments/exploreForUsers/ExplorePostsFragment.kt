@@ -150,7 +150,12 @@ class ExplorePostsFragment : Fragment() {
                             response.forEach { postsDataClass ->
                         totalPages = postsDataClass.pageSize
 
-                        postList.addAll(postsDataClass.posts)
+                                postsDataClass.posts.forEach {
+                                    if (it.user_id != user_id){
+                                        postList.addAll(postsDataClass.posts)
+                                    }
+                                }
+
                         mediaAdapter.removePostsFromList(postsDataClass.posts)
                         mediaAdapter.notifyDataSetChanged()
                         searchBar.addTextChangedListener(object : TextWatcher{

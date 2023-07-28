@@ -148,6 +148,7 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                     if (response.message == "applied"){
                         binding.layout.visibility = View.GONE
                         binding.alreadyApplied.visibility = View.VISIBLE
+                        binding.alreadyApplied.setImageResource(R.drawable.svg_applied_for_verification)
                         binding.profileCompletion.visibility = View.GONE
                     } else if (response.message == " not applied"){
                         Toast.makeText(applicationContext, response.message.toString(), Toast.LENGTH_SHORT).show()

@@ -151,7 +151,11 @@ class ExploreHotelsFragment : Fragment() {
                                 val data = response.body()!!
                                 data.forEach {
 
-                                    hotelList.addAll(it.posts)
+                                    it.posts.forEach { hotelData ->
+                                        if (hotelData.user_id != user_id) {
+                                            hotelList.addAll(it.posts)
+                                        }
+                                    }
 //                                    if (it.posts.size >= 10){
                                         currentPage++
 //                                    }

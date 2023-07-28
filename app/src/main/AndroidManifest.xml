@@ -48,8 +48,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Dashboard.UpdateAppActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash"/>
+        <activity
             android:name=".NavigationFragments.profile.BlockUserActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.home.postDetails.CheckInDetailsActivity"
             android:exported="false"
@@ -76,7 +81,8 @@
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".NavigationFragments.profile.polls.VotesActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -369,12 +375,10 @@
             android:name=".NavigationFragments.profile.vendorsReview.ReviewsActivity"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
-
         <activity
             android:name=".NavigationFragments.home.postDetails.PostDetailsActivityNotification"
             android:exported="false"
             android:theme="@style/Theme.Rown_Splash" />
-
         <activity
             android:name=".NavigationFragments.profile.EditVendorsProfileActivity"
             android:exported="false"
@@ -659,8 +663,6 @@
                 android:value="" />
         </activity>
 
-
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -677,7 +679,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider> <!-- <service -->
-
         <!-- android:name=".ApiRequest.MesiboBackgroundService" -->
         <!-- android:enabled="true" -->
         <!-- android:exported="false" /> -->

@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.profile.EditProfileActivity
 import app.retvens.rown.NavigationFragments.profile.UserDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity
@@ -64,7 +65,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
     var seeStatus = ""
     var profilePic = ""
     var verificationStatus = ""
-
+    var completion = ""
     var selected = 1
 
     private lateinit var progressDialog:Dialog
@@ -202,6 +203,28 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
             fragManager.let{bottomSheet.show(it, BottomSheetProfileSetting.WTP_TAG)}
             bottomSheet.setOnBottomSheetProfileSettingClickListener(this)
         }
+        fetchProfile(user_id)
+    }
+
+    private fun fetchProfile(userId: String) {
+
+        val getData = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
+
+        getData.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    completion = response.body()!!.profileCompletionStatus
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+
+            }
+        })
+
     }
 
     private fun getSelfUserProfile(userId: String, userId1: String) {
@@ -288,11 +311,21 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
                 startActivity(Intent(context, OwnerSettingActivity::class.java))
             }
             "profileDetails" -> {
-                startActivity(Intent(context,UserDetailsActivity::class.java))
+                if (completion == "100"){
+                    startActivity(Intent(context,UserDetailsActivity::class.java))
+                }else{
+                    Toast.makeText(requireContext(),"Complete Your Profile First!!",Toast.LENGTH_SHORT).show()
+                }
+
             }
             "edit" -> {
-                startActivity(Intent(context, EditProfileActivity::class.java))
-                activity?.finish()
+                if (completion == "100"){
+                    startActivity(Intent(context, EditProfileActivity::class.java))
+                    activity?.finish()
+                }else{
+                    Toast.makeText(requireContext(),"Complete Your Profile First!!",Toast.LENGTH_SHORT).show()
+                }
+
             }
             "saved" -> {
                 startActivity(Intent(context, SavedActivity::class.java))

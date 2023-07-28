@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.Dashboard.UpdateAppActivity
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.onboarding.VersionUpdate
@@ -39,6 +40,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth:FirebaseAuth
 
     var versionName = ""
+    var updateAvailable = ""
+
+    var updateLink = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,12 +51,17 @@ class MainActivity : AppCompatActivity() {
         appVersion = findViewById(R.id.appVersion)
         updateYourApp = findViewById(R.id.updateYourApp)
 
+
         var server = 0
         val manager = this.packageManager
         val info = manager.getPackageInfo(this.packageName, PackageManager.GET_ACTIVITIES)
         versionName = info.versionName.toString()
         appVersion.text = versionName
-        getAppVersion()
+        appVersion.visibility = View.GONE
+        getAppVersion(){
+            updateAvailable = "updateAvailable"
+            updateLink = it
+        }
 
         getProfileInfo(this){
             server = it
@@ -64,7 +73,12 @@ class MainActivity : AppCompatActivity() {
             val sharedPreferences = getSharedPreferences("Move", MODE_PRIVATE)
             val move = sharedPreferences.getString("MoveTo", "")
 
-            if (move == "MoveToPI"){
+            if (updateAvailable == "updateAvailable"){
+                val intent = Intent(this, UpdateAppActivity::class.java)
+                intent.putExtra("updateLink", updateLink)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            } else if (move == "MoveToPI"){
                 MesiboApi.init(applicationContext)
                 MesiboApi.startMesibo(true)
                 val intent = Intent(this, PersonalInformation::class.java)
@@ -107,7 +121,7 @@ class MainActivity : AppCompatActivity() {
         },2000)
     }
 
-    private fun getAppVersion() {
+    private fun getAppVersion(onVersionChange : (String) -> Unit) {
         val version = RetrofitBuilder.retrofitBuilder.getAppUpdate()
         version.enqueue(object : Callback<VersionUpdate?> {
             override fun onResponse(
@@ -118,7 +132,8 @@ class MainActivity : AppCompatActivity() {
                     Log.d("appUpdate", response.body()!!.get(0).Android_version.toString())
 //                    appVersion.text = response.body()!!.get(0).Android_version.toString()
                     if (versionName != response.body()!!.get(0).Android_version.toString()){
-                        updateYourApp.visibility = View.VISIBLE
+//                        updateYourApp.visibility = View.VISIBLE
+                        onVersionChange.invoke(response.body()!!.get(0).updateLink)
                     }
                 }
             }

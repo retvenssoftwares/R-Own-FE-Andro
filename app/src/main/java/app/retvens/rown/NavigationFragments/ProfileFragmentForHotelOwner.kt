@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -24,6 +25,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
+import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.NavigationFragments.home.MainAdapter
 import app.retvens.rown.NavigationFragments.profile.EditHotelOwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.EditHotelProfileActivity
@@ -65,7 +67,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     lateinit var verification : ImageView
     lateinit var name : TextView
     lateinit var linkText : TextView
-
+    var completion = ""
     lateinit var polls : TextView
     lateinit var jobs : TextView
     lateinit var media : TextView
@@ -77,6 +79,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     lateinit var postCount:TextView
     lateinit var connCont:TextView
     lateinit var requestCont:TextView
+    lateinit var link:TextView
 
     private lateinit var progressDialog: Dialog
 
@@ -103,6 +106,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         username = view.findViewById(R.id.profile_username)
         bio = view.findViewById(R.id.bio)
         name = view.findViewById(R.id.profile_name)
+        link = view.findViewById(R.id.link)
         linkText = view.findViewById(R.id.linkText)
 
         polls = view.findViewById(R.id.polls)
@@ -140,7 +144,11 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         val profileName = sharedPreferencesName?.getString("full_name", "").toString()
 
         viewPP.setOnClickListener {
-            startActivity(Intent(requireContext(),HotelOwnerDetailsActivity::class.java))
+            if (completion == "100"){
+                startActivity(Intent(requireContext(),HotelOwnerDetailsActivity::class.java))
+            }else{
+                Toast.makeText(requireContext(),"Complete Your Profile First!!", Toast.LENGTH_SHORT).show()
+            }
         }
 
         linkText.setOnClickListener{
@@ -284,6 +292,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             fragManager.let{bottomSheet.show(it, BottomSheetHotelierProfileSetting.Hotelier_TAG)}
             bottomSheet.setOnBottomSheetProfileSettingClickListener(this)
         }
+        fetchProfile(user_id)
     }
 
     private fun getOwnerProfile(userId: String, userId1: String) {
@@ -307,6 +316,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                     } else {
                         profile.setImageResource(R.drawable.svg_user)
                     }
+
 
                     verificationStatus = response.profile.verificationStatus
                     if (verificationStatus != "false"){
@@ -345,7 +355,11 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                         Log.e("error",e.message.toString())
                     }
 
-                    linkText.text = response.profile.hotelOwnerInfo.websiteLink
+                    if (response.profile.hotelOwnerInfo.websiteLink.isNotEmpty()) {
+                        linkText.text = response.profile.hotelOwnerInfo.websiteLink
+                    } else {
+                        link.visibility = View.GONE
+                    }
                 }
 
             }
@@ -359,6 +373,28 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
 
     }
 
+    private fun fetchProfile(userId: String) {
+
+        val getData = RetrofitBuilder.retrofitBuilder.fetchUser(userId)
+
+        getData.enqueue(object : Callback<UserProfileRequestItem?> {
+            override fun onResponse(
+                call: Call<UserProfileRequestItem?>,
+                response: Response<UserProfileRequestItem?>
+            ) {
+                if (response.isSuccessful){
+                    completion = response.body()!!.profileCompletionStatus
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileRequestItem?>, t: Throwable) {
+
+            }
+        })
+
+    }
+
+
     override fun bottomSheetHotelierProfileSettingClick(bottomSheetProfileSettingFrBo: String) {
         when (bottomSheetProfileSettingFrBo) {
 
@@ -366,15 +402,28 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                 startActivity(Intent(context, OwnerSettingActivity::class.java))
             }
             "profileDetails" -> {
-                startActivity(Intent(requireContext(),HotelOwnerDetailsActivity::class.java))
+                if (completion == "100"){
+                    startActivity(Intent(requireContext(),HotelOwnerDetailsActivity::class.java))
+                }else{
+                    Toast.makeText(requireContext(),"Complete Your Profile First!!", Toast.LENGTH_SHORT).show()
+                }
+
             }
             "edit" -> {
-                startActivity(Intent(context, EditHotelOwnerProfileActivity::class.java))
-                activity?.finish()
+                if (completion == "100"){
+                    startActivity(Intent(context, EditHotelOwnerProfileActivity::class.java))
+                    activity?.finish()
+                }else{
+                    Toast.makeText(requireContext(),"Complete Your Profile First!!", Toast.LENGTH_SHORT).show()
+                }
             }
             "editHotelier" -> {
-                startActivity(Intent(context, EditHotelProfileActivity::class.java))
-                activity?.finish()
+                if (completion == "100"){
+                    startActivity(Intent(context, EditHotelProfileActivity::class.java))
+                    activity?.finish()
+                }else{
+                    Toast.makeText(requireContext(),"Complete Your Profile First!!", Toast.LENGTH_SHORT).show()
+                }
             }
             "saved" -> {
                 startActivity(Intent(context, SavedActivity::class.java))

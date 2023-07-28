@@ -1,14 +1,18 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -48,10 +52,22 @@ import app.retvens.rown.utils.getRandomString
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
+import com.google.android.gms.tasks.Task
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.yalantis.ucrop.UCrop
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -68,6 +84,12 @@ class HotelOwnerFragment : Fragment(), BackHandler,
     BottomSheetCountryStateCity.OnBottomCountryStateCityClickListener{
 
 
+    private val REQUEST_CHECK_SETTINGS = 1001
+    private val LOCATION_PERMISSION_REQUEST_CODE = 100
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var settingsClient: SettingsClient
+    private lateinit var locationRequest: LocationRequest
+    lateinit var task:ImageView
     lateinit var hotelType : TextInputEditText
     lateinit var singleHotelLayout : ConstraintLayout
     lateinit var chainHotelLayout : ConstraintLayout
@@ -169,6 +191,21 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         val decline = view.findViewById<ImageView>(R.id.decline)
         decline.setOnClickListener {
             startActivity(Intent(requireContext(), DashBoardActivity::class.java))
+        }
+
+        task = view.findViewById(R.id.autofetch)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        settingsClient = LocationServices.getSettingsClient(requireContext())
+
+        locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        task.setOnClickListener {
+            checkLocationSettings()
         }
 
         hotelOwnerStarET.setOnClickListener {
@@ -282,6 +319,94 @@ class HotelOwnerFragment : Fragment(), BackHandler,
             }
         }
 
+    }
+
+    private fun checkLocationSettings() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+        val client: SettingsClient = LocationServices.getSettingsClient(requireContext())
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            // Location services enabled, proceed to fetch location
+            fetchLocation()
+            Log.e("click","1")
+        }
+
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                try {
+                    exception.startResolutionForResult(requireActivity(), REQUEST_CHECK_SETTINGS)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Log.e("error",sendEx.toString())
+                }
+            }
+        }
+
+    }
+
+    private fun fetchLocation() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            Log.e("click","2")
+        } else {
+            Log.e("click","3")
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    Log.e("latitude",latitude.toString())
+                    Log.e("longitude",longitude.toString())
+
+                    reverseGeocode(latitude, longitude)
+                    Log.e("click","4")
+                }else{
+                    Log.e("click","5")
+                }
+            }.addOnFailureListener { exception: Exception ->
+                Log.e("error",exception.toString())
+                Toast.makeText(requireContext(),"Permission Required",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun reverseGeocode(latitude: Double, longitude: Double) {
+        GlobalScope.launch(Dispatchers.Main) {
+            val geocoder = Geocoder(requireContext())
+            try {
+                val addresses = withContext(Dispatchers.IO) {
+                    geocoder.getFromLocation(latitude, longitude, 1)
+                }
+                if (addresses!!.isNotEmpty()) {
+                    val address = addresses[0]
+
+                    val city = address.locality
+                    val state = address.adminArea
+                    val country = address.countryName
+
+
+                    hotelOwnerLocationET.setText("$city,$state,$country")
+                }
+            } catch (e: Exception) {
+
+            }
+        }
     }
 
     private fun UploadChainData() {

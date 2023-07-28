@@ -9,6 +9,7 @@ data class RoleDetails(
     val Profile_pic: String,
     val verificationStatus: String,
     val userBio: String,
+    val profileCompletionStatus:String,
     val Mesibo_account: List<MesiboAccount>,
     val User_name: String,
     val location: String,

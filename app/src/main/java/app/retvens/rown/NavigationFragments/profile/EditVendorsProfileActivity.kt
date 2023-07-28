@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -23,13 +24,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityEditVendorsProfileBinding
 import app.retvens.rown.utils.cropImage
+import app.retvens.rown.utils.cropProfileImage
 import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
@@ -43,6 +47,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Exception
 
 class EditVendorsProfileActivity : AppCompatActivity() {
     lateinit var binding : ActivityEditVendorsProfileBinding
@@ -55,16 +60,46 @@ class EditVendorsProfileActivity : AppCompatActivity() {
     lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
 //        compressImage(cameraImageUri)
-        cropImage(cameraImageUri, this)
+        cropProfileImage(cameraImageUri, this)
     }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted, set the phone number to the EditText
+                if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+
+                    contract.launch(cameraImageUri)
+
+                }else {
+                    // Permission has been denied, handle it accordingly
+                    // For example, show a message or disable functionality that requires the permission
+                    Toast.makeText(applicationContext,"permission denied", Toast.LENGTH_SHORT).show()
+                }
+            } else{
+                Toast.makeText(applicationContext,"grant permission", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Permission has been denied, handle it accordingly
+            // For example, show a message or disable functionality that requires the permission
+            Toast.makeText(applicationContext,"Something bad", Toast.LENGTH_SHORT).toString()
+        }
+    }
+
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
 
     var user_id = ""
 
+    var username = ""
     var name = ""
     var bio = ""
 
+    var isUsernameVerified = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditVendorsProfileBinding.inflate(layoutInflater)
@@ -80,15 +115,43 @@ class EditVendorsProfileActivity : AppCompatActivity() {
         fetchUser(user_id)
         binding.cameraEdit.setOnClickListener {
             //Requesting Permission For CAMERA
-            if (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
-                )
+            if (ContextCompat.checkSelfPermission(this,
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                openBottomSheet()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
             }
-            openBottomSheet()
         }
 
         binding.save.isClickable = false
+
+        binding.verify.setOnClickListener {
+            if(binding.etUsernameEdit.length() < 4) {
+                Toast.makeText(applicationContext, "Please enter a valid username", Toast.LENGTH_SHORT).show()
+            } else if (!isUsernameVerified) {
+                verifyUserName()
+            }
+        }
+
+        binding.etUsernameEdit.doAfterTextChanged {
+            if (binding.etUsernameEdit.text.toString() == " "){
+                binding.etUsernameEdit.setText("")
+                isUsernameVerified = false
+                binding.verify.setImageResource(R.drawable.svg_verify)
+            } else if (binding.etUsernameEdit.text.toString() == username) {
+                isUsernameVerified = true
+                binding.verify.setImageResource(R.drawable.png_check)
+            } else {
+                isUsernameVerified = false
+                binding.verify.setImageResource(R.drawable.svg_verify)
+            }
+//            userNameLayout.setEndIconDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.svg_verify))
+//            usernameVerified.text = ""
+//            complete.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_40))
+//            complete.isClickable = false
+        }
 
         binding.etNameEdit.addTextChangedListener {
             if (binding.etNameEdit.text.toString() != name) {
@@ -133,6 +196,10 @@ class EditVendorsProfileActivity : AppCompatActivity() {
 
             if(binding.etNameEdit.length() < 3){
                 Toast.makeText(applicationContext, "Please enter your name", Toast.LENGTH_SHORT).show()
+            } else if(!isUsernameVerified){
+                Toast.makeText(applicationContext, "Please verify your username", Toast.LENGTH_SHORT).show()
+                binding.usernameError.text = "Please verify your username"
+                binding.usernameError.setTextColor(ContextCompat.getColor(applicationContext, R.color.error))
             } else{
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -146,6 +213,48 @@ class EditVendorsProfileActivity : AppCompatActivity() {
                 uploadData(user_id)
             }
         }
+    }
+
+    private fun verifyUserName() {
+
+        val usernameText = binding.etUsernameEdit.text.toString()
+        val sharedPreferencesU = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        user_id = sharedPreferencesU.getString("user_id", "").toString()
+        val verify = RetrofitBuilder.profileCompletion.verifyUsername(user_id,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),usernameText))
+
+        verify.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    if (response.body()?.message == "user_name already exist"){
+                        isUsernameVerified = false
+                        binding.verify.setImageResource(R.drawable.svg_verify)
+                        binding.usernameError.setTextColor(ContextCompat.getColor(applicationContext, R.color.error))
+                        binding.usernameError.text = "Username already exist, Please enter another username"
+                    } else {
+                        isUsernameVerified = true
+                        binding.verify.setImageResource( R.drawable.png_check )
+                        binding.usernameError.text = "Congratulations! $usernameText username updated"
+                        binding.usernameError.setTextColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+                        username = usernameText
+                    }
+                } else {
+                    try {
+                        binding.usernameError.text = "Retry - ${response.body()!!.message}"
+                    }catch(e : Exception){
+                        binding.usernameError.text = "Try another Username"
+                    }
+                }
+            }
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
     }
 
     private fun uploadData(userId: String) {
@@ -195,7 +304,7 @@ class EditVendorsProfileActivity : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                     Log.d("image", response.toString())
                     Log.d("image", response.body().toString())
 
@@ -226,11 +335,13 @@ class EditVendorsProfileActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val image = response.body()?.Profile_pic
-                    val name = response.body()?.Full_name
+                    username = response.body()?.User_name.toString()
+                    name = response.body()?.Full_name.toString()
                     saveFullName(applicationContext, name.toString())
                     saveProfileImage(applicationContext, "$image")
 
                     Glide.with(applicationContext).load(image).into(binding.profileEdit)
+                    binding.etUsernameEdit.setText(username)
                     binding.etNameEdit.setText(name)
                     binding.bioEt.setText(response.body()!!.userBio)
                 }
@@ -290,7 +401,7 @@ class EditVendorsProfileActivity : AppCompatActivity() {
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropImage(imageUri, this)
+                cropProfileImage(imageUri, this)
 
             }
         }   else if (requestCode == UCrop.REQUEST_CROP) {

@@ -170,7 +170,6 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/black"
-                android:text="Select Services"
                 android:clickable="true"
                 android:focusable="false"
                 android:editable="false"/>

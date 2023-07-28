@@ -275,7 +275,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
             } else if(brandDesc.length() < 3){
                 brandNameLayout.isErrorEnabled = false
                 brandDescriptionLayout.error = "Please enter Description"
-            } else if(servicesET.length() < 6){
+            } else if(servicesET.length() < 4){
                 brandNameLayout.isErrorEnabled = false
                 brandDescriptionLayout.isErrorEnabled = false
                 portfolioLayout.isErrorEnabled = false

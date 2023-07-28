@@ -18,6 +18,7 @@ data class Profile(
     val _id: String,
     val Full_name: String,
     val Profile_pic: String,
+    val profileCompletionStatus:String,
     val verificationStatus: String,
     val userBio: String,
     val User_name: String,
