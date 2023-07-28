@@ -465,7 +465,7 @@ We take all reports seriously and will do our best to address them promptly."
         android:layout_marginTop="12dp"
         android:layout_marginBottom="6dp"
         android:layout_marginHorizontal="45dp"
-        app:cardElevation="6dp"
+        app:cardElevation="3dp"
         android:layout_gravity="center_horizontal"
         app:cardCornerRadius="7dp">
 

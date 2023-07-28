@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.home
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -140,6 +141,7 @@ class PostsViewActivity : AppCompatActivity() {
         }else if (like == "Unliked" || like == "not liked"){
             isLike = true
             likeButton.setImageResource(R.drawable.svg_like_post)
+            likeButton.setColorFilter(resources.getColor(android.R.color.white), PorterDuff.Mode.SRC_IN)
         }
 
         likeButton.setOnClickListener {
@@ -158,6 +160,7 @@ class PostsViewActivity : AppCompatActivity() {
                     like = "not liked"
                     isLike = true
                     likeButton.setImageResource(R.drawable.svg_like_post)
+                    likeButton.setColorFilter(resources.getColor(android.R.color.white), PorterDuff.Mode.SRC_IN)
                     count -= 1
                     if (count == 0){
                         like_count.visibility = View.GONE
@@ -183,6 +186,7 @@ class PostsViewActivity : AppCompatActivity() {
             operatioin = "push"
             save = true
             savedPost.setImageResource(R.drawable.svg_save_post)
+            savedPost.setColorFilter(resources.getColor(android.R.color.white), PorterDuff.Mode.SRC_IN)
         }
 
         savedPost.setOnClickListener {
@@ -269,6 +273,7 @@ class PostsViewActivity : AppCompatActivity() {
                         save = !save
                     } else {
                         savedPost.setImageResource(R.drawable.svg_save_post)
+                        savedPost.setColorFilter(resources.getColor(android.R.color.white), PorterDuff.Mode.SRC_IN)
                         operatioin = "push"
                         save = !save
                     }

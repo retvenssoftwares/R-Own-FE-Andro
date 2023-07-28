@@ -224,7 +224,7 @@
             android:id="@+id/card_get_quote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardElevation="8dp"
+            app:cardElevation="3dp"
             android:layout_gravity="center_horizontal"
             app:cardCornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="@id/avg_price"

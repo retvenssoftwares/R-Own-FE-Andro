@@ -5,7 +5,7 @@
     android:layout_height="300dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="25dp"
-    app:cardElevation="6dp"
+    app:cardElevation="3dp"
     android:layout_margin="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,7 @@
                 android:id="@+id/card_blog_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardElevation="8dp"
+                app:cardElevation="3dp"
                 android:layout_margin="14dp"
                 android:layout_gravity="center_vertical"
                 app:cardCornerRadius="16dp">

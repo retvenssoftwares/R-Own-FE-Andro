@@ -53,4 +53,5 @@
     <color name="send_message_background">#FFF8EB</color>
     <color name="read_message_color">#76CA66</color>
     <color name="error">#FE5858</color>
+    <color name="blue_own">#272a3d</color>
 </resources>
