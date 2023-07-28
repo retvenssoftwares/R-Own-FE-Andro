@@ -2,6 +2,7 @@ package app.retvens.rown.Dashboard.profileCompletion.frags
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.ContentResolver
 import android.content.Context
@@ -48,6 +49,7 @@ import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetLocation
 import app.retvens.rown.bottomsheet.BottomSheetRating
+import app.retvens.rown.utils.cropImageHorizontal
 import app.retvens.rown.utils.getRandomString
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
@@ -113,6 +115,8 @@ class HotelOwnerFragment : Fragment(), BackHandler,
     lateinit var ownerHotelLayout: TextInputLayout
     lateinit var hotelOwnerStarLayout: TextInputLayout
     lateinit var hotelOwnerLocationLayout: TextInputLayout
+
+    var isHorizontal = false
 
     private var croppedOwnerProfileImageUri: Uri? = null // Final Uri for Owner Profile
     private var croppedOwnerCoverImageUri: Uri? = null  // Final Uri for Owner Cover
@@ -217,6 +221,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
 
         hotelOwnerProfile = view.findViewById(R.id.hotel_owner_profile)
         hotelOwnerProfile.setOnClickListener {
+            isHorizontal = false
             cameraUser = "OwnerProfile" //Requesting Permission For CAMERA
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
@@ -231,6 +236,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         hotelOwnerCover = view.findViewById(R.id.hotel_owner_cover)
         hotelOwnerCover.setOnClickListener {
             cameraUser = "OwnerCover"
+            isHorizontal = true
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
                     android.Manifest.permission.CAMERA
@@ -249,6 +255,7 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         hotelChainProfile = view.findViewById(R.id.hotel_chain_profile)
         cameraHotelChain = view.findViewById(R.id.camera_hotelChain)
         cameraHotelChain.setOnClickListener {
+            isHorizontal = false
             cameraUser = "ChainProfile"
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
@@ -573,13 +580,19 @@ class HotelOwnerFragment : Fragment(), BackHandler,
             val imageUri = data.data
             if (imageUri != null) {
 
-                cropImage(imageUri)
+                if (isHorizontal){
+                    cropImageHorizontal(imageUri)
+                } else {
+                    cropImage(imageUri)
+                }
 
             }
         }  else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = UCrop.getOutput(data!!)!!
-
+                if (isHorizontal){
+                    hotelOwnerCover.setImageResource(R.drawable.svg_save_post)
+                }
                 compressImage(croppedImage)
 
             } else if (resultCode == UCrop.RESULT_ERROR) {
@@ -593,6 +606,14 @@ class HotelOwnerFragment : Fragment(), BackHandler,
 
         UCrop.of(inputUri, outputUri)
             .withAspectRatio(1F, 1F)
+            .start(requireContext(), this)
+    }
+    fun cropImageHorizontal(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(context?.filesDir, "croppedImage.jpg").toUri()
+
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(16F, 9F)
             .start(requireContext(), this)
     }
     fun compressImage(imageUri: Uri): Uri {

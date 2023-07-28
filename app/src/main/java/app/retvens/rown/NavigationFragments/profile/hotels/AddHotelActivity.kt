@@ -38,6 +38,7 @@ import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetRating
 import app.retvens.rown.utils.cropImage
+import app.retvens.rown.utils.cropImageHorizontal
 import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.ResolvableApiException
@@ -316,7 +317,7 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val imageUri = data.data
             if (imageUri != null) {
-                cropImage(imageUri, this)
+                cropImageHorizontal(imageUri, this)
             }
         }   else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {

@@ -22,7 +22,6 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityBugSpottedBinding
 import app.retvens.rown.utils.cropImage
-import app.retvens.rown.utils.cropImage1
 import app.retvens.rown.utils.cropImageFree
 import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide

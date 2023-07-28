@@ -165,12 +165,12 @@ fun cropImage(imageUri: Uri, context: Context) {
         .start(context as Activity)
 }
 
-fun cropImage1(imageUri: Uri, context: Context) {
+fun cropImageHorizontal(imageUri: Uri, context: Context) {
     val inputUri = imageUri
     val outputUri = File(context.filesDir, "croppedImage.jpg").toUri()
 
     UCrop.of(inputUri, outputUri)
-        .withAspectRatio(4F, 3F)
+        .withAspectRatio(16F, 9F)
         .withMaxResultSize(2000,2000)
         .start(context as Activity)
 

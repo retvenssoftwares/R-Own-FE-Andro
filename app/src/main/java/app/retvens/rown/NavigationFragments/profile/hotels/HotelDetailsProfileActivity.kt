@@ -144,9 +144,11 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val data = response.body()!!
                     binding.hotelName.text = data.hotelName
+                    hotelName = data.hotelName
 //                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
 
                     binding.hotelRating.text = "${data.hotelRating} Hotel"
+                    location = data.hotelAddress
                     binding.location.text = data.hotelAddress
                     try {
                         Hoteldescription = data.Hoteldescription

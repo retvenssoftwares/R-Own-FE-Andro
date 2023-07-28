@@ -542,7 +542,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
         val outputUri = File(requireContext().filesDir, "croppedImage.jpg").toUri()
 
         UCrop.of(inputUri, outputUri)
-            .withAspectRatio(4F, 3F)
+            .withAspectRatio(16F, 9F)
             .start(requireContext(), this)
     }
     fun compressImage(imageUri: Uri): Uri {
