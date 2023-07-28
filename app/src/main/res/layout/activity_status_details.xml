@@ -189,8 +189,7 @@
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:layout_weight="1"
-                        android:src="@drawable/svg_like_post"
-                        app:tint="@color/black" />
+                        android:src="@drawable/svg_like_post"/>
 
                     <TextView
                         android:id="@+id/like_count"

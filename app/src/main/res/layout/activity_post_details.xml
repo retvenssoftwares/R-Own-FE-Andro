@@ -248,8 +248,7 @@
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_weight="1"
-                            android:src="@drawable/svg_like_post"
-                            app:tint="@color/black" />
+                            android:src="@drawable/svg_like_post"/>
 
                         <TextView
                             android:id="@+id/like_count"
@@ -305,8 +304,7 @@
                     android:layout_weight="1"
                     android:src="@drawable/svg_save_post"
                     app:layout_constraintStart_toEndOf="@+id/linearLayout"
-                    app:layout_constraintTop_toTopOf="@id/linearLayout"
-                    app:tint="@color/black" />
+                    app:layout_constraintTop_toTopOf="@id/linearLayout"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

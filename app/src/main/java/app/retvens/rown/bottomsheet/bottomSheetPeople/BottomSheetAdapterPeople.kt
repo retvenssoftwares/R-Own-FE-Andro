@@ -104,7 +104,7 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
 
                 sendConnectionRequest(userId, context){
                     holder.connect.text = "Requested"
-                    holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+                    holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_own))
                     holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
                 }
 
@@ -113,7 +113,7 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
                 removeConnRequest(userId, context){
                     holder.connect.text = "Connect"
                     holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                    holder.connect.setTextColor(ContextCompat.getColor(context, R.color.white))
+                    holder.connect.setTextColor(ContextCompat.getColor(context, R.color.blue_own))
                 }
 
             } else if (holder.connect.text == "Accept") {

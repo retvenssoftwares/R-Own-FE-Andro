@@ -81,7 +81,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardElevation="8dp"
+            app:cardElevation="3dp"
             android:layout_gravity="center_horizontal"
             app:cardCornerRadius="10dp"
             android:layout_weight="1"
@@ -108,7 +108,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardElevation="8dp"
+            app:cardElevation="3dp"
             android:layout_gravity="center_horizontal"
             app:cardCornerRadius="10dp"
             android:layout_weight="1"
@@ -157,7 +157,7 @@
         android:id="@+id/apply_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="8dp"
+        app:cardElevation="3dp"
         android:layout_gravity="center_horizontal"
         app:cardCornerRadius="10dp"
         android:layout_weight="1"

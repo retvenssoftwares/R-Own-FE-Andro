@@ -139,7 +139,7 @@
         android:id="@+id/next_Event_Create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="6dp"
+        app:cardElevation="3dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="12dp"

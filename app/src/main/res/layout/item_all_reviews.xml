@@ -91,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
-            app:cardElevation="8dp"
+            app:cardElevation="3dp"
             android:layout_weight="1"
             android:visibility="gone"
             app:cardBackgroundColor="@color/green_own"

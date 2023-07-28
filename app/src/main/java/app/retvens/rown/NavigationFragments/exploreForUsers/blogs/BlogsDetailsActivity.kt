@@ -121,7 +121,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
                     
                     if(res.get(0).like == "liked"){
                         isLiked = false
-                        binding.likePost.setImageResource(R.drawable.likes)
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
                     }
                     try {
                         binding.userName.text = res.get(0).User_name

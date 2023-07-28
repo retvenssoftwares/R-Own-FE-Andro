@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="6dp"
                     android:layout_marginTop="8dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="3dp"
                     android:layout_marginHorizontal="20dp"
                     app:cardBackgroundColor="@color/white">
                     <TextView
@@ -195,7 +195,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     android:layout_marginHorizontal="20dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/white">
                     <TextView
                         android:id="@+id/selectEventStartTime"
@@ -219,7 +219,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="8dp"
-            app:cardElevation="6dp"
+            app:cardElevation="3dp"
             app:cardCornerRadius="12dp"
             app:cardBackgroundColor="@color/grey_5">
 
@@ -242,7 +242,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="6dp"
                     android:layout_marginTop="8dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="3dp"
                     android:layout_marginHorizontal="20dp"
                     app:cardBackgroundColor="@color/white">
                     <TextView
@@ -267,7 +267,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     android:layout_marginHorizontal="20dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/white">
                     <TextView
                         android:id="@+id/selectEventEndTime"
@@ -332,7 +332,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="6dp"
                     android:layout_marginTop="8dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="3dp"
                     android:layout_marginHorizontal="20dp"
                     app:cardBackgroundColor="@color/white">
                     <TextView
@@ -357,7 +357,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     android:layout_marginHorizontal="20dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/white">
                     <TextView
                         android:id="@+id/registrationStartTime"
@@ -383,7 +383,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
             android:layout_marginVertical="8dp"
-            app:cardElevation="6dp"
+            app:cardElevation="3dp"
             app:cardCornerRadius="12dp"
             app:cardBackgroundColor="@color/grey_5">
 
@@ -406,7 +406,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="6dp"
                     android:layout_marginTop="8dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="3dp"
                     android:layout_marginHorizontal="20dp"
                     app:cardBackgroundColor="@color/white">
                     <TextView
@@ -429,7 +429,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     android:layout_marginHorizontal="20dp"
-                    app:cardElevation="8dp"
+                    app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/white">
                     <TextView
                         android:id="@+id/registrationEndTime"
@@ -455,7 +455,7 @@
         android:id="@+id/next_Event_Create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="6dp"
+        app:cardElevation="3dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="12dp"
