@@ -92,6 +92,7 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                     intent.putExtra("hotelDescription", Hoteldescription)
                     intent.putExtra("hotelId", hotelId)
                     startActivity(intent)
+                    finish()
                 }
 
                 binding.checkReviews.setOnClickListener {

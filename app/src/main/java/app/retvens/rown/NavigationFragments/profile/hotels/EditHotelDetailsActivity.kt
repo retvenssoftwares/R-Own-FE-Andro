@@ -69,6 +69,13 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
     private var imgUri1 : Uri?= null   // Final uri for img1
     private var imgUri2 : Uri?= null   // Final uri for img2
     private var imgUri3 : Uri?= null   // Final uri for img3
+
+    private var uploadImg1 = false
+    private var uploadImg2 = false
+    private var uploadImg3 = false
+
+    private var hotelId = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditHotelDetailsBinding.inflate(layoutInflater)
@@ -84,6 +91,8 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
         val img3 = intent.getStringExtra("img3")
         val location = intent.getStringExtra("location")
         val Hoteldescription = intent.getStringExtra("hotelDescription").toString()
+
+        hotelId = intent.getStringExtra("hotelId").toString()
 
         val image1Uri = main(img1.toString())
         val imageUri2 = main(img2.toString())
@@ -197,13 +206,11 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             updateData()
         }
 
-//        getHotel()
+        getHotel()
     }
     private fun getHotel() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
-
-        val hotelId = intent.getStringExtra("hotelId").toString()
 
         val hotel = RetrofitBuilder.ProfileApis.getHotelInfo(hotelId)
         hotel.enqueue(object : Callback<HotelData?> {
@@ -211,33 +218,21 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                 if (response.isSuccessful){
                     val data = response.body()!!
                     binding.etNameEdit.setText(data.hotelName)
-//                    Glide.with(applicationContext).load(data.hotelCoverpicUrl).into(binding.vendorImage)
-
-                    if(data.gallery.size >= 3) {
-//                        img1 = data.gallery.get(0).Images
-//                        img2 = data.gallery.get(1).Images
-//                        img3 = data.gallery.get(2).Images
-//                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Image3).into(binding.img3)
-                    } else if (data.gallery.size >= 2) {
-//                        img1 = data.gallery.get(0).Images
-//                        img2 = data.gallery.get(1).Images
-//                        binding.img3.visibility = View.GONE
-//                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
-                        Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
-                    } else if (data.gallery.size > 0) {
-//                        binding.img2.visibility = View.GONE
-//                        binding.img3.visibility = View.GONE
-//                        img1 = data.gallery.get(0).Images
-                        Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
-//                        Glide.with(applicationContext).load(data.gallery.get(0).Images).into(binding.vendorImage)
-                    }
-
                     binding.overviewEt.setText(data.Hoteldescription)
-//                    hotelLogo = data.hotelLogoUrl
+
+                    try {
+                        if (data.gallery.get(0).Image1.isNotEmpty()){
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image1).into(binding.img1)
+                        }
+                        if (data.gallery.get(0).Image2.isNotEmpty()){
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image2).into(binding.img2)
+                        }
+                        if (data.gallery.get(0).Image3.isNotEmpty()){
+                            Glide.with(applicationContext).load(data.gallery.get(0).Image3).into(binding.img3)
+                        }
+                    }catch (e:IndexOutOfBoundsException){
+                        Log.e("error",e.message.toString())
+                    }
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -263,134 +258,59 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
         val description = binding.overviewEt.text.toString()
         val location = binding.locationText.text.toString()
 
-        try {
-            val parcelFileDescriptorimage1 = contentResolver.openFileDescriptor(
-                imgUri1!!, "r", null
-            ) ?: return
-            val inputStreamImage1 = FileInputStream(parcelFileDescriptorimage1.fileDescriptor)
-            fileImage1 = File(cacheDir, "cropped_${getRandomString(6)}.jpg")
-            val outputStreamImage1 = FileOutputStream(fileImage1)
-            inputStreamImage1.copyTo(outputStreamImage1)
-            bodyImage1 = UploadRequestBody(fileImage1!!, "image")
-        } catch (e: Exception) {
-            Log.e("error", e.message.toString())
-        }
+        if (imagesList.isNotEmpty()) {
 
+            if (uploadImg1) {
+                val image = app.retvens.rown.utils.prepareFilePart(
+                    imgUri1!!,
+                    "galleryImages1",
+                    applicationContext
+                )
 
+                val respo = RetrofitBuilder.ProfileApis.updateHotels1(
+                    hotelId!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                    image!!
+                )
+                respo.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            "image1 : ${response.body()?.message.toString()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
 
-        try {
-            val parcelFileDescriptorImage2 = contentResolver.openFileDescriptor(
-                imgUri2!!, "r", null
-            ) ?: return
-            val inputStreamImage2 = FileInputStream(parcelFileDescriptorImage2.fileDescriptor)
-            fileImage2 = File(cacheDir, "cropped_${getRandomString(6)}.jpg")
-            val outputStreamImage2 = FileOutputStream(fileImage2)
-            inputStreamImage2.copyTo(outputStreamImage2)
-            bodyImage2 = UploadRequestBody(fileImage2, "image")
-
-        } catch (e: Exception) {
-            Log.e("error", e.message.toString())
-        }
-
-        try {
-            val parcelFileDescriptorImage3 = contentResolver.openFileDescriptor(
-                imgUri3!!, "r", null
-            ) ?: return
-            val inputStreamImage3 = FileInputStream(parcelFileDescriptorImage3.fileDescriptor)
-            fileImage3 = File(cacheDir, "cropped_${getRandomString(6)}.jpg")
-            val outputStreamImage3 = FileOutputStream(fileImage3)
-            inputStreamImage3.copyTo(outputStreamImage3)
-            bodyImage3 = UploadRequestBody(fileImage3, "image")
-        } catch (e: Exception) {
-            Log.e("error", e.message.toString())
-        }
-
-        Log.e("image1", imgUri1.toString())
-        Log.e("image2", imgUri2.toString())
-        Log.e("image3", imgUri3.toString())
-
-        if (imgUri1.toString() != "null" && imgUri2.toString() != "null" && imgUri3.toString() != "null"){
-            val respo = RetrofitBuilder.ProfileApis.updateAllHotels(
-                hotelId!!,
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
-                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
-                MultipartBody.Part.createFormData("galleryImages1", fileImage1!!.name.toString(), bodyImage1),
-                MultipartBody.Part.createFormData("galleryImages2", fileImage2.name, bodyImage2),
-                MultipartBody.Part.createFormData("galleryImages3", fileImage3.name, bodyImage3)
-            )
-            respo.enqueue(object : Callback<UpdateResponse?> {
-                override fun onResponse(
-                    call: Call<UpdateResponse?>,
-                    response: Response<UpdateResponse?>
-                ) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        response.body()?.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    onBackPressed()
-                }
-
-                override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                    progressDialog.dismiss()
-                    Toast.makeText(
-                        applicationContext,
-                        t.localizedMessage?.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-        }else {
-            if (imgUri1.toString() != "null") {
-                try {
-                    val respo = RetrofitBuilder.ProfileApis.updateHotels1(
-                        hotelId!!,
-                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
-                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
-                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
-                        MultipartBody.Part.createFormData(
-                            "galleryImages1",
-                            fileImage1!!.name.toString(),
-                            bodyImage1
-                        )
-                    )
-                    respo.enqueue(object : Callback<UpdateResponse?> {
-                        override fun onResponse(
-                            call: Call<UpdateResponse?>,
-                            response: Response<UpdateResponse?>
-                        ) {
-                            progressDialog.dismiss()
-                            Toast.makeText(
-                                applicationContext,
-                                response.body()?.message.toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            onBackPressed()
-                        }
-
-                        override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                            progressDialog.dismiss()
-                            Toast.makeText(
-                                applicationContext,
-                                t.localizedMessage?.toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    })
-                } catch (e: java.lang.Exception) {
-                    Toast.makeText(applicationContext, "$e", Toast.LENGTH_SHORT).show()
-                }
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            t.localizedMessage?.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
             }
 
-            if (imgUri2.toString() != "null") {
+            if (uploadImg2) {
+                val image = app.retvens.rown.utils.prepareFilePart(
+                    imgUri2!!,
+                    "galleryImages2",
+                    applicationContext
+                )
+
                 val respo = RetrofitBuilder.ProfileApis.updateHotels2(
                     hotelId!!,
                     RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
                     RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
                     RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
-                    MultipartBody.Part.createFormData("galleryImages2", fileImage2.name, bodyImage2)
+                    image!!
                 )
                 respo.enqueue(object : Callback<UpdateResponse?> {
                     override fun onResponse(
@@ -400,10 +320,9 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         progressDialog.dismiss()
                         Toast.makeText(
                             applicationContext,
-                            response.body()?.message.toString(),
+                            "image2 : ${response.body()?.message.toString()}",
                             Toast.LENGTH_SHORT
                         ).show()
-                       onBackPressed()
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -417,13 +336,19 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                 })
             }
 
-            if (imgUri3.toString() != "null") {
+            if (uploadImg3) {
+                val image = app.retvens.rown.utils.prepareFilePart(
+                    imgUri3!!,
+                    "galleryImages3",
+                    applicationContext
+                )
+
                 val respo = RetrofitBuilder.ProfileApis.updateHotels3(
                     hotelId!!,
                     RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
                     RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
                     RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
-                    MultipartBody.Part.createFormData("galleryImages3", fileImage3.name, bodyImage3)
+                    image!!
                 )
                 respo.enqueue(object : Callback<UpdateResponse?> {
                     override fun onResponse(
@@ -436,7 +361,6 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                             response.body()?.message.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
-                        onBackPressed()
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -450,7 +374,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                 })
             }
 
-            if (imgUri1.toString() == "null" && imgUri2.toString() == "null" && imgUri3.toString() == "null") {
+        } else {
                 val respo = RetrofitBuilder.ProfileApis.updateHotels(
                     hotelId!!,
                     RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
@@ -482,11 +406,6 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                 })
             }
         }
-
-
-
-
-    }
 
     private fun prepareFilePart(fileUri: Uri, randomId : String, imageCounter : Int): MultipartBody.Part? {
         val randomString = Random().ints(randomId.length.toLong(), 0, randomId.length)
@@ -532,22 +451,25 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
 
                 when (selectedImg) {
                     1 -> {
-                        binding.deleteImg1.visibility = View.VISIBLE
                         imgUri1 = compressImage(croppedImage)
                         imagesList.add(imgUri1!!)
                         binding.img1.setImageURI(imgUri1!!)
+                        binding.deleteImg1.visibility = View.VISIBLE
+                        uploadImg1 = true
                     }
                     2 -> {
-                        binding.deleteImg2.visibility = View.VISIBLE
                         imgUri2 = compressImage(croppedImage)
                         imagesList.add(imgUri2!!)
                         binding.img2.setImageURI(imgUri2!!)
+                        binding.deleteImg2.visibility = View.VISIBLE
+                        uploadImg2 = true
                     }
                     3 -> {
-                        binding.deleteImg3.visibility = View.VISIBLE
                         imgUri3 = compressImage(croppedImage)
                         imagesList.add(imgUri3!!)
                         binding.img3.setImageURI(imgUri3!!)
+                        binding.deleteImg3.visibility = View.VISIBLE
+                        uploadImg3 = true
                     }
                 }
             } else if (resultCode == UCrop.RESULT_ERROR) {
@@ -593,5 +515,13 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
 
     override fun selectlocation(latitude: String, longitude: String) {
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(applicationContext, HotelDetailsProfileActivity::class.java)
+        intent.putExtra("hotelId", hotelId)
+        startActivity(intent)
+        finish()
     }
 }
