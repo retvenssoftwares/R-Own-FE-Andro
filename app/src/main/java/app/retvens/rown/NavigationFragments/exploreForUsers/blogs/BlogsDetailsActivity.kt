@@ -57,7 +57,6 @@ class BlogsDetailsActivity : AppCompatActivity() {
             isSaved = true
             binding.savePost.setImageResource(R.drawable.svg_save_post)
         }
-
         if (like == "liked"){
             isLiked = false
             binding.likePost.setImageResource(R.drawable.liked_vectore)

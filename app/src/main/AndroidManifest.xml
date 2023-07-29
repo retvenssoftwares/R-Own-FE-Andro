@@ -50,38 +50,55 @@
         <activity
             android:name=".Dashboard.UpdateAppActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash"/>
         <activity
             android:name=".NavigationFragments.profile.BlockUserActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.home.postDetails.CheckInDetailsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.home.postDetails.StatusDetailsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".viewAll.communityDetails.ViewAllUsersActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.HotelOwnerDetailsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".viewAll.viewAllCommunities.MembersCommunityDetailsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".NavigationFragments.profile.UserDetailsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".NavigationFragments.profile.polls.VotesActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Rown_Splash" >
             <meta-data
                 android:name="android.app.lib_name"
@@ -90,6 +107,8 @@
         <activity
             android:name=".Dashboard.createPosts.CheckInChildActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Rown_Splash">
             <meta-data
                 android:name="android.app.lib_name"
@@ -98,6 +117,8 @@
         <activity
             android:name=".Dashboard.ChatActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:theme="@style/Theme.Rown_Splash">
             <meta-data
                 android:name="android.app.lib_name"
@@ -121,10 +142,13 @@
         <activity
             android:name=".CreateCommunity.MapsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
+
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".NavigationFragments.jobforvendors.ViewAllMatches"
             android:exported="false"
+
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"

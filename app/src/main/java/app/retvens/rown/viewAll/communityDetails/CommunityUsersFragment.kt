@@ -239,6 +239,8 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
             dialogLanguage.findViewById<TextView>(R.id.remove).setOnClickListener {
                 openBottomSelectionCommunityRemove(dialogLanguage,userId)
             }
+
+
             dialogLanguage.findViewById<TextView>(R.id.view_profile).setOnClickListener {
                 if (role == "Business Vendor / Freelancer") {
                     val intent = Intent(context, VendorProfileActivity::class.java)
@@ -408,8 +410,8 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
             override fun onItemClick(member: User,admin:String) {
                 Log.e("1","working")
                 Log.e("userid","${member.user_id}")
-                openBottomSelectionCommunity(member.user_id,member.Role,admin)
-
+                if (member.admin!="true")
+                 openBottomSelectionCommunity(member.user_id,member.Role,admin)
             }
 
 
