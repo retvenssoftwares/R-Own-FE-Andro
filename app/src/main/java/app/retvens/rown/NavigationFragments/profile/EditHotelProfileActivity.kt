@@ -1,6 +1,8 @@
 package app.retvens.rown.NavigationFragments.profile
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -23,6 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
@@ -31,7 +34,6 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityEditHotelProfileBinding
-import app.retvens.rown.utils.cropProfileImage
 import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
@@ -57,7 +59,7 @@ class EditHotelProfileActivity : AppCompatActivity() {
     lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
         if (it == true) {
-            cropProfileImage(cameraImageUri, this)
+            cropProfileImage(cameraImageUri)
         }
     }
     lateinit var dialog: Dialog
@@ -334,13 +336,19 @@ class EditHotelProfileActivity : AppCompatActivity() {
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropProfileImage(imageUri, this)
+                cropProfileImage(imageUri)
 
             }
         }  else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = UCrop.getOutput(data!!)!!
-
+                binding.save.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        applicationContext,
+                        R.color.green_own
+                    )
+                )
+                binding.save.isClickable = true
                 compressImage(croppedImage)
 
             } else if (resultCode == UCrop.RESULT_ERROR) {
@@ -348,7 +356,17 @@ class EditHotelProfileActivity : AppCompatActivity() {
             }
         }
     }
+    fun cropProfileImage(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
 
+        val options : UCrop.Options = UCrop.Options()
+        options.setCircleDimmedLayer(true)
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(1F, 1F)
+            .withOptions(options)
+            .start(this)
+    }
     private fun createImageUri(): Uri? {
         val image = File(applicationContext.filesDir,"camera_photo.png")
         return FileProvider.getUriForFile(applicationContext,

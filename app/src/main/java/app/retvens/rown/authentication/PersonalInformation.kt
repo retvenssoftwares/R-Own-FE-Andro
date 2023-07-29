@@ -29,6 +29,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
@@ -80,7 +81,7 @@ class PersonalInformation : AppCompatActivity() {
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
 //        compressImage(cameraImageUri)
         if (it == true) {
-            app.retvens.rown.utils.cropProfileImage(cameraImageUri, this)
+            cropProfileImage(cameraImageUri)
         }
     }
     lateinit var dialog: Dialog
@@ -577,7 +578,7 @@ class PersonalInformation : AppCompatActivity() {
             if (imageUri != null) {
 //                compressImage(imageUri)
                 try {
-                    app.retvens.rown.utils.cropProfileImage(imageUri, this)
+                    cropProfileImage(imageUri)
                 }catch(e:RuntimeException){
                     Log.d("cropperOnPersonal", e.toString())
                 }catch(e:ClassCastException){
@@ -603,7 +604,17 @@ class PersonalInformation : AppCompatActivity() {
 
         }
     }
+    fun cropProfileImage(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
 
+        val options : UCrop.Options = UCrop.Options()
+        options.setCircleDimmedLayer(true)
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(1F, 1F)
+            .withOptions(options)
+            .start(this)
+    }
     private fun createImageUri(): Uri? {
         val image = File(applicationContext.filesDir,"camera_photo.png")
         return FileProvider.getUriForFile(applicationContext,

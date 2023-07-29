@@ -3,6 +3,7 @@ package app.retvens.rown.Dashboard.createPosts
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -28,6 +29,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -36,7 +38,6 @@ import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
 import app.retvens.rown.databinding.ActivityCreatePostBinding
 import app.retvens.rown.utils.compressImage
-import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.prepareFilePart
 import com.bumptech.glide.Glide
 import com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity
@@ -87,7 +88,7 @@ class CreatePostActivity : AppCompatActivity(),
     lateinit var progressDialog: Dialog
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraImageUri, this)
+        cropImage(cameraImageUri)
     }
 
     var canSee : Int ?= 0
@@ -564,7 +565,7 @@ class CreatePostActivity : AppCompatActivity(),
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropImage(imageUri, this)
+                cropImage(imageUri)
             }
         }  else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == RESULT_OK) {
@@ -573,7 +574,7 @@ class CreatePostActivity : AppCompatActivity(),
                 when (selectedImg) {
                     1 -> {
                         binding.deletePost.visibility = View.VISIBLE
-                        binding.editImage.visibility = View.VISIBLE
+//                        binding.editImage.visibility = View.VISIBLE
 
                         binding.imgPreview.setImageURI(croppedImage)
                         binding.img1.setImageURI(croppedImage)
@@ -656,6 +657,16 @@ class CreatePostActivity : AppCompatActivity(),
             }
           }
         }
+    }
+    fun cropImage(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
+
+        val options : UCrop.Options = UCrop.Options()
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(3F, 4F)
+            .withOptions(options)
+            .start(this)
     }
 
     private fun createImageUri(): Uri? {

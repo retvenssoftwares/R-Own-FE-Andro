@@ -575,8 +575,11 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
         val inputUri = imageUri
         val outputUri = File(requireContext().filesDir, "croppedImage.jpg").toUri()
 
+        val options : UCrop.Options = UCrop.Options()
+        options.setCircleDimmedLayer(true)
         UCrop.of(inputUri, outputUri)
             .withAspectRatio(1F, 1F)
+            .withOptions(options)
             .start(requireContext(), this)
     }
     fun compressImage(imageUri: Uri): Uri {

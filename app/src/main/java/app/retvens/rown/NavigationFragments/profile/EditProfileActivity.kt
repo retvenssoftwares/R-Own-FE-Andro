@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.profile
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -27,6 +28,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
@@ -42,7 +44,6 @@ import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetJobDesignation
 import app.retvens.rown.bottomsheet.BottomSheetJobTitle
 import app.retvens.rown.databinding.ActivityEditProfileBinding
-import app.retvens.rown.utils.cropProfileImage
 import app.retvens.rown.utils.getRandomString
 import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
@@ -86,7 +87,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
     lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
 //        compressImage(cameraImageUri)
-        cropProfileImage(cameraImageUri, this)
+        cropProfileImage(cameraImageUri)
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -713,7 +714,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropProfileImage(imageUri, this)
+                cropProfileImage(imageUri)
 
             }
         }   else if (requestCode == UCrop.REQUEST_CROP) {
@@ -745,7 +746,17 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
             )
         }
     }
+    fun cropProfileImage(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
 
+        val options : UCrop.Options = UCrop.Options()
+        options.setCircleDimmedLayer(true)
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(1F, 1F)
+            .withOptions(options)
+            .start(this)
+    }
     private fun createImageUri(): Uri? {
         val image = File(applicationContext.filesDir,"camera_photo.png")
         return FileProvider.getUriForFile(applicationContext,

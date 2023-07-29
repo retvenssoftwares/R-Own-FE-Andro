@@ -29,6 +29,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainData
@@ -37,8 +38,6 @@ import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetRating
-import app.retvens.rown.utils.cropImage
-import app.retvens.rown.utils.cropImageHorizontal
 import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.ResolvableApiException
@@ -317,7 +316,7 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val imageUri = data.data
             if (imageUri != null) {
-                cropImageHorizontal(imageUri, this)
+                cropImageHorizontal(imageUri)
             }
         }   else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
@@ -331,6 +330,18 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
         }
     }
 
+    fun cropImageHorizontal(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
+
+        val options : UCrop.Options = UCrop.Options()
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(16F, 9F)
+            .withMaxResultSize(2000,2000)
+            .withOptions(options)
+            .start(this)
+
+    }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri
         try {

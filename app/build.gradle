@@ -76,8 +76,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"
     //ImageCropper
 //    implementation "com.theartofdev.edmodo:android-image-cropper:2.8.0"
-    implementation 'com.github.yalantis:ucrop:2.2.6'
-    implementation 'com.github.yalantis:ucrop:2.2.6-native'
+    implementation 'com.github.yalantis:ucrop:2.2.8'
+    implementation 'com.github.yalantis:ucrop:2.2.8-native'
     //Country Code Picker
     implementation'com.hbb20:ccp:2.5.3'
 

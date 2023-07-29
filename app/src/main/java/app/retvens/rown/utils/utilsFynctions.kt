@@ -160,8 +160,10 @@ fun cropImage(imageUri: Uri, context: Context) {
     val inputUri = imageUri
     val outputUri = File(context.filesDir, "croppedImage.jpg").toUri()
 
+    val options : UCrop.Options = UCrop.Options()
     UCrop.of(inputUri, outputUri)
         .withAspectRatio(3F, 4F)
+        .withOptions(options)
         .start(context as Activity)
 }
 
@@ -169,9 +171,11 @@ fun cropImageHorizontal(imageUri: Uri, context: Context) {
     val inputUri = imageUri
     val outputUri = File(context.filesDir, "croppedImage.jpg").toUri()
 
+    val options : UCrop.Options = UCrop.Options()
     UCrop.of(inputUri, outputUri)
         .withAspectRatio(16F, 9F)
         .withMaxResultSize(2000,2000)
+        .withOptions(options)
         .start(context as Activity)
 
 }
@@ -179,8 +183,10 @@ fun cropImageFree(imageUri: Uri, context: Context) {
     val inputUri = imageUri
     val outputUri = File(context.filesDir, "croppedImage.jpg").toUri()
 
+    val options : UCrop.Options = UCrop.Options()
     UCrop.of(inputUri, outputUri)
         .withMaxResultSize(2000,2000)
+        .withOptions(options)
         .start(context as Activity)
 
 }
@@ -188,8 +194,11 @@ fun cropProfileImage(imageUri: Uri, context: Context) {
     val inputUri = imageUri
     val outputUri = File(context.filesDir, "croppedImage.jpg").toUri()
 
+    val options : UCrop.Options = UCrop.Options()
+    options.setCircleDimmedLayer(true)
     UCrop.of(inputUri, outputUri)
         .withAspectRatio(1F, 1F)
+        .withOptions(options)
         .start(context as Activity)
 }
 fun compressImage(imageUri: Uri, context: Context): Uri {

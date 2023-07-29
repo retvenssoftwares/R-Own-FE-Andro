@@ -26,6 +26,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
@@ -35,7 +36,6 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.databinding.ActivityEditVendorInfoBinding
-import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.getRandomString
 import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.profileComStatus
@@ -64,7 +64,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 
     private var cameraImageUri: Uri? = null
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-        cropImage(cameraImageUri!!, this)
+        cropImage(cameraImageUri!!)
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -681,7 +681,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
             val imageUri = data.data
             if (imageUri != null) {
 
-                cropImage(imageUri, this)
+                cropImage(imageUri)
 
             }
         }  else if (requestCode == UCrop.REQUEST_CROP) {
@@ -746,6 +746,16 @@ class EditVendorInfoActivity : AppCompatActivity() {
             }
         }
 
+    }
+    fun cropImage(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
+
+        val options : UCrop.Options = UCrop.Options()
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(3F, 4F)
+            .withOptions(options)
+            .start(this)
     }
 
     private fun openBottomCameraSheet() {

@@ -1,6 +1,8 @@
 package app.retvens.rown.sideNavigation
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -17,12 +19,11 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityBugSpottedBinding
-import app.retvens.rown.utils.cropImage
-import app.retvens.rown.utils.cropImageFree
 import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide
 import com.yalantis.ucrop.UCrop
@@ -172,7 +173,7 @@ class BugSpottedActivity : AppCompatActivity() {
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropImageFree(imageUri, this)
+                cropImageFree(imageUri)
             }
         }  else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
@@ -203,7 +204,17 @@ class BugSpottedActivity : AppCompatActivity() {
             }
         }
     }
+    fun cropImageFree(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
 
+        val options : UCrop.Options = UCrop.Options()
+        UCrop.of(inputUri, outputUri)
+            .withMaxResultSize(2000,2000)
+            .withOptions(options)
+            .start(this)
+
+    }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri
         try {

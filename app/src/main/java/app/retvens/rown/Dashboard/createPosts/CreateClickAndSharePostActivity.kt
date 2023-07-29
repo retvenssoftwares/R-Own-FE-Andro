@@ -26,6 +26,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -80,7 +81,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
         if (it == true) {
-            app.retvens.rown.utils.cropImage(cameraImageUri, this)
+            cropImage(cameraImageUri)
         }
     }
 
@@ -371,7 +372,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             val croppedImage = UCrop.getOutput(data!!)
             binding.deletePost.visibility = View.VISIBLE
-            binding.editImage.visibility = View.VISIBLE
+//            binding.editImage.visibility = View.VISIBLE
 
             croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage!!, this)
             binding.imgPreview.setImageURI(croppedImageUri)
@@ -384,6 +385,16 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
                     binding.imgPreview.setImageURI(croppedImageUri)
                 }
             }
+    }
+    fun cropImage(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
+
+        val options : UCrop.Options = UCrop.Options()
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(3F, 4F)
+            .withOptions(options)
+            .start(this)
     }
 
     private fun createImageUri(): Uri? {

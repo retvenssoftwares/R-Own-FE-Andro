@@ -23,6 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -32,8 +33,6 @@ import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityEditVendorsProfileBinding
-import app.retvens.rown.utils.cropImage
-import app.retvens.rown.utils.cropProfileImage
 import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
@@ -60,7 +59,7 @@ class EditVendorsProfileActivity : AppCompatActivity() {
     lateinit var cameraImageUri: Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
 //        compressImage(cameraImageUri)
-        cropProfileImage(cameraImageUri, this)
+        cropProfileImage(cameraImageUri)
     }
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -401,7 +400,7 @@ class EditVendorsProfileActivity : AppCompatActivity() {
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropProfileImage(imageUri, this)
+                cropProfileImage(imageUri)
 
             }
         }   else if (requestCode == UCrop.REQUEST_CROP) {
@@ -423,7 +422,17 @@ class EditVendorsProfileActivity : AppCompatActivity() {
             }
         }
     }
+    fun cropProfileImage(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
 
+        val options : UCrop.Options = UCrop.Options()
+        options.setCircleDimmedLayer(true)
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(1F, 1F)
+            .withOptions(options)
+            .start(this)
+    }
     private fun createImageUri(): Uri? {
         val image = File(applicationContext.filesDir,"camera_photo.png")
         return FileProvider.getUriForFile(applicationContext,

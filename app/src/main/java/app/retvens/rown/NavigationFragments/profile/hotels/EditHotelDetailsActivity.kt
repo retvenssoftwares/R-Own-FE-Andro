@@ -18,14 +18,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.databinding.ActivityEditHotelDetailsBinding
-import app.retvens.rown.utils.cropImage
 import app.retvens.rown.utils.getRandomString
 import com.bumptech.glide.Glide
 import com.yalantis.ucrop.UCrop
@@ -436,7 +435,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             val imageUri = data.data
             if (imageUri != null) {
 //                compressImage(imageUri)
-                cropImage(imageUri, this)
+                cropImage(imageUri)
 //                if (selectedImg == 1) {
 //                    binding.img1.setImageURI(imageUri)
 //                } else if (selectedImg == 2) {
@@ -478,6 +477,16 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
         }
     }
 
+    fun cropImage(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
+
+        val options : UCrop.Options = UCrop.Options()
+        UCrop.of(inputUri, outputUri)
+            .withAspectRatio(3F, 4F)
+            .withOptions(options)
+            .start(this)
+    }
     fun compressImage(imageUri: Uri): Uri {
         lateinit var compressed : Uri
         try {

@@ -1,6 +1,8 @@
 package app.retvens.rown.NavigationFragments.profile.setting.profileSetting
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -17,6 +19,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -32,6 +35,7 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.lang.RuntimeException
 
 class ApplyForVerificationActivity : AppCompatActivity() {
@@ -209,7 +213,7 @@ class ApplyForVerificationActivity : AppCompatActivity() {
             val imageUri = data.data
             if (imageUri != null) {
                 try {
-                    app.retvens.rown.utils.cropProfileImage(imageUri, this)
+                    cropImageFree(imageUri)
                 }catch(e: RuntimeException){
                     Log.d("cropperOnPersonal", e.toString())
                 }catch(e:ClassCastException){
@@ -227,5 +231,16 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                 Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+    fun cropImageFree(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
+
+        val options : UCrop.Options = UCrop.Options()
+        UCrop.of(inputUri, outputUri)
+            .withMaxResultSize(2000,2000)
+            .withOptions(options)
+            .start(this)
+
     }
 }
