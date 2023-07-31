@@ -36,7 +36,7 @@
         android:name=".MainApplication"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
-         android:fullBackupContent="false"
+        android:fullBackupContent="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -48,58 +48,53 @@
         tools:replace="android:allowBackup"
         tools:targetApi="31">
         <activity
+            android:name=".NavigationFragments.home.PostLikeActivity"
+            android:exported="false" />
+        <activity
             android:name=".Dashboard.UpdateAppActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Rown_Splash"/>
+            android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.BlockUserActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.home.postDetails.CheckInDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.home.postDetails.StatusDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".viewAll.communityDetails.ViewAllUsersActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.profile.HotelOwnerDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".viewAll.viewAllCommunities.MembersCommunityDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".NavigationFragments.profile.UserDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".NavigationFragments.profile.polls.VotesActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
-            android:theme="@style/Theme.Rown_Splash" >
+            android:theme="@style/Theme.Rown_Splash">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -108,7 +103,6 @@
             android:name=".Dashboard.createPosts.CheckInChildActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/Theme.Rown_Splash">
             <meta-data
                 android:name="android.app.lib_name"
@@ -118,7 +112,6 @@
             android:name=".Dashboard.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-
             android:theme="@style/Theme.Rown_Splash">
             <meta-data
                 android:name="android.app.lib_name"
@@ -142,13 +135,11 @@
         <activity
             android:name=".CreateCommunity.MapsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".NavigationFragments.jobforvendors.ViewAllMatches"
             android:exported="false"
-
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
@@ -703,7 +694,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider> <!-- <service -->
-
         <!-- android:name=".ApiRequest.MesiboBackgroundService" -->
         <!-- android:enabled="true" -->
         <!-- android:exported="false" /> -->

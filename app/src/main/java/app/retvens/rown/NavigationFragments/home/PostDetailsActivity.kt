@@ -2,6 +2,7 @@ package app.retvens.rown.NavigationFragments.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -117,6 +118,10 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         val isSaved = intent.getStringExtra("isSaved")
         val savedFrag = intent.getStringExtra("savedFrag")
 
+        val testLike = findViewById<TextView>(R.id.likebypeople)
+
+
+
         val commentStatus = intent.getStringExtra("commentStatus")
         val Can_comment = intent.getStringExtra("Can_comment")
 //        Toast.makeText(applicationContext, "$savedFrag", Toast.LENGTH_SHORT).show()
@@ -137,6 +142,24 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         like = intent.getStringExtra("like").toString()
         likeSaved = intent.getStringExtra("likeSaved").toString()
         likeCount = intent.getStringExtra("likeCount")?.toInt()!!
+
+        val seeLike = findViewById<TextView>(R.id.likebypeople)
+
+        if (likeCount.toString() == "0"){
+            seeLike.visibility = View.GONE
+        }else{
+            seeLike.text = "$likeCount People Like Your Post...."
+        }
+
+
+
+
+
+        testLike.setOnClickListener {
+            val intent = Intent(this,PostLikeActivity::class.java)
+            intent.putExtra("like",postId)
+            startActivity(intent)
+        }
 
         if (postId == "null"){
             postId = postid

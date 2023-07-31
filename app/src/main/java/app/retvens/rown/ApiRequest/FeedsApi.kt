@@ -309,4 +309,9 @@ interface FeedsApi {
     fun deleteCommunity(
         @Body groupId:DeleteCommunityDataClass
     ):Call<UpdateResponse>
+
+    @GET("fetchlike/{postId}")
+    fun getLike(
+        @Path("postId")PostId:String
+    ):Call<LikeDataClass>
 }
