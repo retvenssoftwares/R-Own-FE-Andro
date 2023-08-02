@@ -12,6 +12,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
+import java.time.chrono.MinguoDate
 
 interface PriofileCompletionApis{
 
@@ -287,5 +288,10 @@ interface PriofileCompletionApis{
     fun addEducation(
         @Path("userId") user_id : String,
         @Body updateData:UserProfileRequestItem.StudentEducation
+    ):Call<UpdateResponse>
+
+    @POST("company")
+    fun addHotel(
+        @Body addCompany:AddCompanyDataClass
     ):Call<UpdateResponse>
 }

@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentTransaction
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import app.retvens.rown.NavigationFragments.exploreForUsers.ExploreOpenCommunity.ExploreOpenCommunity
 import app.retvens.rown.NavigationFragments.exploreForUsers.blogs.ExploreBlogsFragment
 import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobsFragment
 import app.retvens.rown.NavigationFragments.exploreForUsers.ExplorePostsFragment
@@ -37,6 +38,7 @@ class ExploreFragment : Fragment() {
     private lateinit var exploreHotels : CardView
     private lateinit var exploreServices : CardView
     private lateinit var explorePeople : CardView
+    private lateinit var exploreCommunity:CardView
 
 
     var selectedFrag = 0
@@ -59,6 +61,7 @@ class ExploreFragment : Fragment() {
         exploreHotels = view.findViewById(R.id.exploreHotels)
         exploreServices = view.findViewById(R.id.exploreServices)
         explorePeople = view.findViewById(R.id.explorePeoples)
+        exploreCommunity = view.findViewById(R.id.exploreCommunity)
 
         val welcome = view.findViewById<TextView>(R.id.welcome_name)
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
@@ -79,6 +82,7 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreCommunity.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
             selectedFrag = 0
             val event = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
@@ -98,6 +102,7 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreCommunity.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             val event = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
             view.dispatchKeyEvent(event)
             selectedFrag = 1
@@ -116,6 +121,7 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreCommunity.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             val event = KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK)
             view.dispatchKeyEvent(event)
             selectedFrag = 2
@@ -134,7 +140,7 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#ADD134"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
-
+            exploreCommunity.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             selectedFrag = 3
             val childFragment: Fragment = ExploreEventFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -151,7 +157,7 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#ADD134"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
-
+            exploreCommunity.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             selectedFrag = 4
             val childFragment: Fragment = ExploreHotelsFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -168,7 +174,7 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#ADD134"))
-
+            exploreCommunity.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             selectedFrag = 5
             val childFragment: Fragment = ExploreServicesFragment()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
@@ -183,9 +189,25 @@ class ExploreFragment : Fragment() {
             exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
-
+            exploreCommunity.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
             selectedFrag = 6
             val childFragment: Fragment = ExplorePeopleFragment()
+            val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
+            transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
+        }
+
+
+        exploreCommunity.setOnClickListener {
+            explorePosts.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreJobs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            explorePeople.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreBlogs.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreEvents.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreHotels.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreServices.setCardBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            exploreCommunity.setCardBackgroundColor(Color.parseColor("#ADD134"))
+            selectedFrag = 7
+            val childFragment: Fragment = ExploreOpenCommunity()
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_events_fragments_container, childFragment).commit()
         }

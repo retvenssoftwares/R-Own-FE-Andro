@@ -61,4 +61,5 @@
         <item name="dialogCornerRadius">12dp</item>
         <item name="dialogActionButtonColor">@color/black</item>
     </style>
+    <dimen name="dialog_height">600dp</dimen>
 </resources>

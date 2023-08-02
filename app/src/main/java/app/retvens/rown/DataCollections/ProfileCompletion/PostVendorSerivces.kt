@@ -6,3 +6,8 @@ data class PostVendorSerivces(
 ) {
 
 }
+
+data class AddCompanyDataClass(
+    val compnay_name:String,
+    val addedbyUser:String
+)

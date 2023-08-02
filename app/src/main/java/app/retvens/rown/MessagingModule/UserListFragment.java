@@ -276,7 +276,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
                 mAdapter.updateData(filter);
 
-
             }
 
             @Override
