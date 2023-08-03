@@ -107,6 +107,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/searchEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No Search People Found.."
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:visibility="gone"
+            android:layout_gravity="center"
+
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/message_contact_frag_rv"

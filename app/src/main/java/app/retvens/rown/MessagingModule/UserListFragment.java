@@ -95,6 +95,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
     public ImageView mEmptyView;
     public TextView count;
     public TextView name;
+    public TextView searchEmpty;
     public String num;
     public long mForwardId = 0;
     /* access modifiers changed from: private */
@@ -248,6 +249,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         this.mEmptyView = (ImageView) view.findViewById(R.id.emptyview_text);
         this.count = view.findViewById(R.id.count);
         this.name = view.findViewById(R.id.name);
+        this.searchEmpty = view.findViewById(R.id.searchEmpty);
         setEmptyViewText();
         this.mUserProfiles = new ArrayList<>();
         this.mRecyclerView = view.findViewById(R.id.message_contact_frag_rv);
@@ -346,15 +348,27 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
     public void handleEmptyUserList(int userListsize) {
         if (userListsize == 0) {
             this.mRecyclerView.setVisibility(View.INVISIBLE);
-            this.mEmptyView.setVisibility(View.VISIBLE);
-            this.count.setVisibility(View.VISIBLE);
-            this.name.setVisibility(View.VISIBLE);
 
-            SharedPreferences sharedPreferencesName = getContext().getSharedPreferences("SaveFullName", Context.MODE_PRIVATE);
-            String profileName = sharedPreferencesName.getString("full_name", "");
-            this.name.setText("Hi, "+profileName);
 
-            this.count.setText("Connect with "+num+" Hoteliers on R-Own and Engage with a Vibrant Community!");
+            String text = searchBar.getText().toString().trim();
+
+            if (text.isEmpty()){
+                this.mEmptyView.setVisibility(View.VISIBLE);
+                this.count.setVisibility(View.VISIBLE);
+                this.name.setVisibility(View.VISIBLE);
+                this.searchEmpty.setVisibility(View.INVISIBLE);
+
+                SharedPreferences sharedPreferencesName = getContext().getSharedPreferences("SaveFullName", Context.MODE_PRIVATE);
+                String profileName = sharedPreferencesName.getString("full_name", "");
+                this.name.setText("Hi, "+profileName);
+
+                this.count.setText("Connect with "+num+" Hoteliers on R-Own and Engage with a Vibrant Community!");
+            }else {
+                this.searchEmpty.setVisibility(View.VISIBLE);
+                this.mEmptyView.setVisibility(View.INVISIBLE);
+                this.count.setVisibility(View.INVISIBLE);
+                this.name.setVisibility(View.INVISIBLE);
+            }
 
             return;
         }

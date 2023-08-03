@@ -148,7 +148,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         if (likeCount.toString() == "0"){
             seeLike.visibility = View.GONE
         }else{
-            seeLike.text = "$likeCount People Like Your Post...."
+            seeLike.text = "$likeCount People Like This Post...."
         }
 
 
