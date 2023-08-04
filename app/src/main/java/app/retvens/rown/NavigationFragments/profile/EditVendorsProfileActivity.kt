@@ -274,7 +274,7 @@ class EditVendorsProfileActivity : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                     Log.d("image", response.toString())
                     Log.d("image", response.body().toString())
 

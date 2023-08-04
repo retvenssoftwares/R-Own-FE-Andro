@@ -221,7 +221,7 @@ class JobTitleFragment : Fragment(), BackHandler,
 
                     Log.d("JobTitleFragment", "$title, $type, $company, $startY, $endY")
                     progressDialog.dismiss()
-                    Toast.makeText(requireContext(),response.message.toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message.toString(),Toast.LENGTH_SHORT).show()
                     startActivity(Intent(context,DashBoardActivity::class.java))
                     activity?.finish()
                 }else{

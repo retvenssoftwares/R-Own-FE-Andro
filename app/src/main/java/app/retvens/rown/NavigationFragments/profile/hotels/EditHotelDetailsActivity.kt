@@ -279,11 +279,11 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response: Response<UpdateResponse?>
                     ) {
                         progressDialog.dismiss()
-                        Toast.makeText(
-                            applicationContext,
-                            "image1 : ${response.body()?.message.toString()}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            applicationContext,
+//                            "image1 : ${response.body()?.message.toString()}",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -317,11 +317,11 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response: Response<UpdateResponse?>
                     ) {
                         progressDialog.dismiss()
-                        Toast.makeText(
-                            applicationContext,
-                            "image2 : ${response.body()?.message.toString()}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            applicationContext,
+//                            "image2 : ${response.body()?.message.toString()}",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -355,11 +355,11 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response: Response<UpdateResponse?>
                     ) {
                         progressDialog.dismiss()
-                        Toast.makeText(
-                            applicationContext,
-                            response.body()?.message.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            applicationContext,
+//                            response.body()?.message.toString(),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -386,11 +386,11 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response: Response<UpdateResponse?>
                     ) {
                         progressDialog.dismiss()
-                        Toast.makeText(
-                            applicationContext,
-                            response.body()?.message.toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+//                        Toast.makeText(
+//                            applicationContext,
+//                            response.body()?.message.toString(),
+//                            Toast.LENGTH_SHORT
+//                        ).show()
                         onBackPressed()
                     }
 

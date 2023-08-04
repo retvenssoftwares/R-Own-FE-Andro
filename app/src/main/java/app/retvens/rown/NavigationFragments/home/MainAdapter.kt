@@ -880,6 +880,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             var operatioin = "push"
 
             val banner = banner
+            if (banner.verificationStatus == "true") {
+                binding.verification.visibility = View.VISIBLE
+            } else if (banner.verificationStatus == "false") {
+                binding.verification.visibility = View.GONE
+            }
 
             binding.userNamePost.text = banner.Full_name
             binding.location.text = banner.User_name
@@ -1036,6 +1041,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.postProfile.setImageResource(R.drawable.svg_user)
                 }
             } catch (e:NullPointerException){}
+
+            if (banner.verificationStatus == "true") {
+                binding.verification.visibility = View.VISIBLE
+            } else if (banner.verificationStatus == "false") {
+                binding.verification.visibility = View.GONE
+            }
 
 //            if (post.User_name.isNotEmpty()) {
 //                binding.userIdOnComment.text = post.User_name
@@ -1247,6 +1258,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.userNamePost.text = post.Full_name
             binding.postUserType.text = post.User_name
 
+            if (banner.verificationStatus == "true") {
+                binding.verification.visibility = View.VISIBLE
+            } else if (banner.verificationStatus == "false") {
+                binding.verification.visibility = View.GONE
+            }
+
             try {
                 if (post.Profile_pic.isNotEmpty()) {
                     Glide.with(context).load(post.Profile_pic).into(binding.postProfile)
@@ -1320,6 +1337,12 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
             binding.userNamePost.text = post.Full_name
             binding.postUserType.text = post.User_name
+
+            if (banner.verificationStatus == "true") {
+                binding.verification.visibility = View.VISIBLE
+            } else if (banner.verificationStatus == "false") {
+                binding.verification.visibility = View.GONE
+            }
 
             try {
                 if (post.Profile_pic.isNotEmpty()) {

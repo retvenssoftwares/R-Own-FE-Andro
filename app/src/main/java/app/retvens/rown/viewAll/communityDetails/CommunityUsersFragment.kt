@@ -313,7 +313,7 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     getCommunityDetails(groupId)
                 }else{
                     Log.e("error",response.message().toString())

@@ -295,7 +295,7 @@ class AddHotelActivity : AppCompatActivity(), BottomSheetRating.OnBottomRatingCl
                 if (response.isSuccessful){
                     val response = response.body()!!
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     onBackPressed()
                 }else{
                     progressDialog.dismiss()

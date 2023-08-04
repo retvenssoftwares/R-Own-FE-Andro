@@ -255,7 +255,7 @@ class BottomSheetEditExperience(val role:String) : BottomSheetDialogFragment(),
                 if (response.isSuccessful && isAdded){
                     dismiss()
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
                     mListener?.bottomEditClick()
                 }else{
@@ -293,7 +293,7 @@ class BottomSheetEditExperience(val role:String) : BottomSheetDialogFragment(),
                 if (response.isSuccessful && isAdded){
                     dismiss()
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
                     mListener?.bottomEditClick()
                 }else{

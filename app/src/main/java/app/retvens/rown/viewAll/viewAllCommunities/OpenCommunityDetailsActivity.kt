@@ -178,7 +178,7 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.result.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.result.toString(), Toast.LENGTH_SHORT).show()
                     addCommunityMember()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(), Toast.LENGTH_SHORT).show()
@@ -206,8 +206,8 @@ class OpenCommunityDetailsActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val response = response.body()!!
-                        Toast.makeText(applicationContext, response.message, Toast.LENGTH_SHORT)
-                            .show()
+//                        Toast.makeText(applicationContext, response.message, Toast.LENGTH_SHORT)
+//                            .show()
                         val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
                         intent.putExtra(MesiboUI.GROUP_ID, groupId.toLong())
                         startActivity(intent)

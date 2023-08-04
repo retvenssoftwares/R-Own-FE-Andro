@@ -354,7 +354,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                 uploadData()
 
         }else {
-            Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
             profileCompletionStatus = "100"
 
             progressDialog.dismiss()
@@ -406,7 +406,7 @@ class HotelOwnerChainFragment : Fragment(), BackHandler, BottomSheetRating.OnBot
                         counter++
                         counterText.text = "$counter/$n"
                     } else {
-                        Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(context, "All Hotels Uploaded", Toast.LENGTH_SHORT).show()
                         profileCompletionStatus = "100"
 
                         progressDialog.dismiss()

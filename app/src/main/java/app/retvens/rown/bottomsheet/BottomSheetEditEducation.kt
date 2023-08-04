@@ -180,7 +180,7 @@ class BottomSheetEditEducation : BottomSheetDialogFragment() {
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                     mListener?.bottomEditEdClick()
                 }else{
                     Log.e("error",response.code().toString())

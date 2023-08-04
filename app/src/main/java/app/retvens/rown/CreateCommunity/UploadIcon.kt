@@ -274,11 +274,11 @@ class UploadIcon : AppCompatActivity() {
 // Join the cleaned phone numbers into a comma-separated string
         val formattedMembers = cleanedNumbers.joinToString(",")
 
-        Toast.makeText(applicationContext,formattedMembers.toString(),Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext,formattedMembers.toString(),Toast.LENGTH_SHORT).show()
         Log.e("string",formattedMembers.toString())
-        Toast.makeText(applicationContext,groupId.toString(),Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext,groupId.toString(),Toast.LENGTH_SHORT).show()
 
-        Toast.makeText(applicationContext,members.toString(),Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext,members.toString(),Toast.LENGTH_SHORT).show()
 
         val data = AddMemberData(groupId, formattedMembers)
 
@@ -291,7 +291,7 @@ class UploadIcon : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.result.toString(),Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.result.toString(),Toast.LENGTH_SHORT).show()
                     createCommunity()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
@@ -338,7 +338,7 @@ class UploadIcon : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     addCommunityMember()
 
                     val profile = getProfile()
@@ -373,7 +373,7 @@ class UploadIcon : AppCompatActivity() {
                     if (response.isSuccessful){
                         progressDialog.dismiss()
                         val response = response.body()!!
-                        Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                         val intent = Intent(applicationContext,MesiboMessagingActivity::class.java)
                         intent.putExtra("admin","true")
                         intent.putExtra(MesiboUI.GROUP_ID,groupId.toLong())

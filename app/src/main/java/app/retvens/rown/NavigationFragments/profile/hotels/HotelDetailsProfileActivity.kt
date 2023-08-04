@@ -119,7 +119,7 @@ class HotelDetailsProfileActivity : AppCompatActivity() {
                         liked = !liked
                         binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
                     }
-                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     Log.e("error",response.code().toString())
                 }

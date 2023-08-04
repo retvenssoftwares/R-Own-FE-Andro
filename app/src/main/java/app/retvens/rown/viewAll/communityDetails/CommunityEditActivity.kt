@@ -125,7 +125,7 @@ class CommunityEditActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
 
                     val profile = Mesibo.getProfile(groupId.toLong())
                     profile.name = name
@@ -180,7 +180,7 @@ class CommunityEditActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     val profile = Mesibo.getProfile(groupId.toLong())
                     profile.name = names
                     profile.image = decodeSampledBitmapFromFile(file,200,150)

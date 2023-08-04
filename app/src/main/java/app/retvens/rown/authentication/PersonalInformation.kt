@@ -327,7 +327,7 @@ class PersonalInformation : AppCompatActivity() {
 //        val addresse = "address Noted"
 //        val token = "Testing Token With Image"
 //        val uid = 18235
-        Toast.makeText(applicationContext,phone.toString(),Toast.LENGTH_SHORT).show()
+//        Toast.makeText(applicationContext,phone.toString(),Toast.LENGTH_SHORT).show()
 
         val Interest = Interest(_id,uid.toString())
         val Mesibo_account = MesiboAccount(_id,addresse,token,uid)
@@ -346,7 +346,7 @@ class PersonalInformation : AppCompatActivity() {
             profile.image = decodeSampledBitmapFromFile(file,200,150)
             profile.save()
 
-            Toast.makeText(applicationContext,"saved",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(applicationContext,"saved",Toast.LENGTH_SHORT).show()
 
             val selfProfile = Mesibo.getSelfProfile()
 

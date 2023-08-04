@@ -222,7 +222,7 @@ class BasicInformationFragment : Fragment(),
                     progressDialog.show()
 
                     setJobTitle(myRoleInHosET.text.toString())
-                    Toast.makeText(requireContext(), "S H", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "S H", Toast.LENGTH_SHORT).show()
                 }
             } else if (!isHotelier){
                 if (myRoleInHosET.text.toString() == "My Role in hospitality"){
@@ -238,7 +238,7 @@ class BasicInformationFragment : Fragment(),
                     progressDialog.show()
 
                     setJobTitle(myRoleInHosET.text.toString())
-                    Toast.makeText(requireContext(), "H", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "H", Toast.LENGTH_SHORT).show()
                 }
             } else if (!isStudent) {
                 if (university.text.toString() == ""){
@@ -259,7 +259,7 @@ class BasicInformationFragment : Fragment(),
 
                     saveUniversity()
                     setJobTitle("Normal User")
-                    Toast.makeText(requireContext(), "S", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "S", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 if (myRecentJobET.text.toString() == "Most Recent Job Title"){
@@ -275,7 +275,7 @@ class BasicInformationFragment : Fragment(),
                     progressDialog.show()
 
                     setJobTitle("Normal User")
-                    Toast.makeText(requireContext(), "Job Title", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(), "Job Title", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -301,7 +301,7 @@ class BasicInformationFragment : Fragment(),
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
                 }else{
                     Log.e("error",response.code().toString())
                 }

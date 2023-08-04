@@ -207,7 +207,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                 }else{
                     Log.e("error",response.message().toString())
                 }
@@ -231,7 +231,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
             ) {
                 if (response.isSuccessful) {
                     val response = response.body()!!
-                    Toast.makeText(applicationContext, response.message, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext, response.message, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                 } else {
                     Toast.makeText(

@@ -159,7 +159,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
                         isSaved = !isSaved
                         binding.savePost.setImageResource(R.drawable.svg_save_post)
                     }
-                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
@@ -190,7 +190,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
                         isLiked = !isLiked
                         binding.likePost.setImageResource(R.drawable.svg_like_post)
                     }
-                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

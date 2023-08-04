@@ -160,7 +160,7 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context,
                         holder.blogLike.setImageResource(R.drawable.svg_heart)
                         onLiked.invoke(1)
                     }
-                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

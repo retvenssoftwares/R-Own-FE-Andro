@@ -179,7 +179,7 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
             ) {
                 if (response.isSuccessful) {
                     val response = response.body()!!
-                    Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT)
                         .show()

@@ -188,7 +188,7 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                 response: Response<UpdateResponse?>
             ) {
                 progressDialog.dismiss()
-                Toast.makeText(applicationContext, response.toString(), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext, response.toString(), Toast.LENGTH_SHORT).show()
                 if (response.isSuccessful){
                     onBackPressed()
                 }
