@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,7 @@ class ExploreOpenCommunity : Fragment() {
     lateinit var viewAllCommunityAdapter: ViewAllCommunityAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchBar:EditText
+    private lateinit var noCommunities:ImageView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,6 +44,8 @@ class ExploreOpenCommunity : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
+        noCommunities = view.findViewById(R.id.noCommunities)
+
         fetchCommunity()
     }
 
@@ -56,45 +60,59 @@ class ExploreOpenCommunity : Fragment() {
                 call: Call<List<GetCommunitiesData>?>,
                 response: Response<List<GetCommunitiesData>?>
             ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    viewAllCommunityAdapter = ViewAllCommunityAdapter(response as ArrayList<GetCommunitiesData>, requireContext())
-                    recyclerView.adapter = viewAllCommunityAdapter
-                    viewAllCommunityAdapter.notifyDataSetChanged()
+                if (response.isSuccessful) {
+                    try {
+                        val response = response.body()!!
+                        if (response.isNotEmpty()){
+                            viewAllCommunityAdapter = ViewAllCommunityAdapter(
+                                response as ArrayList<GetCommunitiesData>,
+                                requireContext()
+                            )
+                            recyclerView.adapter = viewAllCommunityAdapter
+                            viewAllCommunityAdapter.notifyDataSetChanged()
 
 
-                    searchBar.addTextChangedListener(object : TextWatcher {
-                        override fun beforeTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            count: Int,
-                            after: Int
-                        ) {
+                            searchBar.addTextChangedListener(object : TextWatcher {
+                                override fun beforeTextChanged(
+                                    s: CharSequence?,
+                                    start: Int,
+                                    count: Int,
+                                    after: Int
+                                ) {
 
+                                }
+
+                                override fun onTextChanged(
+                                    s: CharSequence?,
+                                    start: Int,
+                                    before: Int,
+                                    count: Int
+                                ) {
+                                    val original = response.toList()
+                                    val filter = original.filter { searchUser ->
+                                        searchUser.group_name.contains(s.toString(), ignoreCase = true)
+                                    }
+                                    viewAllCommunityAdapter.searchView(filter as ArrayList<GetCommunitiesData>)
+                                }
+
+                                override fun afterTextChanged(s: Editable?) {
+
+                                }
+                            })
+                        }else{
+                            noCommunities.visibility = View.VISIBLE
                         }
 
-                        override fun onTextChanged(
-                            s: CharSequence?,
-                            start: Int,
-                            before: Int,
-                            count: Int
-                        ) {
-                            val original = response.toList()
-                            val filter = original.filter { searchUser ->
-                                searchUser.group_name.contains(s.toString(), ignoreCase = true)
-                            }
-                            viewAllCommunityAdapter.searchView(filter as ArrayList<GetCommunitiesData>)
-                        }
-
-                        override fun afterTextChanged(s: Editable?) {
-
-                        }
-                    })
+                    }catch (e:NullPointerException){
+                        noCommunities.visibility = View.VISIBLE
+                    }
+                }else{
+                    noCommunities.visibility = View.VISIBLE
                 }
             }
 
             override fun onFailure(call: Call<List<GetCommunitiesData>?>, t: Throwable) {
-
+                noCommunities.visibility = View.VISIBLE
             }
         })
     }

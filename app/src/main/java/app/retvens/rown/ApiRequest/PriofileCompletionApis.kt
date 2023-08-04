@@ -294,4 +294,9 @@ interface PriofileCompletionApis{
     fun addHotel(
         @Body addCompany:AddCompanyDataClass
     ):Call<UpdateResponse>
+
+    @POST("designationpost")
+    fun addDesignation(
+        @Body addCompany:AddDesignationDataClass
+    ):Call<UpdateResponse>
 }

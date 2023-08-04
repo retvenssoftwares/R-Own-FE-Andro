@@ -1,25 +1,36 @@
 package app.retvens.rown.bottomsheet
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.BasicInformationAdapter
+import app.retvens.rown.DataCollections.ProfileCompletion.AddCompanyDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.AddDesignationDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.utils.setupFullHeight
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,6 +58,7 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
     private lateinit var recyclerView:RecyclerView
     private lateinit var basicInformationAdapter: BasicInformationAdapter
     private lateinit var serarchBar: EditText
+    private lateinit var AddHotel: CardView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,8 +91,60 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         serarchBar = view.findViewById(R.id.searchJob)
+        AddHotel = view.findViewById<CardView>(R.id.addHotelCard)
+
+        AddHotel.setOnClickListener {
+            val dialog = Dialog(requireContext())
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.bottom_sheet_addjob)
+
+            val name = dialog.findViewById<TextInputEditText>(R.id.companyName)
+            val add = dialog.findViewById<Button>(R.id.AddBtn)
+
+            dialog.window?.run {
+                setLayout(ViewGroup.LayoutParams.MATCH_PARENT, resources.getDimensionPixelSize(R.dimen.dialog_height))
+                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                attributes.windowAnimations = R.style.DailogAnimation
+                setGravity(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL)
+            }
+
+            add.setOnClickListener {
+                val job = name.text.toString().trim()
+                if (job.isEmpty()) {
+                    name.error = "Enter Company Name"
+                } else {
+                    addCompany(job)
+                    dialog.dismiss()
+                }
+            }
+
+            dialog.show()
+        }
 
         getJobsList()
+    }
+
+    private fun addCompany(job: String) {
+        val addHotel = RetrofitBuilder.profileCompletion.addDesignation(AddDesignationDataClass(job,"true"))
+
+        addHotel.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    mListener?.bottomJobTitleClick(job)
+                }else{
+                    Log.e("error",response.message().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
     }
 
     private fun getJobsList() {
@@ -117,7 +181,14 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
                                 item.designation_name.contains(p0.toString(),ignoreCase = true)
                             }
 
-                            basicInformationAdapter.updateData(filterData)
+                            if (filterData.isEmpty()) {
+                                AddHotel.visibility = View.VISIBLE
+                                basicInformationAdapter.updateData(emptyList())
+                            } else {
+                                AddHotel.visibility = View.INVISIBLE
+                                basicInformationAdapter.updateData(filterData)
+                            }
+
                         }
 
                         override fun afterTextChanged(p0: Editable?) {

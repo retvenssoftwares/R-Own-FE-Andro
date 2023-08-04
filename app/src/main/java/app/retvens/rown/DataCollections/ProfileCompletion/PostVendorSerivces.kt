@@ -8,6 +8,11 @@ data class PostVendorSerivces(
 }
 
 data class AddCompanyDataClass(
-    val compnay_name:String,
+    val company_name:String,
+    val addedbyUser:String
+)
+
+data class AddDesignationDataClass(
+    val designation_name:String,
     val addedbyUser:String
 )
