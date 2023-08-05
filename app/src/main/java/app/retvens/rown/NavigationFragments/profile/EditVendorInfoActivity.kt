@@ -318,6 +318,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 //                            profileComStatus(applicationContext, "100")
 //                            profileCompletionStatus = "100"
 
+                            Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                             progressDialog.dismiss()
                             startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                             finish()
@@ -360,6 +361,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 //                            profileComStatus(applicationContext, "100")
 //                            profileCompletionStatus = "100"
 
+                            Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                             progressDialog.dismiss()
                             startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                             finish()
@@ -401,6 +403,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 //                            profileComStatus(applicationContext, "100")
 //                            profileCompletionStatus = "100"
 
+                            Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                             progressDialog.dismiss()
                             startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                             finish()
@@ -447,6 +450,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 //                            profileComStatus(applicationContext, "100")
 //                            profileCompletionStatus = "100"
 
+                            Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                             progressDialog.dismiss()
                             startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                             finish()
@@ -488,6 +492,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 //                            profileComStatus(applicationContext, "100")
 //                            profileCompletionStatus = "100"
 
+                            Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                             progressDialog.dismiss()
                             startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                             finish()
@@ -528,6 +533,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 //                            profileComStatus(applicationContext, "100")
 //                            profileCompletionStatus = "100"
 
+                            Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                             progressDialog.dismiss()
                             startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                             finish()
@@ -568,6 +574,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 //                        profileComStatus(applicationContext, "100")
 //                        profileCompletionStatus = "100"
 
+                        Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                         progressDialog.dismiss()
                         startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                         finish()
@@ -604,6 +611,7 @@ class EditVendorInfoActivity : AppCompatActivity() {
 //                        profileComStatus(applicationContext, "100")
 //                        profileCompletionStatus = "100"
 
+                        Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                         progressDialog.dismiss()
                         startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                         finish()

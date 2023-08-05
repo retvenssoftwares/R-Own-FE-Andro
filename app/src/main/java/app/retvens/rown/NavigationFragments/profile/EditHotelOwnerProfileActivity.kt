@@ -261,13 +261,16 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     Log.d("image", response.toString())
                     Log.d("image", response.body().toString())
 
                     if (response.isSuccessful){
+                        Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                         saveFullName(applicationContext, binding.etNameEdit.text.toString())
 //                        saveProfileImage(applicationContext, )
+                    } else {
+                        Toast.makeText(applicationContext, "Try Again", Toast.LENGTH_SHORT)
+                            .show()
                     }
 
                 }
@@ -289,16 +292,18 @@ class EditHotelOwnerProfileActivity : AppCompatActivity() {
                     response: Response<UserProfileResponse?>
                 ) {
                     progressDialog.dismiss()
-                    Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
                     Log.d("image", response.toString())
                     Log.d("image", response.body().toString())
 
                     if (response.isSuccessful){
+                        Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
                         saveFullName(applicationContext, binding.etNameEdit.text.toString())
 //                        saveProfileImage(applicationContext, )
                         onBackPressed()
+                    } else {
+                        Toast.makeText(applicationContext, "Try Again", Toast.LENGTH_SHORT)
+                            .show()
                     }
-
                 }
                 override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
                     progressDialog.dismiss()
