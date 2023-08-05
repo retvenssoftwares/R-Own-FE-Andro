@@ -150,9 +150,9 @@ class ExplorePostsFragment : Fragment() {
                             response.forEach { postsDataClass ->
                         totalPages = postsDataClass.pageSize
 
-                                postsDataClass.posts.forEach {
-                                    if (it.user_id != user_id){
-                                        postList.addAll(postsDataClass.posts)
+                                postsDataClass.posts.forEach { post ->
+                                    if (post.user_id != user_id){
+                                        postList.add(post)
                                     }
                                 }
 

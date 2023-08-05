@@ -153,7 +153,7 @@ class ExploreHotelsFragment : Fragment() {
 
                                     it.posts.forEach { hotelData ->
                                         if (hotelData.user_id != user_id) {
-                                            hotelList.addAll(it.posts)
+                                            hotelList.add(hotelData)
                                         }
                                     }
 //                                    if (it.posts.size >= 10){
