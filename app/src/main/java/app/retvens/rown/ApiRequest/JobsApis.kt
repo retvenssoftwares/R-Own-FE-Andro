@@ -92,7 +92,7 @@ interface JobsApis {
         @Body saveJob: SaveJob
     ) : Call<UpdateResponse>
 
-    @GET("gethotel/{user_id}")
+    @GET("getHotel/{user_id}")
     fun getHotelList(
         @Path("user_id")user_id:String
     ):Call<List<HotelsDataClass>>

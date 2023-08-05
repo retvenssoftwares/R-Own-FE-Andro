@@ -22,34 +22,34 @@ import retrofit2.http.Path
 
 interface EventApis {
 
-    @GET("allevent/{user_id}")
+    @GET("allEvent/{user_id}")
     fun getAllEvents(
         @Path("user_id") user_id : String,
     ) : Call<List<OnGoingEventsData>>
 
-    @GET("geteventcategory/{user_id}/{category_id}")
+    @GET("getEventCategory/{user_id}/{category_id}")
     fun getEventsByCategory(
         @Path("user_id") user_id : String,
         @Path("category_id") category_id : String
     ) : Call<List<OnGoingEventsData>>
 
-    @GET("geteventcategory")
+    @GET("getEventCategory")
     fun getEventCategory() : Call<List<ViewAllCategoriesData>>
 
-    @GET("ongoingevent")
+    @GET("ongoingEvent")
     fun getOnGoingEvents() : Call<List<OnGoingEventsData>>
 
-    @GET("getevent/{user_id}")
+    @GET("getEvent/{user_id}")
     fun getEventByUserId(
         @Path("user_id") user_id : String,
     ) : Call<List<OnGoingEventsData>>
 
-    @GET("gethotelinpost/{location}")
+    @GET("getHotelInPost/{location}")
     fun getBottomSheetVenueByLocation(
         @Path("location") location : String
     ) : Call<List<HotelsName>>
 
-    @GET("geteventcategory")
+    @GET("getEventCategory")
     fun getBottomSheetEventCategories() : Call<List<BottomEventCategoriesDataItem>>
 
 //    @PATCH("deleterequest/saveid/{user_id}")
@@ -60,7 +60,7 @@ interface EventApis {
     ) : Call<UpdateResponse>
 
     @Multipart
-    @POST("postevent")
+    @POST("postEvent")
     fun uploadEvent(
 //        @Path("user_id") user_id : String,
         @Part("User_id") User_id : RequestBody,
@@ -90,7 +90,7 @@ interface EventApis {
     ) : Call<UserProfileResponse>
 
     @Multipart
-    @PATCH("updateevent/{user_id}")
+    @PATCH("updateEvent/{user_id}")
     fun updateEvent(
         @Path("user_id") User_id : String,
         @Part("user_id") user_id : RequestBody,
@@ -120,7 +120,7 @@ interface EventApis {
     ) : Call<UserProfileResponse>
 
     @Multipart
-    @PATCH("updateevent/{user_id}")
+    @PATCH("updateEvent/{user_id}")
     fun updateEventWithoutImg(
         @Path("user_id") User_id : String,
         @Part("user_id") user_id : RequestBody,

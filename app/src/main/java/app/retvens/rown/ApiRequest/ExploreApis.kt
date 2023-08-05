@@ -29,19 +29,19 @@ interface ExploreApis {
         @Query("page") page: String
     ):Call<List<PostsDataClass>>
 
-    @GET("getalljob")
+    @GET("getAllJob")
     fun getExploreJob(
         @Query("page")page:String
     ):Call<List<ExploreJobData>>
 
-    @GET("getallpostbycaption/{text}/{user_id}")
+    @GET("getAllPostByCaption/{text}/{user_id}")
     fun searchPost(
         @Path("text")text:String,
         @Path("user_id")user_id:String,
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
 
-    @GET("searchpeople/{text}/{user_id}")
+    @GET("searchPeople/{text}/{user_id}")
     fun searchPeople(
         @Path("text")text:String,
         @Path("user_id")user_id:String,
@@ -54,14 +54,14 @@ interface ExploreApis {
         @Query("page")page:String
     ):Call<List<ExploreServiceData>>
 
-    @GET("searchblog/{text}/{user_id}")
+    @GET("searchBlog/{text}/{user_id}")
     fun searchBlog(
         @Path("text")text:String,
         @Path("user_id")user_id:String,
         @Query("page")page:String
     ):Call<List<ExploreBlogData>>
 
-    @GET("searchotel/{text}/{user_id}")
+    @GET("searchHotel/{text}/{user_id}")
     fun searchHotel(
         @Path("text")text:String,
         @Path("user_id")user_id:String,
@@ -74,7 +74,7 @@ interface ExploreApis {
         @Query("page")page:String
     ):Call<List<ExploreJobData>>
 
-    @GET("getpeople/{user_id}")
+    @GET("getPeople/{user_id}")
     fun getPeople(
         @Path("user_id")user_id:String,
         @Query("page")page:String
@@ -86,13 +86,13 @@ interface ExploreApis {
         @Query("page")page:String
     ):Call<List<ExploreBlogData>>
 
-    @GET("getexplorehotel/{user_id}")
+    @GET("getExploreHotel/{user_id}")
     fun getExploreHotels(
         @Path("user_id") user_id : String,
         @Query("page")page:String
     ):Call<List<ExploreHotelData>>
 
-    @GET("Event/{user_id}")
+    @GET("event/{user_id}")
     fun getExploreEvent(
         @Path("user_id") user_id : String,
         @Query("page")page:String
@@ -103,29 +103,29 @@ interface ExploreApis {
         @Query("page")page:String
     ):Call<List<ExploreServiceData>>
 
-    @PATCH("saveid/{User_id}")
+    @PATCH("saveId/{User_id}")
     fun saveHotel(
         @Path("User_id") User_id : String,
         @Body saveHotel: SaveHotel
     ) : Call<UpdateResponse>
 
-    @PATCH("addreviewshotel/{hotel_id}")
+    @PATCH("addReviewsHotel/{hotel_id}")
     fun addHotelReview(
         @Path("hotel_id") hotel_id : String,
         @Body reviewData : ReviewData
     ) : Call<UpdateResponse>
 
-    @GET("tophotelreviews/{hotel_id}")
+    @GET("topHotelReviews/{hotel_id}")
     fun topHotelReviews(
         @Path("hotel_id") hotel_id : String
     ) : Call<List<VendorReviewsData>>
 
-    @GET("gethotelreview/{hotel_id}")
+    @GET("getHotelReview/{hotel_id}")
     fun allHotelReviews(
         @Path("hotel_id") hotel_id : String
     ) : Call<List<AllReviewsData>>
 
-    @GET("getquickreview")
+    @GET("getQuickReview")
     fun getQuickReviews() : Call<List<GetQuickReviewsData>>
 
 

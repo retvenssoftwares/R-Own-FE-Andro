@@ -62,24 +62,24 @@ interface RownUrl {
     @GET("count")
     fun getCount() : Call<Count>
 
-    @GET("details_of/{user_id}")
+    @GET("detailsOf/{user_id}")
     fun getContactsProfile(
         @Path("user_id") user_id: String
     ) : Call<BottomSheetPeopleData>
 
-    @POST("usercreate")
+    @POST("userCreate")
     fun createMesiboUser(@Body create:MesiboDataClass):Call<MesiboResponseClass>
 
     @GET("users")
     fun getMesiboUsers(): Call<UsersList>
 
-    @POST("creategroup/{userId}")
+    @POST("createGroup/{userId}")
     fun createGroup(
         @Path("userId")userId:String,
         @Body create:GroupCreate
     ):Call<ResponseGroup>
 
-    @PATCH("removemember/{groupId}")
+    @PATCH("removeMember/{groupId}")
     fun removeMember(
         @Path("groupId")groupId:String,
         @Body remove:removeMember
@@ -92,7 +92,7 @@ interface RownUrl {
 //        @Part image: MultipartBody.Part
 //    ):Call<ResponseGroup>
 
-    @POST("addmember")
+    @POST("addMember")
     fun addMember(@Body addMember:AddMemberData):Call<ResponseGroup>
 
 
@@ -106,10 +106,10 @@ interface RownUrl {
         @Body checkContacts: CheckContacts
     ) : Call<ContactResponse>
 
-    @GET("get_interest")
+    @GET("getInterest")
     fun getInterests() : Call<List<GetInterests>>
 
-    @PATCH("interest_push/{User_id}")
+    @PATCH("interestPush/{User_id}")
     fun updateInterest(
         @Path("User_id") User_id : String,
         @Body updateInterestClass: UpdateInterestClass
@@ -120,7 +120,7 @@ interface RownUrl {
         @Body devicetoken:DeviceTokenClass
     ):Call<UpdateResponse>
 
-    @GET("getappupdate")
+    @GET("getAppUpdate")
     fun getAppUpdate() : Call<VersionUpdate>
 }
 

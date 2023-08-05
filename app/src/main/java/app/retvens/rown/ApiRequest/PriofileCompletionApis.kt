@@ -77,14 +77,14 @@ interface PriofileCompletionApis{
         @Body details: HospitalityexpertData
     ):Call<UpdateResponse>
 
-    @PATCH("/hotelowner/{user_id}")
+    @PATCH("/hotelOwner/{user_id}")
     fun setHotelInfo(
         @Path("user_id") user_id : String,
         @Body details: HotelOwnerInfoData
     ):Call<UpdateResponse>
 
     @Multipart
-    @POST("hotelpost")
+    @POST("hotelPost")
     fun uploadHotelData(
         @Part("user_id")user_id:RequestBody,
         @Part("hotelName") Name: RequestBody,
@@ -96,7 +96,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @POST("hotelpost")
+    @POST("hotelPost")
     fun uploadHotelChainData(
         @Part("hotelName") Name: RequestBody,
         @Part("Hoteldescription") Hoteldescription: RequestBody,
@@ -107,7 +107,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @POST("hotelpost")
+    @POST("hotelPost")
     fun addHotelProfile(
         @Part("hotelName") Name: RequestBody,
         @Part("hotelAddress") address: RequestBody,
@@ -133,7 +133,7 @@ interface PriofileCompletionApis{
     @GET("getdesignation")
     fun getJobTitle():Call<List<GetJobDataClass>>
 
-    @GET("getcompany")
+    @GET("getCompany")
     fun getCompany():Call<List<CompanyDatacClass>>
 
     @Multipart
@@ -224,16 +224,16 @@ interface PriofileCompletionApis{
         @Part("websiteLink") websiteLink: RequestBody
     ): Call<UpdateResponse>
 
-    @GET("getservicename")
+    @GET("getServiceName")
     fun getServices():Call<List<VendorServicesData>>
 
-    @PATCH("postservice/{user_id}")
+    @PATCH("postService/{user_id}")
     fun setServices(
         @Path("user_id") user_id : String,
         @Body details: PostVendorSerivces
     ):Call<UpdateResponse>
 
-    @POST("postservice")
+    @POST("postService")
     fun postServices(
         @Body details: PostVendorSerivces
     ):Call<UpdateResponse>
@@ -272,19 +272,19 @@ interface PriofileCompletionApis{
         @Body updateData:UpdateEducationDataClass
     ):Call<UpdateResponse>
 
-    @PATCH("addmultiple/{userId}")
+    @PATCH("addMultiple/{userId}")
     fun addExperience(
         @Path("userId") user_id : String,
         @Body updateData:AddExperienceDataClass
     ):Call<UpdateResponse>
 
-    @PATCH("addmultiple/{userId}")
+    @PATCH("addMultiple/{userId}")
     fun addExperienceExpert(
         @Path("userId") user_id : String,
         @Body updateData:HospitalityexpertData
     ):Call<UpdateResponse>
 
-    @PATCH("addmultiple/{userId}")
+    @PATCH("addMultiple/{userId}")
     fun addEducation(
         @Path("userId") user_id : String,
         @Body updateData:UserProfileRequestItem.StudentEducation

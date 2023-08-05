@@ -14,7 +14,7 @@ interface Notification {
         @Query("page") page: String
     ) : Call<List<PersonalNotificationDataItem>>
 
-    @GET("getconnectionNotification/{user_id}")
+    @GET("getConnectionNotification/{user_id}")
     fun getConnectionNotification(
         @Path("user_id") user_id : String,
         @Query("page") page: String

@@ -19,12 +19,12 @@ import retrofit2.http.Path
 
 interface ViewAll {
 
-    @GET("getblogpost/{user_id}")
+    @GET("getBlogPost/{user_id}")
     fun getAllBlogs(
         @Path("user_id") user_id : String,
     ) : Call<List<AllBlogsData>>
 
-    @GET("getcomment/{blog_id}")
+    @GET("getComment/{blog_id}")
     fun getBlogComment(
         @Path("blog_id") blog_id : String
     ):Call<CommentBlog>
@@ -33,52 +33,52 @@ interface ViewAll {
         @Path("blog_id") blog_id:String,
         @Body postComment: BlogPostComment
     ):Call<UpdateResponse>
-    @PATCH("replycomment/{blog_id}")
+    @PATCH("replyComment/{blog_id}")
     fun replyBlogComment(
         @Path("blog_id") blog_id:String,
         @Body postComment: PostCommentReplyClass
     ):Call<UpdateResponse>
 
-    @GET("getblog/{blog_id}/{User_id}")
+    @GET("getBlog/{blog_id}/{User_id}")
     fun getBlogsByBlogId(
         @Path("blog_id") blog_id:String,
         @Path("User_id") User_id : String
     ) : Call<List<GetBlogByIdItem>>
 
 //        @PATCH("deleterequest/saveid/{user_id}")
-    @PATCH("saveid/{user_id}")
+    @PATCH("saveId/{user_id}")
     fun saveBlog(
         @Path("user_id") user_id : String,
         @Body saveBlog: SaveBlog
     ) : Call<UserProfileResponse>
 
-    @PATCH("likeblog/{blog_id}")
+    @PATCH("likeBlog/{blog_id}")
     fun likeBlog(
         @Path("blog_id") blog_id : String,
         @Body likeBlog: LikeBlog
     ) : Call<UserProfileResponse>
 
-    @GET("getcategory")
+    @GET("getCategory")
     fun getBlogsCategory() : Call<List<ViewAllCategoriesData>>
 
-    @GET("getblogcategory/{user_id}/{category_id}")
+    @GET("getBlogCategory/{user_id}/{category_id}")
     fun getBlogsByCategory(
         @Path("user_id") user_id : String,
         @Path("category_id") category_id : String
     ) : Call<List<AllBlogsData>>
 
-    @PATCH("addreviews/{user_id}")
+    @PATCH("addReviews/{user_id}")
     fun addVendorReview(
         @Path("user_id") user_id : String,
         @Body reviewData : ReviewData
     ) : Call<UpdateResponse>
 
-    @GET("topreviews/{user_id}")
+    @GET("topReviews/{user_id}")
     fun topReviews(
         @Path("user_id") user_id : String
     ) : Call<List<VendorReviewsData>>
 
-    @GET("getreviews/{user_id}")
+    @GET("getReviews/{user_id}")
     fun allReviews(
         @Path("user_id") user_id : String
     ) : Call<List<AllReviewsData>>

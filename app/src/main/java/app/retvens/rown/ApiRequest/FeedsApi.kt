@@ -33,14 +33,14 @@ interface FeedsApi {
         @Path("postId")postId : String
     ):Call<PostItem>
 
-    @GET("getpost/{User_id}/{postId}")
+    @GET("getPost/{User_id}/{postId}")
     fun getPostData(
         @Path("User_id")User_id : String,
         @Path("postId")postId : String
     ):Call<List<PostItem>>
 
     @Multipart
-    @POST("usergroup")
+    @POST("userGroup")
     fun createCommunities(
         @Part("group_name") group_name : RequestBody,
         @Part("group_id") group_id: RequestBody,
@@ -53,18 +53,18 @@ interface FeedsApi {
         @Part Profile_pic: MultipartBody.Part
     ): Call<UpdateResponse>
 
-    @PATCH("adduser/{gid}")
+    @PATCH("addUser/{gid}")
     fun addUser(
         @Path("gid") gid:String,
         @Body addMember:AddUserDataClass
     ):Call<UpdateResponse>
 
-    @GET("fetchgroup/{user_id}")
+    @GET("fetchGroup/{user_id}")
     fun getCommunities(
         @Path("user_id")user_id:String
     ):Call<List<GetCommunitiesData>>
 
-    @GET("fetchcommunity/{user_id}")
+    @GET("fetchCommunity/{user_id}")
     fun getOpenCommunities(
         @Path("user_id")user_id:String
     ):Call<List<DataItem.CommunityRecyclerData>>
@@ -72,7 +72,7 @@ interface FeedsApi {
 //    fun getCommunities():Call<List<GetCommunitiesData>>
 
     @Multipart
-    @PATCH("updategroup/{groupId}")
+    @PATCH("updateGroup/{groupId}")
     fun updateGroup(
         @Path("groupId")groupId:String,
         @Part("group_name")group_name:RequestBody,
@@ -81,7 +81,7 @@ interface FeedsApi {
     ):Call<UpdateResponse>
 
     @Multipart
-    @PATCH("updategroup/{groupId}")
+    @PATCH("updateGroup/{groupId}")
     fun updateGroupDetails(
         @Path("groupId")groupId:String,
         @Part("group_name")group_name:RequestBody,
@@ -89,7 +89,7 @@ interface FeedsApi {
     ):Call<UpdateResponse>
 
     @Multipart
-    @PATCH("updategroup/{groupId}")
+    @PATCH("updateGroup/{groupId}")
     fun updateGroupStatus(
         @Path("groupId")groupId:String,
         @Part("community_type")community_type:RequestBody
@@ -211,23 +211,23 @@ interface FeedsApi {
         @Part("pollQuestion[0][Options][4][Option]")Option5:RequestBody,
     ):Call<UpdateResponse>
 
-    @GET("getconnpost/{user_Id}")
+    @GET("getConnPost/{user_Id}")
     fun getPost(
         @Path("user_Id")user_Id:String
     ):Call<List<PostsDataClass>>
 
-    @GET("getfeed/{user_Id}")
+    @GET("getFeed/{user_Id}")
     fun getFeedPost(
         @Path("user_Id")user_Id:String
     ):Call<List<PostsDataClass>>
 
-    @PATCH("saveid/{user_id}")
+    @PATCH("saveId/{user_id}")
     fun savePost(
         @Path("user_id") user_id : String,
         @Body savePost: SavePost
     ) : Call<UserProfileResponse>
 
-    @PATCH("postcomment/{post_Id}")
+    @PATCH("postComment/{post_Id}")
     fun postComment(
         @Path("post_Id") post_Id:String,
         @Body postComment:PostCommentClass
@@ -239,17 +239,17 @@ interface FeedsApi {
         @Body postComment:PostCommentReplyClass
     ):Call<UpdateResponse>
 
-    @GET("gethotelinpost/{location}")
+    @GET("getHotelInPost/{location}")
     fun fetchbyLocation(
         @Path("location") location:String,
     ):Call<List<GetHotelDataClass>>
 
-    @GET("geteventposting/{location}")
+    @GET("getEventPosting/{location}")
     fun getEvent(
         @Path("location")location: String
     ):Call<List<UpcomingEventDataclass>>
 
-    @GET("getpostmedia/{user_id}/{User_id}")
+    @GET("getPostMedia/{user_id}/{User_id}")
     fun getUserProfileMedia(
         @Path("user_id")user_id:String,
         @Path("User_id")User_id:String,
@@ -263,7 +263,7 @@ interface FeedsApi {
         @Query("page")page:String
     ):Call<List<PostsDataClass>>
 
-    @GET("getpollsvotes/{post_Id}")
+    @GET("getPollsVotes/{post_Id}")
     fun getVotes(
         @Path("post_Id")post_Id:String,
     ):Call<List<VotesDataClass>>
@@ -282,35 +282,35 @@ interface FeedsApi {
         @Body user_id: VoteCollection
     ):Call<UpdateResponse>
 
-    @PATCH("editpost/{postId}")
+    @PATCH("editPost/{postId}")
     fun editPost(
         @Path("postId")postId:String,
         @Body editPostClass: EditPostClass
     ):Call<UpdateResponse>
 
-    @PATCH("editpost/{postId}")
+    @PATCH("editPost/{postId}")
     fun deletePost(
         @Path("postId")postId:String,
         @Body deletePost: DeletePost
     ):Call<UpdateResponse>
 
-    @GET("getgroup/{groupId}")
+    @GET("getGroup/{groupId}")
     fun getGroup(
         @Path("groupId")groupId:String
     ):Call<GetCommunitiesData>
 
 
-    @GET("fetchcommunity/{userID}")
+    @GET("fetchCommunity/{userID}")
     fun fetchOpenCommunity(
         @Path("userID")userID:String
     ):Call<List<GetCommunitiesData>>
 
-    @PATCH("deletedata")
+    @PATCH("deleteData")
     fun deleteCommunity(
         @Body groupId:DeleteCommunityDataClass
     ):Call<UpdateResponse>
 
-    @GET("fetchlike/{postId}")
+    @GET("fetchLike/{postId}")
     fun getLike(
         @Path("postId")PostId:String
     ):Call<LikeDataClass>
