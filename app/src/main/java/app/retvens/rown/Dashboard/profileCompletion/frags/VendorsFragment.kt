@@ -357,6 +357,8 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                         profileComStatus(context!!, "100")
                         profileCompletionStatus = "100"
 
+                        Toast.makeText(requireContext(), "Profile Created", Toast.LENGTH_SHORT).show()
+
                         progressDialog.dismiss()
                         startActivity(Intent(requireContext(), DashBoardActivity::class.java))
                         activity?.finish()
@@ -365,7 +367,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                             progressDialog.dismiss()
                             Toast.makeText(
                                 requireContext(),
-                                response.code().toString(),
+                                "Try Again",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -401,6 +403,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                         profileComStatus(context!!, "100")
                         profileCompletionStatus = "100"
 
+                        Toast.makeText(requireContext(), "Profile Created", Toast.LENGTH_SHORT).show()
                         progressDialog.dismiss()
                         startActivity(Intent(requireContext(), DashBoardActivity::class.java))
                         activity?.finish()
@@ -409,7 +412,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                             progressDialog.dismiss()
                             Toast.makeText(
                                 requireContext(),
-                                response.code().toString(),
+                                "Try Again",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -443,6 +446,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                         profileComStatus(context!!, "100")
                         profileCompletionStatus = "100"
 
+                        Toast.makeText(requireContext(), "Profile Created", Toast.LENGTH_SHORT).show()
                         progressDialog.dismiss()
                         startActivity(Intent(requireContext(), DashBoardActivity::class.java))
                         activity?.finish()
@@ -451,7 +455,7 @@ class VendorsFragment : Fragment(), BackHandler, BottomSheetServiceName.OnBottom
                             progressDialog.dismiss()
                             Toast.makeText(
                                 requireContext(),
-                                response.code().toString(),
+                                "Try Again",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

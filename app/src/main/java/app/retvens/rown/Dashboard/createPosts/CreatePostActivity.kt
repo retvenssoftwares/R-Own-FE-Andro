@@ -490,19 +490,20 @@ class CreatePostActivity : AppCompatActivity(),
                 progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
+                    Toast.makeText(applicationContext,"Post created",Toast.LENGTH_SHORT).show()
                     val intent = Intent(applicationContext,DashBoardActivity::class.java)
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                     finish()
                 }else{
-//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"Something went wrong with Post",Toast.LENGTH_SHORT).show()
                     onBackPressed()
                 }
             }
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                 progressDialog.dismiss()
-//                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
                 onBackPressed()
             }
         })

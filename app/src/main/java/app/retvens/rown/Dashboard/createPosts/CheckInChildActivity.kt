@@ -112,11 +112,11 @@ class CheckInChildActivity : AppCompatActivity(),
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-//                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     startActivity(Intent(applicationContext, DashBoardActivity::class.java))
                     finish()
                 }else{
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"Try Again",Toast.LENGTH_SHORT).show()
                 }
             }
 

@@ -221,12 +221,12 @@ class JobTitleFragment : Fragment(), BackHandler,
 
                     Log.d("JobTitleFragment", "$title, $type, $company, $startY, $endY")
                     progressDialog.dismiss()
-//                    Toast.makeText(requireContext(),response.message.toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Profile Created", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(context,DashBoardActivity::class.java))
                     activity?.finish()
                 }else{
                     progressDialog.dismiss()
-                    Toast.makeText(requireContext(),response.code().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"Try Again",Toast.LENGTH_SHORT).show()
                 }
             }
 

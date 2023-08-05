@@ -228,10 +228,12 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
                     profileComStatus(context!!, "100")
                     profileCompletionStatus = "100"
 
+                    Toast.makeText(requireContext(), "Profile Created", Toast.LENGTH_SHORT).show()
+
                     startActivity(Intent(context, DashBoardActivity::class.java))
                     activity?.finish()
                 }else{
-                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Try Again", Toast.LENGTH_SHORT).show()
                 }
             }
 

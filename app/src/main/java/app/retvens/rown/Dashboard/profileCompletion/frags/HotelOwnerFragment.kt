@@ -518,12 +518,13 @@ class HotelOwnerFragment : Fragment(), BackHandler,
                     profileComStatus(context!!, "100")
                     profileCompletionStatus = "100"
 
+                    Toast.makeText(requireContext(), "Profile Created", Toast.LENGTH_SHORT).show()
                     progressDialog.dismiss()
                     startActivity(Intent(requireContext(),DashBoardActivity::class.java))
                     activity?.finish()
                 }else{
                     progressDialog.dismiss()
-                    Toast.makeText(requireContext(),response.message().toString(),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Try Again", Toast.LENGTH_SHORT).show()
                 }
             }
 

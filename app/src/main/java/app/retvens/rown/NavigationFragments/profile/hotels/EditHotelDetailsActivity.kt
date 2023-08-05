@@ -279,11 +279,15 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response: Response<UpdateResponse?>
                     ) {
                         progressDialog.dismiss()
-//                        Toast.makeText(
-//                            applicationContext,
-//                            "image1 : ${response.body()?.message.toString()}",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                applicationContext,
+                                "image1 : ${response.body()?.message.toString()}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(applicationContext,"Something went wrong",Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -317,11 +321,15 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response: Response<UpdateResponse?>
                     ) {
                         progressDialog.dismiss()
+                        if (response.isSuccessful) {
 //                        Toast.makeText(
 //                            applicationContext,
 //                            "image2 : ${response.body()?.message.toString()}",
 //                            Toast.LENGTH_SHORT
 //                        ).show()
+                        } else {
+                            Toast.makeText(applicationContext,"Something went wrong",Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -355,11 +363,19 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response: Response<UpdateResponse?>
                     ) {
                         progressDialog.dismiss()
+                        if (response.isSuccessful) {
 //                        Toast.makeText(
 //                            applicationContext,
 //                            response.body()?.message.toString(),
 //                            Toast.LENGTH_SHORT
 //                        ).show()
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "Something went wrong",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
@@ -386,12 +402,22 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                         response: Response<UpdateResponse?>
                     ) {
                         progressDialog.dismiss()
-//                        Toast.makeText(
-//                            applicationContext,
-//                            response.body()?.message.toString(),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-                        onBackPressed()
+
+                        if (response.isSuccessful) {
+                            onBackPressed()
+                        Toast.makeText(
+                            applicationContext,
+                            response.body()?.message.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "Something went wrong",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
 
                     override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {

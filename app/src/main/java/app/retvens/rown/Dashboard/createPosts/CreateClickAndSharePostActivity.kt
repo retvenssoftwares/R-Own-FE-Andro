@@ -442,6 +442,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
                 progressDialog.dismiss()
                 if (response.isSuccessful){
                     val response = response.body()!!
+                    Toast.makeText(applicationContext,"Post created",Toast.LENGTH_SHORT).show()
                     val intent = Intent(applicationContext, DashBoardActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -453,7 +454,7 @@ class CreateClickAndSharePostActivity : AppCompatActivity(),
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                 progressDialog.dismiss()
-//                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
                 onBackPressed()
             }
         })

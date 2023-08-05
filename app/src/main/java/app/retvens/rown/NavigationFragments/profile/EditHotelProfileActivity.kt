@@ -246,7 +246,13 @@ class EditHotelProfileActivity : AppCompatActivity() {
                 call: Call<UserProfileResponse?>,
                 response: Response<UserProfileResponse?>
             ) {
-                onBackPressed()
+                if (response.isSuccessful) {
+                    Toast.makeText(applicationContext, "Profile updated", Toast.LENGTH_SHORT).show()
+                    onBackPressed()
+                } else {
+                    Toast.makeText(applicationContext, "Try Again", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
 
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {

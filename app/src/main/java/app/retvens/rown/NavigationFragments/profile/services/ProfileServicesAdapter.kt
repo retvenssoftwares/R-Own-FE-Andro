@@ -113,6 +113,11 @@ class ProfileServicesAdapter(val listS : ArrayList<ProfileServicesDataItem>, val
                 response: Response<UpdateResponse?>
             ) {
 
+//                if (response.isSuccessful){
+//                    Toast.makeText(context, "Service Deleted", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    Toast.makeText(context, " Unable to Delete Service", Toast.LENGTH_SHORT).show()
+//                }
 //                try {
 //                    listS.remove(vendorService)
 //                } catch (e : ConcurrentModificationException){
