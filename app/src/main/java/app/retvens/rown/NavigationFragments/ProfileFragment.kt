@@ -116,7 +116,12 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         val sharedPreferencesId = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
         viewPP.setOnClickListener {
-            startActivity(Intent(context,UserDetailsActivity::class.java))
+            if (completion == "100"){
+                startActivity(Intent(context, UserDetailsActivity::class.java))
+                activity?.finish()
+            }else{
+                Toast.makeText(requireContext(),"Complete Your Profile First!!",Toast.LENGTH_SHORT).show()
+            }
         }
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)

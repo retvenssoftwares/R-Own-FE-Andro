@@ -283,7 +283,6 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
 
     private fun getPost(userId: String) {
 
-
         val getData = RetrofitBuilder.feedsApi.getFeedPost(userId)
 
         getData.enqueue(object : Callback<List<PostsDataClass>?> {
@@ -300,7 +299,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
 
                         if (response.body()!!.isNotEmpty()) {
                             val response = response.body()!!
-
+                            Log.e("res",response.toString())
                             try {
 
                                 Log.e("response", response.toString())
@@ -362,7 +361,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
                                             postCounter = 0
                                         }
                                     }
-
+ 
                                 }
                                 adapter.removePostsFromList(mList)
                                 adapter.notifyDataSetChanged()
@@ -446,7 +445,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getCommunity = RetrofitBuilder.feedsApi.getCommunities(user_id)
+        val getCommunity = RetrofitBuilder.ProfileApis.getCommunities(user_id)
 
         getCommunity.enqueue(object : Callback<List<GetCommunitiesData>?> {
             override fun onResponse(

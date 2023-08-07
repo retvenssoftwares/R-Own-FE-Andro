@@ -5,7 +5,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
-const val Base_url = "http://64.227.150.47/"
+const val Base_url = "http://64.227.150.47/main/"
+//const val Feed_url = "http://api.liverown.com/mainFeed/"
+//const val Explore_url = "http://api.liverown.com/mainExplore/"
 
 object RetrofitBuilder {
 
@@ -22,6 +24,8 @@ object RetrofitBuilder {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(Base_url)
         .build()
+
+
 
     val profileCompletion = retrofitBuilder2.create(PriofileCompletionApis::class.java)
 

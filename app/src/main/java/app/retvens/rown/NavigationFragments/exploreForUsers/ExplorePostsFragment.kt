@@ -141,11 +141,9 @@ class ExplorePostsFragment : Fragment() {
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
 
-
-
                         if (response.body()!!.isNotEmpty()) {
                             val response = response.body()!!
-
+                            Log.e("res",response.toString())
                             val originalData = response.toList()
                             response.forEach { postsDataClass ->
                         totalPages = postsDataClass.pageSize
@@ -180,7 +178,7 @@ class ExplorePostsFragment : Fragment() {
                                 if (letter != ""){
                                     searchPost(letter)
                                 }else{
-
+                                    mediaAdapter.notifyDataSetChanged()
                                 }
 
 
@@ -198,7 +196,7 @@ class ExplorePostsFragment : Fragment() {
                             empty.text = "You did'nt post yet"
 //                            empty.visibility = View.VISIBLE
                         }
-                    } else {
+            } else {
 //                        empty.visibility = View.VISIBLE
 //                        mediaRecyclerView.visibility = View.GONE
                         empty.text = response.code().toString()
@@ -232,7 +230,7 @@ class ExplorePostsFragment : Fragment() {
                 call: Call<List<PostsDataClass>?>,
                 response: Response<List<PostsDataClass>?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
 
                     response.forEach { postsDataClass ->

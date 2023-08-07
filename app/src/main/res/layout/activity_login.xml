@@ -170,12 +170,12 @@
             <TextView
                 android:id="@+id/continueText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingHorizontal="80dp"
                 android:paddingVertical="8dp"
                 android:text="@string/continu"
                 android:fontFamily="@font/montserrat_semibold"
-                android:textSize="22dp"
+                android:textSize="20dp"
                 android:textAlignment="center"
                 android:background="@color/grey_40"
                 android:textColor="@color/black"/>

@@ -53,6 +53,9 @@ class PostLikeActivity : AppCompatActivity() {
             ) {
                if (response.isSuccessful){
                    val response = response.body()!!
+
+
+
                    adapter = LikeAdapter(applicationContext,response)
                    recycler.adapter = adapter
                    adapter.notifyDataSetChanged()

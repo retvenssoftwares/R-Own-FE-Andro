@@ -40,7 +40,7 @@ class ViewAllCommmunitiesActivity : AppCompatActivity() {
     private fun getCommunities() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
-        val getCommunity = RetrofitBuilder.feedsApi.getCommunities(user_id)
+        val getCommunity = RetrofitBuilder.ProfileApis.getCommunities(user_id)
 
         getCommunity.enqueue(object : Callback<List<GetCommunitiesData>?> {
             override fun onResponse(

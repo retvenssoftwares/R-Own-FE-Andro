@@ -181,7 +181,7 @@ class ExplorePeopleFragment : Fragment() {
 
                         if (response.body()!!.isNotEmpty()) {
                             val response = response.body()!!
-
+                            Log.e("res",response.toString())
                             response.forEach { explorePeopleDataClass ->
                                 try {
                                     currentPage++
@@ -237,6 +237,8 @@ class ExplorePeopleFragment : Fragment() {
                                 empty.text = "You did'nt post yet"
                                 errorImage.visibility = View.VISIBLE
                             }
+
+                            Log.e("error","empty")
                         }
                     } else {
                         if (currentPage == 1) {
@@ -244,6 +246,7 @@ class ExplorePeopleFragment : Fragment() {
                             empty.text = response.code().toString()
                             shimmerFrameLayout.stopShimmer()
                             shimmerFrameLayout.visibility = View.GONE
+                            Log.e("check2",response.code().toString())
                         }
                     }
                 }

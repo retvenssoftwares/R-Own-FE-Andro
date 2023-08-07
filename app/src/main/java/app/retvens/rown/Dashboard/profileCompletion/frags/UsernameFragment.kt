@@ -261,6 +261,9 @@ class UsernameFragment : Fragment(), BackHandler {
         val username = userName.text.toString()
         val sharedPreferencesU = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         user_id = sharedPreferencesU?.getString("user_id", "").toString()
+
+        Log.e("user",username.toString())
+        Log.e("userid",user_id.toString())
         val verify = RetrofitBuilder.profileCompletion.verifyUsername(user_id!!,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username))
 
@@ -270,7 +273,7 @@ class UsernameFragment : Fragment(), BackHandler {
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful){
-                    if (response.body()?.message == "user_name already exist"){
+                    if (response.body()?.message == "User_name already exist"){
                         isUsernameVerified = false
                         usernameVerified.setTextColor(ContextCompat.getColor(requireContext(), R.color.error))
                         usernameVerified.text = "Username already exist, Please enter another username"
@@ -283,6 +286,7 @@ class UsernameFragment : Fragment(), BackHandler {
                         complete.isClickable = true
                     }
                 } else {
+                    Log.e("res",response.code().toString())
                     try {
                         usernameVerified.text = "Retry - ${response.body()!!.message}"
                     }catch(e : Exception){

@@ -3,6 +3,7 @@ package app.retvens.rown.ApiRequest
 import app.retvens.rown.DataCollections.BlockAccount
 import app.retvens.rown.DataCollections.ConnectionCollection.BlockUserDataClass
 import app.retvens.rown.DataCollections.DeleteAccount
+import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.DataCollections.FeedCollection.PostsDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ReportDataClass
@@ -31,6 +32,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ProfileApis {
+
+    @GET("fetchGroup/{user_id}")
+    fun getCommunities(
+        @Path("user_id")user_id:String
+    ):Call<List<GetCommunitiesData>>
 
     @GET("getEvent/{user_id}")
     fun getProfileEvents(
