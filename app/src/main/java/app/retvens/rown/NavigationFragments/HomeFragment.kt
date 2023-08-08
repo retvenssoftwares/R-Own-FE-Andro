@@ -136,7 +136,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
 
         mList = ArrayList()
 
-        mList.add(0,DataItem(DataItemType.CREATEPOST))
+        mList.add(DataItem(DataItemType.CREATEPOST))
 
         refresh.setOnRefreshListener {
             postCounter = 0
@@ -361,7 +361,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
                                             postCounter = 0
                                         }
                                     }
- 
+
                                 }
                                 adapter.removePostsFromList(mList)
                                 adapter.notifyDataSetChanged()
@@ -414,8 +414,8 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
                         }
                     } else {
                         serverCode = response.code()
-                        empty.visibility = View.VISIBLE
-                        empty.text = response.code().toString()
+//                        empty.visibility = View.VISIBLE
+//                        getPost(userId)
 //                        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
 //                        val user_id = sharedPreferences?.getString("user_id", "").toString()
 //                        getPost(user_id);
@@ -445,7 +445,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val getCommunity = RetrofitBuilder.ProfileApis.getCommunities(user_id)
+        val getCommunity = RetrofitBuilder.feedsApi.getCommunities(user_id)
 
         getCommunity.enqueue(object : Callback<List<GetCommunitiesData>?> {
             override fun onResponse(
@@ -461,7 +461,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
                     try {
                         mList.addAll(1, listOf(DataItem(DataItemType.OURCOMMUNITY, ourCommunityRecyclerList = dataList)))
                     } catch (e : NullPointerException) {
-                        Log.e("error",e.message.toString())
+                        Log.e("error", e.message.toString())
                     }
                 } else {
                     if (isAdded) {

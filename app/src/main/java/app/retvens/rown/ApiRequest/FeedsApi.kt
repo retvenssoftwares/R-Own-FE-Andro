@@ -59,6 +59,10 @@ interface FeedsApi {
         @Body addMember:AddUserDataClass
     ):Call<UpdateResponse>
 
+    @GET("fetchGroup/{user_id}")
+    fun getCommunities(
+        @Path("user_id")user_id:String
+    ):Call<List<GetCommunitiesData>>
 
     @GET("fetchCommunity/{user_id}")
     fun getOpenCommunities(
