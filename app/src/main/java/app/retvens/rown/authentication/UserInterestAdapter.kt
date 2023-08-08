@@ -41,6 +41,14 @@ class UserInterestAdapter(val context: Context, var interestList : List<GetInter
         return interestList.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onBindViewHolder(holder: InterestViewHolder, position: Int) {
         val currentItem = interestList[position]
         holder.name.text = currentItem.Name

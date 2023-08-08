@@ -137,7 +137,7 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
                         ) {
                             val originalData = data.toList()
                             val filterData = originalData.filter {searchInData->
-                                searchInData.Name.contains(s.toString(),ignoreCase = false)
+                                searchInData.Name.contains(s.toString(),ignoreCase = true)
                             }
                             userInterestAdapter.searchInterest(filterData)
                         }
