@@ -17,16 +17,15 @@ import java.time.chrono.MinguoDate
 interface PriofileCompletionApis{
 
     @Multipart
-    @PATCH("/update/{user_id}")
+    @PATCH("update/{user_id}")
     fun setUsername(
         @Path("user_id") user_id : String,
         @Part("Full_name")Full_name:RequestBody,
-        @Part("DOB")DOB:RequestBody,
-        @Part("User_name")User_id:RequestBody
+        @Part("DOB")DOB:RequestBody
     ):Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/update/{user_id}")
+    @PATCH("update/{user_id}")
     fun setBio(
         @Path("user_id") user_id : String,
         @Part("userBio") userBio: RequestBody,
@@ -34,14 +33,14 @@ interface PriofileCompletionApis{
     ):Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/update/{user_id}")
+    @PATCH("update/{user_id}")
     fun setLocation(
         @Path("user_id") user_id : String,
         @Part("location")location:String
     ):Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/update/{user_id}")
+    @PATCH("update/{user_id}")
     fun verifyUsername(
         @Path("user_id")user_id:String,
         @Part("User_name")User_name:RequestBody
@@ -53,31 +52,31 @@ interface PriofileCompletionApis{
 //        @Body verifyUsername: VerifyUsername
 //    ):Call<UpdateResponse>
 
-    @PATCH("/update/{user_id}")
+    @PATCH("update/{user_id}")
     fun setJobRole(
         @Path("user_id") user_id : String,
         @Body role: BasicInfoClass
     ):Call<UpdateResponse>
 
-    @PATCH("/update/{user_id}")
+    @PATCH("update/{user_id}")
     fun setJobDetail(
         @Path("user_id") user_id : String,
         @Body details: JobData
     ):Call<UpdateResponse>
 
-    @PATCH("/update/{user_id}")
+    @PATCH("update/{user_id}")
     fun profileCompletionStatus(
         @Path("user_id") user_id : String,
         @Body profileCompletionStatus : ProfileCompletionStatus
     ):Call<UpdateResponse>
 
-    @PATCH("/update/{user_id}")
+    @PATCH("update/{user_id}")
     fun setHospitalityExpertDetails(
         @Path("user_id") user_id : String,
         @Body details: HospitalityexpertData
     ):Call<UpdateResponse>
 
-    @PATCH("/hotelOwner/{user_id}")
+    @PATCH("hotelOwner/{user_id}")
     fun setHotelInfo(
         @Path("user_id") user_id : String,
         @Body details: HotelOwnerInfoData
@@ -137,7 +136,7 @@ interface PriofileCompletionApis{
     fun getCompany():Call<List<CompanyDatacClass>>
 
     @Multipart
-    @PATCH("/vendor/{user_id}")
+    @PATCH("vendor/{user_id}")
     fun uploadVendorData(
         @Path("user_id") user_id : String,
         @Part Vendorimg: MultipartBody.Part,
@@ -150,7 +149,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/vendor/{user_id}")
+    @PATCH("vendor/{user_id}")
     fun uploadVendorData2(
         @Path("user_id") user_id : String,
         @Part Vendorimg: MultipartBody.Part,
@@ -162,7 +161,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/vendor/{user_id}")
+    @PATCH("vendor/{user_id}")
     fun uploadVendorData1(
         @Path("user_id") user_id : String,
         @Part Vendorimg: MultipartBody.Part,
@@ -173,7 +172,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/vendor/{user_id}")
+    @PATCH("vendor/{user_id}")
     fun uploadVendorDataWithoutLogo(
         @Path("user_id") user_id : String,
         @Part("vendorName") vendorName: RequestBody,
@@ -185,7 +184,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/vendor/{user_id}")
+    @PATCH("vendor/{user_id}")
     fun uploadVendorDataWithoutLogo2(
         @Path("user_id") user_id : String,
         @Part("vendorName") vendorName: RequestBody,
@@ -196,7 +195,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/vendor/{user_id}")
+    @PATCH("vendor/{user_id}")
     fun uploadVendorDataWithoutLogo1(
         @Path("user_id") user_id : String,
         @Part("vendorName") vendorName: RequestBody,
@@ -206,7 +205,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/vendor/{user_id}")
+    @PATCH("vendor/{user_id}")
     fun updateVendorData(
         @Path("user_id") user_id : String,
         @Part("vendorName") vendorName: RequestBody,
@@ -215,7 +214,7 @@ interface PriofileCompletionApis{
     ): Call<UpdateResponse>
 
     @Multipart
-    @PATCH("/vendor/{user_id}")
+    @PATCH("vendor/{user_id}")
     fun updateVendorDataWithoutGallery(
         @Path("user_id") user_id : String,
         @Part Vendorimg: MultipartBody.Part,
@@ -239,7 +238,7 @@ interface PriofileCompletionApis{
     ):Call<UpdateResponse>
 
     @Multipart
-    @POST("/document")
+    @POST("document")
     fun uploadDocs(
         @Part("user_id") user_id : RequestBody,
 //        @Part("CountryorRegion") CountryorRegion: RequestBody,

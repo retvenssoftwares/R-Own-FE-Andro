@@ -273,6 +273,7 @@ class UsernameFragment : Fragment(), BackHandler {
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful){
+                    Log.e("res",response.code().toString())
                     if (response.body()?.message == "User_name already exist"){
                         isUsernameVerified = false
                         usernameVerified.setTextColor(ContextCompat.getColor(requireContext(), R.color.error))
@@ -303,6 +304,17 @@ class UsernameFragment : Fragment(), BackHandler {
 
     }
 
+    private fun verifyUser(){
+        val username = userName.text.toString()
+        val sharedPreferencesU = context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        user_id = sharedPreferencesU?.getString("user_id", "").toString()
+
+        Log.e("user",username.toString())
+        Log.e("userid",user_id.toString())
+        val verify = RetrofitBuilder.profileCompletion.verifyUsername(user_id!!,
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username))
+    }
+
     private fun sendInfo() {
 
         val first = firstName.text.toString()
@@ -313,12 +325,15 @@ class UsernameFragment : Fragment(), BackHandler {
 
         val date = sdf.format(cal.time).toString()
 
+        Log.e("name",fullName)
+        Log.e("username",username)
+        Log.e("date",date)
+
         val update = UpdateUserName(fullName,date,username)
         val send = RetrofitBuilder.profileCompletion.setUsername(user_id!!,
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),fullName),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),date),
-            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),username))
-
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),date)
+        )
         send.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
                 call: Call<UpdateResponse?>,
