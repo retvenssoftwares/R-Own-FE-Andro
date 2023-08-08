@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.R
+import app.retvens.rown.utils.role
 import app.retvens.rown.utils.serverCode
 import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
@@ -23,7 +24,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val username : String) : Fragment() {
+class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val username : String,val status:String) : Fragment() {
 
     lateinit var recycler : RecyclerView
     lateinit var profileHotelsAdapter: ProfileHotelsAdapter
@@ -59,6 +60,10 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
         }
         addHotel.setOnClickListener{
             startActivity(Intent(context, AddHotelActivity::class.java))
+        }
+
+        if (status != "100"){
+            addHotel.visibility = View.GONE
         }
 
         getHotels()

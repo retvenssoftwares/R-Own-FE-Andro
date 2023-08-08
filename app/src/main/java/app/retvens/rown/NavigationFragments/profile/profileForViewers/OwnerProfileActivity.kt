@@ -153,7 +153,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                 transaction.commit()
         } else if (selected == 4){
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false, nameProfile))
+                transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false, nameProfile,role))
                 transaction.commit()
             }
             refresh.isRefreshing = false
@@ -301,7 +301,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
 
             selected = 4
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false, nameProfile))
+            transaction.replace(R.id.child_profile_fragments_container,HotelsFragmentProfile(userID, false, nameProfile,role))
             transaction.commit()
         }
         events.setOnClickListener {
@@ -436,6 +436,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                     profile_username.text = response.profiledata.User_name
                     name.text = response.profiledata.Full_name
                     nameProfile = response.profiledata.Full_name
+                    role = response.profiledata.profileCompletionStatus
 //                    bio.text = response.profiledata.userBio
                     val getBio = response.profiledata.userBio
                     try {

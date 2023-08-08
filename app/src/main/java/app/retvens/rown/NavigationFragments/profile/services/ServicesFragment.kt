@@ -39,7 +39,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ServicesFragment(val userId: String, val isOwner: Boolean, val username: String) : Fragment(),
+class ServicesFragment(val userId: String, val isOwner: Boolean, val username: String,val status:String) : Fragment(),
     BottomSheetServiceName.OnBottomSNClickListener {
 
     lateinit var servicesRecycler: RecyclerView
@@ -84,6 +84,11 @@ class ServicesFragment(val userId: String, val isOwner: Boolean, val username: S
         servicesRecycler.adapter = profileServicesAdapter
 
         addService = view.findViewById(R.id.addService)
+
+        if (status != "100"){
+            addService.visibility = View.GONE
+        }
+
         if (!isOwner) {
             addService.visibility = View.GONE
         }
@@ -166,9 +171,6 @@ class ServicesFragment(val userId: String, val isOwner: Boolean, val username: S
                             try {
                                 list.addAll(response)
 
-//                                if (response.size >= 10){
-
-//                                }
 
                                 isLoading = false
 

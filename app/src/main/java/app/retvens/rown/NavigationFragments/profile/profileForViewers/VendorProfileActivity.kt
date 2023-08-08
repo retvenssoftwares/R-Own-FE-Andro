@@ -85,7 +85,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
     var address =  ""
     var fullName = ""
     var userName =  ""
-
+    var role = ""
     var userId = ""
     var user_id = ""
     var seeStatus = ""
@@ -152,7 +152,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
                 transaction.commit()
             } else if (selected == 4){
                 val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId, false, name.text.toString()))
+                transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId, false, name.text.toString(),role))
                 transaction.commit()
             }
             refresh.isRefreshing = false
@@ -243,7 +243,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
 
             selected = 4
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId, false, name.text.toString()))
+            transaction.replace(R.id.child_profile_fragments_container, ServicesFragment(userId, false, name.text.toString(),role))
             transaction.commit()
         }
 
@@ -436,7 +436,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
 
                         connCount.text = response.connectioncount.toString()
                         postCount.text = response.postcount.toString()
-
+                        role = response.roleDetails.profileCompletionStatus
                         created = response.roleDetails.Created_On
                         location = response.roleDetails.location
                         verification = response.roleDetails.verificationStatus

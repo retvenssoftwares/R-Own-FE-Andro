@@ -65,11 +65,9 @@ class ProfileServicesAdapter(val listS : ArrayList<ProfileServicesDataItem>, val
         holder.location.text = data.location
         holder.servicePrice.text = data.vendorServicePrice
 
-        if (data.Profile_pic.isNotEmpty()) {
-            Glide.with(context).load(data.Profile_pic).into(holder.vendor_profile)
-        } else {
-            holder.vendor_profile.setImageResource(R.drawable.svg_user)
-        }
+
+            Glide.with(context).load(data.vendorImage).into(holder.vendor_profile)
+
 
         holder.del.setOnClickListener {
             openBottomForDel(listS[position])
