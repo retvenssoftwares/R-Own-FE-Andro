@@ -31,7 +31,7 @@ class BlockUserActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.connectionsRecycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+       //  //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()

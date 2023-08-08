@@ -32,7 +32,7 @@ class JobsPostedByUser : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.jobPosted_recycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         back.setOnClickListener {
 

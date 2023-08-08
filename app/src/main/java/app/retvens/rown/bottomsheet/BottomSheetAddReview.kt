@@ -82,7 +82,7 @@ class BottomSheetAddReview(val title: String, val name: String, val userId : Str
 
         recyclerView = view.findViewById(R.id.recycler_review)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),3)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
         getQuickReview()
 
     }

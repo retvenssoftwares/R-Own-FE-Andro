@@ -103,7 +103,7 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
 
         empty = view.findViewById(R.id.empty)
         recyclerView = view.findViewById(R.id.comment_recyclerview)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         comment = view.findViewById(R.id.addThoughts)
         showKeyBoard(comment)

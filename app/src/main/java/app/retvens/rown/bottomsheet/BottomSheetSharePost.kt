@@ -64,7 +64,7 @@ class BottomSheetSharePost(val datas:String) : BottomSheetDialogFragment() {
 
         recyclerView = view.findViewById(R.id.company_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()

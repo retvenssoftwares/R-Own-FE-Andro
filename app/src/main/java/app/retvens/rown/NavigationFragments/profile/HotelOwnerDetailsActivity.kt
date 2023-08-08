@@ -39,7 +39,7 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
         }
 
         binding.propertyRecycler.layoutManager = LinearLayoutManager(this)
-        binding.propertyRecycler.setHasFixedSize(true)
+        //binding.propertyRecycler. //recyclerView.setHasFixedSize(true)
 
         adpater = ProfessionalHotelAdapter(applicationContext,hotelList)
         binding.propertyRecycler.adapter = adpater

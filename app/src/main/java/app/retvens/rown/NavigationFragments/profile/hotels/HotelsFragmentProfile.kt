@@ -46,7 +46,7 @@ class HotelsFragmentProfile(val userId:String, val isOwner : Boolean, val userna
 
         recycler = view.findViewById(R.id.recycler)
         recycler.layoutManager = LinearLayoutManager(context)
-        recycler.setHasFixedSize(true)
+        //recycler. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
         notPosted = view.findViewById(R.id.notPosted)

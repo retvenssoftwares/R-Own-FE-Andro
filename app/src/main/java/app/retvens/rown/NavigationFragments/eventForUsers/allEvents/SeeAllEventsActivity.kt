@@ -114,7 +114,7 @@ class SeeAllEventsActivity : AppCompatActivity() {
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
         binding.eventRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.eventRecyclerView.setHasFixedSize(true)
+        //binding.event //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val getEventByCategory = RetrofitBuilder.EventsApi.getEventsByCategory(user_id, idCategory)
         getEventByCategory.enqueue(object : Callback<List<OnGoingEventsData>?> {

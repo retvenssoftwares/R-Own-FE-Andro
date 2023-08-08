@@ -26,7 +26,7 @@ class ReviewsActivity : AppCompatActivity() {
 
     private fun setUpReviewAdapter() {
         binding.whatPeopleRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.whatPeopleRecycler.setHasFixedSize(true)
+        //binding.whatPeopleRecycler. //recyclerView.setHasFixedSize(true)
 
 
 //        vendorsReviewAdapter = VendorsReviewAdapter(blogs, applicationContext)

@@ -59,7 +59,7 @@ class SavedPostsFragment : Fragment() {
 
         mediaRecyclerView = view.findViewById(R.id.mediaSavedRecyclerView)
         mediaRecyclerView.layoutManager = GridLayoutManager(context,3)
-        mediaRecyclerView.setHasFixedSize(true)
+        //media //recyclerView. //recyclerView.setHasFixedSize(true)
 
         mediaAdapter = MediaAdapter(requireContext(),postList, true, "Connected")
         mediaRecyclerView.adapter = mediaAdapter

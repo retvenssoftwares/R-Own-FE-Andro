@@ -49,7 +49,7 @@ class PersonalNotificationFragment : Fragment() {
 
         recyclerPersonal = view.findViewById(R.id.recyclerPersonal)
         recyclerPersonal.layoutManager = LinearLayoutManager(context)
-        recyclerPersonal.setHasFixedSize(true)
+        //recyclerPersonal. //recyclerView. //recyclerView.setHasFixedSize(true)
 
         progress = view.findViewById(R.id.progress)
         empty = view.findViewById(R.id.emptyBlog)

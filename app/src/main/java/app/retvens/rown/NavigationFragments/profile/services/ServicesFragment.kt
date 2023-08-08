@@ -72,7 +72,7 @@ class ServicesFragment(val userId: String, val isOwner: Boolean, val username: S
 
         servicesRecycler = view.findViewById(R.id.servicesRecycler)
         servicesRecycler.layoutManager = LinearLayoutManager(context)
-        servicesRecycler.setHasFixedSize(true)
+        //servicesRecycler. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
         notPosted = view.findViewById(R.id.notPosted)

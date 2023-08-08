@@ -53,7 +53,7 @@ class CommunityMediaFragment(val groupId:String) : Fragment(), MesiboProfile.Lis
 
         recyclerView = view.findViewById(R.id.mediaItems)
         recyclerView.layoutManager = GridLayoutManager(requireContext(),3)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
     }
 
     private fun addThumbnailToGallery(msg: MesiboMessage) {

@@ -71,7 +71,7 @@ class EventFragmentForHoteliers : Fragment() {
 
         allRecyclerView = view.findViewById(R.id.blogsRecyclerView)
         allRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        allRecyclerView.setHasFixedSize(true)
+        //all //recyclerView. //recyclerView.setHasFixedSize(true)
         getAllEvents()
 
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView)
@@ -179,7 +179,7 @@ class EventFragmentForHoteliers : Fragment() {
 
     private fun getCategories() {
         categoryRecyclerView.layoutManager = LinearLayoutManager(context)
-        categoryRecyclerView.setHasFixedSize(true)
+        //category //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val getEventCategories = RetrofitBuilder.EventsApi.getEventCategory()
         getEventCategories.enqueue(object : Callback<List<ViewAllCategoriesData>?> {

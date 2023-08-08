@@ -54,7 +54,7 @@ class ViewAllVendorsActivity : AppCompatActivity(), BottomSheetFilterVendors.OnB
         setContentView(binding.root)
 
         binding.viewAllVendorsRecycler.layoutManager = GridLayoutManager(applicationContext, 2)
-        binding.viewAllVendorsRecycler.setHasFixedSize(true)
+        //binding.viewAllVendorsRecycler. //recyclerView.setHasFixedSize(true)
 
         exploreServicesAdapter = ExploreServicesAdapter(hotelList, this)
         binding.viewAllVendorsRecycler.adapter = exploreServicesAdapter

@@ -51,7 +51,7 @@ class ConnectionsNotificationFragment : Fragment() {
 
         recyclerConnection = view.findViewById(R.id.recyclerConnection)
         recyclerConnection.layoutManager = LinearLayoutManager(context)
-        recyclerConnection.setHasFixedSize(true)
+        //recyclerConnection. //recyclerView.setHasFixedSize(true)
 
         progress = view.findViewById(R.id.progress)
         nothing = view.findViewById(R.id.nothing)

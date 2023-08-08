@@ -36,7 +36,7 @@ class PostLikeActivity : AppCompatActivity() {
         recycler = findViewById(R.id.likeUserRecycler)
 
         recycler.layoutManager = LinearLayoutManager(this)
-        recycler.setHasFixedSize(true)
+        //recycler. //recyclerView.setHasFixedSize(true)
 
         fetchLike(postId)
 

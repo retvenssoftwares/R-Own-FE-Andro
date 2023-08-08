@@ -110,10 +110,10 @@ class UserDetailsActivity : AppCompatActivity(),
         }
 
         binding.recyclerExperience.layoutManager = LinearLayoutManager(this)
-        binding.recyclerExperience.setHasFixedSize(true)
+        //binding.recyclerExperience. //recyclerView.setHasFixedSize(true)
 
         binding.recyclerEducation.layoutManager = LinearLayoutManager(this)
-        binding.recyclerEducation.setHasFixedSize(true)
+        //binding.recyclerEducation. //recyclerView.setHasFixedSize(true)
 
     }
 

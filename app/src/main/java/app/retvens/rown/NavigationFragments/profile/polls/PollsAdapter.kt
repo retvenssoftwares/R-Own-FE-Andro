@@ -109,7 +109,7 @@ class PollsAdapter(val pollList:ArrayList<PostItem>, val context: Context,val Us
 
 
         holder.recycler.layoutManager = LinearLayoutManager(context)
-        holder.recycler.setHasFixedSize(true)
+        //holder.recycler. //recyclerView.setHasFixedSize(true)
 
         poll.pollQuestion.forEach {
             option.addAll(it.Options)

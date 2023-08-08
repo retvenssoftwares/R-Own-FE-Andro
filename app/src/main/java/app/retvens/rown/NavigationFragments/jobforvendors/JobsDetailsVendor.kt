@@ -84,7 +84,7 @@ class JobsDetailsVendor : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.applied_candidate_recycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         getApplicant(jid)
 

@@ -31,7 +31,7 @@ class ViewAllAvailableCommunitiesActivity : AppCompatActivity(),
         setContentView(binding.root)
 
         binding.viewAllCommRecycler.layoutManager = LinearLayoutManager(applicationContext)
-        binding.viewAllCommRecycler.setHasFixedSize(true)
+        //binding.viewAllCommRecycler. //recyclerView.setHasFixedSize(true)
 
         binding.filterSearch.setOnClickListener {
             val bottomSheet = BottomSheetFilterCommunity()

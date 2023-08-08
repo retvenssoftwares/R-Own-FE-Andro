@@ -30,7 +30,7 @@ class SavedJobsFragment : Fragment() {
 
         savedJobsRecyclerView = view.findViewById(R.id.savedJobsRecyclerView)
         savedJobsRecyclerView.layoutManager = LinearLayoutManager(context)
-        savedJobsRecyclerView.setHasFixedSize(true)
+        //savedJobs //recyclerView. //recyclerView.setHasFixedSize(true)
 //
 //        val blogs = listOf<ExploreJobData>(
 //            ExploreJobData("Senior Inn"),

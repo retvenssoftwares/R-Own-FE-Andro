@@ -63,7 +63,7 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 
         suggestedRecycler = view.findViewById(R.id.suggested_hotelier_job_recycler)
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        suggestedRecycler.setHasFixedSize(true)
+        //suggestedRecycler. //recyclerView.setHasFixedSize(true)
 
         view.findViewById<ImageView>(R.id.filter).setOnClickListener {
             val bottomSheet = BottomSheetJobFilter()
@@ -74,7 +74,7 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 
         recentJobRecycler = view.findViewById(R.id.recent_job_recycler_hotelier)
         recentJobRecycler.layoutManager = LinearLayoutManager(context)
-        recentJobRecycler.setHasFixedSize(true)
+        //recentJobRecycler. //recyclerView.setHasFixedSize(true)
 
         getJobs()
     }

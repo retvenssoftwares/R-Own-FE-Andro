@@ -31,7 +31,7 @@ class ViewRequestsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.requestsRecycler.layoutManager = LinearLayoutManager(applicationContext)
-        binding.requestsRecycler.setHasFixedSize(true)
+        //binding.requestsRecycler. //recyclerView.setHasFixedSize(true)
 
         searchBar = findViewById(R.id.searchBar)
         binding.reBackBtn.setOnClickListener { onBackPressed() }

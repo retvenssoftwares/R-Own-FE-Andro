@@ -48,10 +48,10 @@ class DiscoverPeopleActivity : AppCompatActivity() {
 
         binding.profileBackBtn.setOnClickListener { onBackPressed() }
         binding.discoverRecycler.layoutManager = LinearLayoutManager(this)
-        binding.discoverRecycler.setHasFixedSize(true)
+        //binding.discoverRecycler. //recyclerView.setHasFixedSize(true)
         getContacts()
         binding.discoverRecycler2.layoutManager = LinearLayoutManager(this)
-        binding.discoverRecycler2.setHasFixedSize(true)
+        //binding.discoverRecycler2. //recyclerView.setHasFixedSize(true)
 
         binding.discoverRecycler2.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

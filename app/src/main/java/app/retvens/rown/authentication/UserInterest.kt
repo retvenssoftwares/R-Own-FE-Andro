@@ -59,7 +59,7 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
             binding.userName.text = "Hello, $username!"
         }
         binding.interestGrid.layoutManager = GridLayoutManager(this,3)
-        binding.interestGrid.setHasFixedSize(true)
+        //binding.interestGrid. //recyclerView.setHasFixedSize(true)
 
         binding.cardSkipInterest.setOnClickListener {
             moveTo(this,"MoveToUC")

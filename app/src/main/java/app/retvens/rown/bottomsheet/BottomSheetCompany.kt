@@ -71,7 +71,7 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
 
         recyclerView = view.findViewById(R.id.company_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         AddHotel.setOnClickListener {
             val dialog = Dialog(requireContext())

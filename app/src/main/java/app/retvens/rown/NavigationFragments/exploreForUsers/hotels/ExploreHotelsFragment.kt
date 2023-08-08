@@ -65,7 +65,7 @@ class ExploreHotelsFragment : Fragment() {
 
         exploreBlogsRecyclerView = view.findViewById(R.id.explore_hotels_recycler)
         exploreBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
-        exploreBlogsRecyclerView.setHasFixedSize(true)
+        //exploreBlogs //recyclerView. //recyclerView.setHasFixedSize(true)
 
         searchBar = view.findViewById(R.id.search_explore_hotels)
 

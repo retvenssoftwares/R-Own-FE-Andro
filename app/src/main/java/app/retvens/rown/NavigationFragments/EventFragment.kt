@@ -67,15 +67,15 @@ class EventFragment : Fragment() {
 
         allRecyclerView = view.findViewById(R.id.blogsRecyclerView)
         allRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        allRecyclerView.setHasFixedSize(true)
+        ///all //recyclerView. //recyclerView.setHasFixedSize(true)
 
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerView)
         categoryRecyclerView.layoutManager = LinearLayoutManager(context)
-        categoryRecyclerView.setHasFixedSize(true)
+        //category //recyclerView. //recyclerView.setHasFixedSize(true)
 
         onGoingRecyclerView = view.findViewById(R.id.onGoingRecyclerView)
         onGoingRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        onGoingRecyclerView.setHasFixedSize(true)
+        //onGoing //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
 
@@ -163,7 +163,7 @@ class EventFragment : Fragment() {
 
     private fun getCategories() {
         categoryRecyclerView.layoutManager = LinearLayoutManager(context)
-        categoryRecyclerView.setHasFixedSize(true)
+        //category //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val getEventCategories = RetrofitBuilder.EventsApi.getEventCategory()
         getEventCategories.enqueue(object : Callback<List<ViewAllCategoriesData>?> {

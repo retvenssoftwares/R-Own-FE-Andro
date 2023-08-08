@@ -71,7 +71,7 @@ class ExplorePeopleFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.explore_peoples_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         searchBar = view.findViewById(R.id.search_explore_peoples)
 

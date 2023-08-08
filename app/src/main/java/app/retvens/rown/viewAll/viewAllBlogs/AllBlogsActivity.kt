@@ -29,7 +29,7 @@ class AllBlogsActivity : AppCompatActivity() {
         binding.communityBackBtn.setOnClickListener { onBackPressed() }
 
         binding.allBlogsRecycler.layoutManager = GridLayoutManager(this, 2)
-        binding.allBlogsRecycler.setHasFixedSize(true)
+        //binding.allBlogsRecycler. //recyclerView.setHasFixedSize(true)
 
         binding.refreshLayout.setOnRefreshListener {
             val idCategory = intent.getStringExtra("id")

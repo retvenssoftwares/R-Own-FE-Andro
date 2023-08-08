@@ -61,7 +61,7 @@ class StatusFragment(val userId: String, val isOwner : Boolean, val username : S
         statusRecycler = view.findViewById(R.id.statusRecycler)
 
         statusRecycler.layoutManager = LinearLayoutManager(context)
-        statusRecycler.setHasFixedSize(true)
+        //statusRecycler. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
         notPosted = view.findViewById(R.id.notPosted)

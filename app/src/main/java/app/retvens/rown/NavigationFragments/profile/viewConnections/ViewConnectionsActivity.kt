@@ -34,7 +34,7 @@ class ViewConnectionsActivity : AppCompatActivity() {
         binding.reBackBtn.setOnClickListener { onBackPressed() }
 
         binding.connectionsRecycler.layoutManager = LinearLayoutManager(applicationContext)
-        binding.connectionsRecycler.setHasFixedSize(true)
+        //binding.connectionsRecycler. //recyclerView.setHasFixedSize(true)
 
         searchBar = findViewById(R.id.searchBar)
 

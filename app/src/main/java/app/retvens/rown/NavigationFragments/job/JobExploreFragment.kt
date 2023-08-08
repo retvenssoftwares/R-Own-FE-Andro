@@ -72,7 +72,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
         suggestedRecycler = requireView().findViewById(R.id.suggested_recycler)
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        suggestedRecycler.setHasFixedSize(true)
+//        suggestedRecycler. //recyclerView.setHasFixedSize(true)
 
         requireView().findViewById<TextView>(R.id.view_all_suggested).setOnClickListener {
             startActivity(Intent(context, ViewAllSuggestedJobsActivity::class.java))
@@ -88,7 +88,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
         recentJobRecycler = requireView().findViewById(R.id.recent_job_recycler)
         recentJobRecycler.layoutManager = LinearLayoutManager(context)
-        recentJobRecycler.setHasFixedSize(true)
+        //recentJobRecycler. //recyclerView.setHasFixedSize(true)
 
     }
 

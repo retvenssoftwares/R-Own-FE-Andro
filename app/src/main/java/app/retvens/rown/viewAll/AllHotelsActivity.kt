@@ -57,7 +57,7 @@ class AllHotelsActivity : AppCompatActivity() {
 
         exploreBlogsRecyclerView = findViewById(R.id.explore_hotels_recycler)
         exploreBlogsRecyclerView.layoutManager = GridLayoutManager(this,2)
-        exploreBlogsRecyclerView.setHasFixedSize(true)
+        //exploreBlogs //recyclerView. //recyclerView.setHasFixedSize(true)
 
         progress = findViewById(R.id.progress)
 

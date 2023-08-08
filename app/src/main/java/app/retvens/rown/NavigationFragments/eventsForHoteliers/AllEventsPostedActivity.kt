@@ -32,7 +32,7 @@ class AllEventsPostedActivity : AppCompatActivity() {
         val user_id = sharedPreferences.getString("user_id", "").toString()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val getEvents = RetrofitBuilder.EventsApi.getEventByUserId(user_id)
         getEvents.enqueue(object : Callback<List<OnGoingEventsData>?> {

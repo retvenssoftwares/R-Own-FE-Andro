@@ -64,7 +64,7 @@ class PollsFragment(val user_Id: String, val isOwner : Boolean, val username : S
 
         pollsRecyclerView = view.findViewById(R.id.pollsRecycler)
         pollsRecyclerView.layoutManager = LinearLayoutManager(context)
-        pollsRecyclerView.setHasFixedSize(true)
+        //polls //recyclerView. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
         notPosted = view.findViewById(R.id.notPosted)

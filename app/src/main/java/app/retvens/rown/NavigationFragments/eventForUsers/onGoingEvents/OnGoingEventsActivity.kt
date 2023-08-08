@@ -26,7 +26,7 @@ class OnGoingEventsActivity : AppCompatActivity() {
         binding.communityBackBtn.setOnClickListener { onBackPressed() }
 
         binding.onGoingRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.onGoingRecyclerView.setHasFixedSize(true)
+        //binding.onGoing //recyclerView. //recyclerView.setHasFixedSize(true)
         onGoingEvents()
 
     }

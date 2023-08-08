@@ -44,7 +44,7 @@ class SavedEventsFragment : Fragment() {
 
         savedEventsRecyclerView = view.findViewById(R.id.savedEventsRecyclerView)
         savedEventsRecyclerView.layoutManager = GridLayoutManager(context,2)
-        savedEventsRecyclerView.setHasFixedSize(true)
+        ///savedEvents //recyclerView. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
 

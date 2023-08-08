@@ -156,7 +156,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
         }
 
         mainRecyclerView = view.findViewById(R.id.mainRecyclerView)
-        mainRecyclerView.setHasFixedSize(true)
+        //main //recyclerView. //recyclerView.setHasFixedSize(true)
         mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         getCommunities()

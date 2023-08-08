@@ -40,7 +40,7 @@ class ViewAllBlogsActivity : AppCompatActivity() {
         }
 
         binding.blogsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.blogsRecyclerView.setHasFixedSize(true)
+        //binding.blogs //recyclerView. //recyclerView.setHasFixedSize(true)
 
         binding.refreshLayout.setOnRefreshListener {
 
@@ -132,7 +132,7 @@ class ViewAllBlogsActivity : AppCompatActivity() {
 
     private fun getCategories() {
         binding.categoryRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.categoryRecyclerView.setHasFixedSize(true)
+        //binding.category //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val categories = RetrofitBuilder.viewAllApi.getBlogsCategory()
         categories.enqueue(object : Callback<List<ViewAllCategoriesData>?> {

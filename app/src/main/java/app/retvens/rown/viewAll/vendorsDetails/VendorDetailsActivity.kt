@@ -50,7 +50,7 @@ class VendorDetailsActivity : AppCompatActivity() {
 //        Glide.with(this).load(vendorImage).into(binding.vendorProfile)
 
         binding.servicesGrid.layoutManager = GridLayoutManager(this,3)
-        binding.servicesGrid.setHasFixedSize(true)
+        //binding.servicesGrid. //recyclerView.setHasFixedSize(true)
 
 //        topReview(user_id)
 //        allReview(user_id)
@@ -93,7 +93,7 @@ class VendorDetailsActivity : AppCompatActivity() {
 
     private fun topReview(user_id: String) {
         binding.topReviewRecycler.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-        binding.topReviewRecycler.setHasFixedSize(true)
+        //binding.topReviewRecycler. //recyclerView.setHasFixedSize(true)
 
         val allR = RetrofitBuilder.viewAllApi.topReviews(user_id)
         allR.enqueue(object : Callback<List<VendorReviewsData>?> {
@@ -117,10 +117,10 @@ class VendorDetailsActivity : AppCompatActivity() {
 
     private fun allReview(user_id: String) {
         binding.whatPeopleRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.whatPeopleRecycler.setHasFixedSize(true)
+        //binding.whatPeopleRecycler. //recyclerView.setHasFixedSize(true)
 
         binding.allReviewRecycler.layoutManager = LinearLayoutManager(this)
-        binding.allReviewRecycler.setHasFixedSize(true)
+        //binding.allReviewRecycler. //recyclerView.setHasFixedSize(true)
 
         val allR = RetrofitBuilder.viewAllApi.allReviews(user_id)
         allR.enqueue(object : Callback<List<AllReviewsData>?> {

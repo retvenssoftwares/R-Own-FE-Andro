@@ -138,7 +138,7 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
 
         recyclerViewOwner = view.findViewById(R.id.listOfOwners)
         recyclerViewOwner.layoutManager = LinearLayoutManager(requireContext())
-//        recyclerViewOwner.setHasFixedSize(true)
+//        recyclerViewOwner. //recyclerView.setHasFixedSize(true)
         recyclerViewOwner.setItemViewCacheSize(3)
 
         business.setOnClickListener {
@@ -167,7 +167,7 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
 
         recylerViewUser = view.findViewById(R.id.listOfNormalUser)
         recylerViewUser.layoutManager = LinearLayoutManager(requireContext())
-        recylerViewUser.setHasFixedSize(true)
+        //recylerViewUser. //recyclerView.setHasFixedSize(true)
 
         others.setOnClickListener {
             if (click2){
@@ -180,7 +180,7 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
 
         recyclerViewExpert = view.findViewById(R.id.listOfExpert)
         recyclerViewExpert.layoutManager = LinearLayoutManager(requireContext())
-        recyclerViewExpert.setHasFixedSize(true)
+        //recyclerViewExpert. //recyclerView.setHasFixedSize(true)
 
         hoteliers.setOnClickListener {
             if (click3){

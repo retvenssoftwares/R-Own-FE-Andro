@@ -46,7 +46,7 @@ class ApplyForJobFragment : Fragment() {
     private fun appliedForAJob() {
         appliedRecyclerView = requireView().findViewById(R.id.applied_recycler)
         appliedRecyclerView.layoutManager = LinearLayoutManager(context)
-        appliedRecyclerView.setHasFixedSize(true)
+       // applied //recyclerView. //recyclerView.setHasFixedSize(true)
 
 
 

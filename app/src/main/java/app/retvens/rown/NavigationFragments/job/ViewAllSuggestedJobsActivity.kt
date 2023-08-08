@@ -29,7 +29,7 @@ class ViewAllSuggestedJobsActivity : AppCompatActivity() {
 
         suggestedRecycler = findViewById(R.id.suggested_job_recycler)
         suggestedRecycler.layoutManager = LinearLayoutManager(this)
-        suggestedRecycler.setHasFixedSize(true)
+        //suggestedRecycler. //recyclerView.setHasFixedSize(true)
 
         if (intent.getStringExtra("recent") == "Recent Jobs"){
             findViewById<TextView>(R.id.title).text = "Recent Jobs"

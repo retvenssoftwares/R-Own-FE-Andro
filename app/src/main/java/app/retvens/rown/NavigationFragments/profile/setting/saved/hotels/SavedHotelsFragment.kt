@@ -57,7 +57,7 @@ class SavedHotelsFragment : Fragment() {
 
         savedHotelsRecyclerView = view.findViewById(R.id.savedHotelsRecyclerView)
         savedHotelsRecyclerView.layoutManager = GridLayoutManager(context,2)
-        savedHotelsRecyclerView.setHasFixedSize(true)
+        //savedHotels //recyclerView. //recyclerView.setHasFixedSize(true)
 
         savedHotelsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

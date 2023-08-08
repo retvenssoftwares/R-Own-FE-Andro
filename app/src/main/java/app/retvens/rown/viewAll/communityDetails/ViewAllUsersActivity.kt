@@ -60,7 +60,7 @@ class ViewAllUsersActivity : AppCompatActivity() {
         topTitle = findViewById(R.id.topTitle)
         recycler = findViewById(R.id.recycler)
         recycler.layoutManager = LinearLayoutManager(this)
-        recycler.setHasFixedSize(true)
+        //recycler. //recyclerView.setHasFixedSize(true)
 
         val groupID = intent.getStringExtra("groupID")
         group_Id = groupID!!

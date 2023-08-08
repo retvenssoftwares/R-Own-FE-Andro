@@ -87,7 +87,7 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = view.findViewById(R.id.jobs_recycler)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         serarchBar = view.findViewById(R.id.searchJob)

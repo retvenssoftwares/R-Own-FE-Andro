@@ -45,7 +45,7 @@ class explore_employees_fragment : Fragment() {
 //
 //        matchesRecycler = view.findViewById(R.id.matches_employees_recycler)
 //        matchesRecycler.layoutManager = LinearLayoutManager(context)
-//        matchesRecycler.setHasFixedSize(true)
+//        matchesRecycler. //recyclerView.setHasFixedSize(true)
 //        val matchesJobAdapter = MatchesJobAdapter(listSuggeJobs, requireContext())
 //        matchesRecycler.adapter = matchesJobAdapter
 //        matchesJobAdapter.notifyDataSetChanged()

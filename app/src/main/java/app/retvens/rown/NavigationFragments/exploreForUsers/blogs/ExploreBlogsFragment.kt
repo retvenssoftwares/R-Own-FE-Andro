@@ -62,7 +62,7 @@ class ExploreBlogsFragment : Fragment() {
 
         exploreBlogsRecyclerView = view.findViewById(R.id.explore_blogs_recycler)
         exploreBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
-        exploreBlogsRecyclerView.setHasFixedSize(true)
+        //exploreBlogs //recyclerView. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.emptyBlog)
         errorImage = view.findViewById(R.id.errorImage)

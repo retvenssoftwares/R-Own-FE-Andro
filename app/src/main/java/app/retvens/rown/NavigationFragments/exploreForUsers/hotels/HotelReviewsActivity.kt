@@ -49,7 +49,7 @@ class HotelReviewsActivity : AppCompatActivity(){
 
     private fun topReview(user_id: String) {
         binding.topReviewRecycler.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-        binding.topReviewRecycler.setHasFixedSize(true)
+       // binding.topReviewRecycler. //recyclerView.setHasFixedSize(true)
 
         val allR = RetrofitBuilder.exploreApis.topHotelReviews(user_id)
         allR.enqueue(object : Callback<List<VendorReviewsData>?> {
@@ -73,10 +73,10 @@ class HotelReviewsActivity : AppCompatActivity(){
 
     private fun allReview(user_id: String) {
 //        binding.whatPeopleRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-//        binding.whatPeopleRecycler.setHasFixedSize(true)
+//        binding.whatPeopleRecycler. //recyclerView.setHasFixedSize(true)
 
         binding.allReviewRecycler.layoutManager = LinearLayoutManager(this)
-        binding.allReviewRecycler.setHasFixedSize(true)
+        //binding.allReviewRecycler. //recyclerView.setHasFixedSize(true)
 
         val allR = RetrofitBuilder.exploreApis.allHotelReviews(user_id)
         allR.enqueue(object : Callback<List<AllReviewsData>?> {

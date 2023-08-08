@@ -50,7 +50,7 @@ class ExploreJobsFragment : Fragment() {
 
         exploreJobsRecyclerView = view.findViewById(R.id.explore_jobs_recycler)
         exploreJobsRecyclerView.layoutManager = LinearLayoutManager(context)
-        exploreJobsRecyclerView.setHasFixedSize(true)
+        //exploreJobs //recyclerView. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
         progress = view.findViewById(R.id.progress)

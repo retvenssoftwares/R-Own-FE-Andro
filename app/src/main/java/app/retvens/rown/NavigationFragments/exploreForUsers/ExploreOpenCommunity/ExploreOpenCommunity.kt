@@ -42,7 +42,7 @@ class ExploreOpenCommunity : Fragment() {
 
         recyclerView = view.findViewById(R.id.viewAllCommRecycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         noCommunities = view.findViewById(R.id.noCommunities)
 

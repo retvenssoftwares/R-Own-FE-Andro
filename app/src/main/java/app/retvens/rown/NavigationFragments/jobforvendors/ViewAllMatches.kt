@@ -27,7 +27,7 @@ class ViewAllMatches : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.popular_recycler)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         empty = findViewById(R.id.empty)
 

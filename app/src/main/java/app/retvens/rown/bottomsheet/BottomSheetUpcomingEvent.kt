@@ -58,7 +58,7 @@ class BottomSheetUpcomingEvent(val location:String) : BottomSheetDialogFragment(
 
         recyclerView = view.findViewById(R.id.event_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         getEvent(location)
 

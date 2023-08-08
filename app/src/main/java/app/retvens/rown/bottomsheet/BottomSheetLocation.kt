@@ -84,7 +84,7 @@ class BottomSheetLocation : BottomSheetDialogFragment() {
         ssearchLocation = view.findViewById(R.id.search_country)
 
         recyclerView = view.findViewById(R.id.location_recycler)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         getUserLocation()

@@ -31,7 +31,7 @@ class ViewAllCategoriesActivity : AppCompatActivity() {
         binding.communityBackBtn.setOnClickListener { onBackPressed() }
 
         binding.categoriesRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.categoriesRecyclerView.setHasFixedSize(true)
+        //binding.categories //recyclerView. //recyclerView.setHasFixedSize(true)
 
         getAllCategory()
     }

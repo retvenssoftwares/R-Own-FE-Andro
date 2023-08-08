@@ -63,7 +63,7 @@ lateinit var allBlogsAdapter: SavedBlogsAdapter
 
         savedBlogsRecyclerView = view.findViewById(R.id.savedBlogsRecyclerView)
         savedBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
-        savedBlogsRecyclerView.setHasFixedSize(true)
+        //savedBlogs //recyclerView. //recyclerView.setHasFixedSize(true)
 
         progress = view.findViewById(R.id.progress)
 

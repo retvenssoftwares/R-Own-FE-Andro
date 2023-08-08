@@ -31,7 +31,7 @@ class ViewAllCommmunitiesActivity : AppCompatActivity() {
         binding.communityBackBtn.setOnClickListener { onBackPressed() }
 
         binding.recyclerViewAllCommunity.layoutManager = LinearLayoutManager(applicationContext)
-        binding.recyclerViewAllCommunity.setHasFixedSize(true)
+        //binding.recyclerViewAllCommunity. //recyclerView.setHasFixedSize(true)
         communityArrayList = arrayListOf<Community>()
 
         cummunity = Community("","","","","")

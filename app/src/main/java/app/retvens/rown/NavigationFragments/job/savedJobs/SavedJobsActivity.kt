@@ -25,7 +25,7 @@ class SavedJobsActivity : AppCompatActivity() {
         binding.notificationsBackBtn.setOnClickListener { onBackPressed() }
 
         binding.savedJobRecycler.layoutManager = LinearLayoutManager(this)
-        binding.savedJobRecycler.setHasFixedSize(true)
+        //binding.savedJobRecycler. //recyclerView.setHasFixedSize(true)
         savedJobs()
     }
 

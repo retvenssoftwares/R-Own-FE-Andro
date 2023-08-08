@@ -37,7 +37,7 @@ class AllEventCategoryActivity : AppCompatActivity() {
      }
     private fun getCategories() {
         binding.eventCategoryRecyclerView.layoutManager = LinearLayoutManager(this)
-        binding.eventCategoryRecyclerView.setHasFixedSize(true)
+        //binding.eventCategory //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val getEventCategories = RetrofitBuilder.EventsApi.getEventCategory()
         getEventCategories.enqueue(object : Callback<List<ViewAllCategoriesData>?> {

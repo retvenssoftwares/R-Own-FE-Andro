@@ -1514,7 +1514,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
     inner class RecyclerItemViewHolder(private val binding: EachItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.childRecyclerView.setHasFixedSize(true)
+            //binding.child //recyclerView. //recyclerView.setHasFixedSize(true)
             binding.childRecyclerView.layoutManager =
                 LinearLayoutManager(binding.root.context, RecyclerView.HORIZONTAL, false)
         }

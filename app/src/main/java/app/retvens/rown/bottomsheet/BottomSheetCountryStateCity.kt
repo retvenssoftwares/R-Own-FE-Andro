@@ -144,7 +144,7 @@ class BottomSheetCountryStateCity : BottomSheetDialogFragment(),
         val recyclerViewD = dialogLanguage.findViewById<RecyclerView>(R.id.location_recycler)
         val search = dialogLanguage.findViewById<EditText>(R.id.search_country)
         search.setHint("Search for $s")
-        recyclerViewD.setHasFixedSize(true)
+        //recyclerViewD. //recyclerView.setHasFixedSize(true)
         recyclerViewD.layoutManager = LinearLayoutManager(requireContext())
         if (s=="state") {
             getUserState(recyclerViewD, dialogLanguage, search)

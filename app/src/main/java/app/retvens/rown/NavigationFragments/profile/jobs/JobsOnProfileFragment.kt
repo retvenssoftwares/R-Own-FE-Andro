@@ -47,7 +47,7 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
 
         exploreJobsRecyclerView = view.findViewById(R.id.jobsExploreRecycler)
         exploreJobsRecyclerView.layoutManager = LinearLayoutManager(context)
-        exploreJobsRecyclerView.setHasFixedSize(true)
+        //exploreJobs //recyclerView. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
         notPosted = view.findViewById(R.id.notPosted)

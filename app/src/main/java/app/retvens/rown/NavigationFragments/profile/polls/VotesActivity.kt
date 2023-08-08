@@ -72,15 +72,15 @@ class VotesActivity : AppCompatActivity() {
 
 
         recycler1.layoutManager = LinearLayoutManager(this)
-        recycler1.setHasFixedSize(true)
+        //recycler1. //recyclerView.setHasFixedSize(true)
         recycler2.layoutManager = LinearLayoutManager(this)
-        recycler2.setHasFixedSize(true)
+        //recycler2. //recyclerView.setHasFixedSize(true)
         recycler3.layoutManager = LinearLayoutManager(this)
-        recycler3.setHasFixedSize(true)
+        //recycler3. //recyclerView.setHasFixedSize(true)
         recycler4.layoutManager = LinearLayoutManager(this)
-        recycler4.setHasFixedSize(true)
+        //recycler4. //recyclerView.setHasFixedSize(true)
         recycler5.layoutManager = LinearLayoutManager(this)
-        recycler5.setHasFixedSize(true)
+        //recycler5. //recyclerView.setHasFixedSize(true)
 
         val postId = intent.getStringExtra("postId")
 

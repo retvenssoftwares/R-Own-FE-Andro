@@ -77,7 +77,7 @@ class BottomSheetHotelByLocation(val location:String) : BottomSheetDialogFragmen
 
         recyclerView = view.findViewById(R.id.hotel_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
 
         progress = view.findViewById(R.id.progress)
 

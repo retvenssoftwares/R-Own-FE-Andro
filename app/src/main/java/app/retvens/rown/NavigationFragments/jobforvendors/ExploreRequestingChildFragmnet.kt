@@ -43,7 +43,7 @@ class ExploreRequestingChildFragmnet : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         popularRecycler = view.findViewById(R.id.popular_fields_recycler)
         popularRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        popularRecycler.setHasFixedSize(true)
+        //popularRecycler. //recyclerView.setHasFixedSize(true)
 
 
         empty = view.findViewById(R.id.empty)
@@ -52,7 +52,7 @@ class ExploreRequestingChildFragmnet : Fragment() {
 
         matchesRecycler = view.findViewById(R.id.matches_recycler)
         matchesRecycler.layoutManager = LinearLayoutManager(context)
-        matchesRecycler.setHasFixedSize(true)
+        //matchesRecycler. //recyclerView.setHasFixedSize(true)
 
         val viewAll = view.findViewById<TextView>(R.id.viewAll_popular)
 

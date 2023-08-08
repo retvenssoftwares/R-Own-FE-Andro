@@ -55,7 +55,7 @@ class EventsProfileFragment(val userId:String, val isOwner : Boolean) : Fragment
 
         eventRecyclerView = view.findViewById(R.id.eventRecyclerView)
         eventRecyclerView.layoutManager = LinearLayoutManager(context)
-        eventRecyclerView.setHasFixedSize(true)
+        //event //recyclerView. //recyclerView.setHasFixedSize(true)
 
         empty = view.findViewById(R.id.empty)
         notPosted = view.findViewById(R.id.notPosted)

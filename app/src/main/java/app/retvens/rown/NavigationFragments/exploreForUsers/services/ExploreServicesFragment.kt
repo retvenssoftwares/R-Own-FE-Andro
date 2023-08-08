@@ -67,7 +67,7 @@ class ExploreServicesFragment : Fragment() {
 
         exploreBlogsRecyclerView = view.findViewById(R.id.explore_services_recycler)
         exploreBlogsRecyclerView.layoutManager = GridLayoutManager(context,2)
-        exploreBlogsRecyclerView.setHasFixedSize(true)
+        //exploreBlogs //recyclerView. //recyclerView.setHasFixedSize(true)
 
         exploreServicesAdapter = ExploreServicesAdapter(hotelList, requireContext())
         exploreBlogsRecyclerView.adapter = exploreServicesAdapter

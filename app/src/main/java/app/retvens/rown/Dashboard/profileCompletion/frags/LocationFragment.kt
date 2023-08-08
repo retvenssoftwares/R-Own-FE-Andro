@@ -351,7 +351,7 @@ class LocationFragment : Fragment(), BackHandler, BottomSheetCountryStateCity.On
         getUserLocation()
 
         recyclerView = dialogRole.findViewById(R.id.location_recycler)
-        recyclerView.setHasFixedSize(true)
+         //recyclerView. //recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
     }

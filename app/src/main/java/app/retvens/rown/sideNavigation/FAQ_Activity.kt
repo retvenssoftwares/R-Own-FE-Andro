@@ -25,7 +25,7 @@ class FAQ_Activity : AppCompatActivity() {
         binding.faqBackBtn.setOnClickListener { onBackPressed() }
 
         binding.recycler.layoutManager = LinearLayoutManager(this)
-        binding.recycler.setHasFixedSize(true)
+        //binding.recycler. //recyclerView.setHasFixedSize(true)
 
         fetFaq()
     }

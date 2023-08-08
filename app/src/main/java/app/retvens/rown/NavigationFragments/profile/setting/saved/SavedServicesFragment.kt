@@ -48,7 +48,7 @@ class SavedServicesFragment : Fragment() {
 
         savedServicesRecyclerView = view.findViewById(R.id.savedServicesRecyclerView)
         savedServicesRecyclerView.layoutManager = GridLayoutManager(context,2)
-        savedServicesRecyclerView.setHasFixedSize(true)
+        //savedServices //recyclerView. //recyclerView.setHasFixedSize(true)
 
         val blogs = listOf<ExploreServicesData>(
             ExploreServicesData("Paradise Inn"),
