@@ -436,7 +436,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
 
                         connCount.text = response.connectioncount.toString()
                         postCount.text = response.postcount.toString()
-                        role = response.roleDetails.profileCompletionStatus
+                        role = ""
                         created = response.roleDetails.Created_On
                         location = response.roleDetails.location
                         verification = response.roleDetails.verificationStatus
@@ -466,7 +466,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
                         Log.d("new", e.toString())
                     }
                 } else{
-                    Log.e("error",response.code().toString())
+                    Log.e("error",response.message().toString())
                 }
             }
 

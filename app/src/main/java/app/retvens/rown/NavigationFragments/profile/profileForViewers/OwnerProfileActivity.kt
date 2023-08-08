@@ -436,7 +436,6 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                     profile_username.text = response.profiledata.User_name
                     name.text = response.profiledata.Full_name
                     nameProfile = response.profiledata.Full_name
-                    role = response.profiledata.profileCompletionStatus
 //                    bio.text = response.profiledata.userBio
                     val getBio = response.profiledata.userBio
                     try {
