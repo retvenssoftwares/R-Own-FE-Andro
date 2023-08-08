@@ -189,7 +189,10 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     if (isLoading && (lastVisibleItemPosition == totalItem - 2)) {
                         isLoading = false
-                        getData()
+                        if (mList.size >= 8){
+                            getData()
+                        }
+
                     }
                 }
 
