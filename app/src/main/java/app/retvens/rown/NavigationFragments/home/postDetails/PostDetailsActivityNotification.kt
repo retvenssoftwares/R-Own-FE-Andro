@@ -196,6 +196,8 @@ class PostDetailsActivityNotification : AppCompatActivity(),
         viewPagerAdapter.setOnImageClickListener(this)
         Log.e("img",postPic.toString())
 
+        viewPagerAdapter.notifyDataSetChanged()
+
         if (postPic.size > 1) {
             indicator.setViewPager(viewPager)
         } else {

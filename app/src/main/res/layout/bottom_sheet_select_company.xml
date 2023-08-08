@@ -17,7 +17,7 @@
             android:id="@+id/syjt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Please select your comapany here"
+            android:text="Please select your company here"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="18dp"
             android:layout_gravity="center"

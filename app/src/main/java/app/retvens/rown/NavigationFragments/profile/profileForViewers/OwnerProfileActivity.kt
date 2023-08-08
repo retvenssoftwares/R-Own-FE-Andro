@@ -512,6 +512,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
             }
 
             override fun onFailure(call: Call<OwnerProfileDataClass?>, t: Throwable) {
+                Log.e("error",t.message.toString())
                 progressDialog.dismiss()
             }
         })

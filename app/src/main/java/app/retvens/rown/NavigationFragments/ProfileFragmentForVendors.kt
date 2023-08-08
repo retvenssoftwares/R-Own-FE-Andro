@@ -175,7 +175,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             } else if (selected == 4){
-                val childFragment: Fragment = ServicesFragment(user_id, true, "")
+                val childFragment: Fragment = ServicesFragment(user_id, true, "",completion)
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             }
@@ -227,7 +227,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             status.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
             selected = 4
-            val childFragment: Fragment = ServicesFragment(user_id, true, "")
+            val childFragment: Fragment = ServicesFragment(user_id, true, "",completion)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }
@@ -345,7 +345,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                         websiteLink.text = websiteLinkV
                     }
                 }else{
-                    Toast.makeText(requireContext(),response.code(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
                 }
             }
 

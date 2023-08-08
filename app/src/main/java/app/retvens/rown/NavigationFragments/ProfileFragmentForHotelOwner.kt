@@ -174,7 +174,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             } else if (selected == 4){
-                val childFragment: Fragment = HotelsFragmentProfile(user_id, true, "")
+                val childFragment: Fragment = HotelsFragmentProfile(user_id, true, "",completion)
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
             }
@@ -268,7 +268,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             jobs.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_5))
 
             selected = 4
-            val childFragment: Fragment = HotelsFragmentProfile(user_id, true, "")
+            val childFragment: Fragment = HotelsFragmentProfile(user_id, true, "",completion)
             val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
             transaction.replace(R.id.child_profile_fragments_container, childFragment).commit()
         }

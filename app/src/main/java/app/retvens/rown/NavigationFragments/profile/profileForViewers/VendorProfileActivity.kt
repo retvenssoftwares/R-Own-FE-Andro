@@ -466,13 +466,13 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
                         Log.d("new", e.toString())
                     }
                 } else{
-                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.code().toString())
                 }
             }
 
             override fun onFailure(call: Call<VendorProfileDataClass?>, t: Throwable) {
                 progressDialog.dismiss()
-                Toast.makeText(applicationContext, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                Log.e("error",t.message.toString())
             }
         })
     }
