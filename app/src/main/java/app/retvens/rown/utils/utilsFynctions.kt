@@ -4,11 +4,13 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -201,34 +203,68 @@ fun cropProfileImage(imageUri: Uri, context: Context) {
         .withOptions(options)
         .start(context as Activity)
 }
-fun compressImage(imageUri: Uri, context: Context): Uri {
-    var compressed : Uri? = null
+//fun compressImage(imageUri: Uri, context: Context): Uri {
+//    var compressed : Uri? = null
+//    try {
+//        try {
+//            val imageBitmap: Bitmap =
+//                MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
+//            val path: File =
+//                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+//            val fileName = String.format("%d.jpg", System.currentTimeMillis())
+//            val finalFile = File(path, fileName)
+//            val fileOutputStream = FileOutputStream(finalFile)
+//            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 30, fileOutputStream)
+//            fileOutputStream.flush()
+//            fileOutputStream.close()
+//
+//            compressed = Uri.fromFile(finalFile)
+//
+//            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+//            intent.setData(compressed)
+//            context.sendBroadcast(intent)
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        }
+//    }catch (e:NullPointerException){
+//        Log.e("error",e.message.toString())
+//    }
+//    return compressed!!
+//}
+
+fun compressImage(imageUri: Uri, context: Context): Uri? {
+    var compressed: Uri? = null
     try {
-        try {
-            val imageBitmap: Bitmap =
-                MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
-            val path: File =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            val fileName = String.format("%d.jpg", System.currentTimeMillis())
-            val finalFile = File(path, fileName)
-            val fileOutputStream = FileOutputStream(finalFile)
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 30, fileOutputStream)
-            fileOutputStream.flush()
-            fileOutputStream.close()
+        val imageBitmap: Bitmap =
+            MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
 
-            compressed = Uri.fromFile(finalFile)
-
-            val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            intent.setData(compressed)
-            context.sendBroadcast(intent)
-        } catch (e: IOException) {
-            e.printStackTrace()
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "compressed_image.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
         }
-    }catch (e:NullPointerException){
-        Log.e("error",e.message.toString())
+
+        val contentResolver = context.contentResolver
+        val compressedUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        compressedUri?.let {
+            val outputStream = contentResolver.openOutputStream(it)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+            outputStream?.flush()
+            outputStream?.close()
+
+            compressed = compressedUri
+
+            // You can also send a broadcast to update the media scanner if needed
+            MediaScannerConnection.scanFile(context, arrayOf(compressedUri.toString()), null, null)
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+    } catch (e: NullPointerException) {
+        Log.e("error", e.message.toString())
     }
-    return compressed!!
+    return compressed
 }
+
 
 fun showFullImage(profilePic : String, context: Context) {
     val dialog = Dialog(context)

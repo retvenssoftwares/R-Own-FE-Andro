@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.os.postDelayed
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
@@ -83,6 +84,9 @@ class PostDetailsActivityNotification : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post_details)
 
+        val allhandler = Handler()
+
+
         findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener {
             startActivity(Intent(this,DashBoardActivity::class.java))
         }
@@ -107,6 +111,7 @@ class PostDetailsActivityNotification : AppCompatActivity(),
 
 
         postId = intent.getStringExtra("postId").toString()
+
         getPost(postId)
 
         val handler = Handler()
@@ -128,13 +133,15 @@ class PostDetailsActivityNotification : AppCompatActivity(),
             }
         }
 
+        val pichandler = Handler()
 
+        pichandler.postDelayed({
+            if (profilePic.isNotEmpty()) {
+                Glide.with(applicationContext).load(profilePic).into(profile)
+            } else {
+                profile.setImageResource(R.drawable.svg_user)
+            }},100)
 
-       if (profilePic.isNotEmpty()) {
-            Glide.with(applicationContext).load(profilePic).into(profile)
-        } else {
-            profile.setImageResource(R.drawable.svg_user)
-        }
 
 //        profile.setOnClickListener {
 //            if(role == "Business Vendor / Freelancer"){
@@ -173,8 +180,20 @@ class PostDetailsActivityNotification : AppCompatActivity(),
             if (commentCount == "0"){
                 commentC.visibility = View.GONE
             }
-        likeCountText.text = likeCount.toString()
-        commentC.text = commentCount.toString()
+
+            if (likeCount.toString() == "0"){
+                likeCountText.visibility = View.GONE
+            }
+
+        val counthandler = Handler()
+
+        counthandler.postDelayed({
+
+            likeCountText.text = likeCount.toString()
+            commentC.text = commentCount.toString()
+        },
+            100)
+
 
 
 
@@ -191,12 +210,16 @@ class PostDetailsActivityNotification : AppCompatActivity(),
             savedPost.setImageResource(R.drawable.svg_save_post)
         }
 
-        viewPagerAdapter = ImageSlideActivityAdapter(baseContext, postPic!!)
-        viewPager.adapter = viewPagerAdapter
-        viewPagerAdapter.setOnImageClickListener(this)
         Log.e("img",postPic.toString())
 
-        viewPagerAdapter.notifyDataSetChanged()
+        val handler2 = Handler()
+        handler2.postDelayed({
+            viewPagerAdapter = ImageSlideActivityAdapter(baseContext, postPic!!)
+            viewPager.adapter = viewPagerAdapter
+            viewPagerAdapter.setOnImageClickListener(this)
+        },100)
+
+
 
         if (postPic.size > 1) {
             indicator.setViewPager(viewPager)
