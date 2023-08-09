@@ -1577,13 +1577,22 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
 
         fun bindBlogsRecyclerView(recyclerItemList: List<AllBlogsData>) {
             Log.e("funblog", recyclerItemList.toString())
+
+            // Convert the List<AllBlogsData> to ArrayList<AllBlogsData>
+            val arrayList = ArrayList<AllBlogsData>(recyclerItemList)
+
             val adapter = BlogsChildAdapter(
                 context, DataItemType.BLOGS,
-                recyclerItemList as ArrayList<AllBlogsData>
+                arrayList
             )
+
             binding.childRecyclerView.adapter = adapter
-            adapter.removeBlogsFromList(recyclerItemList)
+
+            // No need to remove elements from the list before setting it to the adapter.
+            // Instead, consider updating the adapter logic to handle this if necessary.
+
             adapter.notifyDataSetChanged()
+
             binding.recyclerHeading.visibility = View.VISIBLE
             binding.recyclerHeading.text = "Popular blogs you must read."
             binding.viewAllItem.visibility = View.VISIBLE
