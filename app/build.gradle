@@ -199,4 +199,7 @@ dependencies {
 
     // Select Year
     implementation 'com.whiteelephant:monthandyearpicker:1.3.0'
+
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+    implementation "com.google.android.gms:play-services-auth-api-phone:18.0.1"
 }

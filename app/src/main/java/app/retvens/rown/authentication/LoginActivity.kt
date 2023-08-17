@@ -156,7 +156,7 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             Toast.makeText(applicationContext, "Notifications ON", Toast.LENGTH_SHORT).show()
         } else {
             // Permission has not been granted, request it
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_NUMBERS,Manifest.permission.POST_NOTIFICATIONS), REQUEST_CODE)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_NUMBERS,Manifest.permission.POST_NOTIFICATIONS,Manifest.permission.READ_SMS,Manifest.permission.RECEIVE_SMS), REQUEST_CODE)
         }
 
         FirebaseApp.initializeApp(this)

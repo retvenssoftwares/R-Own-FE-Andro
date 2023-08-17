@@ -115,6 +115,13 @@ class UserContacts : AppCompatActivity() {
 
     @SuppressLint("Range")
     private fun getContacts() {
+
+        progressDialog.dismiss()
+        moveTo(this@UserContacts,"MoveToD")
+        val intent = Intent(applicationContext, DashBoardActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+
         val listOfContacts = mutableListOf<ContactDetail>()
 //        val builder = StringBuilder()
         val resolver: ContentResolver = contentResolver;
@@ -161,7 +168,10 @@ class UserContacts : AppCompatActivity() {
 //        }
         cursor.close()
 
+
           uploadContacts(listOfContacts)
+
+
     }
     @SuppressLint("Range")
     private fun getRawContactId(id: String?): String? {
@@ -211,34 +221,43 @@ class UserContacts : AppCompatActivity() {
     private fun uploadContacts(listOfContacts: MutableList<ContactDetail>) {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
-        val upload = RetrofitBuilder.retrofitBuilder.uploadContacts(ContactsData(listOfContacts,user_id))
 
-        listOfContacts.forEach {
-            Log.d("con","${it.Name}, ${it.Number}, ${it.Company_Name} ")
-        }
-        upload.enqueue(object : Callback<ContactResponse?> {
-            override fun onResponse(
-                call: Call<ContactResponse?>,
-                response: Response<ContactResponse?>
-            ) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val upload = RetrofitBuilder.retrofitBuilder.uploadContacts(
+                ContactsData(
+                    listOfContacts,
+                    user_id
+                )
+            )
+
+            listOfContacts.forEach {
+                Log.d("con", "${it.Name}, ${it.Number}, ${it.Company_Name} ")
+            }
+            upload.enqueue(object : Callback<ContactResponse?> {
+                override fun onResponse(
+                    call: Call<ContactResponse?>,
+                    response: Response<ContactResponse?>
+                ) {
 //                Toast.makeText(applicationContext,response.body()?.message.toString(),Toast.LENGTH_SHORT).show()
-                Log.d("cont",response.body().toString())
-                if (response.isSuccessful){
-                    progressDialog.dismiss()
-                    moveTo(this@UserContacts,"MoveToD")
-                    val intent = Intent(applicationContext, DashBoardActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                } else {
-                    progressDialog.dismiss()
-                    Toast.makeText(applicationContext,"${response.code().toString()} - Retry (Connection Lost)",Toast.LENGTH_SHORT).show()
+                    Log.d("cont", response.body().toString())
+                    if (response.isSuccessful) {
+                        Log.e("res",response.body()!!.message)
+                    } else {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            "${response.code().toString()} - Retry (Connection Lost)",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
-            override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
-                progressDialog.dismiss()
-                Log.d("cont", "ContactsApi : ${ t.localizedMessage?.toString() }",t)
+
+                override fun onFailure(call: Call<ContactResponse?>, t: Throwable) {
+                    progressDialog.dismiss()
+                    Log.d("cont", "ContactsApi : ${t.localizedMessage?.toString()}", t)
 //                Toast.makeText(applicationContext,"Error - ${t.localizedMessage}",Toast.LENGTH_SHORT).show()
-            }
-        })
+                }
+            })
+        }
     }
 }

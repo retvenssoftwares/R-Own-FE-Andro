@@ -53,6 +53,7 @@ class MediaAdapter(val context: Context,val mediaList:ArrayList<PostItem>, priva
 
         val media = mediaList[position]
 
+        Log.e("res",media.toString())
 
         media.media.forEach { item ->
 

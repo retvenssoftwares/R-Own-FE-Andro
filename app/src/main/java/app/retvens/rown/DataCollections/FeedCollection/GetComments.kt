@@ -35,6 +35,7 @@ data class Posts(
 )
 
 data class GetComments(
+    val message:String,
     val post: Posts,
     val commentCount: Int
 )

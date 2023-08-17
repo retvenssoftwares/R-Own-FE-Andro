@@ -110,6 +110,8 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context,val co
 
         val item = listS[position]
 
+        Log.e("res",item.toString())
+
         when (holder.itemViewType) {
             VIEW_TYPE_LAYOUT_ONE -> {
                 val layoutOneViewHolder = holder as LayoutOneViewHolder
@@ -254,7 +256,7 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context,val co
                     layoutTwoViewHolder.commentCount.visibility = View.GONE
                 }
 
-                if (item.User_name.isNotEmpty()){
+                if (item.User_name.isNullOrEmpty()){
                     layoutTwoViewHolder.username.text = item.User_name
                 } else{
                     layoutTwoViewHolder.username.text = item.Full_name

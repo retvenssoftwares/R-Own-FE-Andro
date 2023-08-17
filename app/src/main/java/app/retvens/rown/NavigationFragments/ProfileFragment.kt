@@ -118,7 +118,6 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
         viewPP.setOnClickListener {
             if (completion == "100"){
                 startActivity(Intent(context, UserDetailsActivity::class.java))
-                activity?.finish()
             }else{
                 Toast.makeText(requireContext(),"Complete Your Profile First!!",Toast.LENGTH_SHORT).show()
             }

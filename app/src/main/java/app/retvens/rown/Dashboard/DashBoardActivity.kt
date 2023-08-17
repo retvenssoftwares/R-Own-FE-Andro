@@ -69,8 +69,6 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
     companion object number{
         var progress = ""
     }
-
-
     lateinit var binding: ActivityDashBoardBinding
     private lateinit var badgeView:RelativeLayout
     private lateinit var drawerLayout:DrawerLayout

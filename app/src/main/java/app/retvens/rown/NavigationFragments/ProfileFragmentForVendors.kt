@@ -153,9 +153,14 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
         val user_id = sharedPreferencesId?.getString("user_id", "").toString()
 
         viewPP.setOnClickListener {
-            val intent = Intent(requireContext(), VendorDetailsActivity::class.java)
-            intent.putExtra("user_id", user_id)
-            startActivity(intent)
+            if (completion == "100"){
+                val intent = Intent(requireContext(), VendorDetailsActivity::class.java)
+                intent.putExtra("user_id", user_id)
+                startActivity(intent)
+            }else{
+                Toast.makeText(requireContext(),"Complete Your Profile First",Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)

@@ -709,6 +709,14 @@
             </intent-filter>
         </service>
 
+        <receiver android:name=".authentication.OtpBroadcastReciever"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
+            </intent-filter>
+
+        </receiver>
         <receiver
             android:name=".NotificationReceiver"
             android:exported="false">

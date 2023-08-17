@@ -11,7 +11,6 @@ const val Base_url = "http://64.227.150.47/main/"
 
 object RetrofitBuilder {
 
-
     val gson = GsonBuilder().setLenient().create()
 
     val retrofitBuilder = Retrofit.Builder()

@@ -121,6 +121,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         val testLike = findViewById<TextView>(R.id.likebypeople)
 
 
+        Log.e("error",profilePic.toString())
 
         val commentStatus = intent.getStringExtra("commentStatus")
         val Can_comment = intent.getStringExtra("Can_comment")
@@ -269,10 +270,10 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
 
         likeButton.setOnClickListener {
+            likeButton.setImageResource(R.drawable.liked_vectore)
             if (isLike) {
                 postLike(postId, applicationContext) {
                     isLike = false
-                    likeButton.setImageResource(R.drawable.liked_vectore)
                     likeCount += 1
 //                    post.Like_count = count.toString()
                     likeCountText.text = likeCount.toString()
@@ -280,9 +281,9 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
                 }
             } else {
+                likeButton.setImageResource(R.drawable.svg_like_post)
                 postLike(postId, applicationContext) {
                     isLike = true
-                    likeButton.setImageResource(R.drawable.svg_like_post)
                     likeCount -= 1
                     if (likeCount == 0){
                         likeCountText.visibility = View.GONE
