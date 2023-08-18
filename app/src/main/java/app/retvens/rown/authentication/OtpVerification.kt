@@ -229,10 +229,10 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
         // I'm adding null here
         client.startSmsUserConsent(null)
             .addOnSuccessListener(OnSuccessListener {
-                Toast.makeText(applicationContext, "On Success", Toast.LENGTH_LONG).show()
+                Log.e("success","ok")
             })
             .addOnFailureListener(OnFailureListener {
-                Toast.makeText(applicationContext, "On OnFailure", Toast.LENGTH_LONG).show()
+                Log.e("fail","Failed")
             })
     }
 
@@ -250,15 +250,23 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
             }
         }
     }
-
+//
     private fun getOtpFromMessage(message: String?) {
-        val storedVerificationId = intent.getStringExtra("storedVerificationId")
+    val storedVerificationId = intent.getStringExtra("storedVerificationId")
         // This will match any 6 digit number in the message
         val pattern: Pattern = Pattern.compile("(|^)\\d{6}")
         val matcher: Matcher = pattern.matcher(message)
         if (matcher.find()) {
-            otp = matcher.group(0)!!.toString()
+            otp = matcher.group(0).toString()
             if (!otp.isEmpty()) {
+
+                otpET1.setText(otp[0].toString())
+                otpET2.setText(otp[1].toString())
+                otpET3.setText(otp[2].toString())
+                otpET4.setText(otp[3].toString())
+                otpET5.setText(otp[4].toString())
+                otpET6.setText(otp[5].toString())
+
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                 progressDialog.setCancelable(false)
@@ -545,7 +553,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
     private fun sendVerificationcode(number: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(number) // Phone number to verify
-            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setTimeout(0L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(this) // Activity (for callback binding)
             .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
             .build()
@@ -599,6 +607,8 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
             }
         }
     }
+
+
 
 
 }

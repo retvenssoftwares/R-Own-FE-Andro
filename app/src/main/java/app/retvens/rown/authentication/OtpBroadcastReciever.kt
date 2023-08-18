@@ -17,18 +17,24 @@ class OtpBroadcastReciever : BroadcastReceiver() {
     lateinit var smsBroadcastReceiverListener: OtpBroadcastReceiverListener
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == SmsRetriever.SMS_RETRIEVED_ACTION) {
-            val extras: Bundle? = intent.extras
-            val smsRetrieverStatus = extras?.get(SmsRetriever.EXTRA_STATUS) as Status?
-            when (smsRetrieverStatus?.statusCode) {
-                CommonStatusCodes.SUCCESS -> {
-                    val messageIntent: Intent? = extras?.getParcelable(SmsRetriever.EXTRA_CONSENT_INTENT)
-                    smsBroadcastReceiverListener.onSuccess(messageIntent)
-                }
-                CommonStatusCodes.TIMEOUT -> {
-                    smsBroadcastReceiverListener.onFailure()
+        try {
+            if (intent.action == SmsRetriever.SMS_RETRIEVED_ACTION) {
+                val extras: Bundle? = intent.extras
+                val smsRetrieverStatus = extras?.get(SmsRetriever.EXTRA_STATUS) as Status?
+                when (smsRetrieverStatus?.statusCode) {
+                    CommonStatusCodes.SUCCESS -> {
+                        val messageIntent: Intent? =
+                            extras?.getParcelable(SmsRetriever.EXTRA_CONSENT_INTENT)
+                        smsBroadcastReceiverListener.onSuccess(messageIntent)
+                    }
+
+                    CommonStatusCodes.TIMEOUT -> {
+                        smsBroadcastReceiverListener.onFailure()
+                    }
                 }
             }
+        }catch (e:Exception){
+            Log.e("error",e.message.toString())
         }
     }
 

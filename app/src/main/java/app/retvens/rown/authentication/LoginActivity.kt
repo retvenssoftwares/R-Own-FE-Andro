@@ -362,7 +362,7 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
     private fun sendVerificationcode(number: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(number) // Phone number to verify
-            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setTimeout(0L, TimeUnit.SECONDS) // Timeout and unit
             .setActivity(this) // Activity (for callback binding)
             .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
             .build()

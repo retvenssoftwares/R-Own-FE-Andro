@@ -709,7 +709,12 @@
             </intent-filter>
         </service>
 
-
+        <receiver android:name=".authentication.OtpBroadcastReciever"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
 
 
 
