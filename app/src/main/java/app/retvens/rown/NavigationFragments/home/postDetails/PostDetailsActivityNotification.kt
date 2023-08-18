@@ -335,11 +335,13 @@ class PostDetailsActivityNotification : AppCompatActivity(),
                         }
 
                     }
+                }else{
+                    Log.e("error",response.code().toString())
                 }
             }
 
             override fun onFailure(call: Call<List<PostItem>?>, t: Throwable) {
-
+                Log.e("error",t.message.toString())
             }
         })
     }

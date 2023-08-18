@@ -1,8 +1,10 @@
 package app.retvens.rown.authentication
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
@@ -41,7 +43,11 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -54,6 +60,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSheetLanguagelickListener {
     lateinit var binding: ActivityOtpVerifificationBinding
@@ -68,7 +76,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
     lateinit var otpET6: EditText
     /*--AUTO-DETECT-OTP--*/
     private val REQ_USER_CONSENT = 200
-    var otpBroadcastReciever : OtpBroadcastReciever ?= null
+    private lateinit var otpBroadcastReciever: OtpBroadcastReciever
 
 
     var selectedETPosition: Int = 0
@@ -87,6 +95,8 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
         binding = ActivityOtpVerifificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        startSmsUserConsent()
+
         otpET1 = findViewById(R.id.otpET1)
         otpET2 = findViewById(R.id.otpET2)
         otpET3 = findViewById(R.id.otpET3)
@@ -100,9 +110,11 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
         otpET4.addTextChangedListener(textWatcher)
         otpET5.addTextChangedListener(textWatcher)
         otpET6.addTextChangedListener(textWatcher)
-//        startSmartUserConsent()
+
 
         showKeyBoard(otpET1)
+
+
 
         otpET6.addTextChangedListener {
             binding.cardVerifyOtp.visibility = View.VISIBLE
@@ -172,6 +184,8 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
         val storedVerificationId = intent.getStringExtra("storedVerificationId")
 
 
+
+
         binding.cardVerifyOtp.setOnClickListener {
 
             val otp1 = otpET1.text.toString()
@@ -184,6 +198,8 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
             otp = "$otp1$otp2$otp3$otp4$otp5$otp6"
 
 
+
+
             if (!otp.isEmpty()) {
                 progressDialog = Dialog(this)
                 progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -194,15 +210,102 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                 Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
                 progressDialog.show()
 
-                val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
-                    storedVerificationId.toString(), otp
-                )
 
-                signInWithPhoneAuthCredential(credential)
+                    val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
+                        storedVerificationId.toString(), otp
+                    )
+                    signInWithPhoneAuthCredential(credential)
+
+
             } else {
                 Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun startSmsUserConsent() {
+        val client: SmsRetrieverClient = SmsRetriever.getClient(this)
+        // We can add sender phone number or leave it blank
+        // I'm adding null here
+        client.startSmsUserConsent(null)
+            .addOnSuccessListener(OnSuccessListener {
+                Toast.makeText(applicationContext, "On Success", Toast.LENGTH_LONG).show()
+            })
+            .addOnFailureListener(OnFailureListener {
+                Toast.makeText(applicationContext, "On OnFailure", Toast.LENGTH_LONG).show()
+            })
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_USER_CONSENT) {
+            if ((resultCode == RESULT_OK) && (data != null)) {
+                // That gives all message to us.
+                // We need to get the code from inside with regex
+                val message: String? = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE)
+                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+
+                getOtpFromMessage(message)
+            }
+        }
+    }
+
+    private fun getOtpFromMessage(message: String?) {
+        val storedVerificationId = intent.getStringExtra("storedVerificationId")
+        // This will match any 6 digit number in the message
+        val pattern: Pattern = Pattern.compile("(|^)\\d{6}")
+        val matcher: Matcher = pattern.matcher(message)
+        if (matcher.find()) {
+            otp = matcher.group(0)!!.toString()
+            if (!otp.isEmpty()) {
+                progressDialog = Dialog(this)
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
+
+
+                val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
+                    storedVerificationId.toString(), otp
+                )
+                signInWithPhoneAuthCredential(credential)
+
+
+            } else {
+                Toast.makeText(this, "Enter OTP", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    private fun registerBroadcastReceiver() {
+        otpBroadcastReciever = OtpBroadcastReciever()
+        otpBroadcastReciever.smsBroadcastReceiverListener = object : OtpBroadcastReciever.OtpBroadcastReceiverListener{
+            override fun onSuccess(intent: Intent?) {
+                startActivityForResult(intent!!, REQ_USER_CONSENT)
+            }
+
+            override fun onFailure() {
+
+            }
+
+        }
+        val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+        registerReceiver(otpBroadcastReciever, intentFilter)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerBroadcastReceiver()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(otpBroadcastReciever)
     }
 
     private fun generateDeviceToken(phone: String) {
@@ -256,11 +359,11 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                     progressDialog.dismiss()
 
 
-//                    Toast.makeText(
-//                        applicationContext,
-//                        "Otp Verified Successfully",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
+                    Toast.makeText(
+                        applicationContext,
+                        "Otp Verified Successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     createUserMesibo()
 
 
@@ -496,4 +599,6 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
             }
         }
     }
+
+
 }

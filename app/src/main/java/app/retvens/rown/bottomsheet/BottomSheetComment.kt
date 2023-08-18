@@ -33,6 +33,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.Event.Log
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -225,6 +226,7 @@ showKeyBoard(comments)
                 if (response.isSuccessful){
 
                     val response = response.body()!!
+                    android.util.Log.e("res",response.toString())
                     if (response.post.comments.isEmpty()){
                         empty.visibility = View.VISIBLE
                     } else {

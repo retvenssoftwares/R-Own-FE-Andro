@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.UserName
 import app.retvens.rown.DataCollections.UserProfileRequestItem
+import app.retvens.rown.NavigationFragments.profile.BlockUserActivity
 import app.retvens.rown.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import retrofit2.Call
@@ -105,6 +106,12 @@ class BottomSheetHotelierProfileSetting : BottomSheetDialogFragment() {
         val discover= view.findViewById<LinearLayout>(R.id.discover)
         discover.setOnClickListener {
             mListener?.bottomSheetHotelierProfileSettingClick("discover")
+            dismiss()
+        }
+
+        val block= view.findViewById<LinearLayout>(R.id.block)
+        block.setOnClickListener {
+            startActivity(Intent(requireContext(), BlockUserActivity::class.java))
             dismiss()
         }
     }

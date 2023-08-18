@@ -159,7 +159,7 @@ class ExploreServicesFragment : Fragment() {
             ) {
 
                 val list:ArrayList<ProfileServicesDataItem> = ArrayList()
-                if(response.isSuccessful){
+                if(response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Log.e("res",response.toString())
                     response.forEach {

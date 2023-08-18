@@ -41,24 +41,25 @@ class BlockUserActivity : AppCompatActivity() {
     private fun getBlockUser(userId: String) {
         val getBlock = RetrofitBuilder.ProfileApis.getBlockList(userId)
 
-        getBlock.enqueue(object : Callback<BlockUserDataClass?> {
-            override fun onResponse(
-                call: Call<BlockUserDataClass?>,
-                response: Response<BlockUserDataClass?>
-            ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    adapter = BlockUserAdapter(applicationContext,response)
-                    recyclerView.adapter = adapter
-                    adapter.notifyDataSetChanged()
-                }else{
-                    Log.e("error",response.code().toString())
-                }
-            }
+       getBlock.enqueue(object : Callback<List<BlockUserDataClass>?> {
+           override fun onResponse(
+               call: Call<List<BlockUserDataClass>?>,
+               response: Response<List<BlockUserDataClass>?>
+           ) {
+                   if (response.isSuccessful){
+                       val response = response.body()!!
+                       adapter = BlockUserAdapter(applicationContext,response)
+                       recyclerView.adapter = adapter
+                       adapter.notifyDataSetChanged()
+                   }else{
+                       Log.e("error",response.code().toString())
+                   }
 
-            override fun onFailure(call: Call<BlockUserDataClass?>, t: Throwable) {
-                Log.e("error",t.message.toString())
-            }
-        })
+           }
+
+           override fun onFailure(call: Call<List<BlockUserDataClass>?>, t: Throwable) {
+               Log.e("error",t.message.toString())
+           }
+       })
     }
 }

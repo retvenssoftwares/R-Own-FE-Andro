@@ -35,7 +35,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BlockUserAdapter(val context: Context, var userList: BlockUserDataClass) :
+class BlockUserAdapter(val context: Context, var userList: List<BlockUserDataClass>) :
     RecyclerView.Adapter<BlockUserAdapter.ProfileViewHolder>() {
 
     private var address = ""
@@ -55,13 +55,13 @@ class BlockUserAdapter(val context: Context, var userList: BlockUserDataClass) :
 
     override fun onBindViewHolder(holder: ProfileViewHolder, position: Int) {
 
-        val data = userList.blockedUser[position]
+        val data = userList[position]
 
         holder.nameTextView.text = data.Full_name
 
         holder.text.text = "Unblock"
 
-        fetchUser(data.user_id)
+        fetchUser(data.User_id)
 
         if (data.Profile_pic.isNotEmpty()) {
             Glide.with(context).load(data.Profile_pic).into(holder.image)
@@ -73,7 +73,7 @@ class BlockUserAdapter(val context: Context, var userList: BlockUserDataClass) :
         holder.button.setOnClickListener {
             if (click == "unblock"){
                 holder.button.visibility = View.GONE
-                unBlockUser(data.user_id)
+                unBlockUser(data.User_id)
                 click = "block"
             }
 
@@ -140,7 +140,7 @@ class BlockUserAdapter(val context: Context, var userList: BlockUserDataClass) :
     }
 
     override fun getItemCount(): Int {
-        return userList.blockedUser.size
+        return userList.size
     }
 
 //    @SuppressLint("NotifyDataSetChanged")

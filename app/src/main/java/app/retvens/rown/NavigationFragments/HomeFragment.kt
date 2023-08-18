@@ -416,6 +416,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
                             empty.visibility = View.VISIBLE
                         }
                     } else {
+                        getPost(userId)
                         serverCode = response.code()
 //                        empty.visibility = View.VISIBLE
 //                        getPost(userId)

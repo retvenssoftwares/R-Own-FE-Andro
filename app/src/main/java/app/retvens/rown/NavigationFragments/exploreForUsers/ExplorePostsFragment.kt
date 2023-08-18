@@ -234,7 +234,7 @@ class ExplorePostsFragment : Fragment() {
                     val response = response.body()!!
 
                     response.forEach { postsDataClass ->
-                        if (postsDataClass.message == "you have reached the end"){
+                        if (postsDataClass.message == "You have reached the end"){
                             mediaAdapter = MediaAdapter(requireContext(), ArrayList(),false, "Connected")
                             mediaRecyclerView.adapter = mediaAdapter
                             mediaAdapter.notifyDataSetChanged()

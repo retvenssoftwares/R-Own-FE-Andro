@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.ExploreOpenCommunit
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -63,6 +64,7 @@ class ExploreOpenCommunity : Fragment() {
                 if (response.isSuccessful) {
                     try {
                         val response = response.body()!!
+                        Log.e("res",response.toString())
                         if (response.isNotEmpty()){
                             viewAllCommunityAdapter = ViewAllCommunityAdapter(
                                 response as ArrayList<GetCommunitiesData>,
@@ -107,11 +109,13 @@ class ExploreOpenCommunity : Fragment() {
                         noCommunities.visibility = View.VISIBLE
                     }
                 }else{
+                    Log.e("error",response.code().toString())
                     noCommunities.visibility = View.VISIBLE
                 }
             }
 
             override fun onFailure(call: Call<List<GetCommunitiesData>?>, t: Throwable) {
+                Log.e("error",t.message.toString())
                 noCommunities.visibility = View.VISIBLE
             }
         })

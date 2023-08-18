@@ -277,7 +277,7 @@ interface ProfileApis {
     @GET("userList/{user_id}")
     fun getBlockList(
         @Path("user_id")user_id:String
-    ):Call<BlockUserDataClass>
+    ):Call<List<BlockUserDataClass>>
 
     @PATCH("unblock/{user_id}")
     fun unblockAccount(

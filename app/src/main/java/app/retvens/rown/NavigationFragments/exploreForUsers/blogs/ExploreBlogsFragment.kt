@@ -145,7 +145,7 @@ class ExploreBlogsFragment : Fragment() {
             ) {
                 progressDialog.dismiss()
                 if (isAdded){
-                    if (response.isSuccessful){
+                    if (response.isSuccessful && isAdded){
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
                         if (response.body()!!.isNotEmpty()) {
@@ -228,7 +228,7 @@ class ExploreBlogsFragment : Fragment() {
                 response: Response<List<ExploreBlogData>?>
             ) {
                 serverCode = response.code()
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Log.e("res",response.toString())
                     val searchList:ArrayList<AllBlogsData> = ArrayList()

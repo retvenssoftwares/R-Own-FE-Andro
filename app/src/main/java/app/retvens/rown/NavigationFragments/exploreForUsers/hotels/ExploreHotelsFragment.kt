@@ -233,7 +233,7 @@ class ExploreHotelsFragment : Fragment() {
                 call: Call<List<ExploreHotelData>?>,
                 response: Response<List<ExploreHotelData>?>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     Log.e("response",response.toString())
                     val searchHotel:ArrayList<HotelData> = ArrayList()
