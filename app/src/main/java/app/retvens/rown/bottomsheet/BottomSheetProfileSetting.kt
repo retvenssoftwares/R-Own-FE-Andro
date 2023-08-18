@@ -87,6 +87,7 @@ class BottomSheetProfileSetting : BottomSheetDialogFragment() {
         handler.postDelayed({
             if (completion == "100"){
                 edit.setOnClickListener {
+                    edittext.text = "Edit Your Profile"
                     mListener?.bottomSheetProfileSettingClick("edit")
                     dismiss()
                 }

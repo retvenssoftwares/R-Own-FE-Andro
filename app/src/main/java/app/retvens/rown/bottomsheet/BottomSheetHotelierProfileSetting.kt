@@ -81,6 +81,7 @@ class BottomSheetHotelierProfileSetting : BottomSheetDialogFragment() {
         handler.postDelayed({
             if (completion == "100"){
                 edit.setOnClickListener {
+                    edittext.text = "Edit Your Profile"
                     mListener?.bottomSheetHotelierProfileSettingClick("edit")
                     dismiss()
                 }
