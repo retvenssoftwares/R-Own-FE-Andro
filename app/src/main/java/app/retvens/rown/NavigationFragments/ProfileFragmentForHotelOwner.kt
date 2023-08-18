@@ -150,7 +150,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                 Toast.makeText(requireContext(),"Complete Your Profile First!!", Toast.LENGTH_SHORT).show()
             }
         }
-
+//RownKey-9feb
         linkText.setOnClickListener{
             val uri = Uri.parse("https://" + linkText.text.toString())
             val intent = Intent(Intent.ACTION_VIEW, uri)

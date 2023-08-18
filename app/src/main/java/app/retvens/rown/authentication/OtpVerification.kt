@@ -144,7 +144,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                 Log.d("TAG","onCodeSent:$verificationId")
                 storedVerificationId = verificationId
                 resendToken = token
-                Toast.makeText(applicationContext,"Otp will be resend",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,"Otp sent successfully",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -244,7 +244,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                 // That gives all message to us.
                 // We need to get the code from inside with regex
                 val message: String? = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE)
-                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+              //  Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
 
                 getOtpFromMessage(message)
             }
@@ -436,7 +436,6 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
                     }
 
                 }else{
-
                     Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
                 }
 
