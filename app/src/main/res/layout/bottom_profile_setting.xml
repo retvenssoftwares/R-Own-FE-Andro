@@ -94,7 +94,7 @@
             android:id="@+id/edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile"
+            android:text="Loading..."
             android:layout_marginStart="13dp"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="14dp"
