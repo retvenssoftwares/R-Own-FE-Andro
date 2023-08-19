@@ -16,11 +16,13 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.AddMemberData
 import app.retvens.rown.DataCollections.FeedCollection.AddUserDataClass
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.ResponseGroup
+import app.retvens.rown.DataCollections.removeMember
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.TimesStamp
@@ -72,7 +74,11 @@ class MembersCommunityDetailsActivity : AppCompatActivity() {
         number.add(phone)
         userId.add(user_id)
 
-        binding.switchToCommunity.text = "Joined"
+        binding.switchToCommunity.text = "Leave Community"
+
+        binding.joinCommunity.setOnClickListener {
+                removeUser(user_id,grpID)
+        }
 
         binding.lll6.visibility = View.VISIBLE
         binding.mapShow.visibility = View.VISIBLE
@@ -96,6 +102,33 @@ class MembersCommunityDetailsActivity : AppCompatActivity() {
         }
 
         getCommunityDetails(groupId.toString())
+    }
+
+    private fun removeUser(userId: String, groupId: String) {
+
+        Log.e("userid",userId)
+        Log.e("groupId",groupId)
+
+        val remove = RetrofitBuilder.retrofitBuilder.removeMember(groupId, removeMember(userId))
+
+        remove.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+//                    Toast.makeText(requireContext(),response.message,Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this@MembersCommunityDetailsActivity,DashBoardActivity::class.java))
+                }else{
+                    Log.e("error",response.message().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Log.e("error",t.message.toString())
+            }
+        })
     }
 
     private fun getCommunityDetails(groupId: String?) {
