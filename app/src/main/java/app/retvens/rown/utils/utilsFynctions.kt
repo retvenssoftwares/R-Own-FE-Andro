@@ -238,8 +238,10 @@ fun compressImage(imageUri: Uri, context: Context): Uri? {
         val imageBitmap: Bitmap =
             MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
 
+        val compressedDisplayName = "compressed_${System.currentTimeMillis()}.jpg" // Unique display name
+
         val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "compressed_image.jpg")
+            put(MediaStore.Images.Media.DISPLAY_NAME, compressedDisplayName)
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
         }
 
@@ -254,7 +256,7 @@ fun compressImage(imageUri: Uri, context: Context): Uri? {
 
             compressed = compressedUri
 
-            // You can also send a broadcast to update the media scanner if needed
+            // Update the media scanner
             MediaScannerConnection.scanFile(context, arrayOf(compressedUri.toString()), null, null)
         }
     } catch (e: IOException) {
