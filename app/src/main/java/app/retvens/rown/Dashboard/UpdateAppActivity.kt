@@ -17,7 +17,6 @@ class UpdateAppActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val updateLink = intent.getStringExtra("updateLink")
-        Toast.makeText(applicationContext, "$updateLink", Toast.LENGTH_SHORT).show()
         binding.update.setOnClickListener {
             val uri : Uri = Uri.parse("$updateLink")
             val intent = Intent(Intent.ACTION_VIEW, uri)
