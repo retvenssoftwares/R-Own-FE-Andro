@@ -147,25 +147,27 @@ class PostsViewActivity : AppCompatActivity() {
         likeButton.setOnClickListener {
 
             if (isLike) {
+                like = "liked"
+                isLike = false
+                likeButton.setImageResource(R.drawable.liked_vectore)
+                count += 1
+                like_count.text = count.toString()
+                like_count.visibility = View.VISIBLE
                 postLike(postIds, this) {
-                    like = "liked"
-                    isLike = false
-                    likeButton.setImageResource(R.drawable.liked_vectore)
-                    count += 1
-                    like_count.text = count.toString()
-                    like_count.visibility = View.VISIBLE
+
                 }
             } else {
+                like = "not liked"
+                isLike = true
+                likeButton.setImageResource(R.drawable.svg_like_post)
+                likeButton.setColorFilter(resources.getColor(android.R.color.white), PorterDuff.Mode.SRC_IN)
+                count -= 1
+                if (count == 0){
+                    like_count.visibility = View.GONE
+                }
+                like_count.text = count.toString()
                 postLike(postIds, this) {
-                    like = "not liked"
-                    isLike = true
-                    likeButton.setImageResource(R.drawable.svg_like_post)
-                    likeButton.setColorFilter(resources.getColor(android.R.color.white), PorterDuff.Mode.SRC_IN)
-                    count -= 1
-                    if (count == 0){
-                        like_count.visibility = View.GONE
-                    }
-                    like_count.text = count.toString()
+
                 }
             }
         }

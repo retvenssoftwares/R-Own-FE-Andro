@@ -1,7 +1,10 @@
 package app.retvens.rown.NavigationFragments.home.postDetails
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -76,7 +80,8 @@ class PostDetailsActivityNotification : AppCompatActivity(),
     private var location = ""
     private var postPic:ArrayList<String> = ArrayList()
     private var role = ""
-
+    private lateinit var progressDialog:Dialog
+    private lateinit var commentC:TextView
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("MissingInflatedId")
@@ -85,6 +90,22 @@ class PostDetailsActivityNotification : AppCompatActivity(),
         setContentView(R.layout.activity_post_details)
 
         val allhandler = Handler()
+
+        progressDialog = Dialog(this)  // Use 'this' instead of 'applicationContext'
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+        Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
+        runOnUiThread {
+            progressDialog.show()
+        }
+
+        val finalhandler = Handler()
+        finalhandler.postDelayed({
+             progressDialog.dismiss()
+        },2000)
 
 
         findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener {
@@ -102,10 +123,10 @@ class PostDetailsActivityNotification : AppCompatActivity(),
         likeButton = findViewById<ImageView>(R.id.like_post)
         likedAnimation = findViewById<ImageView>(R.id.likedAnimation)
         val commentButtom = findViewById<ImageView>(R.id.comment)
-        val viewPager = findViewById<ViewPager>(R.id.viewPager)
+
         indicator = findViewById<CircleIndicator>(R.id.indicator)
         likeCountText = findViewById<TextView>(R.id.like_count)
-        val commentC = findViewById<TextView>(R.id.comment_count)
+        commentC = findViewById<TextView>(R.id.comment_count)
         time = findViewById<TextView>(R.id.post_time)
         postLocation = findViewById<TextView>(R.id.location)
 
@@ -133,14 +154,8 @@ class PostDetailsActivityNotification : AppCompatActivity(),
             }
         }
 
-        val pichandler = Handler()
 
-        pichandler.postDelayed({
-            if (profilePic.isNotEmpty()) {
-                Glide.with(applicationContext).load(profilePic).into(profile)
-            } else {
-                profile.setImageResource(R.drawable.svg_user)
-            }},100)
+
 
 
 //        profile.setOnClickListener {
@@ -187,12 +202,8 @@ class PostDetailsActivityNotification : AppCompatActivity(),
 
         val counthandler = Handler()
 
-        counthandler.postDelayed({
 
-            likeCountText.text = likeCount.toString()
-            commentC.text = commentCount.toString()
-        },
-            100)
+
 
 
 
@@ -212,20 +223,8 @@ class PostDetailsActivityNotification : AppCompatActivity(),
 
         Log.e("img",postPic.toString())
 
-        val handler2 = Handler()
-        handler2.postDelayed({
-            viewPagerAdapter = ImageSlideActivityAdapter(baseContext, postPic!!)
-            viewPager.adapter = viewPagerAdapter
-            viewPagerAdapter.setOnImageClickListener(this)
-        },100)
 
 
-
-        if (postPic.size > 1) {
-            indicator.setViewPager(viewPager)
-        } else {
-            indicator.visibility = View.GONE
-        }
 
 
 
@@ -242,24 +241,26 @@ class PostDetailsActivityNotification : AppCompatActivity(),
 
         likeButton.setOnClickListener {
             if (isLike) {
-                postLike(postId, applicationContext) {
-                    isLike = false
-                    likeButton.setImageResource(R.drawable.liked_vectore)
-                    likeCount += 1
+                isLike = false
+                likeButton.setImageResource(R.drawable.liked_vectore)
+                likeCount += 1
 //                    post.Like_count = count.toString()
-                    likeCountText.text = likeCount.toString()
-                    likeCountText.visibility = View.VISIBLE
+                likeCountText.text = likeCount.toString()
+                likeCountText.visibility = View.VISIBLE
+                postLike(postId, applicationContext) {
+
                 }
             } else {
-                postLike(postId, applicationContext) {
-                    isLike = true
-                    likeButton.setImageResource(R.drawable.svg_like_post)
-                    likeCount -= 1
+                isLike = true
+                likeButton.setImageResource(R.drawable.svg_like_post)
+                likeCount -= 1
 //                    post.Like_count = count.toString()
-                    likeCountText.text = likeCount.toString()
-                    if (likeCount == 0){
-                        likeCountText.visibility = View.GONE
-                    }
+                likeCountText.text = likeCount.toString()
+                if (likeCount == 0){
+                    likeCountText.visibility = View.GONE
+                }
+                postLike(postId, applicationContext) {
+
                 }
             }
         }
@@ -302,7 +303,8 @@ class PostDetailsActivityNotification : AppCompatActivity(),
 
         val getpost = RetrofitBuilder.feedsApi.getPostData(userId ,postId)
 
-        getpost.enqueue(object : Callback<List<PostItem>?> {
+        getpost.enqueue(object : Callback<List<PostItem>?>,
+            ImageSlideActivityAdapter.OnImageClickListener {
             override fun onResponse(
                 call: Call<List<PostItem>?>,
                 response: Response<List<PostItem>?>
@@ -321,6 +323,28 @@ class PostDetailsActivityNotification : AppCompatActivity(),
                         user_id = response.user_id
                         response.media.forEach {
                             postPic.add(it.post)
+                        }
+                        val viewPager = findViewById<ViewPager>(R.id.viewPager)
+                        viewPagerAdapter = ImageSlideActivityAdapter(baseContext, postPic!!)
+                        viewPager.adapter = viewPagerAdapter
+                        viewPagerAdapter.setOnImageClickListener(this)
+                        viewPagerAdapter.notifyDataSetChanged()
+
+                        if (profilePic.isNotEmpty())
+                        {
+                            Glide.with(applicationContext).load(profilePic).into(profile)
+                        } else {
+                            profile.setImageResource(R.drawable.svg_user)
+                        }
+
+                        likeCountText.text = likeCount.toString()
+                        commentC.text = commentCount.toString()
+
+
+                        if (postPic.size > 1) {
+                            indicator.setViewPager(viewPager)
+                        } else {
+                            indicator.visibility = View.GONE
                         }
                         role = response.Role
 
@@ -342,6 +366,32 @@ class PostDetailsActivityNotification : AppCompatActivity(),
 
             override fun onFailure(call: Call<List<PostItem>?>, t: Throwable) {
                 Log.e("error",t.message.toString())
+            }
+
+            override fun imageClick(CTCFrBo: String) {
+                if (CTCFrBo == "image"){
+                    val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_in_bottom)
+                    likedAnimation.startAnimation(anim)
+                    likedAnimation.visibility = View.VISIBLE
+
+                    var count = likeCount
+                    if (isLike){
+                        isLike = false
+                        likeButton.setImageResource(R.drawable.liked_vectore)
+                        count += 1
+                        likeCountText.text = count.toString()
+                        likeCountText.visibility = View.VISIBLE
+                        postLike(postId, applicationContext) {
+
+                        }
+                    }
+
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.postDelayed({
+                        val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_out_bottom)
+                        likedAnimation.startAnimation(anim)
+                        likedAnimation.visibility = View.GONE }, 1000)
+                }
             }
         })
     }
@@ -428,6 +478,11 @@ class PostDetailsActivityNotification : AppCompatActivity(),
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this,DashBoardActivity::class.java))
+    }
+
     fun convertTimeToText(dataDate: String): String? {
         var convTime: String? = null
         val prefix = ""
@@ -468,27 +523,6 @@ class PostDetailsActivityNotification : AppCompatActivity(),
     }
 
     override fun imageClick(CTCFrBo: String) {
-        if (CTCFrBo == "image"){
-            val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_in_bottom)
-            likedAnimation.startAnimation(anim)
-            likedAnimation.visibility = View.VISIBLE
 
-            var count = likeCount
-            if (isLike){
-                postLike(postId, applicationContext) {
-                    isLike = false
-                    likeButton.setImageResource(R.drawable.liked_vectore)
-                    count += 1
-                    likeCountText.text = count.toString()
-                    likeCountText.visibility = View.VISIBLE
-                }
-            }
-
-            val handler = Handler(Looper.getMainLooper())
-            handler.postDelayed({
-                val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_out_bottom)
-                likedAnimation.startAnimation(anim)
-                likedAnimation.visibility = View.GONE }, 1000)
-        }
     }
 }

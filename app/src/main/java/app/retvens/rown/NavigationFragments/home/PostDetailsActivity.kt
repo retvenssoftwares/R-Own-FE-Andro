@@ -272,24 +272,26 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         likeButton.setOnClickListener {
             likeButton.setImageResource(R.drawable.liked_vectore)
             if (isLike) {
-                postLike(postId, applicationContext) {
-                    isLike = false
-                    likeCount += 1
+                isLike = false
+                likeCount += 1
 //                    post.Like_count = count.toString()
-                    likeCountText.text = likeCount.toString()
-                    likeCountText.visibility = View.VISIBLE
+                likeCountText.text = likeCount.toString()
+                likeCountText.visibility = View.VISIBLE
+                postLike(postId, applicationContext) {
+
 
                 }
             } else {
                 likeButton.setImageResource(R.drawable.svg_like_post)
-                postLike(postId, applicationContext) {
-                    isLike = true
-                    likeCount -= 1
-                    if (likeCount == 0){
-                        likeCountText.visibility = View.GONE
-                    }
+                isLike = true
+                likeCount -= 1
+                if (likeCount == 0){
+                    likeCountText.visibility = View.GONE
+                }
 //                    post.Like_count = count.toString()
-                    likeCountText.text = likeCount.toString()
+                likeCountText.text = likeCount.toString()
+                postLike(postId, applicationContext) {
+
                 }
             }
         }

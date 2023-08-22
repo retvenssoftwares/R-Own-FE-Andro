@@ -321,30 +321,32 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.likePost.setOnClickListener {
 
                 if (like) {
+                    banner.like = "liked"
+                    like = false
+                    banner.islike = false
+                    binding.likePost.setImageResource(R.drawable.liked_vectore)
+                    count += 1
+                    binding.likeCount.visibility = View.VISIBLE
+                    post.Like_count = count.toString()
+                    binding.likeCount.text = count.toString()
                     postLike(banner.post_id, context) {
-                        banner.like = "liked"
-                        like = false
-                        banner.islike = false
-                        binding.likePost.setImageResource(R.drawable.liked_vectore)
-                        count += 1
-                        binding.likeCount.visibility = View.VISIBLE
-                        post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
+
                     }
 //                        onItemClickListener?.onItemClick(banner)
                 } else {
-                    postLike(banner.post_id, context) {
-                        banner.like = "not liked"
-                        like = true
-                        banner.islike = true
-                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+                    banner.like = "not liked"
+                    like = true
+                    banner.islike = true
+                    binding.likePost.setImageResource(R.drawable.svg_like_post)
 //                            count = post.Like_count.toInt()
-                        count -= 1
-                        if (count == 0){
-                            binding.likeCount.visibility = View.GONE
-                        }
-                        post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
+                    count -= 1
+                    if (count == 0){
+                        binding.likeCount.visibility = View.GONE
+                    }
+                    post.Like_count = count.toString()
+                    binding.likeCount.text = count.toString()
+                    postLike(banner.post_id, context) {
+
                     }
                 }
             }
@@ -632,30 +634,31 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.likePost.setOnClickListener {
 
                 if (like) {
-                    postLike(post.post_id, context) {
-                        post.like = "liked"
-                        like = false
-                        binding.likePost.setImageResource(R.drawable.liked_vectore)
-                        count += 1
-                        binding.likeCount.visibility = View.VISIBLE
+                    post.like = "liked"
+                    like = false
+                    binding.likePost.setImageResource(R.drawable.liked_vectore)
+                    count += 1
+                    binding.likeCount.visibility = View.VISIBLE
 //                            post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
+                    binding.likeCount.text = count.toString()
+                    postLike(post.post_id, context) {
+
                     }
 //                        onItemClickListener?.onItemClick(banner)
                 } else {
-
-                    postLike(post.post_id, context) {
-                        post.like = "not liked"
-                        like = true
-                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+                    post.like = "not liked"
+                    like = true
+                    binding.likePost.setImageResource(R.drawable.svg_like_post)
 //                            count = post.Like_count.toInt()
 //                            post.Like_count = count.toString()
-                        count -= 1
+                    count -= 1
 
-                        if (count == 0){
-                            binding.likeCount.visibility = View.GONE
-                        }
-                        binding.likeCount.text = count.toString()
+                    if (count == 0){
+                        binding.likeCount.visibility = View.GONE
+                    }
+                    binding.likeCount.text = count.toString()
+                    postLike(post.post_id, context) {
+
                     }
 
 //                        onItemClickListener?.onItemClick(banner)
@@ -673,14 +676,15 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                     binding.likedAnimation.visibility = View.VISIBLE
 
                     if (like) {
-                        postLike(post.post_id, context) {
-                            post.like = "liked"
-                            like = false
-                            binding.likePost.setImageResource(R.drawable.liked_vectore)
-                            count += 1
-                            binding.likeCount.visibility = View.VISIBLE
+                        post.like = "liked"
+                        like = false
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+                        count += 1
+                        binding.likeCount.visibility = View.VISIBLE
 //                            post.Like_count = count.toString()
-                            binding.likeCount.text = count.toString()
+                        binding.likeCount.text = count.toString()
+                        postLike(post.post_id, context) {
+
                         }
                     }
                     val handler = Handler(Looper.getMainLooper())
@@ -837,29 +841,30 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.likePost.setOnClickListener {
 
                 if (like) {
-                    postLike(banner.post_id, context) {
-                        banner.like = "liked"
-                        like = false
-                        binding.likePost.setImageResource(R.drawable.liked_vectore)
-                        count += 1
-                        binding.likeCount.visibility = View.VISIBLE
+                    banner.like = "liked"
+                    like = false
+                    binding.likePost.setImageResource(R.drawable.liked_vectore)
+                    count += 1
+                    binding.likeCount.visibility = View.VISIBLE
 //                            post.Like_count = count.toString()
-                        binding.likeCount.text = count.toString()
+                    binding.likeCount.text = count.toString()
+                    postLike(banner.post_id, context) {
+
                     }
 //                        onItemClickListener?.onItemClick(banner)
                 } else {
-
-                    postLike(banner.post_id, context) {
-                        banner.like = "not liked"
-                        like = true
-                        binding.likePost.setImageResource(R.drawable.svg_like_post)
+                    banner.like = "not liked"
+                    like = true
+                    binding.likePost.setImageResource(R.drawable.svg_like_post)
 //                            count = post.Like_count.toInt()
 //                            post.Like_count = count.toString()
-                        count -= 1
-                        if (count == 0){
-                            binding.likeCount.visibility = View.GONE
-                        }
-                        binding.likeCount.text = count.toString()
+                    count -= 1
+                    if (count == 0){
+                        binding.likeCount.visibility = View.GONE
+                    }
+                    binding.likeCount.text = count.toString()
+                    postLike(banner.post_id, context) {
+
                     }
                 }
             }
@@ -1873,16 +1878,15 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         binding.savePost.setImageResource(R.drawable.svg_save_post)
                         onLiked.invoke(1)
                     }
-                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                     Log.d("savePost", "${response.toString()} ${response.body().toString()}")
                 } else {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.code().toString())
                 }
             }
 
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
-                Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+               Log.e("error",t.message.toString())
             }
         })
     }
@@ -1991,16 +1995,15 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                         binding.savePost.setImageResource(R.drawable.svg_save_post)
                         onLiked.invoke(1)
                     }
-                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                     Log.d("savePost", "${response.toString()} ${response.body().toString()}")
                 } else {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                   Log.e("error",response.code().toString())
                 }
             }
 
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
-                Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+                Log.e("error",t.message.toString())
             }
         })
     }

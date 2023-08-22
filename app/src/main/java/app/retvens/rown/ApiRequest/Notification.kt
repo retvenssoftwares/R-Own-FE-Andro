@@ -21,3 +21,7 @@ interface Notification {
     ) : Call<List<PersonalNotificationDataItem>>
 
 }
+
+interface SmsListener {
+    fun messageReceived(messageText: String)
+}

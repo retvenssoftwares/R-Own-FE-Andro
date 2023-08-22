@@ -7,12 +7,17 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -738,9 +743,37 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
     }
 
 
+
     override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
+        openBottomsheet()
+    }
+
+    private fun openBottomsheet() {
+        val dialogLanguage = Dialog(this)
+        dialogLanguage.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialogLanguage.setContentView(R.layout.bottomsheet_exit_app)
+        dialogLanguage.setCancelable(true)
+
+        dialogLanguage.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialogLanguage.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogLanguage.window?.attributes?.windowAnimations = R.style.DailogAnimation
+        dialogLanguage.window?.setGravity(Gravity.BOTTOM)
+        dialogLanguage.show() // Show the dialog
+
+        dialogLanguage.findViewById<TextView>(R.id.close).setOnClickListener {
+            dialogLanguage.dismiss()
+            finishAffinity()
+        }
+        dialogLanguage.findViewById<TextView>(R.id.not).setOnClickListener {
+            dialogLanguage.dismiss()
+        }
+
+
+
+        // You can optionally remove the finishAffinity() call from here
     }
 
     override fun Mesibo_onMessage(p0: MesiboMessage) {
@@ -768,6 +801,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
     override fun Mesibo_onMessageUpdate(p0: MesiboMessage) {
 
     }
+
 
 
 }

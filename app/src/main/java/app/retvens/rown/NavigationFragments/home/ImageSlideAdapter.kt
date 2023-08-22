@@ -74,14 +74,15 @@ class ImageSlideAdapter(private val context: Context, private var imageList: Lis
                 binding.likedAnimation.visibility = View.VISIBLE
                     var count:Int =  banner.Like_count.toInt()
                     if(banner.islike){
+                        banner.like = "liked"
+                        banner.islike = false
+                        binding.likePost.setImageResource(R.drawable.liked_vectore)
+                        count += 1
+                        banner.Like_count = count.toString()
+                        binding.likeCount.text = count.toString()
+                        binding.likeCount.visibility = View.VISIBLE
                         app.retvens.rown.utils.postLike(banner.post_id, context) {
-                            banner.like = "liked"
-                            banner.islike = false
-                            binding.likePost.setImageResource(R.drawable.liked_vectore)
-                            count += 1
-                            banner.Like_count = count.toString()
-                            binding.likeCount.text = count.toString()
-                            binding.likeCount.visibility = View.VISIBLE
+
                         }
                     }
                 val handler = Handler(Looper.getMainLooper())

@@ -50,24 +50,26 @@ class StatusDetailsActivity : AppCompatActivity() {
 
         binding.likePost.setOnClickListener {
             if (isLike) {
-                postLike(postId, applicationContext) {
-                    isLike = false
-                    binding.likePost.setImageResource(R.drawable.liked_vectore)
-                    likeCount += 1
+                isLike = false
+                binding.likePost.setImageResource(R.drawable.liked_vectore)
+                likeCount += 1
 //                    post.Like_count = count.toString()
-                    binding.likeCount.text = likeCount.toString()
-                    binding.likeCount.visibility = View.VISIBLE
+                binding.likeCount.text = likeCount.toString()
+                binding.likeCount.visibility = View.VISIBLE
+                postLike(postId, applicationContext) {
+
                 }
             } else {
-                postLike(postId, applicationContext) {
-                    isLike = true
-                    binding.likePost.setImageResource(R.drawable.svg_like_post)
-                    likeCount -= 1
+                isLike = true
+                binding.likePost.setImageResource(R.drawable.svg_like_post)
+                likeCount -= 1
 //                    post.Like_count = count.toString()
-                    binding.likeCount.text = likeCount.toString()
-                    if (likeCount == 0){
-                        binding.likeCount.visibility = View.GONE
-                    }
+                binding.likeCount.text = likeCount.toString()
+                if (likeCount == 0){
+                    binding.likeCount.visibility = View.GONE
+                }
+                postLike(postId, applicationContext) {
+
                 }
             }
         }

@@ -196,30 +196,31 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context,val co
 
                 holder.likeButton.setOnClickListener {
                     if (like) {
-                        postLike(item.post_id, context) {
-                            item.like = "liked"
-                            like = false
-                            holder.likeButton.setImageResource(R.drawable.liked_vectore)
-                            count += 1
+                        item.like = "liked"
+                        like = false
+                        holder.likeButton.setImageResource(R.drawable.liked_vectore)
+                        count += 1
 
-                                holder.likeCount.visibility = View.VISIBLE
+                        holder.likeCount.visibility = View.VISIBLE
 
 //                            post.Like_count = count.toString()
-                            holder.likeCount.text = count.toString()
+                        holder.likeCount.text = count.toString()
+                        postLike(item.post_id, context) {
+
                         }
                     } else {
-
-                        postLike(item.post_id, context) {
-                            item.like = "not liked"
-                            like = true
-                            holder.likeButton.setImageResource(R.drawable.svg_like_post)
+                        item.like = "not liked"
+                        like = true
+                        holder.likeButton.setImageResource(R.drawable.svg_like_post)
 //                            count = post.Like_count.toInt()
 //                            post.Like_count = count.toString()
-                            count -= 1
-                            if (count == 0){
-                                holder.likeCount.visibility = View.GONE
-                            }
-                            holder.likeCount.text = count.toString()
+                        count -= 1
+                        if (count == 0){
+                            holder.likeCount.visibility = View.GONE
+                        }
+                        holder.likeCount.text = count.toString()
+                        postLike(item.post_id, context) {
+
                         }
                     }
                 }
@@ -351,27 +352,29 @@ class StatusAdapter(val listS : ArrayList<PostItem>, val context: Context,val co
 
                 holder.likeButton.setOnClickListener {
                     if (like) {
-                        postLike(item.post_id, context) {
-                            item.like = "liked"
-                            like = false
-                            holder.likeButton.setImageResource(R.drawable.liked_vectore)
-                            count += 1
-                            holder.likeCount.visibility = View.VISIBLE
+                        item.like = "liked"
+                        like = false
+                        holder.likeButton.setImageResource(R.drawable.liked_vectore)
+                        count += 1
+                        holder.likeCount.visibility = View.VISIBLE
 //                            post.Like_count = count.toString()
-                            holder.likeCount.text = count.toString()
+                        holder.likeCount.text = count.toString()
+                        postLike(item.post_id, context) {
+
                         }
                     } else {
-                        postLike(item.post_id, context) {
-                            item.like = "not liked"
-                            like = true
-                            holder.likeButton.setImageResource(R.drawable.svg_like_post)
+                        item.like = "not liked"
+                        like = true
+                        holder.likeButton.setImageResource(R.drawable.svg_like_post)
 //                            count = post.Like_count.toInt()
 //                            post.Like_count = count.toString()
-                            count -= 1
-                            if (count == 0) {
-                                holder.likeCount.visibility = View.GONE
-                            }
-                            holder.likeCount.text = count.toString()
+                        count -= 1
+                        if (count == 0) {
+                            holder.likeCount.visibility = View.GONE
+                        }
+                        holder.likeCount.text = count.toString()
+                        postLike(item.post_id, context) {
+
                         }
                     }
                 }
