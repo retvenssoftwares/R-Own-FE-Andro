@@ -18,6 +18,10 @@ class AboutProfileActivity : AppCompatActivity() {
 
         binding.location.setText(intent.getStringExtra("location"))
 
+        binding.communityBackBtn.setOnClickListener {
+            onBackPressed()
+        }
+
         val verification = intent.getStringExtra("verification").toString()
 
         if (verification == "false"){

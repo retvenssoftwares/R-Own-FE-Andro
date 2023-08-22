@@ -80,8 +80,9 @@ class BottomSheetHotelierProfileSetting : BottomSheetDialogFragment() {
         val handler = Handler()
         handler.postDelayed({
             if (completion == "100"){
+                edittext.text = "Edit Your Profile"
                 edit.setOnClickListener {
-                    edittext.text = "Edit Your Profile"
+
                     mListener?.bottomSheetHotelierProfileSettingClick("edit")
                     dismiss()
                 }

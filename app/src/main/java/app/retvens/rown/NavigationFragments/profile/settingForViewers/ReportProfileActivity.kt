@@ -27,6 +27,10 @@ class ReportProfileActivity : AppCompatActivity() {
 
         val userId = intent.getStringExtra("user_id")
 
+        binding.communityBackBtn.setOnClickListener {
+            onBackPressed()
+        }
+
         binding.wrongWith.setOnClickListener {
 
             val bottomSheet = BottomSheetReport(userId!!)
