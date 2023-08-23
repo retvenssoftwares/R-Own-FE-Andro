@@ -72,13 +72,13 @@ class BlogsChildAdapter(
                             like = !like
                         }
                     }
-                }
-                if (isStaticSaved) {
-                    isStaticSaved = !isStaticSaved
-                    binding.blogsCardLike.setImageResource(R.drawable.svg_heart_liked)
-                }else {
-                    isStaticSaved = !isStaticSaved
-                    binding.blogsCardLike.setImageResource(R.drawable.svg_heart)
+                    if (isStaticSaved) {
+                        isStaticSaved = !isStaticSaved
+                        binding.blogsCardLike.setImageResource(R.drawable.svg_heart_liked)
+                    }else {
+                        isStaticSaved = !isStaticSaved
+                        binding.blogsCardLike.setImageResource(R.drawable.svg_heart)
+                    }
                 }
             }
 

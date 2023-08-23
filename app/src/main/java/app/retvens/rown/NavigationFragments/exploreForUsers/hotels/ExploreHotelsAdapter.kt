@@ -52,6 +52,7 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
     override fun onBindViewHolder(holder: ExploreHotelsViewHolder, position: Int) {
 
         var like = true
+        var isStaticSaved = true
         var operatioin = "push"
 
         holder.name.text = listS[position].hotelName
@@ -67,10 +68,12 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
         if (listS[position].saved == "saved"){
             operatioin = "pop"
             like = false
+            isStaticSaved = false
             holder.like.setImageResource(R.drawable.svg_heart_liked)
         } else {
             operatioin = "push"
             like = true
+            isStaticSaved = true
             holder.like.setImageResource(R.drawable.svg_heart)
         }
 
@@ -83,6 +86,13 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
                     operatioin = "push"
                     like = !like
                 }
+            }
+            if (isStaticSaved) {
+                isStaticSaved = !isStaticSaved
+                holder.like.setImageResource(R.drawable.svg_heart_liked)
+            }else {
+                isStaticSaved = !isStaticSaved
+                holder.like.setImageResource(R.drawable.svg_heart)
             }
         }
 
@@ -113,12 +123,13 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
                 if (response.isSuccessful){
                     if (like){
                         holder.like.setImageResource(R.drawable.svg_heart_liked)
+                        Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(0)
                     } else {
                         holder.like.setImageResource(R.drawable.svg_heart)
+                        Toast.makeText(context, "UnSaved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(1)
                     }
-                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

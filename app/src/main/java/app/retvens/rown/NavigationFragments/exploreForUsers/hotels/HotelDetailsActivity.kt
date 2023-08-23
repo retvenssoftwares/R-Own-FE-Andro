@@ -21,6 +21,7 @@ class HotelDetailsActivity : AppCompatActivity() {
     lateinit var binding : ActivityHotelDetailsBinding
 
     private var liked = true
+    private var isStaticSaved = true
     private var operatioin = "push"
 
     private lateinit var hotelName : String
@@ -53,10 +54,12 @@ class HotelDetailsActivity : AppCompatActivity() {
         if (saved == "saved"){
             operatioin = "pop"
             liked = false
+            isStaticSaved = false
             binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
         } else {
             operatioin = "push"
             liked = true
+            isStaticSaved = true
             binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
         }
 
@@ -75,6 +78,13 @@ class HotelDetailsActivity : AppCompatActivity() {
 
         binding.hotelCardLike.setOnClickListener {
             saveHotel(hotelId)
+            if (isStaticSaved) {
+                isStaticSaved = !isStaticSaved
+                binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
+            }else {
+                isStaticSaved = !isStaticSaved
+                binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
+            }
         }
         binding.openReview.setOnClickListener {
             val intent = Intent(applicationContext, HotelReviewsActivity::class.java)

@@ -31,6 +31,7 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
         fun bindHotelSectionView(recyclerItem: HotelData){
 
             var like = true
+            var isStaticSaved = true
             var operatioin = "push"
 
             Log.e("totalHotel",hotelSectionRecyclerData.toString())
@@ -46,10 +47,12 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
             if (recyclerItem.saved == "saved"){
                 operatioin = "pop"
                 like = false
+                isStaticSaved = false
                 binding.cardLike.setImageResource(R.drawable.svg_heart_liked)
             } else {
                 operatioin = "push"
                 like = true
+                isStaticSaved = true
                 binding.cardLike.setImageResource(R.drawable.svg_heart)
             }
 
@@ -62,6 +65,13 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
                         operatioin = "push"
                         like = !like
                     }
+                }
+                if (isStaticSaved) {
+                    isStaticSaved = !isStaticSaved
+                    binding.cardLike.setImageResource(R.drawable.svg_heart_liked)
+                }else {
+                    isStaticSaved = !isStaticSaved
+                    binding.cardLike.setImageResource(R.drawable.svg_heart)
                 }
             }
 
