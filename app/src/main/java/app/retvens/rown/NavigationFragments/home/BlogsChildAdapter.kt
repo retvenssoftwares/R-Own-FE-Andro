@@ -39,6 +39,7 @@ class BlogsChildAdapter(
             Log.e("totalBlogs",blogsRecyclerData.toString())
 
             var like = true
+            var isStaticSaved = true
             var operatioin = "push"
 
             binding.blogCategory.text = recyclerItem.category_name
@@ -51,10 +52,12 @@ class BlogsChildAdapter(
             if (recyclerItem.saved == "saved"){
                 operatioin = "pop"
                 like = false
+                isStaticSaved = false
                 binding.blogsCardLike.setImageResource(R.drawable.svg_heart_liked)
             } else {
                 operatioin = "push"
                 like = true
+                isStaticSaved = true
                 binding.blogsCardLike.setImageResource(R.drawable.svg_heart)
             }
 
@@ -69,6 +72,13 @@ class BlogsChildAdapter(
                             like = !like
                         }
                     }
+                }
+                if (isStaticSaved) {
+                    isStaticSaved = !isStaticSaved
+                    binding.blogsCardLike.setImageResource(R.drawable.svg_heart_liked)
+                }else {
+                    isStaticSaved = !isStaticSaved
+                    binding.blogsCardLike.setImageResource(R.drawable.svg_heart)
                 }
             }
 
@@ -124,12 +134,13 @@ class BlogsChildAdapter(
                 if (response.isSuccessful){
                     if (like){
                         holder.blogsCardLike.setImageResource(R.drawable.svg_heart_liked)
+                        Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(0)
                     } else {
                         holder.blogsCardLike.setImageResource(R.drawable.svg_heart)
+                        Toast.makeText(context, "UnSaved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(1)
                     }
-                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

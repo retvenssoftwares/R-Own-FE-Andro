@@ -59,6 +59,7 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context,
     override fun onBindViewHolder(holder: ExploreBlogsViewHolder, position: Int) {
 //        getUserInfo(holder, listS[position].User_id)
         var like = true
+        var isStaticSaved = true
         var operatioin = "push"
 
         holder.blogCategory.text = listS[position].category_name
@@ -72,10 +73,12 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context,
         if (listS[position].saved == "saved"){
             operatioin = "pop"
             like = false
+            isStaticSaved = false
             holder.blogLike.setImageResource(R.drawable.svg_heart_liked)
         } else {
             operatioin = "push"
             like = true
+            isStaticSaved = true
             holder.blogLike.setImageResource(R.drawable.svg_heart)
         }
 
@@ -89,6 +92,13 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context,
                         operatioin = "push"
                         like = !like
                     }
+                }
+                if (isStaticSaved) {
+                    isStaticSaved = !isStaticSaved
+                    holder.blogLike.setImageResource(R.drawable.svg_heart_liked)
+                }else {
+                    isStaticSaved = !isStaticSaved
+                    holder.blogLike.setImageResource(R.drawable.svg_heart)
                 }
             }
         }
@@ -155,9 +165,11 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context,
                 if (response.isSuccessful){
                     if (like){
                         holder.blogLike.setImageResource(R.drawable.svg_heart_liked)
+                        Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(0)
                     } else {
                         holder.blogLike.setImageResource(R.drawable.svg_heart)
+                        Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(1)
                     }
 //                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()

@@ -51,6 +51,7 @@ class PostsViewActivity : AppCompatActivity() {
     lateinit var progressDialog:Dialog
     lateinit var savedPost : ImageView
     var save = true
+    var isStaticSaved = true
     var operatioin = "push"
 
     var isLike = true
@@ -183,16 +184,25 @@ class PostsViewActivity : AppCompatActivity() {
         if (saved == "saved"){
             operatioin = "pop"
             save = false
+            isStaticSaved = false
             savedPost.setImageResource(R.drawable.svg_saved)
         } else {
             operatioin = "push"
             save = true
+            isStaticSaved = true
             savedPost.setImageResource(R.drawable.svg_save_post)
             savedPost.setColorFilter(resources.getColor(android.R.color.white), PorterDuff.Mode.SRC_IN)
         }
 
         savedPost.setOnClickListener {
             savePosts(postId)
+            if (isStaticSaved) {
+                isStaticSaved = !isStaticSaved
+                savedPost.setImageResource(R.drawable.svg_saved)
+            }else {
+                isStaticSaved = !isStaticSaved
+                savedPost.setImageResource(R.drawable.svg_save_post)
+            }
         }
 
     }
@@ -271,15 +281,16 @@ class PostsViewActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     if (save){
                         savedPost.setImageResource(R.drawable.svg_saved)
+                        Toast.makeText(applicationContext, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         operatioin = "pop"
                         save = !save
                     } else {
                         savedPost.setImageResource(R.drawable.svg_save_post)
                         savedPost.setColorFilter(resources.getColor(android.R.color.white), PorterDuff.Mode.SRC_IN)
+                        Toast.makeText(applicationContext, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         operatioin = "push"
                         save = !save
                     }
-                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                     Log.d("savePost", "${response.toString()} ${response.body().toString()}")
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()

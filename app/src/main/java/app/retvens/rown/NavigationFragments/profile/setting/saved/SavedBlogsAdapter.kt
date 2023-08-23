@@ -99,7 +99,7 @@ class SavedBlogsAdapter(val listS : ArrayList<AllBlogsData>, val context: Contex
                         listS.remove(allBlogsData)
                         notifyDataSetChanged()
                     } catch (e : Exception){}
-                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

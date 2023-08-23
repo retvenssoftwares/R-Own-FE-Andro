@@ -61,6 +61,7 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
     private  var likeSaved = ""
     private var isLike = true
     var save = true
+    var isStaticSaved = true
     var operatioin = "push"
 
     @SuppressLint("MissingInflatedId")
@@ -238,10 +239,12 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         if (isSaved == "saved" || savedFrag == "saved"){
             operatioin = "pop"
             save = false
+            isStaticSaved = false
             savedPost.setImageResource(R.drawable.svg_saved)
         } else if (isSaved == "not saved" || savedFrag == "not saved") {
             operatioin = "push"
             save = true
+            isStaticSaved = true
             savedPost.setImageResource(R.drawable.svg_save_post)
         }
 
@@ -323,6 +326,13 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
         savedPost.setOnClickListener {
             savePosts(postId)
+            if (isStaticSaved) {
+                isStaticSaved = !isStaticSaved
+                savedPost.setImageResource(R.drawable.svg_saved)
+            }else {
+                isStaticSaved = !isStaticSaved
+                savedPost.setImageResource(R.drawable.svg_save_post)
+            }
         }
     }
 
@@ -349,14 +359,15 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
                 if (response.isSuccessful){
                     if (save){
                         savedPost.setImageResource(R.drawable.svg_saved)
+                        Toast.makeText(applicationContext, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         operatioin = "pop"
                         save = !save
                     } else {
                         savedPost.setImageResource(R.drawable.svg_save_post)
+                        Toast.makeText(applicationContext, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         operatioin = "push"
                         save = !save
                     }
-                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                     Log.d("savePost", "${response.toString()} ${response.body().toString()}")
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()

@@ -26,6 +26,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
 
     var isLiked = true
     var isSaved = true
+    var isStaticSaved = true
 
     var operatioin = "push"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,10 +52,12 @@ class BlogsDetailsActivity : AppCompatActivity() {
         if (saved == "saved"){
             operatioin = "pop"
             isSaved = false
+            isStaticSaved = false
             binding.savePost.setImageResource(R.drawable.svg_saved)
         } else {
             operatioin = "push"
             isSaved = true
+            isStaticSaved = true
             binding.savePost.setImageResource(R.drawable.svg_save_post)
         }
         if (like == "liked"){
@@ -87,6 +90,13 @@ class BlogsDetailsActivity : AppCompatActivity() {
         }
         binding.savePost.setOnClickListener {
             savePosts(blogId)
+            if (isStaticSaved) {
+                isStaticSaved = !isStaticSaved
+                binding.savePost.setImageResource(R.drawable.svg_saved)
+            }else {
+                isStaticSaved = !isStaticSaved
+                binding.savePost.setImageResource(R.drawable.svg_save_post)
+            }
         }
 
     }
@@ -117,7 +127,7 @@ class BlogsDetailsActivity : AppCompatActivity() {
 //                        isSaved = true
 //                        binding.savePost.setImageResource(R.drawable.svg_save_post)
 //                    }
-                    
+
                     if(res.get(0).like == "liked"){
                         isLiked = false
                         binding.likePost.setImageResource(R.drawable.liked_vectore)
@@ -155,11 +165,12 @@ class BlogsDetailsActivity : AppCompatActivity() {
                     if (isSaved) {
                         isSaved = !isSaved
                         binding.savePost.setImageResource(R.drawable.svg_saved)
+                        Toast.makeText(applicationContext, "Saved Successfully", Toast.LENGTH_SHORT).show()
                     }else {
                         isSaved = !isSaved
                         binding.savePost.setImageResource(R.drawable.svg_save_post)
+                        Toast.makeText(applicationContext, "UnSaved Successfully", Toast.LENGTH_SHORT).show()
                     }
-//                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                 }

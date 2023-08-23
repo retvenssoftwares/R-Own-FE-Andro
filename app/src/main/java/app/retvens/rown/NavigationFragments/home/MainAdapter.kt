@@ -78,6 +78,7 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
         RecyclerView.ViewHolder(binding.root) {
         fun bindBannerView(banner: PostItem, position: Int) {
             var save = true
+            var isStaticSaved = true
             var like = true
             var operatioin = "push"
 
@@ -158,13 +159,22 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             if (post.isSaved == "saved") {
                 operatioin = "pop"
                 save = false
+                isStaticSaved = false
                 binding.savePost.setImageResource(R.drawable.svg_saved)
             } else {
                 operatioin = "push"
                 save = true
+                isStaticSaved = true
                 binding.savePost.setImageResource(R.drawable.svg_save_post)
             }
             binding.savePost.setOnClickListener {
+                if (isStaticSaved) {
+                    isStaticSaved = !isStaticSaved
+                    binding.savePost.setImageResource(R.drawable.svg_saved)
+                }else {
+                    isStaticSaved = !isStaticSaved
+                    binding.savePost.setImageResource(R.drawable.svg_save_post)
+                }
                 if (post.post_id != null) {
                     savePosts(post.post_id, binding, operatioin, save) {
                         if (it == 0) {
@@ -766,6 +776,11 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
             binding.postTime.text = time
 
             binding.savePost.setOnClickListener {
+                if (save == false) {
+                    binding.savePost.setImageResource(R.drawable.svg_save_post)
+                } else {
+                    binding.savePost.setImageResource(R.drawable.svg_saved)
+                }
                 if (banner.post_id != null) {
                     saveStatus(banner.post_id, binding, operatioin, save) {
                         if (it == 0) {
@@ -1990,12 +2005,13 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 if (response.isSuccessful) {
                     if (like) {
                         binding.savePost.setImageResource(R.drawable.svg_saved)
+                    Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(0)
                     } else {
                         binding.savePost.setImageResource(R.drawable.svg_save_post)
+                        Toast.makeText(context, "UnSaved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(1)
                     }
-                    Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                     Log.d("savePost", "${response.toString()} ${response.body().toString()}")
                 } else {
                    Log.e("error",response.code().toString())
