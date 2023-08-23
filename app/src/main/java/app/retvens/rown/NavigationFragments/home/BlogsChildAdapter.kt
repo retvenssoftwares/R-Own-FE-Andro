@@ -138,11 +138,10 @@ class BlogsChildAdapter(
                         onLiked.invoke(0)
                     } else {
                         holder.blogsCardLike.setImageResource(R.drawable.svg_heart)
-                        Toast.makeText(context, "UnSaved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(1)
                     }
                 } else {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+
                 }
             }
 

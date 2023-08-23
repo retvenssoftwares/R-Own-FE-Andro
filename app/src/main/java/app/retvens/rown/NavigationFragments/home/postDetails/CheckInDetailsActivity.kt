@@ -226,4 +226,8 @@ class CheckInDetailsActivity : AppCompatActivity() {
         })
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this,DashBoardActivity::class.java))
+    }
 }

@@ -95,31 +95,31 @@ class BottomSheetAdapterPeople(val context: Context, var peopleList:ArrayList<Po
 
         holder.connect.setOnClickListener {
             if (holder.connect.text == "Remove"){
-
+                holder.connect.text = "Connect"
                 removeConnection(userId,user_id, context){
-                    holder.connect.text = "Connect"
+
                 }
 
             } else if (holder.connect.text == "Connect") {
-
+                holder.connect.text = "Requested"
+                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_own))
+                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
                 sendConnectionRequest(userId, context){
-                    holder.connect.text = "Requested"
-                    holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.blue_own))
-                    holder.connect.setTextColor(ContextCompat.getColor(context, R.color.green_own))
+
                 }
 
             } else  if (holder.connect.text == "Requested") {
-
+                holder.connect.text = "Connect"
+                holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
+                holder.connect.setTextColor(ContextCompat.getColor(context, R.color.blue_own))
                 removeConnRequest(userId, context){
-                    holder.connect.text = "Connect"
-                    holder.connect.setBackgroundColor(ContextCompat.getColor(context, R.color.green_own))
-                    holder.connect.setTextColor(ContextCompat.getColor(context, R.color.blue_own))
+
                 }
 
             } else if (holder.connect.text == "Accept") {
-
+                holder.connect.text = "Remove"
                 acceptRequest(userId, context){
-                    holder.connect.text = "Remove"
+
                 }
 
             }

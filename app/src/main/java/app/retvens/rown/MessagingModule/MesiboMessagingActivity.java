@@ -568,6 +568,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         }
     }
 
+
     private class ActionModeCallback implements ActionMode.Callback {
         private final String TAG;
 

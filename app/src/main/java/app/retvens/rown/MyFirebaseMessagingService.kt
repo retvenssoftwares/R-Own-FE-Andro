@@ -98,9 +98,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             MesiboApi.startMesibo(true)
             val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
             fullScreenIntent.putExtra(MesiboUI.PEER,address)
+            fullScreenIntent.putExtra("page","2")
             fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-            notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+            notificationBuilder.setContentIntent(fullScreenPendingIntent)
 
         }else{
 
@@ -109,29 +110,29 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 fullScreenIntent.putExtra("postId",postId)
                 fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+                notificationBuilder.setContentIntent(fullScreenPendingIntent)
             }else if (postType == "Check-in"){
                 val fullScreenIntent = Intent(this, CheckInDetailsActivity::class.java)
                 fullScreenIntent.putExtra("postId",postId)
                 fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+                notificationBuilder.setContentIntent(fullScreenPendingIntent)
             }else if (postType == "normal status"){
                 val fullScreenIntent = Intent(this, StatusDetailsActivity::class.java)
                 fullScreenIntent.putExtra("postId",postId)
                 fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+                notificationBuilder.setContentIntent(fullScreenPendingIntent)
             }else if (type == "request"){
                 val fullScreenIntent = Intent(this, ViewRequestsActivity::class.java)
                 fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+                notificationBuilder.setContentIntent(fullScreenPendingIntent)
             }else if (type == "connection"){
                 val fullScreenIntent = Intent(this, ViewConnectionsActivity::class.java)
                 fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-                notificationBuilder.setFullScreenIntent(fullScreenPendingIntent, true)
+                notificationBuilder.setContentIntent(fullScreenPendingIntent)
             }
 
         }

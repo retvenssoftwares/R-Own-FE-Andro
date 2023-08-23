@@ -81,6 +81,13 @@ class BlogsDetailsActivity : AppCompatActivity() {
 
         binding.likePost.setOnClickListener {
             likePost(blogId)
+            if (isLiked) {
+                isLiked = !isLiked
+                binding.likePost.setImageResource(R.drawable.liked_vectore)
+            }else {
+                isLiked = !isLiked
+                binding.likePost.setImageResource(R.drawable.svg_like_post)
+            }
         }
 //        Toast.makeText(applicationContext, blogId.toString(), Toast.LENGTH_SHORT).show()
         binding.comment.setOnClickListener {
@@ -172,12 +179,12 @@ class BlogsDetailsActivity : AppCompatActivity() {
                         Toast.makeText(applicationContext, "UnSaved Successfully", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+
                 }
             }
 
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+
             }
         })
     }
@@ -194,20 +201,14 @@ class BlogsDetailsActivity : AppCompatActivity() {
                 response: Response<UserProfileResponse?>
             ) {
                 if (response.isSuccessful){
-                    if (isLiked) {
-                        isLiked = !isLiked
-                        binding.likePost.setImageResource(R.drawable.liked_vectore)
-                    }else {
-                        isLiked = !isLiked
-                        binding.likePost.setImageResource(R.drawable.svg_like_post)
-                    }
+
 //                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+
                 }
             }
             override fun onFailure(call: Call<UserProfileResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+
             }
         })
     }

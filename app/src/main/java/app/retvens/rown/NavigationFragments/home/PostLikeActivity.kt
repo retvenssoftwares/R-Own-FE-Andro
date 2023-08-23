@@ -20,6 +20,7 @@ class PostLikeActivity : AppCompatActivity() {
     private lateinit var recycler:RecyclerView
     private lateinit var adapter: LikeAdapter
     private lateinit var postId:String
+    private  var likeList:ArrayList<LikeDataClass> = ArrayList()
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +54,6 @@ class PostLikeActivity : AppCompatActivity() {
             ) {
                if (response.isSuccessful){
                    val response = response.body()!!
-
-
 
                    adapter = LikeAdapter(applicationContext,response)
                    recycler.adapter = adapter

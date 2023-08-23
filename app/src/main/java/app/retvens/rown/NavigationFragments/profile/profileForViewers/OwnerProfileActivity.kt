@@ -56,6 +56,8 @@ import com.mesibo.api.Mesibo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.LinkedList
+import java.util.Queue
 
 class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnBottomSheetRemoveConnectionClickListener  {
     private lateinit var setting : ImageView
@@ -91,6 +93,8 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
     var seeStatus = ""
     var userID = ""
     var user_id = ""
+    val apiRequestQueue: Queue<() -> Unit> = LinkedList()
+    var isApiCallInProgress = false
 
     private lateinit var progressDialog:Dialog
 
@@ -178,41 +182,44 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                 fragManager.let{bottomSheet.show(it, BottomSheetRemoveConnection.Remove_TAG)}
                 bottomSheet.setOnBottomSheetRemoveConnectionClickListener(this)
             } else if (connStatus.text == "CONNECT") {
+                connStatus.text = "Requested"
+                viewPP.visibility = View.GONE
 
+                rejectCard.visibility = View.VISIBLE
+                reject.text = "VIEW OWNER PROFILE"
                 sendConnectionRequest(userID, applicationContext){
-                    connStatus.text = "Requested"
-                    viewPP.visibility = View.GONE
-
-                    rejectCard.visibility = View.VISIBLE
-                    reject.text = "VIEW OWNER PROFILE"
+                    processApiRequests()
                 }
 
             } else  if (connStatus.text == "Requested") {
+                connStatus.text = "CONNECT"
+                viewPP.visibility = View.GONE
 
+                rejectCard.visibility = View.VISIBLE
+                reject.text = "VIEW OWNER PROFILE"
                 removeConnRequest(userID, applicationContext){
-                    connStatus.text = "CONNECT"
-                    viewPP.visibility = View.GONE
 
-                    rejectCard.visibility = View.VISIBLE
-                    reject.text = "VIEW OWNER PROFILE"
                 }
 
             } else if (connStatus.text == "Accept") {
-                acceptRequest(userID, applicationContext){
-                    connStatus.text = "Remove"
+                connStatus.text = "Remove"
 
-                    rejectCard.visibility = View.GONE
-                    card_message.visibility = View.VISIBLE
-                    viewPP.visibility = View.VISIBLE
+                rejectCard.visibility = View.GONE
+                card_message.visibility = View.VISIBLE
+                viewPP.visibility = View.VISIBLE
+                acceptRequest(userID, applicationContext){
+
                 }
             }
+            processApiRequests()
         }
 
         rejectCard.setOnClickListener {
             if (reject.text == "REJECT") {
+                rejectCard.visibility = View.GONE
+                connStatus.text = "CONNECT"
                 rejectConnRequest(userID, applicationContext) {
-                    rejectCard.visibility = View.GONE
-                    connStatus.text = "CONNECT"
+
                 }
             } else {
                 val intent = Intent(this, HotelOwnerDetailsActivity::class.java)
@@ -380,6 +387,14 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
 //            val fragManager = supportFragmentManager
 //            fragManager.let{bottomSheet.show(it, BottomSheetProfileSetting.WTP_TAG)}
 //            bottomSheet.setOnBottomSheetProfileSettingClickListener(this)
+        }
+    }
+
+    fun processApiRequests() {
+        if (!isApiCallInProgress && apiRequestQueue.isNotEmpty()) {
+            isApiCallInProgress = true
+            val apiRequest = apiRequestQueue.poll()
+            apiRequest?.invoke()
         }
     }
 

@@ -466,12 +466,13 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
 
             var count = likeCount
             if (isLike){
+                isLike = false
+                likeButton.setImageResource(R.drawable.liked_vectore)
+                count += 1
+                likeCountText.text = count.toString()
+                likeCountText.visibility = View.VISIBLE
                 postLike(postId, applicationContext) {
-                    isLike = false
-                    likeButton.setImageResource(R.drawable.liked_vectore)
-                    count += 1
-                    likeCountText.text = count.toString()
-                    likeCountText.visibility = View.VISIBLE
+
                 }
             }
 

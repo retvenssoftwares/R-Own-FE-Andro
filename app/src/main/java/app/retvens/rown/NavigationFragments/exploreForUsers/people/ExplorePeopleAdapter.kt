@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.exploreForUsers.people
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,11 +28,15 @@ import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import java.util.LinkedList
+import java.util.Queue
 
 class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):RecyclerView.Adapter<ExplorePeopleAdapter.ExplorePeopleViewholder>() {
 
     val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
     val user_id = sharedPreferences?.getString("user_id", "").toString()
+    val apiRequestQueue: Queue<() -> Unit> = LinkedList()
+    var isApiCallInProgress = false
 
     interface ConnectClickListener {
         fun onJobSavedClick(connect: Post)
@@ -95,27 +100,31 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
         }
         holder.connect.setOnClickListener {
             if (holder.connect.text == "Remove"){
-
+                holder.connect.text = "CONNECT"
                 removeConnection(userId,user_id, context){
-                    holder.connect.text = "CONNECT"
+
                 }
 
             } else if (holder.connect.text == "CONNECT") {
+                holder.connect.text = "Requested"
 
                 sendConnectionRequest(userId, context){
-                    holder.connect.text = "Requested"
+                    isApiCallInProgress = false
+                    // Process the next request in the queue
+                    processApiRequests()
                 }
 
-            } else  if (holder.connect.text == "Requested") {
 
+            } else  if (holder.connect.text == "Requested") {
+                holder.connect.text = "CONNECT"
                 removeConnRequest(userId, context){
-                    holder.connect.text = "CONNECT"
+
                 }
 
             } else if (holder.connect.text == "Accept") {
-
+                holder.connect.text = "Remove"
                 acceptRequest(userId, context){
-                    holder.connect.text = "Remove"
+
                 }
 
             } else if (holder.connect.text == "Interact") {
@@ -125,6 +134,9 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
                 context.startActivity(intent)
 
             }
+
+            processApiRequests()
+
         }
 
 
@@ -219,5 +231,13 @@ class ExplorePeopleAdapter(val context: Context,val peopleList:ArrayList<Post>):
     }
     fun cancelConnRequest(listener: ConnectClickListener){
         connectClickListener = listener
+    }
+
+    fun processApiRequests() {
+        if (!isApiCallInProgress && apiRequestQueue.isNotEmpty()) {
+            isApiCallInProgress = true
+            val apiRequest = apiRequestQueue.poll()
+            apiRequest?.invoke()
+        }
     }
 }

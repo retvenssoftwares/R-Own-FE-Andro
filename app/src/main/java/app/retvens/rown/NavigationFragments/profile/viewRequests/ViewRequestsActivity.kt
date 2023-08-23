@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.viewRequests
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ConnectionCollection.Connection
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.Connections
@@ -34,7 +36,7 @@ class ViewRequestsActivity : AppCompatActivity() {
         //binding.requestsRecycler. //recyclerView.setHasFixedSize(true)
 
         searchBar = findViewById(R.id.searchBar)
-        binding.reBackBtn.setOnClickListener { onBackPressed() }
+        binding.reBackBtn.setOnClickListener { startActivity(Intent(this, DashBoardActivity::class.java)) }
 
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -111,12 +113,17 @@ class ViewRequestsActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, DashBoardActivity::class.java))
+    }
+
     private fun accceptRequest(userId: String) {
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        val accept = RetrofitBuilder.connectionApi.sendRequest(user_id, ConnectionDataClass(userId))
+        val accept = RetrofitBuilder.connectionApi.acceptRequest(user_id, ConnectionDataClass(userId))
 
         accept.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(

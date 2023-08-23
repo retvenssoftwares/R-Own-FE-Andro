@@ -53,6 +53,8 @@ import com.mesibo.api.Mesibo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.LinkedList
+import java.util.Queue
 
 class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnBottomSheetRemoveConnectionClickListener {
 
@@ -74,6 +76,8 @@ class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnB
     lateinit var viewPP: CardView
     lateinit var rejectCard: CardView
     lateinit var card_message: CardView
+    val apiRequestQueue: Queue<() -> Unit> = LinkedList()
+    var isApiCallInProgress = false
 
     var created = ""
     var location = ""
@@ -179,43 +183,48 @@ class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnB
                 fragManager.let{bottomSheet.show(it, BottomSheetRemoveConnection.Remove_TAG)}
                 bottomSheet.setOnBottomSheetRemoveConnectionClickListener(this)
             } else if (connStatus.text == "CONNECT") {
+                connStatus.text = "Requested"
+                viewPP.visibility = View.GONE
 
+                rejectCard.visibility = View.VISIBLE
+                reject.text = "VIEW PROFESSIONAL PROFILE"
                 sendConnectionRequest(userID, applicationContext){
-                    connStatus.text = "Requested"
-                    viewPP.visibility = View.GONE
-
-                    rejectCard.visibility = View.VISIBLE
-                    reject.text = "VIEW PROFESSIONAL PROFILE"
+                    isApiCallInProgress = false
+                    // Process the next request in the queue
+                    processApiRequests()
                 }
 
             } else  if (connStatus.text == "Requested") {
+                connStatus.text = "CONNECT"
+                viewPP.visibility = View.GONE
 
+                rejectCard.visibility = View.VISIBLE
+                reject.text = "VIEW PROFESSIONAL PROFILE"
                 removeConnRequest(userID, applicationContext){
-                    connStatus.text = "CONNECT"
-                    viewPP.visibility = View.GONE
 
-                    rejectCard.visibility = View.VISIBLE
-                    reject.text = "VIEW PROFESSIONAL PROFILE"
                 }
 
             } else if (connStatus.text == "Accept") {
+                connStatus.text = "Remove"
 
+                rejectCard.visibility = View.GONE
+                card_message.visibility = View.VISIBLE
+                viewPP.visibility = View.VISIBLE
                 acceptRequest(userID, applicationContext){
-                    connStatus.text = "Remove"
 
-                    rejectCard.visibility = View.GONE
-                    card_message.visibility = View.VISIBLE
-                    viewPP.visibility = View.VISIBLE
                 }
 
             }
+
+            processApiRequests()
         }
 
         rejectCard.setOnClickListener {
             if (reject.text == "REJECT") {
+                rejectCard.visibility = View.GONE
+                connStatus.text = "CONNECT"
                 rejectConnRequest(userID, applicationContext) {
-                    rejectCard.visibility = View.GONE
-                    connStatus.text = "CONNECT"
+
                 }
             } else {
                 val intent = Intent(this, UserDetailsActivity::class.java)
@@ -330,6 +339,16 @@ class UserProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnB
         }
 
     }
+
+    fun processApiRequests() {
+        if (!isApiCallInProgress && apiRequestQueue.isNotEmpty()) {
+            isApiCallInProgress = true
+            val apiRequest = apiRequestQueue.poll()
+            apiRequest?.invoke()
+        }
+    }
+
+
 
     private fun blockUser(userID: String) {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)

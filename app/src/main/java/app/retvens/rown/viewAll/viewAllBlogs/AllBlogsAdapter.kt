@@ -88,7 +88,10 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context,
                     if (it == 0) {
                         operatioin = "pop"
                         like = !like
+                        holder.blogLike.setImageResource(R.drawable.svg_heart_liked)
+                        Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                     } else {
+                        holder.blogLike.setImageResource(R.drawable.svg_heart)
                         operatioin = "push"
                         like = !like
                     }
@@ -164,17 +167,15 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context,
             ) {
                 if (response.isSuccessful){
                     if (like){
-                        holder.blogLike.setImageResource(R.drawable.svg_heart_liked)
-                        Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
+
                         onLiked.invoke(0)
                     } else {
-                        holder.blogLike.setImageResource(R.drawable.svg_heart)
-                        Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
+
                         onLiked.invoke(1)
                     }
 //                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+
                 }
             }
 

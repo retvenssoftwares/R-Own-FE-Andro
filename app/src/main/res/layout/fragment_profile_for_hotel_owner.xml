@@ -18,6 +18,7 @@
             android:layout_height="65dp"
             android:paddingTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -29,23 +30,23 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:src="@drawable/community_btn"
-                app:tint="@color/black"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/profile_setting"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/profile_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="username"
-                android:fontFamily="@font/montserrat_semibold"
-                android:textSize="16dp"
                 android:layout_marginStart="22dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="loading...."
                 android:textColor="@color/black"
-                app:layout_constraintTop_toTopOf="@id/profile_setting"
+                android:textSize="16dp"
                 app:layout_constraintBottom_toBottomOf="@id/profile_setting"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/profile_setting" />
 
             <ImageView
                 android:id="@+id/profile_setting"
@@ -53,11 +54,11 @@
                 android:layout_height="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="18dp"
-                android:src="@drawable/setting"
                 android:rotation="90"
-                app:tint="@color/black"
+                android:src="@drawable/setting"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:tint="@color/black" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -85,7 +86,7 @@
             android:id="@+id/profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="User Name"
+            android:text="loading...."
             android:fontFamily="@font/montserrat_regular"
             android:textSize="16dp"
             android:layout_marginTop="6dp"
@@ -109,7 +110,7 @@
             android:id="@+id/posts_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="150"
+            android:text="0"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="14dp"
             android:textColor="@color/black"
@@ -136,7 +137,7 @@
             android:id="@+id/connections_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="150"
+            android:text="0"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="14dp"
             android:paddingTop="20dp"
@@ -165,7 +166,7 @@
             android:id="@+id/requests_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="150"
+            android:text="0"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="14dp"
             android:paddingTop="20dp"

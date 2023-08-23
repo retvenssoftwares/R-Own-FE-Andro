@@ -11,11 +11,18 @@ import retrofit2.http.Path
 
 interface ConnectionApis {
 
+    @PATCH("acceptRequest/{userId}")
+    fun acceptRequest(
+        @Path("userId")userId:String,
+        @Body user_id: ConnectionDataClass
+    ):Call<UpdateResponse>
+
     @PATCH("sendRequest/{userId}")
     fun sendRequest(
         @Path("userId")userId:String,
         @Body user_id: ConnectionDataClass
     ):Call<UpdateResponse>
+
 
     @PATCH("deleteRequest/{user_id}")
     fun removeRequest(

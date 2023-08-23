@@ -77,6 +77,13 @@ class HotelDetailsActivity : AppCompatActivity() {
         }
 
         binding.hotelCardLike.setOnClickListener {
+            if (liked) {
+                liked = !liked
+                binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
+            }else {
+                liked = !liked
+                binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
+            }
             saveHotel(hotelId)
             if (isStaticSaved) {
                 isStaticSaved = !isStaticSaved
@@ -112,20 +119,14 @@ class HotelDetailsActivity : AppCompatActivity() {
                 response: Response<UpdateResponse?>
             ) {
                 if (response.isSuccessful){
-                    if (liked) {
-                        liked = !liked
-                        binding.hotelCardLike.setImageResource(R.drawable.svg_heart_liked)
-                    }else {
-                        liked = !liked
-                        binding.hotelCardLike.setImageResource(R.drawable.svg_heart)
-                    }
-                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(applicationContext, "Saved Successfully", Toast.LENGTH_SHORT).show()
                 } else {
                     Log.e("error",response.code().toString())
                 }
             }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+
             }
         })
     }

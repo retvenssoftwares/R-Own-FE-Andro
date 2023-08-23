@@ -380,13 +380,15 @@ fun removeConnection(userID: String, userId: String, context: Context, onClick: 
             serverCode = response.code()
             if (response.isSuccessful){
                 val response = response.body()!!
+                Log.e("res",response.message.toString())
                 onClick.invoke()
             }else{
+                Log.e("error",response.code().toString())
             }
         }
 
         override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-//            Toast.makeText(context,t.message.toString(),Toast.LENGTH_SHORT).show()
+           Log.e("error",t.message.toString())
         }
     })
 

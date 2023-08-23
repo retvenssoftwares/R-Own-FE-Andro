@@ -192,13 +192,6 @@ class PostDetailsActivityNotification : AppCompatActivity(),
 
 
 
-            if (commentCount == "0"){
-                commentC.visibility = View.GONE
-            }
-
-            if (likeCount.toString() == "0"){
-                likeCountText.visibility = View.GONE
-            }
 
         val counthandler = Handler()
 
@@ -337,9 +330,21 @@ class PostDetailsActivityNotification : AppCompatActivity(),
                             profile.setImageResource(R.drawable.svg_user)
                         }
 
-                        likeCountText.text = likeCount.toString()
-                        commentC.text = commentCount.toString()
+                        Log.e("res",response.likeCount)
+                        Log.e("res",response.commentCount)
 
+                        likeCountText.text = response.likeCount
+                        commentC.text = response.commentCount
+                        likeCount = response.likeCount.toInt()
+                        commentCount = response.commentCount
+
+                        if (commentCount == "0"){
+                            commentC.visibility = View.GONE
+                        }
+
+                        if (likeCount.toString() == "0"){
+                            likeCountText.visibility = View.GONE
+                        }
 
                         if (postPic.size > 1) {
                             indicator.setViewPager(viewPager)
@@ -351,8 +356,7 @@ class PostDetailsActivityNotification : AppCompatActivity(),
                         like = response.liked
                         isSaved = response.saved
 
-                        likeCount = response.likeCount.toInt()
-                        commentCount = response.commentCount
+
 
                         if (likeCount == 0){
                             likeCountText.visibility = View.GONE
@@ -379,6 +383,7 @@ class PostDetailsActivityNotification : AppCompatActivity(),
                         isLike = false
                         likeButton.setImageResource(R.drawable.liked_vectore)
                         count += 1
+                        likeCount = count
                         likeCountText.text = count.toString()
                         likeCountText.visibility = View.VISIBLE
                         postLike(postId, applicationContext) {

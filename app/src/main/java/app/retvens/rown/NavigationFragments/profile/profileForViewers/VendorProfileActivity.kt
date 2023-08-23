@@ -53,6 +53,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.NullPointerException
+import java.util.LinkedList
+import java.util.Queue
 
 class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.OnBottomSheetRemoveConnectionClickListener  {
 
@@ -90,6 +92,8 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
     var user_id = ""
     var seeStatus = ""
     var selected = 1
+    val apiRequestQueue: Queue<() -> Unit> = LinkedList()
+    var isApiCallInProgress = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -191,25 +195,27 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
                 fragManager.let{bottomSheet.show(it, BottomSheetRemoveConnection.Remove_TAG)}
                 bottomSheet.setOnBottomSheetRemoveConnectionClickListener(this)
             } else if (connStatus.text == "CONNECT") {
-
+                connStatus.text = "Requested"
                 sendConnectionRequest(userId, applicationContext){
-                    connStatus.text = "Requested"
+                   processApiRequests()
                 }
 
             } else  if (connStatus.text == "Requested") {
-
+                connStatus.text = "CONNECT"
                 removeConnRequest(userId, applicationContext){
-                    connStatus.text = "CONNECT"
+
                 }
 
             } else if (connStatus.text == "Accept") {
+                connStatus.text = "Remove"
 
+                rejectCard.visibility = View.GONE
                 acceptRequest(userId, applicationContext){
-                    connStatus.text = "Remove"
 
-                    rejectCard.visibility = View.GONE
                 }
             }
+
+            processApiRequests()
         }
 
         polls.setOnClickListener {
@@ -358,6 +364,14 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
                 Log.e("error",t.message.toString())
             }
         })
+    }
+
+    fun processApiRequests() {
+        if (!isApiCallInProgress && apiRequestQueue.isNotEmpty()) {
+            isApiCallInProgress = true
+            val apiRequest = apiRequestQueue.poll()
+            apiRequest?.invoke()
+        }
     }
 
     private fun getUserPofile(userID: String, userId: String) {

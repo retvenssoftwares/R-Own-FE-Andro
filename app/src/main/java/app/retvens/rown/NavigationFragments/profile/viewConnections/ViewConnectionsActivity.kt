@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile.viewConnections
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -8,6 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.Connections
 import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
@@ -31,7 +33,7 @@ class ViewConnectionsActivity : AppCompatActivity() {
         binding = ActivityViewConnectionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.reBackBtn.setOnClickListener { onBackPressed() }
+        binding.reBackBtn.setOnClickListener {startActivity(Intent(this, DashBoardActivity::class.java)) }
 
         binding.connectionsRecycler.layoutManager = LinearLayoutManager(applicationContext)
         //binding.connectionsRecycler. //recyclerView.setHasFixedSize(true)
@@ -49,6 +51,11 @@ class ViewConnectionsActivity : AppCompatActivity() {
             binding.refreshLayout.isRefreshing = false
         }
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        startActivity(Intent(this, DashBoardActivity::class.java))
     }
 
     private fun getAllConnections(userId: String) {

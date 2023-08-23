@@ -127,15 +127,14 @@ class ExploreHotelsAdapter(var listS : ArrayList<HotelData>, val context: Contex
                         onLiked.invoke(0)
                     } else {
                         holder.like.setImageResource(R.drawable.svg_heart)
-                        Toast.makeText(context, "UnSaved Successfully", Toast.LENGTH_SHORT).show()
                         onLiked.invoke(1)
                     }
                 } else {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.code().toString())
                 }
             }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+                Log.e("error",t.message.toString())
             }
         })
     }

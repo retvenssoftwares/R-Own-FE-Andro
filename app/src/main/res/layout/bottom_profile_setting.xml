@@ -194,11 +194,40 @@
             android:textSize="14dp"
             android:textColor="@color/black"/>
 
+
+
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey_40" />
+
+    <LinearLayout
+        android:id="@+id/block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="20dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/vector_block"
+            app:tint="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Block Accounts"
+            android:layout_marginStart="9dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="14dp"
+            android:textColor="@color/black"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>

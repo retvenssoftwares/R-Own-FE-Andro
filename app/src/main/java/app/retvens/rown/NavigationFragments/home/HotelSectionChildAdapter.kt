@@ -139,13 +139,13 @@ class HotelSectionChildAdapter(val context: Context, private val viewType: Int,
                         holder.cardLike.setImageResource(R.drawable.svg_heart)
                         onLiked.invoke(1)
                     }
-                    Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Log.e("error",response.code().toString())
                 }
             }
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(context, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+                Log.e("error",t.message.toString())
             }
         })
     }

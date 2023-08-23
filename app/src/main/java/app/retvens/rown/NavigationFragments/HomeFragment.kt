@@ -693,11 +693,11 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
     }
 
     override fun Mesibo_onMessageStatus(p0: MesiboMessage) {
-        TODO("Not yet implemented")
+
     }
 
     override fun Mesibo_onMessageUpdate(p0: MesiboMessage) {
-        TODO("Not yet implemented")
+
     }
 
 
