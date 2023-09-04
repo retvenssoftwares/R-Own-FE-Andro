@@ -580,27 +580,45 @@ class HotelOwnerFragment : Fragment(), BackHandler,
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val imageUri = data.data
             if (imageUri != null) {
-
-                if (isHorizontal){
+                if (isHorizontal) {
                     cropImageHorizontal(imageUri)
                 } else {
                     cropImage(imageUri)
                 }
-
             }
-        }  else if (requestCode == UCrop.REQUEST_CROP) {
+        } else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
-                val croppedImage = UCrop.getOutput(data!!)!!
-                if (isHorizontal){
-                    hotelOwnerCover.setImageResource(R.drawable.svg_save_post)
-                }
-                compressImage(croppedImage)
+                val croppedImageUri = UCrop.getOutput(data!!)
+                if (croppedImageUri != null) {
+                    // Display the cropped image
+                    if (isHorizontal) {
+                        hotelOwnerCover.setImageURI(croppedImageUri)
+                    }
 
+                    // Compress the cropped image
+                    val compressedImageUri = compressImage(croppedImageUri)
+                    if (compressedImageUri != null) {
+                        // Handle the compressed image as needed
+                    } else {
+                        // Handle compression failure
+                        Toast.makeText(context, "Image compression failed", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    // Handle UCrop result with no output
+                    Toast.makeText(context, "Cropped image is null", Toast.LENGTH_SHORT).show()
+                }
             } else if (resultCode == UCrop.RESULT_ERROR) {
-                Toast.makeText(context,"Try Again",Toast.LENGTH_SHORT).show()
+                // Handle UCrop error
+                val cropError = UCrop.getError(data!!)
+                if (cropError != null) {
+                    Toast.makeText(context, "Crop error: ${cropError.localizedMessage}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Crop error: Unknown error", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+
     private fun cropImage(imageUri: Uri) {
         val inputUri = imageUri
         val outputUri = File(requireContext().filesDir, "croppedImage.jpg").toUri()
@@ -622,15 +640,22 @@ class HotelOwnerFragment : Fragment(), BackHandler,
             .withOptions(options)
             .start(requireContext(), this)
     }
-    fun compressImage(imageUri: Uri): Uri {
-        lateinit var compressed : Uri
+    fun compressImage(imageUri: Uri): Uri? {
+        var compressed: Uri? = null // Initialize it as null
+
         try {
-            val imageBitmap : Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver,imageUri)
-            val path : File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            val fileName = String.format("%d.jpg",System.currentTimeMillis())
-            val finalFile = File(path,fileName)
+            val imageBitmap: Bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, imageUri)
+
+            // Get the app's private external storage directory
+            val appStorageDir = File(context?.getExternalFilesDir(null), "DCIM")
+            if (!appStorageDir.exists()) {
+                appStorageDir.mkdirs()
+            }
+
+            val fileName = String.format("%d.jpg", System.currentTimeMillis())
+            val finalFile = File(appStorageDir, fileName)
             val fileOutputStream = FileOutputStream(finalFile)
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG,30,fileOutputStream)
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 30, fileOutputStream)
             fileOutputStream.flush()
             fileOutputStream.close()
 
@@ -641,11 +666,11 @@ class HotelOwnerFragment : Fragment(), BackHandler,
                 Log.d("owner", cameraUser)
                 croppedHotelChainImageUri = compressed
                 hotelChainProfile.setImageURI(croppedHotelChainImageUri)
-            }else if (cameraUser == "OwnerProfile"){
+            } else if (cameraUser == "OwnerProfile") {
                 Log.d("owner", cameraUser)
                 croppedOwnerProfileImageUri = compressed
                 hotelOwnerProfile.setImageURI(croppedOwnerProfileImageUri)
-            }else{
+            } else {
                 Log.d("owner", cameraUser)
                 croppedOwnerCoverImageUri = compressed
                 hotelOwnerCover.setImageURI(croppedOwnerCoverImageUri)
@@ -654,11 +679,13 @@ class HotelOwnerFragment : Fragment(), BackHandler,
             val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             intent.setData(compressed)
             context?.sendBroadcast(intent)
-        }catch (e: IOException){
+        } catch (e: IOException) {
             e.printStackTrace()
         }
+
         return compressed
     }
+
 
     private fun createImageUri(): Uri? {
         val image = File(requireContext().filesDir,"camera_photo.png")
