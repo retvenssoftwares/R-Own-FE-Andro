@@ -19,6 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.postDelayed
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -37,6 +38,7 @@ import app.retvens.rown.bottomsheet.BottomSheetPostEdit
 import app.retvens.rown.bottomsheet.BottomSheetReportPost
 import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
 import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
@@ -83,6 +85,9 @@ class PostDetailsActivityNotification : AppCompatActivity(),
     private lateinit var progressDialog:Dialog
     private lateinit var commentC:TextView
 
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    lateinit var layout : ConstraintLayout
+
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,6 +95,9 @@ class PostDetailsActivityNotification : AppCompatActivity(),
         setContentView(R.layout.activity_post_details)
 
         val allhandler = Handler()
+
+        shimmerFrameLayout = findViewById(R.id.shimmer_container)
+        layout = findViewById(R.id.layout)
 
         progressDialog = Dialog(this)  // Use 'this' instead of 'applicationContext'
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -99,13 +107,18 @@ class PostDetailsActivityNotification : AppCompatActivity(),
         val image = progressDialog.findViewById<ImageView>(R.id.imageview)
         Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
         runOnUiThread {
-            progressDialog.show()
+//            progressDialog.show()
         }
 
         val finalhandler = Handler()
         finalhandler.postDelayed({
-             progressDialog.dismiss()
-        },2000)
+
+            shimmerFrameLayout.stopShimmer()
+            shimmerFrameLayout.visibility = View.GONE
+            layout.visibility = View.VISIBLE
+
+//             progressDialog.dismiss()
+        },1000)
 
 
         findViewById<ImageButton>(R.id.createCommunity_backBtn).setOnClickListener {
@@ -303,6 +316,11 @@ class PostDetailsActivityNotification : AppCompatActivity(),
                 response: Response<List<PostItem>?>
             ) {
                 if (response.isSuccessful){
+
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
+                    layout.visibility = View.VISIBLE
+
                     val response = response.body()!!
                     response.forEach { response->
 

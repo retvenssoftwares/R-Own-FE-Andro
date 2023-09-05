@@ -15,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -35,6 +36,7 @@ import app.retvens.rown.bottomsheet.BottomSheetReport
 import app.retvens.rown.bottomsheet.BottomSheetReportPost
 import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
 import me.relex.circleindicator.CircleIndicator
 import retrofit2.Call
@@ -64,6 +66,9 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
     var isStaticSaved = true
     var operatioin = "push"
 
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    lateinit var layout : ConstraintLayout
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +79,9 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         savedPost = findViewById(R.id.savePost)
 
         val actionButton = findViewById<ImageView>(R.id.actionButton)
+
+        shimmerFrameLayout = findViewById(R.id.shimmer_container)
+        layout = findViewById(R.id.layout)
 
         val name = findViewById<TextView>(R.id.user_name_post)
         val profile = findViewById<ShapeableImageView>(R.id.post_profile)
@@ -154,7 +162,9 @@ class PostDetailsActivity : AppCompatActivity(), ImageSlideActivityAdapter.OnIma
         }
 
 
-
+        shimmerFrameLayout.stopShimmer()
+        shimmerFrameLayout.visibility = View.GONE
+        layout.visibility = View.VISIBLE
 
 
         testLike.setOnClickListener {

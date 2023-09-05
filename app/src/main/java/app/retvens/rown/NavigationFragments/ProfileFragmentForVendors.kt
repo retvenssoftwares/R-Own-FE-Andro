@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
@@ -47,6 +48,7 @@ import app.retvens.rown.utils.showFullImage
 import app.retvens.rown.utils.websiteLinkV
 import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
@@ -75,6 +77,9 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
     lateinit var services : TextView
 
     private lateinit var progressDialog: Dialog
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    lateinit var layout : ConstraintLayout
 
     lateinit var viewPP: CardView
 
@@ -118,6 +123,9 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
 
         viewPP = view.findViewById(R.id.viewPP)
 
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_container)
+        layout = view.findViewById(R.id.layout)
+
         if (isAdded) {
             progressDialog = Dialog(requireContext())
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -126,7 +134,7 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
             progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             val image = progressDialog.findViewById<ImageView>(R.id.imageview)
             Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
-            progressDialog.show()
+//            progressDialog.show()
         }
 
         val sharedPreferencesName = context?.getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
@@ -291,7 +299,12 @@ class ProfileFragmentForVendors : Fragment(), BottomSheetVendorsProfileSetting.O
                 response: Response<VendorProfileDataClass?>
             ) {
                 serverCode = response.code()
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
+
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                layout.visibility = View.VISIBLE
+
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
 

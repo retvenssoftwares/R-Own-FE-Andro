@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -47,6 +48,7 @@ import app.retvens.rown.utils.sendConnectionRequest
 import app.retvens.rown.utils.showFullImage
 import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
 import com.mesibo.api.Mesibo
 import retrofit2.Call
@@ -95,6 +97,9 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
     val apiRequestQueue: Queue<() -> Unit> = LinkedList()
     var isApiCallInProgress = false
 
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    lateinit var layout : ConstraintLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vendor_profile)
@@ -126,6 +131,9 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
 
         viewPP = findViewById(R.id.viewPP)
 
+        shimmerFrameLayout = findViewById(R.id.shimmer_container)
+        layout = findViewById(R.id.layout)
+
         progressDialog = Dialog(this)
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         progressDialog.setContentView(R.layout.progress_dialoge)
@@ -133,7 +141,7 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
         progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val image = progressDialog.findViewById<ImageView>(R.id.imageview)
         Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
-        progressDialog.show()
+//        progressDialog.show()
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
 
@@ -383,7 +391,12 @@ class VendorProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.O
                 call: Call<VendorProfileDataClass?>,
                 response: Response<VendorProfileDataClass?>
             ) {
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
+
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                layout.visibility = View.VISIBLE
+
                 if (response.isSuccessful){
                     val response = response.body()!!
                     Log.e("response",response.toString())

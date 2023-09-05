@@ -7,12 +7,6 @@
     android:background="@color/white"
     tools:context=".NavigationFragments.home.postDetails.CheckInDetailsActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/layout"
-        android:visibility="gone">
-
 
     <RelativeLayout
         android:id="@+id/relative"
@@ -83,7 +77,7 @@
             app:shapeAppearanceOverlay="@style/RoundedCornerImage"
             android:layout_marginTop="7dp"
             android:layout_marginStart="15dp"
-            android:src="@drawable/png_profile_post"
+            android:src="@color/grey_10"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
         <ImageView
@@ -105,7 +99,8 @@
             android:text="Karsten Dobrev"
             android:textSize="15dp"
             android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/black"
+            android:textColor="@color/grey_10"
+            android:background="@color/grey_10"
             app:layout_constraintVertical_bias="0.02"
             app:layout_constraintTop_toTopOf="@id/post_profile"
             app:layout_constraintBottom_toBottomOf="@id/post_profile"
@@ -141,7 +136,8 @@
             android:textSize="11dp"
             android:layout_marginEnd="18dp"
             android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/grey_60"
+            android:textColor="@color/grey_10"
+            android:background="@color/grey_10"
             app:layout_constraintTop_toTopOf="@id/user_name_post"
             app:layout_constraintBottom_toBottomOf="@id/user_name_post"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -167,7 +163,8 @@
             android:layout_marginHorizontal="15dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/black"
+            android:textColor="@color/grey_10"
+            android:background="@color/grey_10"
             app:layout_constraintTop_toBottomOf="@id/vi"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -177,7 +174,7 @@
             android:id="@+id/event_image"
             android:layout_width="match_parent"
             android:layout_height="280dp"
-            android:src="@drawable/svg_nothing"
+            android:src="@color/grey_10"
             android:background="@color/white"
             android:scaleType="centerCrop"
             android:layout_marginTop="5dp"
@@ -208,7 +205,7 @@
             app:layout_constraintTop_toBottomOf="@id/event_image"
             android:layout_marginTop="20dp"
             android:background="#272A3D"
-            android:textColor="@color/white"
+            android:textColor="@color/grey_10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="Book Now"
@@ -228,7 +225,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="6dp"
             android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/black"
+            android:textColor="@color/grey_10"
+            android:background="@color/grey_10"
             app:layout_constraintStart_toStartOf="@id/post_profile"
             app:layout_constraintTop_toBottomOf="@id/book"/>
 
@@ -242,7 +240,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/black"
+            android:textColor="@color/grey_10"
+            android:background="@color/grey_10"
             app:layout_constraintStart_toEndOf="@id/user_id_on_comment"
             app:layout_constraintTop_toBottomOf="@id/book"/>
 
@@ -270,7 +269,8 @@
                     android:layout_width="26dp"
                     android:layout_height="26dp"
                     android:layout_weight="1"
-                    android:src="@drawable/svg_like_post"/>
+                    android:src="@drawable/svg_like_post"
+                    app:tint="@color/grey_20"/>
 
                 <TextView
                     android:id="@+id/like_count"
@@ -281,7 +281,8 @@
                     android:text=""
                     android:textSize="12dp"
                     android:textAlignment="center"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/grey_10"
+                    android:background="@color/grey_10" />
 
             </LinearLayout>
 
@@ -300,7 +301,7 @@
                     android:layout_height="26dp"
                     android:layout_weight="1"
                     android:src="@drawable/svg_post_comment"
-                    app:tint="@color/black" />
+                    app:tint="@color/grey_20" />
 
                 <TextView
                     android:id="@+id/comment_count"
@@ -311,7 +312,8 @@
                     android:text=""
                     android:textSize="12dp"
                     android:textAlignment="center"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/grey_10"
+                    android:background="@color/grey_10" />
 
             </LinearLayout>
 
@@ -331,29 +333,5 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/shimmer_layout_tasks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/white">
-
-            <include layout = "@layout/activity_check_in_details_shimmer"/>
-
-        </LinearLayout>
-
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

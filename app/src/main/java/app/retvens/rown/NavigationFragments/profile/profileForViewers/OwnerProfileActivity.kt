@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -51,6 +52,7 @@ import app.retvens.rown.utils.removeConnection
 import app.retvens.rown.utils.sendConnectionRequest
 import app.retvens.rown.utils.showFullImage
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
 import com.mesibo.api.Mesibo
 import retrofit2.Call
@@ -98,6 +100,9 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
 
     private lateinit var progressDialog:Dialog
 
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    lateinit var layout : ConstraintLayout
+
     lateinit var viewPP: CardView
 
     var selected = 1
@@ -125,6 +130,9 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
 
         viewPP = findViewById(R.id.viewPP)
 
+        shimmerFrameLayout = findViewById(R.id.shimmer_container)
+        layout = findViewById(R.id.layout)
+
         progressDialog = Dialog(this)
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         progressDialog.setContentView(R.layout.progress_dialoge)
@@ -132,7 +140,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
         progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val image = progressDialog.findViewById<ImageView>(R.id.imageview)
         Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
-        progressDialog.show()
+//        progressDialog.show()
 
         userID = intent.getStringExtra("userId").toString()
 
@@ -437,7 +445,12 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                 call: Call<OwnerProfileDataClass?>,
                 response: Response<OwnerProfileDataClass?>
             ) {
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
+
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                layout.visibility = View.VISIBLE
+
                 if (response.isSuccessful){
                     val response = response.body()!!
                     profilePic = response.profiledata.Profile_pic

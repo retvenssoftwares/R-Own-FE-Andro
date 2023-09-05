@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.FeedCollection.PostItem
@@ -18,6 +19,7 @@ import app.retvens.rown.bottomsheet.BottomSheetReportPost
 import app.retvens.rown.databinding.ActivityStatusDetailsBinding
 import app.retvens.rown.utils.postLike
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +38,9 @@ class StatusDetailsActivity : AppCompatActivity() {
 
     private var isLike = true
 
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    lateinit var layout : ConstraintLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStatusDetailsBinding.inflate(layoutInflater)
@@ -44,6 +49,9 @@ class StatusDetailsActivity : AppCompatActivity() {
         binding.createCommunityBackBtn.setOnClickListener {
             startActivity(Intent(this, DashBoardActivity::class.java))
         }
+
+        shimmerFrameLayout = findViewById(R.id.shimmer_container)
+        layout = findViewById(R.id.layout)
 
         postId = intent.getStringExtra("postId").toString()
         getPost(postId)
@@ -109,6 +117,11 @@ class StatusDetailsActivity : AppCompatActivity() {
                 response: Response<List<PostItem>?>
             ) {
                 if (response.isSuccessful){
+
+                    shimmerFrameLayout.stopShimmer()
+                    shimmerFrameLayout.visibility = View.GONE
+                    layout.visibility = View.VISIBLE
+
                     val response = response.body()!!
                     response.forEach { response->
 

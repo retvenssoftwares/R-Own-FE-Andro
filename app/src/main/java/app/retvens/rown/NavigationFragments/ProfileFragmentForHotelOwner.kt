@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentTransaction
@@ -53,6 +54,7 @@ import app.retvens.rown.utils.serverCode
 import app.retvens.rown.utils.showFullImage
 import app.retvens.rown.viewAll.vendorsDetails.VendorDetailsActivity
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.imageview.ShapeableImageView
 import retrofit2.Call
 import retrofit2.Callback
@@ -82,6 +84,9 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
     lateinit var link:TextView
 
     private lateinit var progressDialog: Dialog
+
+    lateinit var shimmerFrameLayout: ShimmerFrameLayout
+    lateinit var layout : ConstraintLayout
 
     lateinit var viewPP: CardView
     var seeStatus = ""
@@ -121,6 +126,9 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
         requestCont = view.findViewById(R.id.requests_count)
         viewPP = view.findViewById(R.id.viewPP)
 
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_container)
+        layout = view.findViewById(R.id.layout)
+
         if (isAdded) {
             progressDialog = Dialog(requireContext())
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -129,7 +137,7 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
             progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             val image = progressDialog.findViewById<ImageView>(R.id.imageview)
             Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
-            progressDialog.show()
+//            progressDialog.show()
         }
         profile.setOnLongClickListener {
             showFullImage(profilePic, requireContext())
@@ -306,7 +314,12 @@ class ProfileFragmentForHotelOwner() : Fragment(), BottomSheetHotelierProfileSet
                 response: Response<OwnerProfileDataClass?>
             ) {
                 serverCode = response.code()
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
+
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                layout.visibility = View.VISIBLE
+
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
                     seeStatus = response.connectionStatus
