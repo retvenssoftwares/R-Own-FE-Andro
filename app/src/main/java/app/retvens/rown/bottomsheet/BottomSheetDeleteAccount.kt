@@ -1,11 +1,16 @@
 package app.retvens.rown.bottomsheet
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -28,6 +33,7 @@ import app.retvens.rown.utils.clearProfileImage
 import app.retvens.rown.utils.clearUserId
 import app.retvens.rown.utils.moveToClear
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -40,6 +46,7 @@ import retrofit2.Response
 class BottomSheetDeleteAccount() : BottomSheetDialogFragment(){
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var progressDialog:Dialog
 
     var mListener: OnBottomSheetHotelierProfileSettingClickListener ? = null
     fun setOnBottomSheetProfileSettingClickListener(listener: OnBottomSheetHotelierProfileSettingClickListener?){
@@ -77,11 +84,20 @@ class BottomSheetDeleteAccount() : BottomSheetDialogFragment(){
         text.text = "Do you really want to      delete this Account?"
 
         deletePost.setOnClickListener {
+            progressDialog = Dialog(requireContext())
+            progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialog.setContentView(R.layout.progress_dialoge)
+            progressDialog.setCancelable(false)
+            progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+            Glide.with(requireContext()).load(R.drawable.animated_logo_transparent).into(image)
+            progressDialog.show()
             saveChanges()
         }
 
         deleteNoPost.setOnClickListener {
             dismiss()
+            progressDialog.dismiss()
         }
 
     }
@@ -98,7 +114,7 @@ class BottomSheetDeleteAccount() : BottomSheetDialogFragment(){
             ) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-
+                    progressDialog.dismiss()
                     Toast.makeText(requireContext(),"Account Deleted",Toast.LENGTH_SHORT).show()
                     dismiss()
                     auth.signOut()

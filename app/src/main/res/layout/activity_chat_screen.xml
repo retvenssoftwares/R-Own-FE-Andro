@@ -59,7 +59,7 @@
         android:text="status"
         android:textSize="14sp"
         android:textColor="#31B303"
-        android:fontFamily="@font/montserrat_alternates"
+        android:fontFamily="@font/montserrat_regular"
         android:textFontWeight="500"
         />
 

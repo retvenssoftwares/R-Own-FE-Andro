@@ -8,15 +8,25 @@
     android:background="@drawable/top_round">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do You Really Want to Exit ?"
+        android:textSize="16dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textAlignment="center"
+        />
+
+    <TextView
         android:id="@+id/close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Do You Really Want to Exit"
+        android:text="Yes"
         android:fontFamily="@font/montserrat_semibold"
         android:textSize="14dp"
         android:textAlignment="center"
         android:padding="12dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/svg_rectangle_background"
         android:textColor="@color/black"/>
 

@@ -48,7 +48,7 @@
             android:layout_toRightOf="@+id/mes_rv_profile"
             android:text="Mesibo Username"
             android:textColor="#171717"
-            android:fontFamily="@font/inter_medium"
+            android:fontFamily="@font/montserrat_semibold"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/isOnlineDot"
             app:layout_constraintTop_toTopOf="parent" />

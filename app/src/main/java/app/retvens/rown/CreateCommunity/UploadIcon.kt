@@ -341,8 +341,9 @@ class UploadIcon : AppCompatActivity() {
 //                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     addCommunityMember()
 
-                    val profile = getProfile()
+                    val profile = Mesibo.getProfile(groupId)
                     profile.image = decodeSampledBitmapFromFile(file,200,150)
+
                     profile.save()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()

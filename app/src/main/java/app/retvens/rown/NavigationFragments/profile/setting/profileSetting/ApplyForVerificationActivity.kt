@@ -155,7 +155,7 @@ class ApplyForVerificationActivity : AppCompatActivity() {
                         binding.alreadyApplied.setImageResource(R.drawable.svg_applied_for_verification)
                         binding.profileCompletion.visibility = View.GONE
                     } else if (response.message == " not applied"){
-                        Toast.makeText(applicationContext, response.message.toString(), Toast.LENGTH_SHORT).show()
+                        Log.e("res",response.message.toString())
                     }
                 }else{
                     Log.e("error",response.code().toString())

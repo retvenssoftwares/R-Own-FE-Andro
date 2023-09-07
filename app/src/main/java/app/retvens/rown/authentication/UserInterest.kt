@@ -13,6 +13,7 @@ import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.onboarding.ContactResponse
 import app.retvens.rown.DataCollections.onboarding.GetInterests
@@ -22,6 +23,8 @@ import app.retvens.rown.utils.moveTo
 import app.retvens.rown.utils.profileComStatus
 import app.retvens.rown.utils.profileCompletionStatus
 import com.bumptech.glide.Glide
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,7 +61,9 @@ class UserInterest : AppCompatActivity(), UserInterestAdapter.onItemClickListene
         } else {
             binding.userName.text = "Hello, $username!"
         }
-        binding.interestGrid.layoutManager = GridLayoutManager(this,3)
+        val layoutManager = FlexboxLayoutManager(this)
+        layoutManager.flexDirection = FlexDirection.ROW
+        binding.interestGrid.layoutManager = layoutManager
         //binding.interestGrid. //recyclerView.setHasFixedSize(true)
 
         binding.cardSkipInterest.setOnClickListener {

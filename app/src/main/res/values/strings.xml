@@ -6,7 +6,7 @@
 
     <style name="NavigationViewStyle" parent="Widget.Design.NavigationView">
         <item name="android:textSize">20sp</item>
-        <item name="fontFamily">@font/montserrat_alternates</item>
+        <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:textFontWeight" tools:targetApi="p">600</item>
         <!-- set the desired text size -->
     </style>

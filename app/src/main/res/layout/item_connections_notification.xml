@@ -118,7 +118,7 @@
             android:id="@+id/connection_notification_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_alternates"
+            android:fontFamily="@font/montserrat_regular"
             android:text="08 hours"
             android:textColor="@color/grey_60"
             android:textSize="11dp"

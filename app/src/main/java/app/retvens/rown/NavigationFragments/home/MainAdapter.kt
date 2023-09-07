@@ -1509,15 +1509,14 @@ class MainAdapter(val context: Context, private val dataItemList: ArrayList<Data
                 ) {
                     if (response.isSuccessful) {
                         val response = response.body()!!
-                        Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+
                     } else {
-                        Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT)
-                            .show()
+                       Log.e("error",response.code().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                    Toast.makeText(context, t.message.toString(), Toast.LENGTH_SHORT).show()
+                    Log.e("error",t.message.toString())
                 }
             })
 

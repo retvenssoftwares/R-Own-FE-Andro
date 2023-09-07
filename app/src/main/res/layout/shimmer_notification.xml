@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:fontFamily="@font/montserrat_alternates"
+            android:fontFamily="@font/montserrat_regular"
             android:text="08 hours"
             android:textColor="@color/grey_20"
             android:background="@color/grey_20"

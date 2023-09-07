@@ -12,6 +12,7 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
+import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.Dashboard.createPosts.CreateTextPost
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.FeedCollection.*
@@ -48,6 +50,7 @@ import com.mesibo.api.MesiboMessage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 //import com.karan.multipleviewrecyclerview.RecyclerItem
 
@@ -199,6 +202,8 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
 
             }
         })
+
+
 
     }
     private fun getData() {
@@ -699,6 +704,9 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
     override fun Mesibo_onMessageUpdate(p0: MesiboMessage) {
 
     }
+
+
+
 
 
 }
