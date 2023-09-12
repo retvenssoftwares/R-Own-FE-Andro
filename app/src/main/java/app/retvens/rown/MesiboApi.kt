@@ -7,10 +7,10 @@ import android.util.Log
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.mesibo.api.Mesibo
 import com.mesibo.api.MesiboProfile
-import com.mesibo.calls.api.MesiboCall
+
 
 @SuppressLint("StaticFieldLeak")
-object MesiboApi : MesiboCall.IncomingListener {
+object MesiboApi {
 
     private var mContext: Context? = null
 
@@ -32,8 +32,6 @@ object MesiboApi : MesiboCall.IncomingListener {
 
         // add lister
         Mesibo.addListener(this)
-        MesiboCall.getInstance().setListener(this)
-
 
 
         // set access token
@@ -55,25 +53,5 @@ object MesiboApi : MesiboCall.IncomingListener {
         return true
     }
 
-    override fun MesiboCall_OnIncoming(p0: MesiboProfile?, p1: Boolean): MesiboCall.CallProperties? {
-        return null
-    }
-
-    override fun MesiboCall_OnShowUserInterface(
-        p0: MesiboCall.Call?,
-        p1: MesiboCall.CallProperties?
-    ): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun MesiboCall_OnError(p0: MesiboCall.CallProperties?, p1: Int) {
-        Log.e("notify","error")
-        return
-    }
-
-    override fun MesiboCall_onNotify(p0: Int, p1: MesiboProfile?, p2: Boolean): Boolean {
-        Log.e("notify","okk")
-       return true
-    }
 
 }

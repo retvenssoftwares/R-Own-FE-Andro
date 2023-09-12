@@ -82,6 +82,7 @@ import com.mesibo.api.Mesibo.MessageListener;
 import com.mesibo.api.Mesibo.PresenceListener;
 import com.mesibo.api.Mesibo.SyncListener;
 import com.mesibo.api.MesiboFile;
+
 import com.mesibo.api.MesiboMessage;
 import com.mesibo.api.MesiboMessageProperties;
 import com.mesibo.api.MesiboPresence;
