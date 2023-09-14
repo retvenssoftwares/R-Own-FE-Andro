@@ -68,6 +68,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
     lateinit var name : TextView
     lateinit var profile_username : TextView
     lateinit var websiteLink : TextView
+    lateinit var link : TextView
     lateinit var bio : TextView
 
     lateinit var polls : TextView
@@ -116,6 +117,7 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
         profile_username = findViewById(R.id.profile_username)
         name = findViewById(R.id.profile_name)
         bio = findViewById(R.id.bio)
+        link = findViewById(R.id.link)
         websiteLink = findViewById(R.id.linkText)
         reject = findViewById(R.id.reject)
         rejectCard = findViewById(R.id.openReview)
@@ -492,7 +494,11 @@ class OwnerProfileActivity : AppCompatActivity(), BottomSheetRemoveConnection.On
                         Log.e("error",e.message.toString())
                     }
 
-                    websiteLink.text = response.profile.hotelOwnerInfo.websiteLink
+                    if (response.profile.hotelOwnerInfo.websiteLink.isNotEmpty()) {
+                        websiteLink.text = response.profile.hotelOwnerInfo.websiteLink
+                    } else {
+                        websiteLink.text = "Website not found"
+                    }
                     userName = response.profiledata.User_name
                     seeStatus = response.connectionStatus
                     media.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
