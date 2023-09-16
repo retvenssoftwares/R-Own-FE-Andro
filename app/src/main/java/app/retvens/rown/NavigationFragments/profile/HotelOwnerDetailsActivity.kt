@@ -90,6 +90,11 @@ class HotelOwnerDetailsActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val response = response.body()!!
 
+
+                    binding.shimmerContainer.stopShimmer()
+                    binding.shimmerContainer.visibility = View.GONE
+                    binding.layout.visibility = View.VISIBLE
+
                     try {
                         if (response.Profile_pic!!.isNotEmpty()) {
                             Glide.with(applicationContext).load(response.Profile_pic).into(binding.userProfile)

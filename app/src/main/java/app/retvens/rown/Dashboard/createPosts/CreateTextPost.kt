@@ -365,11 +365,14 @@ class CreateTextPost : AppCompatActivity(),
         }
     }
     override fun onBackPressed() {
-//        super.onBackPressed()
-        val bottomSheet = BottomSheetGoingBack()
-        val fragManager = supportFragmentManager
-        fragManager.let{bottomSheet.show(it, BottomSheetGoingBack.GoingBack_TAG)}
-        bottomSheet.setOnGoingBackClickListener(this)
+        if (binding.canSeeText.text == "Anyone" || binding.canCommentText.text == "Anyone" || binding.whatDYEt.text.isEmpty() || binding.etLocationPostEvent.text!!.isEmpty()){
+            super.onBackPressed()
+        }else {
+            val bottomSheet = BottomSheetGoingBack()
+            val fragManager = supportFragmentManager
+            fragManager.let { bottomSheet.show(it, BottomSheetGoingBack.GoingBack_TAG) }
+            bottomSheet.setOnGoingBackClickListener(this)
+        }
     }
     override fun bottomGoingBackClick(GoingBackFrBo: String) {
         if (GoingBackFrBo == "Discard"){

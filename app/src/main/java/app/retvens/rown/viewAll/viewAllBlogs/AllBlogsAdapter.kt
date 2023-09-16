@@ -111,7 +111,7 @@ class AllBlogsAdapter(var listS : ArrayList<AllBlogsData>, val context: Context,
 
         Glide.with(context).load(listS[position].blog_image).into(holder.cover)
 
-        holder.read_more_blog.setOnClickListener {
+        holder.itemView.setOnClickListener {
             val intent = Intent(context, BlogsDetailsActivity::class.java)
             intent.putExtra("cover", listS[position].blog_image)
             intent.putExtra("title", listS[position].blog_title)

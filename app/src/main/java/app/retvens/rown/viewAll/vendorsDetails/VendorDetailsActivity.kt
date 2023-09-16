@@ -167,6 +167,11 @@ class VendorDetailsActivity : AppCompatActivity() {
                 Log.d("fetch", response.body().toString())
 
                 if (response.isSuccessful) {
+
+                    binding.shimmerContainer.stopShimmer()
+                    binding.shimmerContainer.visibility = View.GONE
+                    binding.layout.visibility = View.VISIBLE
+
                     val image = response.body()?.vendorInfo?.vendorImage
                     val name = response.body()?.Full_name
 //                    val name = response.body()?.vendorInfo?.vendorDescription
