@@ -76,6 +76,14 @@ class SelectMembersAdapter(val context: Context, var userList:List<Connections>)
         return userList.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: List<Connections>) {
         userList = newItems

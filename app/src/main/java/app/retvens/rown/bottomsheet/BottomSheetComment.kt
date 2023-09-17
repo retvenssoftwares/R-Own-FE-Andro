@@ -112,16 +112,25 @@ showKeyBoard(comments)
 
         val post = view.findViewById<TextView>(R.id.postComment)
 
+        val sharedPreference = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
+        val profilePic = sharedPreference?.getString("profile_image", "").toString()
+
+        if (profilePic.isNotEmpty()) {
+            Glide.with(requireContext()).load(profilePic).into(profile)
+        } else {
+            profile.setImageResource(R.drawable.svg_user)
+        }
+
         child = "0"
 
         cancelReply.setOnClickListener {
             child = "0"
             replying.visibility = View.GONE
-            if (postprofile.isNotEmpty()) {
-                Glide.with(requireContext()).load(postprofile).into(profile)
-            } else {
-                profile.setImageResource(R.drawable.svg_user)
-            }
+//            if (postprofile.isNotEmpty()) {
+//                Glide.with(requireContext()).load(postprofile).into(profile)
+//            } else {
+//                profile.setImageResource(R.drawable.svg_user)
+//            }
         }
 
         comments.addTextChangedListener {
@@ -148,9 +157,9 @@ showKeyBoard(comments)
         }
 
         if (postprofile.isNotEmpty()) {
-            Glide.with(requireContext()).load(postprofile).into(profile)
+//            Glide.with(requireContext()).load(postprofile).into(profile)
         } else {
-            profile.setImageResource(R.drawable.svg_user)
+//            profile.setImageResource(R.drawable.svg_user)
         }
 
         getCommentList(postID)
@@ -248,9 +257,9 @@ showKeyBoard(comments)
 
             override fun onItemClick(dataItem: Comments) {
                 if (dataItem.Profile_pic.isNotEmpty()) {
-                    Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
+//                    Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
                 } else {
-                    profile.setImageResource(R.drawable.svg_user)
+//                    profile.setImageResource(R.drawable.svg_user)
                 }
                 child = "1"
                 replyingText.text = " You are replying to ${dataItem.User_name}"

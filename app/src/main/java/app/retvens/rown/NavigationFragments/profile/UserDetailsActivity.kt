@@ -60,7 +60,7 @@ class UserDetailsActivity : AppCompatActivity(),
         progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val image = progressDialog.findViewById<ImageView>(R.id.imageview)
         Glide.with(this).load(R.drawable.animated_logo_transparent).into(image)
-        progressDialog.show()
+//        progressDialog.show()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -74,13 +74,13 @@ class UserDetailsActivity : AppCompatActivity(),
             isOwner = false
             handler.postDelayed({
                 getProfile(userID!!)
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
             },200)
 
         } else {
             handler.postDelayed({
                 getProfile(user_id)
-                progressDialog.dismiss()
+//                progressDialog.dismiss()
             },200)
 
         }
@@ -137,6 +137,10 @@ class UserDetailsActivity : AppCompatActivity(),
                 if (response.isSuccessful){
                     try {
                         val response = response.body()!!
+
+                        binding.shimmerContainer.stopShimmer()
+                        binding.shimmerContainer.visibility = View.GONE
+                        binding.layout.visibility = View.VISIBLE
 
                         if (response.Profile_pic!!.isNotEmpty()) {
                             Glide.with(applicationContext).load(response.Profile_pic)
