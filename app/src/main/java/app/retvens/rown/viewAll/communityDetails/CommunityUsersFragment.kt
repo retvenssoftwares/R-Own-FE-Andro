@@ -409,9 +409,9 @@ class CommunityUsersFragment(val groupID:String) : Fragment() {
 
             override fun onItemClick(member: User,admin:String) {
                 Log.e("1","working")
-                Log.e("userid","${member.User_id}")
+                Log.e("userid","${member.user_id}")
                 if (member.admin!="true")
-                 openBottomSelectionCommunity(member.User_id,member.Role,admin)
+                 openBottomSelectionCommunity(member.user_id,member.Role,admin)
             }
 
 

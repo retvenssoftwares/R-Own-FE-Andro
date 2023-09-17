@@ -90,14 +90,14 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
                 var isAdmin = "false"
 
                 currentItem.Admin.forEach {
-                    if (user_id == it.User_id){
+                    if (user_id == it.user_id){
                         isAdmin = "true"
                     }else{
                         Log.e("error","not")
                     }
 
                     Log.e("user",user_id)
-                    Log.e("user",it.User_id.toString())
+                    Log.e("user",it.user_id.toString())
                 }
 
 

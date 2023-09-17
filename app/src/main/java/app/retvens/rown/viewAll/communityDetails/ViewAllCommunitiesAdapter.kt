@@ -52,7 +52,7 @@ class ViewAllCommunitiesAdapter (val context : Context, var list: List<GetCommun
             var isAdmin = "false"
 
             currentItem.Admin.forEach {
-                if (user_id == it.User_id){
+                if (user_id == it.user_id){
                     isAdmin = "true"
                 }else{
                     Log.e("error","not")
