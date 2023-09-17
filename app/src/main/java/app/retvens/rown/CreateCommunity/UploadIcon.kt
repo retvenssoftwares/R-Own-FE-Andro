@@ -3,8 +3,10 @@ package app.retvens.rown.CreateCommunity
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -52,6 +54,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -71,6 +74,7 @@ class UploadIcon : AppCompatActivity() {
     private lateinit var dialog:Dialog
     private lateinit var latitude:String
     private lateinit var longitude:String
+    private lateinit var imageUri: Uri
     private  var communityUri:Uri? = null
     var PICK_IMAGE_REQUEST_CODE : Int = 0
 
@@ -200,7 +204,7 @@ class UploadIcon : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == AppCompatActivity.RESULT_OK && data != null) {
-            val imageUri = data.data
+            imageUri = data.data!!
             if (imageUri != null) {
                 cropProfileImage(imageUri)
             }
@@ -303,6 +307,17 @@ class UploadIcon : AppCompatActivity() {
         })
     }
 
+    fun decodeUriAsBitmap(context: Context, uri: Uri?): Bitmap? {
+        var bitmap: Bitmap? = null
+        bitmap = try {
+            BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri!!))
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            return null
+        }
+        return bitmap
+    }
+
     private fun createCommunity() {
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -329,7 +344,7 @@ class UploadIcon : AppCompatActivity() {
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id),
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(),description),
             MultipartBody.Part.createFormData("Profile_pic", file.name, body)
-            )
+        )
 
         send.enqueue(object : Callback<UpdateResponse?> {
             override fun onResponse(
@@ -341,10 +356,10 @@ class UploadIcon : AppCompatActivity() {
 //                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     addCommunityMember()
 
-                    val profile = Mesibo.getProfile(groupId)
-                    profile.image = decodeSampledBitmapFromFile(file,200,150)
+                    val profile = Mesibo.getProfile(groupId.toLong())
+                    profile.groupProfile.image =  decodeUriAsBitmap(applicationContext,imageUri)
+                    profile.groupProfile.save()
 
-                    profile.save()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -355,6 +370,30 @@ class UploadIcon : AppCompatActivity() {
             }
         })
 
+
+        val sendProfile = RetrofitBuilder.feedsApi.updateGroupProfile(
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),groupId),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),name),
+            MultipartBody.Part.createFormData("image", file.name, body)
+        )
+
+        sendProfile.enqueue(object : Callback<ResponseGroup?> {
+            override fun onResponse(
+                call: Call<ResponseGroup?>,
+                response: Response<ResponseGroup?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Log.e("res",response.op.toString())
+                }else{
+                    Log.e("code",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseGroup?>, t: Throwable) {
+              Log.e("error",t.message.toString())
+            }
+        })
     }
 
     private fun addCommunityMember() {
@@ -362,7 +401,7 @@ class UploadIcon : AppCompatActivity() {
 
         for (x in members!!){
 
-           val data = AddUserDataClass(x)
+            val data = AddUserDataClass(x)
 
             val send = RetrofitBuilder.feedsApi.addUser(groupId,data)
 

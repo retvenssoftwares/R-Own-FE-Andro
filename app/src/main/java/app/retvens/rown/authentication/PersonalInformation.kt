@@ -1,13 +1,14 @@
 package app.retvens.rown.authentication
 
-import android.R.attr.bitmap
 import android.app.Dialog
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -51,9 +52,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.FirebaseAuth
 import com.mesibo.api.Mesibo
-import com.mesibo.api.MesiboProfile
 import com.yalantis.ucrop.UCrop
-import id.zelory.compressor.decodeSampledBitmapFromFile
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -62,11 +61,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.RuntimeException
-import java.util.*
-import kotlin.streams.asSequence
+import java.util.Locale
 
 
 class PersonalInformation : AppCompatActivity() {
@@ -90,6 +88,7 @@ class PersonalInformation : AppCompatActivity() {
     lateinit var eMail : String
     lateinit var path:String
     private var mGroupId: Long = 0
+    private lateinit var imageUri:Uri
 
     private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -305,6 +304,17 @@ class PersonalInformation : AppCompatActivity() {
 
     }
 
+    fun decodeUriAsBitmap(context: Context, uri: Uri?): Bitmap? {
+        var bitmap: Bitmap? = null
+        bitmap = try {
+            BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri!!))
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            return null
+        }
+        return bitmap
+    }
+
     private fun uploadData(user_id: String) {
 
         val sharedPreferences = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
@@ -342,10 +352,6 @@ class PersonalInformation : AppCompatActivity() {
             val outputStream = FileOutputStream(file)
             inputStream!!.copyTo(outputStream)
 
-            val profile = Mesibo.getProfile(Mesibo_account.address)
-            profile.image = decodeSampledBitmapFromFile(file,200,150)
-            profile.save()
-
 //            Toast.makeText(applicationContext,"saved",Toast.LENGTH_SHORT).show()
 
             val selfProfile = Mesibo.getSelfProfile()
@@ -381,6 +387,11 @@ class PersonalInformation : AppCompatActivity() {
                     Log.d("image", response.body().toString())
                     if (response.message().toString() != "Request Entity Too Large"){
                         if (message.toString() != "User already exists"){
+
+                            val profile = Mesibo.getProfile(Mesibo_account.address)
+                            profile.image = decodeUriAsBitmap(applicationContext,imageUri!!)
+                            profile.save()
+
                             moveTo(this@PersonalInformation,"MoveToI")
                             saveFullName(applicationContext, username)
                             val intent = Intent(applicationContext,UserInterest::class.java)
@@ -573,7 +584,7 @@ class PersonalInformation : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
-            val imageUri = data.data
+            imageUri = data.data!!
             path = imageUri?.path!!
             if (imageUri != null) {
 //                compressImage(imageUri)

@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -43,12 +44,18 @@ class ExploreFragment : Fragment() {
 
     var selectedFrag = 0
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_explore, container, false)
+        val view =  inflater.inflate(R.layout.fragment_explore, container, false)
+
+        view?.setOnTouchListener { _, _ -> true }
+
+        return view
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

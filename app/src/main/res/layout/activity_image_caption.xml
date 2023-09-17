@@ -10,14 +10,14 @@
 
 <!--     android:scaleType="fitCenter" -->
 
-    <com.mesibo.mediapicker.cropper.CropImageView
+    <app.retvens.rown.MesiboMediaPickerClasses.sources.cropper.CropImageView
         android:id="@+id/caption_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         >
 
-    </com.mesibo.mediapicker.cropper.CropImageView>
+    </app.retvens.rown.MesiboMediaPickerClasses.sources.cropper.CropImageView>
 
     <RelativeLayout
         android:id="@+id/caption_view"

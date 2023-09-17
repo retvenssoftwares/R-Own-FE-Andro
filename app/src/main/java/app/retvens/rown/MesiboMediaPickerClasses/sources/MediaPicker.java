@@ -65,7 +65,7 @@ public class MediaPicker {
         return mImageEditorListener;
     }
 
-    public static void launchEditor(Activity context, int type, int drawableid, String title, String filePath, boolean showEditControls, boolean showTitle, boolean showCropOverlay, boolean squareCrop, int maxDimension, ImageEditorListener listener) {
+    public static void launchEditor(Activity context, int type, int drawableid, String title, String filePath, boolean showEditControls, boolean showTitle, boolean showCropOverlay, boolean squareCrop, int maxDimension, ImageEditorListener listener,String peer,long groupId) {
         Intent in = new Intent(context, ImageEditor.class);
         in.putExtra("title", title);
         in.putExtra("filepath", filePath);
@@ -75,6 +75,8 @@ public class MediaPicker {
         in.putExtra("squareCrop", squareCrop);
         in.putExtra("type", type);
         in.putExtra("drawableid", drawableid);
+        in.putExtra("peer",peer);
+        in.putExtra("groupId",groupId);
         mImageEditorListener = listener;
         if (maxDimension > 0) {
             in.putExtra("maxDimension", maxDimension);

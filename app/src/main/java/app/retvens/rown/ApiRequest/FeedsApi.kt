@@ -4,6 +4,7 @@ import app.retvens.rown.DataCollections.DeleteCommunityDataClass
 import app.retvens.rown.DataCollections.FeedCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.LocationClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.ResponseGroup
 import app.retvens.rown.DataCollections.UserProfileResponse
 import app.retvens.rown.DataCollections.location.UpcomingEventDataclass
 import app.retvens.rown.DataCollections.saveId.SaveBlog
@@ -52,6 +53,14 @@ interface FeedsApi {
         @Part("description") description: RequestBody,
         @Part Profile_pic: MultipartBody.Part
     ): Call<UpdateResponse>
+
+    @Multipart
+    @PATCH("editGroup")
+    fun updateGroupProfile(
+        @Part("grp_id") group_id:RequestBody,
+        @Part("attribute") attribute:RequestBody,
+        @Part image: MultipartBody.Part
+    ):Call<ResponseGroup>
 
     @PATCH("addUser/{gid}")
     fun addUser(

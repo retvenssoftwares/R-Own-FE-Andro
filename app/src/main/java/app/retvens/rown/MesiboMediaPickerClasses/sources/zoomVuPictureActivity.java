@@ -97,8 +97,12 @@ public class zoomVuPictureActivity extends AppCompatActivity {
         }
     }
 
-    public class SwipeFragment extends Fragment {
+    public static class SwipeFragment extends Fragment {
         RelativeLayout mTouchLayout;
+
+        public SwipeFragment() {
+            // Required empty public constructor
+        }
 
         @SuppressLint("RestrictedApi")
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -149,13 +153,13 @@ public class zoomVuPictureActivity extends AppCompatActivity {
             return swipeView;
         }
 
-        public void onResume() {
-            super.onResume();
-            zoomVuPictureActivity.super.onResume();
-            if (((AppCompatActivity)getActivity()).getSupportActionBar() != null) {
-                ((AppCompatActivity)getActivity()).getSupportActionBar().show();
-            }
-        }
+//        public void onResume() {
+//            super.onResume();
+//            zoomVuPictureActivity.super.onResume();
+//            if (((AppCompatActivity)getActivity()).getSupportActionBar() != null) {
+//                ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+//            }
+//        }
 
          SwipeFragment newInstance(ArrayList<String> ImageArray, int position) {
             SwipeFragment swipeFragment = new SwipeFragment();

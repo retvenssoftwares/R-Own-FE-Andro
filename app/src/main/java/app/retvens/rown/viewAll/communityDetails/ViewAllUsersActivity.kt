@@ -137,7 +137,7 @@ class ViewAllUsersActivity : AppCompatActivity() {
             }
 
             override fun onItemClick(member: User, admin: String) {
-                openBottomSelectionCommunity(member.user_id,member.Role,admin)
+                openBottomSelectionCommunity(member.User_id,member.Role,admin)
             }
 
 

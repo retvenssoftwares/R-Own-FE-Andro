@@ -74,7 +74,7 @@ class NormalUserDetailsAdapter(val context: Context, var userList:ArrayList<User
 
 
         admin.forEach {
-            if (user_id == it.user_id){
+            if (user_id == it.User_id){
                 isadmin = "true"
             }else{
                 Log.e("error","not")

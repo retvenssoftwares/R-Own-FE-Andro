@@ -279,7 +279,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
                         binding.switchToCommunity.text = "Switch to Open Community"
                     }
                     response.Members.forEach {
-                        members.add(it.user_id)
+                        members.add(it.User_id)
                     }
 
                     if (type == "Open Community"){
@@ -294,7 +294,7 @@ class CommunityDetailsActivity : AppCompatActivity(){
                     binding.communityCreatedBy.text = "Created by ${response.creator_name} | $date"
 
                     response.Admin.forEach {
-                        admin.add(it.user_id)
+                        admin.add(it.User_id)
                     }
 
                 }

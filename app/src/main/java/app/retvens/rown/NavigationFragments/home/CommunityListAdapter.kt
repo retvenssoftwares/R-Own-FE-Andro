@@ -90,14 +90,21 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
                 var isAdmin = "false"
 
                 currentItem.Admin.forEach {
-                    if (user_id == it.user_id){
+                    if (user_id == it.User_id){
                         isAdmin = "true"
                     }else{
                         Log.e("error","not")
                     }
+
+                    Log.e("user",user_id)
+                    Log.e("user",it.User_id.toString())
                 }
 
+
+
+
                 holder.itemView.setOnClickListener {
+                    Log.e("admin",isAdmin.toString())
                     val intent = Intent(context, MesiboMessagingActivity::class.java)
                     intent.putExtra("admin",isAdmin)
                     intent.putExtra(MesiboUI.GROUP_ID, currentItem.group_id.toLong())

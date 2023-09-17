@@ -278,7 +278,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
 
         header.findViewById<TextView>(R.id.isComplete).text = "Your Profile is $profileCompletionStatus% Complete"
 
-         header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
+        header.findViewById<TextView>(R.id.complete_your_profile).setOnClickListener {
             if (profileCompletionStatus == "100"){
                 header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
                 progressBar.progress = profileCompletionStatus.toInt()
@@ -289,9 +289,9 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
             }
         }
 
-            if (profileCompletionStatus == "100"){
-                header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
-            }
+        if (profileCompletionStatus == "100"){
+            header.findViewById<TextView>(R.id.complete_your_profile).text = "Profile completed"
+        }
 
         profile = header.findViewById<ImageView>(R.id.nav_profile)
         val verification = header.findViewById<ImageView>(R.id.verification)
@@ -315,15 +315,15 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
             if (profileImage.isNotEmpty()) {
                 Glide.with(this).load(profileImage).into(profile)
             } else{
-            getProfileInfo(this){
-                if (it == 502){
-                    binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
-                    binding.noInternet.visibility = View.VISIBLE
-                    binding.noInternetLayout.visibility = View.GONE
-                    binding.navView.visibility = View.GONE
-                    binding.dashboard.visibility = View.GONE
+                getProfileInfo(this){
+                    if (it == 502){
+                        binding.noInternetImage.setImageResource(R.drawable.svg_server_down)
+                        binding.noInternet.visibility = View.VISIBLE
+                        binding.noInternetLayout.visibility = View.GONE
+                        binding.navView.visibility = View.GONE
+                        binding.dashboard.visibility = View.GONE
+                    }
                 }
-            }
                 if (profileImage.isNotEmpty()) {
                     Glide.with(this).load(profileImage).into(profile)
                 } else {
@@ -530,15 +530,15 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
             Log.e("role", role.toString())
             drawerLayout.closeDrawer(GravityCompat.START)
             if (role =="Hotel Owner"){
-            replaceFragment(ProfileFragmentForHotelOwner())
-            toolbar.visibility = View.GONE
-        }else if (role == "Business Vendor / Freelancer"){
-            replaceFragment(ProfileFragmentForVendors())
-            toolbar.visibility = View.GONE
-        }else {
-            replaceFragment(ProfileFragment())
-            toolbar.visibility = View.GONE
-        }
+                replaceFragment(ProfileFragmentForHotelOwner())
+                toolbar.visibility = View.GONE
+            }else if (role == "Business Vendor / Freelancer"){
+                replaceFragment(ProfileFragmentForVendors())
+                toolbar.visibility = View.GONE
+            }else {
+                replaceFragment(ProfileFragment())
+                toolbar.visibility = View.GONE
+            }
             toolbar.visibility = View.GONE
         }
 
@@ -784,7 +784,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
     }
 
     override fun Mesibo_onMessage(p0: MesiboMessage) {
-       // mprofile.addAll(listOf(p0.profile))
+        // mprofile.addAll(listOf(p0.profile))
         var counter = 0
         val mesiboProfiles = Mesibo.getSortedUserProfiles()
         for (i in 0 until mesiboProfiles.size) {
@@ -799,7 +799,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
             updateBadgeCount(badgeView,counter)
         },200)
 
-     }
+    }
 
     override fun Mesibo_onMessageStatus(p0: MesiboMessage) {
 
@@ -812,4 +812,3 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
 
 
 }
-

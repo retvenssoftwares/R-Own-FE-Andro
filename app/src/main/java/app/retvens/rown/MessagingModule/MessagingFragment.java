@@ -60,12 +60,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -95,8 +94,7 @@ import com.mesibo.emojiview.EmojiconGridView;
 import com.mesibo.emojiview.EmojiconTextView;
 import com.mesibo.emojiview.EmojiconsPopup;
 import com.mesibo.emojiview.emoji.Emojicon;
-import com.mesibo.mediapicker.MediaPicker;
-import com.mesibo.mediapicker.MediaPicker.ImageEditorListener;
+
 
 
 import java.io.File;
@@ -116,9 +114,11 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import app.retvens.rown.ApiRequest.ChatDataClass;
+import app.retvens.rown.ApiRequest.GroupChatDataClass;
 import app.retvens.rown.ApiRequest.RetrofitBuilder;
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse;
 import app.retvens.rown.MesiboApi;
+import app.retvens.rown.MesiboMediaPickerClasses.sources.MediaPicker;
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
 import app.retvens.rown.MessagingModule.AllUtils.TextToEmoji;
 import app.retvens.rown.R;
@@ -126,7 +126,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MessagingFragment extends BaseFragment implements MessageListener, PresenceListener, ConnectionListener, SyncListener, OnClickListener, MessageViewHolder.ClickListener, OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener, ImageEditorListener, Listener, MessageAdapter.MessagingAdapterListener, MessagingActivityListener{
+public class MessagingFragment extends BaseFragment implements MessageListener, PresenceListener, ConnectionListener, SyncListener, OnClickListener, MessageViewHolder.ClickListener, OnMapReadyCallback, ConnectionCallbacks, OnConnectionFailedListener, LocationListener, MediaPicker.ImageEditorListener, Listener, MessageAdapter.MessagingAdapterListener, MessagingActivityListener, com.mesibo.mediapicker.MediaPicker.ImageEditorListener {
     public static final int MESIBO_MESSAGECONTEXTACTION_FORWARD = 1;
     public static final int MESIBO_MESSAGECONTEXTACTION_REPLY = 2;
     public static final int MESIBO_MESSAGECONTEXTACTION_RESEND = 4;
@@ -535,6 +535,12 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 
 
 
+    }
+
+    @NonNull
+    @Override
+    public CreationExtras getDefaultViewModelCreationExtras() {
+        return super.getDefaultViewModelCreationExtras();
     }
 
 
@@ -1525,6 +1531,17 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
         return true;
     }
 
+    @Override
+    public boolean onDragItem(int i) {
+        if (!this.mSelectionMode) {
+            this.getListener().Mesibo_onShowInContextUserInterface();
+            this.mSelectionMode = true;
+        }
+
+        this.toggleSelection(i);
+        return true;
+    }
+
     private void toggleSelection(int position) {
         int gPosition = this.mAdapter.globalPosition(position);
         this.mAdapter.toggleSelection(gPosition);
@@ -1559,12 +1576,41 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                 performChatNotification(userID, cc.getName(), msg.message);
 
             }catch (NullPointerException e){
-                Log.e("error","e.getMessage().toString()");
+                MesiboProfile group = Mesibo.getProfile(this.mGroupId);
+                String name = group.getName();
+               performGroupChatNotification(name,msg.message, String.valueOf(this.mGroupId));
             }
 
 
 
         }
+    }
+
+    private void performGroupChatNotification(String title,String body,String groupId) {
+        Log.e("group", String.valueOf(groupId));
+        SharedPreferences sharedPreferences1 = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE);
+        String user_id = sharedPreferences1.getString("user_id", "");
+
+        // Make the API call
+        Call<UpdateResponse> call = RetrofitBuilder.INSTANCE.getCalling().groupChatNotification(new GroupChatDataClass(title,body,groupId,user_id));
+        call.enqueue(new Callback<UpdateResponse>() {
+            @Override
+            public void onResponse(Call<UpdateResponse> call, Response<UpdateResponse> response) {
+                if (response.isSuccessful()) {
+                    // API call was successful, handle the response
+                    UpdateResponse updateResponse = response.body();
+                    Log.e("success",updateResponse.getMessage());
+                } else {
+                    Log.e("error",response.message().toString());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateResponse> call, Throwable t) {
+                Log.e("error",t.getMessage().toString());
+            }
+        });
     }
 
     private void performChatNotification(String userId,String title,String body) {
@@ -1779,7 +1825,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
                         drawableid = MesiboImages.getFileDrawable(filePath);
                     }
                     Log.e("error",filePath.toString());
-                    MesiboUIManager.launchImageEditor(this.myActivity(), requestCode, drawableid, (String) null, filePath, true, true, false, false, 1280, this);
+                    MesiboUIManager.launchImageEditor(this.myActivity(), requestCode, drawableid, (String) null, filePath, true, true, false, false, 1280, this,this.mPeer,this.mGroupId);
                     return true;
                 }
             }

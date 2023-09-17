@@ -11,17 +11,24 @@ package app.retvens.rown.MessagingModule;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.DragEvent;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import app.retvens.rown.R;
 
 
-public class MessageViewHolder extends MesiboRecycleViewHolder implements View.OnClickListener, View.OnLongClickListener {
+public class MessageViewHolder extends MesiboRecycleViewHolder implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener {
     protected FrameLayout mBubble;
     protected MessageData mData;
     protected ImageView mFavourite;
@@ -32,6 +39,8 @@ public class MessageViewHolder extends MesiboRecycleViewHolder implements View.O
     protected TextView otherUserName;
     private ClickListener listener;
     private LinearLayout m_titleLayout;
+
+    private GestureDetector gestureDetector;
 
     public MessageViewHolder(int type, View v, ClickListener listener2) {
         super(v);
@@ -52,7 +61,11 @@ public class MessageViewHolder extends MesiboRecycleViewHolder implements View.O
         this.listener = listener2;
         v.setOnClickListener(this);
         v.setOnLongClickListener(this);
+        v.setOnDragListener(this);
+        this.gestureDetector = new GestureDetector(v.getContext(), new MyGestureListener());
     }
+
+
 
     public void setData(MessageData m, int position, boolean selected) {
         int i = 8;
@@ -154,14 +167,106 @@ public class MessageViewHolder extends MesiboRecycleViewHolder implements View.O
 
     public boolean onLongClick(View v) {
         if (this.listener != null) {
+            Log.e("onclick","longClick");
             return this.listener.onItemLongClicked(getAdapterPosition());
         }
         return false;
     }
 
+@Override
+    public boolean onDrag(View view, DragEvent dragEvent) {
+        // This method is called when drag events occur on the 'view'.
+
+        switch (dragEvent.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED:
+                // This event is sent when the drag operation is started.
+                // You can perform initialization or checks here.
+                if (this.listener != null) {
+                    return this.listener.onDragItem(getAdapterPosition());
+                }
+                break;
+
+            case DragEvent.ACTION_DRAG_ENTERED:
+                // This event is sent when the drag shadow enters the 'view'.
+                // You can update the appearance or behavior of the view when it's dragged over.
+                Log.e("Drag", "Drag entered");
+                break;
+
+            case DragEvent.ACTION_DRAG_EXITED:
+                // This event is sent when the drag shadow leaves the 'view'.
+                // You can update the appearance or behavior of the view when it's dragged out.
+                Log.e("Drag", "Drag exited");
+                break;
+
+            case DragEvent.ACTION_DRAG_LOCATION:
+                // This event is sent repeatedly as long as the drag shadow is over the 'view'.
+                // You can use this to track the drag's position.
+                Log.e("Drag", "Drag location");
+                break;
+
+            case DragEvent.ACTION_DROP:
+                // This event is sent when the user releases the drag shadow on the 'view'.
+                // You can handle the dropped data or perform any necessary actions.
+                Log.e("Drag", "Drag dropped");
+                break;
+
+            case DragEvent.ACTION_DRAG_ENDED:
+                // This event is sent when the drag operation ends, whether it was successful or not.
+                // You can perform cleanup or reset the view's state here.
+                Log.e("Drag", "Drag ended");
+                break;
+
+            default:
+                break;
+        }
+
+        return false; // Return 'true' to indicate that you've consumed the drag event.
+    }
+
+
     public interface ClickListener {
         void onItemClicked(int i);
 
         boolean onItemLongClicked(int i);
+
+        boolean onDragItem(int i);
+    }
+
+
+
+    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final int SWIPE_THRESHOLD = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            float diffX = e2.getX() - e1.getX();
+            float diffY = e2.getY() - e1.getY();
+
+            if (Math.abs(diffX) > Math.abs(diffY)
+                    && Math.abs(diffX) > SWIPE_THRESHOLD
+                    && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                if (diffX > 0) {
+                    Log.e("move", "right");
+                    // Start the drag operation when a right swipe is detected
+                    startDragOperation();
+                }
+            }
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+    }
+
+    private void startDragOperation() {
+        // Start a drag operation here
+        // You can create a ClipData object and use startDragAndDrop method
+        // Example:
+        // ClipData data = ClipData.newPlainText("dragData", "Some data to drag");
+        // View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(itemView);
+        // itemView.startDragAndDrop(data, shadowBuilder, null, 0);
     }
 }

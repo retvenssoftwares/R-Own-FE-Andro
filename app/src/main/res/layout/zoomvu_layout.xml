@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     >
 
-    <com.mesibo.mediapicker.ImageViewTouch
+    <app.retvens.rown.MesiboMediaPickerClasses.sources.ImageViewTouch
 
         android:id="@+id/imageViewz"
         android:layout_width="fill_parent"
@@ -14,7 +14,7 @@
         android:layout_centerInParent="true"
         android:background="@android:color/black"
         android:scaleType="matrix" >
-    </com.mesibo.mediapicker.ImageViewTouch>
+    </app.retvens.rown.MesiboMediaPickerClasses.sources.ImageViewTouch>
 
     <LinearLayout
         android:id="@+id/video_layer"
