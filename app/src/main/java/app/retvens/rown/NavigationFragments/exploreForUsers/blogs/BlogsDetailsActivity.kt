@@ -1,7 +1,9 @@
 package app.retvens.rown.NavigationFragments.exploreForUsers.blogs
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.widget.Toast
 import app.retvens.rown.ApiRequest.RetrofitBuilder
@@ -142,7 +144,12 @@ class BlogsDetailsActivity : AppCompatActivity() {
                     try {
                         binding.userName.text = res.get(0).User_name
                         binding.blogTitle.text = res.get(0).blog_title
-                        binding.blogContent.text = res.get(0).blog_content
+                        binding.blogContent.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Html.fromHtml(res.get(0).blog_content, Html.FROM_HTML_MODE_COMPACT)
+                        } else {
+                            Html.fromHtml(res.get(0).blog_content)
+                        }
+//                        binding.blogContent.text =
                         Glide.with(applicationContext).load(res.get(0).blog_image).into(binding.blogPic)
                         Glide.with(applicationContext).load(res.get(0).Profile_pic).into(binding.userProfile)
 

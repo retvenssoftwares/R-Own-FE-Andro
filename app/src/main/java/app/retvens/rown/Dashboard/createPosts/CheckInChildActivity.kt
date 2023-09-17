@@ -128,9 +128,19 @@ class CheckInChildActivity : AppCompatActivity(),
 
     override fun bottomSelectAudienceClick(audienceFrBo: String) {
         if (canSee == 1){
-            binding.canSeeText.text = audienceFrBo
+            if (audienceFrBo == "Connections") {
+                binding.canSeeText.text = audienceFrBo
+                binding.canCommentText.text = audienceFrBo
+            } else {
+                binding.canSeeText.text = audienceFrBo
+            }
         }else{
-            binding.canCommentText.text = audienceFrBo
+            if (audienceFrBo == "Anyone") {
+                binding.canCommentText.text = audienceFrBo
+                binding.canSeeText.text = audienceFrBo
+            } else {
+                binding.canCommentText.text = audienceFrBo
+            }
         }
     }
 }

@@ -114,10 +114,24 @@ class BlogsChildAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val recyclerItem = blogsRecyclerData[position]
         when(holder){
             is BlogsViewHolder -> {
                 holder.bindBlogsView(blogsRecyclerData[position])
             }
+        }
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, BlogsDetailsActivity::class.java)
+            intent.putExtra("cover", recyclerItem.blog_image)
+            intent.putExtra("title", recyclerItem.blog_title)
+            intent.putExtra("content", recyclerItem.blog_content)
+            intent.putExtra("date", recyclerItem.date_added)
+            intent.putExtra("userName", recyclerItem.User_name)
+            intent.putExtra("userProfile", recyclerItem.Profile_pic)
+            intent.putExtra("blogId", recyclerItem.blog_id)
+            intent.putExtra("saved", recyclerItem.saved)
+            intent.putExtra("like", recyclerItem.like)
+            context.startActivity(intent)
         }
     }
 

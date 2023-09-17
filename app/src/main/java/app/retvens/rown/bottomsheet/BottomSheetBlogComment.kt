@@ -125,10 +125,19 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
 
         child = "0"
 
+        val sharedPreference = context?.getSharedPreferences("SaveProfileImage", AppCompatActivity.MODE_PRIVATE)
+        val profilePic = sharedPreference?.getString("profile_image", "").toString()
+
+        if (profilePic.isNotEmpty()) {
+            Glide.with(requireContext()).load(profilePic).into(profile)
+        } else {
+            profile.setImageResource(R.drawable.svg_user)
+        }
+
         cancelReply.setOnClickListener {
             child = "0"
             replying.visibility = View.GONE
-            Glide.with(requireContext()).load(blogProfile).into(profile)
+//            Glide.with(requireContext()).load(blogProfile).into(profile)
         }
 
         post.setOnClickListener {
@@ -144,9 +153,9 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
         }
 
         if (blogProfile.isNotEmpty()) {
-            Glide.with(requireContext()).load(blogProfile).into(profile)
+//            Glide.with(requireContext()).load(blogProfile).into(profile)
         } else {
-            profile.setImageResource(R.drawable.svg_user)
+//            profile.setImageResource(R.drawable.svg_user)
         }
 
         getCommentList(blog_id)
@@ -250,9 +259,9 @@ class BottomSheetBlogComment(val blog_id :String, val blogProfile:String) : Bott
 
             override fun onItemClick(dataItem: Comment) {
                 if (dataItem.Profile_pic.isNotEmpty()) {
-                    Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
+//                    Glide.with(requireContext()).load(dataItem.Profile_pic).into(profile)
                 } else {
-                    profile.setImageResource(R.drawable.svg_user)
+//                    profile.setImageResource(R.drawable.svg_user)
                 }
                 child = "1"
                 replyingText.text = " You are replying to ${dataItem.User_name}"
