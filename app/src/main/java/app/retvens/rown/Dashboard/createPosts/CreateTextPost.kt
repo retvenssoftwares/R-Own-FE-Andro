@@ -365,7 +365,7 @@ class CreateTextPost : AppCompatActivity(),
         }
     }
     override fun onBackPressed() {
-        if (binding.canSeeText.text == "Anyone" || binding.canCommentText.text == "Anyone" || binding.whatDYEt.text.isEmpty() || binding.etLocationPostEvent.text!!.isEmpty()){
+        if (binding.canSeeText.text == "Anyone" && binding.canCommentText.text == "Anyone" && binding.whatDYEt.text.isEmpty() && binding.etLocationPostEvent.text!!.isEmpty()){
             super.onBackPressed()
         }else {
             val bottomSheet = BottomSheetGoingBack()
