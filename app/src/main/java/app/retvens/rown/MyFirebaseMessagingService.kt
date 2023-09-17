@@ -51,6 +51,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.e("message",message.toString())
 
 
+
 //            MesiboCall.getInstance().init(applicationContext)
             title = message.data["title"].toString()
             body = message.data["body"].toString()
@@ -60,7 +61,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             type = message.data["type"].toString()
             postId = message.data["post_id"].toString()
             postType = message.data["postType"].toString()
-
+        Log.e("message",message.toString())
             Log.e("type",type.toString())
              Log.e("post",postType.toString())
         Log.e("podtod",postId.toString())
