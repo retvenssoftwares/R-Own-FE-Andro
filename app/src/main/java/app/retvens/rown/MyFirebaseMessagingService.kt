@@ -92,6 +92,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.r_own_logo)
             .setContentTitle(title)
             .setContentText(body)
+            .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH) // Set high priority for heads-up notification
             .setDefaults(Notification.DEFAULT_ALL) // Add default notification behaviors (sound, vibration, etc.)
 

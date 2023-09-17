@@ -96,8 +96,7 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
                         Log.e("error","not")
                     }
 
-                    Log.e("user",user_id)
-                    Log.e("user",it.user_id.toString())
+
                 }
 
 
