@@ -37,7 +37,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.SearchView;
@@ -74,6 +76,7 @@ import java.util.stream.Collectors;
 
 import app.retvens.rown.ApiRequest.RetrofitBuilder;
 import app.retvens.rown.ChatSection.MesiboUsers;
+import app.retvens.rown.Dashboard.FragmentAdapter;
 import app.retvens.rown.DataCollections.Count;
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
 import app.retvens.rown.R;
@@ -82,12 +85,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserListFragment extends Fragment implements Mesibo.MessageListener,
-        Mesibo.PresenceListener, Mesibo.ConnectionListener, Mesibo.ProfileListener, Mesibo.SyncListener, Mesibo.GroupListener {
+        Mesibo.PresenceListener, Mesibo.ConnectionListener, Mesibo.ProfileListener, Mesibo.SyncListener, Mesibo.GroupListener{
     public static MesiboGroupProfile.Member[] mExistingMembers = null;
     public static ArrayList<MesiboProfile> mMemberProfiles = new ArrayList<>();
     public static ArrayList<MesiboProfile> member = new ArrayList<>();
     public static ArrayList<MesiboProfile> mMemberGroup = new ArrayList<>();
-
+    Boolean  swipeEnabled = false;
     public static boolean isSheetOpen = false;
     /* access modifiers changed from: private */
     public boolean mCloseAfterForward = false;
@@ -234,6 +237,8 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         }
         View view = inflater.inflate(layout, container, false);
         setHasOptionsMenu(true);
+
+
 
 //        this.mforwardLayout.setOnClickListener(new View.OnClickListener() {
 //            public void onClick(View v) {
@@ -843,6 +848,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
     public void Mesibo_onGroupError(MesiboProfile mesiboProfile, long error) {
     }
+
 
     public class MessageContactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public static final int SECTION_CELLS = 300;

@@ -39,6 +39,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private lateinit var address:String
     private lateinit var postId:String
     private lateinit var postType:String
+    private lateinit var groupID:String
 
     override fun onNewToken(token: String) {
         Log.e(TAG, "Refreshed token: $token")
@@ -50,14 +51,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.e("message",message.toString())
 
 
+
 //            MesiboCall.getInstance().init(applicationContext)
             title = message.data["title"].toString()
             body = message.data["body"].toString()
             address = message.data["address"].toString()
+            groupID = message.data["group_id"].toString()
+            Log.e("address",address.toString())
             type = message.data["type"].toString()
             postId = message.data["post_id"].toString()
             postType = message.data["postType"].toString()
-
+        Log.e("message",message.toString())
             Log.e("type",type.toString())
              Log.e("post",postType.toString())
         Log.e("podtod",postId.toString())
@@ -88,23 +92,35 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setSmallIcon(R.drawable.r_own_logo)
             .setContentTitle(title)
             .setContentText(body)
+            .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH) // Set high priority for heads-up notification
             .setDefaults(Notification.DEFAULT_ALL) // Add default notification behaviors (sound, vibration, etc.)
 
         // Create the full-screen intent
 
         if (type == "message"){
-            MesiboApi.init(applicationContext)
-            MesiboApi.startMesibo(true)
-            val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
-            fullScreenIntent.putExtra(MesiboUI.PEER,address)
-            fullScreenIntent.putExtra("page","2")
-            fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-            notificationBuilder.setContentIntent(fullScreenPendingIntent)
+            if (address != "null"){
+                MesiboApi.init(applicationContext)
+                MesiboApi.startMesibo(true)
+                val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
+                fullScreenIntent.putExtra(MesiboUI.PEER,address)
+                fullScreenIntent.putExtra("page","2")
+                fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                notificationBuilder.setContentIntent(fullScreenPendingIntent)
+            }else{
+                MesiboApi.init(applicationContext)
+                MesiboApi.startMesibo(true)
+                val fullScreenIntent = Intent(this, MesiboMessagingActivity::class.java)
+                fullScreenIntent.putExtra(MesiboUI.GROUP_ID,groupID.toLong())
+                fullScreenIntent.putExtra("page","2")
+                fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                val fullScreenPendingIntent = PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                notificationBuilder.setContentIntent(fullScreenPendingIntent)
+            }
+
 
         }else{
-
             if (postType == "share some media"){
                 val fullScreenIntent = Intent(this, PostDetailsActivityNotification::class.java)
                 fullScreenIntent.putExtra("postId",postId)

@@ -16,13 +16,14 @@ import android.text.TextUtils;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mesibo.api.Mesibo;
-import com.mesibo.mediapicker.MediaPicker;
-import com.mesibo.messaging.MesiboEndToEndEncryptionActivity;
+ import com.mesibo.messaging.MesiboEndToEndEncryptionActivity;
  import com.mesibo.messaging.MesiboUserListActivity;
 
-import java.lang.ref.WeakReference;
+
+ import java.lang.ref.WeakReference;
 
  import app.retvens.rown.Dashboard.DashBoardActivity;
+ import app.retvens.rown.MesiboMediaPickerClasses.sources.MediaPicker;
 
 public class MesiboUIManager {
     private static WeakReference<MesiboMessagingActivity> mMessagingActivityNew = null;
@@ -141,8 +142,8 @@ public class MesiboUIManager {
         ((AppCompatActivity) context).startActivityForResult(intent, REQUEST_CODE);
     }
 
-    public static void launchImageEditor(Context context, int type, int drawableid, String title, String filePath, boolean showEditControls, boolean showTitle, boolean showCropOverlay, boolean squareCrop, int maxDimension, MediaPicker.ImageEditorListener listener) {
-        MediaPicker.launchEditor((AppCompatActivity) context, type, drawableid, title, filePath, showEditControls, showTitle, showCropOverlay, squareCrop, maxDimension, listener);
+    public static void launchImageEditor(Context context, int type, int drawableid, String title, String filePath, boolean showEditControls, boolean showTitle, boolean showCropOverlay, boolean squareCrop, int maxDimension, MediaPicker.ImageEditorListener listener,String peer,long groupId) {
+        MediaPicker.launchEditor((AppCompatActivity) context, type, drawableid, title, filePath, showEditControls, showTitle, showCropOverlay, squareCrop, maxDimension, listener,peer,groupId);
     }
 
     public static void setMessagingActivity(app.retvens.rown.MessagingModule.MesiboMessagingActivity activity) {

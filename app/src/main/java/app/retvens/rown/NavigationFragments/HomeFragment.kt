@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager.widget.ViewPager
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.CreateCommunity.CreateCommunity
 import app.retvens.rown.Dashboard.DashBoardActivity
@@ -99,8 +100,16 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view =  inflater.inflate(R.layout.fragment_home, container, false)
 
+        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
+
+        // Hide the ActionBar (Toolbar)
+
+        // Hide the ActionBar (Toolbar)
+        actionBar?.show()
+
+        return view
 
     }
 
@@ -119,6 +128,11 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
             isBS = false
         }
 
+//        val layout = view.findViewById<ConstraintLayout>(R.id.home_fragment)
+//        layout.setOnClickListener {
+//            Toast.makeText(requireContext(),"okk",Toast.LENGTH_SHORT).show()
+//        }
+
 //        nestedScroll = view.findViewById(R.id.homeFragment)
 
         empty = view.findViewById(R.id.empty)
@@ -126,6 +140,7 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
         shimmerFrameLayout2 = view.findViewById(R.id.shimmer_tasks_view_container)
 
         val refresh = view.findViewById<SwipeRefreshLayout>(R.id.refreshLayout)
+
 
         progress = view.findViewById(R.id.progress)
         getProfileInfo(requireContext()){}
@@ -172,6 +187,10 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
         adapter.notifyDataSetChanged()
 
 
+//        val viewPager = view.findViewById<ViewPager>(R.id.viewPager)
+//        viewPager.setOnClickListener {
+//
+//        }
 
 
         mainRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -195,11 +214,12 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
                         if (mList.size >= 8){
                             getData()
                         }
-
                     }
                 }
 
-
+                if (dx > 0){
+                    Toast.makeText(requireContext(),"Work",Toast.LENGTH_SHORT).show()
+                }
             }
         })
 
@@ -249,6 +269,16 @@ class HomeFragment : Fragment() , Mesibo.MessageListener {
                 pageCounter = 0
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.show()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
     }
 
     private fun getOpenCommunites() {

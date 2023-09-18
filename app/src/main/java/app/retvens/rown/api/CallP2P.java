@@ -114,7 +114,7 @@ public class CallP2P implements Mesibo.CallListener, CallPrivate, RtcCall.Listen
                 this.m_am = null;
             }
             if (z) {
-                Mesibo.hangup(0, true);
+                Mesibo.hangup(0,true);
             }
             getListener().MesiboCall_OnHangup(this.mCp, this.mHangupReason);
             CallManager.getInstance().removeP2PCall();
@@ -153,7 +153,7 @@ public class CallP2P implements Mesibo.CallListener, CallPrivate, RtcCall.Listen
 
     private void hangup(boolean z) {
         if (!this.hangedUp && z && (this.mCallCtx.status & RTCFLAG_VIDEOMUTE) == 0) {
-            Mesibo.hangup(0, true);
+            Mesibo.hangup(0,true);
             this.hangedUp = true;
         }
         this.mCallCtx.status = RTCFLAG_VIDEOMUTE;
@@ -469,7 +469,7 @@ public class CallP2P implements Mesibo.CallListener, CallPrivate, RtcCall.Listen
             if (!this.mCp.video.enabled || !z) {
                 z2 = false;
             }
-            Mesibo.answer(0, true, true);
+            Mesibo.answer(0,z2,z2);
             recommendViews();
         }
     }

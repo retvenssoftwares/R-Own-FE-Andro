@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5sp"
     android:background="@color/transparent_color">
 
     <androidx.cardview.widget.CardView
@@ -15,8 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="5sp"
         android:layout_marginRight="60dp"
-        android:layout_marginBottom="2sp"
+        android:layout_marginBottom="7sp"
         android:background="@color/transparent_color"
         android:backgroundTint="@color/transparent_color"
         android:paddingLeft="11dp"
@@ -51,11 +51,10 @@
                     android:layout_marginBottom="-5dp"
                     android:text="Old Bond"
                     android:textColor="#dedede"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
-                    android:visibility="visible"
 
-                    />
+                    android:visibility="visible" />
 
                 <app.retvens.rown.MessagingModule.MessageView
                     android:id="@+id/mesibo_message_view"
@@ -107,8 +106,9 @@
                     android:paddingBottom="1dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_lock_black_18dp"
+                    android:tint="#777777"
                     android:visibility="gone"
-                    app:tint="#777777" />
+                    tools:ignore="UseAppTint" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -118,11 +118,10 @@
 
     <View
         android:id="@+id/selected_overlay"
-        android:layout_width="37dp"
-        android:layout_height="14dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignBottom="@+id/incoming_layout_bubble"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="26dp"
         android:layout_weight="1"
         android:background="@color/overlaySelection"
         android:visibility="gone" />

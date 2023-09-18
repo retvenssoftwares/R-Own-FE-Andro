@@ -179,6 +179,25 @@ class CreatePostActivity : AppCompatActivity(),
             bottomSheet.setOnSelectAudienceClickListener(this)
         }
 
+        binding.imgPreview.setOnClickListener {
+            selectedImg = 1
+            if (imgUri1 == null) {
+                //Requesting Permission For CAMERA
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    openGallery()
+                } else {
+                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+                }
+            } else {
+                imgUriP = imgUri1
+                binding.imgPreview.setImageURI(imgUri1)
+            }
+        }
+
         binding.img1.setOnClickListener {
             selectedImg = 1
             if (imgUri1 == null) {

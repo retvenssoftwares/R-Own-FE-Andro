@@ -95,9 +95,15 @@ class CommunityListAdapter(val context : Context,private val viewType: Int, val 
                     }else{
                         Log.e("error","not")
                     }
+
+
                 }
 
+
+
+
                 holder.itemView.setOnClickListener {
+                    Log.e("admin",isAdmin.toString())
                     val intent = Intent(context, MesiboMessagingActivity::class.java)
                     intent.putExtra("admin",isAdmin)
                     intent.putExtra(MesiboUI.GROUP_ID, currentItem.group_id.toLong())

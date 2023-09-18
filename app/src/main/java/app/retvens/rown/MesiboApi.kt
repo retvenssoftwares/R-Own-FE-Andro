@@ -7,7 +7,7 @@ import android.util.Log
 import com.arjun.compose_mvvm_retrofit.SharedPreferenceManagerAdmin
 import com.mesibo.api.Mesibo
 import com.mesibo.api.MesiboProfile
-import com.mesibo.calls.api.MesiboCall
+
 
 @SuppressLint("StaticFieldLeak")
 object MesiboApi {
@@ -32,8 +32,6 @@ object MesiboApi {
 
         // add lister
         Mesibo.addListener(this)
-//        MesiboCall.getInstance().setListener(this)
-
 
 
         // set access token
@@ -54,5 +52,6 @@ object MesiboApi {
 
         return true
     }
+
 
 }

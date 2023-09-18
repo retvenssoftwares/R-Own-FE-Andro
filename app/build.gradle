@@ -115,6 +115,7 @@ dependencies {
     implementation "com.mesibo.api:mesibo:${project.MesiboVersion_Api}"
     implementation "com.mesibo.api:ui:${project.MesiboVersion_Ui}"
     implementation "com.mesibo.api:calls:${project.MesiboVersion_Calls}"
+//    implementation "com.mesibo.api:mediapicker:${project.MesiboVersion_Ui}"
 
     //Custom ProgressBar
     implementation 'com.github.emreesen27:Android-Nested-Progress:v1.0.2'

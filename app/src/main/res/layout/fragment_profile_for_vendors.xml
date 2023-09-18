@@ -16,7 +16,7 @@
             android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/relative"
@@ -187,6 +187,7 @@
             android:textSize="13dp"
             android:layout_marginTop="12dp"
             android:textFontWeight="600"
+            android:paddingBottom="10dp"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="@id/connections"
             app:layout_constraintTop_toBottomOf="@id/profile_about"
@@ -210,6 +211,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_regular"
             android:textSize="13dp"
+            android:paddingEnd="10dp"
             android:layout_marginStart="6dp"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@id/link"

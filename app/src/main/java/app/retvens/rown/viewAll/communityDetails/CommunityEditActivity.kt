@@ -23,6 +23,7 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.DataCollections.ResponseGroup
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.databinding.ActivityCommunityEditBinding
@@ -182,9 +183,6 @@ class CommunityEditActivity : AppCompatActivity() {
                     val response = response.body()!!
 //                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
                     val profile = Mesibo.getProfile(groupId.toLong())
-                    profile.name = names
-                    profile.image = decodeSampledBitmapFromFile(file,200,150)
-                    profile.save()
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
                 }
@@ -192,6 +190,31 @@ class CommunityEditActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                Log.e("error",t.message.toString())
+            }
+        })
+
+
+        val sendProfile = RetrofitBuilder.feedsApi.updateGroupProfile(
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),groupId),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),names),
+            MultipartBody.Part.createFormData("image", file.name, body)
+        )
+
+        sendProfile.enqueue(object : Callback<ResponseGroup?> {
+            override fun onResponse(
+                call: Call<ResponseGroup?>,
+                response: Response<ResponseGroup?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Log.e("res",response.op.toString())
+                }else{
+                    Log.e("code",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseGroup?>, t: Throwable) {
+                Log.e("error",t.message.toString())
             }
         })
     }

@@ -312,7 +312,7 @@ class ProfileFragment : Fragment(), BottomSheetProfileSetting.OnBottomSheetProfi
 
             override fun onFailure(call: Call<NormalUserDataClass?>, t: Throwable) {
                 progressDialog.dismiss()
-                Toast.makeText(requireContext(),t.message.toString(),Toast.LENGTH_SHORT).show()
+                Log.e("error",t.message.toString())
             }
         })
 

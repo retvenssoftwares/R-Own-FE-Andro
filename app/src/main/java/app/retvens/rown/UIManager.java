@@ -17,12 +17,13 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mesibo.mediapicker.AlbumListData;
-import com.mesibo.mediapicker.MediaPicker;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
+import app.retvens.rown.MesiboMediaPickerClasses.sources.AlbumListData;
+import app.retvens.rown.MesiboMediaPickerClasses.sources.MediaPicker;
 import app.retvens.rown.MessagingModule.MesiboUI;
 
 public class UIManager {
@@ -74,9 +75,9 @@ public class UIManager {
         MediaPicker.launchImageViewer(context, files, firstIndex);
     }
 
-    public static void launchImageEditor(Context context, int type, int drawableid, String title, String filePath, boolean showEditControls, boolean showTitle, boolean showCropOverlay, boolean squareCrop, int maxDimension, MediaPicker.ImageEditorListener listener){
-        MediaPicker.launchEditor((AppCompatActivity)context, type, drawableid, title, filePath, showEditControls, showTitle, showCropOverlay, squareCrop, maxDimension, listener);
-    }
+//    public static void launchImageEditor(Context context, int type, int drawableid, String title, String filePath, boolean showEditControls, boolean showTitle, boolean showCropOverlay, boolean squareCrop, int maxDimension, MediaPicker.ImageEditorListener listener){
+//        MediaPicker.launchEditor((AppCompatActivity)context, type, drawableid, title, filePath, showEditControls, showTitle, showCropOverlay, squareCrop, maxDimension, listener);
+//    }
 
     public static void launchAlbum(Activity context, List<AlbumListData> albumList) {
         MediaPicker.launchAlbum(context, albumList);

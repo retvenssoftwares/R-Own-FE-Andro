@@ -66,6 +66,12 @@ class BottomSheetWhatToPost : BottomSheetDialogFragment() {
             dismiss()
         }
 
+        val status = view.findViewById<LinearLayout>(R.id.status)
+        status.setOnClickListener{
+            mListener?.bottomWhatToPostClick("Status")
+            dismiss()
+        }
+
 
     }
 

@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Geocoder
@@ -34,6 +35,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.DashBoardActivity
+import app.retvens.rown.DataCollections.ConnectionCollection.Mesibo_account
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.UserProfileResponse
@@ -72,6 +74,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.NullPointerException
@@ -126,6 +129,7 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
     private lateinit var settingsClient: SettingsClient
     private lateinit var locationRequest: LocationRequest
     private  var pdfUri:Uri? = null
+    private lateinit var imageUri:Uri
     var PICK_PDF_REQUEST_CODE : Int = 1
 
     var user_id = ""
@@ -459,6 +463,13 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
 
         if (croppedImageUri != null && pdfUri == null){
 
+            val sharedPreferences = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
+            val phone  = sharedPreferences.getString("savePhoneNumber", "0000000000")
+
+            val profile = Mesibo.getProfile(phone)
+            profile.image = decodeUriAsBitmap(applicationContext,imageUri)
+            profile.save()
+
             val image = prepareFilePart(croppedImageUri!!, "Profile_pic", applicationContext)
 
             val respo  = RetrofitBuilder.ProfileApis.updateUserProfileWithoutPDF(
@@ -707,16 +718,27 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
         dialog.dismiss()
     }
 
+    fun decodeUriAsBitmap(context: Context, uri: Uri?): Bitmap? {
+        var bitmap: Bitmap? = null
+        bitmap = try {
+            BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri!!))
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            return null
+        }
+        return bitmap
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
-            val imageUri = data.data
+            imageUri = data.data!!
             if (imageUri != null) {
 //                compressImage(imageUri)
                 cropProfileImage(imageUri)
-
             }
+
         }   else if (requestCode == UCrop.REQUEST_CROP) {
             if (resultCode == AppCompatActivity.RESULT_OK) {
                 val croppedImage = UCrop.getOutput(data!!)!!
@@ -745,6 +767,8 @@ class EditProfileActivity : AppCompatActivity(), BottomSheetJobTitle.OnBottomJob
                 )
             )
         }
+
+
     }
     fun cropProfileImage(imageUri: Uri) {
         val inputUri = imageUri

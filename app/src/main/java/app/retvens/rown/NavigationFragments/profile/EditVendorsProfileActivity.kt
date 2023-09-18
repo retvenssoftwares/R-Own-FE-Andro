@@ -2,9 +2,11 @@ package app.retvens.rown.NavigationFragments.profile
 
 import android.Manifest
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -37,6 +39,7 @@ import app.retvens.rown.utils.prepareFilePart
 import app.retvens.rown.utils.saveFullName
 import app.retvens.rown.utils.saveProfileImage
 import com.bumptech.glide.Glide
+import com.mesibo.api.Mesibo
 import com.yalantis.ucrop.UCrop
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
@@ -44,6 +47,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Exception
@@ -57,6 +61,7 @@ class EditVendorsProfileActivity : AppCompatActivity() {
 
     var REQUEST_CAMERA_PERMISSION : Int = 0
     lateinit var cameraImageUri: Uri
+    private lateinit var imageUri:Uri
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
 //        compressImage(cameraImageUri)
         cropProfileImage(cameraImageUri)
@@ -256,7 +261,25 @@ class EditVendorsProfileActivity : AppCompatActivity() {
 
     }
 
+    fun decodeUriAsBitmap(context: Context, uri: Uri?): Bitmap? {
+        var bitmap: Bitmap? = null
+        bitmap = try {
+            BitmapFactory.decodeStream(context.contentResolver.openInputStream(uri!!))
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            return null
+        }
+        return bitmap
+    }
+
     private fun uploadData(userId: String) {
+
+        val sharedPreferences = getSharedPreferences("savePhoneNo", AppCompatActivity.MODE_PRIVATE)
+        val phone  = sharedPreferences.getString("savePhoneNumber", "0000000000")
+
+        val profile = Mesibo.getProfile(phone)
+        profile.image = decodeUriAsBitmap(applicationContext,imageUri)
+        profile.save()
 
         if (croppedImageUri != null){
 
@@ -397,7 +420,7 @@ class EditVendorsProfileActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
-            val imageUri = data.data
+            imageUri = data.data!!
             if (imageUri != null) {
 //                compressImage(imageUri)
                 cropProfileImage(imageUri)

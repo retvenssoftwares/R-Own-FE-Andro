@@ -34,6 +34,7 @@ import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.IllegalStateException
 
 
 class BottomSheetJobTitle : BottomSheetDialogFragment() {
@@ -199,7 +200,12 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
 
                 }
                 else{
-                    Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+                    try {
+                        Toast.makeText(requireContext(),response.code().toString(), Toast.LENGTH_SHORT).show()
+                    }catch (e:IllegalStateException){
+                        Log.e("error",e.message.toString())
+                    }
+
                 }
             }
 

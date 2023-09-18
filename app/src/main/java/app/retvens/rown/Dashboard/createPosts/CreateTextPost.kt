@@ -36,6 +36,7 @@ import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
+import app.retvens.rown.bottomsheet.BottomSheet
 import app.retvens.rown.bottomsheet.BottomSheetCountryStateCity
 import app.retvens.rown.bottomsheet.BottomSheetGoingBack
 import app.retvens.rown.bottomsheet.BottomSheetSelectAudience
@@ -74,6 +75,7 @@ class CreateTextPost : AppCompatActivity(),
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var settingsClient: SettingsClient
     private lateinit var locationRequest: LocationRequest
+    private lateinit var bottomSheet:BottomSheetWhatToPost
     lateinit var dialog: Dialog
     lateinit var progressDialog: Dialog
     lateinit var task:ImageView
@@ -85,6 +87,12 @@ class CreateTextPost : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         binding = ActivityCreateTextPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        bottomSheet = BottomSheetWhatToPost()
+        val fragManager = supportFragmentManager
+        fragManager.let{bottomSheet.show(it, BottomSheetWhatToPost.WTP_TAG)}
+        bottomSheet.setOnWhatToPostClickListener(this)
+
 
         binding.createCommunityBackBtn.setOnClickListener { onBackPressed() }
 
@@ -362,10 +370,14 @@ class CreateTextPost : AppCompatActivity(),
             "Poll" -> {
                 startActivity(Intent(applicationContext, CreatePollActivity::class.java))
             }
+            "Status" -> {
+
+                bottomSheet.dismiss()
+            }
         }
     }
     override fun onBackPressed() {
-        if (binding.canSeeText.text == "Anyone" || binding.canCommentText.text == "Anyone" || binding.whatDYEt.text.isEmpty() || binding.etLocationPostEvent.text!!.isEmpty()){
+        if (binding.canSeeText.text == "Anyone" && binding.canCommentText.text == "Anyone" && binding.whatDYEt.text.isEmpty() && binding.etLocationPostEvent.text!!.isEmpty()){
             super.onBackPressed()
         }else {
             val bottomSheet = BottomSheetGoingBack()
