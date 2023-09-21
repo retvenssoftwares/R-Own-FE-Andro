@@ -45,7 +45,6 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.mesibo.api.Mesibo
 import com.mesibo.api.MesiboProfile
 import com.yalantis.ucrop.UCrop
-import id.zelory.compressor.decodeSampledBitmapFromFile
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

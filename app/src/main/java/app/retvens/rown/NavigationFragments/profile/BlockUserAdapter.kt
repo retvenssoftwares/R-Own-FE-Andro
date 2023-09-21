@@ -1,9 +1,6 @@
 package app.retvens.rown.NavigationFragments.profile
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.text.format.DateUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,20 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.BlockAccount
 import app.retvens.rown.DataCollections.ConnectionCollection.BlockUserDataClass
-import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
-import app.retvens.rown.DataCollections.ConnectionCollection.Connections
-import app.retvens.rown.DataCollections.MesiboUsersData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.UserProfileRequestItem
-import app.retvens.rown.DataCollections.UserProfileResponse
-import app.retvens.rown.DataCollections.UsersList
-import app.retvens.rown.MessagingModule.MesiboMessagingActivity
-import app.retvens.rown.MessagingModule.MesiboUI
-import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.mesibo.api.Mesibo
-import com.mesibo.api.MesiboProfile
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

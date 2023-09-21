@@ -20,13 +20,9 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.BlockAccount
-import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.NormalUserDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
@@ -39,7 +35,6 @@ import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProf
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
 import app.retvens.rown.NavigationFragments.profile.status.StatusFragment
 import app.retvens.rown.R
-import app.retvens.rown.bottomsheet.BottomSheetProfileSetting
 import app.retvens.rown.bottomsheet.BottomSheetRemoveConnection
 import app.retvens.rown.bottomsheet.BottomSheetSharePost
 import app.retvens.rown.utils.acceptRequest

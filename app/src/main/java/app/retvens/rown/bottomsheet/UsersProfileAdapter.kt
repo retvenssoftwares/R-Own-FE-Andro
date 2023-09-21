@@ -15,11 +15,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
-import app.retvens.rown.MessagingModule.MesiboUI
-import app.retvens.rown.NavigationFragments.exploreForUsers.people.ExplorePeopleAdapter
-import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity

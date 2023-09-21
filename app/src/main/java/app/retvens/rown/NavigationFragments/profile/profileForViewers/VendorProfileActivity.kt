@@ -20,13 +20,10 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.BlockAccount
 import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionDataClass
-import app.retvens.rown.DataCollections.ConnectionCollection.OwnerProfileDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.VendorProfileDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity

@@ -2,15 +2,11 @@ package app.retvens.rown.viewAll.viewAllCommunities
 
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.Window
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -25,7 +21,6 @@ import app.retvens.rown.DataCollections.ResponseGroup
 import app.retvens.rown.DataCollections.removeMember
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
-import app.retvens.rown.NavigationFragments.TimesStamp
 import app.retvens.rown.R
 import app.retvens.rown.databinding.ActivityOpenCommunityDetailsBinding
 import app.retvens.rown.viewAll.communityDetails.CommunityMediaFragment
@@ -40,9 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 

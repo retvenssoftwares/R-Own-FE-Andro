@@ -1,6 +1,5 @@
 package app.retvens.rown
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,12 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import android.widget.RemoteViews
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import app.retvens.rown.ApiRequest.MesiboBackgroundService
-import app.retvens.rown.Dashboard.DashBoardActivity
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.home.postDetails.CheckInDetailsActivity
@@ -26,7 +20,6 @@ import app.retvens.rown.NavigationFragments.profile.viewRequests.ViewRequestsAct
 import app.retvens.rown.api.MesiboCall
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.firebase.messaging.ktx.remoteMessage
 
 const val channelId = "Notification_Channel"
 const val channelName = "app.retvens.rown"

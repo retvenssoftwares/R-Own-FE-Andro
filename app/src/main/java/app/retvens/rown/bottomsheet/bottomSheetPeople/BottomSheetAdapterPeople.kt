@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import app.retvens.rown.MessagingModule.MesiboMessagingActivity
-import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.exploreForUsers.people.Post
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity

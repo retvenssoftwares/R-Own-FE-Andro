@@ -1,27 +1,16 @@
 package app.retvens.rown.NavigationFragments.profile.polls
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
-import app.retvens.rown.DataCollections.ConnectionCollection.Connections
-import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
-import app.retvens.rown.MessagingModule.MesiboUI
-import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity
-import app.retvens.rown.NavigationFragments.profile.profileForViewers.UserProfileActivity
-import app.retvens.rown.NavigationFragments.profile.profileForViewers.VendorProfileActivity
 import app.retvens.rown.R
-import app.retvens.rown.utils.removeConnection
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 

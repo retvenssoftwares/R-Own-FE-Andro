@@ -341,6 +341,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
         startActivity(intent);
     }
 
+    //zoiuqgwasifisgbujka
 
     private void startFragment(Bundle savedInstanceState) {
         if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {

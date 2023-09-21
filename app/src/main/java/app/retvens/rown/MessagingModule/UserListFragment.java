@@ -876,7 +876,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
         public void updateData(ArrayList<MesiboProfile> newItems) {
             this.mDataList = newItems;
-            Log.e("check", String.valueOf(mDataList.size()));
             notifyDataSetChanged();
         }
 
@@ -909,11 +908,11 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             }
             int i = position;
             MesiboProfile user = this.mDataList.get(position);
+            Log.e("profiles",user.address.toString());
             final SectionCellsViewHolder holder = (SectionCellsViewHolder) vh;
             holder.position = position;
             UserData userdata = UserData.getUserData(user);
             member.add(user);
-            Log.e("check", String.valueOf(member.size()));
             userdata.setUser(user);
             userdata.setUserListPosition(position);
             UserData data = userdata;

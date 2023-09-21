@@ -9,12 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import app.retvens.rown.DataCollections.ConnectionCollection.ConnectionListDataClass
 import app.retvens.rown.DataCollections.ConnectionCollection.Connections
-import app.retvens.rown.DataCollections.ConnectionCollection.GetAllRequestDataClass
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.profile.profileForViewers.OwnerProfileActivity

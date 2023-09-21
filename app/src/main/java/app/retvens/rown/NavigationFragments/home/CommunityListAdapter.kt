@@ -10,9 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.CreateCommunity.CreateCommunity
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity

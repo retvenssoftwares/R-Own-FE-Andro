@@ -12,13 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.FeedCollection.GetCommunitiesData
-import app.retvens.rown.DataCollections.ProfileCompletion.LocationDataClass
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
-import app.retvens.rown.NavigationFragments.home.Community
 import app.retvens.rown.R
 import app.retvens.rown.viewAll.viewAllCommunities.MembersCommunityDetailsActivity
-import app.retvens.rown.viewAll.viewAllCommunities.OpenCommunityDetailsActivity
 import com.bumptech.glide.Glide
 
 class ViewAllCommunitiesAdapter (val context : Context, var list: List<GetCommunitiesData>) : RecyclerView.Adapter<ViewAllCommunitiesAdapter.ViewAllCommunitiesAdapterViewHolder>() {

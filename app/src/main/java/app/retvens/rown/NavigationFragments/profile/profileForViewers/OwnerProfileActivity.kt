@@ -20,8 +20,6 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.BlockAccount
@@ -31,13 +29,11 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.MessagingModule.MesiboMessagingActivity
 import app.retvens.rown.MessagingModule.MesiboUI
 import app.retvens.rown.NavigationFragments.profile.HotelOwnerDetailsActivity
-import app.retvens.rown.NavigationFragments.profile.UserDetailsActivity
 import app.retvens.rown.NavigationFragments.profile.events.EventsProfileFragment
 import app.retvens.rown.NavigationFragments.profile.hotels.HotelsFragmentProfile
 import app.retvens.rown.NavigationFragments.profile.jobs.JobsOnProfileFragment
 import app.retvens.rown.NavigationFragments.profile.media.MediaFragment
 import app.retvens.rown.NavigationFragments.profile.polls.PollsFragment
-import app.retvens.rown.NavigationFragments.profile.services.ServicesFragment
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.AboutProfileActivity
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ReportProfileActivity
 import app.retvens.rown.NavigationFragments.profile.settingForViewers.ShareQRActivity
