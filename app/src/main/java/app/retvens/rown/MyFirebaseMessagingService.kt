@@ -45,7 +45,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
 
-//            MesiboCall.getInstance().init(applicationContext)
+            MesiboCall.getInstance().init(applicationContext)
             title = message.data["title"].toString()
             body = message.data["body"].toString()
             address = message.data["address"].toString()

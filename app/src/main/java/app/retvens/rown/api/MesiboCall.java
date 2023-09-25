@@ -280,10 +280,9 @@ public class MesiboCall {
 
         void MesiboCall_OnSetCall(QampCallsActivity mesiboCallActivity, Call call);
 
-        void MesiboCall_OnStatus(CallProperties callProperties, int i, boolean z);
+        void MesiboCall_OnStatus(MesiboCall.CallProperties var1, int var2, boolean var3, boolean var4);
 
-        void MesiboCall_OnUpdateUserInterface(CallProperties callProperties, int i, boolean z, boolean z2);
-
+        void MesiboCall_OnUpdateUserInterface(MesiboCall.CallProperties var1, int var2, boolean var3, boolean var4);
         void MesiboCall_OnVideo(CallProperties callProperties, VideoProperties videoProperties, boolean z);
 
         void MesiboCall_OnVideoSourceChanged(CallProperties callProperties, int i, int i2);

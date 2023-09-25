@@ -307,8 +307,6 @@ public class ImageEditor extends AppCompatActivity {
         return Uri.parse(path);
     }
 
-
-
     public static Bitmap compressAndCropImage(Bitmap originalBitmap, int maxWidth, int maxHeight) {
         try {
             // Calculate the dimensions of the final image while maintaining aspect ratio

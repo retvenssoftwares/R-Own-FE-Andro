@@ -1081,7 +1081,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                                                     public void onClick(DialogInterface dialog, int id) {
                                                         //put your code that needed to be executed when okay is clicked
                                                         if (MessageContactAdapter.this.mHost.mSelectionMode == MesiboUserListFragment.MODE_MESSAGELIST) {
-                                                            Mesibo.deleteMessages(mesiboProfile2.address, mesiboProfile2.groupid, 0);
+                                                            user.deleteMessages(0L);
                                                             UserData userData = (UserData) mesiboProfile2.other;
                                                             MessageContactAdapter.this.mDataList.remove(i2);
                                                             MessageContactAdapter.this.notifyDataSetChanged();

@@ -8,7 +8,7 @@
 
 package app.retvens.rown.api;
 
-import com.mesibo.calls.api.MesiboVideoViewInternal;
+
 
 
 import app.retvens.rown.api.p000ui.QampCallsActivity;
@@ -38,6 +38,11 @@ public class DummyListener implements MesiboCall.GroupCallInProgressListener, Me
 
     @Override
     public void MesiboCall_OnSetCall(QampCallsActivity mesiboCallActivity, MesiboCall.Call call) {
+
+    }
+
+    @Override
+    public void MesiboCall_OnStatus(MesiboCall.CallProperties var1, int var2, boolean var3, boolean var4) {
 
     }
 

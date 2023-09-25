@@ -120,6 +120,9 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             bottomSheet.setOnCountryStateCityClickListener(this)
         }
 
+        getHotel()
+
+
         binding.img1.setOnClickListener {
             selectedImg = 1
             //Requesting Permission For CAMERA
@@ -192,6 +195,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             }
         }
 
+
         binding.updateHotel.setOnClickListener {
             progressDialog = Dialog(this)
             progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -205,7 +209,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             updateData()
         }
 
-        getHotel()
+
     }
     private fun getHotel() {
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
@@ -322,11 +326,11 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                     ) {
                         progressDialog.dismiss()
                         if (response.isSuccessful) {
-//                        Toast.makeText(
-//                            applicationContext,
-//                            "image2 : ${response.body()?.message.toString()}",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "image2 : ${response.body()?.message.toString()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         } else {
                             Toast.makeText(applicationContext,"Something went wrong",Toast.LENGTH_SHORT).show()
                         }
@@ -364,11 +368,11 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                     ) {
                         progressDialog.dismiss()
                         if (response.isSuccessful) {
-//                        Toast.makeText(
-//                            applicationContext,
-//                            response.body()?.message.toString(),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
+                        Toast.makeText(
+                            applicationContext,
+                            response.body()?.message.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         } else {
                             Toast.makeText(
                                 applicationContext,

@@ -586,7 +586,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
     public void MesiboCall_OnStatus(MesiboCall.CallProperties var1, int var2, boolean var3) {
         this.mCp.f2ui.callStatusText = null;
         if (null != this.mCp.f2ui.inProgressListener) {
-            this.mCp.f2ui.inProgressListener.MesiboCall_OnStatus(var1, var2, var3);
+//            this.mCp.f2ui.inProgressListener.MesiboCall_OnStatus(var1, var2, var3);
         }
 
         this.setStatusView(var2, this.mCp.f2ui.callStatusText);
@@ -659,6 +659,11 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         if (null != this.mCp.f2ui.inProgressListener) {
             this.mCp.f2ui.inProgressListener.MesiboCall_OnSetCall(mesiboCallActivity, this.mCall);
         }
+    }
+
+    @Override
+    public void MesiboCall_OnStatus(MesiboCall.CallProperties var1, int var2, boolean var3, boolean var4) {
+
     }
 
     public void MesiboCall_OnHangup(MesiboCall.CallProperties var1, int var2) {

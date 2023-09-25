@@ -1,441 +1,237 @@
-/*
- * *
- *  * Created by Shivam Tiwari on 20/05/23, 3:30 AM
- *  * Copyright (c) 2023 . All rights reserved.
- *  * Last modified 05/05/23, 3:15 PM
- *
- */
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
 
 package app.retvens.rown.api;
+
 
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.os.Build.VERSION;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-
-
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboProfile;
 
-import org.webrtc.IceCandidate;
-import org.webrtc.SessionDescription;
 
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
 import java.util.Set;
+import org.webrtc.IceCandidate;
+import org.webrtc.SessionDescription;
 
+import app.retvens.rown.R;
 import app.retvens.rown.api.p000ui.QampCallsActivity;
 
 public class CallP2P implements Mesibo.CallListener, CallPrivate, RtcCall.Listener {
-    protected static final int CALLINFO_LANDSCAPE = 4;
-    protected static final int CALLINFO_LOWBATTERY = 4096;
-    protected static final int CALLINFO_MIRRORED = 8;
-    protected static final int CALLINFO_REARCAMERA = 1;
-    protected static final int CALLINFO_SCREEN = 2;
-    protected static final int CALLINFO_STREAMCHANGING = 256;
-    protected static final int CALLINFO_VIDEOREQUEST = 512;
-    protected static final int RTCACTION_ANSWER = 2;
-    protected static final int RTCACTION_CREATESTREAMS = 0;
-    protected static final int RTCACTION_MUTE = 7;
-    protected static final int RTCACTION_OFFER = 1;
-    protected static final int RTCACTION_PEERCONNECTION = 4;
-    protected static final int RTCACTION_SDP = 3;
-    protected static final int RTCACTION_STREAM = 5;
-    protected static final int RTCACTION_VIDEOCAPTURER = 6;
-    protected static final int RTCFLAG_AUDIO = 1;
-    protected static final int RTCFLAG_AUDIOMUTE = 16;
-    protected static final int RTCFLAG_AUDIOUNMUTE = 32;
-    protected static final int RTCFLAG_USETURN = 8;
-    protected static final int RTCFLAG_VIDEO = 2;
-    protected static final int RTCFLAG_VIDEOHWACCL = 4;
-    protected static final int RTCFLAG_VIDEOMUTE = 64;
-    protected static final int RTCFLAG_VIDEOUNMUTE = 128;
-    protected static final int RTCSTATUS_CLEANUP = 16;
-    protected static final int RTCSTATUS_CONNECTED = 2;
-    protected static final int RTCSTATUS_ENDED = 4;
-    protected static final int RTCSTATUS_INPROGRESS = 1;
-    protected static final int RTCSTATUS_RECONNECTING = 3;
     public static final String TAG = "CallP2P";
-    private boolean cleanedUp = false;
-    private boolean hangedUp = false;
-    private MesiboCall.AudioDevice mActiveAudioDevice = MesiboCall.AudioDevice.DEFAULT;
-    private Set<MesiboCall.AudioDevice> mAvailableAudioDevices = null;
-    private boolean mBatteryLow = false;
     private CallContext mCallCtx = null;
-    private boolean mConnectedFirstTime = false;
-    /* access modifiers changed from: private */
-    public MesiboCall.CallProperties mCp = null;
-    private MesiboCall.InProgressListener mDefaultListener = (MesiboCall.InProgressListener) CallManager.getInstance().getDummyListener();
-    private boolean mDetached = true;
-    private int mHangupReason = 3;
-    private boolean mIceServersSet = false;
-    private boolean mLandscape = false;
-    private int mLastHeight = 0;
-    private long mLastInfo = 0;
-    private boolean mLastRemoteMirror = false;
-    private int mLastWidth = 0;
-    private WeakReference<MesiboCall.InProgressListener> mListener = null;
-    private MesiboVideoView mLocalVideoView = null;
-    private boolean mMutedDueToBackground = false;
+    private MesiboCall.CallProperties mCp = null;
+    private RtcAudioManager m_am = null;
     private int mPendingRtcMuteFlag = 0;
+    private boolean mDetached = true;
+    private boolean mConnectedFirstTime = false;
+    private boolean mMutedDueToBackground = false;
+    private int mHangupReason = 3;
+    private boolean mBatteryLow = false;
+    private boolean mLandscape = false;
+    private boolean mLastRemoteMirror = false;
     private boolean mRemoteLandscape = false;
     private boolean mRemoteLowBattery = false;
-    private MesiboVideoView mRemoteVideoView = null;
-    private MediaPlayer mRingPlayer = null;
-    private RtcCall mRtcCall = null;
-    private boolean mStarted = false;
-    private Utils.PowerAndWifiLock mWakeLock = null;
-    private RtcAudioManager m_am = null;
-    private SetupCallViews setupViews = new SetupCallViews();
+    private long mLastInfo = 0L;
+    private int mLastWidth = 0;
+    private int mLastHeight = 0;
+    private Set<MesiboCall.AudioDevice> mAvailableAudioDevices = null;
+    private MesiboCall.AudioDevice mActiveAudioDevice;
+    private MesiboCall.InProgressListener mDefaultListener;
+    private WeakReference<MesiboCall.InProgressListener> mListener;
+    protected static final int RTCACTION_CREATESTREAMS = 0;
+    protected static final int RTCACTION_OFFER = 1;
+    protected static final int RTCACTION_ANSWER = 2;
+    protected static final int RTCACTION_SDP = 3;
+    protected static final int RTCACTION_PEERCONNECTION = 4;
+    protected static final int RTCACTION_STREAM = 5;
+    protected static final int RTCACTION_VIDEOCAPTURER = 6;
+    protected static final int RTCACTION_MUTE = 7;
+    protected static final int RTCFLAG_AUDIO = 1;
+    protected static final int RTCFLAG_VIDEO = 2;
+    protected static final int RTCFLAG_VIDEOHWACCL = 4;
+    protected static final int RTCFLAG_USETURN = 8;
+    protected static final int RTCFLAG_AUDIOMUTE = 16;
+    protected static final int RTCFLAG_AUDIOUNMUTE = 32;
+    protected static final int RTCFLAG_VIDEOMUTE = 64;
+    protected static final int RTCFLAG_VIDEOUNMUTE = 128;
+    protected static final int RTCSTATUS_INPROGRESS = 1;
+    protected static final int RTCSTATUS_CONNECTED = 2;
+    protected static final int RTCSTATUS_RECONNECTING = 3;
+    protected static final int RTCSTATUS_ENDED = 4;
+    protected static final int RTCSTATUS_CLEANUP = 16;
+    protected static final int CALLINFO_REARCAMERA = 1;
+    protected static final int CALLINFO_SCREEN = 2;
+    protected static final int CALLINFO_LANDSCAPE = 4;
+    protected static final int CALLINFO_MIRRORED = 8;
+    protected static final int CALLINFO_STREAMCHANGING = 256;
+    protected static final int CALLINFO_VIDEOREQUEST = 512;
+    protected static final int CALLINFO_LOWBATTERY = 4096;
+    private MesiboVideoView mRemoteVideoView;
+    private MesiboVideoView mLocalVideoView;
+    private Utils.PowerAndWifiLock mWakeLock;
+    private RtcCall mRtcCall;
+    private boolean mIceServersSet;
+    private boolean mStarted;
+    private boolean hangedUp;
+    private boolean cleanedUp;
+    private SetupCallViews setupViews;
+    private MediaPlayer mRingPlayer;
 
-    public static class SetupCallViews {
-        boolean firstTime = true;
-        boolean hideControls = true;
-        boolean showIncoming = true;
-        boolean showVideoControls = true;
+    public CallP2P() {
+        this.mActiveAudioDevice = MesiboCall.AudioDevice.DEFAULT;
+        this.mDefaultListener = CallManager.getInstance().getDummyListener();
+        this.mListener = null;
+        this.mRemoteVideoView = null;
+        this.mLocalVideoView = null;
+        this.mWakeLock = null;
+        this.mRtcCall = null;
+        this.mIceServersSet = false;
+        this.mStarted = false;
+        this.hangedUp = false;
+        this.cleanedUp = false;
+        this.setupViews = new SetupCallViews();
+        this.mRingPlayer = null;
     }
 
-    private void cleanup(boolean z) {
-        if (!this.cleanedUp) {
-            this.cleanedUp = true;
-            Mesibo.removeListener(this);
-            this.mCallCtx.inForeground = false;
-            playInCallSound(0, false);
-            CallManager.getInstance().stopIncomingNotification(this.mCp);
-            CallManager.getInstance().clearNotification(this.mCp);
-            this.mRtcCall.hangup();
-            if (this.m_am != null) {
-                this.m_am.stop();
-                this.m_am = null;
+    public CallContext getCallContext() {
+        return this.mCallCtx;
+    }
+
+    public MesiboCall.CallProperties getCallProperties() {
+        return this.mCp;
+    }
+
+    protected boolean setup(MesiboCall.CallProperties var1) {
+        this.mCallCtx = new CallContext(var1);
+        this.mCp = var1;
+        if (var1.video.enabled && var1.video.source == 4 && VERSION.SDK_INT < 21) {
+            return false;
+        } else if (var1.parent == null) {
+            return false;
+        } else {
+            this.mWakeLock = Utils.createPowerAndWifiLock(var1.parent);
+            PeerConnectionClient.PeerConnectionParameters var2;
+            (var2 = new PeerConnectionClient.PeerConnectionParameters()).videoCallEnabled = this.mCp.video.enabled;
+            if (var1.video.height > 0) {
+                var2.videoHeight = var1.video.height;
             }
-            if (z) {
-                Mesibo.hangup(0,true);
+
+            if (var1.video.width > 0) {
+                var2.videoWidth = var1.video.width;
             }
-            getListener().MesiboCall_OnHangup(this.mCp, this.mHangupReason);
-            CallManager.getInstance().removeP2PCall();
-            Utils.releasePowerAndWifiLock(this.mWakeLock);
+
+            if (var1.video.fps > 0) {
+                var2.videoFps = var1.video.fps;
+            }
+
+            var2.videoMaxBitrate = var1.video.bitrate;
+            var2.offerToRecv = true;
+            var2.offerToSend = true;
+            int var3;
+            if ((var3 = var1.video.source) > 4) {
+                var3 = 1;
+            }
+
+            this.mRtcCall = new RtcCall(var1.activity, var2, var3, this);
+            return true;
         }
     }
 
-    private void createStreams(int i) {
-        boolean z = true;
-        boolean z2 = (i & 16) > 0;
-        if ((i & RTCFLAG_VIDEOMUTE) <= 0) {
-            z = false;
+    void onOrientationChanged() {
+        if (this.mLandscape) {
+            this.mLandscape = false;
+            this.getListener().MesiboCall_OnOrientationChanged(this.mCp, false, false);
+            this.sendCallInfo();
         }
-        this.mRtcCall.createCall(this.mCp.activity, z2, z);
-        isAnswered();
+    }
+
+    void batteryLevelChanged() {
+        if (this.mBatteryLow) {
+            this.sendCallInfo();
+            this.mBatteryLow = false;
+            this.getListener().MesiboCall_OnBatteryStatus(this.mCp, this.mBatteryLow, false);
+        } else {
+            if (!this.mBatteryLow && 100 <= this.mCp.batteryLowThreshold) {
+                this.sendCallInfo();
+                this.mBatteryLow = true;
+            } else if (this.mBatteryLow && 100 > this.mCp.batteryLowThreshold) {
+                this.sendCallInfo();
+                this.mBatteryLow = false;
+            }
+
+            this.getListener().MesiboCall_OnBatteryStatus(this.mCp, this.mBatteryLow, false);
+        }
     }
 
     private void firstUiUpdate() {
-        recommendViews();
+        this.recommendViews();
         if (MesiboCall.AudioDevice.DEFAULT != this.mActiveAudioDevice) {
-            notifiAudioDeviceChanged(this.mActiveAudioDevice, MesiboCall.AudioDevice.DEFAULT);
+            this.notifiAudioDeviceChanged(this.mActiveAudioDevice, MesiboCall.AudioDevice.DEFAULT);
         }
-        getListener().MesiboCall_OnStatus(this.mCp, this.mCallCtx.status, this.mCp.video.enabled);
-        getListener().MesiboCall_OnMute(this.mCp, this.mCallCtx.remoteAudioMute, this.mCallCtx.remoteVideoMute, true);
-        getListener().MesiboCall_OnMute(this.mCp, this.mCallCtx.audioMute, this.mCallCtx.videoMute, false);
+
+        this.getListener().MesiboCall_OnStatus(this.mCp, this.mCallCtx.status, this.mCp.video.enabled, false);
+        this.getListener().MesiboCall_OnMute(this.mCp, this.mCallCtx.remoteAudioMute, this.mCallCtx.remoteVideoMute, true);
+        this.getListener().MesiboCall_OnMute(this.mCp, this.mCallCtx.audioMute, this.mCallCtx.videoMute, false);
     }
 
-    /* access modifiers changed from: private */
-    public MesiboCall.InProgressListener getListener() {
-        if (this.mListener == null) {
-            return this.mDefaultListener;
-        }
-        MesiboCall.InProgressListener inProgressListener = (MesiboCall.InProgressListener) this.mListener.get();
-        return inProgressListener == null ? this.mDefaultListener : inProgressListener;
-    }
+    public void start(QampCallsActivity var1, MesiboCall.InProgressListener var2) {
+        MesiboCall.CallProperties var3 = this.mCallCtx.f0cp;
+        if (this.mStarted) {
+            this.mDetached = false;
+            this.setupViews.firstTime = true;
+            var3.activity = var1;
+            this.setListener(var2);
+            if (this.mCallCtx.videoMutedDueToBackground) {
+                this.mute(false, true, false);
+            }
 
-    private void hangup(boolean z) {
-        if (!this.hangedUp && z && (this.mCallCtx.status & RTCFLAG_VIDEOMUTE) == 0) {
-            Mesibo.hangup(0,true);
-            this.hangedUp = true;
-        }
-        this.mCallCtx.status = RTCFLAG_VIDEOMUTE;
-        recommendViews();
-        cleanup(false);
-    }
-
-    private void notifiAudioDeviceChanged(final MesiboCall.AudioDevice audioDevice, final MesiboCall.AudioDevice audioDevice2) {
-        if (Mesibo.isUiThread()) {
-            getListener().MesiboCall_OnAudioDeviceChanged(this.mCp, audioDevice, audioDevice2);
+            this.firstUiUpdate();
         } else {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                public void run() {
-                    CallP2P.this.getListener().MesiboCall_OnAudioDeviceChanged(CallP2P.this.mCp, audioDevice, audioDevice2);
-                }
-            });
-        }
-    }
+            this.mStarted = true;
+            this.mDetached = false;
+            var3.activity = var1;
+            this.setListener(var2);
+            if (var3.video.source == 4 && var3.video.width == 0 && var3.video.height == 0) {
+                DisplayMetrics var4 = DeviceUtils.getDisplayMetrics(var3.activity);
+                var3.video.width = var4.widthPixels;
+                var3.video.height = var4.heightPixels;
+            }
 
-    private void notifyMissedCall() {
-        MesiboCall.IncomingListener listener = CallManager.getInstance().getListener();
-        if (listener != null) {
-            listener.MesiboCall_onNotify(4, this.mCp.user, this.mCp.video.enabled);
-        }
-    }
+            Mesibo.addListener(this);
+            if (this.mCallCtx.firstTimeVisible) {
+                this.mCallCtx.firstTimeVisible = false;
+                if (!this.mCp.incoming) {
+                    if (0 != Mesibo.call(var3.user.address, this.mCp.video.enabled)) {
+                        this.mCallCtx.status = 74;
+                        this.recommendViews();
+                        this.getListener().MesiboCall_OnHangup(this.mCp, 3);
+                        return;
+                    }
 
-    /* access modifiers changed from: private */
-    public void onAudioManagerDevicesChanged(MesiboCall.AudioDevice audioDevice, Set<MesiboCall.AudioDevice> set) {
-        new StringBuilder("onAudioManagerDevicesChanged: ").append(set).append(", selected: ").append(audioDevice);
-        this.mAvailableAudioDevices = set;
-        if (this.mActiveAudioDevice != audioDevice) {
-            notifiAudioDeviceChanged(audioDevice, this.mActiveAudioDevice);
-            this.mActiveAudioDevice = audioDevice;
-            setHideOnProximity();
-        }
-    }
-
-    private void playInCallSound(int i, boolean z) {
-        boolean z2 = false;
-        if (z && this.mCallCtx.inCallSound) {
-            getListener().MesiboCall_OnPlayInCallSound(this.mCp, 0, false);
-            stopInCallSound();
-        }
-        if (z || this.mCallCtx.inCallSound) {
-            this.mCallCtx.inCallSound = z;
-            if (!getListener().MesiboCall_OnPlayInCallSound(this.mCp, i, z)) {
-                int i2 = com.mesibo.calls.api.R.raw.mesibo_ring;
-                if (i == 1) {
-                    i2 = com.mesibo.calls.api.R.raw.mesibo_busy;
+                    this.mCp.callid = Mesibo.getCallId();
                 } else {
-                    z2 = true;
+                    Mesibo.call_ack(null != this.mCp.iceServers && this.mCp.iceServers.length > 0);
+                    this.sendCallInfo();
                 }
-                playInCallSound(CallManager.getAppContext(), i2, z2);
             }
-        }
-    }
 
-    private void recommendViews() {
-        boolean z = true;
-        boolean z2 = this.mCp.incoming && !this.mCallCtx.answered;
-        final boolean z3 = this.mCp.video.enabled && (!this.mCallCtx.answered || this.mCallCtx.answeredVideo);
-        final boolean z4 = this.mCp.video.enabled && this.mCallCtx.answered && this.mCallCtx.p2pConnected && isCallInProgress();
-        if (this.setupViews.firstTime) {
-            this.setupViews.showIncoming = !z2;
-            this.setupViews.showVideoControls = !z3;
-            this.setupViews.hideControls = false;
-        }
-        if (!(z2 == this.setupViews.showIncoming && z3 == this.setupViews.showVideoControls)) {
-            final int i = z2 ? 1 : 2;
-            if (Mesibo.isUiThread()) {
-                getListener().MesiboCall_OnUpdateUserInterface(this.mCp, i, z3, true);
-            } else {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    public void run() {
-                        CallP2P.this.getListener().MesiboCall_OnUpdateUserInterface(CallP2P.this.mCp, i, z3, true);
-                    }
-                });
+            if (!this.mCp.incoming) {
+                this.startAudioManager();
             }
-        }
-        if (z4 != this.setupViews.hideControls) {
-            if (Mesibo.isUiThread()) {
-                MesiboCall.InProgressListener listener = getListener();
-                MesiboCall.CallProperties callProperties = this.mCp;
-                if (z4) {
-                    z = false;
-                }
-                listener.MesiboCall_OnUpdateUserInterface(callProperties, 3, z3, z);
-            } else {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    public void run() {
-                        CallP2P.this.getListener().MesiboCall_OnUpdateUserInterface(CallP2P.this.mCp, 3, z3, !z4);
-                    }
-                });
-            }
-        }
-        this.setupViews.showIncoming = z2;
-        this.setupViews.hideControls = z4;
-        this.setupViews.showVideoControls = z3;
-        this.setupViews.firstTime = false;
-    }
 
-    private void setHideOnProximity() {
-        if (this.mCp.hideOnProximity && this.mCp.activity != null && !isVideoCall()) {
-            this.mCp.activity.setHideOnProximity(this.mActiveAudioDevice != MesiboCall.AudioDevice.SPEAKER && this.mCallCtx.inForeground);
-        }
-    }
-
-    private void setRemoteCallInfo(long j, long j2) {
-        boolean z = false;
-        if (this.mCp.video.enabled && this.mRemoteVideoView != null) {
-            this.mRemoteVideoView.enableMirror((8 & j) > 0);
-        }
-        boolean z2 = (4 & j) > 0;
-        if ((4096 & j) > 0) {
-            z = true;
-        }
-        if (z2 != this.mRemoteLandscape) {
-            getListener().MesiboCall_OnOrientationChanged(this.mCp, z2, true);
-            this.mRemoteLandscape = z2;
-        }
-        if (z != this.mRemoteLowBattery) {
-            getListener().MesiboCall_OnBatteryStatus(this.mCp, z, true);
-        }
-    }
-
-    private void startAudioManager() {
-        this.m_am = RtcAudioManager.create(CallManager.getAppContext(), this.mCallCtx.f0cp.audio.speaker, this.mCallCtx.f0cp.disableSpeakerOnProximity);
-        this.m_am.setDefaultAudioDevice(this.mCp.audio.speaker ? MesiboCall.AudioDevice.SPEAKER : MesiboCall.AudioDevice.EARPIECE);
-        this.m_am.start(new RtcAudioManager.AudioManagerListener() {
-            public void onAudioDeviceChanged(MesiboCall.AudioDevice audioDevice, Set<MesiboCall.AudioDevice> set) {
-                CallP2P.this.onAudioManagerDevicesChanged(audioDevice, set);
-            }
-        });
-    }
-
-    public void MesiboRtcCall_OnCaptureStarted(boolean z) {
-        if (z) {
-            getListener().MesiboCall_OnVideoSourceChanged(this.mCp, getVideoSource(), 0);
-        }
-    }
-
-    public void MesiboRtcCall_OnIceStatus(boolean z) {
-        Mesibo.setCallStatus(z ? 2 : 3, (String) null);
-        this.mCallCtx.iceConnected = z;
-    }
-
-    public void MesiboRtcCall_OnRemoteMedia(boolean z) {
-    }
-
-    public void MesiboRtcCall_OnSendCandidate(IceCandidate iceCandidate) {
-        SdpInterface.sendLocalIceCandidate(iceCandidate);
-    }
-
-    public void MesiboRtcCall_OnSendRemoveCandidate(IceCandidate[] iceCandidateArr) {
-        SdpInterface.sendLocalIceCandidateRemovals(iceCandidateArr);
-    }
-
-    public void MesiboRtcCall_OnSendSdp(SessionDescription sessionDescription, boolean z) {
-        SdpInterface.sendSdp(sessionDescription, z);
-    }
-
-    public boolean Mesibo_onCall(long j, long j2, MesiboProfile mesiboProfile, int i) {
-        return false;
-    }
-
-    public void Mesibo_onCallServer(int i, String str, String str2, String str3) {
-        if (1 != i) {
-            return;
-        }
-        if (this.mCp.iceServers == null || this.mCp.iceServers.length <= 0) {
-            this.mRtcCall.addTurnServer(str, str2, str3);
-        } else if (!this.mIceServersSet) {
-            this.mIceServersSet = true;
-            for (MesiboCall.MesiboIceServer addTurnServer : this.mCp.iceServers) {
-                this.mRtcCall.addTurnServer(addTurnServer);
-            }
-        }
-    }
-
-    public boolean Mesibo_onCallStatus(long j, long j2, int i, long j3, long j4, long j5, String str) {
-        new StringBuilder("Mesibo_onCallStatus: status: ").append(i).append(" flags: ").append(j3);
-        if ((1073741824 & j3) > 0) {
-            onRtcStatus(j, j2, i, (int) j3, str);
-            return true;
-        }
-        boolean z = (1 & j3) > 0;
-        boolean z2 = (2 & j3) > 0;
-        if (3 == i) {
-            playInCallSound(0, true);
-            sendCallInfo();
-        } else if (5 == i || (i & RTCFLAG_VIDEOMUTE) > 0) {
-            playInCallSound(0, false);
-        }
-        if ((i & RTCFLAG_VIDEOMUTE) > 0) {
-            this.mHangupReason = 2;
-            if (76 == i) {
-                this.mHangupReason = 5;
-            }
-            if (!(i == RTCFLAG_VIDEOMUTE || i == 65 || this.mCallCtx.inForeground)) {
-                playInCallSound(1, true);
-            }
-            if (this.mCp.incoming && 65 == i) {
-                notifyMissedCall();
-            }
-        }
-        switch (i) {
-            case 5:
-                this.mCallCtx.answered = true;
-                this.mCallCtx.answeredVideo = z2;
-                if (this.mCallCtx.p2pConnected) {
-                    setAnswerTime();
-                }
-                if (!z2) {
-                    this.mCallCtx.videoMute = true;
-                    break;
-                }
-                break;
-            case 9:
-            case 10:
-                if (z) {
-                    this.mCallCtx.remoteAudioMute = i == 9;
-                }
-                if (z2) {
-                    this.mCallCtx.remoteVideoMute = i == 9;
-                }
-                getListener().MesiboCall_OnMute(this.mCp, this.mCallCtx.remoteAudioMute, this.mCallCtx.remoteVideoMute, true);
-                break;
-            case 11:
-                this.mCallCtx.hold = true;
-                break;
-            case 12:
-                this.mCallCtx.hold = false;
-                break;
-            case 35:
-                setRemoteCallInfo(j4, j5);
-                break;
-            case 48:
-                this.mCallCtx.p2pConnected = true;
-                if (this.mCallCtx.answered) {
-                    setAnswerTime();
-                    break;
-                }
-                break;
-            case 50:
-                this.mCallCtx.p2pConnected = false;
-                if (this.mCallCtx.answered) {
-                }
-                break;
-        }
-        if (!(48 == i || 50 == i || 35 == i)) {
-            this.mCallCtx.status = i;
-        }
-        if (48 == i && !this.mConnectedFirstTime) {
-            if (!this.mCallCtx.answered) {
-                return true;
-            }
-            this.mConnectedFirstTime = true;
-        }
-        getListener().MesiboCall_OnStatus(this.mCp, i, z2);
-        if (5 == i && this.mCallCtx.p2pConnected && !this.mConnectedFirstTime) {
-            this.mConnectedFirstTime = true;
-            getListener().MesiboCall_OnStatus(this.mCp, 48, z2);
-        }
-        recommendViews();
-        if ((i & RTCFLAG_VIDEOMUTE) > 0) {
-            cleanup(false);
-        }
-        return true;
-    }
-
-    public void OnBackground() {
-        MesiboCall.CallProperties callProperties = this.mCallCtx.f0cp;
-        if (!callProperties.runInBackground) {
-            this.mHangupReason = 4;
-            hangup(true);
-            return;
-        }
-        this.mRtcCall.OnForeground(false);
-        this.mCallCtx.inForeground = false;
-        if (this.mRtcCall != null && getVideoSource() != 4 && callProperties.stopVideoInBackground && this.mCp.video.enabled && !this.mCallCtx.videoMute) {
-            mute(false, true, true);
-            this.mCallCtx.videoMutedDueToBackground = true;
+            this.firstUiUpdate();
         }
     }
 
@@ -443,151 +239,155 @@ public class CallP2P implements Mesibo.CallListener, CallPrivate, RtcCall.Listen
         this.mRtcCall.OnForeground(true);
         this.mCallCtx.inForeground = true;
         if (this.mRtcCall != null && this.mCallCtx.videoMutedDueToBackground) {
-            mute(false, true, false);
+            this.mute(false, true, false);
         }
+
         if (this.mPendingRtcMuteFlag > 0) {
-            rtcMute(this.mPendingRtcMuteFlag);
+            this.rtcMute(this.mPendingRtcMuteFlag);
         }
-        setHideOnProximity();
+
+        this.setHideOnProximity();
     }
 
-    public void answer() {
-        answer(this.mCp.video.enabled);
-    }
-
-    public void answer(boolean z) {
-        boolean z2 = true;
-        if (!this.mCallCtx.answered && this.mCp.incoming) {
-            this.mCallCtx.answered = true;
-            this.mCallCtx.answeredVideo = z;
-            if (this.mCp.video.enabled) {
-                this.mCp.video.enabled = z;
+    public void OnBackground() {
+        MesiboCall.CallProperties var1;
+        if (!(var1 = this.mCallCtx.f0cp).runInBackground) {
+            this.mHangupReason = 4;
+            this.hangup(true);
+        } else {
+            this.mRtcCall.OnForeground(false);
+            this.mCallCtx.inForeground = false;
+            if (this.mRtcCall != null && this.getVideoSource() != 4 && var1.stopVideoInBackground && this.mCp.video.enabled && !this.mCallCtx.videoMute) {
+                this.mute(false, true, true);
+                this.mCallCtx.videoMutedDueToBackground = true;
             }
-            CallManager.getInstance().stopIncomingNotification(this.mCp);
-            CallManager.getInstance().clearNotification(this.mCp);
-            startAudioManager();
-            if (!this.mCp.video.enabled || !z) {
-                z2 = false;
-            }
-            Mesibo.answer(0,z2,z2);
-            recommendViews();
+
         }
     }
 
-    /* access modifiers changed from: package-private */
-    public void batteryLevelChanged() {
-        if (this.mBatteryLow) {
-            sendCallInfo();
-            this.mBatteryLow = false;
-            getListener().MesiboCall_OnBatteryStatus(this.mCp, this.mBatteryLow, false);
-            return;
-        }
-        if (!this.mBatteryLow && 100 <= this.mCp.batteryLowThreshold) {
-            sendCallInfo();
-            this.mBatteryLow = true;
-        } else if (this.mBatteryLow && 100 > this.mCp.batteryLowThreshold) {
-            sendCallInfo();
-            this.mBatteryLow = false;
-        }
-        getListener().MesiboCall_OnBatteryStatus(this.mCp, this.mBatteryLow, false);
+    public void onActivityResult(int var1, int var2, Intent var3) {
+        this.mRtcCall.onActivityResult(var1, var2, var3);
     }
 
-    /* access modifiers changed from: package-private */
-    public void cameraSourceChanged() {
-        sendCallInfo();
-        setupMirroring(false);
-    }
-
-    public void changeVideoFormat(int i, int i2, int i3) {
-        if (this.mCp.video.enabled) {
-            this.mRtcCall.changeVideoFormat(i, i2, i3);
-        }
+    public void startScreenCapturerFromServiceOrActivityResult() {
+        this.mRtcCall.startScreenCapturerFromServiceOrActivityResult();
     }
 
     public void detach() {
         this.mDetached = true;
     }
 
-    public MesiboCall.AudioDevice getActiveAudioDevice() {
-        return this.mActiveAudioDevice;
-    }
-
-
-    @Override
-    public boolean toggleAudioDevice(MesiboCall.AudioDevice audioDevice) {
-        boolean z = audioDevice != this.mActiveAudioDevice;
-        setAudioDevice(audioDevice, z);
-        return z;
-    }
-
-
-    public long getAnswerTime() {
-        return this.mCallCtx.answerTs;
-    }
-
-    public CallContext getCallContext() {
-        return this.mCallCtx;
-    }
-
-
-    public MesiboCall.CallProperties getCallProperties() {
-        return this.mCp;
-    }
-
-
-
-    public boolean getMuteStatus(boolean z, boolean z2, boolean z3) {
-        return !z3 ? z ? this.mCallCtx.audioMute : this.mCallCtx.videoMute : z ? this.mCallCtx.remoteAudioMute : this.mCallCtx.remoteVideoMute;
-    }
-
-    public MesiboCall.VideoScalingType getVideoScalingType() {
-        return null;
-    }
-
-    public int getVideoSource() {
-        return this.mRtcCall.getVideoSource();
-    }
-
-    public MesiboVideoView getVideoView(boolean z) {
-        if (!this.mCp.video.enabled) {
-            return null;
-        }
-        return this.mRtcCall.getVideoView(z);
-    }
-
-
-
-    public void hangup() {
-        this.mHangupReason = 1;
-        hangup(true);
-    }
-
-    public boolean isAnswered() {
-        if (this.mCallCtx != null) {
-            return this.mCallCtx.answered;
-        }
-        return false;
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean isAudioCallInProgress() {
-        return this.mCallCtx != null && isCallInProgress() && !this.mCp.video.enabled;
-    }
-
-    public boolean isCallConnected() {
-        return this.mCallCtx != null && this.mCallCtx.p2pConnected && this.mCallCtx.answered && isCallInProgress();
-    }
-
-    public boolean isCallInProgress() {
-        return this.mCallCtx != null && !this.cleanedUp && !this.hangedUp && (this.mCallCtx.status & RTCFLAG_VIDEOMUTE) == 0;
-    }
-
     public boolean isDetached() {
         return this.mDetached;
     }
 
-    public boolean isFrontCamera() {
-        return getVideoSource() == 1;
+    void setupMirroring(boolean var1) {
+        if (var1) {
+            if (this.mRemoteVideoView != null) {
+                this.mRemoteVideoView.enableMirror(this.mLastRemoteMirror);
+                return;
+            }
+        } else if (this.mLocalVideoView != null) {
+            this.mLocalVideoView.enableMirror(this.isFrontCamera());
+        }
+
+    }
+
+    public void setVideoView(MesiboVideoView var1, boolean var2) {
+        if (this.mCp.video.enabled) {
+            this.mRtcCall.setVideoView(var1, var2);
+            if (var2) {
+                this.mRemoteVideoView = var1;
+            } else {
+                this.mLocalVideoView = var1;
+            }
+
+            if (var1 != null) {
+                this.setupMirroring(var2);
+            }
+
+        }
+    }
+
+    public MesiboVideoView getVideoView(boolean var1) {
+        return !this.mCp.video.enabled ? null : this.mRtcCall.getVideoView(var1);
+    }
+
+    public void setVideoViewsSwapped(boolean var1) {
+        this.mCallCtx.videoSwapped = var1;
+    }
+
+    public boolean isVideoViewsSwapped() {
+        return this.mCallCtx.videoSwapped;
+    }
+
+    public void answer(boolean var1) {
+        if (!this.mCallCtx.answered && this.mCp.incoming) {
+            this.mCallCtx.answered = true;
+            this.mCallCtx.answeredVideo = var1;
+            if (this.mCp.video.enabled) {
+                this.mCp.video.enabled = var1;
+            }
+
+            CallManager.getInstance().stopIncomingNotification(this.mCp);
+            CallManager.getInstance().clearNotification(this.mCp);
+            this.startAudioManager();
+            Mesibo.answer(0L, this.mCp.video.enabled && var1, false);
+            this.recommendViews();
+        }
+    }
+
+    public void answer() {
+        this.answer(this.mCp.video.enabled);
+    }
+
+    private void hangup(boolean var1) {
+        if (!this.hangedUp && var1 && 0 == (64 & this.mCallCtx.status)) {
+            Mesibo.hangup(0L, false);
+            this.hangedUp = true;
+        }
+
+        this.mCallCtx.status = 64;
+        this.recommendViews();
+        this.cleanup(false);
+    }
+
+    public void hangup() {
+        this.mHangupReason = 1;
+        this.hangup(true);
+    }
+
+    private void cleanup(boolean var1) {
+        if (!this.cleanedUp) {
+            this.cleanedUp = true;
+            Mesibo.removeListener(this);
+            this.mCallCtx.inForeground = false;
+            this.playInCallSound(0, false);
+            CallManager.getInstance().stopIncomingNotification(this.mCp);
+            CallManager.getInstance().clearNotification(this.mCp);
+            CallManager.getInstance().clearNotification(mCp);
+            this.mRtcCall.hangup();
+            if (this.m_am != null) {
+                this.m_am.stop();
+                this.m_am = null;
+            }
+
+            if (var1) {
+                Mesibo.hangup(0L, false);
+            }
+
+            this.getListener().MesiboCall_OnHangup(this.mCp, this.mHangupReason);
+            CallManager.getInstance().removeP2PCall();
+            Utils.releasePowerAndWifiLock(this.mWakeLock);
+        }
+    }
+
+    public boolean isVideoCall() {
+        return this.mCp.video.enabled && this.mCallCtx.answeredVideo;
+    }
+
+    public boolean isCallInProgress() {
+        return this.mCallCtx != null && !this.cleanedUp && !this.hangedUp && 0 == (this.mCallCtx.status & 64);
     }
 
     public boolean isIncoming() {
@@ -598,281 +398,120 @@ public class CallP2P implements Mesibo.CallListener, CallPrivate, RtcCall.Listen
         return this.mCallCtx != null && this.mCallCtx.p2pConnected;
     }
 
-    public boolean isVideoCall() {
-        return this.mCp.video.enabled && this.mCallCtx.answeredVideo;
+    public boolean isCallConnected() {
+        return this.mCallCtx != null && this.mCallCtx.p2pConnected && this.mCallCtx.answered && this.isCallInProgress();
     }
 
-    /* access modifiers changed from: protected */
-    public boolean isVideoCallInProgress() {
-        return this.mCallCtx != null && isCallInProgress() && this.mCp.video.enabled;
+    protected boolean isAudioCallInProgress() {
+        return this.mCallCtx != null && this.isCallInProgress() && !this.mCp.video.enabled;
     }
 
-    public boolean isVideoViewsSwapped() {
-        return this.mCallCtx.videoSwapped;
+    protected boolean isVideoCallInProgress() {
+        return this.mCallCtx != null && this.isCallInProgress() && this.mCp.video.enabled;
     }
 
-    public void mute(boolean z, boolean z2, boolean z3) {
-        if (z) {
-            this.mCallCtx.audioMute = z3;
+    public long getAnswerTime() {
+        return this.mCallCtx.answerTs;
+    }
+
+    public boolean isAnswered() {
+        return this.mCallCtx != null ? this.mCallCtx.answered : false;
+    }
+
+    public boolean isFrontCamera() {
+        return this.getVideoSource() == 1;
+    }
+
+    public void changeVideoFormat(int var1, int var2, int var3) {
+        if (this.mCp.video.enabled) {
+            this.mRtcCall.changeVideoFormat(var1, var2, var3);
         }
-        if (z2) {
-            this.mCallCtx.videoMute = z3;
+    }
+
+    private void startAudioManager() {
+        this.m_am = RtcAudioManager.create(CallManager.getAppContext(), this.mCallCtx.f0cp.audio.speaker, this.mCallCtx.f0cp.disableSpeakerOnProximity);
+        this.m_am.setDefaultAudioDevice(this.mCp.audio.speaker ? MesiboCall.AudioDevice.SPEAKER : MesiboCall.AudioDevice.EARPIECE);
+        this.m_am.start(new RtcAudioManager.AudioManagerListener() {
+            public void onAudioDeviceChanged(MesiboCall.AudioDevice var1, Set<MesiboCall.AudioDevice> var2) {
+                CallP2P.this.onAudioManagerDevicesChanged(var1, var2);
+            }
+        });
+    }
+
+    private void notifiAudioDeviceChanged(final MesiboCall.AudioDevice var1, final MesiboCall.AudioDevice var2) {
+        if (Mesibo.isUiThread()) {
+            this.getListener().MesiboCall_OnAudioDeviceChanged(this.mCp, var1, var2);
+        } else {
+            (new Handler(Looper.getMainLooper())).post(new Runnable() {
+                public void run() {
+                    CallP2P.this.getListener().MesiboCall_OnAudioDeviceChanged(CallP2P.this.mCp, var1, var2);
+                }
+            });
         }
-        Mesibo.mute(z, z2, z3);
+    }
+
+    private void setHideOnProximity() {
+        if (this.mCp.hideOnProximity && null != this.mCp.activity && !this.isVideoCall()) {
+            this.mCp.activity.setHideOnProximity(this.mActiveAudioDevice != MesiboCall.AudioDevice.SPEAKER && this.mCallCtx.inForeground);
+        }
+
+    }
+
+    private void onAudioManagerDevicesChanged(MesiboCall.AudioDevice var1, Set<MesiboCall.AudioDevice> var2) {
+        (new StringBuilder("onAudioManagerDevicesChanged: ")).append(var2).append(", selected: ").append(var1);
+        this.mAvailableAudioDevices = var2;
+        if (this.mActiveAudioDevice != var1) {
+            this.notifiAudioDeviceChanged(var1, this.mActiveAudioDevice);
+            this.mActiveAudioDevice = var1;
+            this.setHideOnProximity();
+        }
+    }
+
+    public void mute(boolean var1, boolean var2, boolean var3) {
+        if (var1) {
+            this.mCallCtx.audioMute = var3;
+        }
+
+        if (var2) {
+            this.mCallCtx.videoMute = var3;
+        }
+
+        Mesibo.mute(var1, var2, var3);
         this.mCallCtx.videoMutedDueToBackground = false;
     }
 
-    public void onActivityResult(int i, int i2, Intent intent) {
-        this.mRtcCall.onActivityResult(i, i2, intent);
-    }
-
-    /* access modifiers changed from: package-private */
-    public void onOrientationChanged() {
-        if (this.mLandscape) {
-            this.mLandscape = false;
-            getListener().MesiboCall_OnOrientationChanged(this.mCp, false, false);
-            sendCallInfo();
+    public boolean getMuteStatus(boolean var1, boolean var2, boolean var3) {
+        if (!var3) {
+            return var1 ? this.mCallCtx.audioMute : this.mCallCtx.videoMute;
+        } else {
+            return var1 ? this.mCallCtx.remoteAudioMute : this.mCallCtx.remoteVideoMute;
         }
     }
 
-    public void onRtcStatus(long j, long j2, int i, int i2, String str) {
-        new StringBuilder("onRtcStatus: type ").append(i).append(" flags: ").append(i2).append(" peerid: ").append(j);
-        if (i == 0) {
-            createStreams(i2);
-        } else if (!TextUtils.isEmpty(str)) {
-            SdpInterface.onSdp(str, this.mRtcCall);
-        } else if (1 == i) {
-            this.mRtcCall.createOffer(false);
-        } else if (2 == i) {
-            this.mRtcCall.createAnswer();
-        } else if (RTCACTION_MUTE == i) {
-            rtcMute(i2);
-        }
+    public boolean toggleAudioMute() {
+        this.mCallCtx.audioMute = !this.mCallCtx.audioMute;
+        this.mute(true, false, this.mCallCtx.audioMute);
+        return this.mCallCtx.audioMute;
     }
 
-    public void playInCallSound(Context context, int i, boolean z) {
-        stopInCallSound();
-        this.mRingPlayer = CallUtils.playResource(context, i, z);
+    public boolean toggleVideoMute() {
+        this.mCallCtx.videoMute = !this.mCallCtx.videoMute;
+        this.mute(false, true, this.mCallCtx.videoMute);
+        return this.mCallCtx.videoMute;
     }
 
-    /* access modifiers changed from: protected */
-    public void rtcMute(int i) {
-        if (this.mRtcCall != null) {
-            this.mPendingRtcMuteFlag = 0;
-            if ((i & 16) > 0) {
-                this.mRtcCall.mute(true, false, true);
-            } else if ((i & RTCFLAG_AUDIOUNMUTE) > 0) {
-                if (this.mCallCtx.inForeground) {
-                    this.mRtcCall.mute(true, false, false);
-                } else {
-                    this.mPendingRtcMuteFlag |= RTCFLAG_AUDIOUNMUTE;
-                }
-            }
-            if ((i & RTCFLAG_VIDEOMUTE) > 0) {
-                this.mRtcCall.mute(false, true, true);
-            } else if ((i & RTCFLAG_VIDEOUNMUTE) <= 0) {
-            } else {
-                if (this.mCallCtx.inForeground) {
-                    this.mRtcCall.mute(false, true, false);
-                } else {
-                    this.mPendingRtcMuteFlag |= RTCFLAG_VIDEOUNMUTE;
-                }
-            }
-        }
+    void cameraSourceChanged() {
+        this.sendCallInfo();
+        this.setupMirroring(false);
     }
 
-    /* access modifiers changed from: package-private */
-    public void sendCallInfo() {
-        long j = 0;
-        if (!isFrontCamera()) {
-            j = 1;
-        }
-        this.mBatteryLow = false;
-        if (j != this.mLastInfo || this.mLastWidth != 0 || this.mLastHeight != 0) {
-            this.mLastInfo = j;
-            Mesibo.call_info(j, 0, 0);
-        }
+    public void setVideoSource(int var1, int var2) {
+        this.mRtcCall.setVideoSource(var1, var2);
+        this.cameraSourceChanged();
     }
 
-    public void sendDTMF(int i) {
-    }
-
-    public void setAnswerTime() {
-        if (this.mCallCtx.answered && 0 == this.mCallCtx.answerTs) {
-            this.mCallCtx.answerTs = SystemClock.elapsedRealtime() - 1000;
-            this.m_am.setDefaultAudioDevice(this.mCp.video.enabled ? MesiboCall.AudioDevice.SPEAKER : MesiboCall.AudioDevice.EARPIECE);
-        }
-    }
-
-    public void setAudioDevice(MesiboCall.AudioDevice audioDevice, boolean z) {
-        if (this.m_am != null) {
-            if (z) {
-                this.m_am.selectAudioDevice(audioDevice);
-            } else if (this.mAvailableAudioDevices == null) {
-            } else {
-                if (!this.mCp.video.enabled || audioDevice == MesiboCall.AudioDevice.SPEAKER) {
-                    Iterator<MesiboCall.AudioDevice> it = this.mAvailableAudioDevices.iterator();
-                    boolean z2 = false;
-                    boolean z3 = false;
-                    boolean z4 = false;
-                    while (it.hasNext()) {
-                        MesiboCall.AudioDevice next = it.next();
-                        if (next != audioDevice) {
-                            if (next == MesiboCall.AudioDevice.HEADSET) {
-                                this.m_am.selectAudioDevice(audioDevice);
-                                return;
-                            } else if (next == MesiboCall.AudioDevice.BLUETOOTH) {
-                                z4 = true;
-                            } else if (next == MesiboCall.AudioDevice.SPEAKER) {
-                                z3 = true;
-                            } else {
-                                z2 = next == MesiboCall.AudioDevice.EARPIECE ? true : z2;
-                            }
-                        }
-                    }
-                    if (z4) {
-                        this.m_am.selectAudioDevice(MesiboCall.AudioDevice.BLUETOOTH);
-                    } else if (z2) {
-                        this.m_am.selectAudioDevice(MesiboCall.AudioDevice.EARPIECE);
-                    } else if (z3) {
-                        this.m_am.selectAudioDevice(MesiboCall.AudioDevice.EARPIECE);
-                    }
-                } else {
-                    this.m_am.selectAudioDevice(MesiboCall.AudioDevice.SPEAKER);
-                }
-            }
-        }
-    }
-
-    public void setListener(MesiboCall.InProgressListener inProgressListener) {
-        this.mListener = new WeakReference<>(inProgressListener);
-    }
-
-    public void setVideoScaling(MesiboCall.VideoScalingType videoScalingType) {
-    }
-
-    public void setVideoSource(int i, int i2) {
-        this.mRtcCall.setVideoSource(i, i2);
-        cameraSourceChanged();
-    }
-
-    public void setVideoView(MesiboVideoView mesiboVideoView, boolean z) {
-        if (this.mCp.video.enabled) {
-            this.mRtcCall.setVideoView(mesiboVideoView, z);
-            if (z) {
-                this.mRemoteVideoView = mesiboVideoView;
-            } else {
-                this.mLocalVideoView = mesiboVideoView;
-            }
-            if (mesiboVideoView != null) {
-                setupMirroring(z);
-            }
-        }
-    }
-
-    public void setVideoViewsSwapped(boolean z) {
-        this.mCallCtx.videoSwapped = z;
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean setup(MesiboCall.CallProperties callProperties) {
-        this.mCallCtx = new CallContext(callProperties);
-        this.mCp = callProperties;
-        if (callProperties.video.enabled && callProperties.video.source == 4 && Build.VERSION.SDK_INT < 21) {
-            return false;
-        }
-        if (callProperties.parent == null) {
-            return false;
-        }
-        this.mWakeLock = Utils.createPowerAndWifiLock(callProperties.parent);
-        PeerConnectionClient.PeerConnectionParameters peerConnectionParameters = new PeerConnectionClient.PeerConnectionParameters();
-        peerConnectionParameters.videoCallEnabled = this.mCp.video.enabled;
-        if (callProperties.video.height > 0) {
-            peerConnectionParameters.videoHeight = callProperties.video.height;
-        }
-        if (callProperties.video.width > 0) {
-            peerConnectionParameters.videoWidth = callProperties.video.width;
-        }
-        if (callProperties.video.fps > 0) {
-            peerConnectionParameters.videoFps = callProperties.video.fps;
-        }
-        peerConnectionParameters.videoMaxBitrate = callProperties.video.bitrate;
-        peerConnectionParameters.offerToRecv = true;
-        peerConnectionParameters.offerToSend = true;
-        int i = callProperties.video.source;
-        if (i > 4) {
-            i = 1;
-        }
-        this.mRtcCall = new RtcCall(callProperties.activity, peerConnectionParameters, i, this);
-        return true;
-    }
-
-    /* access modifiers changed from: package-private */
-    public void setupMirroring(boolean z) {
-        if (z) {
-            if (this.mRemoteVideoView != null) {
-                this.mRemoteVideoView.enableMirror(this.mLastRemoteMirror);
-            }
-        } else if (this.mLocalVideoView != null) {
-            this.mLocalVideoView.enableMirror(isFrontCamera());
-        }
-    }
-
-    /* JADX WARNING: type inference failed for: r3v12, types: [com.mesibo.calls.api.MesiboCallActivity, android.app.Activity] */
-    public void start(QampCallsActivity mesiboCallActivity, MesiboCall.InProgressListener inProgressListener) {
-        boolean z = true;
-        MesiboCall.CallProperties callProperties = this.mCallCtx.f0cp;
-        if (this.mStarted) {
-            this.mDetached = false;
-            this.setupViews.firstTime = true;
-            callProperties.activity = mesiboCallActivity;
-            setListener(inProgressListener);
-            if (this.mCallCtx.videoMutedDueToBackground) {
-                mute(false, true, false);
-            }
-            firstUiUpdate();
-            return;
-        }
-        this.mStarted = true;
-        this.mDetached = false;
-        callProperties.activity = mesiboCallActivity;
-        setListener(inProgressListener);
-        if (callProperties.video.source == 4 && callProperties.video.width == 0 && callProperties.video.height == 0) {
-            DisplayMetrics displayMetrics = DeviceUtils.getDisplayMetrics(callProperties.activity);
-            callProperties.video.width = displayMetrics.widthPixels;
-            callProperties.video.height = displayMetrics.heightPixels;
-        }
-        Mesibo.addListener(this);
-        if (this.mCallCtx.firstTimeVisible) {
-            this.mCallCtx.firstTimeVisible = false;
-            if (this.mCp.incoming) {
-                if (this.mCp.iceServers == null || this.mCp.iceServers.length <= 0) {
-                    z = false;
-                }
-                Mesibo.call_ack(z);
-                sendCallInfo();
-            } else if (Mesibo.call(callProperties.user.address, this.mCp.video.enabled) != 0) {
-                this.mCallCtx.status = 74;
-                recommendViews();
-                getListener().MesiboCall_OnHangup(this.mCp, 3);
-                return;
-            }
-        }
-        if (!this.mCp.incoming) {
-            startAudioManager();
-        }
-        firstUiUpdate();
-    }
-
-    public void startScreenCapturerFromServiceOrActivityResult() {
-        this.mRtcCall.startScreenCapturerFromServiceOrActivityResult();
-    }
-
-    public void stopInCallSound() {
-        if (this.mRingPlayer != null) {
-            this.mRingPlayer.stop();
-            this.mRingPlayer = null;
-        }
+    public int getVideoSource() {
+        return this.mRtcCall.getVideoSource();
     }
 
     public void switchCamera() {
@@ -887,22 +526,442 @@ public class CallP2P implements Mesibo.CallListener, CallPrivate, RtcCall.Listen
         }
     }
 
-    /**public boolean toggleAudioDevice(MesiboCall.AudioDevice audioDevice) {
-        boolean z = audioDevice != this.mActiveAudioDevice;
-        setAudioDevice(audioDevice, z);
-        return z;
-    }**/
+    void sendCallInfo() {
+        long var1 = 0L;
+        if (!this.isFrontCamera()) {
+            var1 = 1L;
+        }
 
-    public boolean toggleAudioMute() {
-        this.mCallCtx.audioMute = !this.mCallCtx.audioMute;
-        mute(true, false, this.mCallCtx.audioMute);
-        return this.mCallCtx.audioMute;
+        this.mBatteryLow = false;
+        if (var1 != this.mLastInfo || this.mLastWidth != 0 || this.mLastHeight != 0) {
+            this.mLastInfo = var1;
+            Mesibo.call_info(var1, 0, 0);
+        }
     }
 
-    public boolean toggleVideoMute() {
-        this.mCallCtx.videoMute = !this.mCallCtx.videoMute;
-        mute(false, true, this.mCallCtx.videoMute);
-        return this.mCallCtx.videoMute;
+    protected void rtcMute(int var1) {
+        if (this.mRtcCall != null) {
+            this.mPendingRtcMuteFlag = 0;
+            if ((var1 & 16) > 0) {
+                this.mRtcCall.mute(true, false, true);
+            } else if ((var1 & 32) > 0) {
+                if (this.mCallCtx.inForeground) {
+                    this.mRtcCall.mute(true, false, false);
+                } else {
+                    this.mPendingRtcMuteFlag |= 32;
+                }
+            }
+
+            if ((var1 & 64) > 0) {
+                this.mRtcCall.mute(false, true, true);
+            } else {
+                if ((var1 & 128) > 0) {
+                    if (this.mCallCtx.inForeground) {
+                        this.mRtcCall.mute(false, true, false);
+                        return;
+                    }
+
+                    this.mPendingRtcMuteFlag |= 128;
+                }
+
+            }
+        }
     }
 
+    private void createStreams(int var1) {
+        boolean var2 = (var1 & 16) > 0;
+        boolean var3 = (var1 & 64) > 0;
+        this.mRtcCall.createCall(this.mCp.activity, var2, var3);
+        this.isAnswered();
+    }
+
+    public void setAnswerTime() {
+        if (this.mCallCtx.answered) {
+            if (0L == this.mCallCtx.answerTs) {
+                this.mCallCtx.answerTs = SystemClock.elapsedRealtime() - 1000L;
+                this.m_am.setDefaultAudioDevice(this.mCp.video.enabled ? MesiboCall.AudioDevice.SPEAKER : MesiboCall.AudioDevice.EARPIECE);
+            }
+
+        }
+    }
+
+    private void setRemoteCallInfo(long var1, long var3) {
+        if (this.mCp.video.enabled && this.mRemoteVideoView != null) {
+            this.mRemoteVideoView.enableMirror((var1 & 8L) > 0L);
+        }
+
+        boolean var6 = (var1 & 4L) > 0L;
+        boolean var5 = (var1 & 4096L) > 0L;
+        if (var6 != this.mRemoteLandscape) {
+            this.getListener().MesiboCall_OnOrientationChanged(this.mCp, var6, true);
+            this.mRemoteLandscape = var6;
+        }
+
+        if (var5 != this.mRemoteLowBattery) {
+            this.getListener().MesiboCall_OnBatteryStatus(this.mCp, var5, true);
+        }
+
+    }
+
+    private void playInCallSound(int var1, boolean var2) {
+        if (var2 && this.mCallCtx.inCallSound) {
+            this.getListener().MesiboCall_OnPlayInCallSound(this.mCp, 0, false);
+            this.stopInCallSound();
+        }
+
+        if (var2 || this.mCallCtx.inCallSound) {
+            this.mCallCtx.inCallSound = var2;
+            if (!this.getListener().MesiboCall_OnPlayInCallSound(this.mCp, var1, var2)) {
+                int var4 = R.raw.ring;
+                boolean var3 = true;
+                if (var1 == 1) {
+                    var4 = R.raw.busy;
+                    var3 = false;
+                }
+
+                this.playInCallSound(CallManager.getAppContext(), var4, var3);
+            }
+
+        }
+    }
+
+    private void notifyMissedCall() {
+        MesiboCall.IncomingListener var1;
+        if ((var1 = CallManager.getInstance().getListener()) != null) {
+            var1.MesiboCall_onNotify(4, this.mCp.user, this.mCp.video.enabled);
+        }
+
+    }
+
+    private void recommendViews() {
+        boolean var1 = false;
+        boolean var2 = false;
+        boolean var3 = false;
+        if (this.mCp.incoming && !this.mCallCtx.answered) {
+            var1 = true;
+        }
+
+        if (this.mCp.video.enabled && (!this.mCallCtx.answered || this.mCallCtx.answeredVideo)) {
+            var2 = true;
+        }
+
+        if (this.mCp.video.enabled && this.mCallCtx.answered && this.mCallCtx.p2pConnected && this.isCallInProgress()) {
+            var3 = true;
+        }
+
+        if (this.setupViews.firstTime) {
+            this.setupViews.showIncoming = !var1;
+            this.setupViews.showVideoControls = !var2;
+            this.setupViews.hideControls = false;
+        }
+
+        if (var1 != this.setupViews.showIncoming || var2 != this.setupViews.showVideoControls) {
+            final int var4 = var1 ? 1 : 2;
+            if (Mesibo.isUiThread()) {
+                this.getListener().MesiboCall_OnUpdateUserInterface(this.mCp, var4, var2, true);
+            } else {
+                boolean finalVar2 = var2;
+                (new Handler(Looper.getMainLooper())).post(new Runnable() {
+                    public void run() {
+                        CallP2P.this.getListener().MesiboCall_OnUpdateUserInterface(CallP2P.this.mCp, var4, finalVar2, true);
+                    }
+                });
+            }
+        }
+
+        if (var3 != this.setupViews.hideControls) {
+            if (Mesibo.isUiThread()) {
+                this.getListener().MesiboCall_OnUpdateUserInterface(this.mCp, 3, var2, !var3);
+            } else {
+                boolean finalVar = var2;
+                boolean finalVar1 = var3;
+                (new Handler(Looper.getMainLooper())).post(new Runnable() {
+                    public void run() {
+                        CallP2P.this.getListener().MesiboCall_OnUpdateUserInterface(CallP2P.this.mCp, 3, finalVar, !finalVar1);
+                    }
+                });
+            }
+        }
+
+        this.setupViews.showIncoming = var1;
+        this.setupViews.hideControls = var3;
+        this.setupViews.showVideoControls = var2;
+        this.setupViews.firstTime = false;
+    }
+
+    public boolean Mesibo_onCall(long var1, long var3, MesiboProfile var5, int var6) {
+        return false;
+    }
+
+    public void onRtcStatus(long var1, long var3, int var5, int var6, String var7) {
+        (new StringBuilder("onRtcStatus: type ")).append(var5).append(" flags: ").append(var6).append(" peerid: ").append(var1);
+        if (var5 == 0) {
+            this.createStreams(var6);
+        } else if (!TextUtils.isEmpty(var7)) {
+            SdpInterface.onSdp(var7, this.mRtcCall);
+        } else if (1 == var5) {
+            this.mRtcCall.createOffer(false);
+        } else if (2 == var5) {
+            this.mRtcCall.createAnswer();
+        } else if (7 == var5) {
+            this.rtcMute(var6);
+        }
+    }
+
+    public boolean Mesibo_onCallStatus(long var1, long var3, int var5, long var6, long var8, long var10, String var12) {
+        (new StringBuilder("Mesibo_onCallStatus: status: ")).append(var5).append(" flags: ").append(var6);
+        if (var3 != this.mCp.callid) {
+            return true;
+        } else {
+            boolean var13 = (var6 & 8L) > 0L;
+            if ((var6 & 1073741824L) > 0L) {
+                this.onRtcStatus(var1, var3, var5, (int)var6, var12);
+                return true;
+            } else {
+                boolean var14 = (var6 & 1L) > 0L;
+                boolean var2 = (var6 & 2L) > 0L;
+                if (3 == var5) {
+                    this.playInCallSound(0, true);
+                    this.sendCallInfo();
+                } else if (5 == var5 || (var5 & 64) > 0) {
+                    this.playInCallSound(0, false);
+                }
+
+                if ((var5 & 64) > 0) {
+                    this.mHangupReason = 2;
+                    if (76 == var5) {
+                        this.mHangupReason = 5;
+                    }
+
+                    if (77 == var5) {
+                        this.mHangupReason = 1;
+                    }
+
+                    if (var5 != 64 && var5 != 65 && var5 != 77 && !this.mCallCtx.inForeground) {
+                        this.playInCallSound(1, true);
+                    }
+
+                    if (this.mCp.incoming && 65 == var5) {
+                        this.notifyMissedCall();
+                    }
+                }
+
+                switch (var5) {
+                    case 5:
+                        this.mCallCtx.answered = true;
+                        this.mCallCtx.answeredVideo = var2;
+                        if (this.mCallCtx.p2pConnected) {
+                            this.setAnswerTime();
+                        }
+
+                        if (!var2) {
+                            this.mCallCtx.videoMute = true;
+                        }
+                        break;
+                    case 9:
+                    case 10:
+                        if (var14) {
+                            this.mCallCtx.remoteAudioMute = var5 == 9;
+                        }
+
+                        if (var2) {
+                            this.mCallCtx.remoteVideoMute = var5 == 9;
+                        }
+
+                        this.getListener().MesiboCall_OnMute(this.mCp, this.mCallCtx.remoteAudioMute, this.mCallCtx.remoteVideoMute, true);
+                        break;
+                    case 11:
+                        this.mCallCtx.hold = true;
+                        break;
+                    case 12:
+                        this.mCallCtx.hold = false;
+                        break;
+                    case 35:
+                        this.setRemoteCallInfo(var8, var10);
+                        break;
+                    case 48:
+                        this.mCallCtx.p2pConnected = true;
+                        if (this.mCallCtx.answered) {
+                            this.setAnswerTime();
+                        }
+                        break;
+                    case 50:
+                        this.mCallCtx.p2pConnected = false;
+                        if (this.mCallCtx.answered) {
+                        }
+                }
+
+                if (48 != var5 && 50 != var5 && 35 != var5) {
+                    this.mCallCtx.status = var5;
+                }
+
+                if (48 == var5 && !this.mConnectedFirstTime) {
+                    if (!this.mCallCtx.answered) {
+                        return true;
+                    }
+
+                    this.mConnectedFirstTime = true;
+                }
+
+                this.getListener().MesiboCall_OnStatus(this.mCp, var5, var2, var13);
+                if (5 == var5 && this.mCallCtx.p2pConnected && !this.mConnectedFirstTime) {
+                    this.mConnectedFirstTime = true;
+                    this.getListener().MesiboCall_OnStatus(this.mCp, 48, var2, var13);
+                }
+
+                this.recommendViews();
+                if ((var5 & 64) > 0) {
+                    this.cleanup(false);
+                }
+
+                return true;
+            }
+        }
+    }
+
+    public void Mesibo_onCallServer(int var1, String var2, String var3, String var4) {
+        if (1 == var1) {
+            if (null != this.mCp.iceServers && this.mCp.iceServers.length > 0) {
+                if (this.mIceServersSet) {
+                    return;
+                }
+
+                this.mIceServersSet = true;
+
+                for(var1 = 0; var1 < this.mCp.iceServers.length; ++var1) {
+                    this.mRtcCall.addTurnServer(this.mCp.iceServers[var1]);
+                }
+
+                return;
+            }
+
+            this.mRtcCall.addTurnServer(var2, var3, var4);
+        }
+
+    }
+
+    public void MesiboRtcCall_OnCaptureStarted(boolean var1) {
+        if (var1) {
+            this.getListener().MesiboCall_OnVideoSourceChanged(this.mCp, this.getVideoSource(), 0);
+        }
+    }
+
+    public void MesiboRtcCall_OnIceStatus(boolean var1) {
+        Mesibo.setCallStatus(var1 ? 2 : 3, (String)null);
+        this.mCallCtx.iceConnected = var1;
+    }
+
+    public void MesiboRtcCall_OnSendSdp(SessionDescription var1, boolean var2) {
+        SdpInterface.sendSdp(var1, var2);
+    }
+
+    public void MesiboRtcCall_OnSendCandidate(IceCandidate var1) {
+        SdpInterface.sendLocalIceCandidate(var1);
+    }
+
+    public void MesiboRtcCall_OnSendRemoveCandidate(IceCandidate[] var1) {
+        SdpInterface.sendLocalIceCandidateRemovals(var1);
+    }
+
+    public void MesiboRtcCall_OnRemoteMedia(boolean var1) {
+    }
+
+    public void sendDTMF(int var1) {
+    }
+
+    public MesiboCall.AudioDevice getActiveAudioDevice() {
+        return this.mActiveAudioDevice;
+    }
+
+    public void setAudioDevice(MesiboCall.AudioDevice var1, boolean var2) {
+        if (this.m_am != null) {
+            if (var2) {
+                this.m_am.selectAudioDevice(var1);
+            } else if (this.mAvailableAudioDevices != null) {
+                if (this.mCp.video.enabled && var1 != MesiboCall.AudioDevice.SPEAKER) {
+                    this.m_am.selectAudioDevice(MesiboCall.AudioDevice.SPEAKER);
+                } else {
+                    Iterator var7 = this.mAvailableAudioDevices.iterator();
+                    boolean var3 = false;
+                    boolean var4 = false;
+                    boolean var5 = false;
+
+                    while(var7.hasNext()) {
+                        MesiboCall.AudioDevice var6;
+                        if ((var6 = (MesiboCall.AudioDevice)var7.next()) != var1) {
+                            if (var6 == MesiboCall.AudioDevice.HEADSET) {
+                                this.m_am.selectAudioDevice(var1);
+                                return;
+                            }
+
+                            if (var6 == MesiboCall.AudioDevice.BLUETOOTH) {
+                                var3 = true;
+                            } else if (var6 == MesiboCall.AudioDevice.SPEAKER) {
+                                var4 = true;
+                            } else if (var6 == MesiboCall.AudioDevice.EARPIECE) {
+                                var5 = true;
+                            }
+                        }
+                    }
+
+                    if (var3) {
+                        this.m_am.selectAudioDevice(MesiboCall.AudioDevice.BLUETOOTH);
+                    } else if (var5) {
+                        this.m_am.selectAudioDevice(MesiboCall.AudioDevice.EARPIECE);
+                    } else if (var4) {
+                        this.m_am.selectAudioDevice(MesiboCall.AudioDevice.EARPIECE);
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean toggleAudioDevice(MesiboCall.AudioDevice var1) {
+        boolean var2 = var1 != this.mActiveAudioDevice;
+        this.setAudioDevice(var1, var2);
+        return var2;
+    }
+
+    public void setListener(MesiboCall.InProgressListener var1) {
+        this.mListener = new WeakReference(var1);
+    }
+
+    private MesiboCall.InProgressListener getListener() {
+        if (this.mListener == null) {
+            return this.mDefaultListener;
+        } else {
+            MesiboCall.InProgressListener var1;
+            return (var1 = (MesiboCall.InProgressListener)this.mListener.get()) == null ? this.mDefaultListener : var1;
+        }
+    }
+
+    public void setVideoScaling(MesiboCall.VideoScalingType var1) {
+    }
+
+    public MesiboCall.VideoScalingType getVideoScalingType() {
+        return null;
+    }
+
+    public void playInCallSound(Context var1, int var2, boolean var3) {
+        this.stopInCallSound();
+        this.mRingPlayer = CallUtils.playResource(var1, var2, var3);
+    }
+
+    public void stopInCallSound() {
+        if (this.mRingPlayer != null) {
+            this.mRingPlayer.stop();
+            this.mRingPlayer = null;
+        }
+
+    }
+
+    public static class SetupCallViews {
+        boolean showIncoming = true;
+        boolean showVideoControls = true;
+        boolean hideControls = true;
+        boolean firstTime = true;
+
+        public SetupCallViews() {
+        }
+    }
 }

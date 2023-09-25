@@ -372,7 +372,6 @@ public class MessageView extends RelativeLayout {
                             }
                         }
                     });
-
                 }
                 else {
                     this.postCard.setVisibility(8);

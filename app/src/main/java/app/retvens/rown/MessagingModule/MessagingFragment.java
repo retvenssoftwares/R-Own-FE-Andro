@@ -94,7 +94,8 @@ import com.mesibo.emojiview.EmojiconGridView;
 import com.mesibo.emojiview.EmojiconTextView;
 import com.mesibo.emojiview.EmojiconsPopup;
 import com.mesibo.emojiview.emoji.Emojicon;
-
+import com.mesibo.mediapicker.ImageEditor;
+import com.mesibo.messaging.MessageView;
 
 
 import java.io.File;
@@ -724,6 +725,8 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
         }
 
     }
+
+
 
     public void onMediaButtonClicked(int buttonId) {
         if (buttonId == R.id.cameraButton) {
