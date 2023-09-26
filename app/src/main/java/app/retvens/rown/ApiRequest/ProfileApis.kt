@@ -82,18 +82,6 @@ interface ProfileApis {
         @Part("hotelAddress") hotelAddress: RequestBody,
         @Part galleryImages2 : MultipartBody.Part,
     ):Call<UpdateResponse>
-
-    @Multipart
-    @PATCH("updateHotelData/{hotel_id}")
-    fun updateAllHotels(
-        @Path("hotel_id") hotel_id:String,
-        @Part("Hoteldescription") Hoteldescription: RequestBody,
-        @Part("hotelName") hotelName: RequestBody,
-        @Part("hotelAddress") hotelAddress: RequestBody,
-        @Part galleryImages1 : MultipartBody.Part,
-        @Part galleryImages2 : MultipartBody.Part,
-        @Part galleryImages3 : MultipartBody.Part
-    ):Call<UpdateResponse>
     @Multipart
     @PATCH("updateHotelData/{hotel_id}")
     fun updateHotels3(
@@ -101,6 +89,47 @@ interface ProfileApis {
         @Part("Hoteldescription") Hoteldescription: RequestBody,
         @Part("hotelName") hotelName: RequestBody,
         @Part("hotelAddress") hotelAddress: RequestBody,
+        @Part galleryImages3 : MultipartBody.Part
+    ):Call<UpdateResponse>
+    @Multipart
+    @PATCH("updateHotelData/{hotel_id}")
+    fun updateHotels12(
+        @Path("hotel_id") hotel_id:String,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
+        @Part("hotelName") hotelName: RequestBody,
+        @Part("hotelAddress") hotelAddress: RequestBody,
+        @Part galleryImages1 : MultipartBody.Part,
+        @Part galleryImages2 : MultipartBody.Part
+    ):Call<UpdateResponse>
+    @Multipart
+    @PATCH("updateHotelData/{hotel_id}")
+    fun updateHotels13(
+        @Path("hotel_id") hotel_id:String,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
+        @Part("hotelName") hotelName: RequestBody,
+        @Part("hotelAddress") hotelAddress: RequestBody,
+        @Part galleryImages1 : MultipartBody.Part,
+        @Part galleryImages3 : MultipartBody.Part
+    ):Call<UpdateResponse>
+    @Multipart
+    @PATCH("updateHotelData/{hotel_id}")
+    fun updateHotels23(
+        @Path("hotel_id") hotel_id:String,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
+        @Part("hotelName") hotelName: RequestBody,
+        @Part("hotelAddress") hotelAddress: RequestBody,
+        @Part galleryImages2 : MultipartBody.Part,
+        @Part galleryImages3 : MultipartBody.Part
+    ):Call<UpdateResponse>
+    @Multipart
+    @PATCH("updateHotelData/{hotel_id}")
+    fun updateHotels123(
+        @Path("hotel_id") hotel_id:String,
+        @Part("Hoteldescription") Hoteldescription: RequestBody,
+        @Part("hotelName") hotelName: RequestBody,
+        @Part("hotelAddress") hotelAddress: RequestBody,
+        @Part galleryImages1 : MultipartBody.Part,
+        @Part galleryImages2 : MultipartBody.Part,
         @Part galleryImages3 : MultipartBody.Part
     ):Call<UpdateResponse>
 

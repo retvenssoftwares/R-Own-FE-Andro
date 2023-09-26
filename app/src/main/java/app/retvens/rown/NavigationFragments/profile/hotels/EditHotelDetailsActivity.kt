@@ -167,6 +167,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             imagesList.remove(imgUri1)
             imgUri1 = null
             binding.img1.setImageURI(imgUri1)
+            uploadImg1 = false
             binding.deleteImg1.visibility = View.GONE
             selectedImg = 1
         }
@@ -174,6 +175,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             imagesList.remove(imgUri2)
             imgUri2 = null
             binding.img2.setImageURI(imgUri2)
+            uploadImg2 = false
             binding.deleteImg2.visibility = View.GONE
             selectedImg = if (imgUri1 == null){
                 1
@@ -185,6 +187,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
             imagesList.remove(imgUri3)
             imgUri3 = null
             binding.img3.setImageURI(imgUri3)
+            uploadImg3 = false
             binding.deleteImg3.visibility = View.GONE
             selectedImg = if (imgUri1 == null){
                 1
@@ -263,7 +266,205 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
 
         if (imagesList.isNotEmpty()) {
 
-            if (uploadImg1) {
+            if (uploadImg1 && uploadImg2 && uploadImg3) {
+                val image1 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri1!!,
+                    "galleryImages1",
+                    applicationContext
+                )
+                val image2 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri2!!,
+                    "galleryImages2",
+                    applicationContext
+                )
+                val image3 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri3!!,
+                    "galleryImages3",
+                    applicationContext
+                )
+
+                val respo = RetrofitBuilder.ProfileApis.updateHotels123(
+                    hotelId!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                    image1!!,
+                    image2!!,
+                    image3!!
+                )
+                respo.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        progressDialog.dismiss()
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                applicationContext,
+                                "image1 : ${response.body()?.message.toString()}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("image1", "image1 : ${response.body()?.message.toString()}")
+                        } else {
+                            Toast.makeText(applicationContext,"Something went wrong",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            t.localizedMessage?.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            }
+            else if (uploadImg1 && uploadImg2 && !uploadImg3) {
+                val image1 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri1!!,
+                    "galleryImages1",
+                    applicationContext
+                )
+                val image2 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri2!!,
+                    "galleryImages2",
+                    applicationContext
+                )
+
+                val respo = RetrofitBuilder.ProfileApis.updateHotels12(
+                    hotelId!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                    image1!!,
+                    image2!!
+                )
+                respo.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        progressDialog.dismiss()
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                applicationContext,
+                                "image1 : ${response.body()?.message.toString()}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("image1", "image1 : ${response.body()?.message.toString()}")
+                        } else {
+                            Toast.makeText(applicationContext,"Something went wrong",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            t.localizedMessage?.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            }
+            else if (uploadImg1 && !uploadImg2 && uploadImg3) {
+                val image1 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri1!!,
+                    "galleryImages1",
+                    applicationContext
+                )
+                val image3 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri3!!,
+                    "galleryImages3",
+                    applicationContext
+                )
+
+                val respo = RetrofitBuilder.ProfileApis.updateHotels13(
+                    hotelId!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                    image1!!,
+                    image3!!
+                )
+                respo.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        progressDialog.dismiss()
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                applicationContext,
+                                "image1 : ${response.body()?.message.toString()}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("image1", "image1 : ${response.body()?.message.toString()}")
+                        } else {
+                            Toast.makeText(applicationContext,"Something went wrong",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            t.localizedMessage?.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            }
+            else if (!uploadImg1 && uploadImg2 && uploadImg3) {
+                val image2 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri2!!,
+                    "galleryImages2",
+                    applicationContext
+                )
+                val image3 = app.retvens.rown.utils.prepareFilePart(
+                    imgUri3!!,
+                    "galleryImages3",
+                    applicationContext
+                )
+
+                val respo = RetrofitBuilder.ProfileApis.updateHotels23(
+                    hotelId!!,
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), description),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), name),
+                    RequestBody.create("multipart/form-data".toMediaTypeOrNull(), location),
+                    image2!!,
+                    image3!!
+                )
+                respo.enqueue(object : Callback<UpdateResponse?> {
+                    override fun onResponse(
+                        call: Call<UpdateResponse?>,
+                        response: Response<UpdateResponse?>
+                    ) {
+                        progressDialog.dismiss()
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                applicationContext,
+                                "image1 : ${response.body()?.message.toString()}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("image1", "image1 : ${response.body()?.message.toString()}")
+                        } else {
+                            Toast.makeText(applicationContext,"Something went wrong",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                        progressDialog.dismiss()
+                        Toast.makeText(
+                            applicationContext,
+                            t.localizedMessage?.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
+            }
+            else if (uploadImg1 && !uploadImg2 && !uploadImg3) {
                 val image = app.retvens.rown.utils.prepareFilePart(
                     imgUri1!!,
                     "galleryImages1",
@@ -289,6 +490,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                                 "image1 : ${response.body()?.message.toString()}",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            Log.d("image1", "image1 : ${response.body()?.message.toString()}")
                         } else {
                             Toast.makeText(applicationContext,"Something went wrong",Toast.LENGTH_SHORT).show()
                         }
@@ -304,8 +506,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                     }
                 })
             }
-
-            if (uploadImg2) {
+            else if (!uploadImg1 && uploadImg2 && !uploadImg3) {
                 val image = app.retvens.rown.utils.prepareFilePart(
                     imgUri2!!,
                     "galleryImages2",
@@ -346,8 +547,7 @@ class EditHotelDetailsActivity : AppCompatActivity(), BottomSheetCountryStateCit
                     }
                 })
             }
-
-            if (uploadImg3) {
+            else if (!uploadImg1 && !uploadImg2 && uploadImg3) {
                 val image = app.retvens.rown.utils.prepareFilePart(
                     imgUri3!!,
                     "galleryImages3",
