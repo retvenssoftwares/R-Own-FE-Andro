@@ -660,11 +660,4 @@ public class MessageView extends RelativeLayout {
         }
     }
 
-
-
-
-
-
-
-
 }

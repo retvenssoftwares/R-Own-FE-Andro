@@ -33,12 +33,12 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.mesibo.api.Mesibo;
 import com.mesibo.api.MesiboUtils;
 import com.mesibo.calls.api.R.raw;
+import com.mesibo.calls.api.Utils;
 import com.mesibo.calls.api.ui.ViewTouchListener;
 
 import app.retvens.rown.R;
 import app.retvens.rown.api.MesiboCall;
 import app.retvens.rown.api.MesiboVideoView;
-import app.retvens.rown.api.Utils;
 
 public class MesiboDefaultCallFragment extends Fragment implements OnClickListener, MesiboCall.InProgressListener {
     public static final String TAG = "MesiboDefaultCallFragment";
@@ -249,7 +249,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
 
             }
 
-            this.setStatusView(5, (String)null);
+            this.setStatusView(5, (String)null, false);
         }
     }
 
@@ -415,28 +415,18 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
 
     }
 
-    public void setStatusView(int var1, String var2) {
+    public void setStatusView(int var1, String var2, boolean var3) {
         if (this.mCall.isAnswered() && this.mCall.isCallInProgress() && this.mCall.isCallConnected()) {
-
             this.ui.status.setFormat((String)null);
             this.ui.status.setText("");
             this.ui.status.setBase(this.mCall.getAnswerTime());
             this.ui.status.start();
-            if(this.mCall.isVideoCall()){
-                this.ui.thumbnailLayout.setVisibility(View.GONE);
-                this.ui.contactView.setVisibility(View.GONE);
-            }else  {
-                //this.ui.background.setVisibility(View.VISIBLE);
-            }
-
-            //this.ui.thumbnailLayout.setVisibility(View.GONE);
-            //this.ui.contactView.setVisibility(View.GONE);
         } else {
             this.ui.status.stop();
             if (var2 != null) {
                 this.ui.mStatusText = var2;
             } else {
-                this.ui.mStatusText = this.statusToString(var1, this.ui.mStatusText);
+                this.ui.mStatusText = this.statusToString(var1, this.ui.mStatusText, var3);
             }
 
             this.ui.status.setText(this.ui.mStatusText);
@@ -444,8 +434,9 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
     }
 
     public void setStatusView(int var1) {
-        this.setStatusView(var1, (String)null);
+        this.setStatusView(var1, (String)null, false);
     }
+
 
     /**public void updateRemoteMuteButtons() {
      boolean var1 = this.mCall.getMuteStatus(true, false, true);
@@ -583,26 +574,31 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
 
     }
 
-    public void MesiboCall_OnStatus(MesiboCall.CallProperties var1, int var2, boolean var3) {
+    public void MesiboCall_OnStatus(MesiboCall.CallProperties var1, int var2, boolean var3, boolean var4) {
         this.mCp.f2ui.callStatusText = null;
         if (null != this.mCp.f2ui.inProgressListener) {
-//            this.mCp.f2ui.inProgressListener.MesiboCall_OnStatus(var1, var2, var3);
+            this.mCp.f2ui.inProgressListener.MesiboCall_OnStatus(var1, var2, var3, var4);
         }
 
-        this.setStatusView(var2, this.mCp.f2ui.callStatusText);
+        this.setStatusView(var2, this.mCp.f2ui.callStatusText, var4);
         if ((var2 & 64) > 0) {
             if (var2 == 76 && !Mesibo.isAccountPaid()) {
-                String var4 = "mesibo free accounts have a limit on call duration. Please upgrade your mesibo account to remove this limitation";
-                Utils.alert(this.mActivity, "Free Accounts Limit", var4, new DialogInterface.OnClickListener() {
+                String var7 = "mesibo free accounts have a limit on call duration. Please upgrade your mesibo account to remove this limitation";
+                Utils.alert(this.mActivity, "Free Accounts Limit", var7, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface var1, int var2) {
                         MesiboDefaultCallFragment.this.mActivity.finish();
                     }
                 });
             } else {
-                this.mActivity.delayedFinish(3000L);
+                long var5 = 3000L;
+                if (77 == var2 || Mesibo.isCallWaiting()) {
+                    var5 = 0L;
+                }
+
+                this.mActivity.delayedFinish(var5);
             }
         } else {
-            switch(var2) {
+            switch (var2) {
                 case 48:
                     this.callConnected();
                 default:
@@ -661,10 +657,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         }
     }
 
-    @Override
-    public void MesiboCall_OnStatus(MesiboCall.CallProperties var1, int var2, boolean var3, boolean var4) {
 
-    }
 
     public void MesiboCall_OnHangup(MesiboCall.CallProperties var1, int var2) {
         if (null != this.mCp.f2ui.inProgressListener) {
@@ -698,7 +691,7 @@ public class MesiboDefaultCallFragment extends Fragment implements OnClickListen
         return MesiboCall.getInstance().getStatusText(var1, var2);
     }
 
-    public String statusToString(int var1, String var2) {
+    public String statusToString(int var1, String var2, boolean var3) {
         switch(var1) {
             case 0:
                 var2 = this.getStatusText(var1, "Initiating Call");

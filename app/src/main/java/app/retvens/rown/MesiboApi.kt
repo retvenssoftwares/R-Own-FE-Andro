@@ -46,6 +46,7 @@ object MesiboApi {
 
         // Now start mesibo
         val test = Mesibo.start()
+        Log.e("MesiboStart",test.toString());
         if (0 != test) {
             return false
         }

@@ -737,7 +737,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
         else if (buttonId == R.id.document_btn) {
             MediaPicker.launchPicker(this.myActivity(), MediaPicker.TYPE_FILE);
         }
-//        else if (buttonId == R.id.location) {
+        else if (buttonId == R.id.location) {
 //            try {
 //                this.displayPlacePicker();
 //            } catch (GooglePlayServicesNotAvailableException var4) {
@@ -745,7 +745,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
 //            } catch (GooglePlayServicesRepairableException var5) {
 //                var5.printStackTrace();
 //            }
-//        }
+        }
         else if (buttonId == R.id.video) {
             CharSequence[] Options = new CharSequence[]{MesiboUI.getConfig().videoFromRecorderTitle, MesiboUI.getConfig().videoFromGalleryTitle};
             AlertDialog.Builder builder = new AlertDialog.Builder(this.myActivity());

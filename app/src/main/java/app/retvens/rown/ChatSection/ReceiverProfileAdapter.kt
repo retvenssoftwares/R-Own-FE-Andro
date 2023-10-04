@@ -3,6 +3,7 @@ package app.retvens.rown.ChatSection
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -72,6 +73,7 @@ class ReceiverProfileAdapter(val context: Context, var userList:List<Connections
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: List<Connections>) {
+        Log.e("userList",userList.size.toString());
         userList = newItems
         notifyDataSetChanged()
     }
