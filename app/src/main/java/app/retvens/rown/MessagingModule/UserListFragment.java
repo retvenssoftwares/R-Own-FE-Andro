@@ -54,6 +54,7 @@ import com.mesibo.api.MesiboMessage;
 import com.mesibo.api.MesiboPresence;
 import com.mesibo.api.MesiboProfile;
 import com.mesibo.api.MesiboReadSession;
+import com.mesibo.api.MesiboSelfProfile;
 import com.mesibo.emojiview.EmojiconTextView;
 import com.mesibo.messaging.MesiboImages;
 
@@ -78,6 +79,7 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder;
 import app.retvens.rown.ChatSection.MesiboUsers;
 import app.retvens.rown.Dashboard.FragmentAdapter;
 import app.retvens.rown.DataCollections.Count;
+import app.retvens.rown.MesiboListeners;
 import app.retvens.rown.MessagingModule.AllUtils.LetterTileProvider;
 import app.retvens.rown.R;
 import retrofit2.Call;
@@ -85,8 +87,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserListFragment extends Fragment implements Mesibo.MessageListener,
-        Mesibo.PresenceListener, Mesibo.ConnectionListener, Mesibo.ProfileListener, Mesibo.SyncListener, Mesibo.GroupListener{
+        Mesibo.PresenceListener, Mesibo.ConnectionListener, Mesibo.ProfileListener, Mesibo.SyncListener, Mesibo.GroupListener, MesiboProfile.Listener {
     public static MesiboGroupProfile.Member[] mExistingMembers = null;
+    private static ArrayList<MesiboProfile> existingMember = new ArrayList<>();
     public static ArrayList<MesiboProfile> mMemberProfiles = new ArrayList<>();
     public static ArrayList<MesiboProfile> member = new ArrayList<>();
     public static ArrayList<MesiboProfile> mMemberGroup = new ArrayList<>();
@@ -263,6 +266,13 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
         this.mRecyclerView.setAdapter(this.mAdapter);
         this.fabadd = view.findViewById(R.id.fab_add);
         this.searchBar = view.findViewById(R.id.searchBar);
+
+//
+//        ArrayList<MesiboProfile> profile = Mesibo.getSortedUserProfiles();
+//        profile.forEach(mesiboProfile -> {
+//            Log.e("profiles",mesiboProfile.getName());
+//        });
+
 
         getCount();
         ArrayList<MesiboProfile> Search = this.mUserProfiles;
@@ -528,6 +538,8 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
     }
 
 
+
+
     public void Mesibo_onPresence(MesiboPresence msg) {
         if (3L == msg.presence || 4L == msg.presence || 11L == msg.presence) {
             if (null != msg && null != msg.profile) {
@@ -706,6 +718,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             this.mRefreshTs = Mesibo.getTimestamp();
             Mesibo.addListener(this);
             this.mAdhocUserList = this.mUserProfiles;
+            Log.e("size", String.valueOf(mAdhocUserList.size()));
             this.mUserProfiles.clear();
             this.mAdapter.onResumeAdapter();
             MesiboReadSession.endAllSessions();
@@ -713,7 +726,9 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
             this.mDbSession.setQuery(this.mReadQuery);
             this.mDbSession.enableSummary(true);
             this.mDbSession.read(readCount);
+            Log.e("check","1");
         } else {
+            Log.e("check","2");
             this.mUserProfiles.clear();
             ArrayList profiles = Mesibo.getSortedUserProfiles();
             if (profiles != null && profiles.size() > 0 && !TextUtils.isEmpty(this.mMesiboUIOptions.createGroupTitle) && this.mSelectionMode == MesiboUserListFragment.MODE_SELECTCONTACT) {
@@ -730,6 +745,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                 user.other = ud;
                 ud.setMessage(user.getStatus());
                 this.mUserProfiles.add(user);
+
             }
             if (this.mSelectionMode == MesiboUserListFragment.MODE_SELECTCONTACT_FORWARD && this.mMesiboUIOptions.showRecentInForward) {
                 this.mUserProfiles.addAll(Mesibo.getRecentUserProfiles());
@@ -762,6 +778,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                 MesiboProfile user2 = this.mUserProfiles.get(i);
                 if (!TextUtils.isEmpty(user2.address) || user2.groupid != 0) {
                     if (TextUtils.isEmpty(user2.getName()) && user2.groupid > 0) {
+
                         this.mUserProfiles.remove(i);
                     } else if (this.mSelectionMode == MesiboUserListFragment.MODE_EDITGROUP || this.mSelectionMode == MesiboUserListFragment.MODE_SELECTGROUP) {
                         if (user2.groupid > 0) {
@@ -822,8 +839,13 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
     public void Mesibo_onGroupLeft(MesiboProfile mesiboProfile) {
     }
+
+
+
     public void Mesibo_onGroupMembers(MesiboProfile mesiboProfile, MesiboGroupProfile.Member[] members) {
         mExistingMembers = members;
+
+        existingMember.add(mesiboProfile);
 
         for (MesiboGroupProfile.Member m : members) {
             this.tempmemberProfiles.add(m.getProfile());
@@ -847,6 +869,16 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
     }
 
     public void Mesibo_onGroupError(MesiboProfile mesiboProfile, long error) {
+    }
+
+    @Override
+    public void MesiboProfile_onUpdate(MesiboProfile mesiboProfile) {
+
+    }
+
+    @Override
+    public void MesiboProfile_onEndToEndEncryption(MesiboProfile mesiboProfile, int i) {
+
     }
 
 

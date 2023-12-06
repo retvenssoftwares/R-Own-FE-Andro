@@ -62,6 +62,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.mesibo.api.Mesibo
 import com.mesibo.api.Mesibo.ConnectionListener
+import com.mesibo.api.MesiboGroupProfile
 import com.mesibo.api.MesiboMessage
 import com.mesibo.api.MesiboProfile
 import com.mesibo.api.MesiboReadSession
@@ -70,6 +71,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
@@ -87,6 +89,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
     private var count = 0
     private lateinit var auth:FirebaseAuth
     private lateinit var viewPager:ViewPager
+    private  var existingGroup:ArrayList<MesiboProfile> = ArrayList()
     lateinit var dialog: Dialog
     private lateinit var popularUsersAdapter: PopularUsersAdapter
     private  var userList: List<MesiboUsersData> = emptyList()
@@ -111,6 +114,8 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
         imageView = findViewById(R.id.imageView)
         textView = findViewById(R.id.textView)
         startAnimation()
+
+
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         val frag = intent.getStringExtra("frag")
