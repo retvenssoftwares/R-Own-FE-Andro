@@ -150,6 +150,7 @@ class DashBoardActivity : AppCompatActivity(), Mesibo.MessageListener {
                 binding.dashboard.visibility = View.GONE
             }
         }
+        //;kHDOIHQFDNASNFQNHFOUQefkjwbfkduabsfjkbskqf
         checkNetworkConnection = CheckNetworkConnection(application)
         checkNetworkConnection.observe(this) { isConnected ->
             if (isConnected) {
