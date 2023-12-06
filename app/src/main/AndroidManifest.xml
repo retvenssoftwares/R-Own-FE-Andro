@@ -2,19 +2,741 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
-        android:allowBackup="true"
+        android:name=".MainApplication"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
+        android:fullBackupContent="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rown"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup"
         tools:targetApi="31">
+
+        <provider
+            android:name=".MesiboMediaPickerClasses.sources.MediaPickerFileProvider"
+            android:authorities="${applicationId}.app.retvens.rown"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity
+            android:name=".MesiboMediaPickerClasses.sources.zoomVuPictureActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".NavigationFragments.home.PostLikeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Dashboard.UpdateAppActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.BlockUserActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.home.postDetails.CheckInDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+
+        <activity
+            android:name=".MesiboMediaPickerClasses.sources.ImageEditor"
+            android:theme="@style/ImageEditorTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".NavigationFragments.home.postDetails.StatusDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.communityDetails.ViewAllUsersActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.HotelOwnerDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".viewAll.viewAllCommunities.MembersCommunityDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".NavigationFragments.profile.UserDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".NavigationFragments.profile.polls.VotesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Dashboard.createPosts.CheckInChildActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Dashboard.ChatActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA7JusfULIHtnfBGQdL_Hs7FfuDrERm064" />
+
+        <activity
+            android:name=".CreateCommunity.MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NavigationFragments.jobforvendors.ViewAllMatches"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".NavigationFragments.jobforvendors.ViewAllPolpular"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".NavigationFragments.profile.EditHotelProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".NavigationFragments.profile.EditVendorInfoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.vendorsDetails.VendorsImageViewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".viewAll.AllHotelsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.job.ViewAllSuggestedJobsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.job.savedJobs.SavedJobsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.createPosts.CreatePostEventActivityChild"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.EditEventActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.createPosts.CreateClickAndSharePostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.NoActionBar" />
+        <activity
+            android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorStickerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.NoActionBar" />
+        <activity
+            android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorTextActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.NoActionBar" />
+        <activity
+            android:name="com.dsphotoeditor.sdk.activity.DsPhotoEditorDrawActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.NoActionBar" />
+        <activity
+            android:name=".NavigationFragments.eventForUsers.allEvents.SeeAllEventsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.eventForUsers.AllEventCategoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".api.p000ui.MesiboDefaultCallActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.eventForUsers.onGoingEvents.OnGoingEventsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".sideNavigation.PrivacyPolicyActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".sideNavigation.TermsAndCActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.AddEventDeatailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.AllEventsPostedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.AddEventActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.settingForViewers.SelectPostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.settingForViewers.ReportProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.settingForViewers.ShareQRActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.settingForViewers.AboutProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.profileForViewers.VendorProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.profileForViewers.OwnerProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.profileForViewers.UserProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.viewAllBlogs.ViewAllCategoriesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.viewAllBlogs.AllBlogsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.viewAllBlogs.ViewAllBlogsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.ApplyForVerificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.LanguageSettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.JobNotificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.NotificationSettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.AccountManagementActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.SyncContactsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.LastSeenActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.AccountSettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.profileSetting.OwnerSettingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.saved.SavedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.setting.discoverPeople.DiscoverPeopleActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.hotels.AddHotelActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.hotels.EditHotelDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.hotels.HotelDetailsProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.EditHotelOwnerProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.vendorsReview.ReviewsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.home.postDetails.PostDetailsActivityNotification"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.EditVendorsProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.viewConnections.ViewConnectionsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.polls.VotersActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.jobforvendors.CandidateDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.home.PostsViewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".NavigationFragments.home.PostDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.viewAllCommunities.OpenCommunityDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".viewAll.viewAllCommunities.ClosedCommunityDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".viewAll.viewAllCommunities.ViewAllAvailableCommunitiesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.exploreForUsers.blogs.BlogsDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.exploreForUsers.events.EventDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.exploreForUsers.hotels.HotelReviewsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.exploreForUsers.hotels.HotelDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.EvenDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.eventsForHoteliers.CreateEventActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".sideNavigation.ChatWithUsActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".sideNavigation.BugSpottedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".sideNavigation.FAQ_Activity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.jobforvendors.JobsDetailsVendor"
+            android:screenOrientation="portrait"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".NavigationFragments.jobforvendors.JobsPostedByUser"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".NavigationFragments.profile.viewRequests.ViewRequestsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.profile.EditProfileActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.vendorsDetails.ViewAllVendorsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.vendorsDetails.VendorDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".viewAll.communityDetails.ViewAllCommmunitiesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.createPosts.CreatCheackInPostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".CreateCommunity.FilterSelectedMembers"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.createPosts.CreateEventPostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.communityDetails.CommunityEditActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".viewAll.communityDetails.CommunityDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".Dashboard.createPosts.CreatePollActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.createPosts.CreatePostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.notificationScreen.NotificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.createPosts.CreateTextPost"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".CreateCommunity.CreateCummVisibilitySetting"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.jobforvendors.JobPostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.job.JobDetailsAppliedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".NavigationFragments.job.JobDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".Dashboard.profileCompletion.UserName"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash" />
+        <activity
+            android:name=".CreateCommunity.UploadIcon"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".CreateCommunity.SelectMembers"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".CreateCommunity.CreateCommunity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".authentication.UserContacts"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".authentication.UserInterest"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MessagingModule.MesiboMessagingActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/png_r_logo" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/purple_700" />
+
+        <activity
+            android:name=".ChatSection.MesiboUsers"
+            android:exported="true"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".authentication.PersonalInformationPhone"
+            android:exported="true"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".authentication.PersonalInformation"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".authentication.OtpVerification"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".authentication.LoginActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".Dashboard.DashBoardActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Rown_Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,6 +747,54 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="app.retvens.rown.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider> <!-- <service -->
+        <!-- android:name=".ApiRequest.MesiboBackgroundService" -->
+        <!-- android:enabled="true" -->
+        <!-- android:exported="false" /> -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".authentication.OtpBroadcastReciever"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".NotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".api.MesiboCallsReceiver" />
     </application>
 
 </manifest>

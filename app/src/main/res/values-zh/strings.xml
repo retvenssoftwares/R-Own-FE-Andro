@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">R-own</string>
+    <string name="world_s_1st">世界第一</string>
+    <string name="hospitality_community_app">酒店社区应用程序</string>
+    <string name="log_in_or_sign_up">登录或注册</string>
+    <string name="or_continue_with">或者继续</string>
+    <string name="enter_your_number">输入电话号码</string>
+    <string name="continu">继续</string>
+    <string name="by_continuing_you_agree_to_our">继续即表示您同意我们的</string>
+    <string name="terms_and_conditions">条款和条件</string>
+    <string name="privacy_policies">隐私政策</string>
+    <string name="content_policies">内容政策</string>
+    <string name="verification_code">验证码</string>
+    <string name="please_enter_otp_sent_to">请输入发送至的 OTP</string>
+    <string name="didn_t_received_otp">没有收到 OTP？</string>
+    <string name="resend_otp">重新发送一次性密码</string>
+    <string name="verify">核实</string>
+    <string name="please_provide_some_details">请提供一些关于您自己的详细信息，以及您希望我们如何记住。</string>
+    <string name="enter_name">输入名字</string>
+    <string name="this_is_not_your">这不是您的用户名或 Pin 此名称将对您的社区可见</string>
+    <string name="enter_email">输入电子邮件</string>
+    <string name="save">节省</string>
+    <string name="change_phone_number">更改电话号码</string>
+    <string name="send_otp">发送一次性密码</string>
+    <string name="otp_will_be_sent_to">OTP将被发送到</string>
+    <string name="english">英语</string>
+    <string name="hindi">印地语</string>
+    <string name="spanish">西班牙语</string>
+    <string name="german">德语</string>
+    <string name="japanese">日本人</string>
+    <string name="portuguese">葡萄牙语</string>
+    <string name="italian">意大利语</string>
+    <string name="french">法语</string>
+    <string name="russian">俄语</string>
+    <string name="chinese">中国人</string>
+    <string name="arabic">阿拉伯</string>
+    <string name="in_what_language_do">你想用什么语言来体验你的待客之道？</string>
+</resources>

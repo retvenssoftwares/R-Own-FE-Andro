@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="20dp"
+    android:background="@drawable/top_round">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/syjt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select your reason to report"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="16dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#14000000"/>
+
+    <TextView
+        android:id="@+id/bio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="
+
+It's important to know that your report is anonymous, except for cases of intellectual property infringement. If you are reporting such an infringement, we may need to share your identity with the relevant parties.
+
+Also, if someone is in immediate danger, call the local emergency services immediately.
+Don't wait or hesitate. Your safety and the safety of others should always be the top priority.
+
+Thank you for choosing to report any concerns or issues you may have.
+We take all reports seriously and will do our best to address them promptly."
+        android:fontFamily="@font/montserrat_regular"
+        android:textSize="13dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="2dp"
+        android:textFontWeight="600"
+        android:textColor="@color/grey_40"/>
+
+
+    <RelativeLayout
+        android:id="@+id/seleOne"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="It’s spam"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/one"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/one_to_three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I just don’t like it"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/two"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/three_to_six"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Suicide, self-injury or eating disorders"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:layout_marginEnd="40dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/three"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/six_to_ten"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sale of illegal or regulated goods"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="40dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/four"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/ten_to_fif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Interior Nudity or sexual activity"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:layout_marginEnd="40dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/five"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/fif_to_tf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hate speech or symbols"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/six"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/more_than_tf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Violence or dangerous orgnaisations"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/seven"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/report_8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bullying or harassment"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/eight"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/report_9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Intellectual property violation"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/nine"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/report_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scam or fraud"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/ten"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <RelativeLayout
+        android:id="@+id/report_11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="False Information"
+            android:textSize="15dp"
+            android:textFontWeight="600"
+            android:fontFamily="@font/montserrat_regular"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/eleven"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/rounded_image"/>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_report_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginHorizontal="45dp"
+        app:cardElevation="3dp"
+        android:layout_gravity="center_horizontal"
+        app:cardCornerRadius="7dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="8dp"
+            android:textAlignment="center"
+            android:text="NEXT"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="600"
+            android:textSize="18dp"
+            android:background="@color/green_own"
+            android:textColor="@color/black"/>
+
+    </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+</ScrollView>

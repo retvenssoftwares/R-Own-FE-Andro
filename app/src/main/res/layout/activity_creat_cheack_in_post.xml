@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Dashboard.createPosts.CreatCheackInPostActivity">
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/createCommunity_backBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:background="@color/white"
+            android:src="@drawable/community_btn" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/next_cumm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="3dp"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            app:cardCornerRadius="6dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="14dp"
+                android:textAlignment="center"
+                android:text="Share"
+                android:fontFamily="@font/montserrat_bold"
+                android:textFontWeight="600"
+                android:textSize="14dp"
+                android:background="@color/green_own"
+                android:textColor="@color/white"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative"
+        android:background="@color/grey_20" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/user_complete_profile"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:shapeAppearance="@style/RoundedCornerImage"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/svg_user"
+        app:layout_constraintTop_toBottomOf="@id/relative"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/user_complete_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="@color/black"
+        android:textFontWeight="600"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/user_complete_profile"
+        app:layout_constraintStart_toEndOf="@id/user_complete_profile"
+        app:layout_constraintTop_toTopOf="@id/user_complete_profile"
+        app:layout_constraintVertical_bias="0.03" />
+
+    <LinearLayout
+        android:id="@+id/can_see"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@drawable/border"
+        android:layout_marginStart="8dp"
+        android:paddingHorizontal="7dp"
+        app:layout_constraintTop_toBottomOf="@id/user_complete_name"
+        app:layout_constraintStart_toEndOf="@id/user_complete_profile">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/svg_eye"
+            android:paddingEnd="3dp"
+            app:tint="@color/black"/>
+        <TextView
+            android:id="@+id/canSeeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Can See"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            android:paddingVertical="3dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/black"
+            android:textFontWeight="600"/>
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_arrow_down_24"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/can_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@drawable/border"
+        android:layout_marginStart="6dp"
+        android:paddingHorizontal="7dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_complete_name"
+        app:layout_constraintStart_toEndOf="@id/can_see">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/comment"
+            android:paddingEnd="3dp"
+            app:tint="@color/black"/>
+        <TextView
+            android:id="@+id/can_comment_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Can comment"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            android:paddingVertical="3dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/black"
+            android:textFontWeight="600"/>
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_arrow_down_24"
+            />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/whatDY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="4dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardBackgroundColor="@color/white"
+        android:visibility="gone"
+        android:layout_marginTop="18dp"
+        app:layout_constraintStart_toStartOf="@id/user_complete_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_complete_profile">
+        <EditText
+            android:id="@+id/whatDYEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="What do you want to share today ?"
+            android:textColorHint="@color/grey_40"
+            android:textColor="@color/black"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:background="@null"
+            android:padding="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/syjh"/>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/checkIn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="22dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/whatDY">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Where are you checking-in ?"
+            android:textColor="@color/black"
+            android:textFontWeight="600"
+            android:textSize="18dp"
+            android:layout_marginTop="25dp"/>
+
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/user_location_post"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--            android:hint="Location"-->
+<!--            android:textColorHint="@color/black"-->
+<!--            app:boxStrokeColor="@color/black"-->
+<!--            app:endIconDrawable="@drawable/gps"-->
+<!--            app:endIconMode="custom"-->
+<!--            app:endIconTint="@color/black"-->
+<!--            android:layout_marginTop="30dp">-->
+
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/et_location_post"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:fontFamily="@font/montserrat_regular"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:clickable="true"-->
+<!--                android:focusable="false"-->
+<!--                android:text="Select Your Location"-->
+<!--                android:editable="false"/>-->
+
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/venue_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Venue"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginTop="30dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_venue_post"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:clickable="true"
+                android:focusable="false"
+                android:text="Select venue"
+                android:editable="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/next_checkIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="3dp"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            app:cardCornerRadius="6dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="6dp"
+                android:paddingHorizontal="17dp"
+                android:textAlignment="center"
+                android:text="Next"
+                android:fontFamily="@font/montserrat_bold"
+                android:textFontWeight="600"
+                android:textSize="18dp"
+                android:background="@color/green_own"
+                android:textColor="@color/black"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_venue"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="3dp"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="22dp"
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/whatDY"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/hotel_venue_cover"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                android:elevation="8dp"
+                app:shapeAppearanceOverlay="@style/SquareCornerImage"
+                android:src="@drawable/png_blog"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="3dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintStart_toStartOf="@id/hotel_venue_cover"
+                app:layout_constraintEnd_toEndOf="@id/hotel_venue_cover"
+                app:layout_constraintBottom_toBottomOf="@id/hotel_venue_cover">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/venue_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:text="Paradise Inn"
+                        android:maxLines="2"
+                        android:textColor="@color/black"
+                        android:textFontWeight="600"
+                        android:textSize="12dp"/>
+
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:rating="5"
+                        android:stepSize="3"
+                        android:numStars="5"
+                        android:layout_marginStart="5dp"
+                        style="@style/Widget.AppCompat.RatingBar.Small"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

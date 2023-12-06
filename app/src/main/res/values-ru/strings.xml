@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">R-own</string>
+    <string name="world_s_1st">1 место в мире</string>
+    <string name="hospitality_community_app">Приложение сообщества гостеприимства</string>
+    <string name="log_in_or_sign_up">Войдите или зарегистрируйтесь</string>
+    <string name="or_continue_with">Или продолжить с</string>
+    <string name="enter_your_number">введите номер телефона</string>
+    <string name="continu">Продолжать</string>
+    <string name="by_continuing_you_agree_to_our">Продолжая, вы соглашаетесь с нашими</string>
+    <string name="terms_and_conditions">Условия и положения</string>
+    <string name="privacy_policies">Политика конфиденциальности</string>
+    <string name="content_policies">Политики содержания</string>
+    <string name="verification_code">Проверочный код</string>
+    <string name="please_enter_otp_sent_to">Введите OTP, отправленный на</string>
+    <string name="didn_t_received_otp">Не получили одноразовый пароль?</string>
+    <string name="resend_otp">Повторно отправить одноразовый пароль</string>
+    <string name="verify">Проверять</string>
+    <string name="please_provide_some_details">Пожалуйста, предоставьте некоторые подробности о себе, как вы хотите, чтобы мы помнили.</string>
+    <string name="enter_name">Введите имя</string>
+    <string name="this_is_not_your">Это не ваше имя пользователя или пин-код. Это имя будет видно вашему сообществу.</string>
+    <string name="enter_email">Введите адрес электронной почты</string>
+    <string name="save">Сохранять</string>
+    <string name="change_phone_number">Изменить номер телефона</string>
+    <string name="send_otp">Отправить одноразовый пароль</string>
+    <string name="otp_will_be_sent_to">OTP будет отправлен на</string>
+    <string name="english">Английский</string>
+    <string name="hindi">хинди</string>
+    <string name="spanish">испанский</string>
+    <string name="german">Немецкий</string>
+    <string name="japanese">Японский</string>
+    <string name="portuguese">португальский</string>
+    <string name="italian">итальянский</string>
+    <string name="french">Французский</string>
+    <string name="russian">Русский</string>
+    <string name="chinese">Китайский</string>
+    <string name="arabic">арабский</string>
+    <string name="in_what_language_do">На каком языке вы хотите, чтобы ваши приключения в сфере гостеприимства?</string>
+</resources>

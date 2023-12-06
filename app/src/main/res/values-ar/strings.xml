@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">R-own</string>
+    <string name="world_s_1st">الأول في العالم</string>
+    <string name="hospitality_community_app">تطبيق مجتمع الضيافة</string>
+    <string name="log_in_or_sign_up">تسجيل الدخول أو الاشتراك</string>
+    <string name="or_continue_with">أو تواصل مع</string>
+    <string name="enter_your_number">أدخل رقمك</string>
+    <string name="continu">يكمل</string>
+    <string name="by_continuing_you_agree_to_our">بالمتابعة ، فإنك توافق على</string>
+    <string name="terms_and_conditions">الأحكام والشروط</string>
+    <string name="privacy_policies">سياسات الخصوصية</string>
+    <string name="content_policies">سياسات المحتوى</string>
+    <string name="verification_code">رمز التحقق</string>
+    <string name="please_enter_otp_sent_to">الرجاء إدخال OTP المرسل إلى</string>
+    <string name="didn_t_received_otp">لم تستلم OTP؟</string>
+    <string name="resend_otp">إعادة إرسال OTP</string>
+    <string name="verify">يؤكد</string>
+    <string name="please_provide_some_details">يرجى تقديم بعض التفاصيل عن نفسك ، وكيف تريد منا أن نتذكرها.</string>
+    <string name="enter_name">أدخل الاسم</string>
+    <string name="this_is_not_your">هذا ليس اسم المستخدم الخاص بك أو رقم التعريف الشخصي الخاص بك سيكون هذا الاسم مرئيًا لمجتمعك</string>
+    <string name="enter_email">أدخل البريد الإلكتروني</string>
+    <string name="save">يحفظ</string>
+    <string name="change_phone_number">غير رقم الهاتف</string>
+    <string name="send_otp">أرسل OTP</string>
+    <string name="otp_will_be_sent_to">سيتم إرسال OTP إلى</string>
+    <string name="english">إنجليزي</string>
+    <string name="hindi">هندي</string>
+    <string name="spanish">الأسبانية</string>
+    <string name="german">ألمانية</string>
+    <string name="japanese">اليابانية</string>
+    <string name="portuguese">البرتغالية</string>
+    <string name="italian">إيطالي</string>
+    <string name="french">فرنسي</string>
+    <string name="russian">الروسية</string>
+    <string name="chinese">صينى</string>
+    <string name="arabic">عربي</string>
+    <string name="in_what_language_do">بأي لغة تريد أن تكون لديك مغامرات الضيافة الخاصة بك؟</string>
+</resources>

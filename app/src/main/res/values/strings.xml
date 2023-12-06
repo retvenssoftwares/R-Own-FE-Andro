@@ -1,3 +1,135 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">R-own</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+    <style name="NavigationViewStyle" parent="Widget.Design.NavigationView">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:textFontWeight" tools:targetApi="p">600</item>
+        <!-- set the desired text size -->
+    </style>
+
+    <string name="default_notification_channel_id" translatable="false">Channel ID</string>
+    <string name="navigation_drawer_close" translatable="false">Close Drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open Drawer</string>
+    <string name="world_s_1st">World\'s 1st</string>
+    <!--Login Screen-->
+    <string name="hospitality_community_app">Hospitality Community App</string>
+    <string name="log_in_or_sign_up">Log in or sign up</string>
+    <string name="or_continue_with">Or continue with</string>
+    <string name="enter_your_number">Enter your number</string>
+    <string name="continu">Continue</string>
+    <string name="by_continuing_you_agree_to_our">By continuing, you agree to our</string>
+    <string name="terms_and_conditions">Terms and conditions</string>
+    <string name="privacy_policies">Privacy policies</string>
+    <string name="content_policies">Content policies</string>
+    <!--OTP Screen-->
+    <string name="verification_code">Verification Code</string>
+    <string name="please_enter_otp_sent_to">Please enter OTP sent to</string>
+    <string name="didn_t_received_otp">Didn\'t received OTP?</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="verify">Verify</string>
+    <!--Personal Information-->
+    <string name="welcome_on" translatable="false">Welcome On </string>
+    <string name="board" translatable="false">Board</string>
+    <string name="please_provide_some_details">Please provide some details about your self, how you want us to remember.</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="this_is_not_your">This is not your username or Pin This name will be visible to your Community</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="save">Save</string>
+    <!--Bottom Sheet-->
+    <string name="change_phone_number">Change Phone Number</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="otp_will_be_sent_to">OTP will be sent to</string>
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
+    <string name="spanish">Spanish</string>
+    <string name="german">German</string>
+    <string name="japanese">Japanese</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="italian">Italian</string>
+    <string name="french">French</string>
+    <string name="russian">Russian</string>
+    <string name="chinese">Chinese</string>
+    <string name="arabic">Arabic</string>
+    <string name="in_what_language_do">In what language do you want  to have your hospitality adventures ?</string>
+    <string name="privacy_security" formatted="false" translatable="false">Privacy &amp; Security</string>
+    <string name="help_support" formatted="false" translatable="false">Help &amp; Support</string>
+    <string name="_1_month" translatable="false"><![CDATA[< 1 Month]]></string>
+    <string name="_3_month" translatable="false"><![CDATA[>3 Month]]></string>
+
+    <style name="SmallText">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+
+    <string name="yesterday" translatable="false">yesterday</string>
+
+
+    <string name="online_text" translatable="false">Online</string>
+    <string name="typing_text" translatable="false">Typing</string>
+    <string name="no_network_text" translatable="false">No Network</string>
+    <string name="delete_messages" translatable="false">Delete Messages?</string>
+    <string name="delete_for_everyone_text" translatable="false">Delete For Everyone</string>
+    <string name="delete_for_me" translatable="false">Delete For Me</string>
+    <string name="Create_group_text" translatable="false">Create Group</string>
+    <string name="all_users" translatable="false">All Users</string>
+    <string name="select_group_members" translatable="false">Select group members</string>
+    <string name="Message_hint" translatable="false">Type your message...</string>
+    <string name="not_having_messages" translatable="false">You do not have any messages. Click on the message button above to start a conversation</string>
+    <string name="gallery_text" translatable="false">Gallery</string>
+    <string name="video_text" translatable="false">Videos</string>
+    <string name="location_text" translatable="false">Location</string>
+    <string name="document_text" translatable="false">Documents</string>
+    <string name="chat_delete_confirmation" translatable="false">Do you really want to delete this chat?,it cannot be recovered</string>
+    <string name="delete_group_confirmation" translatable="false">Do you really want to delete this Group?,it cannot be recovered</string>
+    <string name="leave_group_confirmation" translatable="false">Do you really want to leave this group?,it cannot be recovered</string>
+    <string name="invite_only" translatable="false">Invite</string>
+    <string name="today_text" translatable="false">Today</string>
+    <string name="deletedMessageTitle" translatable="false">This message was deleted</string>
+
+
+    <string name="create_community" translatable="false">Create a Community</string>
+    <string name="community_name_text_description" translatable="false">What do you wish you call your Community?</string>
+    <string name="Channel_title" translatable="false">Name</string>
+    <string name="Channel_Description" translatable="false">Channel Description</string>
+    <string name="EmptychannelNameandDescription" translatable="false">Channel Name , Channel Discription or Channel Type can\'t be empty</string>
+    <string name="business_type" translatable="false">Enter-Channel Name</string>
+    <string name="whereLocatedText" translatable="false">Where are you located?</string>
+    <string name="pickedLocationText" translatable="false">We have picked your current location by default. You can also search for another locaiton</string>
+    <string name="part_of_community_text" translatable="false">Who can be a part of you community?</string>
+    <string name="share_invite_text" translatable="false">Share Invite</string>
+    <string name="notification_center" translatable="false">Notification Center</string>
+    <string name="edit_details" translatable="false">Edit Details</string>
+    <string name="channel_type" translatable="false">Channel Type</string>
+    <string name="community_location" translatable="false">Community Location</string>
+
+    <string name="Media_Text" translatable="false">Media</string>
+    <string name="Max_Media_Text" translatable="false">10</string>
+    <string name="EtoEEncryption" translatable="false">End-To-End Encryption</string>
+    <string name="blocking" translatable="false">Blocking</string>
+    <string name="Group_Messages" translatable="false">Group Messages</string>
+    <string name="calls" translatable="false">Calls</string>
+    <string name="video_calls" translatable="false">Video Calls</string>
+    <string name="profile_view" translatable="false">Profile View</string>
+    <string name="ok_text" translatable="false">OK</string>
+    <string name="cancel_text" translatable="false">Cancel</string>
+    <string name="custom_notifications" translatable="false">Custom Notifications</string>
+    <string name="favorite_messages" translatable="false">Favorite Messages</string>
+    <string name="status_and_phone" translatable="false">Status and Phone</string>
+    <string name="hi_today_is_nice_day" translatable="false">Hi today is nice day</string>
+    <string name="Example_Time" translatable="false">10 hours ago</string>
+    <string name="Mobile" translatable="false">Mobile</string>
+    <string name="group_members" translatable="false">Group Members</string>
+    <string name="_25" translatable="false">25</string>
+    <string name="Edit_Group_Destails" translatable="false">Edit Group Details</string>
+    <string name="add_group_members" translatable="false">Add Group members</string>
+    <string name="exit_group" translatable="false">Exit Group</string>
+    <string name="Sample_Time" translatable="false">11:15</string>
+    <string name="this_is_title" translatable="false">This is title</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="apply_for_verification_text">Verified accounts display a green checkmark next to their names, indicating that we have verified their authenticity as representatives of public figures, celebrities, or brands.</string>
+
 </resources>

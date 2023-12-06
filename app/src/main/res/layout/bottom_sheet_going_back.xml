@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="20dp"
+    android:background="@drawable/top_round">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Going Back ?"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/keep_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/syjt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Keep editing"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="18dp"
+            android:drawableStart="@drawable/svg_edit_pen"
+            android:drawablePadding="7dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/syjh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Keep editing and proceed with sharing with your community"
+            android:fontFamily="@font/montserrat_regular"
+            android:textSize="11dp"
+            android:layout_marginStart="27dp"
+            android:layout_gravity="center"
+            android:textColor="@color/grey_60"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/syjt"
+            app:layout_constraintStart_toStartOf="@id/syjt"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/grey_40" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/discard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/sjt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableStart="@drawable/delete_svg"
+            android:drawablePadding="7dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Discard"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/syh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Media is not saved, you will loose all the progress and you will have to start again."
+            android:textColor="@color/grey_60"
+            android:layout_marginStart="24dp"
+            android:textSize="11dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/sjt"
+            app:layout_constraintTop_toBottomOf="@id/sjt" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="6dp"
+        android:background="@color/grey_40" />
+
+</LinearLayout>

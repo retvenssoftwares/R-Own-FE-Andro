@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".NavigationFragments.profile.polls.PollsFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pollsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/green_own"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/pollsRecycler"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_tasks_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/shimmer_layout_tasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white">
+            <include layout = "@layout/shimmer_poll_profile"/>
+            <include layout = "@layout/shimmer_poll_profile"/>
+            <include layout = "@layout/shimmer_poll_profile"/>
+            <include layout = "@layout/shimmer_poll_profile"/>
+            <include layout = "@layout/shimmer_poll_profile"/>
+            <include layout = "@layout/shimmer_poll_profile"/>
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="You have not posted anything yet."
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:textColor="@color/green_own"
+        android:textSize="16sp"
+        android:maxLines="3"
+        android:lines="3"
+        android:fontFamily="@font/montserrat_semibold"
+        app:layout_constraintVertical_bias="0.15"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintBottom_toBottomOf="@id/notPosted"
+        app:layout_constraintStart_toStartOf="@id/notPosted"
+        app:layout_constraintEnd_toEndOf="@id/notPosted"
+        app:layout_constraintTop_toTopOf="@id/notPosted"/>
+
+    <ImageView
+        android:id="@+id/notPosted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:src="@drawable/svg_nothing_other"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

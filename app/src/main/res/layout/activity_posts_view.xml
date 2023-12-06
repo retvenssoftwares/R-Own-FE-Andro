@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:fitsSystemWindows="true"
+    tools:context=".NavigationFragments.home.PostsViewActivity">
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/createCommunity_backBtn"
+            android:layout_width="45dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@color/black"
+            app:tint = "@color/white"
+            android:src="@drawable/community_btn" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/likedAnimation"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:elevation="8dp"
+        android:visibility="gone"
+        android:src="@drawable/liked_vectore"
+        app:layout_constraintTop_toTopOf="@id/post_pic"
+        app:layout_constraintBottom_toBottomOf="@id/post_pic"
+        app:layout_constraintEnd_toEndOf="@id/post_pic"
+        app:layout_constraintStart_toStartOf="@id/post_pic"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/post_pic"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="83dp"
+        android:layout_marginHorizontal="15dp"
+        android:src="@drawable/png_post"
+        app:shapeAppearanceOverlay="@style/SquareCornerImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="250dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="4dp"/>
+
+    <TextView
+        android:id="@+id/caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Every stay gives you a reason to smile :)Every stay gives you a reason to smile :)Every stay gives you a reason to smile :)"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintTop_toBottomOf="@id/post_pic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ll"/>
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/transparent_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/postaction"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            app:layout_constraintStart_toStartOf="@id/viewPager"
+            app:layout_constraintTop_toBottomOf="@+id/recentCommentByUser">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/like_post"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/svg_like_post" />
+
+                <TextView
+                    android:id="@+id/like_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/comment"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/svg_post_comment"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/comment_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text=""
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/share_post"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:visibility="gone"
+                android:src="@drawable/svg_share_post"/>
+            <ImageView
+                android:id="@+id/savedPost"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/svg_save_post"/>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

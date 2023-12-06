@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".NavigationFragments.job.jobDetailsAppliedFrags.ActivitiesJobAppliedFragment">
+
+    <!--____________________________________________ Activities Section_________________________________________-->
+    <LinearLayout
+        android:id="@+id/ll_activities_applied"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Applied for the job"
+                android:textSize="15dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Successfully, applied for the job and \nuploaded the resume."
+                android:textSize="12dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="22dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/grey_60"/>
+
+            <ImageView
+                android:id="@+id/appliedjob"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/svg_tick"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employer viewed your resume "
+                android:textSize="15dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employer, successfully viewed your resume"
+                android:textSize="12dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="22dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/grey_60"/>
+
+            <ImageView
+                android:id="@+id/viewResume"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/svg_tick"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current Status "
+                android:textSize="15dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="On hold/scheduled/criteria dosen’t matched "
+                android:textSize="12dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="22dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/grey_60"/>
+
+            <ImageView
+                android:id="@+id/currentStatus"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/rounded_image"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Final Status "
+                android:textSize="15dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hired/Rejected/Further Round"
+                android:textSize="12dp"
+                android:textFontWeight="600"
+                android:fontFamily="@font/montserrat_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="22dp"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/grey_60"/>
+
+            <ImageView
+                android:id="@+id/finalStatus"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/rounded_image"/>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

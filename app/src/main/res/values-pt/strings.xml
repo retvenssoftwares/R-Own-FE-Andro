@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">R-own</string>
+    <string name="world_s_1st">1º do mundo</string>
+    <string name="hospitality_community_app">Aplicativo da Comunidade de Hospitalidade</string>
+    <string name="log_in_or_sign_up">Faça o login ou cadastre-se</string>
+    <string name="or_continue_with">Ou continuar com</string>
+    <string name="enter_your_number">digite o número de telefone</string>
+    <string name="continu">Continuar</string>
+    <string name="by_continuing_you_agree_to_our">Ao continuar, você concorda com nossos</string>
+    <string name="terms_and_conditions">Termos e Condições</string>
+    <string name="privacy_policies">Políticas de privacidade</string>
+    <string name="content_policies">políticas de conteúdo</string>
+    <string name="verification_code">Código de verificação</string>
+    <string name="please_enter_otp_sent_to">Insira OTP enviado para</string>
+    <string name="didn_t_received_otp">Não recebeu OTP?</string>
+    <string name="resend_otp">Reenviar OTP</string>
+    <string name="verify">Verificar</string>
+    <string name="please_provide_some_details">Por favor, forneça alguns detalhes sobre você, como você quer que nos lembremos.</string>
+    <string name="enter_name">Insira o nome</string>
+    <string name="this_is_not_your">Este não é seu nome de usuário ou PIN Este nome ficará visível para sua comunidade</string>
+    <string name="enter_email">Digite o e-mail</string>
+    <string name="save">Salvar</string>
+    <string name="change_phone_number">Alterar número de telefone</string>
+    <string name="send_otp">Enviar OTP</string>
+    <string name="otp_will_be_sent_to">OTP será enviado para</string>
+    <string name="english">Inglês</string>
+    <string name="hindi">hindi</string>
+    <string name="spanish">Espanhol</string>
+    <string name="german">Alemão</string>
+    <string name="japanese">japonês</string>
+    <string name="portuguese">Português</string>
+    <string name="italian">Italiano</string>
+    <string name="french">Francês</string>
+    <string name="russian">Russo</string>
+    <string name="chinese">chinês</string>
+    <string name="arabic">árabe</string>
+    <string name="in_what_language_do">Em que idioma você quer ter suas aventuras de hospitalidade?</string>
+</resources>

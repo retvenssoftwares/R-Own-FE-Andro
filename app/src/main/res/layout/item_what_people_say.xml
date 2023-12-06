@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="210dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="5dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ratingNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.3"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_semibold"
+            android:drawableStart="@drawable/ic_star_black_18dp"
+            android:drawableTint="@color/green_own"
+            android:textSize="14dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="10dp"/>
+
+
+        <TextView
+            android:id="@+id/review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="I Recieved the work before the deadline"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_regular"
+            android:textSize="14dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginHorizontal="10dp"/>
+
+        <TextView
+            android:id="@+id/fullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Arjun Gupta"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="14dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginHorizontal="10dp"/>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ordered on 18 May 2023"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_regular"
+            android:textSize="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginHorizontal="10dp"/>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,246 @@
+package app.retvens.rown.NavigationFragments.profile.setting.profileSetting
+
+import android.app.Activity
+import android.app.Dialog
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
+import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.Dashboard.profileCompletion.UserName
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.R
+import app.retvens.rown.databinding.ActivityApplyForVerificationBinding
+import app.retvens.rown.utils.prepareFilePart
+import app.retvens.rown.utils.profileCompletionStatus
+import app.retvens.rown.utils.verificationStatus
+import com.bumptech.glide.Glide
+import com.yalantis.ucrop.UCrop
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.File
+import java.lang.RuntimeException
+
+class ApplyForVerificationActivity : AppCompatActivity() {
+    lateinit var binding : ActivityApplyForVerificationBinding
+
+    var PICK_IMAGE_REQUEST_CODE : Int = 0
+    //Cropped image uri
+    private var croppedImageUri: Uri?= null
+    lateinit var progressDialog: Dialog
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityApplyForVerificationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.reBackBtn.setOnClickListener { onBackPressed() }
+
+
+        if (profileCompletionStatus != "100"){
+            binding.layout.visibility = View.GONE
+            binding.alreadyApplied.visibility = View.GONE
+            binding.profileCompletion.visibility = View.VISIBLE
+        } else if (verificationStatus == "true"){
+            binding.layout.visibility = View.GONE
+            binding.alreadyApplied.visibility = View.VISIBLE
+            binding.profileCompletion.visibility = View.GONE
+        }
+
+        binding.complete.setOnClickListener {
+            startActivity(Intent(this, UserName::class.java))
+            finish()
+        }
+        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        checkVerification(user_id)
+
+        val sharedPreferencess = getSharedPreferences("SaveUserName", AppCompatActivity.MODE_PRIVATE)
+        val userName = sharedPreferencess.getString("user_name", "").toString()
+        binding.userName.text = userName
+
+        val sharedPreferencesName = getSharedPreferences("SaveFullName", AppCompatActivity.MODE_PRIVATE)
+        val profileName = sharedPreferencesName?.getString("full_name", "").toString()
+        binding.fullName.text = profileName
+
+        binding.save.isClickable = false
+
+        binding.uploadDoc.setOnClickListener {
+            val dialog = Dialog(this)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.bottom_sheet_select_doc)
+
+            dialog.findViewById<RelativeLayout>(R.id.one_to_three).setOnClickListener {
+                binding.select.text = "Driver's License"
+                openGallery()
+                dialog.dismiss()
+            }
+            dialog.findViewById<RelativeLayout>(R.id.three_to_six).setOnClickListener {
+                binding.select.text = "Passport"
+                openGallery()
+                dialog.dismiss()
+            }
+            dialog.findViewById<RelativeLayout>(R.id.six_to_ten).setOnClickListener {
+                binding.select.text = "Aadhar Card"
+                openGallery()
+                dialog.dismiss()
+            }
+            dialog.findViewById<RelativeLayout>(R.id.ten_to_fif).setOnClickListener {
+                binding.select.text = "Tax Filing"
+                openGallery()
+                dialog.dismiss()
+            }
+            dialog.findViewById<RelativeLayout>(R.id.fif_to_tf).setOnClickListener {
+                binding.select.text = "Recent Utility Bill"
+                openGallery()
+                dialog.dismiss()
+            }
+
+            dialog.show()
+            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.attributes?.windowAnimations = R.style.DailogAnimation
+            dialog.window?.setGravity(Gravity.BOTTOM)
+        }
+
+        binding.save.setOnClickListener {
+            if (croppedImageUri != null) {
+                progressDialog = Dialog(this)
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                progressDialog.setCancelable(false)
+                progressDialog.setContentView(R.layout.progress_dialoge)
+                progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+                Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+                progressDialog.show()
+                upload(user_id)
+            } else {
+                Toast.makeText(applicationContext, "Please Select an document", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun checkVerification(user_id: String) {
+
+        Log.e("user",user_id)
+
+        val check = RetrofitBuilder.profileCompletion.appliedFor(user_id)
+        check.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    val response = response.body()!!
+                    Log.e("res",response.message.toString())
+                    if (response.message == "applied"){
+                        binding.layout.visibility = View.GONE
+                        binding.alreadyApplied.visibility = View.VISIBLE
+                        binding.alreadyApplied.setImageResource(R.drawable.svg_applied_for_verification)
+                        binding.profileCompletion.visibility = View.GONE
+                    } else if (response.message == " not applied"){
+                        Log.e("res",response.message.toString())
+                    }
+                }else{
+                    Log.e("error",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext, "${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+
+    }
+
+    private fun upload(user_id: String) {
+
+        val file = prepareFilePart( croppedImageUri!!,"Documents", applicationContext)
+
+        val upload = RetrofitBuilder.profileCompletion.uploadDocs(
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),user_id),
+//            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),"Location"),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.select.text.toString()),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.userName.text.toString()),
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(),binding.fullName.text.toString()),
+            file!!
+        )
+        upload.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                progressDialog.dismiss()
+//                Toast.makeText(applicationContext, response.toString(), Toast.LENGTH_SHORT).show()
+                if (response.isSuccessful){
+                    onBackPressed()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                progressDialog.dismiss()
+                Toast.makeText(applicationContext, t.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent,PICK_IMAGE_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null){
+            val imageUri = data.data
+            if (imageUri != null) {
+                try {
+                    cropImageFree(imageUri)
+                }catch(e: RuntimeException){
+                    Log.d("cropperOnPersonal", e.toString())
+                }catch(e:ClassCastException){
+                    Log.d("cropperOnPersonal", e.toString())
+                }
+            }
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            if (resultCode == RESULT_OK) {
+                val croppedImage = UCrop.getOutput(data!!)!!
+                croppedImageUri = app.retvens.rown.utils.compressImage(croppedImage, this)
+                binding.preview.setImageURI(croppedImageUri)
+                binding.save.isClickable = true
+                binding.save.setCardBackgroundColor(ContextCompat.getColor(applicationContext, R.color.green_own))
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    fun cropImageFree(imageUri: Uri) {
+        val inputUri = imageUri
+        val outputUri = File(filesDir, "croppedImage.jpg").toUri()
+
+        val options : UCrop.Options = UCrop.Options()
+        UCrop.of(inputUri, outputUri)
+            .withMaxResultSize(2000,2000)
+            .withOptions(options)
+            .start(this)
+
+    }
+}

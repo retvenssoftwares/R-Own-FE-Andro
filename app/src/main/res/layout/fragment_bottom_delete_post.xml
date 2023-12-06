@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/top_round">
+
+    <TextView
+        android:id="@+id/deleteText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:text="Do you really want to      delete this post?"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textSize="25dp"
+        android:textFontWeight="700"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_yes"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/deleteText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        app:cardCornerRadius="10dp"
+        android:backgroundTint="@color/green_own"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Yes, I'm Sure"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="700"
+            />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_no"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/card_yes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="10dp"
+        android:backgroundTint="@color/green_own"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="700"
+            />
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Dashboard.profileCompletion.frags.BasicInformationFragment">
+
+    <ImageView
+        android:id="@+id/decline"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/vector_decline"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        />
+
+    <TextView
+        android:id="@+id/use_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Your information helps you discover new community"
+        android:textColor="@color/black"
+        android:textFontWeight="600"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:paddingStart="12dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintVertical_bias="0.075"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <RelativeLayout
+        android:id="@+id/student"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hotelier">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="I'm a Non Hotelier"
+            android:textColor="@color/black"
+            android:textFontWeight="600"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"/>
+
+        <ImageView
+            android:id="@+id/switch_student"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/switch_no"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true"/>
+        <TextView
+            android:id="@+id/switch_student_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textSize="12dp"
+            android:layout_below="@id/switch_student"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/black"
+            android:layout_marginEnd="26dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_stud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/student"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/university"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="University/School"
+            android:textColorHint="@color/black"
+            app:hintTextColor="@color/black"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginHorizontal="20dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dob_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:hint="College Name"
+                android:textColorHint="@drawable/hint_selector"
+                android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/session_start"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Session Start"
+                android:textColorHint="@color/black"
+                app:hintTextColor="@color/black"
+                app:boxStrokeColor="@color/black"
+                app:boxStrokeWidthFocused="2dp"
+                app:endIconDrawable="@drawable/ic_arrow_down_24"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toStartOf="@id/session_end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_session_Start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/black"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:editable="false"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/session_end"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Session End"
+                android:textColorHint="@color/black"
+                app:boxStrokeColor="@color/black"
+                app:boxStrokeWidthFocused="2dp"
+                app:endIconDrawable="@drawable/ic_arrow_down_24"
+                app:endIconMode="custom"
+                app:endIconTint="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/session_start">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_end"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/black"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:editable="false"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/presentText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Click here if still pursuing"
+                android:textColor="@color/black"
+                android:textSize="13dp"
+                android:paddingVertical="2dp"
+                app:layout_constraintTop_toBottomOf="@id/session_end"
+                app:layout_constraintEnd_toEndOf="@id/session_end"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/hotelier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/use_text">
+
+        <TextView
+            android:id="@+id/user_co_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="I’m a hotelier"
+            android:textColor="@color/black"
+            android:textFontWeight="600"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginEnd="55dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="I belong to hospitality industry and my network is on hospitality industry.
+I am a hotelier, hotel owner or vendor in hospitality"
+            android:textColor="@color/grey_40"
+            android:textFontWeight="600"
+            android:textSize="8dp"
+            android:textStyle="bold"
+            android:lineHeight="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/user_co_text"
+            android:layout_alignParentStart="true"/>
+
+
+        <ImageView
+            android:id="@+id/switch_hotel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/switch_no"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true"/>
+        <TextView
+            android:id="@+id/switch_hotel_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No"
+            android:textSize="12dp"
+            android:layout_below="@id/switch_hotel"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/black"
+            android:layout_marginEnd="26dp"/>
+
+    </RelativeLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/my_role_hospitality"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="My Role in hospitality"
+        android:textColorHint="@color/black"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidthFocused="2dp"
+        android:visibility="gone"
+        android:defaultFocusHighlightEnabled="true"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@id/ll_stud"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/myRoleInHosET"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/montserrat_regular"
+            android:textColor="@color/black"
+            android:clickable="true"
+            android:focusable="false"
+            android:text="My Role in hospitality"
+            android:editable="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/recentJobLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:hint="Most Recent Job Title"
+            android:textColorHint="@color/black"
+            android:visibility="gone"
+            app:boxStrokeColor="@color/black"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="25dp"
+            app:layout_constraintTop_toBottomOf="@id/ll_stud"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/my_recent_job"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:textColor="@color/black"
+                android:clickable="true"
+                android:focusable="false"
+                android:text="Most Recent Job Title"
+                android:editable="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_basic_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginHorizontal="45dp"
+        app:cardElevation="3dp"
+        android:layout_gravity="center_horizontal"
+        app:cardCornerRadius="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="10dp"
+            android:textAlignment="center"
+            android:text="Next"
+            android:fontFamily="@font/montserrat_regular"
+            android:textFontWeight="600"
+            android:textSize="22dp"
+            android:background="@color/green_own"
+            android:textColor="@color/black"/>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

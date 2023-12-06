@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".NavigationFragments.job.JobExploreFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <EditText
+            android:id="@+id/jobs_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:drawableEnd="@drawable/svg_search"
+            android:padding="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginHorizontal="20dp"
+            android:textSize="15dp"
+            android:hint="Search Jobs"
+            android:textColor="@color/grey_60"
+            android:textColorHint="@color/grey_40"
+            android:background="@drawable/searchboxusers"
+            android:backgroundTint="@color/grey_5"
+            app:layout_constraintTop_toBottomOf="@+id/ll_menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            >
+
+            <ImageView
+                android:id="@+id/filter_user_jobs"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/svg_filter"
+                android:layout_marginVertical="12dp"
+                android:layout_marginStart="22dp"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginVertical="12dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="2dp"
+                    >
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/filter_card1"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    app:cardCornerRadius="8dp"
+                    android:background="#F0F0F0"
+                    android:layout_marginStart="10dp"
+                    app:cardBackgroundColor="#F0F0F0"
+                    android:paddingBottom="5dp"
+                    android:layout_height="40dp">
+
+                    <TextView
+                        android:id="@+id/filter_job"
+                        android:padding="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Manager Associate"
+                        android:textColor="@color/black"
+                        android:layout_marginVertical="5dp"
+                        />
+
+                </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:visibility="gone"
+                        android:id="@+id/filter_card2"
+                        android:paddingBottom="5dp"
+                        android:layout_width="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginStart="10dp"
+                        app:cardBackgroundColor="#F0F0F0"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:id="@+id/filter_type"
+                            android:padding="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Manager Associate"
+                            android:textColor="@color/black"
+                            android:layout_marginVertical="5dp"
+                            />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:visibility="gone"
+                        android:id="@+id/filter_card3"
+                        android:paddingBottom="5dp"
+                        android:layout_width="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginStart="10dp"
+                        app:cardBackgroundColor="#F0F0F0"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:id="@+id/filter_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="5dp"
+                            android:padding="5dp"
+                            android:text="Manager Associate"
+                            android:textColor="@color/black" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:visibility="gone"
+                        android:id="@+id/filter_card4"
+                        android:paddingBottom="5dp"
+                        android:layout_width="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginStart="10dp"
+                        app:cardBackgroundColor="#F0F0F0"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:id="@+id/filter_salary"
+                            android:padding="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Manager"
+                            android:textColor="@color/black"
+                            android:layout_marginVertical="5dp"
+                            />
+
+                    </androidx.cardview.widget.CardView>
+
+
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Suggested Jobs"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                android:textSize="14dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/view_all_suggested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/green_own"
+                android:textAlignment="center"
+                android:textSize="14dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/suggested_recycler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:listitem="@layout/item_suggested_job"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recent Jobs"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                android:textSize="16dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/view_all_recent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/green_own"
+                android:textAlignment="center"
+                android:textSize="14dp"
+                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recent_job_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:listitem="@layout/item_recent_job"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_tasks_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:id="@+id/shimmer_layout_tasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white">
+               <include layout = "@layout/item_recent_job_shimmer"/>
+               <include layout = "@layout/item_recent_job_shimmer"/>
+               <include layout = "@layout/item_recent_job_shimmer"/>
+               <include layout = "@layout/item_recent_job_shimmer"/>
+               <include layout = "@layout/item_recent_job_shimmer"/>
+               <include layout = "@layout/item_recent_job_shimmer"/>
+               <include layout = "@layout/item_recent_job_shimmer"/>
+            </LinearLayout>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

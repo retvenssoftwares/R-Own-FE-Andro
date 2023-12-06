@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="20dp"
+    android:background="@drawable/top_round">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:id="@+id/syjt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select your brand services?"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="16dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/syjh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select your preferd services -"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="11dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/syjt"
+            app:layout_constraintStart_toStartOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="6dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardBackgroundColor="@color/white">
+        <EditText
+            android:id="@+id/searchServices"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/grey_40"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:background="@null"
+            android:padding="12dp"
+            android:drawableEnd="@drawable/svg_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/syjh"/>
+    </androidx.cardview.widget.CardView>
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/brand_services"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="25dp"
+       />
+
+</LinearLayout>
