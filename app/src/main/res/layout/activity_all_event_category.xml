@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@color/white">
-                <include layout = "@layout/shimmer_notification"/>
+                 <include layout = "@layout/shimmer_notification"/>
                 <include layout = "@layout/shimmer_notification"/>
                 <include layout = "@layout/shimmer_notification"/>
                 <include layout = "@layout/shimmer_notification"/>

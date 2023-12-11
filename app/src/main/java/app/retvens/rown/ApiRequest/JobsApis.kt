@@ -23,7 +23,7 @@ interface JobsApis {
     @GET("getjob/{userId}")
     fun getJobs(
         @Path("userId") userId : String
-    ): Call<List<JobsData>>
+    ): Call<List<GetAllJobsData>>
 
     @GET("job/{userId}")
     fun getIndividualJobs(

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.FilterDataClass
+import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobFilter
@@ -99,35 +101,35 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
         val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 
-        getJob.enqueue(object : Callback<List<JobsData>?>,
+        getJob.enqueue(object : Callback<List<GetAllJobsData>?>,
             SuggestedJobAdapter.JobSavedClickListener {
             override fun onResponse(
-                call: Call<List<JobsData>?>,
-                response: Response<List<JobsData>?>
+                call: Call<List<GetAllJobsData>?>,
+                response: Response<List<GetAllJobsData>?>
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
+                    Log.d("response",response.toString())
+                    try {
 
-                    response.forEach { it ->
+                        response.forEach { it ->
 
                             val originalData = response.toList()
-                            val suggestedJobAdapter = SuggestedJobAdapter(requireContext(),response)
+                            val suggestedJobAdapter = SuggestedJobAdapter(requireContext(), response)
                             suggestedRecycler.adapter = suggestedJobAdapter
                             suggestedJobAdapter.notifyDataSetChanged()
 
                             suggestedJobAdapter.setJobSavedClickListener(this)
 
 
-                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
-                            recentJobRecycler.visibility = View.VISIBLE
-                            shimmerLayout.visibility = View.GONE
-                            recentJobRecycler.adapter = recentJobAdapter
-                            recentJobAdapter.notifyDataSetChanged()
+//                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+//                            recentJobRecycler.visibility = View.VISIBLE
+//                            shimmerLayout.visibility = View.GONE
+//                            recentJobRecycler.adapter = recentJobAdapter
+//                            recentJobAdapter.notifyDataSetChanged()
 
 
-
-
-                            searchBar.addTextChangedListener(object :TextWatcher{
+                            searchBar.addTextChangedListener(object : TextWatcher {
                                 override fun beforeTextChanged(
                                     p0: CharSequence?,
                                     p1: Int,
@@ -137,15 +139,20 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
                                 }
 
-                                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                                override fun onTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
                                     val filterData = originalData.filter { item ->
-                                        item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                                        item.jobTitle.contains(p0.toString(), ignoreCase = true)
                                     }
 
                                     suggestedJobAdapter.updateData(filterData)
 
                                     val filterData1 = originalData.filter { item ->
-                                        item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                                        item.jobTitle.contains(p0.toString(), ignoreCase = true)
                                     }
 
                                     suggestedJobAdapter.updateData(filterData1)
@@ -159,8 +166,10 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                             })
 
 
+                        }
+                    }catch (e:NullPointerException){
+                        Log.e("error",e.toString())
                     }
-
 
                 }else{
                     if(isAdded) {
@@ -173,7 +182,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                 }
             }
 
-            override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<GetAllJobsData>?>, t: Throwable) {
                 if (isAdded) {
                     Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
                         .show()
