@@ -34,48 +34,48 @@ class ViewAllSuggestedJobsActivity : AppCompatActivity() {
         if (intent.getStringExtra("recent") == "Recent Jobs"){
             findViewById<TextView>(R.id.title).text = "Recent Jobs"
         }
-        getJobs()
+//        getJobs()
 
     }
 
-    private fun getJobs() {
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences.getString("user_id", "").toString()
-
-        val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
-
-        getJob.enqueue(object : Callback<List<JobsData>?>,
-            SuggestedJobAdapter.JobSavedClickListener {
-            override fun onResponse(
-                call: Call<List<JobsData>?>,
-                response: Response<List<JobsData>?>
-            ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-
-                    if (intent.getStringExtra("recent") == "Recent Jobs"){
-                        val recentJobAdapter = RecentJobAdapter(this@ViewAllSuggestedJobsActivity, response)
-                        suggestedRecycler.adapter = recentJobAdapter
-                        recentJobAdapter.notifyDataSetChanged()
-                    } else {
-                        val suggestedJobAdapter =
-                            SuggestedAllJobAdapter(this@ViewAllSuggestedJobsActivity, response)
-                        suggestedRecycler.adapter = suggestedJobAdapter
-                        suggestedJobAdapter.notifyDataSetChanged()
-                    }
-                }else{
-                    Toast.makeText(applicationContext,response.code().toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(), Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onJobSavedClick(job: JobsData) {
-
-            }
-        })
-    }
+//    private fun getJobs() {
+//        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+//        val user_id = sharedPreferences.getString("user_id", "").toString()
+//
+//        val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
+//
+//        getJob.enqueue(object : Callback<List<JobsData>?>,
+//            SuggestedJobAdapter.JobSavedClickListener {
+//            override fun onResponse(
+//                call: Call<List<JobsData>?>,
+//                response: Response<List<JobsData>?>
+//            ) {
+//                if (response.isSuccessful){
+//                    val response = response.body()!!
+//
+//                    if (intent.getStringExtra("recent") == "Recent Jobs"){
+//                        val recentJobAdapter = RecentJobAdapter(this@ViewAllSuggestedJobsActivity, response)
+//                        suggestedRecycler.adapter = recentJobAdapter
+//                        recentJobAdapter.notifyDataSetChanged()
+//                    } else {
+//                        val suggestedJobAdapter =
+//                            SuggestedAllJobAdapter(this@ViewAllSuggestedJobsActivity, response)
+//                        suggestedRecycler.adapter = suggestedJobAdapter
+//                        suggestedJobAdapter.notifyDataSetChanged()
+//                    }
+//                }else{
+//                    Toast.makeText(applicationContext,response.code().toString(), Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
+//                Toast.makeText(applicationContext,t.message.toString(), Toast.LENGTH_SHORT).show()
+//            }
+//
+//            override fun onJobSavedClick(job: JobsData) {
+//
+//            }
+//        })
+//    }
 
 }

@@ -19,16 +19,19 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
+import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
 import com.mackhartley.roundedprogressbar.ext.setDrawableTint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : RecyclerView.Adapter<SuggestedJobAdapter.SuggestedJobViewHolder>() {
+class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>) : Adapter<SuggestedJobAdapter.SuggestedJobViewHolder>() {
 
     interface JobSavedClickListener {
         fun onJobSavedClick(job: JobsData)
@@ -37,6 +40,7 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
     private var jobSavedClickListener: JobSavedClickListener? = null
 
     class SuggestedJobViewHolder(itemView: View) : ViewHolder(itemView){
+        val jobImages = itemView.findViewById<ShapeableImageView>(R.id.profile_suggested_job)
         val position = itemView.findViewById<TextView>(R.id.suggested_job_title)
         val location = itemView.findViewById<TextView>(R.id.suggested_job_location)
         val type = itemView.findViewById<TextView>(R.id.workType)
@@ -70,14 +74,14 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
 
         } else {
             ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_yellow)
-
-
         }
 
         holder.color.setBackgroundColor(backgroundColor)
 
 
-            holder.position.text = jobs.designationType
+        Glide.with(context).load(jobs.companyImage).into(holder.jobImages)
+
+            holder.position.text = jobs.jobTitle
             holder.location.text = jobs.companyName
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
@@ -90,37 +94,25 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
 
         holder.jobSaved.setOnClickListener {
             if (operation == "push"){
-                saveJob(jobs.jid, "push")
+                saveJob(jobs.jobId, "push")
                 holder.jobSaved.setImageResource(R.drawable.svg_saved)
                 operation = "pop"
             } else {
-                saveJob(jobs.jid, "pop")
+                saveJob(jobs.jobId, "pop")
                 holder.jobSaved.setImageResource(R.drawable.svg_jobs_explore)
                 operation = "push"
             }
         }
 
-        if (jobs.applyStatus == "Applied"){
-            holder.text.setBackgroundColor(Color.parseColor("#AFAFAF"))
-            holder.text.text = "Applied"
-        }
+//        if (jobs.applyStatus == "Applied"){
+//            holder.text.setBackgroundColor(Color.parseColor("#AFAFAF"))
+//            holder.text.text = "Applied"
+//        }
 
 
             holder.button.setOnClickListener{
 
-                if (jobs.applyStatus == "Not Applied"){
-                    val intent = Intent(context,JobDetailsActivity::class.java)
-                    intent.putExtra("title",jobs.jobTitle)
-                    intent.putExtra("company",jobs.companyName)
-                    intent.putExtra("location",jobs.jobLocation)
-                    intent.putExtra("type",jobs.jobType)
-                    intent.putExtra("worktype",jobs.workplaceType)
-                    intent.putExtra("description",jobs.jobDescription)
-                    intent.putExtra("skill",jobs.skillsRecq)
-                    intent.putExtra("jobId",jobs.jid)
-                    intent.putExtra("userId",jobs.user_id)
-                    context.startActivity(intent)
-                }
+
 
 
             }
@@ -130,7 +122,7 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<JobsData>) : Re
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<JobsData>) {
+    fun updateData(newItems: List<GetAllJobsData>) {
         jobList = newItems
         notifyDataSetChanged()
     }

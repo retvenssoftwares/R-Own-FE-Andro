@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth:FirebaseAuth
 
     var versionName = ""
-    var updateAvailable = ""
+    var updateAvailable = "" 
 
     var updateLink = ""
 
