@@ -14,6 +14,8 @@ object RetrofitBuilder {
 
     val gson = GsonBuilder().setLenient().create()
 
+
+
     val retrofitBuilder = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(Base_url)
