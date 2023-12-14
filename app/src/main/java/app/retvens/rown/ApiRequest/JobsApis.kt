@@ -17,6 +17,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface JobsApis {
 
@@ -25,6 +26,11 @@ interface JobsApis {
         @Path("userId") userId : String
     ): Call<List<GetAllJobsData>>
 
+    @GET("getJobs/{jobId}")
+    fun getJobDetail(
+        @Path("jobId") jobId: String,
+        @Query("userId") userId: String
+    ): Call<JobDetailsDataClass>
 
     @GET("job/{userId}")
     fun getIndividualJobs(
