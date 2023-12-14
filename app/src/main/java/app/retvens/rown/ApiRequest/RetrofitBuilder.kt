@@ -9,10 +9,12 @@ const val Base_url = "http://64.227.150.47/main/"
 //const val Feed_url = "http://api.liverown.com/mainFeed/"
 //const val Explore_url = "http://api.liverown.com/mainExplore/"
 
-
 object RetrofitBuilder {
 
     val gson = GsonBuilder().setLenient().create()
+
+
+
 
 
     val retrofitBuilder = Retrofit.Builder()
@@ -25,7 +27,6 @@ object RetrofitBuilder {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(Base_url)
         .build()
-
 
 
 

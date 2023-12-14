@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
+import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
@@ -23,8 +24,9 @@ import app.retvens.rown.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
-class SuggestedAllJobAdapter(val context: Context, var jobList:List<JobsData>) : RecyclerView.Adapter<SuggestedAllJobAdapter.SuggestedJobViewHolder>() {
+class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsData>) : RecyclerView.Adapter<SuggestedAllJobAdapter.SuggestedJobViewHolder>() {
 
     interface JobSavedClickListener {
         fun onJobSavedClick(job: JobsData)
@@ -61,9 +63,8 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<JobsData>) :
 
         var operation = "push"
 
-
-            holder.position.text = jobs.designationType
-            holder.location.text = jobs.companyName
+            holder.position.text = jobs.jobTitle
+            holder.location.text = jobs.jobLocation
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
 
@@ -75,37 +76,37 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<JobsData>) :
 
         holder.jobSaved.setOnClickListener {
             if (operation == "push"){
-                saveJob(jobs.jid, "push")
+                saveJob(jobs.jobId, "push")
                 holder.jobSaved.setImageResource(R.drawable.svg_saved)
                 operation = "pop"
             } else {
-                saveJob(jobs.jid, "pop")
+                saveJob(jobs.jobId, "pop")
                 holder.jobSaved.setImageResource(R.drawable.svg_jobs_explore)
                 operation = "push"
             }
         }
 
 
-            holder.button.setOnClickListener{
-                val intent = Intent(context,JobDetailsActivity::class.java)
-                intent.putExtra("title",jobs.jobTitle)
-                intent.putExtra("company",jobs.companyName)
-                intent.putExtra("location",jobs.jobLocation)
-                intent.putExtra("type",jobs.jobType)
-                intent.putExtra("worktype",jobs.workplaceType)
-                intent.putExtra("description",jobs.jobDescription)
-                intent.putExtra("skill",jobs.skillsRecq)
-                intent.putExtra("jobId",jobs.jid)
-                intent.putExtra("userId",jobs.user_id)
-                context.startActivity(intent)
-            }
+//            holder.button.setOnClickListener{
+//                val intent = Intent(context,JobDetailsActivity::class.java)
+//                intent.putExtra("title",jobs.jobTitle)
+//                intent.putExtra("company",jobs.companyName)
+//                intent.putExtra("location",jobs.jobLocation)
+//                intent.putExtra("type",jobs.jobType)
+//                intent.putExtra("worktype",jobs.workplaceType)
+//                intent.putExtra("description",jobs.jobDescription)
+//                intent.putExtra("skill",jobs.skillsRecq)
+//                intent.putExtra("jobId",jobs.jid)
+//                intent.putExtra("userId",jobs.user_id)
+//                context.startActivity(intent)
+//            }
 
 
 
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<JobsData>) {
+    fun updateData(newItems: List<GetAllJobsData>) {
         jobList = newItems
         notifyDataSetChanged()
     }
