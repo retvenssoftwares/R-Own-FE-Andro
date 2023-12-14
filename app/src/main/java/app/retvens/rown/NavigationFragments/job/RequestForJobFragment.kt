@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments.job
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -163,6 +164,7 @@ class RequestForJobFragment : Fragment(),
             ) {
                 if (isAdded) {
                     if (response.isSuccessful) {
+                        Log.e("success",response.body().toString())
                         val response = response.body()!!
                         Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT)
                             .show()
