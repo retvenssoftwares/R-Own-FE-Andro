@@ -22,7 +22,7 @@
             android:fontFamily="@font/montserrat_bold"
             android:layout_marginStart="18dp"/>
         <TextView
-            android:id="@+id/companyD"
+            android:id="@+id/companyID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Your role as the UI Designer is to use interactive components on various platforms (web, desktop and mobile). This will include producing high-fidelity mock-ups, iconography, UI illustrations/graphics, and other graphic elements. As the UI Designer, you will be supporting the wider design team with the internal Design System, tying together the visual language. You will with other UI and UX Designers, Product Managers, and Engineering teams in a highly customer-focused agile environment to help define the vision of the products."
@@ -32,7 +32,6 @@
             android:layout_marginStart="18dp"/>
 
         <TextView
-            android:id="@+id/cw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Company Websites"
@@ -41,6 +40,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="18dp"/>
         <TextView
+            android:id="@+id/webTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="www.website.com"

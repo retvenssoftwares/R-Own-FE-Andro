@@ -9,12 +9,12 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -22,16 +22,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.ApplyJobsResponse
+import app.retvens.rown.DataCollections.JobsCollection.JobDetailsDataClass
+import app.retvens.rown.DataCollections.JobsCollection.People
 import app.retvens.rown.DataCollections.JobsCollection.PushApplicantIdData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.NavigationFragments.job.JobDetailsActivity.Companion.newInstance
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.ActivitiesFragment
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.CompanyDetailsFragment
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.DescriptionFragment
-import app.retvens.rown.NavigationFragments.profile.setting.saved.SavedPostsFragment
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.databinding.ActivityJobDetailsBinding
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -48,39 +49,51 @@ import java.io.FileOutputStream
 
 class JobDetailsActivity : AppCompatActivity() {
 
-    companion object {
-        private const val ARG_VALUE = "arg_value"
 
-        fun newInstance(value: String): DescriptionFragment {
-            val fragment = DescriptionFragment()
-            val args = Bundle()
-            args.putString(ARG_VALUE, value)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 
     lateinit var binding : ActivityJobDetailsBinding
     private  var pdfUri:Uri? = null
     var PICK_PDF_REQUEST_CODE : Int = 0
 
-
+    private lateinit var progressDialog:Dialog
     private lateinit var name:TextInputEditText
     private lateinit var experience:TextInputEditText
     private lateinit var resume:TextInputEditText
     private lateinit var intro:TextInputEditText
+    private var skills:String = ""
+    private var description:String= ""
+    private var companyDertails:String=""
+    private var companyWeb:String=""
+    private var fragmentPositon="1"
+    private  var peopleName:String=""
+    private  var peopleRole:String=""
+    private  var peopleProfile:String=""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJobDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        progressDialog = Dialog(this)
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setCancelable(true)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val image = progressDialog.findViewById<ImageView>(R.id.imageview)
+
+        Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
+        progressDialog.show()
+
         binding.backJobsDetails.setOnClickListener {
             onBackPressed()
         }
 
-        val desc = intent.getStringExtra("description")
+
+        getJobDetail()
+
         val status = intent.getStringExtra("applyStatus")
-        val skill = intent.getStringExtra("skill")
+
 
         val text = findViewById<TextView>(R.id.appliedText)
 
@@ -89,78 +102,42 @@ class JobDetailsActivity : AppCompatActivity() {
             text.text = "Applied"
         }
 
-
-
-        val bundle = Bundle()
-        bundle.putString("desc", desc)
-        bundle.putString("skill",skill)
-        val fragment: Fragment = DescriptionFragment()
-        fragment.arguments = bundle
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.details_fragments_container,fragment)
-        transaction.commit()
-
         binding.descriptionJobCardText.setOnClickListener {
-            binding.descriptionJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            binding.descriptionJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
 
-            binding.companyJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.companyJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            removeStyleAll()
+            setStyle(binding.descriptionJobCardText)
 
-            binding.activityJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.activityJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            fragmentPositon="1"
 
-            val desc = intent.getStringExtra("description")
-            val skill = intent.getStringExtra("skill")
+            val fragment: Fragment = DescriptionFragment(description,skills)
+            fragmentReplace(fragment)
 
-            val bundle = Bundle()
-            bundle.putString("desc", desc)
-            bundle.putString("skill",skill)
-
-            val fragment = DescriptionFragment()
-            fragment.arguments = bundle
-
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.details_fragments_container, fragment)
-            transaction.commit()
         }
         binding.companyJobCardText.setOnClickListener {
 
-            binding.companyJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            binding.companyJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
+            removeStyleAll()
+            setStyle(binding.companyJobCardText)
 
-            binding.descriptionJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.descriptionJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            fragmentPositon="2"
 
-            binding.activityJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.activityJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
-
-
-
-            val fragment: Fragment = CompanyDetailsFragment()
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.details_fragments_container,fragment)
-            transaction.commit()
+            val fragment:Fragment=CompanyDetailsFragment(companyDertails,skills)
+            fragmentReplace(fragment)
         }
         binding.activityJobCardText.setOnClickListener {
 
-            binding.activityJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-            binding.activityJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
+            removeStyleAll()
+            setStyle(binding.activityJobCardText)
 
-            binding.companyJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.companyJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            fragmentPositon="3"
 
-            binding.descriptionJobCardText.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
-            binding.descriptionJobCardText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+            val fragment:Fragment=ActivitiesFragment(peopleName,peopleRole,peopleProfile)
+            fragmentReplace(fragment)
 
-            val fragment: Fragment = ActivitiesFragment()
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.details_fragments_container,fragment)
-            transaction.commit()
         }
 
 
-            binding.cardApplyJob.setOnClickListener {
+        binding.cardApplyJob.setOnClickListener {
+
 
                 if (status != "Applied"){
 
@@ -204,6 +181,7 @@ class JobDetailsActivity : AppCompatActivity() {
                     }else if (intro.length() < 3){
                         introLayout.error = "Enter Proper details"
                     }else{
+                        dialogRole.dismiss()
                         applyforJob()
                     }
 
@@ -214,31 +192,91 @@ class JobDetailsActivity : AppCompatActivity() {
 
         }
 
-
-
-
-
-        var jobTitle = findViewById<TextView>(R.id.job_name_details)
-        var location = findViewById<TextView>(R.id.location_job_details)
-        var type = findViewById<TextView>(R.id.jobtype)
-        var workType = findViewById<TextView>(R.id.worktype)
-
-
-        jobTitle.text = intent?.getStringExtra("title")
-        type.text = intent?.getStringExtra("type")
-        workType.text = "Onsite"
-//
-//        val data = intent.getStringExtra("description")
-//        description.text = data
-
-        val locat = intent.getStringExtra("location")
-        val company = intent.getStringExtra("company")
-
-
-        location.text = "$company.$locat"
-
-
     }
+
+    private fun getJobDetail(){
+
+        val jobId=intent.getStringExtra("jobID").toString()
+        val userId=intent.getStringExtra("userId").toString()
+
+        Log.d("ooooouserId", "getJobDetail: "+userId)
+
+        val getJobDetail = RetrofitBuilder.jobsApis.getJobDetail(jobId,userId)
+
+        getJobDetail.enqueue(object : Callback<JobDetailsDataClass?> {
+            override fun onResponse(
+                call: Call<JobDetailsDataClass?>,
+                response: Response<JobDetailsDataClass?>
+            ) {
+                if (response.isSuccessful) {
+                    progressDialog.dismiss()
+
+                    val response = response.body()
+
+                    if (response != null) {
+                        binding.jobNameDetails.setText(response.jobTitle.toString())
+                        binding.locationJobDetails.setText(response.jobLocation)
+                        binding.jobtype.setText(response.jobType)
+
+                        Glide.with(applicationContext).load(response.companyImage)
+                            .into(binding.profileJobsDetails)
+
+                        val jobStatus=response.status
+
+                        Log.d("ooooo", "onResponse: "+jobStatus)
+
+                        if (fragmentPositon=="1"){
+
+                            description = response.jobDescription
+                            skills = response.skillsRecq
+
+                            val fragment: Fragment = DescriptionFragment(description,skills)
+                            fragmentReplace(fragment)
+
+
+                        }
+                        else if (fragmentPositon=="2")
+                        {
+//                            companyDertails=response.companyDetails
+                            companyWeb=response.websiteLink
+                            skills = response.skillsRecq
+                            val fragment:Fragment=CompanyDetailsFragment(companyDertails,skills)
+                            fragmentReplace(fragment)
+
+                        }
+                        else if (fragmentPositon=="3"){
+
+                            peopleName=response.people.full_name
+                            peopleRole=response.people.role
+                            peopleProfile=response.people.profile_pic
+
+                            val fragment:Fragment=ActivitiesFragment(peopleName,peopleRole,peopleProfile)
+                            fragmentReplace(fragment)
+                        }
+//                        if(jobStatus!="Not Applied")
+//                        {
+//                            Toast.makeText(applicationContext,"omomom",Toast.LENGTH_SHORT).show()
+//                            binding.appliedText.setTextColor(ContextCompat.getColor(applicationContext, R.color.light_grey))
+//                            binding.appliedText.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.light_grey))
+//                            binding.appliedText.isClickable=true
+//
+//                        }
+
+                    }
+                }
+                else{
+                    progressDialog.dismiss()
+                    Log.e("error",response.code().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<JobDetailsDataClass?>, t: Throwable) {
+                progressDialog.dismiss()
+                Log.e("error",t.message.toString())
+            }
+        })
+    }
+
 
     private fun applyforJob() {
         val parcelFileDescriptor = contentResolver.openFileDescriptor(
@@ -252,11 +290,10 @@ class JobDetailsActivity : AppCompatActivity() {
         val body = UploadRequestBody(file,"pdf")
 
         val name = name.text.toString()
-        val experience = experience.text.toString()
+
+        val experience = experience.text.toString()+" Year"
         val intro = intro.text.toString()
         val jobId = intent.getStringExtra("jobId").toString()
-
-        Toast.makeText(applicationContext,jobId,Toast.LENGTH_SHORT).show()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
@@ -270,17 +307,20 @@ class JobDetailsActivity : AppCompatActivity() {
             MultipartBody.Part.createFormData("resume", file.name, body)
         )
 
+
+        progressDialog.show()
         send.enqueue(object : Callback<ApplyJobsResponse?> {
             override fun onResponse(
                 call: Call<ApplyJobsResponse?>,
                 response: Response<ApplyJobsResponse?>
             ) {
                 if (response.isSuccessful){
+                    progressDialog.dismiss()
                     val response = response.body()!!
-                    pushId(response.applicationId,response.job_id)
+                    Toast.makeText(applicationContext,response.message.toString(),Toast.LENGTH_SHORT).show()
+
                 }else{
                     Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
-
                 }
             }
 
@@ -289,36 +329,36 @@ class JobDetailsActivity : AppCompatActivity() {
             }
         })
     }
-
-    private fun pushId(ApplicationId:String,jid:String) {
-
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences?.getString("user_id", "").toString()
-
-        val userID = intent.getStringExtra("userId")
-
-        val push = PushApplicantIdData(user_id,ApplicationId)
-
-        val send = RetrofitBuilder.jobsApis.pushId(jid,push)
-        send.enqueue(object : Callback<UpdateResponse?> {
-            override fun onResponse(
-                call: Call<UpdateResponse?>,
-                response: Response<UpdateResponse?>
-            ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
-                }else{
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
-            }
-        })
-
-    }
+//
+//    private fun pushId(ApplicationId:String,jid:String) {
+//
+//        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+//        val user_id = sharedPreferences?.getString("user_id", "").toString()
+//
+//        val userID = intent.getStringExtra("userId")
+//
+//        val push = PushApplicantIdData(user_id,ApplicationId)
+//
+//        val send = RetrofitBuilder.jobsApis.pushId(jid,push)
+//        send.enqueue(object : Callback<UpdateResponse?> {
+//            override fun onResponse(
+//                call: Call<UpdateResponse?>,
+//                response: Response<UpdateResponse?>
+//            ) {
+//                if (response.isSuccessful){
+//                    val response = response.body()!!
+//                    Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+//                }else{
+//                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+//                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -340,4 +380,29 @@ class JobDetailsActivity : AppCompatActivity() {
         }
         return name
     }
+
+    private fun setStyle(textViewId:TextView )
+    {
+        textViewId.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+        textViewId.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.black))
+    }
+
+    private fun removeStyle(textViewId:TextView){
+
+        textViewId.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
+        textViewId.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
+    }
+    private fun removeStyleAll(){
+
+        removeStyle(binding.descriptionJobCardText)
+        removeStyle(binding.companyJobCardText)
+        removeStyle(binding.activityJobCardText)
+    }
+    private fun fragmentReplace(fragment:Fragment){
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.details_fragments_container,fragment)
+        transaction.commit()
+    }
+
 }

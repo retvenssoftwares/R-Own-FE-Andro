@@ -2,9 +2,6 @@ package app.retvens.rown.ApiRequest
 
 import app.retvens.rown.DataCollections.JobsCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
-import app.retvens.rown.DataCollections.saveId.SaveEvent
-import app.retvens.rown.NavigationFragments.home.DataItem
-import app.retvens.rown.NavigationFragments.job.savedJobs.Job
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsData
 import okhttp3.MultipartBody
@@ -17,6 +14,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface JobsApis {
 
@@ -24,6 +22,13 @@ interface JobsApis {
     fun getJobs(
         @Path("userId") userId : String
     ): Call<List<GetAllJobsData>>
+
+    @GET("getJobs/{jobId}")
+    fun getJobDetail(
+        @Path("jobId") jobId: String,
+        @Query("userId") userId: String
+    ): Call<JobDetailsDataClass>
+
 
     @GET("job/{userId}")
     fun getIndividualJobs(
@@ -54,7 +59,7 @@ interface JobsApis {
         @Part("Experience")Experience:RequestBody,
         @Part("self_introduction")self_introduction:RequestBody,
         @Part("user_id")user_id:RequestBody,
-        @Part("jid")jobId:RequestBody,
+        @Part("jobId")jobId:RequestBody,
         @Part resume: MultipartBody.Part
     ):Call<ApplyJobsResponse>
 
