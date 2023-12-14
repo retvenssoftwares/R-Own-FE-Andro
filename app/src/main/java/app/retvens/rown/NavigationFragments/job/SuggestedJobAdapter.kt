@@ -82,7 +82,7 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
         Glide.with(context).load(jobs.companyImage).into(holder.jobImages)
 
             holder.position.text = jobs.jobTitle
-            holder.location.text = jobs.companyName
+            holder.location.text = jobs.jobLocation
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
 

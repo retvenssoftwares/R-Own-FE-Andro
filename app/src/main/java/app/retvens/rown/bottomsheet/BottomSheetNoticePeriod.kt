@@ -39,10 +39,10 @@ class BottomSheetNoticePeriod : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            mListener?.bottomNoticeClick("Select one -")
-            dismiss()
-        }
+//        view.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
+//            mListener?.bottomNoticeClick("Select one -")
+//            dismiss()
+//        }
         view.findViewById<RelativeLayout>(R.id.no).setOnClickListener {
             mListener?.bottomNoticeClick("No")
             dismiss()
