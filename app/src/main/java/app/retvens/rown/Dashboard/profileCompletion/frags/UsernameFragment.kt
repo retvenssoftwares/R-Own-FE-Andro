@@ -1,5 +1,6 @@
 package app.retvens.rown.Dashboard.profileCompletion.frags
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Intent
@@ -80,6 +81,7 @@ class UsernameFragment : Fragment(), BackHandler {
         return inflater.inflate(R.layout.fragment_username, container, false)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

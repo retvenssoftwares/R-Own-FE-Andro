@@ -1,167 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="20dp"
-    android:background="@drawable/top_round">
+    android:background="@drawable/top_round"
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
-        android:paddingHorizontal="20dp">
+        android:background="@drawable/top_round"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/card_job_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
 
         <TextView
             android:id="@+id/syjt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Please, verify and enter all the details for applying for this job"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textSize="16dp"
             android:layout_gravity="center"
+            android:layout_marginVertical="20dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:paddingHorizontal="20dp"
+            android:text="Please, verify and enter all the details for applying for this job"
             android:textColor="@color/black"
+            android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nameOfApplicantLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Full Name*"
-        android:textColorHint="@color/black"
-        app:hintTextColor="@color/black"
-        app:boxStrokeColor="@color/black"
-        android:layout_marginHorizontal="20dp"
-        app:boxStrokeWidthFocused="2dp"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/black">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nameOfApplicant"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/black"
-            android:hint="Your Full Name"
-            android:textColorHint="@drawable/hint_selector"
-            android:inputType="text"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/experienceLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Experience*"
-        android:textColorHint="@color/black"
-        app:hintTextColor="@color/black"
-        app:boxStrokeColor="@color/black"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="12dp"
-        app:boxStrokeWidthFocused="2dp"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/black">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/experience"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/black"
-            android:hint="4 years"
-            android:textColorHint="@drawable/hint_selector"
-            android:inputType="text"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/resumeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Attach Your Resume*"
-        android:textColorHint="@color/black"
-        app:hintTextColor="@color/black"
-        app:boxStrokeColor="@color/black"
-        android:layout_marginTop="8dp"
-        android:layout_marginHorizontal="20dp"
-        app:boxStrokeWidthFocused="2dp"
-        app:endIconDrawable="@drawable/svg_attachment"
-        app:endIconMode="custom"
-        app:endIconTint="@color/black">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/eType_et"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/black"
-            android:clickable="true"
-            android:focusable="false"
-            android:text="Select a file"
-            android:editable="false"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/introLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Introduce YourSelf"
-        android:textColorHint="@color/black"
-        app:hintTextColor="@color/black"
-        app:boxStrokeColor="@color/black"
-        android:layout_marginHorizontal="20dp"
-        app:boxStrokeWidthFocused="2dp"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/black">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/intro"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameOfApplicantLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_regular"
-            android:textColor="@color/black"
+            android:layout_marginHorizontal="20dp"
+            android:hint="Full Name*"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
+            app:hintTextColor="@color/black">
 
-            android:textColorHint="@drawable/hint_selector"
-            android:inputType="text"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameOfApplicant"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:hint="Your Full Name"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="@drawable/hint_selector"
+                android:textSize="14sp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/experienceLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="12dp"
+            android:hint="Experience*"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
+            app:hintTextColor="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/experience"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_regular"
+                android:hint="4 years"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:textColorHint="@drawable/hint_selector"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/resumeLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="8dp"
+            android:hint="Attach Your Resume*"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconDrawable="@drawable/svg_attachment"
+            app:endIconMode="custom"
+            app:endIconTint="@color/black"
+            app:hintTextColor="@color/black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/eType_et"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="false"
+                android:fontFamily="@font/montserrat_regular"
+                android:maxLines="3"
+                android:text="Select a file"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/introLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:hint="Introduce YourSelf"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/black"
+            app:boxStrokeWidthFocused="2dp"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/black"
+            app:hintTextColor="@color/black">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/intro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:inputType="text"
+                android:maxLines="3"
+                android:textColor="@color/black"
+                android:textColorHint="@drawable/hint_selector"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_job_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
-        android:layout_marginHorizontal="45dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginBottom="30dp"
+        app:cardCornerRadius="11dp"
         app:cardElevation="3dp"
-        android:layout_gravity="center_horizontal"
-        app:cardCornerRadius="11dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout2">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingVertical="10dp"
-            android:textAlignment="center"
-            android:text="Apply Now"
-            android:fontFamily="@font/montserrat_regular"
-            android:textFontWeight="600"
-            android:textSize="18dp"
             android:background="@color/green_own"
-            android:textColor="@color/black"/>
+            android:fontFamily="@font/montserrat_regular"
+            android:paddingVertical="10dp"
+            android:text="Apply Now"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textFontWeight="600"
+            android:textSize="18dp" />
 
     </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

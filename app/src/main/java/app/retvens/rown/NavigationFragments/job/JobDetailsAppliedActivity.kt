@@ -40,7 +40,7 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putString("desc", desc)
         bundle.putString("skill",skill)
-        val fragment: Fragment = DescriptionFragment()
+        val fragment: Fragment = DescriptionFragment(desc!!,skill!!)
         fragment.arguments = bundle
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.details_applied_fragments_container,fragment)
@@ -62,7 +62,7 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
             bundle.putString("desc", desc)
             bundle.putString("skill",skill)
 
-            val fragment = DescriptionFragment()
+            val fragment = DescriptionFragment(desc!!,skill!!)
             fragment.arguments = bundle
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.details_applied_fragments_container,fragment)
@@ -79,7 +79,7 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
             binding.activitiesJobCardTextApplied.setTextColor(ContextCompat.getColor(applicationContext, R.color.black))
             binding.activitiesJobCardTextApplied.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-            val fragment: Fragment = CompanyDetailsFragment()
+            val fragment: Fragment = CompanyDetailsFragment("","")
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.details_applied_fragments_container,fragment)
             transaction.commit()

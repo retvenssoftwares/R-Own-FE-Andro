@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +47,6 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
         val type = itemView.findViewById<TextView>(R.id.workType)
         val title = itemView.findViewById<TextView>(R.id.jobTitle)
         val salary = itemView.findViewById<TextView>(R.id.salary)
-        val button = itemView.findViewById<CardView>(R.id.apply_btn)
         val text = itemView.findViewById<TextView>(R.id.buttontext)
         val jobSaved = itemView.findViewById<ImageView>(R.id.save_suggested)
         val color = itemView.findViewById<ConstraintLayout>(R.id.constraintback)
@@ -78,11 +78,10 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
 
         holder.color.setBackgroundColor(backgroundColor)
 
-
         Glide.with(context).load(jobs.companyImage).into(holder.jobImages)
 
             holder.position.text = jobs.jobTitle
-            holder.location.text = jobs.companyName
+            holder.location.text = jobs.jobLocation
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
 
@@ -109,13 +108,13 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
 //            holder.text.text = "Applied"
 //        }
 
-
-            holder.button.setOnClickListener{
-
-
-
-
-            }
+        holder.itemView.setOnClickListener{
+            val intent= Intent (context,JobDetailsActivity::class.java)
+            intent.putExtra("jobID",jobs.jobId)
+            intent.putExtra("userId",jobs.user_id)
+//            intent.putExtra("companyImageUri",jobs.companyImage)
+            context.startActivity(intent)
+        }
 
 
 
@@ -153,4 +152,5 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
     fun setJobSavedClickListener(listener: JobSavedClickListener) {
         jobSavedClickListener = listener
     }
+
 }
