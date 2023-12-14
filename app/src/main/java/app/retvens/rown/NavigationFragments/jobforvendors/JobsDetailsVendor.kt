@@ -106,30 +106,37 @@ class JobsDetailsVendor : AppCompatActivity() {
 
         val getApplicant = RetrofitBuilder.jobsApis.getApplicant(jid!!)
 
-        getApplicant.enqueue(object : Callback<JobDetailsData?> { override fun onResponse(call: Call<JobDetailsData?>, response: Response<JobDetailsData?>
-            ) {
-                if (response.isSuccessful){
+        getApplicant.enqueue(object : Callback<JobDetailsData?> {
+            override fun onResponse(call: Call<JobDetailsData?>, response: Response<JobDetailsData?>) {
+                try {
+                    if (response.isSuccessful) {
 
-                    descriptiontext.text=response.body()?.jobDescription
-                    skillreq.text=response.body()?.skillsRecq
+                        if (response.body() != null) {
 
-                    Log.d("sucessssss", "onResponse: "+response.body())
+                            descriptiontext.text = response.body()?.jobDescription
+                            skillreq.text = response.body()?.skillsRecq
 
+                            Log.d("sucessssss", "onResponse: " + response.body())
 
-                    appliedCandidateAdapter = AppliedCandidateAdapter(applicationContext,response.body()!!.jobApplicants)
-                    recyclerView.adapter = appliedCandidateAdapter
-                    appliedCandidateAdapter.notifyDataSetChanged()
-                }else{
-                    Toast.makeText(applicationContext,response.code().toString(),Toast.LENGTH_SHORT).show()
+                            appliedCandidateAdapter =
+                                AppliedCandidateAdapter(applicationContext, response.body()!!.jobApplicants)
+                            recyclerView.adapter = appliedCandidateAdapter
+                            appliedCandidateAdapter.notifyDataSetChanged()
+                        }
+                    } else {
+                        Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    Log.e("Exception", "Error processing response", e)
+                    Toast.makeText(applicationContext, "An error occurred", Toast.LENGTH_SHORT).show()
                 }
-
             }
 
             override fun onFailure(call: Call<JobDetailsData?>, t: Throwable) {
-
-                Log.d("failure", "onFailure: "+t.message)
-                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+                Log.d("failure", "onFailure: " + t.message)
+                Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 }

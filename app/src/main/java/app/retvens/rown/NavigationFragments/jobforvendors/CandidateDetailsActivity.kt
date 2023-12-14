@@ -71,7 +71,6 @@ class CandidateDetailsActivity : AppCompatActivity(),
         }
 
     }
-
     private fun chechResume(id: String) {
         val getResume = RetrofitBuilder.jobsApis.getCandidate(id)
 
@@ -92,14 +91,14 @@ class CandidateDetailsActivity : AppCompatActivity(),
                     } catch (e: ActivityNotFoundException) {
 
                     }
-                }
-            }
+                  }
+               }
 
             override fun onFailure(call: Call<List<CandidateDataClass>?>, t: Throwable) {
                 TODO("Not yet implemented")
             }
-        })
-    }
+          })
+       }
 
 
     private fun getCandidate(id: String?) {

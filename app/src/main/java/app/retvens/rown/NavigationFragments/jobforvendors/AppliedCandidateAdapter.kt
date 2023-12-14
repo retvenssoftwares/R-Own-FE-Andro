@@ -48,8 +48,9 @@ class AppliedCandidateAdapter(val context:Context, var applicantData:List<JobApp
         Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.location)
         Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.normalUserInfo)
         Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.normalUserInfo)
+
         holder.city.text = data.location
-       holder.role.text = data.normalUserInfo[position].jobTitle
+         holder.role.text = data.normalUserInfo[position].jobTitle
          Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
         holder.button.setOnClickListener {
