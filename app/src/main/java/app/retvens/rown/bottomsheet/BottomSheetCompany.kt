@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.LocationFragmentAdapter
+import app.retvens.rown.DataCollections.JobsCollection.HotelsList
 import app.retvens.rown.DataCollections.ProfileCompletion.AddCompanyDataClass
 import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -71,7 +72,7 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
 
         recyclerView = view.findViewById(R.id.company_recycler)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-         //recyclerView. //recyclerView.setHasFixedSize(true)
+        //recyclerView. //recyclerView.setHasFixedSize(true)
 
         AddHotel.setOnClickListener {
             val dialog = Dialog(requireContext())
@@ -102,7 +103,8 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
         }
 
 
-        searchBar = view.findViewById(R.id.search_company)
+        searchBar = view.findViewById(R.id.search_companyn)
+
         val getCompany = RetrofitBuilder.profileCompletion.getCompany()
 
         getCompany.enqueue(object : Callback<List<CompanyDatacClass>?>, CompanyAdapter.OnLocationClickListener {
@@ -159,12 +161,15 @@ class BottomSheetCompany : BottomSheetDialogFragment() {
 
             }
 
-            override fun onStateDataClick(companyDatacClass: String) {
+            override fun onStateDataClick(companyDatacClass: CompanyDatacClass) {
+                mListener?.bottomLocationClick(companyDatacClass.company_name)
                 dismiss()
-
-                mListener?.bottomLocationClick(companyDatacClass)
             }
+
+
         })
+
+
 
     }
 

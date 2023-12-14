@@ -50,7 +50,7 @@
         android:layout_marginHorizontal="20dp"
         app:cardBackgroundColor="@color/white">
         <EditText
-            android:id="@+id/search_company"
+            android:id="@+id/search_companyn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Type an company name"

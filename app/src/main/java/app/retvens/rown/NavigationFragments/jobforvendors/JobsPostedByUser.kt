@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.JobsForHoteliers
+import app.retvens.rown.NavigationFragments.job.GetJobData
 import app.retvens.rown.NavigationFragments.job.JobsPostedAdapater
 import app.retvens.rown.NavigationFragments.job.RecentJobAdapter
 import app.retvens.rown.NavigationFragments.job.SuggestedJobAdapter
@@ -47,14 +48,11 @@ class JobsPostedByUser : AppCompatActivity() {
 
         val getJob = RetrofitBuilder.jobsApis.getIndividualJobs(user_id)
 
-        getJob.enqueue(object : Callback<List<JobsData>?> {
-            override fun onResponse(
-                call: Call<List<JobsData>?>,
-                response: Response<List<JobsData>?>
-            ) {
+        getJob.enqueue(object : Callback<GetJobData?> {
+            override fun onResponse(call: Call<GetJobData?>, response: Response<GetJobData?>) {
                 if (response.isSuccessful){
                     val response = response.body()!!
-                    jobsPostedAdapater = JobsPostedAdapater(applicationContext, response)
+                    jobsPostedAdapater = JobsPostedAdapater(applicationContext, response.userJobs)
                     recyclerView.adapter = jobsPostedAdapater
                     jobsPostedAdapater.notifyDataSetChanged()
                 }else{
@@ -62,7 +60,7 @@ class JobsPostedByUser : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
+            override fun onFailure(call: Call<GetJobData?>, t: Throwable) {
                 Toast.makeText(applicationContext,t.message.toString(), Toast.LENGTH_SHORT).show()
             }
         })

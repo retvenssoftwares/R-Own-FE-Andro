@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,23 +87,22 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 
         val getJob = RetrofitBuilder.jobsApis.getIndividualJobs(user_id)
 
-        getJob.enqueue(object : Callback<List<JobsData>?> {
-            override fun onResponse(
-                call: Call<List<JobsData>?>,
-                response: Response<List<JobsData>?>
-            ) {
-                if (response.isSuccessful && isAdded){
+        getJob.enqueue(object : Callback<GetJobData?> {
+            override fun onResponse(call: Call<GetJobData?>, response: Response<GetJobData?>) {
+
+
+
+                if (response.code()==200 && isAdded){
                     shimmerLayout.visibility = View.GONE
-                    val response = response.body()!!
-                    val originalData = response.toList()
-                    if (response.isNotEmpty()) {
-                        val suggestedJobAdapter = SuggestedJobAdaperHotelOwner(requireContext(), response)
+                    if (response.body() != null) {
+                        val suggestedJobAdapter = SuggestedJobAdaperHotelOwner(requireContext(), response.body()!!.userJobs)
                         suggestedRecycler.adapter = suggestedJobAdapter
                         suggestedJobAdapter.notifyDataSetChanged()
 
-                        val recentJobAdapter = RecentJobAdapterOwner(requireContext(), response)
+                        val recentJobAdapter = RecentJobAdapterOwner(requireContext(), response.body()!!.userJobs)
                         recentJobRecycler.adapter = recentJobAdapter
                         recentJobAdapter.notifyDataSetChanged()
+
                     searchBar.addTextChangedListener(object :TextWatcher{
                         override fun beforeTextChanged(
                             p0: CharSequence?,
@@ -114,16 +114,15 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
                         }
 
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            val filterData = originalData.filter { item ->
+                            val filterData = response.body()!!.userJobs.filter { item ->
                                 item.jobTitle.contains(p0.toString(),ignoreCase = true)
                             }
 
                             suggestedJobAdapter.updateData(filterData)
 
-                            val filterData2 = originalData.filter { item ->
+                            val filterData2 = response.body()!!.userJobs.filter { item ->
                                 item.jobTitle.contains(p0.toString(),ignoreCase = true)
                             }
-
                             recentJobAdapter.updateData(filterData2)
                         }
 
@@ -132,29 +131,29 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
                         }
 
                     })
+
+
                 } else {
                     nothing.visibility = View.VISIBLE
                         relative_jobs.visibility = View.GONE
+
                     }
                 }else{
                     if (isAdded) {
                         shimmerLayout.visibility = View.GONE
                         nothing.visibility = View.VISIBLE
                         relative_jobs.visibility = View.GONE
-//                        Toast.makeText(
-//                            requireContext(),
-//                            response.code().toString(),
-//                            Toast.LENGTH_SHORT
-//                        ).show()
+                        Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
 
-            override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
+            override fun onFailure(call: Call<GetJobData?>, t: Throwable) {
+                Log.d("sdfghjkldfghj", "onFailure: "+t.message)
                 shimmerLayout.visibility = View.GONE
                 if (isAdded) {
-//                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
-//                        .show()
+                   Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                  .show()
                 }
             }
         })
@@ -165,6 +164,6 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 //    }
 
     override fun bottomJobClick(category: String, type: String, location: String, salary: String) {
-        TODO("Not yet implemented")
+
     }
 }

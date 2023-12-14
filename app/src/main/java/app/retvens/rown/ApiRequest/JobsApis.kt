@@ -4,6 +4,9 @@ import app.retvens.rown.DataCollections.JobsCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.saveId.SaveEvent
 import app.retvens.rown.NavigationFragments.home.DataItem
+import app.retvens.rown.NavigationFragments.job.GetJobData
+import app.retvens.rown.NavigationFragments.job.JobPostData
+import app.retvens.rown.NavigationFragments.job.JobPostResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.Job
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsData
@@ -17,6 +20,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface JobsApis {
 
@@ -28,7 +32,7 @@ interface JobsApis {
     @GET("job/{userId}")
     fun getIndividualJobs(
         @Path("userId") userId : String
-    ): Call<List<JobsData>>
+    ): Call<GetJobData>
 
     @GET("appliedjob/{userId}")
     fun appliedJobs(
@@ -43,9 +47,8 @@ interface JobsApis {
 
     @POST("jobpost/{userId}")
     fun postJob(
-        @Path("userId") userId:String,
-        @Body post: PostJobDataCLass
-    ):Call<UpdateResponse>
+        @Path("userId") userId : String,
+        @Body post: JobPostData):Call<JobPostResponse>
 
     @Multipart
     @POST("applyjob")
@@ -65,10 +68,10 @@ interface JobsApis {
     ):Call<UpdateResponse>
 
 
-    @GET("getapplicant/{jId}")
+    @GET("getspecificjob/{jId}")
     fun getApplicant(
         @Path("jId") jId:String
-    ):Call<List<ApplicantDataClass>>
+    ):Call<JobDetailsData>
 
     @GET("getcandidate/{appId}")
     fun getCandidate(
@@ -92,8 +95,8 @@ interface JobsApis {
         @Body saveJob: SaveJob
     ) : Call<UpdateResponse>
 
-    @GET("getHotel/{user_id}")
+    @GET("getCompaniesList")
     fun getHotelList(
-        @Path("user_id")user_id:String
-    ):Call<List<HotelsDataClass>>
+        @Query("userId")userId:String
+    ):Call<List<HotelsList>>
 }

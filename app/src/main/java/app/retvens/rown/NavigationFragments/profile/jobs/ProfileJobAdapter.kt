@@ -9,10 +9,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
+import app.retvens.rown.MessagingModule.UserData
 import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobData
+import app.retvens.rown.NavigationFragments.job.GetJobData
+import app.retvens.rown.NavigationFragments.job.UserJob
 import app.retvens.rown.R
 
-class ProfileJobAdapter(val context: Context, var jobsList:List<JobsData>) : RecyclerView.Adapter<ProfileJobAdapter.ExploreJobViewHolder>() {
+class ProfileJobAdapter(val context: Context, var jobsList:List<UserJob>) : RecyclerView.Adapter<ProfileJobAdapter.ExploreJobViewHolder>() {
 
     class ExploreJobViewHolder(itemView: View) : ViewHolder(itemView){
         val designation = itemView.findViewById<TextView>(R.id.recent_job_designation)

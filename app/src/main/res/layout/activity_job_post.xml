@@ -27,11 +27,11 @@
                 android:layout_height="wrap_content"
                 android:text="Add job details"
                 android:layout_marginTop="30dp"
-                android:layout_marginHorizontal="25dp"
+                android:layout_marginHorizontal="23dp"
                 android:fontFamily="@font/montserrat_semibold"
                 android:textColor="@color/black"
                 android:textAlignment="center"
-                android:textSize="26dp" />
+                android:textSize="@dimen/_17sdp" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -43,7 +43,7 @@
                 android:textColorHint="@color/black"
                 app:hintTextColor="@color/black"
                 app:boxStrokeColor="@color/black"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="35dp"
                 android:layout_marginHorizontal="20dp"
                 app:boxStrokeWidthFocused="2dp"
                 app:endIconDrawable="@drawable/ic_arrow_down_24"
@@ -54,12 +54,13 @@
                     android:id="@+id/post_Designation_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:textColor="@color/black"
-                    android:hint="Select one"
+                    android:clickable="true"
                     android:editable="false"
                     android:focusable="false"
-                    android:clickable="true"/>
+                    android:fontFamily="@font/montserrat_regular"
+                    android:hint="Select one"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11sdp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +73,7 @@
                 android:textColorHint="@color/black"
                 app:hintTextColor="@color/black"
                 app:boxStrokeColor="@color/black"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginHorizontal="20dp"
                 app:boxStrokeWidthFocused="2dp"
                 app:endIconTint="@color/black">
@@ -81,6 +82,7 @@
                     android:id="@+id/post_job_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textSize="@dimen/_11sdp"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:inputType="text"
@@ -108,6 +110,7 @@
                     android:id="@+id/postCompaET"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textSize="@dimen/_11sdp"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:hint="Select one"
@@ -126,7 +129,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_45sdp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="Workplace type*"
                     android:layout_weight="1"
@@ -143,10 +146,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_post_workplace_type"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:textColor="@color/black"
                         android:hint="WorkPlace"
+                        android:textSize="@dimen/_11sdp"
                         android:textColorHint="@drawable/hint_selector"
                         android:inputType="text"/>
 
@@ -155,7 +159,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/typeLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_45sdp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="Job Type"
                     android:layout_weight="1"
@@ -171,10 +175,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_post_job_type"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:textColor="@color/black"
                         android:hint="Select one"
+                        android:textSize="@dimen/_11sdp"
                         android:editable="false"
                         android:focusable="false"
                         android:clickable="true"/>
@@ -203,7 +208,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_post_min_salary"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_11sdp"
                         android:fontFamily="@font/montserrat_regular"
                         android:textColor="@color/black"
                         android:hint="Select One"
@@ -230,10 +236,11 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_location_job_post"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:clickable="true"
+                    android:textSize="@dimen/_11sdp"
                     android:focusable="false"
                     android:text="Select Your Location"
                     android:editable="false"/>
@@ -258,10 +265,11 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/post_job_description_et"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:maxLines="4"
+                    android:textSize="@dimen/_11sdp"
                     android:hint="Hi,  We are photography based digital brand
 providing you vast variety of photo shoots
 for your properties and other services too."
@@ -288,13 +296,14 @@ for your properties and other services too."
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/post_job_skills_et"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:maxLines="4"
                     android:hint="Hi,  We are photography based digital brand
 providing you vast variety of photo shoots
 for your properties and other services too."
+                    android:textSize="@dimen/_11sdp"
                     android:textColorHint="@drawable/hint_selector"
                     android:inputType="text"/>
 
@@ -305,7 +314,7 @@ for your properties and other services too."
                 android:id="@+id/card_post_job"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop = "60dp"
+                android:layout_marginTop = "50dp"
                 android:layout_marginBottom="30dp"
                 android:layout_marginHorizontal="45dp"
                 app:cardElevation="3dp"
@@ -323,7 +332,7 @@ for your properties and other services too."
                     android:text="Post Job"
                     android:fontFamily="@font/montserrat_regular"
                     android:textFontWeight="600"
-                    android:textSize="22dp"
+                    android:textSize="@dimen/_15sdp"
                     android:background="@color/green_own"
                     android:textColor="@color/black"/>
 

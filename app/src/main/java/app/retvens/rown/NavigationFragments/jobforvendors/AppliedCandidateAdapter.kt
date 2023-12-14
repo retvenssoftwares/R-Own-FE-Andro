@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.jobforvendors
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +12,15 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.DataCollections.JobsCollection.ApplicantDataClass
+import app.retvens.rown.DataCollections.JobsCollection.JobDetailsData
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.job.JobsPostedAdapater
+import app.retvens.rown.NavigationFragments.job.savedJobs.JobApplicant
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class AppliedCandidateAdapter(val context:Context, var applicantData:List<ApplicantDataClass>):RecyclerView.Adapter<AppliedCandidateAdapter.AppliedCandidateAdapter>() {
+class AppliedCandidateAdapter(val context:Context, var applicantData:List<JobApplicant>):RecyclerView.Adapter<AppliedCandidateAdapter.AppliedCandidateAdapter>() {
 
     class AppliedCandidateAdapter(itemview:View):ViewHolder(itemview) {
 
@@ -40,18 +43,23 @@ class AppliedCandidateAdapter(val context:Context, var applicantData:List<Applic
         val data = applicantData[position]
 
         holder.name.text = data.Full_name
-        holder.city.text = "Kanpur"
-        holder.role.text = data.jobTitle
-        Glide.with(context).load(data.Profile_pic).into(holder.profile)
+
+        Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.Full_name)
+        Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.location)
+        Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.normalUserInfo)
+        Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.normalUserInfo)
+        holder.city.text = data.location
+       holder.role.text = data.normalUserInfo[position].jobTitle
+         Glide.with(context).load(data.Profile_pic).into(holder.profile)
 
         holder.button.setOnClickListener {
             val intent = Intent(context,CandidateDetailsActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra("name",data.Full_name)
-            intent.putExtra("city",data.Location)
-            intent.putExtra("role",data.jobTitle)
+            intent.putExtra("city",data.location)
+            intent.putExtra("role",data.Full_name)
             intent.putExtra("profile",data.Profile_pic)
-            intent.putExtra("applicationId",data.applicationId)
+            intent.putExtra("applicationId",data.userId)
             context.startActivity(intent)
         }
     }

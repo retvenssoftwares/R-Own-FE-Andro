@@ -166,7 +166,7 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
                 submit.isClickable = false
             }
         }
-         end.addTextChangedListener {
+        end.addTextChangedListener {
             if (start.text!!.isNotEmpty() && end.text!!.isNotEmpty()){
                 submit.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green_own))
                 submit.isClickable = true
@@ -174,7 +174,7 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
                 submit.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey_20))
                 submit.isClickable = false
             }
-         }
+        }
 
         submit.setOnClickListener {
             if(jobTitle.text.toString() == "Job Title"){
@@ -258,7 +258,7 @@ class HospitalityExpertFragment : Fragment(), BackHandler,
         dialogRole.show()
 
         recyclerView = dialogRole.findViewById(R.id.company_recycler)
-         //recyclerView. //recyclerView.setHasFixedSize(true)
+        //recyclerView. //recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         getCompany()

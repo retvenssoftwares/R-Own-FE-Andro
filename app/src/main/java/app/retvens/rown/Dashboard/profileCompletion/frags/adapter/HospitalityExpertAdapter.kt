@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import app.retvens.rown.DataCollections.JobsCollection.HotelsList
 import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
 import app.retvens.rown.DataCollections.ProfileCompletion.GetJobDataClass
 import app.retvens.rown.R

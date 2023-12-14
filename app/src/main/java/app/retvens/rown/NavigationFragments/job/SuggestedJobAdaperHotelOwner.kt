@@ -16,7 +16,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
 import app.retvens.rown.R
 
-class SuggestedJobAdaperHotelOwner(val context: Context, var jobList:List<JobsData>) : RecyclerView.Adapter<SuggestedJobAdaperHotelOwner.SuggestedJobViewHolder>() {
+class SuggestedJobAdaperHotelOwner(val context: Context, var jobList:List<UserJob>) : RecyclerView.Adapter<SuggestedJobAdaperHotelOwner.SuggestedJobViewHolder>() {
 
     class SuggestedJobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val position = itemView.findViewById<TextView>(R.id.suggested_job_title)
@@ -55,7 +55,7 @@ class SuggestedJobAdaperHotelOwner(val context: Context, var jobList:List<JobsDa
         holder.color.setBackgroundColor(backgroundColor)
 
 
-        holder.position.text = jobs.designationType
+        holder.position.text = jobs.jobTitle
         holder.location.text = jobs.jobLocation
         holder.type.text = jobs.jobType
         holder.title.text = "Remote"
@@ -65,7 +65,7 @@ class SuggestedJobAdaperHotelOwner(val context: Context, var jobList:List<JobsDa
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<JobsData>) {
+    fun updateData(newItems: List<UserJob>) {
         jobList = newItems
         notifyDataSetChanged()
     }

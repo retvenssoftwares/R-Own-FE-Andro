@@ -5,6 +5,7 @@ import android.content.Context
 import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.ApplicantDataClass
+import app.retvens.rown.DataCollections.JobsCollection.JobDetailsData
 import app.retvens.rown.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,6 +26,8 @@ class JobsDetailsVendor : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var descriptiontext: TextView
+    private lateinit var skillreq: TextView
     private lateinit var appliedCandidateAdapter: AppliedCandidateAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,9 +69,12 @@ class JobsDetailsVendor : AppCompatActivity() {
         val title = findViewById<TextView>(R.id.detail_job_designation)
         val location = findViewById<TextView>(R.id.detail_job_location)
         val type = findViewById<TextView>(R.id.details_jobs_type)
-        val descriptiontext = findViewById<TextView>(R.id.JobsDescription)
-        val skillreq = findViewById<TextView>(R.id.JobsSkills)
+//        val descriptiontext = findViewById<TextView>(R.id.JobsDescription)
+//        val skillreq = findViewById<TextView>(R.id.JobsSkills)
         val salary = findViewById<TextView>(R.id.details_salary)
+
+        descriptiontext = findViewById(R.id.JobsDescription)
+        skillreq = findViewById(R.id.JobsSkills)
 
         title.text = intent.getStringExtra("title")
         type.text = intent.getStringExtra("type")
@@ -79,7 +86,11 @@ class JobsDetailsVendor : AppCompatActivity() {
 
         val jid = intent.getStringExtra("jid")
 
+        Log.d("sdcfvgbhnjmk", "onCreate: "+jid)
+
         location.setText("$company.$locat")
+
+
 
 
         recyclerView = findViewById(R.id.applied_candidate_recycler)
@@ -95,14 +106,17 @@ class JobsDetailsVendor : AppCompatActivity() {
 
         val getApplicant = RetrofitBuilder.jobsApis.getApplicant(jid!!)
 
-        getApplicant.enqueue(object : Callback<List<ApplicantDataClass>?> {
-            override fun onResponse(
-                call: Call<List<ApplicantDataClass>?>,
-                response: Response<List<ApplicantDataClass>?>
+        getApplicant.enqueue(object : Callback<JobDetailsData?> { override fun onResponse(call: Call<JobDetailsData?>, response: Response<JobDetailsData?>
             ) {
                 if (response.isSuccessful){
-                    val response = response.body()!!
-                    appliedCandidateAdapter = AppliedCandidateAdapter(applicationContext,response)
+
+                    descriptiontext.text=response.body()?.jobDescription
+                    skillreq.text=response.body()?.skillsRecq
+
+                    Log.d("sucessssss", "onResponse: "+response.body())
+
+
+                    appliedCandidateAdapter = AppliedCandidateAdapter(applicationContext,response.body()!!.jobApplicants)
                     recyclerView.adapter = appliedCandidateAdapter
                     appliedCandidateAdapter.notifyDataSetChanged()
                 }else{
@@ -111,7 +125,9 @@ class JobsDetailsVendor : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<List<ApplicantDataClass>?>, t: Throwable) {
+            override fun onFailure(call: Call<JobDetailsData?>, t: Throwable) {
+
+                Log.d("failure", "onFailure: "+t.message)
                 Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
             }
         })

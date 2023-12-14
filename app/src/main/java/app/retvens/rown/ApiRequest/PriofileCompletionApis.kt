@@ -2,6 +2,7 @@ package app.retvens.rown.ApiRequest
 
 import androidx.room.SkipQueryVerification
 import app.retvens.rown.Dashboard.profileCompletion.ProfileCompletionStatus
+import app.retvens.rown.DataCollections.JobsCollection.HotelsList
 import app.retvens.rown.DataCollections.ProfileCompletion.*
 import app.retvens.rown.DataCollections.UserProfileRequestItem
 import app.retvens.rown.DataCollections.location.CityData
@@ -131,6 +132,12 @@ interface PriofileCompletionApis{
 
     @GET("getdesignation")
     fun getJobTitle():Call<List<GetJobDataClass>>
+
+//
+//    @GET("getCompaniesList")
+//    fun getCompany(
+//        @Query("userId")userId:String
+//    ):Call<List<HotelsList>>
 
     @GET("getCompany")
     fun getCompany():Call<List<CompanyDatacClass>>

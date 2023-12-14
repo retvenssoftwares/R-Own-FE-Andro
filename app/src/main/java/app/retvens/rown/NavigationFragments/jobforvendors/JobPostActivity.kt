@@ -1,7 +1,13 @@
 package app.retvens.rown.NavigationFragments.jobforvendors
 
+import android.app.Dialog
+import android.app.ProgressDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Window
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.FragmentActivity
@@ -9,6 +15,8 @@ import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.JobResponseDataClass
 import app.retvens.rown.DataCollections.JobsCollection.PostJobDataCLass
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
+import app.retvens.rown.NavigationFragments.job.JobPostData
+import app.retvens.rown.NavigationFragments.job.JobPostResponse
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.*
 import app.retvens.rown.databinding.ActivityJobPostBinding
@@ -25,16 +33,17 @@ class JobPostActivity : AppCompatActivity(),
     BottomSheetHotels.OnBottomCompanyClickListener {
 
     lateinit var binding:ActivityJobPostBinding
-
+    private lateinit var progressDialog: Dialog
     lateinit var jobTypeEt : TextInputEditText
     lateinit var postMinSalaryEt : TextInputEditText
     lateinit var postLocationEt : TextInputEditText
     private lateinit var jobTitle:TextInputEditText
+    private lateinit var workplace:TextInputEditText
     private lateinit var company:TextInputEditText
     private lateinit var jobDescription:TextInputEditText
     private lateinit var jobsSkill:TextInputEditText
     private lateinit var designation:TextInputEditText
-    private  var hotelsId:String? = null
+    private lateinit var hotelsId:String
 
     var etType : Int ? = 1
 
@@ -45,6 +54,7 @@ class JobPostActivity : AppCompatActivity(),
 
         //define variables
         jobTitle = findViewById(R.id.post_job_title)
+        workplace = findViewById(R.id.et_post_workplace_type)
         company = findViewById(R.id.postCompaET)
         jobDescription = findViewById(R.id.post_job_description_et)
         jobsSkill = findViewById(R.id.post_job_skills_et)
@@ -84,7 +94,7 @@ class JobPostActivity : AppCompatActivity(),
         company.setOnClickListener {
             val bottomSheet = BottomSheetHotels()
             val fragManager = supportFragmentManager
-            fragManager.let{bottomSheet.show(it, BottomSheetHotels.Company_TAG)}
+            fragManager.let{bottomSheet.show(it,BottomSheetHotels .Company_TAG)}
             bottomSheet.setOnCompanyClickListener(this)
         }
 
@@ -100,6 +110,7 @@ class JobPostActivity : AppCompatActivity(),
 
         post.setOnClickListener {
 
+
             if (designation.length() < 3){
                 binding.postDesignationTitle.error = "Enter Proper details"
             }else if (jobTitle.length() < 3){
@@ -114,6 +125,7 @@ class JobPostActivity : AppCompatActivity(),
                 binding.skillLayout.error = "Enter Proper details"
             }else{
                 postJob()
+
             }
 
         }
@@ -122,39 +134,58 @@ class JobPostActivity : AppCompatActivity(),
 
     private fun postJob() {
 
+        val designation = designation.text.toString()
         val title = jobTitle.text.toString()
-        val company = company.text.toString()
+        val workplacetype = workplace.text.toString()
+//        val company = company.text.toString()
         val description = jobDescription.text.toString()
         val skill = jobsSkill.text.toString()
         val type = jobTypeEt.text.toString()
         val expected = postMinSalaryEt.text.toString()
         val location = postLocationEt.text.toString()
-        val designation = designation.text.toString()
+
+
+        progressDialog = Dialog(this)
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        progressDialog.setContentView(R.layout.progress_dialoge)
+        progressDialog.setCancelable(false)
+        progressDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        progressDialog.show()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
+        Log.d("sdfghjkldfghjkl", "postJob: "+user_id)
 
-        val jobsData = PostJobDataCLass(user_id,hotelsId!!,"1","",title,company,"",type,designation,
-        "",expected,location,description,skill)
+        val jobsData = JobPostData(designation,title,hotelsId,workplacetype,type,expected,location,
+            description,skill)
+        Log.d("kjhgfcxzs", "postJob: "+company)
+        Log.d("kjhgfcxzs", "postJob: "+designation)
+        Log.d("kjhgfcxzs", "postJob: "+location)
+        Log.d("kjhgfcxzs", "postJob: "+type)
+        Log.d("kjhgfcxzs", "postJob: "+hotelsId)
 
         val postJob = RetrofitBuilder.jobsApis.postJob(user_id,jobsData)
 
-       postJob.enqueue(object : Callback<UpdateResponse?> {
-           override fun onResponse(
-               call: Call<UpdateResponse?>,
-               response: Response<UpdateResponse?>
-           ) {
+        postJob.enqueue(object : Callback<JobPostResponse?> {
+           override fun onResponse(call: Call<JobPostResponse?>, response: Response<JobPostResponse?>) {
+
+               progressDialog.dismiss()
                if (response.isSuccessful){
-                   val response = response.body()!!
-                   Toast.makeText(applicationContext,response.message,Toast.LENGTH_SHORT).show()
+                   Log.e("sucessfull", "onResponse: "+response.body())
+                   val res = response.body()!!
+                   Toast.makeText(applicationContext,res.message,Toast.LENGTH_SHORT).show()
+                   finish()
                }else{
-                   Toast.makeText(applicationContext,response.message().toString(),Toast.LENGTH_SHORT).show()
+                   Toast.makeText(applicationContext,""+response.message(),Toast.LENGTH_SHORT).show()
+
                }
            }
 
-           override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+           override fun onFailure(call: Call<JobPostResponse?>, t: Throwable) {
+               Log.e("failuree", "onFailure: "+t.message)
                Toast.makeText(applicationContext,t.message.toString(),Toast.LENGTH_SHORT).show()
+               progressDialog.dismiss()
            }
        })
 
@@ -181,8 +212,9 @@ class JobPostActivity : AppCompatActivity(),
     }
 
     override fun bottomLocationClick(hotelName: String, hotelId: String) {
-        company.setText(hotelName)
+     company.setText(hotelName)
         hotelsId = hotelId
+        Log.d("dfghjkl", "bottomLocationClick: "+hotelsId)
     }
 
 

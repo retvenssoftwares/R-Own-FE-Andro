@@ -13,7 +13,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
 import app.retvens.rown.R
 
-class RecentJobAdapterOwner(val context: Context, var jobsList:List<JobsData>) : RecyclerView.Adapter<RecentJobAdapterOwner.RecentJobViewHolder>() {
+class RecentJobAdapterOwner(val context: Context, var jobsList:List<UserJob>) : RecyclerView.Adapter<RecentJobAdapterOwner.RecentJobViewHolder>() {
 
     class RecentJobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val designation = itemView.findViewById<TextView>(R.id.recent_job_designation)
@@ -39,7 +39,7 @@ class RecentJobAdapterOwner(val context: Context, var jobsList:List<JobsData>) :
         val data = jobsList[position]
 
 
-        holder.designation.text = data.designationType
+        holder.designation.text = data.jobTitle
         holder.location.text = data.jobLocation
         holder.type.text = data.jobType
         holder.title.text = "Remote"
@@ -49,8 +49,9 @@ class RecentJobAdapterOwner(val context: Context, var jobsList:List<JobsData>) :
         holder.saved.visibility = View.GONE
     }
 
+
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<JobsData>) {
+    fun updateData(newItems: List<UserJob>) {
         jobsList = newItems
         notifyDataSetChanged()
     }

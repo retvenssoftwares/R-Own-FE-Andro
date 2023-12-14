@@ -251,7 +251,7 @@ class JobTitleFragment : Fragment(), BackHandler,
         dialogRole.show()
 
         recyclerView = dialogRole.findViewById(R.id.company_recycler)
-         // //recyclerView. //recyclerView.setHasFixedSize(true)
+        // //recyclerView. //recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         searchBar = dialogRole.findViewById(R.id.searchCompany)

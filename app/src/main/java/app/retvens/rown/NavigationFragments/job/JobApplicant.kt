@@ -1,10 +1,10 @@
-package app.retvens.rown.NavigationFragments.job.savedJobs
+package app.retvens.rown.NavigationFragments.job
 
 data class JobApplicant(
     val Full_name: String,
     val Profile_pic: String,
-    val verificationStatus: String,
+    val User_id: String,
     val location: String,
     val normalUserInfo: List<NormalUserInfo>,
-    val userId: String
+    val verificationStatus: String
 )

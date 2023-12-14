@@ -14,7 +14,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsDetailsVendor
 import app.retvens.rown.R
 
-class JobsPostedAdapater(val context: Context, val jobList:List<JobsData>):RecyclerView.Adapter<JobsPostedAdapater.JobsPostedApdater>() {
+class JobsPostedAdapater(val context: Context, val jobList:List<UserJob>):RecyclerView.Adapter<JobsPostedAdapater.JobsPostedApdater>() {
     class JobsPostedApdater(itemView:View):ViewHolder(itemView) {
 
         val designation = itemView.findViewById<TextView>(R.id.view_job_designation)
@@ -38,7 +38,7 @@ class JobsPostedAdapater(val context: Context, val jobList:List<JobsData>):Recyc
         val jobs = jobList[position]
 
 
-        holder.designation.text = jobs.designationType
+        holder.designation.text = jobs.jobTitle
         holder.location.text = jobs.jobLocation
         holder.type.text = jobs.jobType
         holder.title.text = "Remote"
@@ -48,13 +48,13 @@ class JobsPostedAdapater(val context: Context, val jobList:List<JobsData>):Recyc
 
         holder.button.setOnClickListener {
            val intent = Intent(context,JobsDetailsVendor::class.java)
-            intent.putExtra("jid",jobs.jid)
+            intent.putExtra("jid",jobs.jobId)
             intent.putExtra("title",jobs.jobTitle)
-            intent.putExtra("company",jobs.companyName)
+            intent.putExtra("company",jobs.jobCategory)
             intent.putExtra("location",jobs.jobLocation)
             intent.putExtra("type",jobs.jobType)
-            intent.putExtra("description",jobs.jobDescription)
-            intent.putExtra("skills",jobs.skillsRecq)
+            intent.putExtra("description",jobs.jobCategory)
+            intent.putExtra("skills",jobs.jobCategory)
             intent.putExtra("salary",jobs.expectedCTC)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)

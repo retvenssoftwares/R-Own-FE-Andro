@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.exploreForUsers.jobExplore.ExploreJobData
+import app.retvens.rown.NavigationFragments.job.GetJobData
 import app.retvens.rown.NavigationFragments.job.RecentJobAdapterOwner
 import app.retvens.rown.NavigationFragments.job.SuggestedJobAdaperHotelOwner
 import app.retvens.rown.R
@@ -64,19 +65,18 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
 
         val getJob = RetrofitBuilder.jobsApis.getIndividualJobs(userId)
 
-        getJob.enqueue(object : Callback<List<JobsData>?> {
+        getJob.enqueue(object : Callback<GetJobData?> {
             override fun onResponse(
-                call: Call<List<JobsData>?>,
-                response: Response<List<JobsData>?>
+                call: Call<GetJobData?>,
+                response: Response<GetJobData?>
             ) {
                 if (isAdded) {
                     if (response.isSuccessful) {
                         shimmerFrameLayout.stopShimmer()
                         shimmerFrameLayout.visibility = View.GONE
 
-                        val response = response.body()!!
-                        if (response.isNotEmpty()) {
-                            exploreJobAdapter = ProfileJobAdapter(requireContext(), response)
+                        if (response.isSuccessful) {
+                            exploreJobAdapter = ProfileJobAdapter(requireContext(), response.body()!!.userJobs)
                             exploreJobsRecyclerView.adapter = exploreJobAdapter
                             exploreJobAdapter.notifyDataSetChanged()
                         } else {
@@ -90,7 +90,7 @@ class JobsOnProfileFragment(val userId:String) : Fragment() {
                     }
                 }
             }
-            override fun onFailure(call: Call<List<JobsData>?>, t: Throwable) {
+            override fun onFailure(call: Call<GetJobData?>, t: Throwable) {
                 if (isAdded) {
                     empty.visibility = View.VISIBLE
                     empty.text = "Try Again : Check your internet"

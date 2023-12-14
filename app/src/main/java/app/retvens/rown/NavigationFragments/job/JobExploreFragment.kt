@@ -101,6 +101,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
         val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 
+
         getJob.enqueue(object : Callback<List<GetAllJobsData>?>,
             SuggestedJobAdapter.JobSavedClickListener {
             override fun onResponse(
