@@ -39,10 +39,10 @@ class BottomSheetCTC : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
-            mListener?.bottomCTCClick("Select one -")
-            dismiss()
-        }
+//        view.findViewById<RelativeLayout>(R.id.seleOne).setOnClickListener {
+//            mListener?.bottomCTCClick("Select one -")
+//            dismiss()
+//        }
         view.findViewById<RelativeLayout>(R.id.one_to_three).setOnClickListener {
             mListener?.bottomCTCClick("1-3 Lakhs/p.a")
             dismiss()

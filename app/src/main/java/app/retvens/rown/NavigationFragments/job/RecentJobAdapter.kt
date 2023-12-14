@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
 import app.retvens.rown.DataCollections.JobsCollection.FilterDataClass
+import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.JobData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
@@ -25,7 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : RecyclerView.Adapter<RecentJobAdapter.RecentJobViewHolder>() {
+class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) : RecyclerView.Adapter<RecentJobAdapter.RecentJobViewHolder>() {
 
     class RecentJobViewHolder(itemView: View) : ViewHolder(itemView){
         val designation = itemView.findViewById<TextView>(R.id.recent_job_designation)
@@ -33,7 +34,6 @@ class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : Recy
         val title = itemView.findViewById<TextView>(R.id.jobs_title)
         val type = itemView.findViewById<TextView>(R.id.jobs_type)
         val salary = itemView.findViewById<TextView>(R.id.salary)
-
         val save_recent = itemView.findViewById<ImageView>(R.id.save_recent)
     }
 
@@ -53,40 +53,40 @@ class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : Recy
 
         var operation = "push"
 
-        holder.designation.text = data.designationType
-        holder.location.text = data.companyName
+        holder.designation.text = data.jobTitle
+        holder.location.text = data.jobLocation
         holder.type.text = data.jobType
         holder.title.text = "Remote"
         holder.salary.text = data.expectedCTC
 
         holder.save_recent.setOnClickListener {
             if (operation == "push"){
-                saveJob(data.jid, "push")
+                saveJob(data.jobId, "push")
                 holder.save_recent.setImageResource(R.drawable.svg_saved)
                 operation = "pop"
                 holder.save_recent.setImageResource(R.drawable.vector_saved)
             } else {
-                saveJob(data.jid, "pop")
+                saveJob(data.jobId, "pop")
                 holder.save_recent.setImageResource(R.drawable.svg_jobs_explore)
                 operation = "push"
             }
         }
 
-        holder.itemView.setOnClickListener{
-            val intent = Intent(context,JobDetailsActivity::class.java)
-            intent.putExtra("title",data.jobTitle)
-            intent.putExtra("company",data.companyName)
-            intent.putExtra("location",data.jobLocation)
-            intent.putExtra("type",data.jobType)
-            intent.putExtra("worktype",data.workplaceType)
-            intent.putExtra("description",data.jobDescription)
-            intent.putExtra("skill",data.skillsRecq)
-            intent.putExtra("jobId",data.jid)
-            intent.putExtra("userId",data.user_id)
-            intent.putExtra("applyStatus",data.applyStatus)
-            intent.putExtra("appliedStatus",data.display_status)
-            context.startActivity(intent)
-        }
+//        holder.itemView.setOnClickListener{
+//            val intent = Intent(context,JobDetailsActivity::class.java)
+//            intent.putExtra("title",data.jobTitle)
+//            intent.putExtra("company",data.companyName)
+//            intent.putExtra("location",data.jobLocation)
+//            intent.putExtra("type",data.jobType)
+//            intent.putExtra("worktype",data.workplaceType)
+//            intent.putExtra("description",data.jobDescription)
+//            intent.putExtra("skill",data.skillsRecq)
+//            intent.putExtra("jobId",data.jid)
+//            intent.putExtra("userId",data.user_id)
+//            intent.putExtra("applyStatus",data.applyStatus)
+//            intent.putExtra("appliedStatus",data.display_status)
+//            context.startActivity(intent)
+//        }
 
     }
 
@@ -114,7 +114,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<JobsData>) : Recy
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<JobsData>) {
+    fun updateData(newItems: List<GetAllJobsData>) {
         jobsList = newItems
         notifyDataSetChanged()
     }

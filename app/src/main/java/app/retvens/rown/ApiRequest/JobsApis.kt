@@ -25,6 +25,7 @@ interface JobsApis {
         @Path("userId") userId : String
     ): Call<List<GetAllJobsData>>
 
+
     @GET("job/{userId}")
     fun getIndividualJobs(
         @Path("userId") userId : String

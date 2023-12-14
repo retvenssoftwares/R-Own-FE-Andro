@@ -1,6 +1,9 @@
 package app.retvens.rown.NavigationFragments.job
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -26,6 +30,7 @@ import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobFilter
+import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -122,11 +127,11 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                             suggestedJobAdapter.setJobSavedClickListener(this)
 
 
-//                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
-//                            recentJobRecycler.visibility = View.VISIBLE
-//                            shimmerLayout.visibility = View.GONE
-//                            recentJobRecycler.adapter = recentJobAdapter
-//                            recentJobAdapter.notifyDataSetChanged()
+                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+                            recentJobRecycler.visibility = View.VISIBLE
+                            shimmerLayout.visibility = View.GONE
+                            recentJobRecycler.adapter = recentJobAdapter
+                            recentJobAdapter.notifyDataSetChanged()
 
 
                             searchBar.addTextChangedListener(object : TextWatcher {
