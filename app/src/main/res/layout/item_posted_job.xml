@@ -37,7 +37,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:textFontWeight="700"
         android:textColor="@color/white"
-        android:textSize="18dp"
+        android:textSize="@dimen/_12sdp"
         app:layout_constraintEnd_toStartOf="@id/save_suggested"
         app:layout_constraintTop_toTopOf="@id/profile_suggested_job"
         app:layout_constraintStart_toEndOf="@id/profile_suggested_job"/>
@@ -54,7 +54,7 @@
         android:layout_marginTop="3dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/grey_10"
-        android:textSize="14dp"
+        android:textSize="@dimen/_10sdp"
         app:layout_constraintEnd_toStartOf="@id/save_suggested"
         app:layout_constraintTop_toBottomOf="@id/suggested_job_title"
         app:layout_constraintStart_toEndOf="@id/profile_suggested_job"/>
@@ -147,7 +147,7 @@
         android:textAlignment="center"
         android:text="10-12K"
         android:fontFamily="@font/montserrat_semibold"
-        android:textSize="18dp"
+        android:textSize="@dimen/_12sdp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/linear_layout_suggested_jobs"
         app:layout_constraintBottom_toBottomOf="parent"

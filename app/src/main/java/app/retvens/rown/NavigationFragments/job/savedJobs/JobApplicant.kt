@@ -6,5 +6,5 @@ data class JobApplicant(
     val verificationStatus: String,
     val location: String,
     val normalUserInfo: List<NormalUserInfo>,
-    val userId: String
+    val User_id: String
 )

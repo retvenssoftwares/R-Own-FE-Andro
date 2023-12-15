@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -39,6 +40,7 @@ class JobsDetailsVendor : AppCompatActivity() {
 
         val description = findViewById<TextView>(R.id.textdes)
         val skill = findViewById<TextView>(R.id.textskill)
+        val jobs_back = findViewById<ImageView>(R.id.jobs_back)
 
         val view1 = findViewById<RelativeLayout>(R.id.descriptionView)
         val view2 = findViewById<RelativeLayout>(R.id.skillView)
@@ -53,6 +55,10 @@ class JobsDetailsVendor : AppCompatActivity() {
 
             view1.visibility = View.VISIBLE
             view2.visibility = View.GONE
+        }
+
+        jobs_back.setOnClickListener{
+            onBackPressed()
         }
 
         cardSkill.setOnClickListener {
@@ -119,7 +125,7 @@ class JobsDetailsVendor : AppCompatActivity() {
                             Log.d("sucessssss", "onResponse: " + response.body())
 
                             appliedCandidateAdapter =
-                                AppliedCandidateAdapter(applicationContext, response.body()!!.jobApplicants)
+                                AppliedCandidateAdapter(applicationContext, response.body()!!.jobApplicants,response.body()!!.jobId)
                             recyclerView.adapter = appliedCandidateAdapter
                             appliedCandidateAdapter.notifyDataSetChanged()
                         }

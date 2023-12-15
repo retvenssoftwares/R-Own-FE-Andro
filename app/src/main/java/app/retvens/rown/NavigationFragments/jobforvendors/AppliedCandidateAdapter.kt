@@ -20,7 +20,7 @@ import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class AppliedCandidateAdapter(val context:Context, var applicantData:List<JobApplicant>):RecyclerView.Adapter<AppliedCandidateAdapter.AppliedCandidateAdapter>() {
+class AppliedCandidateAdapter(val context:Context, var applicantData:List<JobApplicant>,var Id:String):RecyclerView.Adapter<AppliedCandidateAdapter.AppliedCandidateAdapter>() {
 
     class AppliedCandidateAdapter(itemview:View):ViewHolder(itemview) {
 
@@ -47,20 +47,31 @@ class AppliedCandidateAdapter(val context:Context, var applicantData:List<JobApp
         Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.Full_name)
         Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.location)
         Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.normalUserInfo)
-        Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.normalUserInfo)
+        Log.d("dfghjkldfghjk", "onBindViewHolder: "+data.User_id)
+        Log.d("dfghjkldfghjk", "onBindViewHolder: "+Id)
 
         holder.city.text = data.location
-         holder.role.text = data.normalUserInfo[position].jobTitle
-         Glide.with(context).load(data.Profile_pic).into(holder.profile)
+        if (data.normalUserInfo.isNotEmpty()) {
+            val jobTitle = data.normalUserInfo[0].jobTitle
+            holder.role.text = jobTitle
+        } else {
+            // Handle the case when the list is empty
+            holder.role.text = "No job title available"
+        }
+        Glide.with(context)
+            .load(data.Profile_pic)
+            .placeholder(R.drawable.svg_user)
+            .into(holder.profile)
 
         holder.button.setOnClickListener {
             val intent = Intent(context,CandidateDetailsActivity::class.java)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra("name",data.Full_name)
             intent.putExtra("city",data.location)
-            intent.putExtra("role",data.Full_name)
+            intent.putExtra("role",data.normalUserInfo[0].jobTitle)
             intent.putExtra("profile",data.Profile_pic)
-            intent.putExtra("applicationId",data.userId)
+            intent.putExtra("applicationId",Id)
+            intent.putExtra("UserId",data.User_id)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
     }

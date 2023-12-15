@@ -36,6 +36,7 @@ class JobsPostedByUser : AppCompatActivity() {
          //recyclerView. //recyclerView.setHasFixedSize(true)
 
         back.setOnClickListener {
+            onBackPressed()
 
         }
 
@@ -50,19 +51,32 @@ class JobsPostedByUser : AppCompatActivity() {
 
         getJob.enqueue(object : Callback<GetJobData?> {
             override fun onResponse(call: Call<GetJobData?>, response: Response<GetJobData?>) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    jobsPostedAdapater = JobsPostedAdapater(applicationContext, response.userJobs)
-                    recyclerView.adapter = jobsPostedAdapater
-                    jobsPostedAdapater.notifyDataSetChanged()
-                }else{
-                    Toast.makeText(applicationContext,response.code().toString(), Toast.LENGTH_SHORT).show()
+                try {
+                    if (response.isSuccessful) {
+                        val responseData = response.body()!!
+                        jobsPostedAdapater = JobsPostedAdapater(applicationContext, responseData.userJobs)
+                        recyclerView.adapter = jobsPostedAdapater
+                        jobsPostedAdapater.notifyDataSetChanged()
+                    } else {
+                        Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: Exception) {
+                    // Handle exceptions that may occur during response processing
+                    Toast.makeText(applicationContext, "Error processing response", Toast.LENGTH_SHORT).show()
+                    e.printStackTrace()
                 }
             }
 
             override fun onFailure(call: Call<GetJobData?>, t: Throwable) {
-                Toast.makeText(applicationContext,t.message.toString(), Toast.LENGTH_SHORT).show()
+                try {
+                    Toast.makeText(applicationContext, t.message.toString(), Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    // Handle exceptions that may occur during failure handling
+                    Toast.makeText(applicationContext, "Error handling failure", Toast.LENGTH_SHORT).show()
+                    e.printStackTrace()
+                }
             }
         })
+
     }
 }

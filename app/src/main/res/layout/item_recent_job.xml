@@ -27,7 +27,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:textFontWeight="700"
         android:textColor="@color/black"
-        android:textSize="18dp"
+        android:textSize="@dimen/_13sdp"
         app:layout_constraintEnd_toStartOf="@id/save_recent"
         app:layout_constraintTop_toTopOf="@id/profile_recent_job"
         app:layout_constraintStart_toEndOf="@id/profile_recent_job"/>
@@ -41,7 +41,7 @@
         android:layout_marginTop="3dp"
         android:fontFamily="@font/montserrat_regular"
         android:textColor="@color/grey_60"
-        android:textSize="14dp"
+        android:textSize="@dimen/_10sdp"
         app:layout_constraintEnd_toStartOf="@id/save_recent"
         app:layout_constraintTop_toBottomOf="@id/recent_job_designation"
         app:layout_constraintStart_toEndOf="@id/profile_recent_job"/>

@@ -5,6 +5,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.saveId.SaveEvent
 import app.retvens.rown.NavigationFragments.home.DataItem
 import app.retvens.rown.NavigationFragments.job.GetJobData
+import app.retvens.rown.NavigationFragments.job.JobCantidateDetailsData
 import app.retvens.rown.NavigationFragments.job.JobPostData
 import app.retvens.rown.NavigationFragments.job.JobPostResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.Job
@@ -79,10 +80,16 @@ interface JobsApis {
         @Path("jId") jId:String
     ):Call<JobDetailsData>
 
-    @GET("getcandidate/{appId}")
+//    @GET("getcandidate/{appId}")
+//    fun getCandidate(
+//        @Path("appId") appId:String
+//    ):Call<List<CandidateDataClass>>
+
+    @GET("getcandidate")
     fun getCandidate(
-        @Path("appId") appId:String
-    ):Call<List<CandidateDataClass>>
+        @Query("user_id")user_id:String,
+        @Query("jobId")jobId:String,
+    ):Call<JobCantidateDetailsData>
 
     @PATCH("updatejob/{appId}")
     fun updateStatus(
