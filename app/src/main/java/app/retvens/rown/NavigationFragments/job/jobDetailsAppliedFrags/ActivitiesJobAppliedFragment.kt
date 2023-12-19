@@ -15,7 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ActivitiesJobAppliedFragment : Fragment() {
+class ActivitiesJobAppliedFragment() : Fragment() {
 
     private lateinit var currentStaus:ImageView
     private lateinit var finalStatus:ImageView
@@ -30,53 +30,53 @@ class ActivitiesJobAppliedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val applied = view.findViewById<ImageView>(R.id.appliedjob)
-        val viewed = view.findViewById<ImageView>(R.id.viewResume)
-        currentStaus = view.findViewById<ImageView>(R.id.currentStatus)
-        finalStatus = view.findViewById<ImageView>(R.id.finalStatus)
-
-        val status = arguments?.getString("AppID")
-
-
-        getStatus(status)
-
-    }
-
-    private fun getStatus(status: String?) {
-
-        val getStatus = RetrofitBuilder.jobsApis.getCandidate(status!!)
-
-        getStatus.enqueue(object : Callback<List<CandidateDataClass>?> {
-            override fun onResponse(
-                call: Call<List<CandidateDataClass>?>,
-                response: Response<List<CandidateDataClass>?>
-            ) {
-                if (response.isSuccessful){
-                    val response = response.body()!!
-                    val status = response.get(0).status
-                    if (status == "On Hold"){
-                        currentStaus.setImageResource(R.drawable.svg_tick)
-                    }else if (status == "Scheduled"){
-                        currentStaus.setImageResource(R.drawable.svg_tick)
-                    }else if (status == "Criteria Doesn’t Match") {
-                        currentStaus.setImageResource(R.drawable.svg_tick)
-                    }else if (status == "Hired"){
-                        currentStaus.setImageResource(R.drawable.svg_tick)
-                        finalStatus.setImageResource(R.drawable.svg_tick)
-                    }else if (status == "Rejected"){
-                        currentStaus.setImageResource(R.drawable.svg_tick)
-                        finalStatus.setImageResource(R.drawable.svg_tick)
-                    }else if (status == "Promoted to further round"){
-                        currentStaus.setImageResource(R.drawable.svg_tick)
-                        finalStatus.setImageResource(R.drawable.svg_tick)
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<List<CandidateDataClass>?>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-        })
+//        val applied = view.findViewById<ImageView>(R.id.appliedjob)
+//        val viewed = view.findViewById<ImageView>(R.id.viewResume)
+//        currentStaus = view.findViewById<ImageView>(R.id.currentStatus)
+//        finalStatus = view.findViewById<ImageView>(R.id.finalStatus)
+//
+//        val status = arguments?.getString("AppID")
+//
+//
+//        getStatus(status)
 
     }
+
+//    private fun getStatus(status: String?) {
+//
+//        val getStatus = RetrofitBuilder.jobsApis.getCandidate(status!!)
+//
+//        getStatus.enqueue(object : Callback<List<CandidateDataClass>?> {
+//            override fun onResponse(
+//                call: Call<List<CandidateDataClass>?>,
+//                response: Response<List<CandidateDataClass>?>
+//            ) {
+//                if (response.isSuccessful){
+//                    val response = response.body()!!
+//                    val status = response.get(0).status
+//                    if (status == "On Hold"){
+//                        currentStaus.setImageResource(R.drawable.svg_tick)
+//                    }else if (status == "Scheduled"){
+//                        currentStaus.setImageResource(R.drawable.svg_tick)
+//                    }else if (status == "Criteria Doesn’t Match") {
+//                        currentStaus.setImageResource(R.drawable.svg_tick)
+//                    }else if (status == "Hired"){
+//                        currentStaus.setImageResource(R.drawable.svg_tick)
+//                        finalStatus.setImageResource(R.drawable.svg_tick)
+//                    }else if (status == "Rejected"){
+//                        currentStaus.setImageResource(R.drawable.svg_tick)
+//                        finalStatus.setImageResource(R.drawable.svg_tick)
+//                    }else if (status == "Promoted to further round"){
+//                        currentStaus.setImageResource(R.drawable.svg_tick)
+//                        finalStatus.setImageResource(R.drawable.svg_tick)
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<CandidateDataClass>?>, t: Throwable) {
+//
+//            }
+//        })
+//
+//    }
 }

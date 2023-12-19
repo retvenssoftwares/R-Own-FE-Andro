@@ -197,7 +197,7 @@ class JobDetailsActivity : AppCompatActivity() {
     private fun getJobDetail(){
 
         val jobId=intent.getStringExtra("jobID").toString()
-        val userId=intent.getStringExtra("userId").toString()
+        val userId=intent.getStringExtra("ownerUserId").toString()
 
         Log.d("ooooouserId", "getJobDetail: "+userId)
 
@@ -218,17 +218,21 @@ class JobDetailsActivity : AppCompatActivity() {
                         binding.locationJobDetails.setText(response.jobLocation)
                         binding.jobtype.setText(response.jobType)
 
-                        Glide.with(applicationContext).load(response.companyImage)
+                        Glide.with(applicationContext).load(response.companyImage).placeholder(R.drawable.png_blog)
                             .into(binding.profileJobsDetails)
 
                         val jobStatus=response.status
 
-                        Log.d("ooooo", "onResponse: "+jobStatus)
+                        description = response.jobDescription
+                        skills = response.skillsRecq
+//                        companyDertails = response.companyDetails
+                        companyWeb = response.websiteLink
+                        peopleName=response.people.Full_name
+                        peopleRole=response.people.Role
+                        peopleProfile=response.people.Profile_pic
+
 
                         if (fragmentPositon=="1"){
-
-                            description = response.jobDescription
-                            skills = response.skillsRecq
 
                             val fragment: Fragment = DescriptionFragment(description,skills)
                             fragmentReplace(fragment)
@@ -237,18 +241,11 @@ class JobDetailsActivity : AppCompatActivity() {
                         }
                         else if (fragmentPositon=="2")
                         {
-//                            companyDertails=response.companyDetails
-                            companyWeb=response.websiteLink
-                            skills = response.skillsRecq
                             val fragment:Fragment=CompanyDetailsFragment(companyDertails,skills)
                             fragmentReplace(fragment)
 
                         }
                         else if (fragmentPositon=="3"){
-
-                            peopleName=response.people.full_name
-                            peopleRole=response.people.role
-                            peopleProfile=response.people.profile_pic
 
                             val fragment:Fragment=ActivitiesFragment(peopleName,peopleRole,peopleProfile)
                             fragmentReplace(fragment)
@@ -261,7 +258,6 @@ class JobDetailsActivity : AppCompatActivity() {
 //                            binding.appliedText.isClickable=true
 //
 //                        }
-
                     }
                 }
                 else{
@@ -293,7 +289,7 @@ class JobDetailsActivity : AppCompatActivity() {
 
         val experience = experience.text.toString()+" Year"
         val intro = intro.text.toString()
-        val jobId = intent.getStringExtra("jobId").toString()
+        val jobId = intent.getStringExtra("jobID").toString()
 
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
