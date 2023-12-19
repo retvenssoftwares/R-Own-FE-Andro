@@ -293,8 +293,7 @@ class JobDetailsActivity : AppCompatActivity() {
 
         val experience = experience.text.toString()+" Year"
         val intro = intro.text.toString()
-        val jobId = intent.getStringExtra("jobId").toString()
-
+        val jobId = intent.getStringExtra("jobID").toString()
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
