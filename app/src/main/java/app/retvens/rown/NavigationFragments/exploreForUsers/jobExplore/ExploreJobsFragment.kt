@@ -63,6 +63,8 @@ class ExploreJobsFragment : Fragment() {
         exploreJobAdapter = ExploreJobAdapter(jobList, requireContext())
         exploreJobsRecyclerView.adapter = exploreJobAdapter
 
+
+
         exploreJobsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -76,7 +78,7 @@ class ExploreJobsFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
 
                 if (dy > 0){
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager 
                     val currentItem = layoutManager.childCount
                     val totalItem = layoutManager.itemCount
                     val  scrollOutItems = layoutManager.findFirstVisibleItemPosition()
@@ -86,8 +88,6 @@ class ExploreJobsFragment : Fragment() {
                         isLoading = false
                         currentPage++
                         getData()
-
-
                     }
                 }
 
@@ -103,11 +103,11 @@ class ExploreJobsFragment : Fragment() {
     private fun getData() {
         val handler = Handler()
 
-        progress.setVisibility(View.VISIBLE);
+        progress.visibility = View.VISIBLE;
 
         handler.postDelayed({
             getExploreJob()
-            progress.setVisibility(View.GONE);
+            progress.visibility = View.GONE;
         },
             3000)
     }
@@ -166,7 +166,7 @@ class ExploreJobsFragment : Fragment() {
                                 })
                             }
                         } else {
-                            empty.text = "You did'nt post a job yet"
+                            empty.text = "You didn't post a job yet"
                             empty.visibility = View.VISIBLE
                         }
                     } else {

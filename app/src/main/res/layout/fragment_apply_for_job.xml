@@ -30,11 +30,32 @@
             android:background="@drawable/searchboxusers"
             android:backgroundTint="@color/grey_5"/>
 
+        <TextView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Empty Data"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textAlignment="center"
+            android:fontFamily="@font/montserrat_semibold"
+            android:layout_marginTop="40dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/applied_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_applied_job"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:progressTint="@color/green_own"
+            android:visibility="gone"
+            />
 
 
         <com.facebook.shimmer.ShimmerFrameLayout
@@ -59,6 +80,7 @@
             </LinearLayout>
 
         </com.facebook.shimmer.ShimmerFrameLayout>
+
 
 
     </LinearLayout>
