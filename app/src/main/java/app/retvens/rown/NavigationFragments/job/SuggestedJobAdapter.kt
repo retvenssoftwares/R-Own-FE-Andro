@@ -108,7 +108,9 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
 //            holder.text.text = "Applied"
 //        }
 
+
         holder.itemView.setOnClickListener{
+            Log.e("jobId",jobs.jobId)
             val intent= Intent (context,JobDetailsActivity::class.java)
             intent.putExtra("jobID",jobs.jobId)
             intent.putExtra("userId",jobs.user_id)

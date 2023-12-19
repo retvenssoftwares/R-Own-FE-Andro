@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -43,6 +45,7 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
         val button = itemView.findViewById<CardView>(R.id.apply_btn)
         val text = itemView.findViewById<TextView>(R.id.buttontext)
         val jobSaved = itemView.findViewById<ImageView>(R.id.save_suggested)
+        val color = itemView.findViewById<ConstraintLayout>(R.id.view_all_suggested_items_cLayout)
 
     }
 
@@ -63,10 +66,27 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
 
         var operation = "push"
 
+        val backgroundColor = if (position % 2 == 0) {
+            ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_black)
+
+        } else {
+            ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_yellow)
+        }
+
+        holder.color.setBackgroundColor(backgroundColor)
+
             holder.position.text = jobs.jobTitle
-            holder.location.text = jobs.jobLocation
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
+
+        if (jobs.companyName.isNotEmpty() && jobs.jobLocation.isNotEmpty()){
+            holder.location.text = "${jobs.companyName} • ${jobs.jobLocation}"
+        }else{
+            if (jobs.jobLocation.isNotEmpty())
+                holder.location.text = jobs.jobLocation
+            else
+                holder.location.text = jobs.companyName
+        }
 
 //        holder.jobSaved.setOnClickListener {
 //            jobSavedClickListener?.onJobSavedClick(jobs)
@@ -84,6 +104,14 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
                 holder.jobSaved.setImageResource(R.drawable.svg_jobs_explore)
                 operation = "push"
             }
+        }
+
+        holder.itemView.setOnClickListener{
+            val intent= Intent (context,JobDetailsActivity::class.java)
+            intent.putExtra("jobID",jobs.jobId)
+            intent.putExtra("userId",jobs.user_id)
+//            intent.putExtra("companyImageUri",jobs.companyImage)
+            context.startActivity(intent)
         }
 
 
