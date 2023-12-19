@@ -124,7 +124,7 @@ class JobsForHoteliers : Fragment() {
                 val transaction: FragmentTransaction = childFragmentManager.beginTransaction()
                 transaction.replace(R.id.child_jobs_fragments_container, childFragment).commit()
             }
-            refresh.isRefreshing = false
+           refresh.isRefreshing = false
         }
 
 

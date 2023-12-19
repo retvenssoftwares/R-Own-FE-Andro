@@ -25,6 +25,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.job.*
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobFilter
+import app.retvens.rown.utils.role
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +38,9 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 
     lateinit var shimmerLayout: LinearLayout
     lateinit var nothing :ImageView
+    lateinit var filter :ImageView
     lateinit var relative_jobs :RelativeLayout
+
 
 
     override fun onCreateView(
@@ -54,9 +57,14 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
         val viewAll = view.findViewById<TextView>(R.id.view_all_recent)
         searchBar = view.findViewById(R.id.jobs_search_hoteliers)
         nothing = view.findViewById<ImageView>(R.id.nothing)
+        filter = view.findViewById<ImageView>(R.id.filter)
 
         shimmerLayout = view.findViewById(R.id.shimmer_layout_tasks)
         relative_jobs = view.findViewById(R.id.relative_jobs)
+
+
+
+
 
         viewAll.setOnClickListener {
             startActivity(Intent(requireContext(),JobsPostedByUser::class.java))
@@ -66,12 +74,23 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
         suggestedRecycler.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         //suggestedRecycler. //recyclerView.setHasFixedSize(true)
 
-        view.findViewById<ImageView>(R.id.filter).setOnClickListener {
+        filter.setOnClickListener {
             val bottomSheet = BottomSheetJobFilter()
             val fragManager = (activity as FragmentActivity).supportFragmentManager
             fragManager.let{bottomSheet.show(it, BottomSheetJobFilter.Job_TAG)}
             bottomSheet.setOnJobClickListener(this)
         }
+
+        if ( role == "Hotel Owner") {
+
+            filter.visibility = View.GONE
+
+        }
+        else{
+
+            filter.visibility = View.VISIBLE
+        }
+
 
         recentJobRecycler = view.findViewById(R.id.recent_job_recycler_hotelier)
         recentJobRecycler.layoutManager = LinearLayoutManager(context)
@@ -89,7 +108,6 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 
         getJob.enqueue(object : Callback<GetJobData?> {
             override fun onResponse(call: Call<GetJobData?>, response: Response<GetJobData?>) {
-
 
 
                 if (response.code()==200 && isAdded){

@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.job
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -14,7 +15,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.NavigationFragments.jobforvendors.JobsDetailsVendor
 import app.retvens.rown.R
 
-class JobsPostedAdapater(val context: Context, val jobList:List<UserJob>):RecyclerView.Adapter<JobsPostedAdapater.JobsPostedApdater>() {
+class JobsPostedAdapater(val context: Context, var jobList:List<UserJob>):RecyclerView.Adapter<JobsPostedAdapater.JobsPostedApdater>() {
     class JobsPostedApdater(itemView:View):ViewHolder(itemView) {
 
         val designation = itemView.findViewById<TextView>(R.id.view_job_designation)
@@ -64,5 +65,11 @@ class JobsPostedAdapater(val context: Context, val jobList:List<UserJob>):Recycl
 
     override fun getItemCount(): Int {
         return jobList.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<UserJob>) {
+        jobList = newItems
+        notifyDataSetChanged()
     }
 }

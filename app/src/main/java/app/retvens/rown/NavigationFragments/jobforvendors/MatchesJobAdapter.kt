@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.jobforvendors
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class MatchesJobAdapter(val context: Context, val requestJob:List<GetRequestedJobDara>) : RecyclerView.Adapter<MatchesJobAdapter.MatchesViewHolder>() {
+class MatchesJobAdapter(val context: Context, var requestJob:List<GetRequestedJobDara>) : RecyclerView.Adapter<MatchesJobAdapter.MatchesViewHolder>() {
 
     class MatchesViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.employee_name_explore)
@@ -43,16 +44,24 @@ class MatchesJobAdapter(val context: Context, val requestJob:List<GetRequestedJo
 
         val data = requestJob[position]
         holder.name.text = data.Full_name
-//        holder.role.text = data.jobTitle.get(0)
+       holder.role.text = data.jobTitle
         holder.location.text = data.Location
-        Glide.with(context).load(data.profile_pic).into(holder.profile)
+        Glide.with(context)
+            .load(data.profile_pic)
+            .placeholder(R.drawable.svg_user)
+            .into(holder.profile)
 
         holder.view.setOnClickListener {
             val intent = Intent(context, UserProfileActivity::class.java)
-            intent.putExtra("userId",data.userID)
+            intent.putExtra("userId",data.userId)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent)
         }
 
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<GetRequestedJobDara>) {
+        requestJob = newItems
+        notifyDataSetChanged()
     }
 }

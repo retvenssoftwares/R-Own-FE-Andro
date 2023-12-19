@@ -48,8 +48,8 @@ import com.google.firebase.auth.FirebaseAuth
 import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLanguagelickListener{
-    lateinit var binding: ActivityLoginBinding
 
+    lateinit var binding: ActivityLoginBinding
 
     private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
     val REQUEST_CODE = 102
@@ -232,7 +232,7 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
                 storedVerificationId = verificationId
                 resendToken = token
                 phoneNum = binding.editPhone.text.toString()
-//                Toast.makeText(applicationContext,"Otp will be send to Enter Mobile Number",Toast.LENGTH_SHORT).show()
+//              Toast.makeText(applicationContext,"Otp will be send to Enter Mobile Number",Toast.LENGTH_SHORT).show()
                 var intent = Intent(applicationContext,OtpVerification::class.java)
                 intent.putExtra("storedVerificationId",storedVerificationId)
                 intent.putExtra("phone",phone)

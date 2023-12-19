@@ -31,7 +31,7 @@ class SharedPreferenceManagerAdmin private constructor(private val context : Con
 
         editor.putString("access_token", user.address)
         editor.putString("message", user.token)
-//        editor.putBoolean("success", user.success)
+//      editor.putBoolean("success", user.success)
         editor.putString("token_type", user.uid)
         editor.putInt("__v", user.__v)
         editor.apply()
@@ -55,6 +55,4 @@ class SharedPreferenceManagerAdmin private constructor(private val context : Con
             return mInstance as SharedPreferenceManagerAdmin
         }
     }
-
-
-}
+ }

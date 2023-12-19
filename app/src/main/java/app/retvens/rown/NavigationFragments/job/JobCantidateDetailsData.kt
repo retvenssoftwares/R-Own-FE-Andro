@@ -14,5 +14,6 @@ data class JobCantidateDetailsData(
     val previousExperience: List<PreviousExperience>,
     val resume: String,
     val applicationId:String,
+    val status:String,
     val self_introduction: String
 )

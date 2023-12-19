@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.CompanyDatacClass
+import app.retvens.rown.NavigationFragments.jobforvendors.JobsDetailsVendor
 import app.retvens.rown.R
 
 class SuggestedJobAdaperHotelOwner(val context: Context, var jobList:List<UserJob>) : RecyclerView.Adapter<SuggestedJobAdaperHotelOwner.SuggestedJobViewHolder>() {
@@ -48,9 +49,7 @@ class SuggestedJobAdaperHotelOwner(val context: Context, var jobList:List<UserJo
 
         } else {
             ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_yellow)
-
-
-        }
+         }
 
         holder.color.setBackgroundColor(backgroundColor)
 
@@ -62,8 +61,20 @@ class SuggestedJobAdaperHotelOwner(val context: Context, var jobList:List<UserJo
 
         holder.salary.text = jobs.expectedCTC
 
-    }
-
+        holder.color.setOnClickListener {
+            val intent = Intent(context, JobsDetailsVendor::class.java)
+            intent.putExtra("jid",jobs.jobId)
+            intent.putExtra("title",jobs.jobTitle)
+            intent.putExtra("company",jobs.jobCategory)
+            intent.putExtra("location",jobs.jobLocation)
+            intent.putExtra("type",jobs.jobType)
+            intent.putExtra("description",jobs.jobCategory)
+            intent.putExtra("skills",jobs.jobCategory)
+            intent.putExtra("salary",jobs.expectedCTC)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
+      }
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: List<UserJob>) {
         jobList = newItems

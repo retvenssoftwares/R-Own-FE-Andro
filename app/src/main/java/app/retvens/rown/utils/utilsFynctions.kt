@@ -61,7 +61,7 @@ var serverCode = 0
 var isBS:Boolean = true
 
 fun dateFormat(date : String) : String {
-    // Note, MM is months, not mm
+// Note, MM is months, not mm
 //    val outputFormat: DateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 //    val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
 //

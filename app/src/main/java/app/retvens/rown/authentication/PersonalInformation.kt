@@ -190,6 +190,7 @@ class PersonalInformation : AppCompatActivity() {
                         val name = response.body()?.Full_name
                         phone = response.body()!!.Phone
                         role = response.body()!!.Role
+
                         profileCompletionStatus = response.body()!!.profileCompletionStatus
                         saveFullName(applicationContext, name.toString())
                         saveProfileImage(applicationContext, "$image")

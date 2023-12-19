@@ -1,5 +1,6 @@
 package app.retvens.rown.NavigationFragments.jobforvendors
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -18,7 +19,7 @@ import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
-class PopularFieldsAdapter(val context: Context, val requestData:List<GetRequestedJobDara>) : RecyclerView.Adapter<PopularFieldsAdapter.PopularViewHolder>() {
+class PopularFieldsAdapter(val context: Context, var requestData:List<GetRequestedJobDara>) : RecyclerView.Adapter<PopularFieldsAdapter.PopularViewHolder>() {
 
     class PopularViewHolder(itemView: View) : ViewHolder(itemView){
         val name = itemView.findViewById<TextView>(R.id.employee_name_item_popular)
@@ -53,8 +54,8 @@ class PopularFieldsAdapter(val context: Context, val requestData:List<GetRequest
 
         holder.noticePeriod.text = data.noticePeriod
         holder.ctc.text = data.expectedCTC
-//        holder.title.text = data.jobTitle.get(0)
-//        holder.type.text = data.jobType.get(0)
+        holder.title.text = data.jobTitle
+        holder.type.text = data.jobType
 
         val preflocation = data.preferredLocation
         val prefcity = preflocation.split(",")[0]
@@ -66,13 +67,22 @@ class PopularFieldsAdapter(val context: Context, val requestData:List<GetRequest
 
         holder.location.text = city
 
-        Glide.with(context).load(data.profile_pic).into(holder.profile)
+        Glide.with(context)
+            .load(data.profile_pic)
+            .placeholder(R.drawable.svg_user)
+            .into(holder.profile)
 
         holder.view.setOnClickListener {
             val intent = Intent(context,UserProfileActivity::class.java)
-            intent.putExtra("userId",data.userID)
+            intent.putExtra("userId",data.userId)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent)
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<GetRequestedJobDara>) {
+        requestData = newItems
+        notifyDataSetChanged()
     }
 }

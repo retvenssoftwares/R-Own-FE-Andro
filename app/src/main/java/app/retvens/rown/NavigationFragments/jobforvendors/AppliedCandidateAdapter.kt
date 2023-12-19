@@ -70,6 +70,7 @@ class AppliedCandidateAdapter(val context:Context, var applicantData:List<JobApp
             intent.putExtra("role",data.normalUserInfo[0].jobTitle)
             intent.putExtra("profile",data.Profile_pic)
             intent.putExtra("applicationId",Id)
+            intent.putExtra("status",Id)
             intent.putExtra("UserId",data.User_id)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)

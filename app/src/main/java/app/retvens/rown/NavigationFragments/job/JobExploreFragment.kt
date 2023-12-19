@@ -102,11 +102,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
 
 
-        getJob.enqueue(object : Callback<List<GetAllJobsData>?>,
-            SuggestedJobAdapter.JobSavedClickListener {
-            override fun onResponse(
-                call: Call<List<GetAllJobsData>?>,
-                response: Response<List<GetAllJobsData>?>
+        getJob.enqueue(object : Callback<List<GetAllJobsData>?>, SuggestedJobAdapter.JobSavedClickListener {
+            override fun onResponse(call: Call<List<GetAllJobsData>?>, response: Response<List<GetAllJobsData>?>
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
@@ -239,8 +236,6 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         }catch (e:java.lang.NullPointerException){
 
         }
-
-
 
     }
 

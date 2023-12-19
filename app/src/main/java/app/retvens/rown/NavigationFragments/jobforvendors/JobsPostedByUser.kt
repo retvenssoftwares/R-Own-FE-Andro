@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +27,7 @@ class JobsPostedByUser : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     private lateinit var recyclerView: RecyclerView
     private lateinit var jobsPostedAdapater: JobsPostedAdapater
+    private lateinit var jobs_search_posted: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_jobs_posted_by_user)
@@ -32,6 +36,7 @@ class JobsPostedByUser : AppCompatActivity() {
 
 
         recyclerView = findViewById(R.id.jobPosted_recycler)
+        jobs_search_posted = findViewById(R.id.jobs_search_posted)
         recyclerView.layoutManager = LinearLayoutManager(this)
          //recyclerView. //recyclerView.setHasFixedSize(true)
 
@@ -57,6 +62,32 @@ class JobsPostedByUser : AppCompatActivity() {
                         jobsPostedAdapater = JobsPostedAdapater(applicationContext, responseData.userJobs)
                         recyclerView.adapter = jobsPostedAdapater
                         jobsPostedAdapater.notifyDataSetChanged()
+
+                        jobs_search_posted.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                p0: CharSequence?,
+                                p1: Int,
+                                p2: Int,
+                                p3: Int
+                            ) {
+
+                            }
+
+                            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                                val filterData = response.body()!!.userJobs.filter { item ->
+                                    item.jobTitle.contains(p0.toString(),ignoreCase = true)
+                                }
+
+                                jobsPostedAdapater.updateData(filterData)
+
+
+                            }
+
+                            override fun afterTextChanged(p0: Editable?) {
+
+                            }
+
+                        })
                     } else {
                         Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
                     }

@@ -146,6 +146,7 @@ class CandidateDetailsActivity : AppCompatActivity(),
                         intro.text = response.self_introduction
                         exp.text = response.experience
                         appId=response.applicationId
+                        update_status.text=response.status.toString()
 
 
 
