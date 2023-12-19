@@ -11,18 +11,15 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-
         findViewById<ImageView>(R.id.notifications_backBtn).setOnClickListener{ onBackPressed() }
 
         val myFragment = app.retvens.rown.MessagingModule.UserListFragment()
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container_chat, myFragment)
-            addToBackStack(null)
+         replace(R.id.fragment_container_chat, myFragment)
+         addToBackStack(null)
             commit()
-
         }
-
-    }
+      }
 
     override fun onBackPressed() {
             finish()

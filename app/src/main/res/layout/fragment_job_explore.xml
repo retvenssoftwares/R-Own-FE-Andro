@@ -200,9 +200,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            tools:listitem="@layout/item_suggested_job"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            />
+            tools:listitem="@layout/item_suggested_job" />
 
         <RelativeLayout
             android:layout_width="match_parent"

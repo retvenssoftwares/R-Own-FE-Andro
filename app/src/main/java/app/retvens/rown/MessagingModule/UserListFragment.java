@@ -322,7 +322,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
     private void showConatcts() {
 
-                startActivity(new Intent(requireContext(), MesiboUsers.class));
+     startActivity(new Intent(requireContext(), MesiboUsers.class));
 
     }
 
@@ -1082,7 +1082,7 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
                             }
                             return;
                         }
-                        MessageContactAdapter.this.mHost.mForwardId = 0;
+                           MessageContactAdapter.this.mHost.mForwardId = 0;
                     } else {
                         MesiboUIManager.launchContactActivity(UserListFragment.this.getActivity(), 0, MesiboUserListFragment.MODE_SELECTGROUP, 0, false, false, (Bundle) null, "");
                         UserListFragment.this.getActivity().finish();
@@ -1137,7 +1137,6 @@ public class UserListFragment extends Fragment implements Mesibo.MessageListener
 
                                     return true;
                                 }
-
                                 public void onMenuModeChange(MenuBuilder menu) {
                                 }
                             });

@@ -877,7 +877,7 @@
                         android:background="@drawable/edit_buttons"
                         android:text="Logout"
                         android:textColor="@color/black"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 

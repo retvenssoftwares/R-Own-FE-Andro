@@ -258,6 +258,7 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
         val matcher: Matcher = pattern.matcher(message)
         if (matcher.find()) {
             otp = matcher.group(0).toString()
+            Log.d("sdfghjkl", "getOtpFromMessage: "+otp)
             if (!otp.isEmpty()) {
 
                 otpET1.setText(otp[0].toString())
@@ -279,6 +280,8 @@ open class OtpVerification : AppCompatActivity(), BottomSheetLanguage.OnBottomSh
 
                 val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                     storedVerificationId.toString(), otp
+
+
                 )
                 signInWithPhoneAuthCredential(credential)
 

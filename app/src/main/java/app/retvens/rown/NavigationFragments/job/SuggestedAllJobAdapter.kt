@@ -21,6 +21,7 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,6 +44,7 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
         val button = itemView.findViewById<CardView>(R.id.apply_btn)
         val text = itemView.findViewById<TextView>(R.id.buttontext)
         val jobSaved = itemView.findViewById<ImageView>(R.id.save_suggested)
+        val profile_suggested_job = itemView.findViewById<ImageView>(R.id.profile_suggested_job)
 
     }
 
@@ -62,6 +64,12 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
         val jobs = jobList[position]
 
         var operation = "push"
+
+        Glide.with(context)
+            .load(jobs.companyImage)
+            .placeholder(R.drawable.svg_user) // Set your default image resource here
+            .error(R.drawable.svg_user) // Optional: Set an error image resource
+            .into(holder.profile_suggested_job);
 
             holder.position.text = jobs.jobTitle
             holder.location.text = jobs.jobLocation
@@ -101,9 +109,7 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
 //                context.startActivity(intent)
 //            }
 
-
-
-    }
+       }
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: List<GetAllJobsData>) {
@@ -131,10 +137,10 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                 Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
             }
-        })
-    }
+         })
+      }
 
     fun setJobSavedClickListener(listener: JobSavedClickListener) {
         jobSavedClickListener = listener
     }
-}
+  }

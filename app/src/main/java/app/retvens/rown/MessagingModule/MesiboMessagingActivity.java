@@ -377,7 +377,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
     /* access modifiers changed from: protected */
     public void onDestroy() {
         MesiboMessagingActivity.super.onDestroy();
-    }
+      }
 
     @Override
     public void onBackPressed() {
@@ -594,6 +594,7 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             boolean z;
             boolean z2;
             boolean z3 = false;
+            boolean z4 = false;
             if (MesiboMessagingActivity.this.mFragment == null) {
                 return false;
             }
@@ -617,6 +618,11 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
                 z3 = true;
             }
             findItem3.setVisible(z3);
+            MenuItem findItem4 = menu.findItem(R.id.menu_reply);
+            if ((enabled & 1) > 0) {
+                z4 = true;
+            }
+            findItem4.setVisible(z4);
             return true;
         }
 
@@ -629,9 +635,11 @@ public class MesiboMessagingActivity extends AppCompatActivity implements Mesibo
             }
 //            else if (item.getItemId() == R.id.menu_resend) {
 //                mesiboItemId = 4;
-//            } else if (item.getItemId() == R.id.menu_forward) {
-//                mesiboItemId = 1;
-//            } else if (item.getItemId() == R.id.menu_star) {
+//          }
+            else if (item.getItemId() == R.id.menu_forward) {
+                mesiboItemId = 1;
+            }
+//            else if (item.getItemId() == R.id.menu_star) {
 //                mesiboItemId = 32;
 //            }
             else if (item.getItemId() == R.id.menu_reply) {

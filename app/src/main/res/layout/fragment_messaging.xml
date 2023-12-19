@@ -231,6 +231,7 @@
             android:orientation="vertical"
             android:padding="10dp"
             android:visibility="visible">
+
             <include layout="@layout/reply_layout">
 
             </include>

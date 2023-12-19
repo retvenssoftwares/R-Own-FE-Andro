@@ -112,50 +112,56 @@ class JobPostedChildFragmnet : Fragment(), BottomSheetJobFilter.OnBottomJobClick
 
                 if (response.code()==200 && isAdded){
                     shimmerLayout.visibility = View.GONE
-                    if (response.body() != null) {
+                    if (response.body()?.userJobs != null) {
+
+
                         val suggestedJobAdapter = SuggestedJobAdaperHotelOwner(requireContext(), response.body()!!.userJobs)
-                        suggestedRecycler.adapter = suggestedJobAdapter
-                        suggestedJobAdapter.notifyDataSetChanged()
+                            suggestedRecycler.adapter = suggestedJobAdapter
+                            suggestedJobAdapter.notifyDataSetChanged()
 
                         val recentJobAdapter = RecentJobAdapterOwner(requireContext(), response.body()!!.userJobs)
-                        recentJobRecycler.adapter = recentJobAdapter
-                        recentJobAdapter.notifyDataSetChanged()
+                            recentJobRecycler.adapter = recentJobAdapter
+                            recentJobAdapter.notifyDataSetChanged()
 
-                    searchBar.addTextChangedListener(object :TextWatcher{
-                        override fun beforeTextChanged(
-                            p0: CharSequence?,
-                            p1: Int,
-                            p2: Int,
-                            p3: Int
-                        ) {
+                            searchBar.addTextChangedListener(object : TextWatcher {
+                                override fun beforeTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
+                                }
+                                override fun onTextChanged(
+                                    p0: CharSequence?,
+                                    p1: Int,
+                                    p2: Int,
+                                    p3: Int
+                                ) {
+                                    val filterData = response.body()!!.userJobs.filter { item ->
+                                        item.jobTitle.contains(p0.toString(), ignoreCase = true)
+                                    }
+
+                                    suggestedJobAdapter.updateData(filterData)
+
+                                    val filterData2 = response.body()!!.userJobs.filter { item ->
+                                        item.jobTitle.contains(p0.toString(), ignoreCase = true)
+                                    }
+                                    recentJobAdapter.updateData(filterData2)
+                                }
+
+                                override fun afterTextChanged(p0: Editable?) {
+
+                                }
+
+                            })
+
+
+                        } else {
+                            nothing.visibility = View.VISIBLE
+                            relative_jobs.visibility = View.GONE
 
                         }
 
-                        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                            val filterData = response.body()!!.userJobs.filter { item ->
-                                item.jobTitle.contains(p0.toString(),ignoreCase = true)
-                            }
-
-                            suggestedJobAdapter.updateData(filterData)
-
-                            val filterData2 = response.body()!!.userJobs.filter { item ->
-                                item.jobTitle.contains(p0.toString(),ignoreCase = true)
-                            }
-                            recentJobAdapter.updateData(filterData2)
-                        }
-
-                        override fun afterTextChanged(p0: Editable?) {
-
-                        }
-
-                    })
-
-
-                } else {
-                    nothing.visibility = View.VISIBLE
-                        relative_jobs.visibility = View.GONE
-
-                    }
                 }else{
                     if (isAdded) {
                         shimmerLayout.visibility = View.GONE

@@ -78,7 +78,12 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
 
         holder.color.setBackgroundColor(backgroundColor)
 
-        Glide.with(context).load(jobs.companyImage).into(holder.jobImages)
+        Glide.with(context)
+            .load(jobs.companyImage)
+            .placeholder(R.drawable.svg_user)
+            .error(R.drawable.svg_user)
+            .into(holder.jobImages);
+
 
             holder.position.text = jobs.jobTitle
             holder.location.text = jobs.jobLocation

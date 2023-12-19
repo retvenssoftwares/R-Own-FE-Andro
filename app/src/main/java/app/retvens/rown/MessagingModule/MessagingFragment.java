@@ -220,7 +220,7 @@ public class MessagingFragment extends BaseFragment implements MessageListener, 
     private Handler mScrollHandler = new Handler();
     private long uptime = Mesibo.getTimestamp();
     private boolean mFirstLayout = true;
-//    private MesiboMapScreenshot mMapScreenshot = new MesiboMapScreenshot();
+//  private MesiboMapScreenshot mMapScreenshot = new MesiboMapScreenshot();
     private int mMediaButtonClicked = -1;
     private GoogleApiClient mGoogleApiClient = null;
     private boolean mPlaceInitialized = false;

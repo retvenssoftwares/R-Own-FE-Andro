@@ -35,6 +35,7 @@ class CandidateDetailsActivity : AppCompatActivity(),
     private lateinit var type:TextView
     private lateinit var intro:TextView
     private lateinit var exp:TextView
+    private lateinit var location:TextView
     private lateinit var update_status:TextView
     private lateinit var message:CardView
     private lateinit var jobs_back:ImageView
@@ -49,7 +50,7 @@ class CandidateDetailsActivity : AppCompatActivity(),
         username = findViewById<TextView>(R.id.userName_Candidate)
         update_status = findViewById<TextView>(R.id.update_status)
         val role = findViewById<TextView>(R.id.candidate_role)
-        val location = findViewById<TextView>(R.id.location_candidate)
+       location = findViewById<TextView>(R.id.location_candidate)
         type = findViewById<TextView>(R.id.candidate_jobType)
         intro = findViewById<TextView>(R.id.candidate_intro)
         exp = findViewById<TextView>(R.id.candidate_experience)
@@ -60,7 +61,7 @@ class CandidateDetailsActivity : AppCompatActivity(),
 
         name.text = intent.getStringExtra("name")
         role.text = intent.getStringExtra("role")
-        location.text = "Kanpur"
+
 
         val image = intent.getStringExtra("profile")
 
@@ -147,7 +148,7 @@ class CandidateDetailsActivity : AppCompatActivity(),
                         exp.text = response.experience
                         appId=response.applicationId
                         update_status.text=response.status.toString()
-
+                        location.text = "Kanpur"
 
 
                         Log.d("appppId", "onResponse: "+appId)

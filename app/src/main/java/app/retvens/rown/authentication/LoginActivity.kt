@@ -227,14 +227,14 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             ) {
                 dialog.dismiss()
 
-
-                Log.d("TAG","onCodeSent:$verificationId")
+                Log.d("vvvvvrificationid","onCodeSent:$verificationId")
                 storedVerificationId = verificationId
                 resendToken = token
                 phoneNum = binding.editPhone.text.toString()
 //              Toast.makeText(applicationContext,"Otp will be send to Enter Mobile Number",Toast.LENGTH_SHORT).show()
                 var intent = Intent(applicationContext,OtpVerification::class.java)
                 intent.putExtra("storedVerificationId",storedVerificationId)
+                Log.d("wertyuiop", "onCodeSent: "+storedVerificationId)
                 intent.putExtra("phone",phone)
                 intent.putExtra("phoneNum",phoneNum)
                 startActivity(intent)
@@ -250,7 +250,7 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
                 val countryCode = binding.countryCode.selectedCountryCode
                 val phoneNo = binding.editPhone.text.toString()
                 phone = "+$countryCode$phoneNo"
-//                phoneNumber = "+$countryCode$phoneNo"
+//              phoneNumber = "+$countryCode$phoneNo"
                 showBottomDialog(phone)
             }
         }
@@ -347,7 +347,7 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
             val image = progressDialog.findViewById<ImageView>(R.id.imageview)
             Glide.with(applicationContext).load(R.drawable.animated_logo_transparent).into(image)
             progressDialog.show()
-//            Toast.makeText(this,"Sending..", Toast.LENGTH_SHORT).show()
+//          Toast.makeText(this,"Sending..", Toast.LENGTH_SHORT).show()
             sendVerificationcode(phone)
         }
         dialog.findViewById<CardView>(R.id.card_change_phone).setOnClickListener {
@@ -388,8 +388,8 @@ class LoginActivity : AppCompatActivity() , BottomSheetLanguage.OnBottomSheetLan
                     Log.d("SignIn", "signInWithCredential:failure", task.exception)
                     Toast.makeText(applicationContext,"signInWithGoogle : Failure",Toast.LENGTH_SHORT).show()
                 }
-            }
-    }
+             }
+         }
 
 
     override fun onStart() {

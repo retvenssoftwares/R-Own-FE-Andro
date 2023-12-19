@@ -120,11 +120,11 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                             suggestedJobAdapter.setJobSavedClickListener(this)
 
 
-//                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
-//                            recentJobRecycler.visibility = View.VISIBLE
-//                            shimmerLayout.visibility = View.GONE
-//                            recentJobRecycler.adapter = recentJobAdapter
-//                            recentJobAdapter.notifyDataSetChanged()
+                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+                            recentJobRecycler.visibility = View.VISIBLE
+                            shimmerLayout.visibility = View.GONE
+                            recentJobRecycler.adapter = recentJobAdapter
+                            recentJobAdapter.notifyDataSetChanged()
 
 
                             searchBar.addTextChangedListener(object : TextWatcher {
