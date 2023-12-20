@@ -78,7 +78,7 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
 
         holder.color.setBackgroundColor(backgroundColor)
 
-        Glide.with(context).load(jobs.companyImage).into(holder.jobImages)
+        Glide.with(context).load(jobs.companyImage).placeholder(R.drawable.png_blog).into(holder.jobImages)
 
             holder.position.text = jobs.jobTitle
             holder.location.text = jobs.jobLocation
@@ -114,7 +114,6 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
             val intent= Intent (context,JobDetailsActivity::class.java)
             intent.putExtra("jobID",jobs.jobId)
             intent.putExtra("userId",jobs.user_id)
-//            intent.putExtra("companyImageUri",jobs.companyImage)
             context.startActivity(intent)
         }
 

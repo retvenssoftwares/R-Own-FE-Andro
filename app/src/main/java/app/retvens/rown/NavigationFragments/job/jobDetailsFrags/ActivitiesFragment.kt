@@ -1,19 +1,23 @@
 package app.retvens.rown.NavigationFragments.job.jobDetailsFrags
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import app.retvens.rown.DataCollections.JobsCollection.People
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
 
-class ActivitiesFragment(val employeeNameRes:String, val employeeRoleRes:String, val employeeProfileRes:String) : Fragment() {
+class ActivitiesFragment(
+    context: Context,
+    val employeeNameRes: String,
+    val employeeRoleRes: String,
+    val employeeProfileRes: String
+) : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +37,12 @@ class ActivitiesFragment(val employeeNameRes:String, val employeeRoleRes:String,
         employeeName.text=employeeNameRes
         employee_role.text=employeeRoleRes
 
-        context?.let { Glide.with(it).load(employeeProfileRes).into(employeeProfile) }
+        context?.let {
+            Glide.with(it).load(employeeProfileRes).placeholder(R.drawable.png_blog)
+                .into(employeeProfile)
+        }
+
+    //        context?.let { Glide.with(it).load(employeeProfileRes).into(employeeProfile) }
 
     }
 }

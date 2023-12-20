@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
@@ -188,7 +187,12 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
                         }
                         else if (fragmentPositon=="3"){
 
-                            val fragment:Fragment=ActivitiesFragment(peopleName,peopleRole,peopleProfile)
+                            val fragment:Fragment=ActivitiesFragment(
+                                applicationContext,
+                                peopleName,
+                                peopleRole,
+                                peopleProfile
+                            )
                             fragmentReplace(fragment)
                         }
 //                        if(jobStatus!="Not Applied")

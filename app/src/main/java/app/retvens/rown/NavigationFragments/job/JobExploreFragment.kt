@@ -110,7 +110,6 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-                    Log.d("response",response.toString())
                     try {
 
                         response.forEach { it ->
@@ -123,11 +122,11 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                             suggestedJobAdapter.setJobSavedClickListener(this)
 
 
-//                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
-//                            recentJobRecycler.visibility = View.VISIBLE
-//                            shimmerLayout.visibility = View.GONE
-//                            recentJobRecycler.adapter = recentJobAdapter
-//                            recentJobAdapter.notifyDataSetChanged()
+                            val recentJobAdapter = RecentJobAdapter(requireContext(), response)
+                            recentJobRecycler.visibility = View.VISIBLE
+                            shimmerLayout.visibility = View.GONE
+                            recentJobRecycler.adapter = recentJobAdapter
+                            recentJobAdapter.notifyDataSetChanged()
 
 
                             searchBar.addTextChangedListener(object : TextWatcher {

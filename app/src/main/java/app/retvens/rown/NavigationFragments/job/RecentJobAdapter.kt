@@ -3,6 +3,7 @@ package app.retvens.rown.NavigationFragments.job
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import app.retvens.rown.DataCollections.ProfileCompletion.JobData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,6 +37,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) 
         val type = itemView.findViewById<TextView>(R.id.jobs_type)
         val salary = itemView.findViewById<TextView>(R.id.salary)
         val save_recent = itemView.findViewById<ImageView>(R.id.save_recent)
+        val companyProfile = itemView.findViewById<ImageView>(R.id.profile_recent_job)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentJobViewHolder {
@@ -59,6 +62,8 @@ class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) 
         holder.title.text = "Remote"
         holder.salary.text = data.expectedCTC
 
+        Glide.with(context).load(data.companyImage).placeholder(R.drawable.png_blog).into(holder.companyProfile)
+
         holder.save_recent.setOnClickListener {
             if (operation == "push"){
                 saveJob(data.jobId, "push")
@@ -72,21 +77,12 @@ class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) 
             }
         }
 
-//        holder.itemView.setOnClickListener{
-//            val intent = Intent(context,JobDetailsActivity::class.java)
-//            intent.putExtra("title",data.jobTitle)
-//            intent.putExtra("company",data.companyName)
-//            intent.putExtra("location",data.jobLocation)
-//            intent.putExtra("type",data.jobType)
-//            intent.putExtra("worktype",data.workplaceType)
-//            intent.putExtra("description",data.jobDescription)
-//            intent.putExtra("skill",data.skillsRecq)
-//            intent.putExtra("jobId",data.jid)
-//            intent.putExtra("userId",data.user_id)
-//            intent.putExtra("applyStatus",data.applyStatus)
-//            intent.putExtra("appliedStatus",data.display_status)
-//            context.startActivity(intent)
-//        }
+        holder.itemView.setOnClickListener{
+            val intent= Intent (context,JobDetailsActivity::class.java)
+            intent.putExtra("jobID",data.jobId)
+            intent.putExtra("userId",data.user_id)
+            context.startActivity(intent)
+        }
 
     }
 
