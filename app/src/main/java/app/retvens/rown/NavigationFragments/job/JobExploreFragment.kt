@@ -115,6 +115,8 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                         response.forEach { it ->
 
                             val originalData = response.toList()
+
+                            Log.e("See All Jobs", originalData.toString())
                             val suggestedJobAdapter = SuggestedJobAdapter(requireContext(), response)
                             suggestedRecycler.adapter = suggestedJobAdapter
                             suggestedJobAdapter.notifyDataSetChanged()

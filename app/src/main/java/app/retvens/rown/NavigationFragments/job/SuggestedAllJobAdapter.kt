@@ -79,7 +79,7 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
 
-        if (jobs.companyName.isNotEmpty() && jobs.jobLocation.isNotEmpty()){
+        if (jobs.companyName?.isNotEmpty() == true && jobs.jobLocation.isNotEmpty()){
             holder.location.text = "${jobs.companyName} • ${jobs.jobLocation}"
         }else{
             if (jobs.jobLocation.isNotEmpty())
