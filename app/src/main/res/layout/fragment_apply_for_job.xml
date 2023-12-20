@@ -48,14 +48,6 @@
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_applied_job"/>
 
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:progressTint="@color/green_own"
-            android:visibility="gone"
-            />
 
 
         <com.facebook.shimmer.ShimmerFrameLayout

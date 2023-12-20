@@ -246,9 +246,9 @@ class JobDetailsActivity : AppCompatActivity() {
                         }
                         else if (fragmentPositon=="3"){
 
-                            peopleName=response.people.full_name
-                            peopleRole=response.people.role
-                            peopleProfile=response.people.profile_pic
+                            peopleName=response.people.Full_name
+                            peopleRole=response.people.Role
+                            peopleProfile=response.people.Profile_pic
 
                             val fragment:Fragment=ActivitiesFragment(peopleName,peopleRole,peopleProfile)
                             fragmentReplace(fragment)
