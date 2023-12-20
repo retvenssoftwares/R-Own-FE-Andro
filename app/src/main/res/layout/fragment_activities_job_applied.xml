@@ -12,26 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="25dp">
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="20dp">
+            >
 
             <TextView
+                android:id="@+id/Textview1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Applied for the job"
                 android:textSize="15dp"
                 android:textFontWeight="600"
                 android:fontFamily="@font/montserrat_regular"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:textColor="@color/black"/>
 
             <TextView
@@ -41,18 +41,64 @@
                 android:textSize="12dp"
                 android:textFontWeight="600"
                 android:fontFamily="@font/montserrat_regular"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="22dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/Textview1"
                 android:textColor="@color/grey_60"/>
 
             <ImageView
                 android:id="@+id/appliedjob"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginHorizontal="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
                 android:src="@drawable/svg_tick"/>
+
+            <ImageView
+                android:id="@+id/pointOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/appliedjob"
+                android:layout_alignStart="@+id/appliedjob"
+                android:layout_alignEnd="@+id/appliedjob"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point_s" />
+            <ImageView
+                android:id="@+id/pointTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointOne"
+                android:layout_alignStart="@+id/pointOne"
+                android:layout_alignEnd="@+id/pointOne"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point_s" />
+            <ImageView
+                android:id="@+id/pointThree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointTwo"
+                android:layout_alignStart="@+id/pointTwo"
+                android:layout_alignEnd="@+id/pointTwo"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point_s" />
+            <ImageView
+                android:id="@+id/pointFour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointThree"
+                android:layout_alignStart="@+id/pointThree"
+                android:layout_alignEnd="@+id/pointThree"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point_s" />
+            <ImageView
+                android:id="@+id/pointFive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointFour"
+                android:layout_alignStart="@+id/pointFour"
+                android:layout_alignEnd="@+id/pointFour"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point_s" />
 
         </RelativeLayout>
 
@@ -60,20 +106,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="20dp">
+            >
 
             <TextView
+                android:id="@+id/Textview2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Employer viewed your resume "
                 android:textSize="15dp"
                 android:textFontWeight="600"
                 android:fontFamily="@font/montserrat_regular"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:textColor="@color/black"/>
 
             <TextView
@@ -83,60 +128,149 @@
                 android:textSize="12dp"
                 android:textFontWeight="600"
                 android:fontFamily="@font/montserrat_regular"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="22dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/Textview2"
                 android:textColor="@color/grey_60"/>
 
             <ImageView
                 android:id="@+id/viewResume"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginHorizontal="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/svg_tick"/>
-
+            <ImageView
+                android:id="@+id/pointOneB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/viewResume"
+                android:layout_alignStart="@+id/viewResume"
+                android:layout_alignEnd="@+id/viewResume"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point_s" />
+            <ImageView
+                android:id="@+id/pointTwoB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointOneB"
+                android:layout_alignStart="@+id/pointOneB"
+                android:layout_alignEnd="@+id/pointOneB"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
+            <ImageView
+                android:id="@+id/pointThreeB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointTwoB"
+                android:layout_alignStart="@+id/pointTwoB"
+                android:layout_alignEnd="@+id/pointTwoB"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
+            <ImageView
+                android:id="@+id/pointFourB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointThreeB"
+                android:layout_alignStart="@+id/pointThreeB"
+                android:layout_alignEnd="@+id/pointThreeB"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
+            <ImageView
+                android:id="@+id/pointFiveB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointFourB"
+                android:layout_alignStart="@+id/pointFourB"
+                android:layout_alignEnd="@+id/pointFourB"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
         </RelativeLayout>
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="20dp">
-
+            >
             <TextView
+                android:id="@+id/Textview3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Status "
                 android:textSize="15dp"
                 android:textFontWeight="600"
                 android:fontFamily="@font/montserrat_regular"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:textColor="@color/black"/>
 
             <TextView
+                android:id="@+id/textViewCurrentStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="On hold/scheduled/criteria dosen’t matched "
                 android:textSize="12dp"
                 android:textFontWeight="600"
                 android:fontFamily="@font/montserrat_regular"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="22dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/Textview3"
                 android:textColor="@color/grey_60"/>
 
             <ImageView
                 android:id="@+id/currentStatus"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginHorizontal="12dp"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/rounded_image"/>
+                android:layout_marginHorizontal="5dp"
+                android:src="@drawable/rounded_image" />
+            <ImageView
+                android:id="@+id/pointOneC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/currentStatus"
+                android:layout_alignStart="@+id/currentStatus"
+                android:layout_alignEnd="@+id/currentStatus"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
+            <ImageView
+                android:id="@+id/pointTwoC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointOneC"
+                android:layout_alignStart="@+id/pointOneC"
+                android:layout_alignEnd="@+id/pointOneC"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
+            <ImageView
+                android:id="@+id/pointThreeC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointTwoC"
+                android:layout_alignStart="@+id/pointTwoC"
+                android:layout_alignEnd="@+id/pointTwoC"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
+            <ImageView
+                android:id="@+id/pointFourC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointThreeC"
+                android:layout_alignStart="@+id/pointThreeC"
+                android:layout_alignEnd="@+id/pointThreeC"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
+            <ImageView
+                android:id="@+id/pointFiveC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pointFourC"
+                android:layout_alignStart="@+id/pointFourC"
+                android:layout_alignEnd="@+id/pointFourC"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/svg_point" />
+
 
         </RelativeLayout>
 
@@ -144,39 +278,39 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="20dp">
+            android:layout_marginBottom="20dp"
 
+            >
             <TextView
+                android:id="@+id/Textview4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Final Status "
                 android:textSize="15dp"
                 android:textFontWeight="600"
                 android:fontFamily="@font/montserrat_regular"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:textColor="@color/black"/>
 
             <TextView
+                android:id="@+id/textViewFinalStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hired/Rejected/Further Round"
                 android:textSize="12dp"
                 android:textFontWeight="600"
                 android:fontFamily="@font/montserrat_regular"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="22dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/Textview4"
                 android:textColor="@color/grey_60"/>
 
             <ImageView
                 android:id="@+id/finalStatus"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginHorizontal="12dp"
+                android:layout_marginHorizontal="5dp"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/rounded_image"/>
 

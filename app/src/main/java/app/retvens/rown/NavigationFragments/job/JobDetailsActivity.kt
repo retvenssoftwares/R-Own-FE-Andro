@@ -126,7 +126,7 @@ class JobDetailsActivity : AppCompatActivity() {
 
             fragmentPositon="3"
 
-            val fragment:Fragment=ActivitiesFragment(applicationContext,peopleName,peopleRole,peopleProfile)
+            val fragment:Fragment=ActivitiesFragment(peopleName,peopleRole,peopleProfile)
             fragmentReplace(fragment)
 
         }
@@ -237,7 +237,7 @@ class JobDetailsActivity : AppCompatActivity() {
                         }
                         else if (fragmentPositon=="3"){
 
-                            val fragment:Fragment=ActivitiesFragment(applicationContext,peopleName,peopleRole,peopleProfile)
+                            val fragment:Fragment=ActivitiesFragment(peopleName,peopleRole,peopleProfile)
                             fragmentReplace(fragment)
                         }
 //                        if(jobStatus!="Not Applied")
