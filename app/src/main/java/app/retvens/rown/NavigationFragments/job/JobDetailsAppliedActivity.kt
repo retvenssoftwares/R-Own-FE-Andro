@@ -37,6 +37,7 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
     private  var peopleName:String=""
     private  var peopleRole:String=""
     private  var peopleProfile:String=""
+    private  var userAppliedStatus :String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,8 +116,9 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
             setStyle(binding.activitiesJobCardTextApplied)
 
             fragmentPositon="3"
+            userAppliedStatus= intent.getStringExtra("status").toString()
 
-            val fragment:Fragment= ActivitiesJobAppliedFragment()
+            val fragment:Fragment= ActivitiesJobAppliedFragment(userAppliedStatus)
             fragmentReplace(fragment)
 
 
@@ -133,9 +135,6 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
 
         val jobId=intent.getStringExtra("jobId").toString()
         val userId=intent.getStringExtra("ownerUserId").toString()
-
-        Log.d("oooooOwnerUserId", "getJobDetail: "+userId)
-        Log.d("oooooJobId", "getJobDetail: "+jobId)
 
         val getJobDetail = RetrofitBuilder.jobsApis.getJobDetail(jobId,userId)
 
@@ -187,12 +186,7 @@ class JobDetailsAppliedActivity : AppCompatActivity() {
                         }
                         else if (fragmentPositon=="3"){
 
-                            val fragment:Fragment=ActivitiesFragment(
-                                applicationContext,
-                                peopleName,
-                                peopleRole,
-                                peopleProfile
-                            )
+                            val fragment:Fragment= ActivitiesJobAppliedFragment(userAppliedStatus)
                             fragmentReplace(fragment)
                         }
 //                        if(jobStatus!="Not Applied")

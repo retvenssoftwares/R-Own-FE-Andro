@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide
 
 
 class ActivitiesFragment(
-    context: Context,
     val employeeNameRes: String,
     val employeeRoleRes: String,
     val employeeProfileRes: String
@@ -38,7 +37,7 @@ class ActivitiesFragment(
         employee_role.text=employeeRoleRes
 
         context?.let {
-            Glide.with(it).load(employeeProfileRes).placeholder(R.drawable.png_blog)
+            Glide.with(it).load(employeeProfileRes).placeholder(R.drawable.img)
                 .into(employeeProfile)
         }
 
