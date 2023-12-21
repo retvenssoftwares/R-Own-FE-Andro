@@ -59,21 +59,23 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
         return jobList.size
     }
 
-    @SuppressLint("SuspiciousIndentation")
+    @SuppressLint("SuspiciousIndentation", "ResourceAsColor")
     override fun onBindViewHolder(holder: SuggestedJobViewHolder, position: Int) {
 
         val jobs = jobList[position]
 
         var operation = "push"
-
-        val backgroundColor = if (position % 2 == 0) {
-            ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_black)
-
-        } else {
-            ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_yellow)
+        if(position % 2 !=0){
+            holder.title.setBackgroundColor(ContextCompat.getColor(holder.title.context,R.color.text_color_black_white22))
+            holder.type.setBackgroundColor(ContextCompat.getColor(holder.type.context,R.color.text_color_black_white22))
+            holder.color.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.text_color_black_white2))
         }
+        else{
+            holder.title.setBackgroundColor(ContextCompat.getColor(holder.title.context,R.color.suggested_job_yellowB))
+            holder.type.setBackgroundColor(ContextCompat.getColor(holder.type.context,R.color.suggested_job_yellowB))
+            holder.color.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.suggested_job_yellow))
 
-        holder.color.setBackgroundColor(backgroundColor)
+        }
 
             holder.position.text = jobs.jobTitle
             holder.type.text = jobs.jobType
@@ -113,23 +115,6 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
 //            intent.putExtra("companyImageUri",jobs.companyImage)
             context.startActivity(intent)
         }
-
-
-//            holder.button.setOnClickListener{
-//                val intent = Intent(context,JobDetailsActivity::class.java)
-//                intent.putExtra("title",jobs.jobTitle)
-//                intent.putExtra("company",jobs.companyName)
-//                intent.putExtra("location",jobs.jobLocation)
-//                intent.putExtra("type",jobs.jobType)
-//                intent.putExtra("worktype",jobs.workplaceType)
-//                intent.putExtra("description",jobs.jobDescription)
-//                intent.putExtra("skill",jobs.skillsRecq)
-//                intent.putExtra("jobId",jobs.jid)
-//                intent.putExtra("userId",jobs.user_id)
-//                context.startActivity(intent)
-//            }
-
-
 
     }
 

@@ -23,7 +23,8 @@
             android:drawableEnd="@drawable/svg_search"
             android:padding="10dp"
             android:layout_marginTop="12dp"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:textSize="15sp"
             android:textColor="@color/grey_60"
             android:textColorHint="@color/grey_40"
@@ -46,7 +47,7 @@
             android:id="@+id/applied_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_applied_job"/>
+            />
 
 
 
@@ -81,6 +82,17 @@
             android:layout_gravity="center_horizontal"
             />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginVertical="10dp"
+            android:textSize="16dp"
+            android:text="No more Jobs"
+            android:visibility="visible"
+            android:textStyle="bold"
+            android:textColor="@color/text_color_subtitle"
+            />
 
 
     </LinearLayout>

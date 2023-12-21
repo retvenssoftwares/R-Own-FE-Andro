@@ -73,31 +73,21 @@ class ApplyForJobFragment : Fragment() {
                 newState: Int
             ) {
                 super.onScrollStateChanged(recyclerView, newState)
-                Log.d("ScrollTest", "onScrollStateChanged: newState=$newState")
                 if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
                 {
                     isLoading = true
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    // val currentItem = layoutManager.childCount
-                    val totalItem = layoutManager.itemCount
-                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-                    // val scrollOutItems = layoutManager.findFirstVisibleItemPosition()
-                    Log.e("working","okk")
-                    if (isLoading && (lastVisibleItemPosition == totalItem-1)){
-                        isLoading = false
-                        currentPage++
-                        getData()
-                    }
+
                 }
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                Log.d("ScrollTest", "onScrolled: dx=$dx, dy=$dy")
-
+                isLoading = false
+                currentPage++
+                getData()
             }
         })
-
+        appliedJobList()
     }
 
     private fun appliedForAJob() {
@@ -107,7 +97,6 @@ class ApplyForJobFragment : Fragment() {
         appliedRecyclerView.adapter = appliedJobAdapter
 
 
-        appliedJobList()
     }
 
     private fun appliedJobList() {
@@ -115,7 +104,6 @@ class ApplyForJobFragment : Fragment() {
             context?.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
-        Log.e("userId",user_id.toString())
 
         val data = RetrofitBuilder.jobsApis.userAppliedJobs(currentPage,user_id)
 
@@ -128,7 +116,6 @@ class ApplyForJobFragment : Fragment() {
                    if (response.isSuccessful && isAdded){
                        val response = response.body()!!
                        val original = response.toList()
-                       Log.e("Applied success :", response.toString())
 
                        response.forEach{userJobAppliedData ->
                            jobList.addAll(userJobAppliedData.jobs)
@@ -163,7 +150,6 @@ class ApplyForJobFragment : Fragment() {
                        empty.visibility = View.VISIBLE
                    }
                }catch (e:NullPointerException){
-                   Toast.makeText(requireContext(),"No More Jobs",Toast.LENGTH_SHORT).show()
                }
 
            }

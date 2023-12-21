@@ -34,6 +34,7 @@
 
     <color name="suggested_job_black">#272A3D</color>
     <color name="suggested_job_yellow">#ACD037</color>
+    <color name="suggested_job_yellowB">#8EA83C</color>
 
 
     <color name="text_color13">#333333</color>
@@ -45,6 +46,7 @@
     <color name="text_color_black_orange">#272A3D</color>
     <color name="text_color_black_white">#171717</color>
     <color name="text_color_black_white2">#272A3D</color>
+    <color name="text_color_black_white22">#1A272A3D</color>
     <color name="text_color_subtitle">#828282</color>
     <color name="text_color_button">#B7B7B7</color>
     <color name="text_color_black">#272A3D</color>

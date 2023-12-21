@@ -1,6 +1,7 @@
 package app.retvens.rown.NavigationFragments.job.jobDetailsAppliedFrags
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -61,23 +62,14 @@ class ActivitiesJobAppliedFragment(val appliedStatus:String) : Fragment() {
         pointFourC=view.findViewById(R.id.pointFourC)
         pointFiveC=view.findViewById(R.id.pointFiveC)
 
-        if (appliedStatus == "On Hold"){
-            currentStaus.setImageResource(R.drawable.svg_tick)
-        }else if (appliedStatus == "Scheduled"){
+
+        if (appliedStatus == "Scheduled" || appliedStatus == "On Hold" || appliedStatus == "Promoted to further round"){
+            Log.d("ooooStatusActivity", "onViewCreated: "+appliedStatus)
             currentStaus.setImageResource(R.drawable.svg_tick)
             currentMasage.text=appliedStatus
-            finalMasage.text=""
-
            setThiedPointStyle()
-
-        }else if (appliedStatus == "Criteria Doesn’t Match") {
-            currentStaus.setImageResource(R.drawable.svg_tick)
-            currentMasage.text=appliedStatus
-            finalMasage.text=""
-
-            setThiedPointStyle()
-
-        }else if (appliedStatus == "Hired"){
+        }
+        else if (appliedStatus == "Hired"){
             currentStaus.setImageResource(R.drawable.svg_tick)
             finalStatus.setImageResource(R.drawable.svg_tick)
             currentMasage.text=appliedStatus
@@ -85,25 +77,16 @@ class ActivitiesJobAppliedFragment(val appliedStatus:String) : Fragment() {
 
            setFourPointStyle()
 
-        }else if (appliedStatus == "Rejected"){
+        }else if (appliedStatus == "Rejected" || appliedStatus == "Criteria Doesn't Match"){
             currentStaus.setImageResource(R.drawable.svg_cross_red)
             finalStatus.setImageResource(R.drawable.svg_cross_red)
             currentMasage.text=appliedStatus
             finalMasage.text=appliedStatus
 
             setFourPointStyle()
-
-        }else if (appliedStatus == "Promoted to further round"){
-            currentStaus.setImageResource(R.drawable.svg_cross)
-            finalStatus.setImageResource(R.drawable.svg_cross)
-
-            setFourPointStyle()
-
         }
 
 
-//        val status = arguments?.getString("AppID")
-//        getStatus(status)
 
     }
 

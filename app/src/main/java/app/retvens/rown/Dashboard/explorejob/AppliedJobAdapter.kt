@@ -43,7 +43,7 @@ class AppliedJobAdapter(val context: Context, var appList : List<AppliedJobs>) :
         val data = appList[position]
 
         holder.designation.text = data.jobTitle
-        holder.status.text = data.status
+        holder.status.text = "Applied"
         holder.type.text = data.jobType
         holder.workLocation.text = "Remote"
 
@@ -68,22 +68,6 @@ class AppliedJobAdapter(val context: Context, var appList : List<AppliedJobs>) :
             intent.putExtra("status",data.status)
             context.startActivity(intent)
         }
-
-//
-//        holder.itemView.setOnClickListener{
-//            val intent = Intent(context, JobDetailsAppliedActivity::class.java)
-//            intent.putExtra("title",data.jobData.jobTitle)
-//            intent.putExtra("company",data.jobData.companyName)
-//            intent.putExtra("location",data.jobData.jobLocation)
-//            intent.putExtra("type",data.jobData.jobType)
-//            intent.putExtra("worktype",data.jobData.workplaceType)
-//            intent.putExtra("description",data.jobData.jobDescription)
-//            intent.putExtra("skill",data.jobData.skillsRecq)
-//            intent.putExtra("jobId",data.jid)
-//            intent.putExtra("userId",data.user_id)
-//            intent.putExtra("AppId",data.applicationId)
-//            context.startActivity(intent)
-//        }
     }
 
     fun filterList(filteredList: List<AppliedJobs>) {

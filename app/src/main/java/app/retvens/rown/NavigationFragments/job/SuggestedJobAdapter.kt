@@ -69,16 +69,17 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
 
         var operation = "push"
 
-        val backgroundColor = if (position % 2 == 0) {
-            ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_black)
-
-        } else {
-            ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_yellow)
+        if(position % 2 !=0){
+            holder.title.setBackgroundColor(ContextCompat.getColor(holder.title.context,R.color.text_color_black_white22))
+            holder.type.setBackgroundColor(ContextCompat.getColor(holder.type.context,R.color.text_color_black_white22))
+            holder.color.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.text_color_black_white2))
         }
+        else{
+            holder.title.setBackgroundColor(ContextCompat.getColor(holder.title.context,R.color.suggested_job_yellowB))
+            holder.type.setBackgroundColor(ContextCompat.getColor(holder.type.context,R.color.suggested_job_yellowB))
+            holder.color.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.suggested_job_yellow))
 
-        holder.color.setBackgroundColor(backgroundColor)
-
-
+        }
 
         //Glide.with(context).load(jobs.companyImage).placeholder(R.drawable.png_blog).into(holder.jobImages)
         val imageUrl = jobs.companyImage
