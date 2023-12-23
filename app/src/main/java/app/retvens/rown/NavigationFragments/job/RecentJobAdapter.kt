@@ -3,7 +3,6 @@ package app.retvens.rown.NavigationFragments.job
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
-import app.retvens.rown.DataCollections.JobsCollection.FilterDataClass
-import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
-import app.retvens.rown.DataCollections.JobsCollection.JobsData
-import app.retvens.rown.DataCollections.ProfileCompletion.JobData
+import app.retvens.rown.DataCollections.JobsCollection.FatchAllJobData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
@@ -28,7 +22,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) : RecyclerView.Adapter<RecentJobAdapter.RecentJobViewHolder>() {
+class RecentJobAdapter(val context: Context, var jobsList: FatchAllJobData) : RecyclerView.Adapter<RecentJobAdapter.RecentJobViewHolder>() {
 
     class RecentJobViewHolder(itemView: View) : ViewHolder(itemView){
         val designation = itemView.findViewById<TextView>(R.id.recent_job_designation)
@@ -47,12 +41,12 @@ class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) 
     }
 
     override fun getItemCount(): Int {
-        return jobsList.size
+        return jobsList.jobs.size
     }
 
     override fun onBindViewHolder(holder: RecentJobViewHolder, position: Int) {
 
-        val data = jobsList[position]
+        val data = jobsList.jobs[position]
 
         var operation = "push"
 
@@ -69,7 +63,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) 
                 saveJob(data.jobId, "push")
                 holder.save_recent.setImageResource(R.drawable.svg_saved)
                 operation = "pop"
-                holder.save_recent.setImageResource(R.drawable.vector_saved)
+                holder.save_recent.setImageResource(R.drawable.svg_saved_green)
             } else {
                 saveJob(data.jobId, "pop")
                 holder.save_recent.setImageResource(R.drawable.svg_jobs_explore)
@@ -110,7 +104,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) 
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<GetAllJobsData>) {
+    fun updateData(newItems: FatchAllJobData) {
         jobsList = newItems
         notifyDataSetChanged()
     }

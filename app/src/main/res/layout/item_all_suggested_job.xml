@@ -79,7 +79,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="@id/save_suggested"
         app:layout_constraintTop_toBottomOf="@id/save_suggested"
         app:layout_constraintStart_toStartOf="@id/profile_suggested_job">
@@ -104,7 +104,7 @@
                 android:fontFamily="@font/montserrat_semibold"
                 android:textSize="12dp"
                 android:background="@color/text_color_black_white22"
-                android:paddingVertical="12dp"
+                android:paddingVertical="8dp"
                 android:paddingHorizontal="10dp"
                 android:textColor="@color/white"/>
 
@@ -132,7 +132,7 @@
                 android:fontFamily="@font/montserrat_semibold"
                 android:background="@color/text_color_black_white22"
                 android:textSize="12dp"
-                android:paddingVertical="12dp"
+                android:paddingVertical="8dp"
                 android:paddingHorizontal="10dp"
                 android:textColor="@color/white"/>
 
@@ -146,8 +146,8 @@
         android:id="@+id/salary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/montserrat_semibold"
         android:text="10-12K"
         android:textColor="@color/white"

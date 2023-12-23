@@ -3,7 +3,6 @@ package app.retvens.rown.NavigationFragments.job
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,27 +11,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
-import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
+import app.retvens.rown.DataCollections.JobsCollection.FatchAllJobData
+import app.retvens.rown.DataCollections.JobsCollection.Job
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
-import com.mackhartley.roundedprogressbar.ext.setDrawableTint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>) : Adapter<SuggestedJobAdapter.SuggestedJobViewHolder>() {
+class SuggestedJobAdapter(val context: Context, var jobList: FatchAllJobData) : Adapter<SuggestedJobAdapter.SuggestedJobViewHolder>() {
 
     interface JobSavedClickListener {
         fun onJobSavedClick(job: JobsData)
@@ -59,13 +55,13 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
     }
 
     override fun getItemCount(): Int {
-        return jobList.size
+        return jobList.jobs.size
     }
 
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: SuggestedJobViewHolder, position: Int) {
 
-        val jobs = jobList[position]
+        val jobs = jobList.jobs[position]
 
         var operation = "push"
 
@@ -136,8 +132,8 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<GetAllJobsData>) {
-        jobList = newItems
+    fun updateData(newItems: List<Job>) {
+        jobList = FatchAllJobData( newItems)
         notifyDataSetChanged()
     }
 

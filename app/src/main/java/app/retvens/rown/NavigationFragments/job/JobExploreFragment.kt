@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,14 +20,15 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.retvens.rown.ApiRequest.RetrofitBuilder
+import app.retvens.rown.DataCollections.JobsCollection.FatchAllJobData
 import app.retvens.rown.DataCollections.JobsCollection.FilterDataClass
-import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.R
 import app.retvens.rown.bottomsheet.BottomSheetJobFilter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickListener {
 
@@ -86,35 +86,31 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
             startActivity(intent)
         }
 
-        getJobs()
-
+        getAllJobs()
         recentJobRecycler = requireView().findViewById(R.id.recent_job_recycler)
         recentJobRecycler.layoutManager = LinearLayoutManager(context)
         //recentJobRecycler. //recyclerView.setHasFixedSize(true)
 
     }
 
+    private fun getAllJobs(){
+            val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+            val user_id = sharedPreferences.getString("user_id", "").toString()
 
-    private fun getJobs() {
-        val sharedPreferences = requireContext().getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
-        val user_id = sharedPreferences.getString("user_id", "").toString()
-
-        val getJob = RetrofitBuilder.jobsApis.getJobs(user_id)
+            val getJob = RetrofitBuilder.jobsApis.getAllJobs(user_id)
 
 
-        getJob.enqueue(object : Callback<List<GetAllJobsData>?>,
-            SuggestedJobAdapter.JobSavedClickListener {
-            override fun onResponse(
-                call: Call<List<GetAllJobsData>?>,
-                response: Response<List<GetAllJobsData>?>
-            ) {
-                if (response.isSuccessful && isAdded){
-                    val response = response.body()!!
-                    try {
+            getJob.enqueue(object : Callback<FatchAllJobData?>,
+                SuggestedJobAdapter.JobSavedClickListener {
+                override fun onResponse(
+                    call: Call<FatchAllJobData?>,
+                    response: Response<FatchAllJobData?>
+                ) {
+                    if (response.isSuccessful && isAdded){
+                        val response = response.body()!!
+                        try {
 
-                        response.forEach { it ->
-
-                            val originalData = response.toList()
+                            val originalData = response.jobs
 
                             Log.e("See All Jobs", originalData.toString())
                             val suggestedJobAdapter = SuggestedJobAdapter(requireContext(), response)
@@ -148,16 +144,18 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                                     p3: Int
                                 ) {
                                     val filterData = originalData.filter { item ->
-                                        item.jobTitle.contains(p0.toString(), ignoreCase = true)
+                                        item.jobTitle.lowercase(Locale.ROOT).contains(p0.toString().trim().lowercase(Locale.ROOT))
                                     }
 
                                     suggestedJobAdapter.updateData(filterData)
+                                    suggestedJobAdapter.notifyDataSetChanged()
 
-                                    val filterData1 = originalData.filter { item ->
-                                        item.jobTitle.contains(p0.toString(), ignoreCase = true)
-                                    }
-
-                                    suggestedJobAdapter.updateData(filterData1)
+//                                    val filterData1 = originalData.filter { item ->
+//                                    item.jobType.lowercase(Locale.ROOT).contains(p0.toString().trim().lowercase(Locale.ROOT))
+//                                    }
+//
+//                                    suggestedJobAdapter.updateData(filterData1)
+//                                    suggestedJobAdapter.notifyDataSetChanged()
 
                                 }
 
@@ -166,35 +164,33 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                                 }
 
                             })
-
-
+                        }catch (e:NullPointerException){
+                            Log.e("error",e.toString())
                         }
-                    }catch (e:NullPointerException){
-                        Log.e("error",e.toString())
-                    }
 
-                }else{
-                    if(isAdded) {
-                        Toast.makeText(
-                            requireContext(),
-                            response.code().toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    }else{
+                        if(isAdded) {
+                            Toast.makeText(
+                                requireContext(),
+                                response.code().toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
-            }
 
-            override fun onFailure(call: Call<List<GetAllJobsData>?>, t: Throwable) {
-                if (isAdded) {
-                    Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
+                override fun onFailure(call: Call<FatchAllJobData?>, t: Throwable) {
+                    if (isAdded) {
+                        Toast.makeText(requireContext(), t.message.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
-            }
 
-            override fun onJobSavedClick(job: JobsData) {
+                override fun onJobSavedClick(job: JobsData) {
 
-            }
-        })
+                }
+            })
+
     }
 
     override fun bottomJobClick(category: String, type: String, location: String, salary: String) {
@@ -225,7 +221,7 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
         location?.text = filterlist.location
         salary?.text = filterlist.salary
 
-        getJobs()
+        getAllJobs()
 
         try {
             if (filterJob!!.text.isNotEmpty()){
@@ -241,9 +237,6 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
 
         }
 
-
-
     }
-
 
 }

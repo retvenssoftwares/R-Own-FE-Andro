@@ -14,21 +14,19 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
-import app.retvens.rown.Dashboard.profileCompletion.frags.adapter.HotelChainAdapter
-import app.retvens.rown.DataCollections.JobsCollection.GetAllJobsData
+import app.retvens.rown.DataCollections.JobsCollection.FatchAllJobData
 import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
+import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Locale
 
-class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsData>) : RecyclerView.Adapter<SuggestedAllJobAdapter.SuggestedJobViewHolder>() {
+class SuggestedAllJobAdapter(val context: Context, var jobList: FatchAllJobData) : RecyclerView.Adapter<SuggestedAllJobAdapter.SuggestedJobViewHolder>() {
 
     interface JobSavedClickListener {
         fun onJobSavedClick(job: JobsData)
@@ -46,6 +44,8 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
         val text = itemView.findViewById<TextView>(R.id.buttontext)
         val jobSaved = itemView.findViewById<ImageView>(R.id.save_suggested)
         val color = itemView.findViewById<ConstraintLayout>(R.id.view_all_suggested_items_cLayout)
+        val companyProfile = itemView.findViewById<ImageView>(R.id.profile_suggested_job)
+
 
     }
 
@@ -56,13 +56,13 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
     }
 
     override fun getItemCount(): Int {
-        return jobList.size
+        return jobList.jobs.size
     }
 
     @SuppressLint("SuspiciousIndentation", "ResourceAsColor")
     override fun onBindViewHolder(holder: SuggestedJobViewHolder, position: Int) {
 
-        val jobs = jobList[position]
+        val jobs = jobList.jobs[position]
 
         var operation = "push"
         if(position % 2 !=0){
@@ -77,9 +77,11 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
 
         }
 
-            holder.position.text = jobs.jobTitle
-            holder.type.text = jobs.jobType
-            holder.title.text = "Remote"
+        holder.position.text = jobs.jobTitle
+        holder.type.text = jobs.jobType
+        holder.title.text = "Remote"
+        holder.salary.text = jobs.expectedCTC
+        Glide.with(context).load(jobs.companyImage).placeholder(R.drawable.png_blog).into(holder.companyProfile)
 
         if (jobs.companyName?.isNotEmpty() == true && jobs.jobLocation.isNotEmpty()){
             holder.location.text = "${jobs.companyName} • ${jobs.jobLocation}"
@@ -94,7 +96,6 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
 //            jobSavedClickListener?.onJobSavedClick(jobs)
 //        }
 
-        holder.salary.text = jobs.expectedCTC
 
         holder.jobSaved.setOnClickListener {
             if (operation == "push"){
@@ -119,7 +120,7 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: List<GetAllJobsData>) {
+    fun updateData(newItems: FatchAllJobData) {
         jobList = newItems
         notifyDataSetChanged()
     }

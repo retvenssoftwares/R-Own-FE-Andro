@@ -29,6 +29,10 @@ interface JobsApis {
     fun getJobs(
         @Path("userId") userId : String
     ): Call<List<GetAllJobsData>>
+    @GET("fetchAllJob")
+    fun getAllJobs(
+        @Query("userId") userId : String
+    ): Call<FatchAllJobData>
 
     @GET("getJobs/{jobId}")
     fun getJobDetail(
