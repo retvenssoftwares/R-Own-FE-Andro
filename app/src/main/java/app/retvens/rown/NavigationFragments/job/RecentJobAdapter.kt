@@ -99,7 +99,7 @@ class RecentJobAdapter(val context: Context, var jobsList:List<GetAllJobsData>) 
                 if (response.isSuccessful){
                     Toast.makeText(context, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, response.message(), Toast.LENGTH_SHORT).show()
                 }
             }
 

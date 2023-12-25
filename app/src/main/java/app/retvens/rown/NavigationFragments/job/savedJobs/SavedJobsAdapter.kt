@@ -16,7 +16,7 @@ import app.retvens.rown.NavigationFragments.jobforvendors.JobsDetailsVendor
 import app.retvens.rown.R
 import com.bumptech.glide.Glide
 
-class SavedJobsAdapter(val listS : List<Job>, val context: Context) : RecyclerView.Adapter<SavedJobsAdapter.PollsViewHolder>() {
+class SavedJobsAdapter(val listS : List<SavedJob>, val context: Context) : RecyclerView.Adapter<SavedJobsAdapter.PollsViewHolder>() {
 
     class PollsViewHolder(itemView: View) : ViewHolder(itemView){
         val designation = itemView.findViewById<TextView>(R.id.view_job_designation)
@@ -51,21 +51,21 @@ class SavedJobsAdapter(val listS : List<Job>, val context: Context) : RecyclerVi
         holder.title.text = "Remote"
         holder.salary.text = jobs.expectedCTC
 
-        Glide.with(context).load(jobs.hotelLogoUrl).into(holder.hotelLogo)
+        Glide.with(context).load(jobs.companyImage).into(holder.hotelLogo)
 
-        holder.button.setOnClickListener {
-            val intent = Intent(context, JobsDetailsVendor::class.java)
-            intent.putExtra("jid",jobs.jid)
-            intent.putExtra("title",jobs.jobTitle)
-            intent.putExtra("company",jobs.companyName)
-            intent.putExtra("location",jobs.jobLocation)
-            intent.putExtra("type",jobs.jobType)
-            intent.putExtra("description",jobs.jobDescription)
-            intent.putExtra("skills",jobs.skillsRecq)
-            intent.putExtra("salary",jobs.expectedCTC)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-        }
+//        holder.button.setOnClickListener {
+//            val intent = Intent(context, JobsDetailsVendor::class.java)
+//            intent.putExtra("jid",jobs.jid)
+//            intent.putExtra("title",jobs.jobTitle)
+//            intent.putExtra("company",jobs.companyName)
+//            intent.putExtra("location",jobs.jobLocation)
+//            intent.putExtra("type",jobs.jobType)
+//            intent.putExtra("description",jobs.jobDescription)
+//            intent.putExtra("skills",jobs.skillsRecq)
+//            intent.putExtra("salary",jobs.expectedCTC)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            context.startActivity(intent)
+//        }
 
     }
 }
