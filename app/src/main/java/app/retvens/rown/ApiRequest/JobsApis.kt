@@ -106,14 +106,26 @@ interface JobsApis {
         @Body status:StatusDataClass
     ):Call<UpdateResponse>
 
-    @GET("getbookmark/{userId}")
-    fun getSavedJobs(
-        @Path("userId") userId : String
-    ): Call<SavedJobsData>
+//    @GET("getbookmark/{userId}")
+//    fun getSavedJobs(
+//        @Path("userId") userId : String
+//    ): Call<SavedJobsData>
 
-    @PATCH("saveid/{User_id}")
+    @GET("getSaveJob/{user_id}")
+    fun getSavedJobs(
+        @Path("user_id") userId : String,
+        @Query("page") page: Int
+    ): Call<List<SavedJobsData>>
+
+//    @PATCH("saveid/{User_id}")
+//    fun saveJobs(
+//        @Path("User_id") User_id : String,
+//        @Body saveJob: SaveJob
+//    ) : Call<UpdateResponse>
+
+    @PATCH("saveId/{user_id}")
     fun saveJobs(
-        @Path("User_id") User_id : String,
+        @Path("user_id") userId : String,
         @Body saveJob: SaveJob
     ) : Call<UpdateResponse>
 
