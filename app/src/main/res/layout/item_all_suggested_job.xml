@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -32,92 +33,95 @@
 
     <TextView
         android:id="@+id/suggested_job_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Senior UI Designer"
-        android:maxLines="1"
-        android:lines="1"
-        android:singleLine="true"
-        android:layout_marginHorizontal="15dp"
+        android:layout_marginHorizontal="10dp"
         android:fontFamily="@font/montserrat_regular"
-        android:textFontWeight="700"
+        android:maxWidth="190dp"
+        android:maxLines="2"
+        android:text="Senior UI Designer"
         android:textColor="@color/white"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toStartOf="@id/save_suggested"
-        app:layout_constraintTop_toTopOf="@id/profile_suggested_job"
-        app:layout_constraintStart_toEndOf="@id/profile_suggested_job"/>
+        android:textFontWeight="700"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintEnd_toStartOf="@+id/save_suggested"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/profile_suggested_job"
+        app:layout_constraintTop_toTopOf="@id/profile_suggested_job" />
 
     <TextView
         android:id="@+id/suggested_job_location"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Shahpura • Jakarta, Indonesia"
-        android:maxLines="1"
-        android:lines="1"
-        android:singleLine="true"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="3dp"
         android:fontFamily="@font/montserrat_regular"
+        android:lines="1"
+        android:maxWidth="190dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="Shahpura • Jakarta, Indonesia"
         android:textColor="@color/grey_10"
-        android:textSize="14dp"
-        app:layout_constraintEnd_toStartOf="@id/save_suggested"
-        app:layout_constraintTop_toBottomOf="@id/suggested_job_title"
-        app:layout_constraintStart_toEndOf="@id/profile_suggested_job"/>
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toStartOf="@+id/save_suggested"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/profile_suggested_job"
+        app:layout_constraintTop_toBottomOf="@id/suggested_job_title" />
 
     <ImageView
         android:id="@+id/save_suggested"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/svg_jobs_explore"
-        app:tint="@color/white"
         android:layout_marginEnd="12dp"
+        android:src="@drawable/svg_jobs_explore"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/suggested_job_location"/>
+        app:layout_constraintTop_toTopOf="@+id/suggested_job_title"
+        app:tint="@color/white" />
 
     <RelativeLayout
         android:id="@+id/linear_layout_suggested_jobs"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="15dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/save_suggested"
-        app:layout_constraintTop_toBottomOf="@id/save_suggested"
-        app:layout_constraintStart_toStartOf="@id/profile_suggested_job">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/profile_suggested_job"
+        app:layout_constraintTop_toBottomOf="@+id/suggested_job_location">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardElevation="3dp"
-            app:cardCornerRadius="100dp"
-            android:layout_marginEnd="10dp"
             android:layout_alignParentStart="true"
-            >
+            android:layout_marginEnd="10dp"
+            app:cardCornerRadius="100dp"
+            app:cardElevation="3dp">
 
             <TextView
                 android:id="@+id/jobTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:minWidth="120dp"
-                android:maxWidth="160dp"
-                android:textAlignment="center"
-                android:text="Fulltime"
-                android:fontFamily="@font/montserrat_semibold"
-                android:textSize="12dp"
                 android:background="@color/text_color_black_white22"
-                android:paddingVertical="8dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:maxWidth="160dp"
+                android:maxLines="1"
+                android:minWidth="120dp"
                 android:paddingHorizontal="10dp"
-                android:textColor="@color/white"/>
+                android:paddingVertical="8dp"
+                android:text="Fulltime"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11sdp" />
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardElevation="3dp"
-            app:cardCornerRadius="50dp"
-            android:layout_marginStart="10dp"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="3dp"
 
             >
 
@@ -125,19 +129,19 @@
                 android:id="@+id/workType"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:minWidth="120dp"
-                android:maxWidth="160dp"
-                android:textAlignment="center"
-                android:text="Fulltime"
-                android:fontFamily="@font/montserrat_semibold"
                 android:background="@color/text_color_black_white22"
-                android:textSize="12dp"
-                android:paddingVertical="8dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:maxWidth="160dp"
+                android:maxLines="1"
+                android:minWidth="120dp"
                 android:paddingHorizontal="10dp"
-                android:textColor="@color/white"/>
+                android:paddingVertical="8dp"
+                android:text="Fulltime"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11sdp" />
 
         </androidx.cardview.widget.CardView>
-
 
 
     </RelativeLayout>
@@ -151,7 +155,7 @@
         android:fontFamily="@font/montserrat_semibold"
         android:text="10-12K"
         android:textColor="@color/white"
-        android:textSize="16dp"
+        android:textSize="@dimen/_13sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/linear_layout_suggested_jobs"
         app:layout_constraintTop_toBottomOf="@+id/linear_layout_suggested_jobs" />

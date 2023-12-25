@@ -5,51 +5,58 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:layout_marginTop="6dp">
+    >
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profile_recent_job"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/png_blog"
+        app:layout_constraintEnd_toStartOf="@+id/save_recent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearance="@style/SquareCornerImage" />
+        >
 
-    <TextView
-        android:id="@+id/recent_job_designation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:fontFamily="@font/montserrat_regular"
-        android:text="Senior UI Designer"
-        android:textColor="@color/black"
-        android:textFontWeight="700"
-        android:textSize="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_recent_job"
-        app:layout_constraintEnd_toStartOf="@id/save_recent"
-        app:layout_constraintStart_toEndOf="@id/profile_recent_job"
-        app:layout_constraintTop_toTopOf="@id/profile_recent_job"
-        app:layout_constraintVertical_bias="0.0" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_recent_job"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/png_blog"
+            app:shapeAppearance="@style/SquareCornerImage" />
 
-    <TextView
-        android:id="@+id/recent_job_location"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/montserrat_regular"
-        android:text="Shahpura • Jakarta, Indonesia"
-        android:textColor="@color/grey_60"
-        android:textSize="12dp"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_recent_job"
-        app:layout_constraintEnd_toStartOf="@id/save_recent"
-        app:layout_constraintStart_toEndOf="@id/profile_recent_job"
-        app:layout_constraintTop_toBottomOf="@id/recent_job_designation"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/recent_job_designation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginHorizontal="10dp"
+            android:layout_toEndOf="@+id/profile_recent_job"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Senior UI Designer"
+            android:textColor="@color/black"
+            android:textFontWeight="700"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/recent_job_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recent_job_designation"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/profile_recent_job"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="Shahpura • Jakarta, Indonesia"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+    </RelativeLayout>
+
 
     <ImageView
         android:id="@+id/save_recent"
@@ -58,17 +65,18 @@
         android:layout_marginEnd="12dp"
         android:src="@drawable/svg_jobs_explore"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recent_job_designation" />
+        app:layout_constraintTop_toTopOf="@+id/relative" />
 
 
     <LinearLayout
         android:id="@+id/linear_layout_recent_jobs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@id/profile_recent_job"
-        app:layout_constraintTop_toBottomOf="@+id/profile_recent_job">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relative">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -91,12 +99,13 @@
                 android:fontFamily="@font/montserrat_semibold"
                 android:maxWidth="110dp"
                 android:minWidth="90dp"
+                android:maxLines="1"
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="8dp"
                 android:text="Fulltime"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="@dimen/_11sdp" />
 
         </androidx.cardview.widget.CardView>
 
@@ -121,12 +130,13 @@
                 android:fontFamily="@font/montserrat_semibold"
                 android:maxWidth="110dp"
                 android:minWidth="90dp"
+                android:maxLines="1"
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="8dp"
                 android:text="Remote"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="@dimen/_11sdp" />
 
         </androidx.cardview.widget.CardView>
 
@@ -137,13 +147,14 @@
         android:id="@+id/salary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
+        android:maxWidth="120dp"
+        android:layout_marginEnd="10dp"
         android:fontFamily="@font/montserrat_semibold"
         android:paddingHorizontal="2dp"
         android:text="15K"
         android:textAlignment="center"
         android:textColor="@color/green_own"
-        android:textSize="16dp"
+        android:textSize="@dimen/_13sdp"
         app:layout_constraintBottom_toBottomOf="@+id/linear_layout_recent_jobs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/linear_layout_recent_jobs" />

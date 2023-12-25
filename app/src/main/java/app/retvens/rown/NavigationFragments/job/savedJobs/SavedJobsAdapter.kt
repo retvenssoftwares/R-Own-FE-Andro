@@ -51,7 +51,7 @@ class SavedJobsAdapter(val listS : List<SavedJob>, val context: Context) : Recyc
         holder.title.text = "Remote"
         holder.salary.text = jobs.expectedCTC
 
-        Glide.with(context).load(jobs.companyImage).into(holder.hotelLogo)
+        Glide.with(context).load(jobs.companyImage).placeholder(R.drawable.png_blog).into(holder.hotelLogo)
 
 //        holder.button.setOnClickListener {
 //            val intent = Intent(context, JobsDetailsVendor::class.java)

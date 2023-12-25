@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,7 +28,7 @@
         android:text="Senior UI Designer"
         android:textColor="@color/black"
         android:textFontWeight="700"
-        android:textSize="14dp"
+        android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_applied_job"
         app:layout_constraintEnd_toStartOf="@id/card_status"
         app:layout_constraintStart_toEndOf="@id/profile_applied_job"
@@ -72,7 +73,7 @@
             android:text="Scheduled"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="12dp" />
+            android:textSize="@dimen/_11sdp" />
 
     </androidx.cardview.widget.CardView>
 
@@ -82,12 +83,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal"
         android:weightSum="5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/profile_applied_job"
-        app:layout_constraintTop_toBottomOf="@+id/profile_applied_job">
+        app:layout_constraintTop_toBottomOf="@+id/applied_job_location">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -115,7 +116,7 @@
                 android:text="Full_Time"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="@dimen/_11sdp" />
 
         </androidx.cardview.widget.CardView>
 
@@ -145,7 +146,7 @@
                 android:text="Remote"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="12dp" />
+                android:textSize="@dimen/_11sdp" />
 
         </androidx.cardview.widget.CardView>
 
