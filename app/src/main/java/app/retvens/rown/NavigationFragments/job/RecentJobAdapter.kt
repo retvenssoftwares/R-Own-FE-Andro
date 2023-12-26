@@ -48,7 +48,7 @@ class RecentJobAdapter(val context: Context, var jobsList: FatchAllJobData) : Re
 
         val data = jobsList.jobs[position]
 
-        var operation = "push"
+        var operation: String
 
         holder.designation.text = data.jobTitle
         holder.location.text = data.jobLocation
@@ -56,18 +56,25 @@ class RecentJobAdapter(val context: Context, var jobsList: FatchAllJobData) : Re
         holder.title.text = "Remote"
         holder.salary.text = data.expectedCTC
 
+        operation = if (data.saved != "not saved"){
+            holder.save_recent.setImageResource(R.drawable.svg_saved_green)
+            "pop"
+        }else{
+            holder.save_recent.setImageResource(R.drawable.svg_jobs_explore)
+            "push"
+        }
+
         Glide.with(context).load(data.companyImage).placeholder(R.drawable.png_blog).into(holder.companyProfile)
 
         holder.save_recent.setOnClickListener {
-            if (operation == "push"){
+            operation = if (operation == "push"){
                 saveJob(data.jobId, "push")
-                holder.save_recent.setImageResource(R.drawable.svg_saved)
-                operation = "pop"
                 holder.save_recent.setImageResource(R.drawable.svg_saved_green)
+                "pop"
             } else {
                 saveJob(data.jobId, "pop")
                 holder.save_recent.setImageResource(R.drawable.svg_jobs_explore)
-                operation = "push"
+                "push"
             }
         }
 
@@ -75,6 +82,7 @@ class RecentJobAdapter(val context: Context, var jobsList: FatchAllJobData) : Re
             val intent= Intent (context,JobDetailsActivity::class.java)
             intent.putExtra("jobID",data.jobId)
             intent.putExtra("userId",data.user_id)
+            intent.putExtra("saved",data.saved)
             context.startActivity(intent)
         }
 

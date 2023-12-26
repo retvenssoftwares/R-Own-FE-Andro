@@ -23,9 +23,12 @@ import androidx.fragment.app.Fragment
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.ApplyJobsResponse
 import app.retvens.rown.DataCollections.JobsCollection.JobDetailsDataClass
+import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.ActivitiesFragment
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.CompanyDetailsFragment
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.DescriptionFragment
+import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
+import app.retvens.rown.NavigationFragments.job.savedJobs.SavedJobsActivity
 import app.retvens.rown.R
 import app.retvens.rown.authentication.UploadRequestBody
 import app.retvens.rown.databinding.ActivityJobDetailsBinding
@@ -65,6 +68,7 @@ class JobDetailsActivity : AppCompatActivity() {
     private  var peopleName:String=""
     private  var peopleRole:String=""
     private  var peopleProfile:String=""
+    lateinit var operation: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,10 +87,24 @@ class JobDetailsActivity : AppCompatActivity() {
         progressDialog.show()
 
         binding.backJobsDetails.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
-        getJobDetail()
+
+        val jobId = intent.getStringExtra("jobID").toString()
+        val userId = intent.getStringExtra("userId").toString()
+        val saved = intent.getStringExtra("saved").toString()
+
+        operation = if (saved != "not saved"){
+            binding.saveJobsDetails.setImageResource(R.drawable.svg_saved_green)
+            "pop"
+        }else{
+            binding.saveJobsDetails.setImageResource(R.drawable.svg_jobs_explore)
+            "push"
+        }
+        getJobDetail(jobId, userId)
+
+
 
         val status = intent.getStringExtra("applyStatus")
 
@@ -96,6 +114,19 @@ class JobDetailsActivity : AppCompatActivity() {
         if (status == "Applied"){
             text.setBackgroundColor(Color.parseColor("#AFAFAF"))
             text.text = "Applied"
+        }
+
+        binding.saveJobsDetails.setOnClickListener{
+            Log.e("binding.saveJobsDetails","Clicked")
+            operation = if (operation == "push"){
+                saveJob(jobId, "push")
+                binding.saveJobsDetails.setImageResource(R.drawable.svg_saved_green)
+                "pop"
+            } else {
+                saveJob(jobId, "pop")
+                binding.saveJobsDetails.setImageResource(R.drawable.svg_jobs_explore)
+                "push"
+            }
         }
 
         binding.descriptionJobCardText.setOnClickListener {
@@ -119,6 +150,10 @@ class JobDetailsActivity : AppCompatActivity() {
             val fragment:Fragment=CompanyDetailsFragment(companyDertails,skills)
             fragmentReplace(fragment)
         }
+
+
+
+
         binding.activityJobCardText.setOnClickListener {
 
             removeStyleAll()
@@ -188,10 +223,7 @@ class JobDetailsActivity : AppCompatActivity() {
 
     }
 
-    private fun getJobDetail(){
-
-        val jobId=intent.getStringExtra("jobID").toString()
-        val userId=intent.getStringExtra("userId").toString()
+    private fun getJobDetail(jobId:String, userId:String){
 
         val getJobDetail = RetrofitBuilder.jobsApis.getJobDetail(jobId,userId)
 
@@ -282,7 +314,7 @@ class JobDetailsActivity : AppCompatActivity() {
         val intro = intro.text.toString()
         val jobId = intent.getStringExtra("jobId").toString()
 
-        val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("SaveUserId", MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
         val send = RetrofitBuilder.jobsApis.applyJob(
@@ -390,6 +422,29 @@ class JobDetailsActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.details_fragments_container,fragment)
         transaction.commit()
+    }
+
+    private fun saveJob(jid: String, operation: String) {
+        val sharedPreferences = applicationContext.getSharedPreferences("SaveUserId", MODE_PRIVATE)
+        val user_id = sharedPreferences.getString("user_id", "").toString()
+
+        val save = RetrofitBuilder.jobsApis.saveJobs(user_id, SaveJob(operation, jid))
+        save.enqueue(object : Callback<UpdateResponse?> {
+            override fun onResponse(
+                call: Call<UpdateResponse?>,
+                response: Response<UpdateResponse?>
+            ) {
+                if (response.isSuccessful){
+                    Toast.makeText(applicationContext, response.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(applicationContext, response.code().toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
+                Toast.makeText(applicationContext, t.localizedMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 }

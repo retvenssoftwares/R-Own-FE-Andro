@@ -63,7 +63,7 @@ class SuggestedJobAdapter(val context: Context, var jobList: FatchAllJobData) : 
 
         val jobs = jobList.jobs[position]
 
-        var operation = "push"
+        var operation: String
 
         if(position % 2 !=0){
             holder.title.setBackgroundColor(ContextCompat.getColor(holder.title.context,R.color.text_color_black_white22))
@@ -95,21 +95,25 @@ class SuggestedJobAdapter(val context: Context, var jobList: FatchAllJobData) : 
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
 
-//        holder.jobSaved.setOnClickListener {
-//            jobSavedClickListener?.onJobSavedClick(jobs)
-//        }
-
         holder.salary.text = jobs.expectedCTC
 
+        operation = if (jobs.saved != "not saved"){
+            holder.jobSaved.setImageResource(R.drawable.svg_saved_white)
+            "pop"
+        }else{
+            holder.jobSaved.setImageResource(R.drawable.svg_jobs_explore)
+            "push"
+        }
+
         holder.jobSaved.setOnClickListener {
-            if (operation == "push"){
+            operation = if (operation == "push"){
                 saveJob(jobs.jobId, "push")
-                holder.jobSaved.setImageResource(R.drawable.svg_saved)
-                operation = "pop"
+                holder.jobSaved.setImageResource(R.drawable.svg_saved_white)
+                "pop"
             } else {
                 saveJob(jobs.jobId, "pop")
                 holder.jobSaved.setImageResource(R.drawable.svg_jobs_explore)
-                operation = "push"
+                "push"
             }
         }
 
@@ -124,6 +128,7 @@ class SuggestedJobAdapter(val context: Context, var jobList: FatchAllJobData) : 
             val intent= Intent (context,JobDetailsActivity::class.java)
             intent.putExtra("jobID",jobs.jobId)
             intent.putExtra("userId",jobs.user_id)
+            intent.putExtra("saved",jobs.saved)
             context.startActivity(intent)
         }
 
