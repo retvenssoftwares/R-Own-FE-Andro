@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Rown" parent="Theme.MaterialComponents.NoActionBar">
-    
+
         <!-- Primary brand color. -->
         <item name="colorPrimary">#ADD134</item>
 
@@ -57,6 +57,11 @@
         <item name="android:layoutDirection">ltr</item>
         <item name="android:windowDisablePreview">true</item>
         <!-- Customize your theme here. -->
+    </style>
+  <!-- Base application theme. -->
+    <style name="Base.Theme.Rown" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
 

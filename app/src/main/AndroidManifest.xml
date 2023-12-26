@@ -5,7 +5,6 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -41,12 +40,15 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup"
         tools:targetApi="31">
+        <activity
+            android:name=".activity.ForwardActivity"
+            android:exported="false" />
 
         <provider
             android:name=".MesiboMediaPickerClasses.sources.MediaPickerFileProvider"
             android:authorities="${applicationId}.app.retvens.rown"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
@@ -55,7 +57,6 @@
         <activity
             android:name=".MesiboMediaPickerClasses.sources.zoomVuPictureActivity"
             android:exported="false" />
-
         <activity
             android:name=".NavigationFragments.home.PostLikeActivity"
             android:exported="false" />
@@ -74,12 +75,10 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
-
         <activity
             android:name=".MesiboMediaPickerClasses.sources.ImageEditor"
             android:theme="@style/ImageEditorTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <activity
             android:name=".NavigationFragments.home.postDetails.StatusDetailsActivity"
             android:exported="false"
@@ -499,8 +498,8 @@
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".sideNavigation.ChatWithUsActivity"
-            android:screenOrientation="portrait"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".sideNavigation.BugSpottedActivity"
@@ -514,8 +513,8 @@
             android:theme="@style/Theme.Rown_Splash" />
         <activity
             android:name=".NavigationFragments.jobforvendors.JobsDetailsVendor"
-            android:screenOrientation="portrait"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

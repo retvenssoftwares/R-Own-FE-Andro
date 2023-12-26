@@ -74,7 +74,7 @@ class ActivitiesJobAppliedFragment : Fragment() {
 //            }
 //
 //            override fun onFailure(call: Call<List<CandidateDataClass>?>, t: Throwable) {
-//
+//                TODO("Not yet implemented")
 //            }
 //        })
 //

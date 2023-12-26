@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ForwardActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/relative_n"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Forward Message"
+            android:textColor="#000000"
+            android:textFontWeight="700"
+            android:textSize="17dp" />
+
+        <ImageView
+            android:id="@+id/forward_backBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:background="@color/white"
+            android:src="@drawable/community_btn" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/relative_n"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/relative_n"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:id="@+id/forward_recycle"
+        android:layout_below="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/relative_n"
+        tools:layout_editor_absoluteX="0dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <RelativeLayout
+        android:id="@+id/caption_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginHorizontal="3dp"
+        android:elevation="@dimen/_5sdp"
+        android:background="#fff"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        tools:ignore="MissingConstraints">
+
+        <!-- android:background="@drawable/input_circle_normal" -->
+
+
+    <TextView
+        android:id="@+id/caption_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/white"
+        android:minHeight="50dp"
+        android:paddingVertical="2dp"
+        android:background="@null"
+        android:paddingLeft="10dp"
+        android:text="hiii"
+        android:scrollbars="vertical"
+        android:textColor="@color/black"
+        android:textColorHint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageButton
+        android:id="@+id/caption_send"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginRight="@dimen/_4sdp"
+        android:padding="@dimen/_5sdp"
+        android:background="@drawable/circle_editor_background"
+        android:src="@drawable/input_send"
+        android:layout_margin="@dimen/_4sdp"
+        android:layout_alignParentEnd="true"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="351dp"
+        tools:layout_editor_absoluteY="655dp" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

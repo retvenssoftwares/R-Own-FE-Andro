@@ -22,8 +22,11 @@ import com.mesibo.api.Mesibo;
 
  import java.lang.ref.WeakReference;
 
+ import app.retvens.rown.Dashboard.ChatActivity;
  import app.retvens.rown.Dashboard.DashBoardActivity;
+
  import app.retvens.rown.MesiboMediaPickerClasses.sources.MediaPicker;
+ import app.retvens.rown.activity.ForwardActivity;
 
 public class MesiboUIManager {
     private static WeakReference<MesiboMessagingActivity> mMessagingActivityNew = null;
@@ -93,7 +96,7 @@ public class MesiboUIManager {
     }
 
     public static void launchContactActivity(Context context, int selectionMode, long[] mids) {
-        Intent intent = new Intent(context, DashBoardActivity.class);
+        Intent intent = new Intent(context, ForwardActivity.class);
         intent.putExtra(MesiboUserListFragment.MESSAGE_LIST_MODE, selectionMode).putExtra(MesiboUI.MESSAGE_IDS, mids);
         context.startActivity(intent);
     }

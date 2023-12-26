@@ -173,10 +173,8 @@ class MembersCommunityDetailsActivity : AppCompatActivity() {
                 googleMap.addMarker(MarkerOptions().position(location).title("location"))
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location,15f))
             }
-
-        })
-
-    }
+         })
+       }
 
     private fun replaceFragment(fragment: Fragment) {
         if (fragment !=null){
@@ -184,7 +182,7 @@ class MembersCommunityDetailsActivity : AppCompatActivity() {
             transaction.replace(R.id.community_fragment_container,fragment)
             transaction.commit()
         }
-    }
+      }
 
     private fun addMembers() {
 
@@ -238,7 +236,7 @@ class MembersCommunityDetailsActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val response = response.body()!!
 //                        Toast.makeText(applicationContext, response.message, Toast.LENGTH_SHORT)
-//                            .show()
+//                        .show()
                         val intent = Intent(applicationContext, MesiboMessagingActivity::class.java)
                         intent.putExtra(MesiboUI.GROUP_ID, groupId.toLong())
                         startActivity(intent)

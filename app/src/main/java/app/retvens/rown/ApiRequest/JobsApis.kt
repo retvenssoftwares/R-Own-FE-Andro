@@ -1,5 +1,6 @@
 package app.retvens.rown.ApiRequest
 
+import UserJobAppliedData
 import app.retvens.rown.DataCollections.JobsCollection.*
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.DataCollections.saveId.SaveEvent
@@ -79,6 +80,12 @@ interface JobsApis {
     fun getApplicant(
         @Path("jId") jId:String
     ):Call<JobDetailsData>
+
+    @GET("getapplicant")
+    fun userAppliedJobs(
+            @Query("page") page: Int,
+            @Query("userId") userId:String
+    ):Call<List<UserJobAppliedData>>
 
 //    @GET("getcandidate/{appId}")
 //    fun getCandidate(

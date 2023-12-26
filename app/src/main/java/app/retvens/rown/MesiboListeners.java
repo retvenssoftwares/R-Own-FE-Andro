@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import app.retvens.rown.MessagingModule.MesiboUI;
 import app.retvens.rown.api.MesiboCall;
 
-public class MesiboListeners implements Mesibo.ConnectionListener, ILoginInterface,  Mesibo.MessageListener, MesiboUI.Listener,   Mesibo.MessageFilter, Mesibo.ProfileListener, Mesibo.CrashListener, MesiboRegistrationIntentService.GCMListener, MesiboCall.IncomingListener, Mesibo.GroupListener, Mesibo.AppStateListener, Mesibo.EndToEndEncryptionListener {
+public class MesiboListeners implements Mesibo.ConnectionListener, ILoginInterface,Mesibo.MessageListener, MesiboUI.Listener,Mesibo.MessageFilter, Mesibo.ProfileListener, Mesibo.CrashListener, MesiboRegistrationIntentService.GCMListener, MesiboCall.IncomingListener, Mesibo.GroupListener, Mesibo.AppStateListener, Mesibo.EndToEndEncryptionListener {
     public static final String TAG = "MesiboListeners";
     public static Context mLoginContext = null;
     private static Gson mGson = new Gson();
@@ -354,7 +354,6 @@ public class MesiboListeners implements Mesibo.ConnectionListener, ILoginInterfa
             message = "You missed a " + (video?"video ":"") + "call from " + profile.getNameOrAddress("+");
 
         }
-
 
         return true;
     }
