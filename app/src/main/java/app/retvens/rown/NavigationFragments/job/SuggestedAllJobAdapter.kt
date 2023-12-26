@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -21,7 +23,6 @@ import app.retvens.rown.DataCollections.JobsCollection.JobsData
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
-import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +45,7 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
         val button = itemView.findViewById<CardView>(R.id.apply_btn)
         val text = itemView.findViewById<TextView>(R.id.buttontext)
         val jobSaved = itemView.findViewById<ImageView>(R.id.save_suggested)
-        val profile_suggested_job = itemView.findViewById<ImageView>(R.id.profile_suggested_job)
+        val color = itemView.findViewById<ConstraintLayout>(R.id.view_all_suggested_items_cLayout)
 
     }
 
@@ -65,16 +66,27 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
 
         var operation = "push"
 
-        Glide.with(context)
-            .load(jobs.companyImage)
-            .placeholder(R.drawable.svg_user) // Set your default image resource here
-            .error(R.drawable.svg_user) // Optional: Set an error image resource
-            .into(holder.profile_suggested_job);
+        val backgroundColor = if (position % 2 == 0) {
+            ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_black)
+
+        } else {
+            ContextCompat.getColor(holder.itemView.context, R.color.suggested_job_yellow)
+        }
+
+        holder.color.setBackgroundColor(backgroundColor)
 
             holder.position.text = jobs.jobTitle
-            holder.location.text = jobs.jobLocation
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
+
+        if (jobs.companyName?.isNotEmpty() == true && jobs.jobLocation.isNotEmpty()){
+            holder.location.text = "${jobs.companyName} • ${jobs.jobLocation}"
+        }else{
+            if (jobs.jobLocation.isNotEmpty())
+                holder.location.text = jobs.jobLocation
+            else
+                holder.location.text = jobs.companyName
+        }
 
 //        holder.jobSaved.setOnClickListener {
 //            jobSavedClickListener?.onJobSavedClick(jobs)
@@ -94,6 +106,14 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
             }
         }
 
+        holder.itemView.setOnClickListener{
+            val intent= Intent (context,JobDetailsActivity::class.java)
+            intent.putExtra("jobID",jobs.jobId)
+            intent.putExtra("userId",jobs.user_id)
+//            intent.putExtra("companyImageUri",jobs.companyImage)
+            context.startActivity(intent)
+        }
+
 
 //            holder.button.setOnClickListener{
 //                val intent = Intent(context,JobDetailsActivity::class.java)
@@ -109,7 +129,9 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
 //                context.startActivity(intent)
 //            }
 
-       }
+
+
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData(newItems: List<GetAllJobsData>) {
@@ -137,10 +159,10 @@ class SuggestedAllJobAdapter(val context: Context, var jobList:List<GetAllJobsDa
             override fun onFailure(call: Call<UpdateResponse?>, t: Throwable) {
                 Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
             }
-         })
-      }
+        })
+    }
 
     fun setJobSavedClickListener(listener: JobSavedClickListener) {
         jobSavedClickListener = listener
     }
-  }
+}

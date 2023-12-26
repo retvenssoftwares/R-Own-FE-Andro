@@ -78,14 +78,22 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
 
         holder.color.setBackgroundColor(backgroundColor)
 
-        Glide.with(context)
-            .load(jobs.companyImage)
-            .placeholder(R.drawable.svg_user)
-            .error(R.drawable.svg_user)
-            .into(holder.jobImages);
 
 
-            holder.position.text = jobs.jobTitle
+        //Glide.with(context).load(jobs.companyImage).placeholder(R.drawable.png_blog).into(holder.jobImages)
+        val imageUrl = jobs.companyImage
+        if (imageUrl?.isNotEmpty() == true) {
+            Glide.with(context)
+                .load(imageUrl)
+                .placeholder(R.drawable.png_blog)
+                .into(holder.jobImages);
+        } else {
+            // Handle null case, e.g., set a placeholder image
+            holder.jobImages.setImageResource(R.drawable.png_blog);
+        }
+
+
+        holder.position.text = jobs.jobTitle
             holder.location.text = jobs.jobLocation
             holder.type.text = jobs.jobType
             holder.title.text = "Remote"
@@ -119,7 +127,6 @@ class SuggestedJobAdapter(val context: Context, var jobList:List<GetAllJobsData>
             val intent= Intent (context,JobDetailsActivity::class.java)
             intent.putExtra("jobID",jobs.jobId)
             intent.putExtra("userId",jobs.user_id)
-//            intent.putExtra("companyImageUri",jobs.companyImage)
             context.startActivity(intent)
         }
 

@@ -107,12 +107,13 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
             ) {
                 if (response.isSuccessful && isAdded){
                     val response = response.body()!!
-                    Log.d("response",response.toString())
                     try {
 
                         response.forEach { it ->
 
                             val originalData = response.toList()
+
+                            Log.e("See All Jobs", originalData.toString())
                             val suggestedJobAdapter = SuggestedJobAdapter(requireContext(), response)
                             suggestedRecycler.adapter = suggestedJobAdapter
                             suggestedJobAdapter.notifyDataSetChanged()

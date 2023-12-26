@@ -15,8 +15,8 @@ data class JobDetailsDataClass(
     val people: People
 )
 data class People(
-    val full_name: String,
-    val role: String,
-    val profile_pic: String,
+    val Full_name: String,
+    val Role: String,
+    val Profile_pic: String,
     val verificationStatus: String
 )

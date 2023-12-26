@@ -23,9 +23,6 @@ import androidx.fragment.app.Fragment
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.ApplyJobsResponse
 import app.retvens.rown.DataCollections.JobsCollection.JobDetailsDataClass
-import app.retvens.rown.DataCollections.JobsCollection.People
-import app.retvens.rown.DataCollections.JobsCollection.PushApplicantIdData
-import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.ActivitiesFragment
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.CompanyDetailsFragment
 import app.retvens.rown.NavigationFragments.job.jobDetailsFrags.DescriptionFragment
@@ -89,7 +86,6 @@ class JobDetailsActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-
         getJobDetail()
 
         val status = intent.getStringExtra("applyStatus")
@@ -134,8 +130,6 @@ class JobDetailsActivity : AppCompatActivity() {
             fragmentReplace(fragment)
 
         }
-
-
         binding.cardApplyJob.setOnClickListener {
 
 
@@ -199,8 +193,6 @@ class JobDetailsActivity : AppCompatActivity() {
         val jobId=intent.getStringExtra("jobID").toString()
         val userId=intent.getStringExtra("userId").toString()
 
-        Log.d("ooooouserId", "getJobDetail: "+userId)
-
         val getJobDetail = RetrofitBuilder.jobsApis.getJobDetail(jobId,userId)
 
         getJobDetail.enqueue(object : Callback<JobDetailsDataClass?> {
@@ -218,17 +210,19 @@ class JobDetailsActivity : AppCompatActivity() {
                         binding.locationJobDetails.setText(response.jobLocation)
                         binding.jobtype.setText(response.jobType)
 
-                        Glide.with(applicationContext).load(response.companyImage)
+                        Glide.with(applicationContext).load(response.companyImage).placeholder(R.drawable.png_blog)
                             .into(binding.profileJobsDetails)
 
                         val jobStatus=response.status
-
-                        Log.d("ooooo", "onResponse: "+jobStatus)
+                        description = response.jobDescription
+                        skills = response.skillsRecq
+                        peopleName=response.people.Full_name
+                        peopleRole=response.people.Role
+                        peopleProfile=response.people.Profile_pic
+                        companyWeb=response.websiteLink
+//                        companyDertails=response.companyDetails
 
                         if (fragmentPositon=="1"){
-
-                            description = response.jobDescription
-                            skills = response.skillsRecq
 
                             val fragment: Fragment = DescriptionFragment(description,skills)
                             fragmentReplace(fragment)
@@ -237,18 +231,11 @@ class JobDetailsActivity : AppCompatActivity() {
                         }
                         else if (fragmentPositon=="2")
                         {
-//                            companyDertails=response.companyDetails
-                            companyWeb=response.websiteLink
-                            skills = response.skillsRecq
                             val fragment:Fragment=CompanyDetailsFragment(companyDertails,skills)
                             fragmentReplace(fragment)
 
                         }
                         else if (fragmentPositon=="3"){
-
-                            peopleName=response.people.full_name
-                            peopleRole=response.people.role
-                            peopleProfile=response.people.profile_pic
 
                             val fragment:Fragment=ActivitiesFragment(peopleName,peopleRole,peopleProfile)
                             fragmentReplace(fragment)
@@ -293,7 +280,8 @@ class JobDetailsActivity : AppCompatActivity() {
 
         val experience = experience.text.toString()+" Year"
         val intro = intro.text.toString()
-        val jobId = intent.getStringExtra("jobID").toString()
+        val jobId = intent.getStringExtra("jobId").toString()
+
         val sharedPreferences = getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences?.getString("user_id", "").toString()
 
