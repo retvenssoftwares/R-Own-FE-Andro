@@ -1,7 +1,9 @@
 package app.retvens.rown.NavigationFragments.job.savedJobs
 
 data class SavedJob(
+    val jobId: String,
     val jobTitle: String,
+    val jobDescription: String,
     val jobType: String,
     val expectedCTC: String,
     val jobLocation: String,

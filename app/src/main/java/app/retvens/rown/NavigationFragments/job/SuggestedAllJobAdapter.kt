@@ -74,7 +74,6 @@ class SuggestedAllJobAdapter(val context: Context, var jobList: FatchAllJobData)
             holder.title.setBackgroundColor(ContextCompat.getColor(holder.title.context,R.color.suggested_job_yellowB))
             holder.type.setBackgroundColor(ContextCompat.getColor(holder.type.context,R.color.suggested_job_yellowB))
             holder.color.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.suggested_job_yellow))
-
         }
 
         holder.position.text = jobs.jobTitle
