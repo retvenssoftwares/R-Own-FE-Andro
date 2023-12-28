@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import app.retvens.rown.ApiRequest.RetrofitBuilder
 import app.retvens.rown.DataCollections.JobsCollection.FatchAllJobData
+import app.retvens.rown.DataCollections.JobsCollection.Job
 import app.retvens.rown.DataCollections.ProfileCompletion.UpdateResponse
 import app.retvens.rown.NavigationFragments.job.savedJobs.SaveJob
 import app.retvens.rown.R
@@ -88,6 +89,12 @@ class RecentJobAdapter(val context: Context, var jobsList: FatchAllJobData) : Re
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newItems: List<Job>) {
+        jobsList = FatchAllJobData( newItems)
+        notifyDataSetChanged()
+    }
+
     private fun saveJob(jid: String, operation: String) {
         val sharedPreferences = context.getSharedPreferences("SaveUserId", AppCompatActivity.MODE_PRIVATE)
         val user_id = sharedPreferences.getString("user_id", "").toString()
@@ -111,9 +118,9 @@ class RecentJobAdapter(val context: Context, var jobsList: FatchAllJobData) : Re
         })
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newItems: FatchAllJobData) {
-        jobsList = newItems
-        notifyDataSetChanged()
-    }
+//    @SuppressLint("NotifyDataSetChanged")
+//    fun updateData(newItems: FatchAllJobData) {
+//        jobsList = newItems
+//        notifyDataSetChanged()
+//    }
 }

@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Assistance"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:textFontWeight="600"
             android:fontFamily="@font/montserrat_regular"
             android:layout_gravity="center_vertical"

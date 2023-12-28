@@ -148,7 +148,9 @@ class JobExploreFragment : Fragment(), BottomSheetJobFilter.OnBottomJobClickList
                                     }
 
                                     suggestedJobAdapter.updateData(filterData)
+                                    recentJobAdapter.updateData(filterData)
                                     suggestedJobAdapter.notifyDataSetChanged()
+                                    recentJobAdapter.notifyDataSetChanged()
 
 //                                    val filterData1 = originalData.filter { item ->
 //                                    item.jobType.lowercase(Locale.ROOT).contains(p0.toString().trim().lowercase(Locale.ROOT))

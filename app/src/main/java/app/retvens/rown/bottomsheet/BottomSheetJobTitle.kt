@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -60,6 +61,7 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
     private lateinit var basicInformationAdapter: BasicInformationAdapter
     private lateinit var serarchBar: EditText
     private lateinit var AddHotel: CardView
+    lateinit var shimmerLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,6 +89,7 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        shimmerLayout = view.findViewById(R.id.shimmer_layout_tasks)
         recyclerView = view.findViewById(R.id.jobs_recycler)
          //recyclerView. //recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -164,6 +167,7 @@ class BottomSheetJobTitle : BottomSheetDialogFragment() {
                     basicInformationAdapter = BasicInformationAdapter(requireContext(),response)
                     basicInformationAdapter.notifyDataSetChanged()
                     recyclerView.adapter = basicInformationAdapter
+                    shimmerLayout.visibility = View.GONE
 
                     basicInformationAdapter.setOnJobClickListener(this)
 

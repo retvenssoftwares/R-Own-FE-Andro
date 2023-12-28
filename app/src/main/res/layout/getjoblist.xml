@@ -5,28 +5,39 @@
     android:background="#FFFFFF"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/jobsname"
+    <LinearLayout
+        android:id="@+id/title_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="20dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+    <TextView
+        android:id="@+id/jobsname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textFontWeight="600"
         android:text="Android Developer"
         android:textColor="@color/black"
         android:fontFamily="@font/montserrat_regular"
-        android:textSize="18dp"
+        android:textSize="15sp"
         android:layout_marginStart="10dp"
         />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        app:layout_constraintTop_toBottomOf="@+id/jobsname"
-
-        android:layout_marginTop="15dp"
-        android:background="#070707"
-        />
+        android:background="@color/grey_60"
+        android:layout_marginHorizontal="30dp"
+        app:layout_constraintTop_toBottomOf="@id/title_linear"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
